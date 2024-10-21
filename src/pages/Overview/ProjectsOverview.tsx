@@ -39,8 +39,13 @@ const ProjectsOverview = () => {
         <Col xl={12}>
           <Card>
             <CardHeader className="border-0 align-items-center d-flex">
-              <h4 className="card-title mb-0 flex-grow-1">Projects Overview</h4>
-              <div className="d-flex gap-1">
+              <h4
+                className="card-title mb-0 flex-grow-1"
+                // style={{ fontFamily: "Poppins" }}
+              >
+                Projects Details of last 7 days
+              </h4>
+              {/* <div className="d-flex gap-1">
                 <button
                   type="button"
                   className="btn btn-soft-secondary btn-sm"
@@ -77,7 +82,7 @@ const ProjectsOverview = () => {
                 >
                   1Y
                 </button>
-              </div>
+              </div> */}
             </CardHeader>
 
             <CardHeader className="p-0 border-0 bg-light-subtle">

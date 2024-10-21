@@ -18,20 +18,26 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ListItemButton from "@mui/material/ListItemButton";
-import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
 import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import Logo1 from "../../assets/images/logo1.png";
 import Logo from "../../assets/logo.png";
 import DrawerItem from "../DrawerItem/index";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import KycSummaryTable from "../KycTable";
 import OverviewComponent from "../../pages/Overview";
+import TradeDashboard from "../../pages/TradeDashboard";
+import AnnualPNL from "../../pages/Reports/annualPNL";
+import DormantClient from "../../pages/Reports/dormantClient";
+// import Table from "../../components/common/table";
+import LastTrade from "../../pages/Reports/LastTrade";
+import QuarterlyPayout from "../../pages/Reports/QPayout";
+import SLBM from "../../pages/Reports/SLBM";
+import CoreReport from "../../pages/Reports/CoreReport";
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 // Utility functions for Drawer
 const openedMixin = (theme: Theme, drawerWidth: any): CSSObject => ({
@@ -160,7 +166,7 @@ const SideBar = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const drawerWidth = isMobile ? 180 : 240;
-  const settings = ["Profile", "Account", "Dashboard", "Logout"];
+  const settings = ["Account", "Logout"];
 
   useEffect(() => {
     handleDrawerOpen();
@@ -190,6 +196,17 @@ const SideBar = () => {
   const menuItems = [
     { title: "OverView" },
     { title: "Trading Dashboard" },
+    {
+      title: "Reports",
+      subItems: [
+        "Annual PNL Statement",
+        "Dormant Client Report",
+        "Last Trade Data",
+        "Quarterly Payout Recovery",
+        "SLBM Client Holding",
+        "Core Alerts Report",
+      ],
+    },
     { title: "Revenue Details" },
     { title: "Client Details" },
     { title: "e-KYC Link" },
@@ -213,19 +230,46 @@ const SideBar = () => {
   };
   const renderContent = () => {
     // debugger;
+    // if (activeMenu !== "Reports") {
+    //   setActiveSubItem();
+    // }
     switch (activeMenu) {
-      case "OverView": // When 'Overview' is clicked, show KycSummaryTable
+      case "OverView" || "":
         return <OverviewComponent />;
       case "Trading Dashboard":
-        return <Typography>Trading Dashboard content goes here</Typography>;
-      // Add more cases for other menu items as needed
+        return <TradeDashboard />;
+      case "Revenue Details":
+        return <Typography>Client Details render here</Typography>;
+      case "Client Details":
+        return <Typography>Client Details render here</Typography>;
+      case "e-KYC Link":
+        return <Typography>e-KYC Link section here</Typography>;
+      case "Reports":
+        switch (activeSubItem) {
+          case "Annual PNL Statement":
+            return <AnnualPNL />;
+          case "Dormant Client Report":
+            return <DormantClient />;
+          case "Last Trade Data":
+            return <LastTrade />;
+          case "Quarterly Payout Recovery":
+            return <QuarterlyPayout />;
+          case "SLBM Client Holding":
+            return <SLBM />;
+          case "Core Alerts Report":
+            return <CoreReport />;
+          default:
+            break;
+        }
       default:
         return (
           <>
             <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
               Please select a table for KYC
             </Typography>
-            <Typography>No sub-item selected</Typography>
+            <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
+              No sub-item selected
+            </Typography>
           </>
         );
     }
@@ -235,33 +279,37 @@ const SideBar = () => {
       <CssBaseline />
       <AppBar position="fixed" open={open} sx={{ backgroundColor: "#F9F6EE" }}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={[{ marginRight: 5 }, open && { display: "none" }]}
-          >
-            <MenuIcon sx={{ color: "black" }} />
-          </IconButton>
-          <Box sx={{ flexGrow: 0, backgroundColor: "#F9F6EE" }}>
-            <Box
-              component="img"
-              alt="Logo"
-              src={Logo}
-              width={"auto"}
-              height="50px"
-            />
-          </Box>
-          {/* <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search> */}
+          {open ? (
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          ) : (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={[{ marginRight: 5 }, open && { display: "none" }]}
+            >
+              <MenuIcon sx={{ color: "black" }} />
+            </IconButton>
+          )}
+          {!open && (
+            <Box sx={{ flexGrow: 0, backgroundColor: "#F9F6EE" }}>
+              <Box
+                component="img"
+                alt="Logo"
+                src={Logo}
+                width={"auto"}
+                height="50px"
+              />
+            </Box>
+          )}
+
           <Box sx={{ flexGrow: 1 }} />
           <Tooltip title="Open settings">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -293,50 +341,50 @@ const SideBar = () => {
         </Toolbar>
       </AppBar>
 
-      <Drawer
-        variant="permanent"
-        open={open}
-        sx={{
-          "& .MuiDrawer-paper": {
-            backgroundColor: "#095192",
-          },
-        }}
-      >
-        <DrawerHeader style={{ backgroundColor: "#F9F6EE" }}>
-          {/* <Box sx={{ flexGrow: 0 }}>
+      {open && (
+        <Drawer
+          variant="permanent"
+          open={open}
+          sx={{
+            "& .MuiDrawer-paper": {
+              backgroundColor: "#11395C",
+            },
+          }}
+        >
+          <Divider />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: isMobile ? "0px" : "10px",
+            }}
+          >
             <Box
               component="img"
               alt="Logo"
-              src={Logo}
+              src={Logo1}
               width={"auto"}
               height="50px"
             />
-          </Box> */}
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "rtl" ? (
-              <ChevronRightIcon />
-            ) : (
-              <ChevronLeftIcon />
-            )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {menuItems.map((item) => (
-            <DrawerItem
-              key={item.title}
-              title={item.title}
-              open={open}
-              // subItems={item.subItems}
-              handleDrawerOpen={handleDrawerOpen}
-              isMobile={isMobile}
-              activeMenu={activeMenu}
-              handleClick={() => handleMenuClick(item.title)}
-              handleSubItemClick={handleSubItemClick}
-            />
-          ))}
-        </List>
-      </Drawer>
+          </Box>
+
+          <List>
+            {menuItems.map((item) => (
+              <DrawerItem
+                key={item.title}
+                title={item.title}
+                open={open}
+                subItems={item.subItems}
+                handleDrawerOpen={handleDrawerOpen}
+                isMobile={isMobile}
+                activeMenu={activeMenu}
+                handleClick={() => handleMenuClick(item.title)}
+                handleSubItemClick={handleSubItemClick}
+              />
+            ))}
+          </List>
+        </Drawer>
+      )}
 
       <Box
         component="main"

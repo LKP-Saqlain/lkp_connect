@@ -1,0 +1,14 @@
+export interface Credentials {
+  user_id: string;
+  user_type: string;
+}
+
+export interface UserValues {
+  credentials: Credentials;
+}
+
+export interface FormData {
+  clientCode: string;
+  accNo: string;
+  chequeNo: string;
+}

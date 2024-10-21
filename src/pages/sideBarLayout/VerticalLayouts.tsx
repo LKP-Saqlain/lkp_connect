@@ -6,7 +6,7 @@ import { Collapse } from "reactstrap";
 import MenuLayout from "./LayoutMenu";
 //i18n
 import { withTranslation } from "react-i18next";
-import withRouter from "../../Components/Common/withRouter";
+import withRouter from "../../components/common/withRouter";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 
@@ -27,88 +27,78 @@ const VerticalLayout = (props: any) => {
     })
   );
   // Inside your component
-  const { leftsidbarSizeType, sidebarVisibilitytype, layoutType } = useSelector(
-    selectLayoutProperties
-  );
+  //   const { leftsidbarSizeType, sidebarVisibilitytype, layoutType } = useSelector(
+  //     selectLayoutProperties
+  //   );
 
   //vertical and semibox resize events
-  const resizeSidebarMenu = useCallback(() => {
-    var windowSize = document.documentElement.clientWidth;
-    const humberIcon = document.querySelector(".hamburger-icon") as HTMLElement;
-    var hamburgerIcon = document.querySelector(".hamburger-icon");
-    if (windowSize >= 1025) {
-      if (document.documentElement.getAttribute("data-layout") === "vertical") {
-        document.documentElement.setAttribute(
-          "data-sidebar-size",
-          leftsidbarSizeType
-        );
-      }
-      if (document.documentElement.getAttribute("data-layout") === "semibox") {
-        document.documentElement.setAttribute(
-          "data-sidebar-size",
-          leftsidbarSizeType
-        );
-      }
-      if (
-        (sidebarVisibilitytype === "show" ||
-          layoutType === "vertical" ||
-          layoutType === "twocolumn") &&
-        document.querySelector(".hamburger-icon")
-      ) {
-        if (hamburgerIcon !== null) {
-          hamburgerIcon.classList.remove("open");
-        }
-      } else {
-        // var hamburgerIcon = document.querySelector(".hamburger-icon");
-        if (hamburgerIcon !== null) {
-          hamburgerIcon.classList.add("open");
-        }
-      }
-    } else if (windowSize < 1025 && windowSize > 767) {
-      document.body.classList.remove("twocolumn-panel");
-      if (document.documentElement.getAttribute("data-layout") === "vertical") {
-        document.documentElement.setAttribute("data-sidebar-size", "sm");
-      }
-      if (document.documentElement.getAttribute("data-layout") === "semibox") {
-        document.documentElement.setAttribute("data-sidebar-size", "sm");
-      }
-      if (humberIcon) {
-        humberIcon.classList.add("open");
-      }
-    } else if (windowSize <= 767) {
-      document.body.classList.remove("vertical-sidebar-enable");
-      if (
-        document.documentElement.getAttribute("data-layout") !== "horizontal"
-      ) {
-        document.documentElement.setAttribute("data-sidebar-size", "lg");
-      }
-      if (humberIcon) {
-        humberIcon.classList.add("open");
-      }
-    }
-  }, [leftsidbarSizeType, sidebarVisibilitytype, layoutType]);
+  //   const resizeSidebarMenu = useCallback(() => {
+  //     var windowSize = document.documentElement.clientWidth;
+  //     const humberIcon = document.querySelector(".hamburger-icon") as HTMLElement;
+  //     var hamburgerIcon = document.querySelector(".hamburger-icon");
+  //     if (windowSize >= 1025) {
+  //       if (document.documentElement.getAttribute("data-layout") === "vertical") {
+  //         document.documentElement.setAttribute(
+  //           "data-sidebar-size",
+  //           leftsidbarSizeType
+  //         );
+  //       }
+  //       if (
+  //         layoutType === "vertical" &&
+  //         document.querySelector(".hamburger-icon")
+  //       ) {
+  //         if (hamburgerIcon !== null) {
+  //           hamburgerIcon.classList.remove("open");
+  //         }
+  //       } else {
+  //         // var hamburgerIcon = document.querySelector(".hamburger-icon");
+  //         if (hamburgerIcon !== null) {
+  //           hamburgerIcon.classList.add("open");
+  //         }
+  //       }
+  //     } else if (windowSize < 1025 && windowSize > 767) {
+  //       document.body.classList.remove("twocolumn-panel");
+  //       if (document.documentElement.getAttribute("data-layout") === "vertical") {
+  //         document.documentElement.setAttribute("data-sidebar-size", "sm");
+  //       }
+  //       if (document.documentElement.getAttribute("data-layout") === "semibox") {
+  //         document.documentElement.setAttribute("data-sidebar-size", "sm");
+  //       }
+  //       if (humberIcon) {
+  //         humberIcon.classList.add("open");
+  //       }
+  //     } else if (windowSize <= 767) {
+  //       document.body.classList.remove("vertical-sidebar-enable");
+  //       {
+  //         document.documentElement.setAttribute("data-sidebar-size", "lg");
+  //       }
+  //       if (humberIcon) {
+  //         humberIcon.classList.add("open");
+  //       }
+  //     }
+  //   }, [leftsidbarSizeType, sidebarVisibilitytype, layoutType]);
 
-  useEffect(() => {
-    window.addEventListener("resize", resizeSidebarMenu, true);
-  }, [resizeSidebarMenu]);
+  //   useEffect(() => {
+  //     window.addEventListener("resize", resizeSidebarMenu, true);
+  //   }, [resizeSidebarMenu]);
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    const initMenu = () => {
-      const pathName = process.env.PUBLIC_URL + path;
-      const ul = document.getElementById("navbar-nav") as HTMLElement;
-      const items: any = ul.getElementsByTagName("a");
-      let itemsArray = [...items]; // converts NodeList to Array
-      removeActivation(itemsArray);
-      let matchingMenuItem = itemsArray.find((x) => {
-        return x.pathname === pathName;
-      });
-      if (matchingMenuItem) {
-        activateParentDropdown(matchingMenuItem);
-      }
-    };
-    initMenu();
-  }, [path, props.layoutType]);
+  //   useEffect(() => {
+  //     window.scrollTo({ top: 0, behavior: "smooth" });
+  //     const initMenu = () => {
+  //       const pathName = process.env.PUBLIC_URL + path;
+  //       const ul = document.getElementById("navbar-nav") as HTMLElement;
+  //       const items: any = ul.getElementsByTagName("a");
+  //       let itemsArray = [...items]; // converts NodeList to Array
+  //       removeActivation(itemsArray);
+  //       let matchingMenuItem = itemsArray.find((x) => {
+  //         return x.pathname === pathName;
+  //       });
+  //       if (matchingMenuItem) {
+  //         activateParentDropdown(matchingMenuItem);
+  //       }
+  //     };
+  //     initMenu();
+  //   }, [path, props.layoutType]);
 
   function activateParentDropdown(item: any) {
     item.classList.add("active");

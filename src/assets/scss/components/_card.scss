@@ -25,10 +25,11 @@
 .card-title {
     font-size: 16px;
     margin: 0 0 7px 0;
+    text-align: center;
 }
 
 .card-height-100 {
-    height: calc(100% - #{$grid-gutter-width});
+    height: calc(100% - #{$grid-gutter-width})!important;
 }
 
 .card-animate{
@@ -151,3 +152,35 @@ $value in $theme-colors {
         }
     }
 }
+
+.capsule-hover:hover {
+    background-color: #11395C;
+    color: #fff;
+}
+
+.capsule-custom {
+    display: flex;
+    justify-content:center;
+}
+
+
+// added custom style for tradeDash without rounded capsules
+@media (min-width: 992px) {
+    .col-lg-2 {
+        flex: 0 0 auto !important;
+        width: 19.666667% !important;
+    }
+}
+
+.custom-btn {
+    width: 50px;
+    height: 25px;
+    font-size: 8px !important;
+}
+
+.custom-table-btn {
+    background-color: #11395C !important;
+}
+
+
+

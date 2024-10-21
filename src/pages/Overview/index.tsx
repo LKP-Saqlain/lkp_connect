@@ -2,6 +2,7 @@ import React from "react";
 import { Col, Container, Row } from "reactstrap";
 import ProjectsOverview from "./ProjectsOverview";
 import StoreVisits from "./VisitorsCount";
+import Revenue from "./Revenue";
 
 const DashboardProject = () => {
   document.title = "Projects | Velzon - React Admin & Dashboard Template";
@@ -19,6 +20,11 @@ const DashboardProject = () => {
                     </div>
                   </Col>
                   <StoreVisits />
+                </Row>
+                <Row>
+                  <Col>
+                    <Revenue />
+                  </Col>
                 </Row>
               </div>
             </Col>

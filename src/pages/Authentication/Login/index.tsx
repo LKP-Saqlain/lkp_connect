@@ -11,7 +11,6 @@ import {
   FormControlLabel,
   Radio,
   FormControl,
-  FormLabel,
   RadioGroup,
 } from "@mui/material";
 import "./style.css";
@@ -30,21 +29,36 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import "dayjs/locale/en-gb";
 import { regEx, isValidPANNo } from "../../../helper/method";
 import { useNavigate } from "react-router-dom";
+import { apiServices } from "../../../services";
+import Loader from "../../../components/common/Loader";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { UserValues } from "../../../types";
+import { UserLogin } from "../../../redux/thunk/Login/login";
+import { RootState, AppDispatch } from "../../../redux/store";
 
-interface ForgotPassword {
-  handleForgotClick: () => void;
-}
-
-const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
+const LoginPage = () => {
   const [submitted, setSubmiited] = useState(false);
   const [value, setValue] = useState<dayjs.Dayjs | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [userValues, setUserValues] = useState<UserValues>({
+    credentials: {
+      user_id: "",
+      user_type: "",
+    },
+  });
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const customInputRef = useRef();
   const navigate = useNavigate();
 
+  // const LoginUser = useSelector((state: RootState) => state.UserLogin);
+  // const { user_id, user_type } = LoginUser?.data;
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   console.log("userData", LoginUser.data);
+  // }, [LoginUser]);
   const formStyle: CSSProperties = {
     display: "flex",
     flexDirection: "column",
@@ -82,12 +96,81 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
     validationSchema: !submitted
       ? validationSchema
       : authenticationValidationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       console.log("Form Data:", values);
       // Handle login logic here
-      setSubmiited(true);
+      // setSubmiited(true);
+      handleValidateUser(values);
+      // const result = await handleTwoFactorAuthentication(values);
     },
   });
+
+  const handleValidateUser = async (values: any) => {
+    console.log("handleValidateUservalues", values);
+
+    let payload = {
+      user_type: values.loginButtonGroup,
+      user_id: values.username,
+      user_password: values.password,
+    };
+
+    dispatch(showLoader(""));
+    // dispatch(UserLogin(payload));
+    dispatch(hideLoader());
+    formik.setErrors({});
+    setSubmiited(true);
+
+    //   .Login(payload)
+    //   .then((response) => {
+    //     console.log("response->", response);
+    //     dispatch(hideLoader());
+    //     // setUserValues((prevState) => ({
+    //     //   ...prevState,
+    //     //   credentials: {
+    //     //     ...prevState.credentials,
+    //     //     ["user_id"]: value, // Dynamically update the field by its name
+    //     //   },
+    //     // }));
+    //     formik.setErrors({}); // Clear any previous errors
+
+    //     // Set submitted to true only when there are no API errors
+    //     setSubmiited(true);
+    //   })
+    //   .catch((Err) => {
+    //     const { message } = Err.response.data;
+    //     console.log("Error->", message);
+    //     dispatch(hideLoader());
+    //     formik.setFieldError("password", message);
+    //   });
+  };
+
+  const handleTwoFactorAuthentication = async () => {
+    try {
+      let payload = {
+        user_id: "EMP-5341", //LoginUser.data.user_id, //need to get this api from Login
+        user_type: "Employee", //LoginUser.data.user_type, //need to get this api from Login
+        auth_type:
+          formik.values.authenticationButtonGroup === "Pan" ? "PAN" : "DOB",
+        auth_value: formik.values.authentication, //testPan -> "JNCPS0816L",
+      };
+      dispatch(showLoader(""));
+      const result = await apiServices.twoFactorAuthentication(payload);
+      dispatch(hideLoader());
+      console.log("response", result?.status);
+      // const { status, data } = result;
+
+      if (result?.status === 200) {
+        const { token, user_id, user_type } = result.data;
+        localStorage.setItem("tkn", token);
+        localStorage.setItem("Id", user_id);
+        localStorage.setItem("uIdType", user_type);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("An error occurred during login:", error.message);
+      }
+    }
+  };
 
   const customHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -118,18 +201,14 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
     setShowPassword((prev) => !prev);
   };
 
-  const handleClick = (event: any) => {
+  const handleClick = () => {
     console.log("event");
-    handleForgotClick();
     navigate("/forgot-password");
   };
 
   useEffect(() => {
     console.log("formikValues->", formik.values);
   }, [formik.values]);
-  //   useEffect(() => {
-  //     formik.setFieldValue("authenticationButtonGroup", "Pan");
-  //   }, [formik.values.authenticationButtonGroup]);
 
   return (
     <>
@@ -147,7 +226,7 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
           src={Banner}
           alt="Banner"
           sx={{
-            width: isMobile ? "100%" : "50%",
+            width: isMobile ? "100%" : "52%",
             borderRadius: "4px",
             marginBottom: isMobile ? 2 : 0,
             // border: "1px solid black",
@@ -174,18 +253,30 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
             <Typography
               variant="h6"
               gutterBottom
-              sx={{ fontWeight: 600, color: "#095192" }}
+              sx={{
+                fontWeight: 600,
+                color: "#095192",
+                fontFamily: "Poppins",
+              }}
             >
               Welcome to
             </Typography>
             <Typography
               variant="h4"
               gutterBottom
-              sx={{ fontWeight: 600, color: "#095192" }}
+              sx={{
+                fontWeight: 700,
+                color: "#095192",
+                fontFamily: "Poppins",
+              }}
             >
               LKP Connect{" "}
             </Typography>
-            <FormControl sx={{ marginBottom: "6px" }}>
+            <FormControl
+              sx={{
+                marginBottom: "6px",
+              }}
+            >
               <RadioGroup
                 row
                 aria-labelledby="demo-row-radio-buttons-group-label"
@@ -194,17 +285,44 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
               >
                 <FormControlLabel
                   value="Client"
-                  control={<Radio onChange={customHandleChange} />}
+                  control={
+                    <Radio
+                      onChange={customHandleChange}
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#11395C",
+                        },
+                      }}
+                    />
+                  }
                   label="Client"
                 />
                 <FormControlLabel
                   value="Partner"
-                  control={<Radio onChange={customHandleChange} />}
+                  control={
+                    <Radio
+                      onChange={customHandleChange}
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#11395C",
+                        },
+                      }}
+                    />
+                  }
                   label="Partner"
                 />
                 <FormControlLabel
                   value="Employee"
-                  control={<Radio onChange={customHandleChange} />}
+                  control={
+                    <Radio
+                      onChange={customHandleChange}
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#11395C",
+                        },
+                      }}
+                    />
+                  }
                   label="Employee"
                 />
               </RadioGroup>
@@ -279,7 +397,7 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
                 type="submit" // Add type submit to the button
                 sx={{
                   width: isMobile ? "100%" : "400px",
-                  backgroundColor: "#095192",
+                  backgroundColor: "#11395C",
                 }}
               >
                 Login
@@ -294,17 +412,16 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
             >
               <Grid2>
                 <Typography
-                  sx={{ color: "#095192", cursor: "pointer" }}
+                  sx={{
+                    color: "#11395C",
+                    cursor: "pointer",
+                    fontFamily: "Public Sans, sans-serif",
+                  }}
                   onClick={handleClick}
                 >
                   Forgot Password / Unblocked User ?
                 </Typography>
               </Grid2>
-              {/* <Grid2>
-                <Typography sx={{ color: "#095192", cursor: "pointer" }}>
-                  UnBlocked User?
-                </Typography>
-              </Grid2> */}
             </Grid2>
           </Box>
         ) : (
@@ -323,7 +440,11 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
             <Typography
               variant="h6"
               gutterBottom
-              sx={{ fontWeight: 600, color: "#095192" }}
+              sx={{
+                fontWeight: 700,
+                color: "#095192",
+                fontFamily: "Poppins",
+              }}
             >
               Two Factor Authentication
             </Typography>
@@ -337,7 +458,6 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
                   value="Pan"
                   control={<Radio onChange={customHandleChange} />}
                   label="Pan"
-                  //   checked={formik.values.authenticationButtonGroup==="Pan"?true:false}
                 />
                 <FormControlLabel
                   value="Date of Birth"
@@ -392,9 +512,9 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
                       : null
                   }
                   sx={{
-                    marginBottom: 2,
+                    marginBottom: 4,
                     width: isMobile ? "100%" : "400px",
-                    height: "40px !important",
+                    height: "40px",
                   }}
                   maxDate={dayjs().subtract(18, "year")}
                   minDate={dayjs().subtract(64, "year")}
@@ -417,9 +537,11 @@ const LoginPage = ({ handleForgotClick }: ForgotPassword) => {
                 width: isMobile ? "100%" : "400px",
                 backgroundColor: "#095192",
               }}
+              onClick={handleTwoFactorAuthentication}
             >
               Submit
             </Button>
+            <Loader />
           </Box>
         )}
       </Box>

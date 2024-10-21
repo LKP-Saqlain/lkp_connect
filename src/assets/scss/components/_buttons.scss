@@ -8,7 +8,7 @@ a {
 }
 
 .btn {
-    box-shadow: $element-shadow;
+    box-shadow: $element-shadow !important;
 }
 
 :is(.btn.show, .btn:first-child:active, :not(.btn-check)+.btn:active) {

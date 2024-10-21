@@ -40,31 +40,31 @@ function Header() {
   };
 
   return (
-    <AppBar
-      position="static"
-      sx={{
-        backgroundColor: "white",
-        color: "black",
-        // border: "1px solid #095192",
-        borderRadius: "5px",
-      }}
-    >
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}></Box>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Box
-              component="img"
-              alt="Logo"
-              src={Logo}
-              width={"auto"}
-              height="50px"
-            />
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+    // <AppBar
+    //   position="static"
+    //   sx={{
+    //     backgroundColor: "white",
+    //     color: "black",
+    //     // border: "1px solid #095192",
+    //     borderRadius: "5px",
+    //   }}
+    // >
+    <Container maxWidth="xl">
+      <Toolbar disableGutters>
+        <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}></Box>
+        <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
+        <Box sx={{ flexGrow: 0 }}>
+          <Box
+            component="img"
+            alt="Logo"
+            src={Logo}
+            width={"auto"}
+            height="50px"
+          />
+        </Box>
+      </Toolbar>
+    </Container>
+    // </AppBar>
   );
 }
 export default Header;
