@@ -4,150 +4,112 @@ import CountUp from "react-countup";
 import { ProjectsOverviewCharts } from "./DashboardProjectCharts";
 // import { getProjectChartsData } from "../../slices/thunks";
 import { createSelector } from "reselect";
-import { monthProjectData } from "../../components/common/OverviewData";
+// import { monthProjectData } from "../../components/common/OverviewData";
+import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
+import { useDispatch } from "react-redux";
 
 const ProjectsOverview = () => {
-  //   const dispatch: any = useDispatch();
+  const [brokerageData, setBrokerageData] = useState<[]>([]);
+  const [monthProjectData, setMonthProjectData] = useState([
+    {
+      name: "Gross Brokerage",
+      type: "bar",
+      data: [],
+    },
+    {
+      name: "AP Share",
+      type: "bar",
+      data: [],
+    },
+  ]);
+  const dispatch = useDispatch();
 
-  //   const [chartData, setchartData] = useState<any>([]);
+  useEffect(() => {
+    const fetchBrokerage = async () => {
+      const Id = localStorage.getItem("Id");
+      const payload = {
+        user_id: Id,
+      };
+      try {
+        dispatch(showLoader(""));
+        const response = await apiServices.Last7dayBrokerage(payload);
+        console.log("Last7dayBrokerageresponse", response?.data?.data);
+        setBrokerageData(response?.data?.data);
+        const fetchedBrokerageData = response?.data?.data;
 
-  //   const selectprojectData = createSelector(
-  //     (state: any) => state.DashboardProject,
-  //     (state) => ({
-  //       projectData: state.projectData,
-  //     })
-  //   );
-  //   // Inside your component
-  //   const { projectData } = useSelector(selectprojectData);
+        if (fetchedBrokerageData) {
+          // Extract GrossBrokerage and APbrokerage data from the API response
+          const grossBrokerageData = fetchedBrokerageData.map(
+            (item: any) => item.GrossBrokerage
+          );
+          const apShareData = fetchedBrokerageData.map(
+            (item: any) => item.APbrokerage
+          );
 
-  //   useEffect(() => {
-  //     setchartData(projectData);
-  //   }, [projectData]);
+          // Update the monthProjectData array
+          setMonthProjectData([
+            {
+              name: "Gross Brokerage",
+              type: "bar",
+              data: grossBrokerageData, // Set GrossBrokerage data
+            },
+            {
+              name: "AP Share",
+              type: "bar",
+              data: apShareData, // Set APbrokerage data
+            },
+          ]);
+        }
 
-  //   const onChangeChartPeriod = (pType: any) => {
-  //     // dispatch(getProjectChartsData(pType));
-  //     alert("onChangeChartPeriod Click");
-  //   };
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+        }
+      } catch (error) {
+        console.error("Error->", error);
+        dispatch(hideLoader());
+      }
+    };
 
-  //   useEffect(() => {
-  //     dispatch(getProjectChartsData("all"));
-  //   }, [dispatch]);
+    fetchBrokerage();
+  }, [dispatch]);
 
   return (
     <React.Fragment>
       <Row>
         <Col xl={12}>
           <Card>
-            <CardHeader className="border-0 align-items-center d-flex">
-              <h4
-                className="card-title mb-0 flex-grow-1"
-                // style={{ fontFamily: "Poppins" }}
-              >
-                Projects Details of last 7 days
-              </h4>
-              {/* <div className="d-flex gap-1">
-                <button
-                  type="button"
-                  className="btn btn-soft-secondary btn-sm"
-                  //   onClick={() => {
-                  //     onChangeChartPeriod("all");
-                  //   }}
-                >
-                  ALL
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-soft-secondary btn-sm"
-                  //   onClick={() => {
-                  //     onChangeChartPeriod("month");
-                  //   }}
-                >
-                  1M
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-soft-secondary btn-sm"
-                  //   onClick={() => {
-                  //     onChangeChartPeriod("halfyear");
-                  //   }}
-                >
-                  6M
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-soft-primary btn-sm"
-                  //   onClick={() => {
-                  //     onChangeChartPeriod("year");
-                  //   }}
-                >
-                  1Y
-                </button>
-              </div> */}
-            </CardHeader>
-
             <CardHeader className="p-0 border-0 bg-light-subtle">
               <Row className="g-0 text-center">
-                <Col xs={6} sm={3}>
-                  <div className="p-3 border border-dashed border-start-0">
-                    <h5 className="mb-1">
-                      <span className="counter-value" data-target="9851">
-                        <CountUp
-                          start={0}
-                          end={9851}
-                          separator={","}
-                          duration={4}
-                        />
-                      </span>
-                    </h5>
-                    <p className="text-muted mb-0">Number of Projects</p>
-                  </div>
-                </Col>
-                <Col xs={6} sm={3}>
-                  <div className="p-3 border border-dashed border-start-0">
-                    <h5 className="mb-1">
-                      <span className="counter-value">
-                        <CountUp
-                          start={0}
-                          end={1026}
-                          separator={","}
-                          duration={4}
-                        />
-                      </span>
-                    </h5>
-                    <p className="text-muted mb-0">Active Projects</p>
-                  </div>
-                </Col>
-                <Col xs={6} sm={3}>
-                  <div className="p-3 border border-dashed border-start-0">
-                    <h5 className="mb-1">
-                      $
-                      <span className="counter-value" data-target="228.89">
-                        <CountUp
-                          start={0}
-                          end={228.89}
-                          decimals={2}
-                          duration={4}
-                        />
-                      </span>
-                      k
-                    </h5>
-                    <p className="text-muted mb-0">Revenue</p>
-                  </div>
-                </Col>
-                <Col xs={6} sm={3}>
-                  <div className="p-3 border border-dashed border-start-0 border-end-0">
-                    <h5 className="mb-1 text-success">
-                      <span className="counter-value" data-target="10589">
-                        <CountUp
-                          start={0}
-                          end={10589}
-                          separator={","}
-                          duration={4}
-                        />
-                      </span>
-                      h
-                    </h5>
-                    <p className="text-muted mb-0">Working Hours</p>
+                <Col xs={12} sm={12}>
+                  <div className="p-3 border border-dashed border-start-0 d-flex">
+                    <h4 className="card-title mb-0 flex-grow-1 text-start">
+                      Brokerage Details for last 7 Days
+                    </h4>
+                    <div
+                      className="d-flex align-items-center"
+                      style={{ fontFamily: "Public Sans, sans-serif" }}
+                    >
+                      <div
+                        style={{
+                          backgroundColor: "#1c3d5a", // Color for Gross Brokerage
+                          width: "16px",
+                          height: "16px",
+                          marginRight: "8px",
+                        }}
+                      ></div>
+                      <p className="mb-0 me-4">Gross Brokerage</p>
+
+                      <div
+                        style={{
+                          backgroundColor: "#f57c00", // Color for AP Share
+                          width: "16px",
+                          height: "16px",
+                          marginRight: "8px",
+                        }}
+                      ></div>
+                      <p className="mb-0">AP Share</p>
+                    </div>
                   </div>
                 </Col>
               </Row>
@@ -157,7 +119,8 @@ const ProjectsOverview = () => {
                 <div dir="ltr" className="apex-charts">
                   <ProjectsOverviewCharts
                     series={monthProjectData}
-                    dataColors='["--vz-primary", "--vz-secondary", "--vz-danger"]'
+                    // dataColors='["--vz-primary", "--vz-secondary", "--vz-danger"]'
+                    brokerageData={brokerageData}
                   />
                 </div>
               </div>

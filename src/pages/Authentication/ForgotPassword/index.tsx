@@ -7,6 +7,10 @@ import {
   IconButton,
   Button,
   useMediaQuery,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -18,14 +22,23 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { RiLockPasswordFill } from "react-icons/ri";
 import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
+import { useDispatch } from "react-redux";
 import { regEx } from "../../../helper/method";
+import { apiServices } from "../../../services/index";
+import ShowToast from "../../../utils/toastUtils";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [submitted, setSubmiited] = useState(false);
   const [value, setValue] = useState<dayjs.Dayjs | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [showOtpField, setShowOtpField] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -42,10 +55,12 @@ const ForgotPassword = () => {
   const validationSchema = Yup.object({
     userId: Yup.string()
       .required("userId is required")
-      .min(3, "user ID must be at least 3 characters"),
+      .min(4, "user ID must be at least 4 characters"),
     otp: Yup.string()
       .required("OTP is required")
       .min(4, "OTP must be at least 4 characters"),
+    password: Yup.string().required("Password is required"),
+    confirmPassword: Yup.string().required("Confirm Password is required"),
   });
 
   // Initialize Formik
@@ -55,12 +70,14 @@ const ForgotPassword = () => {
       otp: "",
       password: "",
       confirmPassword: "",
+      forgotButtonGroup: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log("Form Data:", values);
       // Handle login logic here
       setSubmiited(true);
+      handleResetPassword(values);
     },
   });
   const handleToggleOTPVisibility = () => {
@@ -78,34 +95,94 @@ const ForgotPassword = () => {
     const { name, value } = e.target;
     console.log("name->", name, "value->", value);
 
-    switch (name) {
-      case "userId":
-        if (regEx.alphaNumeric.test(value)) {
-          formik.setFieldValue(name, value.replace(/\s/g, ""));
-        }
-        break;
-      case "otp":
-        if (regEx.number.test(value)) {
-          formik.setFieldValue(name, value.replace(/\s/g, ""));
-        }
-        break;
-
-      default:
-        formik.handleChange(e);
-        break;
-    }
-
     if (name === "userId") {
+      setShowOtpField(false);
       if (regEx.alphaNumeric.test(value)) {
-        formik.setFieldValue(name, value.replace(/\s/g, ""));
+        formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
       }
     } else if (name === "otp") {
       if (regEx.number.test(value)) {
         formik.setFieldValue(name, value.replace(/\s/g, ""));
       }
+    } else if (name === "password") {
+      if (regEx.alphaNumeric.test(value)) {
+        formik.setFieldValue(name, value.replace(/\s/g, ""));
+      }
+    } else if (name === "confirmPassword") {
+      if (regEx.alphaNumeric.test(value)) {
+        formik.setFieldValue(name, value.replace(/\s/g, ""));
+      }
     } else {
       formik.handleChange(e);
     }
+  };
+
+  const handleSentOtp = async () => {
+    if (formik.values.userId.length < 4) {
+      return;
+    } else {
+      let payload = {
+        otp_type: "SendOtp",
+        user_id: formik.values.userId,
+        user_type: formik.values.forgotButtonGroup,
+        sender_type: "E,S",
+      };
+      dispatch(showLoader(""));
+
+      apiServices
+        .sendOtp(payload)
+        .then((response) => {
+          console.log("sendOtpResponse", response?.data?.message);
+
+          if (response?.status === 200) {
+            dispatch(hideLoader());
+            ShowToast("success", response?.data?.message);
+            setShowOtpField(true);
+          }
+        })
+        .catch((error) => {
+          dispatch(hideLoader());
+          const errorMessage = error.response.data.message;
+          ShowToast(
+            "error",
+            errorMessage ||
+              "Sorry for the inconvenience, please try after some time."
+          );
+        });
+    }
+  };
+
+  const handleResetPassword = async (values: any) => {
+    let payload = {
+      user_type: formik.values.forgotButtonGroup,
+      user_id: formik.values.userId,
+      user_password: formik.values.password,
+      confirm_password: formik.values.confirmPassword,
+      otp: formik.values.otp,
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .forgetPassword(payload)
+      .then((response) => {
+        console.log("forgetPasswordResponse", response?.data);
+        console.log("forgetPasswordResponse", response);
+
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          ShowToast("success", response?.data?.message);
+          setShowOtpField(true);
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        const errorMessage = error.response.data.message;
+        ShowToast(
+          "error",
+          errorMessage ||
+            "Sorry for the inconvenience, please try after some time."
+        );
+      });
   };
 
   useEffect(() => {
@@ -163,6 +240,47 @@ const ForgotPassword = () => {
             {" "}
             Don't worry! We will reset your Password in few seconds
           </Typography>
+          <FormControl
+            sx={{
+              marginBottom: "6px",
+            }}
+          >
+            <RadioGroup
+              row
+              aria-labelledby="demo-row-radio-buttons-group-label"
+              name="forgotButtonGroup"
+              // onChange={customHandleChange}
+            >
+              <FormControlLabel
+                value="Partner"
+                control={
+                  <Radio
+                    onChange={customHandleChange}
+                    sx={{
+                      "&.Mui-checked": {
+                        color: "#11395C",
+                      },
+                    }}
+                  />
+                }
+                label="Partner"
+              />
+              <FormControlLabel
+                value="Employee"
+                control={
+                  <Radio
+                    onChange={customHandleChange}
+                    sx={{
+                      "&.Mui-checked": {
+                        color: "#11395C",
+                      },
+                    }}
+                  />
+                }
+                label="Employee"
+              />
+            </RadioGroup>
+          </FormControl>
           <form
             style={isMobile ? {} : formStyle}
             onSubmit={formik.handleSubmit}
@@ -208,127 +326,146 @@ const ForgotPassword = () => {
                       ? 3
                       : null,
                 }}
+                onClick={handleSentOtp}
               >
                 Send OTP
               </Button>
             </Box>
 
-            <TextField
-              label="OTP"
-              placeholder="Please enter OTP"
-              variant="outlined"
-              type={showOtp ? "text" : "password"}
-              size="small"
-              name="otp"
-              inputProps={{
-                maxLength: 4,
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <RiLockPasswordFill />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleToggleOTPVisibility}
-                      edge="end"
-                      aria-label="toggle password visibility"
-                    >
-                      {showOtp ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              onChange={customHandleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.otp}
-              error={formik.touched.otp && Boolean(formik.errors.otp)}
-              helperText={formik.touched.otp && formik.errors.otp}
-              sx={{ marginBottom: 2, width: isMobile ? "100%" : "400px" }}
-            />
-            <TextField
-              label="Password"
-              placeholder="Please enter Password"
-              variant="outlined"
-              type={showPassword ? "text" : "password"}
-              size="small"
-              name="password"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <RiLockPasswordFill />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleTogglePasswordVisibility}
-                      edge="end"
-                      aria-label="toggle password visibility"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              onChange={customHandleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.password}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-              sx={{ marginBottom: 2, width: isMobile ? "100%" : "400px" }}
-            />
-            <TextField
-              label="Confirm Password"
-              placeholder="Please confirm Password"
-              variant="outlined"
-              type={showConfirmPassword ? "text" : "password"}
-              size="small"
-              name="confirmPassword"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <RiLockPasswordFill />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={handleToggleShowPasswordVisibility}
-                      edge="end"
-                      aria-label="toggle password visibility"
-                    >
-                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              onChange={customHandleChange}
-              onBlur={formik.handleBlur}
-              value={formik.values.confirmPassword}
-              error={
-                formik.touched.confirmPassword &&
-                Boolean(formik.errors.confirmPassword)
-              }
-              helperText={
-                formik.touched.confirmPassword && formik.errors.confirmPassword
-              }
-              sx={{ marginBottom: 2, width: isMobile ? "100%" : "400px" }}
-            />
+            {showOtpField && (
+              <>
+                <TextField
+                  label="OTP"
+                  placeholder="Please enter OTP"
+                  variant="outlined"
+                  // type={showOtp ? "text" : "password"}
+                  type={"text"}
+                  size="small"
+                  name="otp"
+                  inputProps={{
+                    maxLength: 6,
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <RiLockPasswordFill />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleToggleOTPVisibility}
+                          edge="end"
+                          aria-label="toggle password visibility"
+                        >
+                          {showOtp ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  onChange={customHandleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.otp}
+                  error={formik.touched.otp && Boolean(formik.errors.otp)}
+                  helperText={formik.touched.otp && formik.errors.otp}
+                  sx={{ marginBottom: 2, width: isMobile ? "100%" : "400px" }}
+                />
+                <TextField
+                  label="Password"
+                  placeholder="Please enter Password"
+                  variant="outlined"
+                  type={showPassword ? "text" : "password"}
+                  size="small"
+                  name="password"
+                  inputProps={{
+                    maxLength: 20,
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <RiLockPasswordFill />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleTogglePasswordVisibility}
+                          edge="end"
+                          aria-label="toggle password visibility"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  onChange={customHandleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.password}
+                  error={
+                    formik.touched.password && Boolean(formik.errors.password)
+                  }
+                  helperText={formik.touched.password && formik.errors.password}
+                  sx={{ marginBottom: 2, width: isMobile ? "100%" : "400px" }}
+                />
+                <TextField
+                  label="Confirm Password"
+                  placeholder="Please confirm Password"
+                  variant="outlined"
+                  type={showConfirmPassword ? "text" : "password"}
+                  size="small"
+                  name="confirmPassword"
+                  inputProps={{
+                    maxLength: 20,
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <RiLockPasswordFill />
+                      </InputAdornment>
+                    ),
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={handleToggleShowPasswordVisibility}
+                          edge="end"
+                          aria-label="toggle password visibility"
+                        >
+                          {showConfirmPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                  onChange={customHandleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.confirmPassword}
+                  error={
+                    formik.touched.confirmPassword &&
+                    Boolean(formik.errors.confirmPassword)
+                  }
+                  helperText={
+                    formik.touched.confirmPassword &&
+                    formik.errors.confirmPassword
+                  }
+                  sx={{ marginBottom: 2, width: isMobile ? "100%" : "400px" }}
+                />
 
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit" // Add type submit to the button
-              sx={{
-                width: isMobile ? "100%" : "400px",
-                backgroundColor: "#095192",
-              }}
-            >
-              Submit
-            </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit" // Add type submit to the button
+                  sx={{
+                    width: isMobile ? "100%" : "400px",
+                    backgroundColor: "#095192",
+                  }}
+                >
+                  Submit
+                </Button>
+              </>
+            )}
           </form>
         </Box>
       </Box>

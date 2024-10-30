@@ -20,6 +20,7 @@ import DataTable from "../../../components/common/table";
 import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { endpoints } from "../../../services/endpoints";
+import ShowToast from "../../../utils/toastUtils";
 
 const ClientStatus = [
   { value: "ALL", label: "ALL" },
@@ -48,6 +49,9 @@ const SlbmHoling = () => {
   const [isInValue, setIsInValue] = useState<any>("");
   const [userData, setUserData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(null);
+
+  const [page, setPage] = useState(1); // Track current page
+  const [pageSize, setPageSize] = useState(10); // Initial page size
 
   const dispatch = useDispatch();
 
@@ -91,7 +95,16 @@ const SlbmHoling = () => {
         }
       })
       .catch((Err) => {
-        console.log("Error", Err);
+        const { message } = Err.response.data;
+        console.log("Error->", message);
+        dispatch(hideLoader());
+        // formik.setFieldError("password", message);
+        const errorMessage = Err.response.data.message;
+        ShowToast(
+          "error",
+          errorMessage ||
+            "Sorry for the inconvenience, please try after some time."
+        );
       });
 
     dispatch(hideLoader());
@@ -126,9 +139,17 @@ const SlbmHoling = () => {
           }
           dispatch(hideLoader());
         })
-        .catch((err) => {
-          console.error("Error fetching branch data:", err);
+        .catch((Err) => {
+          const { message } = Err.response.data;
+          console.log("Error->", message);
           dispatch(hideLoader());
+          // formik.setFieldError("password", message);
+          const errorMessage = Err.response.data.message;
+          ShowToast(
+            "error",
+            errorMessage ||
+              "Sorry for the inconvenience, please try after some time."
+          );
         });
     }
   }, [selectedZone, dispatch]); // This effect runs when `selectedZone` changes
@@ -141,10 +162,25 @@ const SlbmHoling = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    newPage: number
+  ) => {
+    setPage(newPage);
+    handleSubmit(event, newPage); // Fetch data for the new page
+  };
+
+  const handleSubmit = async (event?: any, value?: any) => {
+    console.log("newPage", event, value);
+    let Id = localStorage.getItem("Id");
+    const pageSize = 10; // Define pageSize
+
+    // Calculate start based on the new page (0-indexed)
+    const start = (value - 1) * pageSize;
+
     const payload = {
-      loginName: "EMP-5341", //THIS VALUES COMES FROM API
-      start: 0,
+      loginName: Id,
+      start: value === undefined ? 0 : start, // Calculate start based on the new page
       pageSize: 10,
       searchKey: "",
       zone: selectedZone?.value,
@@ -155,7 +191,6 @@ const SlbmHoling = () => {
     const result = await apiServices
       .SLBMHoldingsReport(payload)
       .then((response) => {
-        debugger;
         console.log("response", response?.data);
         console.log("response", response?.data?.sLBMHoldings[0]);
         const { recordsTotal } = response?.data?.sLBMHoldings[0];
@@ -166,8 +201,12 @@ const SlbmHoling = () => {
         }
       })
       .catch((error) => {
-        console.log("Error->", error);
+        console.log("Error->", error.response);
+        const zoneError = error.response?.data?.errors?.Zone["0"];
+        const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
         dispatch(hideLoader());
+        ShowToast("error", zoneError);
+        ShowToast("error", branchCodeError);
       });
   };
 
@@ -214,9 +253,14 @@ const SlbmHoling = () => {
       document.body.appendChild(link);
       link.click();
       dispatch(hideLoader());
-    } catch (error) {
-      console.error("Download error", error);
+    } catch (error: any) {
+      console.error("Download error", error?.message);
       dispatch(hideLoader());
+      ShowToast(
+        "error",
+        error?.message ||
+          "Sorry for the inconvenience, please try after some time."
+      );
     }
   };
 
@@ -325,9 +369,12 @@ const SlbmHoling = () => {
               <Card>
                 <CardBody>
                   <DataTable
-                    totalRecords={totalEntries}
                     dynamicHeader={slbmColumns}
                     tableData={userData}
+                    totalRecords={totalEntries}
+                    page={page}
+                    onPageChange={handlePageChange}
+                    pageSize={pageSize}
                   />
                 </CardBody>
               </Card>

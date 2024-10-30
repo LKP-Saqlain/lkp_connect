@@ -1,4 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import CountUp from "react-countup";
+// import { getProjectChartsData } from "../../slices/thunks";
+import { createSelector } from "reselect";
+// import { monthProjectData } from "../../components/common/OverviewData";
+import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
+import { useDispatch } from "react-redux";
 import {
   Card,
   CardHeader,
@@ -8,38 +15,49 @@ import {
   DropdownToggle,
   UncontrolledDropdown,
 } from "reactstrap";
-import { StoreVisitsCharts } from "../../components/common/OverviewData";
+import { StoreVisitsCharts } from "../../components/common/Visitors";
 
 const StoreVisits = () => {
+  const [chartData, setChartData] = useState<[]>([]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchActiveInactiveCli = async () => {
+      // if (selectedItem === "T6 Selling") {
+      const Id = localStorage.getItem("Id");
+      const payload = {
+        user_id: Id,
+      };
+      try {
+        dispatch(showLoader(""));
+        const response = await apiServices.GetClientStatusCnt(payload);
+        console.log("GetClientStatusCntresponse", response?.data?.data[0]);
+        setChartData(response?.data?.data[0]);
+        // setBrokerageData(response?.data?.data);
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+        }
+      } catch (error) {
+        console.error("Error->", error);
+        dispatch(hideLoader());
+      }
+    };
+    fetchActiveInactiveCli();
+  }, [dispatch]);
   return (
     <React.Fragment>
       <Col xl={4}>
         <Card className="card-height-100">
           <CardHeader className="align-items-center d-flex">
             <h4 className="card-title mb-0 flex-grow-1">Client Summary</h4>
-            <div className="flex-shrink-0">
-              <UncontrolledDropdown className="card-header-dropdown">
-                <DropdownToggle
-                  tag="a"
-                  className="text-reset dropdown-btn"
-                  role="button"
-                >
-                  <span className="text-muted">
-                    Report<i className="mdi mdi-chevron-down ms-1"></i>
-                  </span>
-                </DropdownToggle>
-                <DropdownMenu className="dropdown-menu-end" end>
-                  <DropdownItem>Download Report</DropdownItem>
-                  <DropdownItem>Export</DropdownItem>
-                  <DropdownItem>Import</DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
-            </div>
           </CardHeader>
 
           <div className="card-body">
             <div dir="ltr">
-              <StoreVisitsCharts dataColors='["--vz-primary", "--vz-success", "--vz-secondary", "--vz-info", "--vz-warning"]' />
+              <StoreVisitsCharts
+                chartData={chartData}
+                dataColors='["--vz-primary", "--vz-success", "--vz-secondary", "--vz-info", "--vz-warning"]'
+              />
             </div>
           </div>
         </Card>

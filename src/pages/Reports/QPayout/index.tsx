@@ -16,6 +16,7 @@ import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
 import DataTable from "../../../components/common/table";
 import { GridColDef } from "@mui/x-data-grid";
+import ShowToast from "../../../utils/toastUtils";
 
 interface Option {
   label: string;
@@ -34,8 +35,11 @@ const QuarterlyPayout = () => {
   const [qPayoutFinYear, setqPayoutFinYear] = useState<any>(null);
   const [selectfinancialQuarter, setSelectFiancialQuarter] =
     useState<Option | null>(null);
-  const [userData, setUserData] = useState([]);
+  const [qPayoutData, setQpayoutData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(null);
+
+  const [page, setPage] = useState(1); // Track current page
+  const [pageSize, setPageSize] = useState(10); // Initial page size
 
   const dispatch = useDispatch();
 
@@ -44,12 +48,26 @@ const QuarterlyPayout = () => {
     setqPayoutFinYear(financialYear);
   }
 
-  const handleSubmit = async () => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    newPage: number
+  ) => {
+    setPage(newPage);
+    handleSubmit(event, newPage); // Fetch data for the new page
+  };
+
+  const handleSubmit = async (event?: any, value?: any) => {
+    const Id = localStorage.getItem("Id");
+    const pageSize = 10; // Define pageSize
+
+    // Calculate start based on the new page (0-indexed)
+    const start = (value - 1) * pageSize;
+
     const payload = {
-      start: 0,
+      start: value === undefined ? 0 : start,
       pageSize: 10,
       searchKey: "",
-      userId: "EMP-5341",
+      userId: Id,
       financialQtr: `2024-${selectfinancialQuarter?.value}`,
     };
     dispatch(showLoader(""));
@@ -61,12 +79,20 @@ const QuarterlyPayout = () => {
         setTotalEntries(recordsTotal);
         dispatch(hideLoader());
         if (response?.status === 200) {
-          setUserData(response.data);
+          setQpayoutData(response.data);
         }
       })
-      .catch((error) => {
-        console.log("Error->", error);
+      .catch((Err) => {
+        const { message } = Err.response.data;
+        console.log("Error->", message);
         dispatch(hideLoader());
+        // formik.setFieldError("password", message);
+        const errorMessage = Err.response.data.message;
+        ShowToast(
+          "error",
+          errorMessage ||
+            "Sorry for the inconvenience, please try after some time."
+        );
       });
   };
 
@@ -152,9 +178,12 @@ const QuarterlyPayout = () => {
               <Card>
                 <CardBody>
                   <DataTable
-                    totalRecords={totalEntries}
-                    tableData={userData}
                     dynamicHeader={qpayoutColumns}
+                    tableData={qPayoutData}
+                    totalRecords={totalEntries}
+                    page={page}
+                    onPageChange={handlePageChange}
+                    pageSize={pageSize}
                   />
                 </CardBody>
               </Card>

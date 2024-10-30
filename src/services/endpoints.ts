@@ -1,6 +1,7 @@
 export const endpoints = {
   Login: "/api/Login/Login",
   TwoFactorAuthentication: "/api/Login/ValidateTwoFactorAuthentication",
+  sendOtp: "/api/Common/SendOtp",
   GetPNL: "/api/PNL/GetPNL",
   getDropDown: "/api/Common/MGetDropDowns",
   getDormantReport: "/api/Common/GetDormantReport",
@@ -10,4 +11,13 @@ export const endpoints = {
   SLBMHoldingsReport: "/api/ShortAllocation/SLBMHoldingsReport",
   SLBMHoldingsReportExcel: "/api/ShortAllocation/SLBMHoldingsReportExcel",
   GetCoreAlertsReport: "/api/Common/GetCoreAlertsReport",
+  getMenus: "/api/Menu/GetMenus",
+  shortAllocation: "/api/ShortAllocation/InsertShortAllocationData",
+  SLBMHoldingsUpload: "/api/ShortAllocation/SLBMHoldingsUpload",
+  ClientCash: "/api/Client/ClientCash",
+  T6Selling: "/api/ShortAllocation/T6Selling",
+  Last7dayBrokerage: "/api/Client/Last7DaysBrok",
+  GetClientStatusCnt: "/api/Client/GetClientStatusCnt",
+  DealerPerformance: "/api/MIS/DEALERPERFORMANCE",
+  forgetPassword: "/api/Login/ForgetPassword",
 };

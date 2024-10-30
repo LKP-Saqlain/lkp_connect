@@ -163,6 +163,12 @@ $value in $theme-colors {
     justify-content:center;
 }
 
+@media (max-width: 576px) {
+    .mobile-margin {
+      margin: -1px !important;
+    }
+  }
+
 
 // added custom style for tradeDash without rounded capsules
 @media (min-width: 992px) {
@@ -176,10 +182,22 @@ $value in $theme-colors {
     width: 50px;
     height: 25px;
     font-size: 8px !important;
+    background-color: #6c757d !important; /* Button color */
+    color: #fff !important; /* Default text color */
+    border: none; /* Optional: remove borders */
+    // font-weight: 100;
 }
+.custom-btn:hover {
+    color: #000 !important; /* Change text color to white on hover */
+  }
 
 .custom-table-btn {
-    background-color: #11395C !important;
+    width: 50px;
+    height: 25px;
+    font-size: 12px !important;
+    background-color: #6c757d !important; /* Button color */
+    color: #fff !important; /* Default text color */
+    border: none; /* Optional: remove borders */
 }
 
 

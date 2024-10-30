@@ -1,16 +1,16 @@
 export const cyptoWidgets = [
-  {
-    id: 1,
-    label: "Reasearch Calls",
-    color: "primary",
-  },
+  // {
+  //   id: 1,
+  //   label: "Reasearch Calls",
+  //   color: "primary",
+  // },
   {
     id: 2,
 
     label: "Clients With Cash Balance",
   },
   { id: 3, label: "T6 Selling" },
-  { id: 4, label: "MTF Open Position" },
+  // { id: 4, label: "MTF Open Position" },
 ];
 
 export const TradeCapsules = [

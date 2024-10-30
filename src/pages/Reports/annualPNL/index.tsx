@@ -17,7 +17,7 @@ import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import axios from "axios";
-
+import ModalComponent from "../../../components/common/SessionModal";
 import Select from "react-select";
 import { endpoints } from "../../../services/endpoints";
 
@@ -40,7 +40,7 @@ const AnnualPNL = () => {
     const value = e.target.value;
     console.log("value", value);
     if (regEx.alphaNumeric.test(value)) {
-      // setIsClientCodeValid(true);
+      setIsClientCodeValid(true);
       setPnlValues(value.toUpperCase().replace(/\s/g, ""));
     }
   };

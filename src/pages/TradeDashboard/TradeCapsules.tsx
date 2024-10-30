@@ -30,14 +30,15 @@ const TradeCapsule = () => {
   };
   return (
     <React.Fragment>
-      <Row className="capsule-custom">
+      <Row className="capsule-custom d-flex flex-row justify-content-between align-items-center ms-1 mobile-margin">
         {(TradeCapsules || []).map((item, key) => (
           <Col lg={2} md={6} sm={12} key={key}>
             <Card
               className="capsule-hover"
               style={{
-                // Set a larger height for id 1 to match the others with buttons
-                height: item.id === 1 ? "75px" : "auto",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
+                border: "1px solid rgba(0, 0, 0, 0.2)",
+                height: item.id === 1 ? "80px" : "auto",
               }}
             >
               <CardBody>
@@ -47,6 +48,7 @@ const TradeCapsule = () => {
                       className="fw-semibold fs-12 mb-1 trade-dash-txt text-center"
                       style={{
                         fontFamily: '"Public Sans", sans-serif',
+                        marginTop: item.id === 1 ? "15px" : "auto",
                       }}
                     >
                       {item.label}

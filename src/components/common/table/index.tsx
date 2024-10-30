@@ -4,83 +4,67 @@ import Paper from "@mui/material/Paper";
 import Pagination from "@mui/material/Pagination";
 import "./style.css";
 
-interface DormantClient {
+interface DormantClientProps {
   tableData?: any[];
   totalRecords?: any;
   dynamicHeader: GridColDef[];
-  handlePageChange?: (event: React.ChangeEvent<unknown>, value: number) => void;
+  initialPage?: number; // This can be used if you want to set a default value in case page is not passed.
+  page?: number; // Make sure to receive this as a required prop
+  pageSize?: number; // Make sure to receive this as a required prop
+  onPageChange?: (event: React.ChangeEvent<unknown>, page: number) => void;
 }
 
-export default function DataTable({
+const DataTable: React.FC<DormantClientProps> = ({
   tableData = [],
-  totalRecords,
+  totalRecords = 0,
   dynamicHeader,
-  handlePageChange,
-}: DormantClient) {
-  const [page, setPage] = React.useState(1);
-  const pageSize = 10; // Define page size
-  const totalRows = tableData.length; // Total number of rows
+  page = 0, // Use the page prop directly
+  pageSize = 10, // Use the pageSize prop directly
+  onPageChange,
+}) => {
+  // Calculate the rows to display based on current page and page size
+  // debugger;
+  // const rows = React.useMemo(
+  //   () =>
+  //     tableData
+  //       .slice((page - 1) * pageSize, page * pageSize)
+  //       .map((item, index) => {
+  //         let row: { [key: string]: any } = {
+  //           id: (page - 1) * pageSize + index + 1, // Set unique row id
+  //         };
 
-  // Calculate the rows to display based on current page
-  // const rows = tableData
-  //   .slice((page - 1) * pageSize, page * pageSize)
-  //   .map((item, index) => ({
-  //     id: (page - 1) * pageSize + index + 1, // Correct the id based on the page
-  //     clientCode: item.ctermcode ? item.ctermcode : item.accountcode,
-  //     clientName: item.clientName,
-  //     broFY2223: item.brokerageGeneratedinFY2223,
-  //     broFY2324: item.brokerageGeneratedinFY2324,
-  //     active: item.active,
-  //     lastTradeDate: item.lastTradeDate,
-  //     rmName: item.rmname ? item.rmname : item.rm,
-  //     rmStatus: item.rmstatus,
-  //     dealerName: item.dealerName,
-  //     dealerStatus: item.dealerSTATUS,
-  //     branchCode: item.branchcode,
-  //     zone: item.zone,
-  //     branchType: item.branchtype,
-  //     activationDate: item.activationDate,
-  //     mobileNo: item.mobileNo,
-  //     email: item.email,
-  //     broFY1920: item.brokerageGeneratedinFY1920,
-  //     broFY2021: item.brokerageGeneratedinFY2021,
-  //     broFY1922: item.brokerageGeneratedinFY2122,
-  //   }));
+  //         dynamicHeader.forEach((header) => {
+  //           const field = header.field;
+  //           row[field] = item[field] ?? ""; // Assign field or default to empty string
+  //         });
 
-  // Calculate the rows to display based on current page
-  const rows = tableData
-    .slice((page - 1) * pageSize, page * pageSize)
-    .map((item, index) => {
-      // Define row as an indexable object with string keys
-      let row: { [key: string]: any } = {
-        id: (page - 1) * pageSize + index + 1, // Add unique row id
-      };
-      // Loop through all headers in dynamicHeader and assign the corresponding field from item
-      dynamicHeader.forEach((header) => {
-        const field = header.field; // Field name from header
-        row[field] = field in item ? item[field] : ""; // Check if field exists in item, otherwise fallback to empty string
-      });
+  //         // Add extra fields from item that aren’t part of dynamicHeader
+  //         Object.keys(item).forEach((key) => {
+  //           if (!(key in row)) {
+  //             row[key] = item[key];
+  //           }
+  //         });
 
-      // Optionally: Add any additional fields that are not part of dynamicHeader
-      Object.keys(item).forEach((key) => {
-        if (!row[key]) {
-          row[key] = item[key]; // Add extra fields that are not in dynamicHeader
-        }
-      });
+  //         return row;
+  //       }),
+  //   [tableData, page, pageSize, dynamicHeader] // Ensure all dependencies are here
+  // );
 
-      return row;
-    });
+  React.useEffect(() => {
+    console.log("tableData", tableData);
+  }, [tableData]);
 
   // Handle page change
-  // const handlePageChange = (
-  //   event: React.ChangeEvent<unknown>,
-  //   value: number
-  // ) => {
-  //   setPage(value);
-  // };
-  React.useEffect(() => {
-    console.log("records", totalRecords, tableData);
-  }, [totalRecords, tableData]);
+  const handlePaginationChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    console.log("clickedValue", value);
+    if (onPageChange) {
+      onPageChange(event, value);
+    }
+  };
+
   return (
     <>
       <Paper
@@ -92,10 +76,13 @@ export default function DataTable({
         }}
       >
         <DataGrid
-          rows={rows}
+          rows={tableData}
           columns={dynamicHeader}
-          //   pageSize={pageSize} // Set the page size
-          hideFooterPagination // Hide the default pagination
+          hideFooterPagination
+          getRowId={(row: any) =>
+            row.clientName ? row.clientName : row.alertSequenceNo
+          }
+          // getRowId={(row: any) => console.log("row", row.TransactionDate)}
           sx={{
             border: 0,
             fontFamily: '"Public Sans", sans-serif',
@@ -117,17 +104,19 @@ export default function DataTable({
           padding: "10px 0",
         }}
       >
-        {totalRecords && totalRecords !== null && (
+        {totalRecords > 0 && (
           <div>{`Total ${totalRecords} records available`}</div>
         )}
         <Pagination
           count={Math.ceil(totalRecords / pageSize)}
           page={page}
-          onChange={handlePageChange}
+          onChange={handlePaginationChange}
           color="primary"
           sx={{ display: "flex" }}
         />
       </div>
     </>
   );
-}
+};
+
+export default DataTable;

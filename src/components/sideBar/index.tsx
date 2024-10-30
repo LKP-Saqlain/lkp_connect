@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   styled,
   useTheme,
@@ -36,8 +37,14 @@ import LastTrade from "../../pages/Reports/LastTrade";
 import QuarterlyPayout from "../../pages/Reports/QPayout";
 import SLBM from "../../pages/Reports/SLBM";
 import CoreReport from "../../pages/Reports/CoreReport";
+import { apiServices } from "../../services";
+import { MenuItems } from "../../types";
+import MenuMaster from "../../pages/Masters/MenuMaster";
+import AccessMapping from "../../pages/Masters/AccessMapping";
+import RMSAllocation from "../../pages/RMS/Allocation";
+import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
 
-const drawerWidth = 300;
+const drawerWidth = 260;
 
 // Utility functions for Drawer
 const openedMixin = (theme: Theme, drawerWidth: any): CSSObject => ({
@@ -162,11 +169,61 @@ const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const [activeSubItem, setActiveSubItem] = useState<string | null>(null);
+  const [activeSubItem, setActiveSubItem] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const drawerWidth = isMobile ? 180 : 240;
-  const settings = ["Account", "Logout"];
+  const settings = ["Logout"];
+  const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let userId = localStorage.getItem("Id");
+    let payload = {
+      user_id: userId,
+      menu_Type: "byUser",
+    };
+
+    const respones = apiServices
+      .dashGetMenus(payload)
+      .then((res) => {
+        console.log("res", res?.data);
+        const processedMenus = buildMenuHierarchy(res?.data);
+        console.log("menuItems-->", menuItems);
+        setMenuItems(processedMenus);
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+
+    const buildMenuHierarchy = (data: any) => {
+      // Create a map of menu items with the `menu_code` as the key
+      const menuMap = new Map();
+      data.forEach((item: any) => {
+        menuMap.set(item.menu_code, { ...item, subItems: [] });
+      });
+
+      // Iterate over the data and find child menus
+      const menuHierarchy: any = [];
+      data.forEach((item: any) => {
+        if (item.parent_menu_code === 0) {
+          menuHierarchy.push(menuMap.get(item.menu_code));
+        } else {
+          // Child menu, add to parent
+          const parentMenu = menuMap.get(item.parent_menu_code);
+          if (parentMenu) {
+            parentMenu.subItems.push(menuMap.get(item.menu_code));
+          }
+        }
+      });
+
+      return menuHierarchy;
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log("MenuMaster", activeMenu, activeSubItem);
+  }, [activeMenu, activeSubItem]);
 
   useEffect(() => {
     handleDrawerOpen();
@@ -182,18 +239,34 @@ const SideBar = () => {
 
   // Unified handler for toggling the drawer submenus
   const handleMenuClick = (menuName: string) => {
-    setActiveMenu(activeMenu === menuName ? null : menuName);
+    console.log("test", menuName);
+    if (menuName !== "Reports") {
+      setActiveSubItem("");
+    }
+    setActiveMenu(menuName);
+    // setActiveMenu((prevMenu) => (prevMenu === menuName ? "" : menuName));
   };
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    console.log("data", event.currentTarget);
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (value: any) => {
+    console.log("values", value);
+    if (value === "Logout") {
+      localStorage.removeItem("tkn");
+      localStorage.removeItem("Id");
+      localStorage.removeItem("uIdType");
+      navigate("/");
+    } else {
+      console.log("User clicked on:", value);
+    }
+
     setAnchorElUser(null);
   };
 
-  const menuItems = [
+  const NewmenuItems = [
     { title: "OverView" },
     { title: "Trading Dashboard" },
     {
@@ -218,7 +291,6 @@ const SideBar = () => {
   ];
 
   const handleSubItemClick = (subItem: string) => {
-    // alert("called");
     console.log("value-->", subItem);
     setActiveSubItem(subItem); // Set active sub-item
     isMobile && handleMobileDrawerClose();
@@ -229,21 +301,21 @@ const SideBar = () => {
     handleMenuClick("");
   };
   const renderContent = () => {
-    // debugger;
-    // if (activeMenu !== "Reports") {
-    //   setActiveSubItem();
-    // }
     switch (activeMenu) {
       case "OverView" || "":
         return <OverviewComponent />;
       case "Trading Dashboard":
         return <TradeDashboard />;
       case "Revenue Details":
-        return <Typography>Client Details render here</Typography>;
-      case "Client Details":
-        return <Typography>Client Details render here</Typography>;
-      case "e-KYC Link":
-        return <Typography>e-KYC Link section here</Typography>;
+      case "Masters":
+        switch (activeSubItem) {
+          case "Menu Master":
+            return <MenuMaster />;
+          case "User Access Mapping":
+            return <AccessMapping />;
+          default:
+            break;
+        }
       case "Reports":
         switch (activeSubItem) {
           case "Annual PNL Statement":
@@ -254,21 +326,43 @@ const SideBar = () => {
             return <LastTrade />;
           case "Quarterly Payout Recovery":
             return <QuarterlyPayout />;
-          case "SLBM Client Holding":
+          case "SLBM ClientHolding":
             return <SLBM />;
           case "Core Alerts Report":
             return <CoreReport />;
           default:
             break;
         }
+      case "RMS":
+        switch (activeSubItem) {
+          case "RMS Allocation":
+            return <RMSAllocation />;
+          case "Upload SLBM Holding":
+            return <SLBMHoldings />;
+          default:
+            break;
+        }
+      case "Referal Lead":
+        switch (activeSubItem) {
+          case "Referal Entry":
+            return <TradeDashboard />;
+          case "Referal Entry Status":
+            return <OverviewComponent />;
+          default:
+            break;
+        }
+      case "Client Details":
+        return <Typography>Client Details render here</Typography>;
+      case "e-KYC Link":
+        return <Typography>e-KYC Link section here</Typography>;
       default:
         return (
           <>
             <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-              Please select a table for KYC
+              Welcome to LKP Dashboard
             </Typography>
             <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-              No sub-item selected
+              Please select anyone from left
             </Typography>
           </>
         );
@@ -333,7 +427,10 @@ const SideBar = () => {
             onClose={handleCloseUserMenu}
           >
             {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
+              <MenuItem
+                key={setting}
+                onClick={() => handleCloseUserMenu(setting)}
+              >
                 <Typography sx={{ textAlign: "center" }}>{setting}</Typography>
               </MenuItem>
             ))}
@@ -371,14 +468,14 @@ const SideBar = () => {
           <List>
             {menuItems.map((item) => (
               <DrawerItem
-                key={item.title}
-                title={item.title}
+                key={item.menu_code}
+                title={item.menu_name}
                 open={open}
                 subItems={item.subItems}
                 handleDrawerOpen={handleDrawerOpen}
                 isMobile={isMobile}
                 activeMenu={activeMenu}
-                handleClick={() => handleMenuClick(item.title)}
+                handleClick={() => handleMenuClick(item.menu_name)}
                 handleSubItemClick={handleSubItemClick}
               />
             ))}

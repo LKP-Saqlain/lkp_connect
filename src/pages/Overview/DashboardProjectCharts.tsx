@@ -1,14 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import getChartColorsArray from "../../components/common/ChartsDynamicColor";
 import { Col } from "reactstrap";
 
-const ProjectsOverviewCharts = ({ dataColors, series }: any) => {
-  var linechartcustomerColors = getChartColorsArray(dataColors);
+const barColors = ["#11395C", "#F57C00"];
+
+const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
+  const [latestDates, setLatestDates] = useState<any>("");
+
+  // var linechartcustomerColors = getChartColorsArray(dataColors);
+
+  useEffect(() => {
+    console.log("brokData", brokerageData);
+
+    const formatDate = (dateString: string) => {
+      const date = new Date(dateString);
+      const options: Intl.DateTimeFormatOptions = {
+        day: "numeric",
+        month: "short",
+        year: "2-digit",
+      };
+      return date.toLocaleDateString("en-US", options);
+    };
+
+    const categories = brokerageData.map((item: any) => item.Dtrandate);
+    setLatestDates(categories);
+    console.log("categories", categories);
+  }, [brokerageData]);
+
+  // Dynamically calculate max for both series
+  const maxGrossBrokerage =
+    Math.max(...brokerageData.map((item: any) => item.GrossBrokerage)) * 1.1;
+  const maxAPbrokerage =
+    Math.max(...brokerageData.map((item: any) => item.APbrokerage)) * 1.1;
 
   var options: any = {
     chart: {
-      height: 374,
+      height: 370,
       type: "line",
       toolbar: {
         show: false,
@@ -16,11 +44,11 @@ const ProjectsOverviewCharts = ({ dataColors, series }: any) => {
     },
     stroke: {
       curve: "smooth",
-      dashArray: [0, 3, 0],
+      dashArray: [0, 0, 8],
       width: [0, 1, 0],
     },
     fill: {
-      opacity: [1, 0.1, 1],
+      opacity: [1, 1],
     },
     markers: {
       size: [0, 4, 0],
@@ -30,16 +58,7 @@ const ProjectsOverviewCharts = ({ dataColors, series }: any) => {
       },
     },
     xaxis: {
-      categories: [
-        "1 April 24",
-        "2 April 24",
-        "3 April 24",
-        "4 April 24",
-        "5 April 24",
-        "6 April 24",
-        "7 April 24",
-        "8 April 24",
-      ],
+      categories: latestDates,
       axisTicks: {
         show: false,
       },
@@ -47,6 +66,34 @@ const ProjectsOverviewCharts = ({ dataColors, series }: any) => {
         show: false,
       },
     },
+    // Add yaxis configuration here
+    yaxis: [
+      {
+        title: {
+          text: "Bar Range",
+        },
+        min: 0,
+        max: maxGrossBrokerage, // Dynamic max for GrossBrokerage
+        labels: {
+          formatter: function (value: number) {
+            return value.toFixed(2);
+          },
+        },
+      },
+      // {
+      //   opposite: true,
+      //   title: {
+      //     text: "AP Share",
+      //   },
+      //   min: 0,
+      //   max: maxAPbrokerage,
+      //   labels: {
+      //     formatter: function (value: number) {
+      //       return value.toFixed(2);
+      //     },
+      //   },
+      // },
+    ],
     grid: {
       show: true,
       xaxis: {
@@ -83,11 +130,10 @@ const ProjectsOverviewCharts = ({ dataColors, series }: any) => {
     },
     plotOptions: {
       bar: {
-        columnWidth: "30%",
-        barHeight: "70%",
+        horizontal: false,
       },
     },
-    colors: linechartcustomerColors,
+    colors: barColors,
     tooltip: {
       shared: true,
       y: [
@@ -102,7 +148,7 @@ const ProjectsOverviewCharts = ({ dataColors, series }: any) => {
         {
           formatter: function (y: any) {
             if (typeof y !== "undefined") {
-              return "$" + y.toFixed(2) + "k";
+              return y.toFixed(2);
             }
             return y;
           },
@@ -118,9 +164,10 @@ const ProjectsOverviewCharts = ({ dataColors, series }: any) => {
       ],
     },
   };
+
   return (
     <React.Fragment>
-      <Col xl={10}>
+      <Col>
         <ReactApexChart
           dir="ltr"
           options={options}
@@ -134,53 +181,41 @@ const ProjectsOverviewCharts = ({ dataColors, series }: any) => {
   );
 };
 
-const RevenueCharts = ({ dataColors, series }: any) => {
+const RevenueCharts = ({ dataColors, series, revenueMonths }: any) => {
+  const [mnthYRValues, setMnthYRValues] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log("series", revenueMonths, series);
+    const latestMonths = revenueMonths.map((item: any) => item.MnthYR);
+    console.log("latestMonts", latestMonths);
+    setMnthYRValues(latestMonths);
+  }, [revenueMonths, series]);
+
   var linechartcustomerColors = getChartColorsArray(dataColors);
 
+  const revenueBarColor = ["#01D28E", "#6DBBFF"];
+
+  const brokingRange =
+    Math.max(...revenueMonths.map((item: any) => item.Ach_brok_dir)) * 1.1;
+  const NonBrokingRange =
+    Math.max(...revenueMonths.map((item: any) => item.Tot_TPD_rev)) * 1.1;
+
   var options: any = {
+    series: series,
     chart: {
-      height: 370,
-      type: "line",
+      type: "bar",
+      height: 350,
+      stacked: true,
       toolbar: {
-        show: false,
+        show: false, // Hide the toolbar
       },
     },
     stroke: {
-      curve: "straight",
-      dashArray: [0, 0, 8],
-      width: [2, 0, 2.2],
+      width: 1,
+      colors: ["#fff"],
     },
-    fill: {
-      opacity: [0.1, 0.9, 1],
-    },
-    markers: {
-      size: [0, 0, 0],
-      strokeWidth: 2,
-      hover: {
-        size: 4,
-      },
-    },
-    xaxis: {
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
-      axisTicks: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
+    dataLabels: {
+      enabled: false, // Disable data labels
     },
     grid: {
       show: true,
@@ -201,56 +236,36 @@ const RevenueCharts = ({ dataColors, series }: any) => {
         left: 10,
       },
     },
-    legend: {
-      show: true,
-      horizontalAlign: "center",
-      offsetX: 0,
-      offsetY: -5,
-      markers: {
-        width: 9,
-        height: 9,
-        radius: 6,
-      },
-      itemMargin: {
-        horizontal: 10,
-        vertical: 0,
-      },
-    },
     plotOptions: {
       bar: {
-        columnWidth: "30%",
-        barHeight: "70%",
+        horizontal: false,
       },
     },
-    colors: linechartcustomerColors,
+    xaxis: {
+      categories: mnthYRValues,
+    },
+    fill: {
+      opacity: 1,
+    },
+    colors: ["#01D28E", "#008FFB", "#F57C00", "#00E396"],
+    yaxis: {
+      title: {
+        text: "Bar Range",
+      },
+      labels: {
+        formatter: (value: any) => {
+          return value.toFixed(0);
+        },
+      },
+    },
+    legend: {
+      position: "bottom",
+      horizontalAlign: "center",
+    },
     tooltip: {
+      enabled: true,
       shared: true,
-      y: [
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return y.toFixed(0);
-            }
-            return y;
-          },
-        },
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return "$" + y.toFixed(2) + "k";
-            }
-            return y;
-          },
-        },
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return y.toFixed(0) + " Sales";
-            }
-            return y;
-          },
-        },
-      ],
+      intersect: false,
     },
   };
   return (
@@ -258,8 +273,8 @@ const RevenueCharts = ({ dataColors, series }: any) => {
       <ReactApexChart
         dir="ltr"
         options={options}
-        series={series}
-        type="line"
+        series={options?.series}
+        type="bar"
         height="370"
         className="apex-charts"
       />

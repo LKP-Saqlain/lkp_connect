@@ -12,3 +12,13 @@ export interface FormData {
   accNo: string;
   chequeNo: string;
 }
+
+export interface MenuItems {
+  menu_code: number;
+  menu_name: string;
+  menu_path: string | null;
+  parent_menu_code: number;
+  menu_order: number;
+  isParent: boolean;
+  subItems?: MenuItems[]; // SubItems for child menus
+}

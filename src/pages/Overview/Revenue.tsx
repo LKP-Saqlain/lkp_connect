@@ -1,129 +1,170 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import { RevenueCharts } from "./DashboardProjectCharts";
-import CountUp from "react-countup";
-import { useSelector, useDispatch } from "react-redux";
-// import { getRevenueChartsData } from "../../slices/thunks";
+import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
+import { useDispatch } from "react-redux";
 import { createSelector } from "reselect";
-import { allRevenueData } from "../../components/common/OverviewData";
+
+export const allRevenueData = [
+  {
+    name: "Broking",
+    type: "bar",
+    data: [34, 65, 46, 68, 49, 61, 42, 44, 78, 52, 63, 67],
+  },
+  {
+    name: "Non-Broking",
+    type: "bar",
+    data: [
+      89.25, 98.58, 68.74, 108.87, 77.54, 84.03, 51.24, 28.57, 92.57, 42.36,
+      88.51, 36.57,
+    ],
+  },
+];
+
+const series = [
+  {
+    name: "Q1 Budget",
+    group: "budget",
+    data: [44000, 55000, 41000, 67000, 22000, 43000],
+  },
+  {
+    name: "Q1 Actual",
+    group: "actual",
+    data: [48000, 50000, 40000, 65000, 25000, 40000],
+  },
+  {
+    name: "Q2 Budget",
+    group: "budget",
+    data: [13000, 36000, 20000, 8000, 13000, 27000],
+  },
+];
 
 const Revenue = () => {
-  //   const dispatch: any = useDispatch();
+  const [yearRevenue, setYearRevenue] = useState<[]>([]);
+  const [brokingNonBrokingData, setBrokingNonBrokingData] = useState([
+    {
+      name: "Broking",
+      group: "Broking",
+      data: [],
+    },
+    {
+      name: "Non-Broking",
+      group: "Non-Broking",
+      data: [],
+    },
+    {
+      name: "Indirect Broking",
+      group: "Broking",
+      data: [],
+    },
+  ]);
+  const dispatch = useDispatch();
 
-  //   const [chartData, setchartData] = useState<any>([]);
+  useEffect(() => {
+    console.log("series", series, brokingNonBrokingData);
+  }, [series]);
+  useEffect(() => {
+    const fetchBrokerage = async () => {
+      const Id = localStorage.getItem("Id");
+      const payload = {
+        user_id: Id,
+      };
+      try {
+        dispatch(showLoader(""));
+        const response = await apiServices.DealerPerformance(payload);
+        console.log("DealerPerformanceResponse", response?.data?.data?.Table);
+        setYearRevenue(response?.data?.data?.Table);
+        const fetchRevenueData = response?.data?.data?.Table;
+        if (fetchRevenueData) {
+          // Extract GrossBrokerage and APbrokerage data from the API response
+          const brokingValues = fetchRevenueData.map(
+            (item: any) => item.Ach_brok_dir
+          );
+          const nonBrokingValues = fetchRevenueData.map(
+            (item: any) => item.Tot_TPD_rev
+          );
 
-  //   const selectDashboardData = createSelector(
-  //     (state: any) => state.DashboardEcommerce,
-  //     (state) => ({
-  //       revenueData: state.revenueData,
-  //     })
-  //   );
-  // Inside your component
-  //   const { revenueData } = useSelector(selectDashboardData);
+          const indirectValues = fetchRevenueData.map(
+            (item: any) => item.Ach_brok_indir + item.Ach_brok_ind_less2yrs
+          );
 
-  //   useEffect(() => {
-  //     setchartData(revenueData);
-  //   }, [revenueData]);
+          console.log("indirectValues-->", indirectValues);
 
-  //   const onChangeChartPeriod = (pType: any) => {
-  //     dispatch(getRevenueChartsData(pType));
-  //   };
+          // Update the monthProjectData array
+          setBrokingNonBrokingData([
+            {
+              name: "Broking",
+              group: "Broking",
+              data: brokingValues,
+            },
+            {
+              name: "Non-Broking",
+              group: "Non-Broking",
+              data: nonBrokingValues,
+            },
+            {
+              name: "Indirect Broking",
+              group: "Broking",
+              data: indirectValues,
+            },
+          ]);
+        }
 
-  //   useEffect(() => {
-  //     dispatch(getRevenueChartsData("all"));
-  //   }, [dispatch]);
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+        }
+      } catch (error) {
+        console.error("Error->", error);
+        dispatch(hideLoader());
+      }
+    };
+
+    fetchBrokerage();
+  }, [dispatch]);
   return (
     <React.Fragment>
       <Card>
-        <CardHeader className="border-0 align-items-center d-flex">
-          <h4 className="card-title mb-0 flex-grow-1">
-            Revenue Summary For Current Financial Year
-          </h4>
-          <div className="d-flex gap-1">
-            <button
-              type="button"
-              className="btn btn-primary btn-sm"
-              //   onClick={() => {
-              //     onChangeChartPeriod("all");
-              //   }}
-            >
-              Gross Revenue
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary btn-sm"
-              //   onClick={() => {
-              //     onChangeChartPeriod("month");
-              //   }}
-            >
-              AP Share
-            </button>
-            {/* <button
-              type="button"
-              className="btn btn-soft-secondary btn-sm"
-              //   onClick={() => {
-              //     onChangeChartPeriod("halfyear");
-              //   }}
-            >
-              6M
-            </button>
-            <button
-              type="button"
-              className="btn btn-soft-primary btn-sm"
-              //   onClick={() => {
-              //     onChangeChartPeriod("year");
-              //   }}
-            >
-              1Y
-            </button> */}
-          </div>
-        </CardHeader>
-
         <CardHeader className="p-0 border-0 bg-light-subtle">
           <Row className="g-0 text-center">
-            <Col xs={6} sm={3}>
-              <div className="p-3 border border-dashed border-start-0">
-                <h5 className="mb-1">
-                  <CountUp start={0} end={7585} duration={3} separator="," />
-                </h5>
-                <p className="text-muted mb-0">Orders</p>
-              </div>
-            </Col>
-            <Col xs={6} sm={3}>
-              <div className="p-3 border border-dashed border-start-0">
-                <h5 className="mb-1">
-                  <CountUp
-                    suffix="k"
-                    prefix="$"
-                    start={0}
-                    decimals={2}
-                    end={22.89}
-                    duration={3}
-                  />
-                </h5>
-                <p className="text-muted mb-0">Earnings</p>
-              </div>
-            </Col>
-            <Col xs={6} sm={3}>
-              <div className="p-3 border border-dashed border-start-0">
-                <h5 className="mb-1">
-                  <CountUp start={0} end={367} duration={3} />
-                </h5>
-                <p className="text-muted mb-0">Refunds</p>
-              </div>
-            </Col>
-            <Col xs={6} sm={3}>
-              <div className="p-3 border border-dashed border-start-0 border-end-0">
-                <h5 className="mb-1 text-success">
-                  <CountUp
-                    start={0}
-                    end={18.92}
-                    decimals={2}
-                    duration={3}
-                    suffix="%"
-                  />
-                </h5>
-                <p className="text-muted mb-0">Conversation Ratio</p>
+            <Col xs={12} sm={12}>
+              <div className="p-3 border border-dashed border-start-0 d-flex">
+                <h4 className="card-title mb-0 flex-grow-1 text-start">
+                  Revenue Summary For Current Financial Year
+                </h4>
+                <div
+                  className="d-flex align-items-center"
+                  style={{ fontFamily: "Public Sans, sans-serif" }}
+                >
+                  <div
+                    style={{
+                      backgroundColor: "#01D28E",
+                      width: "16px",
+                      height: "16px",
+                      marginRight: "8px",
+                    }}
+                  ></div>
+                  <p className="mb-0 me-3">Broking</p>
+                  <div
+                    style={{
+                      backgroundColor: "#F57C00",
+                      width: "16px",
+                      height: "16px",
+                      marginRight: "8px",
+                    }}
+                  ></div>
+                  <p className="mb-0 me-3">Indirect-broking</p>
+
+                  <div
+                    style={{
+                      backgroundColor: "#008FFB",
+                      width: "16px",
+                      height: "16px",
+                      marginRight: "8px",
+                    }}
+                  ></div>
+                  <p className="mb-0">Non-broking</p>
+                </div>
               </div>
             </Col>
           </Row>
@@ -133,7 +174,8 @@ const Revenue = () => {
           <div className="w-100">
             <div dir="ltr">
               <RevenueCharts
-                series={allRevenueData}
+                revenueMonths={yearRevenue}
+                series={brokingNonBrokingData}
                 dataColors='["--vz-light",  "--vz-primary", "--vz-secondary"]'
               />
             </div>

@@ -1,9 +1,10 @@
 // /src/services/baseInstance.ts
 import axios from "axios";
+import { endpoints } from "./endpoints";
 
 // Create an Axios instance
 const baseInstance = axios.create({
-  baseURL: "https://middlewareapi.lkp.net.in",
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 10000, // Timeout for the requests
   headers: {
     "Content-Type": "application/json",
@@ -16,17 +17,36 @@ const credentials = `${username}:${password}`;
 const encodedCredentials = btoa(credentials); // Base64 encode
 const LoginauthHeader = `Basic ${encodedCredentials}`;
 
+const publicEndpoints = [
+  endpoints.Login,
+  endpoints.sendOtp,
+  endpoints.TwoFactorAuthentication,
+  endpoints.forgetPassword,
+];
+
 // Add a request interceptor
 baseInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("tkn");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-      // config.headers.Authorization = LoginauthHeader;
-    } else {
+    // Check if the request URL matches one of the public endpoints
+    const isPublicEndpoint = publicEndpoints.some((endpoint) =>
+      config.url?.includes(endpoint)
+    );
+
+    // Use `LoginauthHeader` for public endpoints or `Bearer` token for others
+    if (isPublicEndpoint || !token) {
       config.headers.Authorization = LoginauthHeader;
+    } else {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
+
+    // if (token) {
+    //   config.headers.Authorization = `Bearer ${token}`;
+    //   // config.headers.Authorization = LoginauthHeader;
+    // }
+    // return config;
   },
   (error) => {
     // Handle request error

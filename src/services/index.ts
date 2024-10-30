@@ -11,6 +11,12 @@ export const apiServices = {
   Login: async (payload: any) => {
     return await apiService("POST", endpoints.Login, payload);
   },
+  sendOtp: async (payload: any) => {
+    return await apiService("POST", endpoints.sendOtp, payload);
+  },
+  forgetPassword: async (payload: any) => {
+    return await apiService("POST", endpoints.forgetPassword, payload);
+  },
   getDropDown: async (payload: any, customHeader?: any) => {
     return await apiService(
       "POST",
@@ -41,5 +47,23 @@ export const apiServices = {
   },
   GetCoreAlertsReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetCoreAlertsReport, payload);
+  },
+  dashGetMenus: async (payload: any) => {
+    return await apiService("POST", endpoints.getMenus, payload);
+  },
+  ClientCash: async (payload: any) => {
+    return await apiService("POST", endpoints.ClientCash, payload);
+  },
+  T6Selling: async (payload: any) => {
+    return await apiService("POST", endpoints.T6Selling, payload);
+  },
+  Last7dayBrokerage: async (payload: any) => {
+    return await apiService("POST", endpoints.Last7dayBrokerage, payload);
+  },
+  GetClientStatusCnt: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientStatusCnt, payload);
+  },
+  DealerPerformance: async (payload: any) => {
+    return await apiService("POST", endpoints.DealerPerformance, payload);
   },
 };

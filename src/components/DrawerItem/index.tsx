@@ -21,11 +21,12 @@ import HowToRegIcon from "@mui/icons-material/HowToReg";
 import StackedBarChartIcon from "@mui/icons-material/StackedBarChart";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import List from "@mui/material/List";
+import { MenuItems } from "../../types/index";
 // import "./style.css";
 
 type DrawerItemProps = {
   title: string;
-  subItems?: string[];
+  subItems?: MenuItems[];
   activeMenu: string | null;
   open: boolean;
   handleDrawerOpen: () => void;
@@ -49,7 +50,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
 
   const handleSubMenuToggle = () => {
     console.log("titleCheck", title);
-    setSubMenuOpen((prev) => !prev);
+    setSubMenuOpen((prevOpen) => !prevOpen);
     handleClick();
   };
 
@@ -57,13 +58,19 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     switch (title) {
       case "OverView":
         return <HomeIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />;
-      case "Trading Dashboard":
+      case "Kyc Dashboard":
+        return <HomeIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />;
+      case "Masters":
         return (
           <GridViewIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />
         );
       case "Revenue Details":
         return (
           <LibraryBooksIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />
+        );
+      case "RMS":
+        return (
+          <SwitchAccountIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />
         );
       case "Client Details":
         return (
@@ -80,6 +87,10 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
       case "Marketing Materials":
         return (
           <AddBusinessIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />
+        );
+      case "Referal Lead":
+        return (
+          <CampaignIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />
         );
       case "Regulatory Announcement":
         return (
@@ -149,6 +160,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           ) : (
             <ExpandMore />
           )} */}
+          {/* {subItems && (subMenuOpen ? <ExpandLess /> : <ExpandMore />)} */}
         </ListItemButton>
         {subItems && (
           <Collapse in={subMenuOpen} timeout="auto" unmountOnExit>
@@ -157,11 +169,12 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
                 <ListItemButton
                   key={index}
                   sx={{ pl: 4, color: "#fff" }}
-                  onClick={() => handleSubItemClick(subItem)}
+                  onClick={() => handleSubItemClick(subItem.menu_name)}
                 >
-                  <ArrowRightIcon></ArrowRightIcon>
+                  <ArrowRightIcon />
+                  {/* Ensure subItem.menu_name or appropriate string is passed */}
                   <ListItemText
-                    primary={subItem}
+                    primary={subItem.menu_name} // Replace subItem with subItem.menu_name
                     primaryTypographyProps={{
                       fontSize: "13px",
                       fontFamily: "Public Sans",

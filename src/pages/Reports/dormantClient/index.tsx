@@ -22,6 +22,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { endpoints } from "../../../services/endpoints";
 import { fetchDormantReport } from "../../../redux/thunk/Reports/dormantReport";
+import ShowToast from "../../../utils/toastUtils";
 
 const ClientStatus = [
   { value: "ALL", label: "ALL" },
@@ -35,6 +36,9 @@ interface Option {
   label: string;
   value: string;
 }
+
+const Id = localStorage.getItem("Id");
+const uIdType = localStorage.getItem("uIdType");
 
 const DormantClient = () => {
   const [selectedNoSortingGroup, setSelectedNoSortingGroup] =
@@ -51,12 +55,15 @@ const DormantClient = () => {
   const [userData, setUserData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(null);
 
+  const [page, setPage] = useState(1); // Track current page
+  const [pageSize, setPageSize] = useState(10); // Initial page size
+
   // const data = useSelector((state: RootState) => state.dormantReport.data);
   const dispatch = useDispatch();
 
   useEffect(() => {
     let payload = {
-      user_id: "5341",
+      user_id: Id, // need to
       option: "zone",
       userType: "EMP",
       zone: selectedZone?.value,
@@ -127,9 +134,16 @@ const DormantClient = () => {
           }
           dispatch(hideLoader());
         })
-        .catch((err) => {
-          console.error("Error fetching branch data:", err);
+        .catch((Err) => {
+          const { message } = Err.response.data;
+          console.log("Error->", message);
           dispatch(hideLoader());
+          const errorMessage = Err.response.data.message;
+          ShowToast(
+            "error",
+            errorMessage ||
+              "Sorry for the inconvenience, please try after some time."
+          );
         });
     }
   }, [selectedZone, dispatch]); // This effect runs when `selectedZone` changes
@@ -141,13 +155,26 @@ const DormantClient = () => {
       setPnlValues(value.toUpperCase().replace(/\s/g, ""));
     }
   };
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    newPage: number
+  ) => {
+    setPage(newPage);
+    handleSubmit(event, newPage); // Fetch data for the new page
+  };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event?: any, value?: any) => {
+    console.log("newPage", event, value);
+    let Id = localStorage.getItem("Id");
+    const pageSize = 10; // Define pageSize
+
+    // Calculate start based on the new page (0-indexed)
+    const start = (value - 1) * pageSize;
     const payload = {
-      start: 0,
+      start: value === undefined ? 0 : start, // Calculate start based on the new page
       pageSize: 10,
       searchKey: "",
-      loginName: "EMP-5341",
+      loginName: Id,
       zone: selectedZone?.value,
       branchCode: selectedBranchCode?.value,
       clientStatus:
@@ -163,21 +190,28 @@ const DormantClient = () => {
     const result = await apiServices
       .getDormantReport(payload)
       .then((response) => {
-        console.log("response", response);
         dispatch(hideLoader());
         if (response?.status === 200) {
           let { recordsTotal } = response?.data[0];
+
+          console.log("getDormantReport_response_1", response?.data);
           setTotalEntries(recordsTotal);
           setUserData(response.data);
+        } else if (response?.status == 400) {
+          console.log("getDormantReport_response", response);
         }
       })
       .catch((error) => {
-        console.log("Error->", error);
+        console.log("Error->", error.response.data.errors.Zone["0"]);
+        const zoneError = error.response.data.errors.Zone["0"];
+        const branchCodeError = error.response.data.errors.BranchCode["0"];
         dispatch(hideLoader());
+        ShowToast("error", zoneError);
+        ShowToast("error", branchCodeError);
       });
   };
 
-  const handleExcelDownload = async () => {
+  const handleExcelDownload = () => {
     const payload = {
       start: 0,
       pageSize: 10,
@@ -192,10 +226,12 @@ const DormantClient = () => {
           ? "N"
           : "ALL",
     };
-    try {
-      let token = localStorage.getItem("tkn");
-      dispatch(showLoader("Please wait, We are Processing your Request"));
-      const response = await axios.post(
+
+    let token = localStorage.getItem("tkn");
+    dispatch(showLoader("Please wait, We are Processing your Request"));
+
+    axios
+      .post(
         `https://middlewareapi.lkp.net.in${endpoints.getDormantExcel}`,
         payload,
         {
@@ -204,18 +240,40 @@ const DormantClient = () => {
             Authorization: `Bearer ${token}`,
           },
         }
-      );
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "file.xlsx"); // Specify the file name
-      document.body.appendChild(link);
-      link.click();
-      dispatch(hideLoader());
-    } catch (error) {
-      console.error("Download error", error);
-      dispatch(hideLoader());
-    }
+      )
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "file.xlsx"); // Specify the file name
+        document.body.appendChild(link);
+        link.click();
+        dispatch(hideLoader());
+        console.log("response111", response);
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        if (axios.isAxiosError(error) && error.response) {
+          console.log("Error", error);
+          // Check if error.response exists
+          const validationErrors = error.response.data.errors;
+          if (validationErrors) {
+            // Create a message to display the validation errors
+            const errorMessages = Object.values(validationErrors)
+              .flat() // Flatten the array of error messages
+              .join(", "); // Join messages into a single string
+            ShowToast("error", errorMessages);
+          } else {
+            // Handle other types of errors
+            ShowToast("error", error.message);
+            // dispatch(ShowToast(`An error occurred: ${error.message}`));
+          }
+        } else {
+          // Handle general errors not related to Axios
+          ShowToast("error", "An unexpected error occurred.");
+          // dispatch(ShowToast(`An unexpected error occurred.`));
+        }
+      });
   };
 
   const dormantColumns: GridColDef[] = [
@@ -365,6 +423,9 @@ const DormantClient = () => {
                     dynamicHeader={dormantColumns}
                     tableData={userData}
                     totalRecords={totalEntries}
+                    page={page}
+                    onPageChange={handlePageChange}
+                    pageSize={pageSize}
                   />
                 </CardBody>
               </Card>

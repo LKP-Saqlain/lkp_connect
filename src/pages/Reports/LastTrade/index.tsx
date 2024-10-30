@@ -52,35 +52,21 @@ const LastTrade = () => {
   const handleExcel = async () => {
     console.log("submitClick", selectedClientStatus.value, pnlValues);
 
+    const str = localStorage.getItem("Id");
+    let extractUserId: string | null = null;
+
+    if (str) {
+      const parts = str.split("-");
+      if (parts.length > 1) {
+        extractUserId = parts[1];
+      }
+    }
+
     const payload = {
-      user_id: "5341",
+      user_id: extractUserId,
       active: selectedClientStatus.value,
     };
     dispatch(showLoader("Please wait, We are Processing your Request"));
-    // const result = await apiServices
-    //   .LastTradeDate(payload)
-    //   .then((response: any) => {
-    //     console.log("response-->", response);
-    //     // Handle the response for file download
-    //     const blob = new Blob([response.data], {
-    //       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    //     });
-
-    //     const url = window.URL.createObjectURL(blob);
-    //     const link = document.createElement("a");
-    //     link.href = url;
-    //     link.setAttribute("download", "file.xlsx");
-    //     document.body.appendChild(link);
-    //     link.click();
-
-    //     console.log("File downloaded successfully");
-    //     dispatch(hideLoader());
-    //   })
-    //   .catch((error) => {
-    //     // Handle the error
-    //     console.log("ERROR", error);
-    //     dispatch(hideLoader());
-    //   });
 
     try {
       let token = localStorage.getItem("tkn");

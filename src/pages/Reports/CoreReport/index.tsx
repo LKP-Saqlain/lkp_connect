@@ -25,6 +25,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import "./style.css";
 import { FormData } from "../../../types";
 import axios from "axios";
+import ShowToast from "../../../utils/toastUtils";
 
 import Select from "react-select";
 import { endpoints } from "../../../services/endpoints";
@@ -88,65 +89,86 @@ const CoreReport = () => {
 
   const handleDownloadExcel = async () => {
     const payload = {
-      clientCode: formData.clientCode ? formData.clientCode : "",
-      clientAccNo: formData.accNo ? formData.accNo : "",
-      chequeNo: formData.chequeNo ? formData.chequeNo : "",
-      lkpAccNo: lkpAccDropDownValue ? lkpAccDropDownValue : "",
-      paymentType: paymentType ? lkpAccDropDownValue : "",
-      valueDate: selectedDate ? selectedDate : "",
+      clientCode: formData.clientCode || "",
+      clientAccNo: formData.accNo || "",
+      chequeNo: formData.chequeNo || "",
+      lkpAccNo: lkpAccDropDownValue || "",
+      paymentType: paymentType || "",
+      valueDate: selectedDate || "",
       userId: "",
       option: "",
     };
+
     try {
       let token = localStorage.getItem("tkn");
       dispatch(showLoader("Please wait, We are Processing your Request"));
+
       const response = await axios.post(
         `https://middlewareapi.lkp.net.in${endpoints.GetCoreAlertsReport}`,
         payload,
         {
-          responseType: "blob",
+          responseType: "blob", // Ensures the response is treated as a binary file
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+
+      // Check if the response is a valid Blob
+      if (response.data.size === 0) {
+        throw new Error("Received empty response from server");
+      }
+
+      // Create a URL for the Blob and download it
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "file.xlsx"); // Specify the file name
+      link.setAttribute("download", "file.xlsx"); // Ensure the file name has a proper extension
       document.body.appendChild(link);
       link.click();
+      document.body.removeChild(link); // Clean up the DOM
+      window.URL.revokeObjectURL(url); // Free up memory by revoking the URL
       dispatch(hideLoader());
     } catch (error) {
       console.error("Download error", error);
       dispatch(hideLoader());
     }
   };
-  const handleSubmit = async () => {
+
+  const handleSubmit = () => {
+    // Prepare the payload
     const payload = {
-      clientCode: formData.clientCode ? formData.clientCode : "",
-      clientAccNo: formData.accNo ? formData.accNo : "",
-      chequeNo: formData.chequeNo ? formData.chequeNo : "",
-      lkpAccNo: lkpAccDropDownValue ? lkpAccDropDownValue : "",
-      paymentType: paymentType ? lkpAccDropDownValue : "",
-      valueDate: selectedDate ? selectedDate : "",
+      clientCode: formData.clientCode || "",
+      clientAccNo: formData.accNo || "",
+      chequeNo: formData.chequeNo || "",
+      lkpAccNo: lkpAccDropDownValue || "",
+      paymentType: paymentType || "",
+      valueDate: selectedDate || "",
       userId: "",
       option: "",
     };
-    dispatch(showLoader(""));
-    const result = await apiServices
+
+    dispatch(showLoader("")); // Show the loader
+
+    apiServices
       .GetCoreAlertsReport(payload)
       .then((response) => {
         console.log("response", response?.status);
-        dispatch(hideLoader());
+
+        // Check for success status
         if (response?.status === 200) {
-          // let { recordsTotal } = response?.data[0];
-          // setTotalEntries(recordsTotal);
           setUserData(response?.data);
         }
       })
-      .catch((error) => {
-        console.log("Error->", error);
+      .catch((Err) => {
+        const errorMessage =
+          Err.response?.data?.message ||
+          "Sorry for the inconvenience, please try after some time.";
+        console.log("Error->", errorMessage);
+        ShowToast("error", errorMessage);
+      })
+      .finally(() => {
+        // Hide the loader in the finally block
         dispatch(hideLoader());
       });
   };
