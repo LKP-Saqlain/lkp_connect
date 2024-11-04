@@ -8,7 +8,6 @@ import "./assets/scss/themes.scss";
 import PrivateRoute from "./components/PrivateRoutes";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer } from "react-toastify";
-import { useAuth } from "./components/hooks";
 
 import Loader from "./components/common/Loader";
 
@@ -21,7 +20,6 @@ function App() {
         <Loader />
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          {/* <Route path="/authorization" element={<AuthenticateUser />} /> */}
           <Route
             path="/authorization"
             element={<PrivateRoute authElement={<AuthenticateUser />} />}

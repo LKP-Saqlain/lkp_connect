@@ -4,7 +4,6 @@ import { RevenueCharts } from "./DashboardProjectCharts";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { useDispatch } from "react-redux";
-import { createSelector } from "reselect";
 
 export const allRevenueData = [
   {

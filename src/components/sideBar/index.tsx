@@ -118,7 +118,7 @@ const SideBar = () => {
   const [activeSubItem, setActiveSubItem] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const drawerWidth = isMobile ? 180 : 240;
+  // const drawerWidth = isMobile ? 180 : 240;
   const settings = ["Logout"];
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
   const navigate = useNavigate();
@@ -133,7 +133,7 @@ const SideBar = () => {
       menu_Type: "byUser",
     };
 
-    const respones = apiServices
+    apiServices
       .dashGetMenus(payload)
       .then((res) => {
         console.log("res", res?.data);
@@ -211,30 +211,6 @@ const SideBar = () => {
     setAnchorElUser(null);
   };
 
-  const NewmenuItems = [
-    { title: "OverView" },
-    { title: "Trading Dashboard" },
-    {
-      title: "Reports",
-      subItems: [
-        "Annual PNL Statement",
-        "Dormant Client Report",
-        "Last Trade Data",
-        "Quarterly Payout Recovery",
-        "SLBM Client Holding",
-        "Core Alerts Report",
-      ],
-    },
-    { title: "Revenue Details" },
-    { title: "Client Details" },
-    { title: "e-KYC Link" },
-    { title: "Live Contest" },
-    { title: "Marketing Materials" },
-    { title: "Regulatory Announcement" },
-    { title: "Registration Details" },
-    { title: "Stack Study" },
-  ];
-
   const handleSubItemClick = (subItem: string) => {
     console.log("value-->", subItem);
     setActiveSubItem(subItem); // Set active sub-item
@@ -253,7 +229,8 @@ const SideBar = () => {
   const renderContent = () => {
     console.log("activeMenu", activeMenu);
     switch (activeMenu) {
-      case "Overview" || "":
+      case "Overview":
+      case "":
         return <OverviewComponent />;
       case "Trading":
         return <TradeDashboard />;
@@ -265,7 +242,7 @@ const SideBar = () => {
           case "User Access Mapping":
             return <AccessMapping />;
           default:
-            break;
+            return null;
         }
       case "Reports":
         switch (activeSubItem) {
@@ -282,7 +259,7 @@ const SideBar = () => {
           case "Core Alerts Report":
             return <CoreReport />;
           default:
-            break;
+            return null;
         }
       case "RMS":
         switch (activeSubItem) {
@@ -291,7 +268,7 @@ const SideBar = () => {
           case "Upload SLBM Holding":
             return <SLBMHoldings />;
           default:
-            break;
+            return null;
         }
       case "Referal Lead":
         switch (activeSubItem) {
@@ -300,7 +277,7 @@ const SideBar = () => {
           case "Referal Entry Status":
             return <OverviewComponent />;
           default:
-            break;
+            return null;
         }
       case "Client Details":
         return <Typography>Client Details render here</Typography>;

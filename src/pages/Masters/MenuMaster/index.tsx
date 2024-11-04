@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardBody,
@@ -13,11 +13,9 @@ import {
 import { regEx } from "../../../helper/method";
 import DownloadIcon from "@mui/icons-material/Download";
 import PNLNote from "../../../components/common/pnlNote";
-import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import axios from "axios";
-import ModalComponent from "../../../components/common/SessionModal";
 import Select from "react-select";
 import { endpoints } from "../../../services/endpoints";
 
@@ -35,7 +33,9 @@ const MenuMaster = () => {
     setFinYear(finYear);
     setIsFinYearValid(true);
   }
-
+  useEffect(() => {
+    console.log(isFinYearValid);
+  }, []);
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     console.log("value", value);

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   ListItem,
   ListItemButton,
@@ -6,7 +5,7 @@ import {
   ListItemText,
   Collapse,
 } from "@mui/material";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
+// import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import HomeIcon from "@mui/icons-material/Home";
@@ -39,9 +38,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   title,
   subItems,
   open,
-  handleDrawerOpen,
   handleClick,
-  isMobile,
   activeMenu,
   handleSubItemClick,
 }) => {

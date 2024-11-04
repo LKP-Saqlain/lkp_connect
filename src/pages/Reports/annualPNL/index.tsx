@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Card, CardBody, CardHeader, Col, Row, Button } from "reactstrap";
 import "../style.css";
 import DownloadIcon from "@mui/icons-material/Download";

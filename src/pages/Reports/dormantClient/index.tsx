@@ -6,22 +6,17 @@ import {
   Col,
   Label,
   Row,
-  Input,
   Button,
 } from "reactstrap";
-import { regEx } from "../../../helper/method";
 import DownloadIcon from "@mui/icons-material/Download";
-import PNLNote from "../../../components/common/pnlNote";
 import { apiServices } from "../../../services";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../../../redux/store";
+import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
 import DataTable from "../../../components/common/table";
 import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { endpoints } from "../../../services/endpoints";
-import { fetchDormantReport } from "../../../redux/thunk/Reports/dormantReport";
 import ShowToast from "../../../utils/toastUtils";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -34,31 +29,20 @@ const ClientStatus = [
   //   { value: "Toronto", label: "Toronto" },
 ];
 
-interface Option {
-  label: string;
-  value: string;
-}
+// interface Option {
+//   label: string;
+//   value: string;
+// }
 
 const Id = localStorage.getItem("Id");
-const uIdType = localStorage.getItem("uIdType");
 
 const DormantClient = () => {
-  const [selectedNoSortingGroup, setSelectedNoSortingGroup] =
-    useState<any>(null);
-  const [selectedZone, setSelectedZone] = useState<Option | null>(null);
-  const [selectedBranchCode, setSelectedBranchCode] = useState<Option | null>(
-    null
-  );
-  const [selectedClientStatus, setSelectedClientStatus] =
-    useState<Option | null>(null);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
-  const [pnlValues, setPnlValues] = useState<any>("");
   const [userData, setUserData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(null);
 
   const [page, setPage] = useState(1); // Track current page
-  const [pageSize, setPageSize] = useState(10); // Initial page size
 
   // const data = useSelector((state: RootState) => state.dormantReport.data);
   const dispatch = useDispatch();
@@ -116,7 +100,7 @@ const DormantClient = () => {
     };
 
     dispatch(showLoader(""));
-    const response = apiServices
+    apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
         console.log("Response-->", res);
@@ -190,13 +174,13 @@ const DormantClient = () => {
     }
   }, [formik.values.selectedZone, dispatch]); // This effect runs when `selectedZone` changes
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    console.log("value", value);
-    if (regEx.alphaNumeric.test(value)) {
-      setPnlValues(value.toUpperCase().replace(/\s/g, ""));
-    }
-  };
+  // const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   console.log("value", value);
+  //   if (regEx.alphaNumeric.test(value)) {
+  //     setPnlValues(value.toUpperCase().replace(/\s/g, ""));
+  //   }
+  // };
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     newPage: number
@@ -229,7 +213,7 @@ const DormantClient = () => {
     dispatch(showLoader(""));
     // const test = dispatch(fetchDormantReport(payload));
     // console.log("testReduxThnk", test);
-    const result = await apiServices
+    await apiServices
       .getDormantReport(payload)
       .then((response) => {
         dispatch(hideLoader());
@@ -590,7 +574,7 @@ const DormantClient = () => {
                     totalRecords={totalEntries}
                     page={page}
                     onPageChange={handlePageChange}
-                    pageSize={pageSize}
+                    pageSize={10}
                   />
                 </CardBody>
               </Card>

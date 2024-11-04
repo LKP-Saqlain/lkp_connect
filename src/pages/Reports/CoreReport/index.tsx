@@ -8,11 +8,9 @@ import {
   Row,
   Input,
   Button,
-  FormFeedback,
 } from "reactstrap";
 import { regEx } from "../../../helper/method";
 import DownloadIcon from "@mui/icons-material/Download";
-import PNLNote from "../../../components/common/pnlNote";
 import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
@@ -143,10 +141,11 @@ const CoreReport = () => {
     newPage: number
   ) => {
     setPage(newPage);
-    handleSubmit(event, newPage); // Fetch data for the new page
+    // handleSubmit(event, newPage); // Fetch data for the new page
+    handleSubmit();
   };
 
-  const handleSubmit = (event?: any, value?: any) => {
+  const handleSubmit = () => {
     // Prepare the payload
     const payload = {
       clientCode: formData.clientCode || "",

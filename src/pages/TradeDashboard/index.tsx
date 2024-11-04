@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Container, Row } from "reactstrap";
+import { Container, Row } from "reactstrap";
 import { useDispatch } from "react-redux";
 import Widgets from "./Widgets";
 import TradeCapsule from "./TradeCapsules";

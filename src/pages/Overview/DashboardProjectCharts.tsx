@@ -13,15 +13,16 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
   useEffect(() => {
     console.log("brokData", brokerageData);
 
-    const formatDate = (dateString: string) => {
-      const date = new Date(dateString);
-      const options: Intl.DateTimeFormatOptions = {
-        day: "numeric",
-        month: "short",
-        year: "2-digit",
-      };
-      return date.toLocaleDateString("en-US", options);
-    };
+    //convert to proper date format
+    // const formatDate = (dateString: string) => {
+    //   const date = new Date(dateString);
+    //   const options: Intl.DateTimeFormatOptions = {
+    //     day: "numeric",
+    //     month: "short",
+    //     year: "2-digit",
+    //   };
+    //   return date.toLocaleDateString("en-US", options);
+    // };
 
     const categories = brokerageData.map((item: any) => item.Dtrandate);
     setLatestDates(categories);
@@ -31,8 +32,8 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
   // Dynamically calculate max for both series
   const maxGrossBrokerage =
     Math.max(...brokerageData.map((item: any) => item.GrossBrokerage)) * 1.1;
-  const maxAPbrokerage =
-    Math.max(...brokerageData.map((item: any) => item.APbrokerage)) * 1.1;
+  // const maxAPbrokerage =
+  //   Math.max(...brokerageData.map((item: any) => item.APbrokerage)) * 1.1;
 
   var options: any = {
     chart: {
@@ -181,7 +182,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
   );
 };
 
-const RevenueCharts = ({ dataColors, series, revenueMonths }: any) => {
+const RevenueCharts = ({ series, revenueMonths }: any) => {
   const [mnthYRValues, setMnthYRValues] = useState<string[]>([]);
 
   useEffect(() => {
@@ -191,14 +192,14 @@ const RevenueCharts = ({ dataColors, series, revenueMonths }: any) => {
     setMnthYRValues(latestMonths);
   }, [revenueMonths, series]);
 
-  var linechartcustomerColors = getChartColorsArray(dataColors);
+  // var linechartcustomerColors = getChartColorsArray(dataColors);
 
-  const revenueBarColor = ["#01D28E", "#6DBBFF"];
+  // const revenueBarColor = ["#01D28E", "#6DBBFF"];
 
-  const brokingRange =
-    Math.max(...revenueMonths.map((item: any) => item.Ach_brok_dir)) * 1.1;
-  const NonBrokingRange =
-    Math.max(...revenueMonths.map((item: any) => item.Tot_TPD_rev)) * 1.1;
+  // const brokingRange =
+  //   Math.max(...revenueMonths.map((item: any) => item.Ach_brok_dir)) * 1.1;
+  // const NonBrokingRange =
+  //   Math.max(...revenueMonths.map((item: any) => item.Tot_TPD_rev)) * 1.1;
 
   var options: any = {
     series: series,

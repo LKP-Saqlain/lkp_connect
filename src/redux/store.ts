@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loaderReducer from "./slices/loaderSlice";
-import dormantReportReducer from "./slices/Reports/dormantReport";
-import LoginReducer from "./slices/Login/login";
+// import dormantReportReducer from "./slices/Reports/dormantReport";
+// import LoginReducer from "./slices/Login/login";
 
 const store = configureStore({
   reducer: {

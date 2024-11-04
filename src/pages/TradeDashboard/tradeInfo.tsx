@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import DropDown from "../../components/common/customDropDown";
@@ -29,6 +29,8 @@ const DataTable = ({ selectedWidget, T6Data }: SelectedWidgetProps) => {
   // Define columns for the DataGrid dynamically
 
   useEffect(() => {
+    console.log(totalRows);
+
     if (selectedWidget !== "Clients With Cash Balance") {
       setTradeData([]);
     }

@@ -4,9 +4,6 @@ import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
-import { GridColDef } from "@mui/x-data-grid";
-import axios from "axios";
-import { endpoints } from "../../../services/endpoints";
 import ShowToast from "../../../utils/toastUtils";
 
 interface Option {
@@ -18,7 +15,6 @@ interface table {
   handleValues: (data: any) => void;
   tradeData: any;
 }
-const userType = localStorage.getItem("uIdType");
 const Id = localStorage.getItem("Id");
 
 const DropDown = ({ handleValues, tradeData }: table) => {
@@ -26,16 +22,17 @@ const DropDown = ({ handleValues, tradeData }: table) => {
   const [selectedBranchCode, setSelectedBranchCode] = useState<Option | null>(
     null
   );
-  const [selectedClientStatus, setSelectedClientStatus] =
-    useState<Option | null>(null);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
-  const [pnlValues, setPnlValues] = useState<any>("");
   const [userData, setUserData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(null);
 
   // const data = useSelector((state: RootState) => state.dormantReport.data);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(userData, totalEntries);
+  }, []);
 
   useEffect(() => {
     const userType = localStorage.getItem("uIdType");
@@ -57,7 +54,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
     };
 
     dispatch(showLoader(""));
-    const response = apiServices
+    apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
         console.log("Response-->", res);
@@ -78,10 +75,6 @@ const DropDown = ({ handleValues, tradeData }: table) => {
 
     dispatch(hideLoader());
   }, [dispatch]);
-
-  useEffect(() => {
-    console.log("selectedClientStatus", selectedClientStatus?.value);
-  }, [selectedClientStatus]);
 
   useEffect(() => {
     if (selectedZone) {
@@ -130,7 +123,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
       branchCode: selectedBranchCode?.value,
     };
     dispatch(showLoader(""));
-    const result = await apiServices
+    apiServices
       .ClientCash(payload)
       .then((response) => {
         console.log("ClientCashresponse", response?.data);
@@ -148,21 +141,6 @@ const DropDown = ({ handleValues, tradeData }: table) => {
         dispatch(hideLoader());
       });
   };
-
-  const ClientCashColumns: GridColDef[] = [
-    { field: "ClientCode", headerName: "Client Code", width: 150 },
-    { field: "ClientName", headerName: "Client Name", width: 150 },
-    {
-      field: "LastTradeDate",
-      headerName: "Last Trade Date",
-      width: 150,
-    },
-    {
-      field: "Cash",
-      headerName: "Cash",
-      width: 150,
-    },
-  ];
 
   document.title = "LKP Securities | Dormant Client Report";
 

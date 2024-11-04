@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState, useRef } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -20,7 +20,6 @@ import { useTheme } from "@mui/material/styles";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { RiLockPasswordFill } from "react-icons/ri";
-import dayjs from "dayjs";
 import "dayjs/locale/en-gb";
 import { useDispatch } from "react-redux";
 import { regEx } from "../../../helper/method";
@@ -30,8 +29,6 @@ import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
-  const [submitted, setSubmiited] = useState(false);
-  const [value, setValue] = useState<dayjs.Dayjs | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showOtpField, setShowOtpField] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
@@ -42,7 +39,6 @@ const ForgotPassword = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const customInputRef = useRef();
 
   const formStyle: CSSProperties = {
     display: "flex",
@@ -76,8 +72,7 @@ const ForgotPassword = () => {
     onSubmit: (values) => {
       console.log("Form Data:", values);
       // Handle login logic here
-      setSubmiited(true);
-      handleResetPassword(values);
+      handleResetPassword();
     },
   });
   const handleToggleOTPVisibility = () => {
@@ -152,7 +147,7 @@ const ForgotPassword = () => {
     }
   };
 
-  const handleResetPassword = async (values: any) => {
+  const handleResetPassword = async () => {
     let payload = {
       user_type: formik.values.forgotButtonGroup,
       user_id: formik.values.userId,

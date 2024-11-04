@@ -1,20 +1,9 @@
 import React, { useEffect, useState } from "react";
-import CountUp from "react-countup";
-// import { getProjectChartsData } from "../../slices/thunks";
-import { createSelector } from "reselect";
 // import { monthProjectData } from "../../components/common/OverviewData";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { useDispatch } from "react-redux";
-import {
-  Card,
-  CardHeader,
-  Col,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  UncontrolledDropdown,
-} from "reactstrap";
+import { Card, CardHeader, Col } from "reactstrap";
 import { StoreVisitsCharts } from "../../components/common/Visitors";
 
 const StoreVisits = () => {

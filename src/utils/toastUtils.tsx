@@ -1,4 +1,4 @@
-import { toast, Bounce, TypeOptions, Flip } from "react-toastify";
+import { toast, Bounce, TypeOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Function to trigger toast notifications

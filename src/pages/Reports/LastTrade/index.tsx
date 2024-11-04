@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Card,
   CardBody,
@@ -6,15 +6,8 @@ import {
   Col,
   Label,
   Row,
-  Input,
   Button,
-  CardTitle,
-  CardText,
 } from "reactstrap";
-import { regEx } from "../../../helper/method";
-import DownloadIcon from "@mui/icons-material/Download";
-import PNLNote from "../../../components/common/pnlNote";
-import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import axios from "axios";
@@ -33,15 +26,9 @@ const ClientStatus = [
 ];
 
 const LastTrade = () => {
-  const [selectedClientStatus, setSelectedClientStatus] = useState<any>(null);
-
-  const [pnlValues, setPnlValues] = useState<any>("");
+  // const [pnlValues, setPnlValues] = useState<any>("");
 
   const dispatch = useDispatch();
-
-  function handleSelectDropdown(selectedNoSortingGroup: any) {
-    setSelectedClientStatus(selectedNoSortingGroup);
-  }
 
   const validationSchema = Yup.object({
     clientStatus: Yup.object()
@@ -69,13 +56,13 @@ const LastTrade = () => {
     console.log("formikValls", formik.values, formik.errors);
   }, [formik.values]);
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    console.log("value", value);
-    if (regEx.alphaNumeric.test(value)) {
-      setPnlValues(value.toUpperCase().replace(/\s/g, ""));
-    }
-  };
+  // const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   console.log("value", value);
+  //   if (regEx.alphaNumeric.test(value)) {
+  //     setPnlValues(value.toUpperCase().replace(/\s/g, ""));
+  //   }
+  // };
 
   const getUserIdFromLocalStorage = (key: any) => {
     const str = localStorage.getItem(key);

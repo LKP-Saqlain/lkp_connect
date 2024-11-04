@@ -1,4 +1,4 @@
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { GridColDef } from "@mui/x-data-grid";
 
 export const ClientCashColumns: GridColDef[] = [
   { field: "ClientCode", headerName: "Client Code", width: 150 },

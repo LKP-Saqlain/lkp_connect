@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 // import getChartColorsArray from "../ChartsDynamicColor";
 
-const StoreVisitsCharts = ({ dataColors, chartData }: any) => {
+const StoreVisitsCharts = ({ chartData }: any) => {
   const [labels, setLabels] = useState<string[]>([]);
   const [seriess, setSeriess] = useState<number[]>([]);
 

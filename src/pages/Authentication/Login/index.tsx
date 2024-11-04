@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState, useRef } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -22,25 +22,16 @@ import { useTheme } from "@mui/material/styles";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { RiLockPasswordFill } from "react-icons/ri";
-import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/en-gb";
 import { regEx, isValidPANNo } from "../../../helper/method";
 import { useNavigate } from "react-router-dom";
 import { apiServices } from "../../../services";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { useDispatch } from "react-redux";
-import { UserValues } from "../../../types";
 import ShowToast from "../../../utils/toastUtils";
 const LoginPage = () => {
   const [submitted, setSubmiited] = useState(false);
-  const [value, setValue] = useState<dayjs.Dayjs | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [userValues, setUserValues] = useState<UserValues>({
-    credentials: {
-      user_id: "",
-      user_type: "",
-    },
-  });
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -117,12 +108,7 @@ const LoginPage = () => {
     };
 
     dispatch(showLoader(""));
-    // dispatch(UserLogin(payload));
-    // dispatch(hideLoader());
-    // formik.setErrors({});
-    // setSubmiited(true);
-
-    const data = apiServices
+    apiServices
       .Login(payload)
       .then((response) => {
         console.log("response->", response?.data);

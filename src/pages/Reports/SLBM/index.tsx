@@ -11,7 +11,6 @@ import {
 } from "reactstrap";
 import { regEx } from "../../../helper/method";
 import DownloadIcon from "@mui/icons-material/Download";
-import PNLNote from "../../../components/common/pnlNote";
 import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
@@ -24,43 +23,20 @@ import ShowToast from "../../../utils/toastUtils";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 
-const ClientStatus = [
-  { value: "ALL", label: "ALL" },
-  { value: "ACTIVE", label: "ACTIVE" },
-  { value: "INACTIVE", label: "INACTIVE" },
-  //   { value: "Madrid", label: "Madrid" },
-  //   { value: "Toronto", label: "Toronto" },
-];
-
-interface Option {
-  label: string;
-  value: string;
-}
+// interface Option {
+//   label: string;
+//   value: string;
+// }
 
 const SlbmHoling = () => {
-  const [selectedNoSortingGroup, setSelectedNoSortingGroup] =
-    useState<any>(null);
-  const [selectedZone, setSelectedZone] = useState<Option | null>(null);
-  const [selectedBranchCode, setSelectedBranchCode] = useState<Option | null>(
-    null
-  );
-  const [selectedClientStatus, setSelectedClientStatus] =
-    useState<Option | null>(null);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
-  const [isInValue, setIsInValue] = useState<any>("");
   const [userData, setUserData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(null);
 
   const [page, setPage] = useState(1); // Track current page
-  const [pageSize, setPageSize] = useState(10); // Initial page size
 
   const dispatch = useDispatch();
-
-  function handleSelectNoSortingGroup(selectedNoSortingGroup: any) {
-    console.log("selectedValue", selectedNoSortingGroup);
-    // setSelectedNoSortingGroup(selectedNoSortingGroup);
-  }
 
   const validationSchema = Yup.object({
     selectedZone: Yup.object().nullable().required("Zone is required"),
@@ -119,7 +95,7 @@ const SlbmHoling = () => {
     };
 
     dispatch(showLoader(""));
-    const response = apiServices
+    apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
         console.log("Response-->", res);
@@ -245,7 +221,7 @@ const SlbmHoling = () => {
       symbolISIN: formik.values.isInValue,
     };
     dispatch(showLoader(""));
-    const result = await apiServices
+    await apiServices
       .SLBMHoldingsReport(payload)
       .then((response) => {
         console.log("response", response?.data);
@@ -288,9 +264,9 @@ const SlbmHoling = () => {
       start: 0,
       pageSize: 10,
       searchKey: "",
-      zone: selectedZone?.value,
-      branchCode: selectedBranchCode?.value,
-      symbolISIN: isInValue,
+      zone: formik.values.selectedZone?.value,
+      branchCode: formik.values.selectedBranchCode?.value,
+      symbolISIN: formik.values.isInValue,
     };
     try {
       let token = localStorage.getItem("tkn");
@@ -555,7 +531,7 @@ const SlbmHoling = () => {
                     totalRecords={totalEntries}
                     page={page}
                     onPageChange={handlePageChange}
-                    pageSize={pageSize}
+                    pageSize={10}
                   />
                 </CardBody>
               </Card>

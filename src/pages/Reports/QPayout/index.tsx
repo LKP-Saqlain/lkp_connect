@@ -31,7 +31,7 @@ const QuarterlyPayout = () => {
   const [totalEntries, setTotalEntries] = useState(null);
 
   const [page, setPage] = useState(1); // Track current page
-  const [pageSize, setPageSize] = useState(10); // Initial page size
+  // const [pageSize, setPageSize] = useState(10); // Initial page size
 
   const dispatch = useDispatch();
 
@@ -71,6 +71,7 @@ const QuarterlyPayout = () => {
   };
 
   const handleSubmit = async (event?: any, value?: any) => {
+    console.log(event);
     const Id = localStorage.getItem("Id");
     const pageSize = 10; // Define pageSize
 
@@ -85,7 +86,7 @@ const QuarterlyPayout = () => {
       financialQtr: `2024-${formik.values.quarter?.value}`,
     };
     dispatch(showLoader(""));
-    const result = await apiServices
+    await apiServices
       .GetQuaterlyPayoutGrid(payload)
       .then((response) => {
         console.log("responseQpayout", response?.data);
@@ -267,7 +268,7 @@ const QuarterlyPayout = () => {
                     totalRecords={totalEntries}
                     page={page}
                     onPageChange={handlePageChange}
-                    pageSize={pageSize}
+                    pageSize={10}
                   />
                 </CardBody>
               </Card>

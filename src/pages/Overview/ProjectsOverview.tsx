@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
-import CountUp from "react-countup";
 import { ProjectsOverviewCharts } from "./DashboardProjectCharts";
 // import { getProjectChartsData } from "../../slices/thunks";
-import { createSelector } from "reselect";
 // import { monthProjectData } from "../../components/common/OverviewData";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";

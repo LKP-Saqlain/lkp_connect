@@ -24,6 +24,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     // Check authentication state on component mount
     const isLoggedIn = Boolean(localStorage.getItem("authenticated"));
     setIsUserLoggedIn(isLoggedIn);
+    console.log(isUserLoggedIn);
 
     // Redirect to the login page if the user tries to access a restricted route
     if (customLogin && isLoggedIn) {

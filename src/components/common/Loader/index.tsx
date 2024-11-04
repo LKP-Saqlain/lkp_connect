@@ -1,4 +1,3 @@
-import React from "react";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { useSelector } from "react-redux";
 
@@ -30,7 +29,6 @@ const Loader = () => {
           {message}
         </div>
       )}{" "}
-      {/* Add margin for spacing */}
     </Backdrop>
   );
 };
