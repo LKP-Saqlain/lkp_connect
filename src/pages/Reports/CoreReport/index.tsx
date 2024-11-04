@@ -50,7 +50,6 @@ const CoreReport = () => {
   const [totalEntries, setTotalEntries] = useState(null);
 
   const [page, setPage] = useState(1); // Track current page
-  const [pageSize, setPageSize] = useState(10); // Initial page size
 
   const [formData, setFormData] = useState<FormData>({
     clientCode: "",
@@ -140,6 +139,8 @@ const CoreReport = () => {
     event: React.ChangeEvent<unknown>,
     newPage: number
   ) => {
+    console.log(event);
+
     setPage(newPage);
     // handleSubmit(event, newPage); // Fetch data for the new page
     handleSubmit();
@@ -403,7 +404,7 @@ const CoreReport = () => {
                     totalRecords={totalEntries}
                     page={page}
                     onPageChange={handlePageChange}
-                    pageSize={pageSize}
+                    pageSize={10}
                   />
                 </CardBody>
               </Card>
