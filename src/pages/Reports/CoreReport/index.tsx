@@ -51,6 +51,9 @@ const CoreReport = () => {
   const [userData, setUserData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(null);
 
+  const [page, setPage] = useState(1); // Track current page
+  const [pageSize, setPageSize] = useState(10); // Initial page size
+
   const [formData, setFormData] = useState<FormData>({
     clientCode: "",
     accNo: "",
@@ -135,7 +138,15 @@ const CoreReport = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    newPage: number
+  ) => {
+    setPage(newPage);
+    handleSubmit(event, newPage); // Fetch data for the new page
+  };
+
+  const handleSubmit = (event?: any, value?: any) => {
     // Prepare the payload
     const payload = {
       clientCode: formData.clientCode || "",
@@ -153,14 +164,17 @@ const CoreReport = () => {
     apiServices
       .GetCoreAlertsReport(payload)
       .then((response) => {
-        console.log("response", response?.status);
+        console.log("GetCoreAlertsReport_response", response?.data.length);
 
         // Check for success status
         if (response?.status === 200) {
           setUserData(response?.data);
+          const userRecords = response?.data.length;
+          setTotalEntries(userRecords);
         }
       })
       .catch((Err) => {
+        console.log(Err, "error-->");
         const errorMessage =
           Err.response?.data?.message ||
           "Sorry for the inconvenience, please try after some time.";
@@ -385,9 +399,12 @@ const CoreReport = () => {
               <Card>
                 <CardBody>
                   <DataTable
-                    // totalRecords={4530}
-                    tableData={userData}
                     dynamicHeader={Corecolumns}
+                    tableData={userData}
+                    totalRecords={totalEntries}
+                    page={page}
+                    onPageChange={handlePageChange}
+                    pageSize={pageSize}
                   />
                 </CardBody>
               </Card>

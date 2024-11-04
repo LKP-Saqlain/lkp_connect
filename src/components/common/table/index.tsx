@@ -23,7 +23,6 @@ const DataTable: React.FC<DormantClientProps> = ({
   onPageChange,
 }) => {
   // Calculate the rows to display based on current page and page size
-  // debugger;
   // const rows = React.useMemo(
   //   () =>
   //     tableData

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardBody,
@@ -18,6 +18,8 @@ import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import axios from "axios";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 import Select from "react-select";
 import { endpoints } from "../../../services/endpoints";
@@ -41,6 +43,32 @@ const LastTrade = () => {
     setSelectedClientStatus(selectedNoSortingGroup);
   }
 
+  const validationSchema = Yup.object({
+    clientStatus: Yup.object()
+      .nullable()
+      .required("Please select Client Status"),
+  });
+
+  interface FormValues {
+    clientStatus: { label: string; value: string } | null;
+  }
+
+  const formik = useFormik<FormValues>({
+    initialValues: {
+      clientStatus: null,
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      // Only called if no validation errors
+      console.log("values1-->", values);
+      handleExcel();
+    },
+  });
+
+  useEffect(() => {
+    console.log("formikValls", formik.values, formik.errors);
+  }, [formik.values]);
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     console.log("value", value);
@@ -49,28 +77,39 @@ const LastTrade = () => {
     }
   };
 
-  const handleExcel = async () => {
-    console.log("submitClick", selectedClientStatus.value, pnlValues);
-
-    const str = localStorage.getItem("Id");
-    let extractUserId: string | null = null;
-
+  const getUserIdFromLocalStorage = (key: any) => {
+    const str = localStorage.getItem(key);
     if (str) {
       const parts = str.split("-");
-      if (parts.length > 1) {
-        extractUserId = parts[1];
-      }
+      return parts.length > 1 ? parts[1] : null;
     }
+    return null;
+  };
 
-    const payload = {
-      user_id: extractUserId,
-      active: selectedClientStatus.value,
-    };
+  const downloadFile = (data: any, filename: any) => {
+    const url = window.URL.createObjectURL(new Blob([data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Clean up the link element
+  };
+
+  const handleExcel = async () => {
     dispatch(showLoader("Please wait, We are Processing your Request"));
 
     try {
-      let token = localStorage.getItem("tkn");
-      dispatch(showLoader("Please wait, We are Processing your Request"));
+      const extractUserId = getUserIdFromLocalStorage("Id");
+
+      const payload = {
+        user_id: extractUserId,
+        active: formik.values.clientStatus?.value,
+      };
+
+      const token = localStorage.getItem("tkn");
+
+      // Make the API call
       const response = await axios.post(
         `https://middlewareapi.lkp.net.in${endpoints.lastTradeDate}`,
         payload,
@@ -81,20 +120,15 @@ const LastTrade = () => {
           },
         }
       );
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "file.xlsx"); // Specify the file name
-      document.body.appendChild(link);
-      link.click();
-      dispatch(hideLoader());
+      downloadFile(response.data, "file.xlsx");
     } catch (error) {
       console.error("Download error", error);
+    } finally {
       dispatch(hideLoader());
     }
   };
 
-  document.title = "LKP Securities | Annual PNL Statement";
+  document.title = "LKP Securities | Last Trade Status";
 
   return (
     <React.Fragment>
@@ -107,38 +141,78 @@ const LastTrade = () => {
                   <h4 className="card-title mb-0">Last Trade</h4>
                 </CardHeader>
                 <CardBody>
-                  <div>
-                    <Row>
-                      <Col xl={4}>
-                        <div className="mb-3">
-                          <Label
-                            htmlFor="choices-single-no-sorting"
-                            className="form-label text-muted"
-                          >
-                            Select Client Status
-                          </Label>
-                          <Select
-                            value={selectedClientStatus}
-                            onChange={(selectedClientStatus: any) => {
-                              handleSelectDropdown(selectedClientStatus);
-                            }}
-                            options={ClientStatus}
-                          />
-                        </div>
-                      </Col>
+                  <form onSubmit={formik.handleSubmit}>
+                    <div>
+                      <Row>
+                        <Col xl={4}>
+                          <div className="mb-3">
+                            <Label
+                              htmlFor="choices-single-no-sorting"
+                              className="form-label text-muted"
+                            >
+                              Select Client Status
+                            </Label>
+                            <Select
+                              value={formik.values.clientStatus}
+                              onChange={(option: any) =>
+                                formik.setFieldValue("clientStatus", option)
+                              }
+                              onBlur={formik.handleBlur}
+                              options={ClientStatus}
+                              styles={{
+                                control: (base: any) => ({
+                                  ...base,
+                                  borderColor:
+                                    formik.touched.clientStatus &&
+                                    formik.errors.clientStatus
+                                      ? "#DC4535"
+                                      : base.borderColor,
+                                  "&:hover": {
+                                    borderColor:
+                                      formik.touched.clientStatus &&
+                                      formik.errors.clientStatus
+                                        ? "#DC4535"
+                                        : base.borderColor,
+                                  },
+                                }),
+                              }}
+                            />
+                            {formik.touched.clientStatus &&
+                              formik.errors.clientStatus && (
+                                <div
+                                  className="text-danger"
+                                  style={{ fontSize: "12px" }}
+                                >
+                                  {formik.errors.clientStatus}
+                                </div>
+                              )}
+                          </div>
+                        </Col>
 
-                      <Col xl={4} className="d-flex flex-column-reverse">
-                        <div className="mb-3" />
-                        <Button
-                          className="w-50"
-                          style={{ backgroundColor: "#11395C" }}
-                          onClick={handleExcel}
+                        <Col
+                          xl={4}
+                          className="d-flex flex-column-reverse"
+                          style={{
+                            top:
+                              formik.touched.clientStatus &&
+                              formik.errors.clientStatus
+                                ? "-18px"
+                                : "",
+                          }}
                         >
-                          Submit
-                        </Button>
-                      </Col>
-                    </Row>
-                  </div>
+                          <div className="mb-3" />
+                          <Button
+                            className="w-50"
+                            style={{ backgroundColor: "#11395C" }}
+                            // onClick={handleExcel}
+                            type="submit"
+                          >
+                            Submit
+                          </Button>
+                        </Col>
+                      </Row>
+                    </div>
+                  </form>
                 </CardBody>
               </Card>
             </Col>

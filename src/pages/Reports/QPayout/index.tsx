@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardBody,
@@ -6,10 +6,8 @@ import {
   Col,
   Label,
   Row,
-  Input,
   Button,
 } from "reactstrap";
-import { regEx } from "../../../helper/method";
 import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
@@ -17,11 +15,8 @@ import Select from "react-select";
 import DataTable from "../../../components/common/table";
 import { GridColDef } from "@mui/x-data-grid";
 import ShowToast from "../../../utils/toastUtils";
-
-interface Option {
-  label: string;
-  value: string;
-}
+import * as Yup from "yup";
+import { useFormik } from "formik";
 
 const FinancialYears = [{ value: "2024-2025", label: "2024-2025" }];
 const FinancialQuarters = [
@@ -32,9 +27,6 @@ const FinancialQuarters = [
 ];
 
 const QuarterlyPayout = () => {
-  const [qPayoutFinYear, setqPayoutFinYear] = useState<any>(null);
-  const [selectfinancialQuarter, setSelectFiancialQuarter] =
-    useState<Option | null>(null);
   const [qPayoutData, setQpayoutData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(null);
 
@@ -43,10 +35,32 @@ const QuarterlyPayout = () => {
 
   const dispatch = useDispatch();
 
-  function handleQpayoutFinYear(financialYear: any) {
-    console.log("selectedValue", financialYear);
-    setqPayoutFinYear(financialYear);
+  const validationSchema = Yup.object({
+    selectedFinancialYear: Yup.object()
+      .nullable()
+      .required("Financial Year is Required"),
+    quarter: Yup.object()
+      .nullable()
+      .required("Please select Financial Quarter"),
+  });
+
+  interface FormValues {
+    selectedFinancialYear: { label: string; value: string } | null;
+    quarter: { label: string; value: string } | null;
   }
+
+  const formik = useFormik<FormValues>({
+    initialValues: {
+      selectedFinancialYear: null,
+      quarter: null,
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      // Only called if no validation errors
+      console.log("values1-->", values);
+      handleSubmit(values);
+    },
+  });
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -68,7 +82,7 @@ const QuarterlyPayout = () => {
       pageSize: 10,
       searchKey: "",
       userId: Id,
-      financialQtr: `2024-${selectfinancialQuarter?.value}`,
+      financialQtr: `2024-${formik.values.quarter?.value}`,
     };
     dispatch(showLoader(""));
     const result = await apiServices
@@ -123,56 +137,126 @@ const QuarterlyPayout = () => {
                   </h4>
                 </CardHeader>
                 <CardBody>
-                  <div>
-                    <Row>
-                      <Col xl={3}>
-                        <div className="mb-3">
-                          <Label
-                            htmlFor="choices-single-no-sorting"
-                            className="form-label text-muted"
-                          >
-                            Financial Year
-                          </Label>
-                          <Select
-                            value={qPayoutFinYear}
-                            onChange={(financialYear: any) => {
-                              handleQpayoutFinYear(financialYear);
-                            }}
-                            options={FinancialYears}
-                          />
-                        </div>
-                      </Col>
+                  <form onSubmit={formik.handleSubmit}>
+                    <div>
+                      <Row>
+                        <Col xl={3}>
+                          <div className="mb-3">
+                            <Label
+                              htmlFor="choices-single-no-sorting"
+                              className="form-label text-muted"
+                            >
+                              Financial Year
+                            </Label>
+                            <Select
+                              value={formik.values.selectedFinancialYear}
+                              onChange={(option) =>
+                                formik.setFieldValue(
+                                  "selectedFinancialYear",
+                                  option
+                                )
+                              }
+                              onBlur={formik.handleBlur}
+                              options={FinancialYears}
+                              styles={{
+                                control: (base: any) => ({
+                                  ...base,
+                                  borderColor:
+                                    formik.touched.selectedFinancialYear &&
+                                    formik.errors.selectedFinancialYear
+                                      ? "#DC4535"
+                                      : base.borderColor,
+                                  "&:hover": {
+                                    borderColor:
+                                      formik.touched.selectedFinancialYear &&
+                                      formik.errors.selectedFinancialYear
+                                        ? "#DC4535"
+                                        : base.borderColor,
+                                  },
+                                }),
+                              }}
+                            />
+                            {formik.touched.selectedFinancialYear &&
+                              formik.errors.selectedFinancialYear && (
+                                <div
+                                  className="text-danger"
+                                  style={{ fontSize: "12px" }}
+                                >
+                                  {formik.errors.selectedFinancialYear}
+                                </div>
+                              )}
+                          </div>
+                        </Col>
 
-                      <Col xl={3}>
-                        <div className="mb-3">
-                          <Label
-                            htmlFor="branch-code-select"
-                            className="form-label text-muted"
-                          >
-                            QUARTER
-                          </Label>
-                          <Select
-                            value={selectfinancialQuarter}
-                            onChange={(selectedOption) =>
-                              setSelectFiancialQuarter(selectedOption)
-                            }
-                            options={FinancialQuarters}
-                            isClearable
-                            id="branch-code-select"
-                          />
-                        </div>
-                      </Col>
-                      <Col xl={3} className="d-flex flex-column-reverse">
-                        <div className="mb-3" />
-                        <Button
-                          style={{ backgroundColor: "#11395C" }}
-                          onClick={handleSubmit}
+                        <Col xl={3}>
+                          <div className="mb-3">
+                            <Label
+                              htmlFor="branch-code-select"
+                              className="form-label text-muted"
+                            >
+                              QUARTER
+                            </Label>
+                            <Select
+                              value={formik.values.quarter}
+                              onChange={(option) =>
+                                formik.setFieldValue("quarter", option)
+                              }
+                              options={FinancialQuarters}
+                              isClearable
+                              id="branch-code-select"
+                              styles={{
+                                control: (base: any) => ({
+                                  ...base,
+                                  borderColor:
+                                    formik.touched.quarter &&
+                                    formik.errors.quarter
+                                      ? "#DC4535"
+                                      : base.borderColor,
+                                  "&:hover": {
+                                    borderColor:
+                                      formik.touched.quarter &&
+                                      formik.errors.quarter
+                                        ? "#DC4535"
+                                        : base.borderColor,
+                                  },
+                                }),
+                              }}
+                            />
+                            {formik.touched.quarter &&
+                              formik.errors.quarter && (
+                                <div
+                                  className="text-danger"
+                                  style={{ fontSize: "12px" }}
+                                >
+                                  {formik.errors.quarter}
+                                </div>
+                              )}
+                          </div>
+                        </Col>
+                        <Col
+                          xl={3}
+                          className="d-flex flex-column-reverse"
+                          style={{
+                            top:
+                              (formik.touched.selectedFinancialYear &&
+                                formik.errors.selectedFinancialYear) ||
+                              (formik.touched.quarter && formik.errors.quarter)
+                                ? "-18px"
+                                : "",
+                          }}
                         >
-                          Submit
-                        </Button>
-                      </Col>
-                    </Row>
-                  </div>
+                          <div className="mb-3" />
+                          <Button
+                            style={{ backgroundColor: "#11395C" }}
+                            // onClick={handleSubmit}
+                            type="submit"
+                          >
+                            Submit
+                          </Button>
+                        </Col>
+                      </Row>
+                    </div>
+                  </form>
                 </CardBody>
               </Card>
               <Card>

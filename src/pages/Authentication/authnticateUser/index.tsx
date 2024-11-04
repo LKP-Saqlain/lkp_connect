@@ -106,9 +106,11 @@ const AuthenticateUser = () => {
       .then((result) => {
         dispatch(hideLoader());
         if (result?.status === 200) {
-          const { token, user_type } = result.data;
+          const { token, name } = result.data;
+          console.log("2FA_Response", result?.data);
           localStorage.setItem("authenticated", "true");
           localStorage.setItem("tkn", token);
+          localStorage.setItem("userName", name);
           navigate("/dashboard");
         }
       })

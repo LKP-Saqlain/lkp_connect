@@ -20,7 +20,13 @@ const Loader = () => {
     >
       <CircularProgress color="inherit" />
       {message && (
-        <div style={{ marginTop: "16px", fontFamily: "Public Sans" }}>
+        <div
+          style={{
+            marginTop: "16px",
+            fontSize: "12px",
+            fontFamily: "Public Sans",
+          }}
+        >
           {message}
         </div>
       )}{" "}

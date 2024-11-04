@@ -121,7 +121,7 @@ const RMSAllocation = () => {
       // Prepare the payload
       const Id = localStorage.getItem("Id");
       const payload = {
-        user_id: "EMP-5341", // Use the correct user ID
+        user_id: Id, // Use the correct user ID
         files: resolvedFiles, // The resolved files will be sent in the payload
       };
 

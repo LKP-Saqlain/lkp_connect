@@ -45,21 +45,15 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   activeMenu,
   handleSubItemClick,
 }) => {
-  const isMenuOpen = activeMenu === title; // Check if the current item is open
-  const [subMenuOpen, setSubMenuOpen] = useState(false);
-
-  const handleSubMenuToggle = () => {
-    console.log("titleCheck", title);
-    setSubMenuOpen((prevOpen) => !prevOpen);
-    handleClick();
-  };
+  const isMenuOpen = activeMenu === title;
 
   const getIcon = (title: string) => {
+    console.log("title", title);
     switch (title) {
-      case "OverView":
+      case "Overview":
         return <HomeIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />;
-      case "Kyc Dashboard":
-        return <HomeIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />;
+      case "Trading":
+        return <PollIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />;
       case "Masters":
         return (
           <GridViewIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />
@@ -92,9 +86,11 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
         return (
           <CampaignIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />
         );
-      case "Regulatory Announcement":
+      case "Kyc Dashboard":
         return (
-          <CampaignIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />
+          <StackedBarChartIcon
+            sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }}
+          />
         );
       case "Registration Details":
         return (
@@ -114,79 +110,68 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
         );
     }
   };
+
   return (
-    <>
-      <ListItem disablePadding sx={{ display: "block" }}>
-        <ListItemButton
-          onClick={handleSubMenuToggle}
-          sx={{
-            minHeight: 48,
-            justifyContent: open ? "initial" : "center",
-            px: 2.5,
-            backgroundColor: isMenuOpen ? "#f0f0f0" : "transparent", // Background for selected item
-            "&:hover": {
-              backgroundColor: "#f0f0f0", // Same hover background for all items
-              "& .MuiListItemText-root, & .MuiSvgIcon-root": {
-                color: "black", // Change text/icon color on hover
-              },
+    <ListItem disablePadding sx={{ display: "block" }}>
+      <ListItemButton
+        onClick={handleClick}
+        sx={{
+          minHeight: 48,
+          justifyContent: open ? "initial" : "center",
+          px: 2.5,
+          backgroundColor: isMenuOpen ? "#f0f0f0" : "transparent",
+          "&:hover": {
+            backgroundColor: "#f0f0f0",
+            "& .MuiListItemText-root, & .MuiSvgIcon-root": {
+              color: "black",
             },
+          },
+        }}
+      >
+        <ListItemIcon
+          sx={{
+            minWidth: 0,
+            mr: open ? 1 : "auto",
+            justifyContent: "center",
           }}
         >
-          <ListItemIcon
-            sx={{
-              minWidth: 0,
-              mr: open ? 1 : "auto",
-              justifyContent: "center",
-            }}
-          >
-            {getIcon(title)}
-          </ListItemIcon>
+          {getIcon(title)}
+        </ListItemIcon>
+        <ListItemText
+          primary={title}
+          sx={{
+            opacity: open ? 1 : 0,
+            color: isMenuOpen ? "black" : "#F9F6EE",
+            transition: "color 0.5s",
+          }}
+        />
+        {/* {subItems && (isMenuOpen ? <ExpandLess /> : <ExpandMore />)} */}
+      </ListItemButton>
 
-          <ListItemText
-            primary={title}
-            sx={{
-              opacity: open ? 1 : 0,
-              color: isMenuOpen ? "black" : "#F9F6EE", // Change text color based on activeMenu
-              transition: "color 0.5s",
-            }}
-            onClick={handleDrawerOpen}
-            primaryTypographyProps={{
-              fontSize: "14px",
-              fontFamily: "Public Sans",
-            }}
-          />
-          {/* {title === "Reports" && subItems && subMenuOpen ? (
-            <ExpandLess />
-          ) : (
-            <ExpandMore />
-          )} */}
-          {/* {subItems && (subMenuOpen ? <ExpandLess /> : <ExpandMore />)} */}
-        </ListItemButton>
-        {subItems && (
-          <Collapse in={subMenuOpen} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              {subItems.map((subItem, index) => (
-                <ListItemButton
-                  key={index}
-                  sx={{ pl: 4, color: "#fff" }}
-                  onClick={() => handleSubItemClick(subItem.menu_name)}
-                >
-                  <ArrowRightIcon />
-                  {/* Ensure subItem.menu_name or appropriate string is passed */}
-                  <ListItemText
-                    primary={subItem.menu_name} // Replace subItem with subItem.menu_name
-                    primaryTypographyProps={{
-                      fontSize: "13px",
-                      fontFamily: "Public Sans",
-                    }}
-                  />
-                </ListItemButton>
-              ))}
-            </List>
-          </Collapse>
-        )}
-      </ListItem>
-    </>
+      {/* Only show sub-items if the menu is open */}
+      {subItems && (
+        <Collapse in={isMenuOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {subItems.map((subItem, index) => (
+              <ListItemButton
+                key={index}
+                sx={{ pl: 4, color: "#fff" }}
+                onClick={() => handleSubItemClick(subItem.menu_name)}
+              >
+                <ArrowRightIcon />
+                <ListItemText
+                  primary={subItem.menu_name}
+                  primaryTypographyProps={{
+                    fontSize: "13px",
+                    fontFamily: "Public Sans",
+                  }}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+        </Collapse>
+      )}
+    </ListItem>
   );
 };
 

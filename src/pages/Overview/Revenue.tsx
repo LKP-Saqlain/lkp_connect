@@ -127,16 +127,17 @@ const Revenue = () => {
       <Card>
         <CardHeader className="p-0 border-0 bg-light-subtle">
           <Row className="g-0 text-center">
-            <Col xs={12} sm={12}>
-              <div className="p-3 border border-dashed border-start-0 d-flex">
-                <h4 className="card-title mb-0 flex-grow-1 text-start">
+            <Col xs={12}>
+              <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-sm-row">
+                <h4 className="card-title mb-0 flex-grow-1 text-md-start text-center">
                   Revenue Summary For Current Financial Year
                 </h4>
                 <div
-                  className="d-flex align-items-center"
+                  className="d-flex align-items-center flex-wrap mt-2 mt-sm-0"
                   style={{ fontFamily: "Public Sans, sans-serif" }}
                 >
                   <div
+                    className="legend-color"
                     style={{
                       backgroundColor: "#01D28E",
                       width: "16px",
@@ -146,6 +147,7 @@ const Revenue = () => {
                   ></div>
                   <p className="mb-0 me-3">Broking</p>
                   <div
+                    className="legend-color"
                     style={{
                       backgroundColor: "#F57C00",
                       width: "16px",
@@ -154,8 +156,8 @@ const Revenue = () => {
                     }}
                   ></div>
                   <p className="mb-0 me-3">Indirect-broking</p>
-
                   <div
+                    className="legend-color"
                     style={{
                       backgroundColor: "#008FFB",
                       width: "16px",

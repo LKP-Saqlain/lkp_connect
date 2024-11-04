@@ -81,28 +81,28 @@ const ProjectsOverview = () => {
           <Card>
             <CardHeader className="p-0 border-0 bg-light-subtle">
               <Row className="g-0 text-center">
-                <Col xs={12} sm={12}>
-                  <div className="p-3 border border-dashed border-start-0 d-flex">
-                    <h4 className="card-title mb-0 flex-grow-1 text-start">
-                      Brokerage Details for last 7 Days
+                <Col xs={12}>
+                  <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-md-row">
+                    <h4 className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center">
+                      Brokerage Details for Last 7 Days
                     </h4>
                     <div
-                      className="d-flex align-items-center"
+                      className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end"
                       style={{ fontFamily: "Public Sans, sans-serif" }}
                     >
                       <div
                         style={{
-                          backgroundColor: "#1c3d5a", // Color for Gross Brokerage
+                          backgroundColor: "#1c3d5a",
                           width: "16px",
                           height: "16px",
                           marginRight: "8px",
                         }}
                       ></div>
-                      <p className="mb-0 me-4">Gross Brokerage</p>
+                      <p className="mb-2 mb-md-0 me-4">Gross Brokerage</p>
 
                       <div
                         style={{
-                          backgroundColor: "#f57c00", // Color for AP Share
+                          backgroundColor: "#f57c00",
                           width: "16px",
                           height: "16px",
                           marginRight: "8px",

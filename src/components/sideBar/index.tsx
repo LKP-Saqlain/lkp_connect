@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  styled,
-  useTheme,
-  Theme,
-  CSSObject,
-  alpha,
-} from "@mui/material/styles";
+import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -19,7 +13,6 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import InputBase from "@mui/material/InputBase";
 import Menu from "@mui/material/Menu";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
@@ -44,7 +37,7 @@ import AccessMapping from "../../pages/Masters/AccessMapping";
 import RMSAllocation from "../../pages/RMS/Allocation";
 import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
 
-const drawerWidth = 260;
+const drawerWidth = 240;
 
 // Utility functions for Drawer
 const openedMixin = (theme: Theme, drawerWidth: any): CSSObject => ({
@@ -54,55 +47,8 @@ const openedMixin = (theme: Theme, drawerWidth: any): CSSObject => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
+  // overflowY: "hidden",
 });
-
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-end",
-  padding: theme.spacing(0, 1),
-  ...theme.mixins.toolbar,
-}));
-
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
-
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
-  },
-}));
 
 const closedMixin = (theme: Theme): CSSObject => ({
   transition: theme.transitions.create("width", {
@@ -168,7 +114,7 @@ const Drawer = styled(MuiDrawer, {
 const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [activeMenu, setActiveMenu] = useState<string>("Overview");
   const [activeSubItem, setActiveSubItem] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -176,6 +122,9 @@ const SideBar = () => {
   const settings = ["Logout"];
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
   const navigate = useNavigate();
+
+  const username = localStorage.getItem("userName");
+  const firstLetter = username ? username.charAt(0).toUpperCase() : "";
 
   useEffect(() => {
     let userId = localStorage.getItem("Id");
@@ -189,7 +138,7 @@ const SideBar = () => {
       .then((res) => {
         console.log("res", res?.data);
         const processedMenus = buildMenuHierarchy(res?.data);
-        console.log("menuItems-->", menuItems);
+        console.log("menuItems-->", processedMenus);
         setMenuItems(processedMenus);
       })
       .catch((error) => {
@@ -238,13 +187,8 @@ const SideBar = () => {
   };
 
   // Unified handler for toggling the drawer submenus
-  const handleMenuClick = (menuName: string) => {
-    console.log("test", menuName);
-    if (menuName !== "Reports") {
-      setActiveSubItem("");
-    }
-    setActiveMenu(menuName);
-    // setActiveMenu((prevMenu) => (prevMenu === menuName ? "" : menuName));
+  const handleMenuClick = (menuTitle: string) => {
+    setActiveMenu((prevActive) => (prevActive === menuTitle ? "" : menuTitle));
   };
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -258,6 +202,7 @@ const SideBar = () => {
       localStorage.removeItem("tkn");
       localStorage.removeItem("Id");
       localStorage.removeItem("uIdType");
+      localStorage.removeItem("userName");
       navigate("/");
     } else {
       console.log("User clicked on:", value);
@@ -293,18 +238,24 @@ const SideBar = () => {
   const handleSubItemClick = (subItem: string) => {
     console.log("value-->", subItem);
     setActiveSubItem(subItem); // Set active sub-item
-    isMobile && handleMobileDrawerClose();
+    if (isMobile) {
+      setTimeout(() => {
+        handleMobileDrawerClose();
+      }, 400);
+    }
+    // isMobile && handleMobileDrawerClose();
   };
 
   const handleMobileDrawerClose = () => {
     handleDrawerClose();
-    handleMenuClick("");
+    // handleMenuClick("");
   };
   const renderContent = () => {
+    console.log("activeMenu", activeMenu);
     switch (activeMenu) {
-      case "OverView" || "":
+      case "Overview" || "":
         return <OverviewComponent />;
-      case "Trading Dashboard":
+      case "Trading":
         return <TradeDashboard />;
       case "Revenue Details":
       case "Masters":
@@ -405,11 +356,23 @@ const SideBar = () => {
           )}
 
           <Box sx={{ flexGrow: 1 }} />
-          <Tooltip title="Open settings">
+
+          <Tooltip title="">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="A Sharp" src="/static/images/avatar/2.jpg" />
+              <Avatar src="/static/images/avatar/2.jpg">{firstLetter}</Avatar>
             </IconButton>
           </Tooltip>
+          <Typography
+            sx={{
+              color: "black",
+              fontSize: "12px",
+              ml: 1,
+              fontFamily: "Public Sans",
+            }}
+          >
+            {localStorage.getItem("userName")}
+          </Typography>
+
           <Menu
             sx={{ mt: "45px" }}
             id="menu-appbar"
@@ -487,9 +450,7 @@ const SideBar = () => {
         component="main"
         sx={{ flexGrow: 1, p: 1, backgroundColor: "#E5E4E2" }}
       >
-        <Box>
-          {renderContent()} {/* Render the content based on active sub-item */}
-        </Box>
+        <Box>{renderContent()}</Box>
       </Box>
     </Box>
   );

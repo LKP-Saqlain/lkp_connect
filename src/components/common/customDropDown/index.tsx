@@ -129,7 +129,6 @@ const DropDown = ({ handleValues, tradeData }: table) => {
       zone: selectedZone?.value,
       branchCode: selectedBranchCode?.value,
     };
-    debugger;
     dispatch(showLoader(""));
     const result = await apiServices
       .ClientCash(payload)

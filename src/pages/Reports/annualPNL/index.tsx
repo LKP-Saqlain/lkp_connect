@@ -1,95 +1,89 @@
-import React, { useState } from "react";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Label,
-  Row,
-  Input,
-  Button,
-  FormFeedback,
-} from "reactstrap";
-import { regEx } from "../../../helper/method";
+import React, { useEffect } from "react";
+import { Card, CardBody, CardHeader, Col, Row, Button } from "reactstrap";
+import "../style.css";
 import DownloadIcon from "@mui/icons-material/Download";
 import PNLNote from "../../../components/common/pnlNote";
-import { apiServices } from "../../../services";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import Select from "@mui/material/Select";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import axios from "axios";
-import ModalComponent from "../../../components/common/SessionModal";
-import Select from "react-select";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { endpoints } from "../../../services/endpoints";
+import { regEx } from "../../../helper/method";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
-const financialYears = [{ value: "2023-2024", label: "2023-2024" }, ,];
+const financialYears = [{ value: "2023-2024", label: "2023-2024" }];
 
 const AnnualPNL = () => {
-  const [finYear, setFinYear] = useState<any>("");
-  const [pnlValues, setPnlValues] = useState<any>("");
-  const [isFinYearValid, setIsFinYearValid] = useState(true);
-  const [isClientCodeValid, setIsClientCodeValid] = useState(true);
-
+  const isMobile = useMediaQuery("(max-width:600px)");
   const dispatch = useDispatch();
 
-  function handleDropDown(finYear: any) {
-    setFinYear(finYear);
-    setIsFinYearValid(true);
-  }
+  // Formik and Yup setup
+  const formik = useFormik({
+    initialValues: {
+      finYear: "",
+      clientCode: "",
+    },
+    validationSchema: Yup.object({
+      finYear: Yup.string().required("Please select a Financial Year"),
+      clientCode: Yup.string()
+        // .matches(/^[a-zA-Z0-9]*$/, "Only alphanumeric characters allowed")
+        .required("Please enter a Client Code"),
+    }),
+    onSubmit: async (values) => {
+      const { finYear, clientCode } = values;
+      console.log("submitClick", finYear, clientCode);
+      let uId = localStorage.getItem("Id");
+      const payload = {
+        clientCode: clientCode,
+        finYear: finYear,
+        userId: uId,
+      };
+      try {
+        let token = localStorage.getItem("tkn");
+        dispatch(showLoader("Please wait, We are Processing your Request"));
+        const response = await axios.post(
+          `https://middlewareapi.lkp.net.in${endpoints.GetPNL}`,
+          payload,
+          {
+            responseType: "blob",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", "file.xlsx");
+        document.body.appendChild(link);
+        link.click();
+        dispatch(hideLoader());
+        formik.resetForm();
+      } catch (error) {
+        console.error("Download error", error);
+        dispatch(hideLoader());
+      }
+    },
+  });
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    console.log("value", value);
-    if (regEx.alphaNumeric.test(value)) {
-      setIsClientCodeValid(true);
-      setPnlValues(value.toUpperCase().replace(/\s/g, ""));
+  const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    console.log("value", name, value);
+    if (name === "clientCode") {
+      if (regEx.alphaNumeric.test(value)) {
+        formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
+      }
+    } else {
+      formik.handleChange(e);
     }
   };
-
-  const handleExcel = async () => {
-    console.log("submitClick", finYear.value, pnlValues);
-    if (!finYear) {
-      setIsFinYearValid(false);
-      return;
-    }
-    if (!pnlValues) {
-      setIsClientCodeValid(false);
-      return;
-    }
-    let uId = localStorage.getItem("Id");
-    const payload = {
-      clientCode: pnlValues, //MT0600508
-      finYear: finYear.value,
-      userId: uId,
-    };
-    try {
-      let token = localStorage.getItem("tkn");
-      dispatch(showLoader("Please wait, We are Processing your Request"));
-      const response = await axios.post(
-        `https://middlewareapi.lkp.net.in${endpoints.GetPNL}`,
-        payload,
-        {
-          responseType: "blob",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "file.xlsx"); // Specify the file name
-      document.body.appendChild(link);
-      link.click();
-      dispatch(hideLoader());
-      setFinYear("");
-      setPnlValues("");
-    } catch (error) {
-      console.error("Download error", error);
-      dispatch(hideLoader());
-    }
-  };
-
-  document.title = "LKP Securities | Annual PNL Statement";
 
   return (
     <React.Fragment>
@@ -102,84 +96,96 @@ const AnnualPNL = () => {
                   <h4 className="card-title mb-0">Annual PNL Statement</h4>
                 </CardHeader>
                 <CardBody>
-                  <div>
+                  <form onSubmit={formik.handleSubmit}>
                     <Row>
-                      <Col xl={4}>
-                        <div className="mb-3">
-                          <Label
-                            htmlFor="choices-single-no-sorting"
-                            className="form-label text-muted"
+                      <Col xs={12} md={6} lg={4}>
+                        <Box sx={{ minWidth: 120 }}>
+                          <FormControl
+                            fullWidth
+                            error={
+                              formik.touched.finYear &&
+                              Boolean(formik.errors.finYear)
+                            }
                           >
-                            Financial Year
-                          </Label>
-                          <Select
-                            value={finYear}
-                            onChange={(selectedNoSortingGroup: any) => {
-                              handleDropDown(selectedNoSortingGroup);
-                            }}
-                            options={financialYears}
-                            // styles={{
-                            //   control: (provided: any, state: any) => ({
-                            //     ...provided,
-                            //     borderColor: !isFinYearValid
-                            //       ? "red"
-                            //       : provided.borderColor,
-                            //   }),
-                            // }}
-                          />
-                          {/* {!isFinYearValid && (
-                            <div
-                              style={{
-                                color: "#DC3545",
-                                marginTop: "5px",
-                                fontSize: "14px",
-                              }}
+                            <InputLabel id="financial-year-select-label">
+                              Financial Year
+                            </InputLabel>
+                            <Select
+                              size="small"
+                              labelId="financial-year-select-label"
+                              id="financial-year-select"
+                              name="finYear"
+                              value={formik.values.finYear}
+                              label="Financial Year"
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
                             >
-                              Please select a Financial Year.
-                            </div>
-                          )} */}
-                        </div>
+                              {financialYears.map((year) => (
+                                <MenuItem key={year.value} value={year.value}>
+                                  {year.label}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {formik.touched.finYear &&
+                              formik.errors.finYear && (
+                                <p className="text-error">
+                                  {formik.errors.finYear}
+                                </p>
+                              )}
+                          </FormControl>
+                        </Box>
                       </Col>
-                      <Col xl={4}>
-                        <div className="mb-3">
-                          <Label
-                            htmlFor="choices-text-remove-button"
-                            className="form-label text-muted"
+                      <Col
+                        xs={12}
+                        md={6}
+                        lg={4}
+                        style={{ marginTop: isMobile ? "16px" : "0" }}
+                      >
+                        <TextField
+                          size="small"
+                          id="client-code-input"
+                          label="Client Code"
+                          variant="outlined"
+                          name="clientCode"
+                          type="text"
+                          value={formik.values.clientCode}
+                          onChange={handleCustomChange}
+                          onBlur={formik.handleBlur}
+                          error={
+                            formik.touched.clientCode &&
+                            Boolean(formik.errors.clientCode)
+                          }
+                          helperText={
+                            formik.touched.clientCode &&
+                            formik.errors.clientCode
+                          }
+                          fullWidth
+                        />
+                      </Col>
+                      <Col
+                        xs={12}
+                        lg={4}
+                        style={{ marginTop: isMobile ? "16px" : "0" }}
+                      >
+                        <Box textAlign={isMobile ? "center" : "left"}>
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{
+                              width: isMobile ? "100%" : "50%",
+                              backgroundColor: "#11395C",
+                              "&:hover": {
+                                backgroundColor: "#0d2d4a",
+                              },
+                            }}
+                            startIcon={<DownloadIcon />}
                           >
-                            Client Code
-                          </Label>
-                          <Input
-                            invalid={!isClientCodeValid}
-                            name="ClientCode"
-                            type="text"
-                            className="form-control"
-                            value={pnlValues}
-                            onChange={handleOnChange}
-                            id="choices-text-remove-button"
-                            data-choices
-                            data-choices-limit="3"
-                          />
-                          {!isClientCodeValid && (
-                            <FormFeedback>
-                              Please enter a valid Client Code.
-                            </FormFeedback>
-                          )}
-                        </div>
-                      </Col>
-
-                      <Col className="d-flex flex-column-reverse">
-                        <div className="mb-3" />
-                        <Button
-                          className="w-50"
-                          style={{ backgroundColor: "#11395C" }}
-                          onClick={handleExcel}
-                        >
-                          Excel
-                          <DownloadIcon />
-                        </Button>
+                            Excel
+                          </Button>
+                        </Box>
                       </Col>
                     </Row>
-                  </div>
+                  </form>
                 </CardBody>
                 <PNLNote />
               </Card>
