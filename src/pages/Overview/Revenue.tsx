@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import { RevenueCharts } from "./DashboardProjectCharts";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
-import { apiServices } from "../../services";
+// import { apiServices } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
 import { DealerPerformance } from "../../redux/thunk/DealerPerformance";
@@ -39,6 +39,7 @@ const Revenue = () => {
       const payload = {
         user_id: user_id,
       };
+      dispatch(showLoader(""));
       dispatch(DealerPerformance(payload))
         .unwrap()
         .then((response) => {

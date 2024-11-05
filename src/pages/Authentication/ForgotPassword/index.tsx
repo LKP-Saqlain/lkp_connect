@@ -23,7 +23,7 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import "dayjs/locale/en-gb";
 import { useDispatch } from "react-redux";
 import { regEx } from "../../../helper/method";
-import { apiServices } from "../../../services/index";
+// import { apiServices } from "../../../services/index";
 import ShowToast from "../../../utils/toastUtils";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { useNavigate } from "react-router-dom";
