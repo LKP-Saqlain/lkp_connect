@@ -27,6 +27,11 @@ import { apiServices } from "../../../services/index";
 import ShowToast from "../../../utils/toastUtils";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { useNavigate } from "react-router-dom";
+import { AppDispatch } from "../../../redux/store";
+import {
+  SendOtp,
+  ForgotUserPassword,
+} from "../../../redux/thunk/ForgotPassword";
 
 const ForgotPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -34,7 +39,7 @@ const ForgotPassword = () => {
   const [showOtp, setShowOtp] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const theme = useTheme();
@@ -123,12 +128,10 @@ const ForgotPassword = () => {
         sender_type: "E,S",
       };
       dispatch(showLoader(""));
-
-      apiServices
-        .sendOtp(payload)
+      dispatch(SendOtp(payload))
+        .unwrap()
         .then((response) => {
-          console.log("sendOtpResponse", response?.data?.message);
-
+          console.log("Response", response);
           if (response?.status === 200) {
             dispatch(hideLoader());
             ShowToast("success", response?.data?.message);
@@ -136,13 +139,17 @@ const ForgotPassword = () => {
           }
         })
         .catch((error) => {
+          const { message } = error;
+          console.log("Error->", message);
           dispatch(hideLoader());
-          const errorMessage = error.response.data.message;
           ShowToast(
             "error",
-            errorMessage ||
+            message ||
               "Sorry for the inconvenience, please try after some time."
           );
+        })
+        .finally(() => {
+          dispatch(hideLoader());
         });
     }
   };
@@ -156,12 +163,10 @@ const ForgotPassword = () => {
       otp: formik.values.otp,
     };
     dispatch(showLoader(""));
-    apiServices
-      .forgetPassword(payload)
+    dispatch(ForgotUserPassword(payload))
+      .unwrap()
       .then((response) => {
-        console.log("forgetPasswordResponse", response?.data);
-        console.log("forgetPasswordResponse", response);
-
+        console.log("Response-->", response);
         if (response?.status === 200) {
           dispatch(hideLoader());
           ShowToast("success", response?.data?.message);
@@ -170,13 +175,16 @@ const ForgotPassword = () => {
         }
       })
       .catch((error) => {
+        const { message } = error;
+        console.log("Error->", message);
         dispatch(hideLoader());
-        const errorMessage = error.response.data.message;
         ShowToast(
           "error",
-          errorMessage ||
-            "Sorry for the inconvenience, please try after some time."
+          message || "Sorry for the inconvenience, please try after some time."
         );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
       });
   };
 

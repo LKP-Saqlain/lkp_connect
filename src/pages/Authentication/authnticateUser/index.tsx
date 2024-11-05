@@ -27,12 +27,14 @@ import Banner from "../../../assets/banner.png";
 import Vector from "../../../assets/vector.png";
 import ShowToast from "../../../utils/toastUtils";
 import { useEffect } from "react";
+import { AppDispatch } from "../../../redux/store";
+import { AuthUser } from "../../../redux/thunk/AuthUser";
 
 const AuthenticateUser = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const authenticationValidationSchema = Yup.object({
     authentication: Yup.string().when("authenticationButtonGroup", {
@@ -98,16 +100,14 @@ const AuthenticateUser = () => {
         ? formik.values.authentication
         : formik.values.DateOfBirth,
     };
-
     dispatch(showLoader(""));
-
-    apiServices
-      .twoFactorAuthentication(payload)
-      .then((result) => {
-        dispatch(hideLoader());
-        if (result?.status === 200) {
-          const { token, name } = result.data;
-          console.log("2FA_Response", result?.data);
+    dispatch(AuthUser(payload))
+      .unwrap()
+      .then((response) => {
+        console.log("response", response);
+        if (response?.status === 200) {
+          const { token, name } = response?.data;
+          console.log("2FA_Response", response?.data);
           localStorage.setItem("authenticated", "true");
           localStorage.setItem("tkn", token);
           localStorage.setItem("userName", name);
@@ -115,13 +115,17 @@ const AuthenticateUser = () => {
         }
       })
       .catch((error) => {
-        dispatch(hideLoader()); // Hide loader in case of error as well
-        const errorMessage = error.response.data.message;
+        const { message } = error;
+        console.log("Error->", message);
+        dispatch(hideLoader());
+        // formik.setFieldError("password", message);
         ShowToast(
           "error",
-          errorMessage ||
-            "Sorry for the inconvenience, please try after some time."
+          message || "Sorry for the inconvenience, please try after some time."
         );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
       });
   };
 

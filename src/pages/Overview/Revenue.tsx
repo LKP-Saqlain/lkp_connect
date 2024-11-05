@@ -3,41 +3,10 @@ import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import { RevenueCharts } from "./DashboardProjectCharts";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
-import { useDispatch } from "react-redux";
-
-export const allRevenueData = [
-  {
-    name: "Broking",
-    type: "bar",
-    data: [34, 65, 46, 68, 49, 61, 42, 44, 78, 52, 63, 67],
-  },
-  {
-    name: "Non-Broking",
-    type: "bar",
-    data: [
-      89.25, 98.58, 68.74, 108.87, 77.54, 84.03, 51.24, 28.57, 92.57, 42.36,
-      88.51, 36.57,
-    ],
-  },
-];
-
-const series = [
-  {
-    name: "Q1 Budget",
-    group: "budget",
-    data: [44000, 55000, 41000, 67000, 22000, 43000],
-  },
-  {
-    name: "Q1 Actual",
-    group: "actual",
-    data: [48000, 50000, 40000, 65000, 25000, 40000],
-  },
-  {
-    name: "Q2 Budget",
-    group: "budget",
-    data: [13000, 36000, 20000, 8000, 13000, 27000],
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../redux/store";
+import { DealerPerformance } from "../../redux/thunk/DealerPerformance";
+import ShowToast from "../../utils/toastUtils";
 
 const Revenue = () => {
   const [yearRevenue, setYearRevenue] = useState<[]>([]);
@@ -58,65 +27,126 @@ const Revenue = () => {
       data: [],
     },
   ]);
-  const dispatch = useDispatch();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+  console.log("user", user_id);
+  const dispatch = useDispatch<AppDispatch>();
 
-  useEffect(() => {
-    console.log("series", series, brokingNonBrokingData);
-  }, [series]);
   useEffect(() => {
     const fetchBrokerage = async () => {
-      const Id = localStorage.getItem("Id");
+      // const Id = localStorage.getItem("Id");
       const payload = {
-        user_id: Id,
+        user_id: user_id,
       };
-      try {
-        dispatch(showLoader(""));
-        const response = await apiServices.DealerPerformance(payload);
-        console.log("DealerPerformanceResponse", response?.data?.data?.Table);
-        setYearRevenue(response?.data?.data?.Table);
-        const fetchRevenueData = response?.data?.data?.Table;
-        if (fetchRevenueData) {
-          // Extract GrossBrokerage and APbrokerage data from the API response
-          const brokingValues = fetchRevenueData.map(
-            (item: any) => item.Ach_brok_dir
-          );
-          const nonBrokingValues = fetchRevenueData.map(
-            (item: any) => item.Tot_TPD_rev
-          );
+      dispatch(DealerPerformance(payload))
+        .unwrap()
+        .then((response) => {
+          console.log("Resp", response);
+          setYearRevenue(response?.data?.data?.Table);
+          const fetchRevenueData = response?.data?.data?.Table;
+          if (fetchRevenueData) {
+            // Extract GrossBrokerage and APbrokerage data from the API response
+            const brokingValues = fetchRevenueData.map(
+              (item: any) => item.Ach_brok_dir
+            );
+            const nonBrokingValues = fetchRevenueData.map(
+              (item: any) => item.Tot_TPD_rev
+            );
 
-          const indirectValues = fetchRevenueData.map(
-            (item: any) => item.Ach_brok_indir + item.Ach_brok_ind_less2yrs
-          );
+            const indirectValues = fetchRevenueData.map(
+              (item: any) => item.Ach_brok_indir + item.Ach_brok_ind_less2yrs
+            );
 
-          console.log("indirectValues-->", indirectValues);
+            console.log("indirectValues-->", indirectValues);
 
-          // Update the monthProjectData array
-          setBrokingNonBrokingData([
-            {
-              name: "Broking",
-              group: "Broking",
-              data: brokingValues,
-            },
-            {
-              name: "Non-Broking",
-              group: "Non-Broking",
-              data: nonBrokingValues,
-            },
-            {
-              name: "Indirect Broking",
-              group: "Broking",
-              data: indirectValues,
-            },
-          ]);
-        }
+            // Update the monthProjectData array
+            setBrokingNonBrokingData([
+              {
+                name: "Broking",
+                group: "Broking",
+                data: brokingValues,
+              },
+              {
+                name: "Non-Broking",
+                group: "Non-Broking",
+                data: nonBrokingValues,
+              },
+              {
+                name: "Indirect Broking",
+                group: "Broking",
+                data: indirectValues,
+              },
+            ]);
+          }
 
-        if (response?.status === 200) {
+          if (response?.status === 200) {
+            dispatch(hideLoader());
+          }
+        })
+        .catch((Err) => {
+          const { message } = Err;
+          console.log("Error->", message);
           dispatch(hideLoader());
-        }
-      } catch (error) {
-        console.error("Error->", error);
-        dispatch(hideLoader());
-      }
+          // formik.setFieldError("password", message);
+          ShowToast(
+            "error",
+            message ||
+              "Sorry for the inconvenience, please try after some time."
+          );
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+
+      // try {
+      //   dispatch(showLoader(""));
+      //   const response = await apiServices.DealerPerformance(payload);
+      //   console.log("DealerPerformanceResponse", response?.data?.data?.Table);
+      //   setYearRevenue(response?.data?.data?.Table);
+      //   const fetchRevenueData = response?.data?.data?.Table;
+      //   if (fetchRevenueData) {
+      //     // Extract GrossBrokerage and APbrokerage data from the API response
+      //     const brokingValues = fetchRevenueData.map(
+      //       (item: any) => item.Ach_brok_dir
+      //     );
+      //     const nonBrokingValues = fetchRevenueData.map(
+      //       (item: any) => item.Tot_TPD_rev
+      //     );
+
+      //     const indirectValues = fetchRevenueData.map(
+      //       (item: any) => item.Ach_brok_indir + item.Ach_brok_ind_less2yrs
+      //     );
+
+      //     console.log("indirectValues-->", indirectValues);
+
+      //     // Update the monthProjectData array
+      //     setBrokingNonBrokingData([
+      //       {
+      //         name: "Broking",
+      //         group: "Broking",
+      //         data: brokingValues,
+      //       },
+      //       {
+      //         name: "Non-Broking",
+      //         group: "Non-Broking",
+      //         data: nonBrokingValues,
+      //       },
+      //       {
+      //         name: "Indirect Broking",
+      //         group: "Broking",
+      //         data: indirectValues,
+      //       },
+      //     ]);
+      //   }
+
+      //   if (response?.status === 200) {
+      //     dispatch(hideLoader());
+      //   }
+      // } catch (error) {
+      //   console.error("Error->", error);
+      //   dispatch(hideLoader());
+      // }
     };
 
     fetchBrokerage();

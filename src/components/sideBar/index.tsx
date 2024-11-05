@@ -30,12 +30,17 @@ import LastTrade from "../../pages/Reports/LastTrade";
 import QuarterlyPayout from "../../pages/Reports/QPayout";
 import SLBM from "../../pages/Reports/SLBM";
 import CoreReport from "../../pages/Reports/CoreReport";
-import { apiServices } from "../../services";
+// import { apiServices } from "../../services";
 import { MenuItems } from "../../types";
 import MenuMaster from "../../pages/Masters/MenuMaster";
 import AccessMapping from "../../pages/Masters/AccessMapping";
 import RMSAllocation from "../../pages/RMS/Allocation";
 import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
+import { persistor } from "../../redux/store";
+import { RootState, AppDispatch } from "../../redux/store";
+import ShowToast from "../../utils/toastUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { GetMenu } from "../../redux/thunk/GetMenus";
 
 const drawerWidth = 240;
 
@@ -122,28 +127,56 @@ const SideBar = () => {
   const settings = ["Logout"];
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+  console.log("user", user_id);
 
   const username = localStorage.getItem("userName");
   const firstLetter = username ? username.charAt(0).toUpperCase() : "";
 
   useEffect(() => {
-    let userId = localStorage.getItem("Id");
+    // let userId = localStorage.getItem("Id");
     let payload = {
-      user_id: userId,
+      user_id: user_id,
       menu_Type: "byUser",
     };
 
-    apiServices
-      .dashGetMenus(payload)
+    dispatch(GetMenu(payload))
+      .unwrap()
       .then((res) => {
+        console.log("response", res);
         console.log("res", res?.data);
         const processedMenus = buildMenuHierarchy(res?.data);
         console.log("menuItems-->", processedMenus);
         setMenuItems(processedMenus);
       })
-      .catch((error) => {
-        console.log("Error", error);
+      .catch((Err) => {
+        const { message } = Err;
+        console.log("Error->", message);
+        // dispatch(hideLoader());
+        // formik.setFieldError("password", message);
+        ShowToast(
+          "error",
+          message || "Sorry for the inconvenience, please try after some time."
+        );
+      })
+      .finally(() => {
+        // dispatch(hideLoader());
       });
+    // apiServices
+    //   .dashGetMenus(payload)
+    //   .then((res) => {
+    //     console.log("res", res?.data);
+    //     const processedMenus = buildMenuHierarchy(res?.data);
+    //     console.log("menuItems-->", processedMenus);
+    //     setMenuItems(processedMenus);
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error", error);
+    //   });
 
     const buildMenuHierarchy = (data: any) => {
       // Create a map of menu items with the `menu_code` as the key
@@ -199,6 +232,7 @@ const SideBar = () => {
   const handleCloseUserMenu = (value: any) => {
     console.log("values", value);
     if (value === "Logout") {
+      persistor.purge();
       localStorage.removeItem("tkn");
       localStorage.removeItem("Id");
       localStorage.removeItem("uIdType");

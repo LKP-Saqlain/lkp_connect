@@ -1,35 +1,67 @@
 import React, { useEffect, useState } from "react";
 // import { monthProjectData } from "../../components/common/OverviewData";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
-import { apiServices } from "../../services";
-import { useDispatch } from "react-redux";
+// import { apiServices } from "../../services";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, Col } from "reactstrap";
 import { StoreVisitsCharts } from "../../components/common/Visitors";
+import { RootState, AppDispatch } from "../../redux/store";
+import { ClientSummary } from "../../redux/thunk/ClientSummary";
+import ShowToast from "../../utils/toastUtils";
 
 const StoreVisits = () => {
   const [chartData, setChartData] = useState<[]>([]);
-  const dispatch = useDispatch();
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+  console.log("user", user_id);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const fetchActiveInactiveCli = async () => {
-      // if (selectedItem === "T6 Selling") {
-      const Id = localStorage.getItem("Id");
+      // const Id = localStorage.getItem("Id");
       const payload = {
-        user_id: Id,
+        user_id: user_id,
       };
-      try {
-        dispatch(showLoader(""));
-        const response = await apiServices.GetClientStatusCnt(payload);
-        console.log("GetClientStatusCntresponse", response?.data?.data[0]);
-        setChartData(response?.data?.data[0]);
-        // setBrokerageData(response?.data?.data);
-        if (response?.status === 200) {
+      dispatch(showLoader(""));
+      dispatch(ClientSummary(payload))
+        .unwrap()
+        .then((response) => {
+          console.log("Response", response);
+          setChartData(response?.data?.data[0]);
+          // setBrokerageData(response?.data?.data);
+          if (response?.status === 200) {
+            dispatch(hideLoader());
+          }
+        })
+        .catch((Err) => {
+          const { message } = Err;
+          console.log("Error->", message);
           dispatch(hideLoader());
-        }
-      } catch (error) {
-        console.error("Error->", error);
-        dispatch(hideLoader());
-      }
+          // formik.setFieldError("password", message);
+          ShowToast(
+            "error",
+            message ||
+              "Sorry for the inconvenience, please try after some time."
+          );
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+      // try {
+      //   dispatch(showLoader(""));
+      //   const response = await apiServices.GetClientStatusCnt(payload);
+      //   console.log("GetClientStatusCntresponse", response?.data?.data[0]);
+      //   setChartData(response?.data?.data[0]);
+      //   // setBrokerageData(response?.data?.data);
+      //   if (response?.status === 200) {
+      //     dispatch(hideLoader());
+      //   }
+      // } catch (error) {
+      //   console.error("Error->", error);
+      //   dispatch(hideLoader());
+      // }
     };
     fetchActiveInactiveCli();
   }, [dispatch]);

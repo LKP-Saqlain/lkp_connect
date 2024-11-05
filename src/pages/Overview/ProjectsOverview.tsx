@@ -4,8 +4,11 @@ import { ProjectsOverviewCharts } from "./DashboardProjectCharts";
 // import { getProjectChartsData } from "../../slices/thunks";
 // import { monthProjectData } from "../../components/common/OverviewData";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
-import { apiServices } from "../../services";
-import { useDispatch } from "react-redux";
+// import { apiServices } from "../../services";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../redux/store";
+import { userOverview } from "../../redux/thunk/Overview";
+import ShowToast from "../../utils/toastUtils";
 
 const ProjectsOverview = () => {
   const [brokerageData, setBrokerageData] = useState<[]>([]);
@@ -21,52 +24,107 @@ const ProjectsOverview = () => {
       data: [],
     },
   ]);
-  const dispatch = useDispatch();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+  console.log("user", user_id);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const fetchBrokerage = async () => {
-      const Id = localStorage.getItem("Id");
+      // const Id = localStorage.getItem("Id");
       const payload = {
-        user_id: Id,
+        user_id: user_id,
       };
-      try {
-        dispatch(showLoader(""));
-        const response = await apiServices.Last7dayBrokerage(payload);
-        console.log("Last7dayBrokerageresponse", response?.data?.data);
-        setBrokerageData(response?.data?.data);
-        const fetchedBrokerageData = response?.data?.data;
 
-        if (fetchedBrokerageData) {
-          // Extract GrossBrokerage and APbrokerage data from the API response
-          const grossBrokerageData = fetchedBrokerageData.map(
-            (item: any) => item.GrossBrokerage
-          );
-          const apShareData = fetchedBrokerageData.map(
-            (item: any) => item.APbrokerage
-          );
+      dispatch(showLoader("Please wait"));
+      dispatch(userOverview(payload))
+        .unwrap()
+        .then((response) => {
+          console.log("Response", response);
+          setBrokerageData(response?.data?.data);
+          const fetchedBrokerageData = response?.data?.data;
 
-          // Update the monthProjectData array
-          setMonthProjectData([
-            {
-              name: "Gross Brokerage",
-              type: "bar",
-              data: grossBrokerageData, // Set GrossBrokerage data
-            },
-            {
-              name: "AP Share",
-              type: "bar",
-              data: apShareData, // Set APbrokerage data
-            },
-          ]);
-        }
+          if (fetchedBrokerageData) {
+            // Extract GrossBrokerage and APbrokerage data from the API response
+            const grossBrokerageData = fetchedBrokerageData.map(
+              (item: any) => item.GrossBrokerage
+            );
+            const apShareData = fetchedBrokerageData.map(
+              (item: any) => item.APbrokerage
+            );
 
-        if (response?.status === 200) {
+            // Update the monthProjectData array
+            setMonthProjectData([
+              {
+                name: "Gross Brokerage",
+                type: "bar",
+                data: grossBrokerageData, // Set GrossBrokerage data
+              },
+              {
+                name: "AP Share",
+                type: "bar",
+                data: apShareData, // Set APbrokerage data
+              },
+            ]);
+          }
+
+          if (response?.status === 200) {
+            dispatch(hideLoader());
+          }
+        })
+        .catch((Err) => {
+          const { message } = Err;
+          console.log("Error->", message);
           dispatch(hideLoader());
-        }
-      } catch (error) {
-        console.error("Error->", error);
-        dispatch(hideLoader());
-      }
+          // formik.setFieldError("password", message);
+          ShowToast(
+            "error",
+            message ||
+              "Sorry for the inconvenience, please try after some time."
+          );
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+      // try {
+      //   dispatch(showLoader(""));
+      //   const response = await apiServices.Last7dayBrokerage(payload);
+      //   console.log("Last7dayBrokerageresponse", response?.data?.data);
+      //   setBrokerageData(response?.data?.data);
+      //   const fetchedBrokerageData = response?.data?.data;
+
+      //   if (fetchedBrokerageData) {
+      //     // Extract GrossBrokerage and APbrokerage data from the API response
+      //     const grossBrokerageData = fetchedBrokerageData.map(
+      //       (item: any) => item.GrossBrokerage
+      //     );
+      //     const apShareData = fetchedBrokerageData.map(
+      //       (item: any) => item.APbrokerage
+      //     );
+
+      //     // Update the monthProjectData array
+      //     setMonthProjectData([
+      //       {
+      //         name: "Gross Brokerage",
+      //         type: "bar",
+      //         data: grossBrokerageData, // Set GrossBrokerage data
+      //       },
+      //       {
+      //         name: "AP Share",
+      //         type: "bar",
+      //         data: apShareData, // Set APbrokerage data
+      //       },
+      //     ]);
+      //   }
+
+      //   if (response?.status === 200) {
+      //     dispatch(hideLoader());
+      //   }
+      // } catch (error) {
+      //   console.error("Error->", error);
+      //   dispatch(hideLoader());
+      // }
     };
 
     fetchBrokerage();

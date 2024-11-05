@@ -1,38 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UserLogin } from "../../thunk/Login/login";
+import { GetMenu } from "../../thunk/GetMenus";
 
-interface UserLoginPage {
+interface userDashboardMenu {
   data: any;
   loading: boolean;
   error: string | null;
 }
 
-const initialState: UserLoginPage = {
+const initialState: userDashboardMenu = {
   data: [],
   loading: false,
   error: null,
 };
 
-const LoginPageSlice = createSlice({
-  name: "Login",
+const GetUserMenus = createSlice({
+  name: "Menu",
   initialState,
   reducers: {
     // Optional: If you need some synchronous actions
   },
   extraReducers: (builder) => {
     builder
-      .addCase(UserLogin.pending, (state) => {
+      .addCase(GetMenu.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(UserLogin.fulfilled, (state, action) => {
+      .addCase(GetMenu.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload;
       })
-      .addCase(UserLogin.rejected, (state, action) => {
+      .addCase(GetMenu.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
   },
 });
-export default LoginPageSlice.reducer;
+export default GetUserMenus.reducer;

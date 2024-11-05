@@ -25,10 +25,13 @@ import { RiLockPasswordFill } from "react-icons/ri";
 import "dayjs/locale/en-gb";
 import { regEx, isValidPANNo } from "../../../helper/method";
 import { useNavigate } from "react-router-dom";
-import { apiServices } from "../../../services";
+// import { apiServices } from "../../../services";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { useDispatch } from "react-redux";
 import ShowToast from "../../../utils/toastUtils";
+import { AppDispatch } from "../../../redux/store";
+import { UserLogin } from "../../../redux/thunk/Login/login";
+
 const LoginPage = () => {
   const [submitted, setSubmiited] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -37,9 +40,7 @@ const LoginPage = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
 
-  // const LoginUser = useSelector((state: RootState) => state.UserLogin);
-  // const { user_id, user_type } = LoginUser?.data;
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     localStorage.removeItem("tkn");
@@ -94,24 +95,24 @@ const LoginPage = () => {
       // Handle login logic here
       // setSubmiited(true);
       handleValidateUser(values);
-      // const result = await handleTwoFactorAuthentication(values);
     },
   });
 
-  const handleValidateUser = async (values: any) => {
-    console.log("handleValidateUservalues", values);
+  const handleValidateUser = (values: any) => {
+    console.log("handleValidateUser values", values);
 
-    let payload = {
+    const payload = {
       user_type: values.loginButtonGroup,
       user_id: values.username,
       user_password: values.password,
     };
 
-    dispatch(showLoader(""));
-    apiServices
-      .Login(payload)
+    dispatch(showLoader("Please wait"));
+
+    dispatch(UserLogin(payload))
+      .unwrap()
       .then((response) => {
-        console.log("response->", response?.data);
+        console.log("reduxResponse", response?.data);
         if (response?.status === 200) {
           const { user_id, user_type } = response?.data;
           dispatch(hideLoader());
@@ -126,16 +127,17 @@ const LoginPage = () => {
         }
       })
       .catch((Err) => {
-        const { message } = Err.response.data;
+        const { message } = Err;
         console.log("Error->", message);
         dispatch(hideLoader());
-        formik.setFieldError("password", message);
-        const errorMessage = Err.response.data.message;
+        // formik.setFieldError("password", message);
         ShowToast(
           "error",
-          errorMessage ||
-            "Sorry for the inconvenience, please try after some time."
+          message || "Sorry for the inconvenience, please try after some time."
         );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
       });
   };
 
