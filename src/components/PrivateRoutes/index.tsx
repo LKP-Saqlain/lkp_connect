@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 
 interface PrivateRouteProps {
   authElement?: JSX.Element;
-  dasheElement?: JSX.Element;
+  dashElement?: JSX.Element;
   customLogin?: boolean;
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({
   authElement,
   customLogin,
-  dasheElement,
+  dashElement,
 }) => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -36,14 +36,14 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
     return <Navigate to="/" replace />; // Redirect to login if not authenticated
   }
   if (hasAuthenticatedSuccessfully) {
-    return dasheElement;
+    return dashElement;
   }
   // Allow access if authenticated
   if (isAuthenticated) {
     return authElement ? authElement : <Navigate to="/" replace />;
   }
-  // Render dasheElement if authenticated but not authorized for the dashboard
-  return dasheElement ? dasheElement : <Navigate to="/" replace />;
+  // Render dashElement if authenticated but not authorized for the dashboard
+  return dashElement ? dashElement : <Navigate to="/" replace />;
 };
 
 export default PrivateRoute;

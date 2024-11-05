@@ -28,7 +28,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <PrivateRoute customLogin={false} dasheElement={<SideBar />} />
+              <PrivateRoute customLogin={false} dashElement={<SideBar />} />
             }
           />
         </Routes>
