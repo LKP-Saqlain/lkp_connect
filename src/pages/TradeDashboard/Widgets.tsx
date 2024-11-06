@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardBody, Col } from "reactstrap";
-import { cyptoWidgets } from "../../components/common/TradeDashBoardData";
+import { cyptoWidgets } from "../../components/common/Capsules";
 
 interface SelectedWidgetProps {
   selectedWidget: string;

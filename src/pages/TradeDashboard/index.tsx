@@ -3,7 +3,7 @@ import { Container, Row } from "reactstrap";
 import { useDispatch } from "react-redux";
 import Widgets from "./Widgets";
 import TradeCapsule from "./TradeCapsules";
-import TradeInfo from "./tradeInfo";
+import TradeInfo from "../../components/common/UserInfoTable";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 

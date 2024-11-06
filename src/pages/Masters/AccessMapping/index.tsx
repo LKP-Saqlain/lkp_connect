@@ -1,5 +1,5 @@
 const AccessMapping = () => {
-  return <div>AccessMapping</div>;
+  return <div>Access Mapping Component</div>;
 };
 
 export default AccessMapping;

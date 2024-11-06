@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardBody, Col, Row } from "reactstrap";
-import { TradeCapsules } from "../../components/common/TradeDashBoardData";
+import { TradeCapsules } from "../../components/common/Capsules";
 import ButtonGroup from "../../components/common/BuutonGroup";
 
 const TradeCapsule = () => {

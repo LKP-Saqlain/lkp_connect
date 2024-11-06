@@ -32,7 +32,7 @@ import SLBM from "../../pages/Reports/SLBM";
 import CoreReport from "../../pages/Reports/CoreReport";
 // import { apiServices } from "../../services";
 import { MenuItems } from "../../types";
-import MenuMaster from "../../pages/Masters/MenuMaster";
+// import MenuMaster from "../../pages/Masters/MenuMaster";
 import AccessMapping from "../../pages/Masters/AccessMapping";
 import RMSAllocation from "../../pages/RMS/Allocation";
 import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
@@ -41,6 +41,7 @@ import { RootState, AppDispatch } from "../../redux/store";
 import ShowToast from "../../utils/toastUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { GetMenu } from "../../redux/thunk/GetMenus";
+import ClientDetails from "../../pages/ClientDetails";
 
 const drawerWidth = 240;
 
@@ -272,7 +273,7 @@ const SideBar = () => {
       case "Masters":
         switch (activeSubItem) {
           case "Menu Master":
-            return <MenuMaster />;
+            return <Typography>Menu Master Content</Typography>;
           case "User Access Mapping":
             return <AccessMapping />;
           default:
@@ -307,9 +308,9 @@ const SideBar = () => {
       case "Referal Lead":
         switch (activeSubItem) {
           case "Referal Entry":
-            return <TradeDashboard />;
+            return "";
           case "Referal Entry Status":
-            return <OverviewComponent />;
+            return "";
           default:
             return null;
         }
@@ -367,22 +368,32 @@ const SideBar = () => {
           )}
 
           <Box sx={{ flexGrow: 1 }} />
-
+          <Typography
+            sx={{
+              color: "black",
+              fontSize: "10px",
+              mr: 1,
+              fontFamily: "Public Sans",
+            }}
+          >
+            <Typography
+              sx={{
+                textAlign: "end",
+                fontFamily: "Public Sans",
+                fontSize: "18px",
+                fontWeight: 400,
+              }}
+            >
+              {" "}
+              Welcome
+            </Typography>
+            {localStorage.getItem("userName")}
+          </Typography>
           <Tooltip title="">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               <Avatar src="/static/images/avatar/2.jpg">{firstLetter}</Avatar>
             </IconButton>
           </Tooltip>
-          <Typography
-            sx={{
-              color: "black",
-              fontSize: "12px",
-              ml: 1,
-              fontFamily: "Public Sans",
-            }}
-          >
-            {localStorage.getItem("userName")}
-          </Typography>
 
           <Menu
             sx={{ mt: "45px" }}
@@ -459,7 +470,12 @@ const SideBar = () => {
 
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 1, backgroundColor: "#E5E4E2" }}
+        sx={{
+          flexGrow: 1,
+          p: 1,
+          backgroundColor: "#E5E4E2",
+          overflow: "hidden",
+        }}
       >
         <Box>{renderContent()}</Box>
       </Box>

@@ -15,8 +15,6 @@ interface table {
   handleValues: (data: any) => void;
   tradeData: any;
 }
-const Id = localStorage.getItem("Id");
-
 const DropDown = ({ handleValues, tradeData }: table) => {
   const [selectedZone, setSelectedZone] = useState<Option | null>(null);
   const [selectedBranchCode, setSelectedBranchCode] = useState<Option | null>(
@@ -35,6 +33,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
   }, []);
 
   useEffect(() => {
+    const Id = localStorage.getItem("Id");
     const userType = localStorage.getItem("uIdType");
     let payload = {
       user_id: Id,
@@ -77,6 +76,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
   }, [dispatch]);
 
   useEffect(() => {
+    const Id = localStorage.getItem("Id");
     if (selectedZone) {
       const payload = {
         user_id: Id,
