@@ -41,7 +41,7 @@ import { RootState, AppDispatch } from "../../redux/store";
 import ShowToast from "../../utils/toastUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { GetMenu } from "../../redux/thunk/GetMenus";
-import ClientDetails from "../../pages/ClientDetails";
+// import ClientDetails from "../../pages/ClientDetails";
 
 const drawerWidth = 240;
 
