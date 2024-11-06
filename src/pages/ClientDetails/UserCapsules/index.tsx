@@ -3,8 +3,8 @@ import * as React from "react";
 // import Stack from "@mui/material/Stack";
 import { Card, CardBody, Col, Row } from "reactstrap";
 import { ClientDetailsCapsule } from "../../../components/common/Capsules";
-import { useMediaQuery } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
+// import { useMediaQuery } from "@mui/material";
+// import { useTheme } from "@mui/material/styles";
 
 interface userCapsules {
   selectedCapsule: any;
@@ -12,8 +12,8 @@ interface userCapsules {
 }
 
 const UserCapsules = ({ selectedCapsule, handleClick }: userCapsules) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <React.Fragment>
