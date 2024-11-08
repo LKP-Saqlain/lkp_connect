@@ -9,7 +9,8 @@ import {
   Button,
 } from "reactstrap";
 import { apiServices } from "../../../services";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
 import DataTable from "../../../components/common/table";
@@ -33,8 +34,11 @@ const QuarterlyPayout = () => {
   const [page, setPage] = useState(1); // Track current page
   // const [pageSize, setPageSize] = useState(10); // Initial page size
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
   const validationSchema = Yup.object({
     selectedFinancialYear: Yup.object()
       .nullable()
@@ -72,7 +76,7 @@ const QuarterlyPayout = () => {
 
   const handleSubmit = async (event?: any, value?: any) => {
     console.log(event);
-    const Id = localStorage.getItem("Id");
+    // const Id = localStorage.getItem("Id");
     const pageSize = 10; // Define pageSize
 
     // Calculate start based on the new page (0-indexed)
@@ -82,7 +86,7 @@ const QuarterlyPayout = () => {
       start: value === undefined ? 0 : start,
       pageSize: 10,
       searchKey: "",
-      userId: Id,
+      userId: user_id,
       financialQtr: `2024-${formik.values.quarter?.value}`,
     };
     dispatch(showLoader(""));

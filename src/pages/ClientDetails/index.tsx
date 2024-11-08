@@ -4,7 +4,8 @@ import UserInfoTable from "../../components/common/UserInfoTable";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { useDispatch } from "react-redux";
-import { CardBody, Card, Row, Col } from "reactstrap";
+import "./style.css";
+import UserInfoDetail from "./IndUserInfoDetails";
 
 const ClientDetails = () => {
   const [selectedCapsule, setSelectedCapsule] = useState("");
@@ -71,33 +72,7 @@ const ClientDetails = () => {
           />
         </>
       ) : (
-        <>
-          <Card style={{ borderRadius: "23px" }}>
-            {/* <CardHeader>View User Details</CardHeader> */}
-            <CardBody>
-              <Row noGutters>
-                <Col xs={2} md={2} lg={2}>
-                  <h6>Hello</h6>
-                </Col>
-                <Col xs={2} md={2} lg={2}>
-                  <h6>Hello</h6>
-                </Col>
-                <Col xs={2} md={2} lg={2}>
-                  <h6>Hello</h6>
-                </Col>
-                <Col xs={2} md={2} lg={2}>
-                  <h6>Hello</h6>
-                </Col>
-                <Col xs={2} md={2} lg={2}>
-                  <h6>Hello</h6>
-                </Col>
-                <Col xs={2} md={2} lg={2}>
-                  <h6>Hello</h6>
-                </Col>
-              </Row>
-            </CardBody>
-          </Card>
-        </>
+        <UserInfoDetail />
       )}
     </>
   );

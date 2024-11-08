@@ -27,3 +27,37 @@ export const ClientDetailsCapsule = [
   { id: 3, label: "Inactive Clients", count: 200 },
   { id: 4, label: "Client Approaching  Dormant Status" },
 ];
+
+export const ClientInfoCapsules = [
+  { id: 1, label: "Equity", status: "active" },
+  { id: 2, label: "F&O", status: "active" },
+  { id: 3, label: "Currency", status: "active" },
+  { id: 4, label: "Commodity", status: "Inactive" },
+  { id: 5, label: "MTF", status: "active" },
+  { id: 6, label: "SLBM", status: "Inactive" },
+];
+
+export const BrokSlabItems = [
+  { id: 1, label: "Equity Delivery", subvalue: "0.5% of Turnover" },
+  { id: 2, label: "Equity Intraday", subvalue: "0.5% of Turnover" },
+  { id: 3, label: "Equity Futures", subvalue: "0.5% of Turnover" },
+  { id: 4, label: "Equity Options", subvalue: "₹ 50 per lot" },
+  { id: 5, label: "Currency Futures", subvalue: "0.5% of Turnover" },
+  { id: 6, label: "Currency Options", subvalue: "₹ 50 per lot" },
+  { id: 7, label: "Commodity Futures", subvalue: "Inactive" },
+  { id: 7, label: "Commodity Options", subvalue: "Inactive" },
+];
+
+export const LastTradeDates = [
+  { id: 1, label: "Equity", status: "1-Jan-24" },
+  { id: 2, label: "F&O", status: "1-Jan-24" },
+  { id: 3, label: "Currency", status: "Inactive" },
+  { id: 4, label: "Commodity", status: "Inactive" },
+  { id: 5, label: "MTF", status: "1-Jan-24" },
+  { id: 6, label: "SLBM", status: "Inactive" },
+];
+
+export const DPSchemes = [
+  { id: 1, label: "Equity", status: "1-Jan-24" },
+  { id: 2, label: "F&O", status: "1-Jan-24" },
+];

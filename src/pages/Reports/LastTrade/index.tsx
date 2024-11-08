@@ -8,7 +8,8 @@ import {
   Row,
   Button,
 } from "reactstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import axios from "axios";
 import * as Yup from "yup";
@@ -26,9 +27,11 @@ const ClientStatus = [
 ];
 
 const LastTrade = () => {
-  // const [pnlValues, setPnlValues] = useState<any>("");
+  const dispatch = useDispatch<AppDispatch>();
 
-  const dispatch = useDispatch();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   const validationSchema = Yup.object({
     clientStatus: Yup.object()
@@ -64,8 +67,8 @@ const LastTrade = () => {
   //   }
   // };
 
-  const getUserIdFromLocalStorage = (key: any) => {
-    const str = localStorage.getItem(key);
+  const getUserIdFromLocalStorage = () => {
+    const str = user_id;
     if (str) {
       const parts = str.split("-");
       return parts.length > 1 ? parts[1] : null;
@@ -87,7 +90,7 @@ const LastTrade = () => {
     dispatch(showLoader("Please wait, We are Processing your Request"));
 
     try {
-      const extractUserId = getUserIdFromLocalStorage("Id");
+      const extractUserId = getUserIdFromLocalStorage();
 
       const payload = {
         user_id: extractUserId,

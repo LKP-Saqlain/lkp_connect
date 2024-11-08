@@ -9,7 +9,8 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -22,7 +23,11 @@ const financialYears = [{ value: "2023-2024", label: "2023-2024" }];
 
 const AnnualPNL = () => {
   const isMobile = useMediaQuery("(max-width:600px)");
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   // Formik and Yup setup
   const formik = useFormik({
@@ -39,11 +44,11 @@ const AnnualPNL = () => {
     onSubmit: async (values) => {
       const { finYear, clientCode } = values;
       console.log("submitClick", finYear, clientCode);
-      let uId = localStorage.getItem("Id");
+      // let uId = localStorage.getItem("Id");
       const payload = {
         clientCode: clientCode,
         finYear: finYear,
-        userId: uId,
+        userId: user_id,
       };
       try {
         let token = localStorage.getItem("tkn");

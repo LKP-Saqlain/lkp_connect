@@ -12,7 +12,8 @@ import {
 import { regEx } from "../../../helper/method";
 import DownloadIcon from "@mui/icons-material/Download";
 import { apiServices } from "../../../services";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
 import DataTable from "../../../components/common/table";
@@ -36,14 +37,18 @@ const SlbmHoling = () => {
 
   const [page, setPage] = useState(1); // Track current page
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   const validationSchema = Yup.object({
     selectedZone: Yup.object().nullable().required("Zone is required"),
     selectedBranchCode: Yup.object()
       .nullable()
       .required("Branch code is required"),
-    isInValue: Yup.string().required("SYMBOL / ISIN is required"),
+    // isInValue: Yup.string().required("SYMBOL / ISIN is required"),
   });
 
   interface FormValues {
@@ -67,7 +72,7 @@ const SlbmHoling = () => {
   });
 
   useEffect(() => {
-    const str = localStorage.getItem("Id");
+    const str = user_id;
     const userType = localStorage.getItem("uIdType");
     let extractUserId: string | null = null;
 
@@ -132,7 +137,7 @@ const SlbmHoling = () => {
 
   useEffect(() => {
     if (formik.values.selectedZone) {
-      const str = localStorage.getItem("Id");
+      const str = user_id;
       const userType = localStorage.getItem("uIdType");
       let extractUserId: string | null = null;
 
@@ -205,14 +210,14 @@ const SlbmHoling = () => {
     // formik.setFieldValue("selectedZone", {});
     // formik.setFieldValue("selectedBranchCode", {});
     // formik.setFieldValue("isInValue", "");
-    let Id = localStorage.getItem("Id");
+    // let Id = localStorage.getItem("Id");
     const pageSize = 10; // Define pageSize
 
     // Calculate start based on the new page (0-indexed)
     const start = (value - 1) * pageSize;
 
     const payload = {
-      loginName: Id,
+      loginName: user_id,
       start: value === undefined ? 0 : start, // Calculate start based on the new page
       pageSize: 10,
       searchKey: "",
@@ -258,9 +263,9 @@ const SlbmHoling = () => {
   ];
 
   const handleDownloadExcel = async () => {
-    const Id = localStorage.getItem("Id");
+    // const Id = localStorage.getItem("Id");
     const payload = {
-      loginName: Id,
+      loginName: user_id,
       start: 0,
       pageSize: 10,
       searchKey: "",

@@ -10,7 +10,8 @@ import {
 } from "reactstrap";
 import DownloadIcon from "@mui/icons-material/Download";
 import { apiServices } from "../../../services";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
 import DataTable from "../../../components/common/table";
@@ -34,8 +35,6 @@ const ClientStatus = [
 //   value: string;
 // }
 
-const Id = localStorage.getItem("Id");
-
 const DormantClient = () => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
@@ -45,7 +44,11 @@ const DormantClient = () => {
   const [page, setPage] = useState(1); // Track current page
 
   // const data = useSelector((state: RootState) => state.dormantReport.data);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   const validationSchema = Yup.object({
     selectedZone: Yup.object().nullable().required("Zone is required"),
@@ -82,8 +85,9 @@ const DormantClient = () => {
   }, [formik.values]);
 
   useEffect(() => {
+    // const Id = localStorage.getItem("Id");
     let payload = {
-      user_id: Id,
+      user_id: user_id,
       option: "zone",
       userType: "EMP",
       zone: formik.values.selectedZone?.value,
@@ -124,7 +128,7 @@ const DormantClient = () => {
 
   useEffect(() => {
     if (formik.values.selectedZone) {
-      const str = localStorage.getItem("Id");
+      const str = user_id;
       let extractUserId: string | null = null;
 
       if (str) {
@@ -191,7 +195,7 @@ const DormantClient = () => {
 
   const handleSubmit = async (event?: any, value?: any) => {
     console.log("newPage", event, value);
-    let Id = localStorage.getItem("Id");
+    // let Id = localStorage.getItem("Id");
     const pageSize = 10; // Define pageSize
 
     // Calculate start based on the new page (0-indexed)
@@ -200,7 +204,7 @@ const DormantClient = () => {
       start: value === undefined ? 0 : start, // Calculate start based on the new page
       pageSize: 10,
       searchKey: "",
-      loginName: Id,
+      loginName: user_id,
       zone: formik.values.selectedZone?.value,
       branchCode: formik.values.selectedBranchCode?.value,
       clientStatus:
@@ -238,12 +242,12 @@ const DormantClient = () => {
   };
 
   const handleExcelDownload = () => {
-    const Id = localStorage.getItem("Id");
+    // const Id = localStorage.getItem("Id");
     const payload = {
       start: 0,
       pageSize: 20,
       searchKey: "",
-      loginName: Id,
+      loginName: user_id,
       zone: formik.values.selectedZone?.value,
       branchCode: formik.values.selectedBranchCode?.value,
       clientStatus:

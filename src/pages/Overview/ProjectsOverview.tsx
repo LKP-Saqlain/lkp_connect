@@ -87,44 +87,6 @@ const ProjectsOverview = () => {
         .finally(() => {
           dispatch(hideLoader());
         });
-      // try {
-      //   dispatch(showLoader(""));
-      //   const response = await apiServices.Last7dayBrokerage(payload);
-      //   console.log("Last7dayBrokerageresponse", response?.data?.data);
-      //   setBrokerageData(response?.data?.data);
-      //   const fetchedBrokerageData = response?.data?.data;
-
-      //   if (fetchedBrokerageData) {
-      //     // Extract GrossBrokerage and APbrokerage data from the API response
-      //     const grossBrokerageData = fetchedBrokerageData.map(
-      //       (item: any) => item.GrossBrokerage
-      //     );
-      //     const apShareData = fetchedBrokerageData.map(
-      //       (item: any) => item.APbrokerage
-      //     );
-
-      //     // Update the monthProjectData array
-      //     setMonthProjectData([
-      //       {
-      //         name: "Gross Brokerage",
-      //         type: "bar",
-      //         data: grossBrokerageData, // Set GrossBrokerage data
-      //       },
-      //       {
-      //         name: "AP Share",
-      //         type: "bar",
-      //         data: apShareData, // Set APbrokerage data
-      //       },
-      //     ]);
-      //   }
-
-      //   if (response?.status === 200) {
-      //     dispatch(hideLoader());
-      //   }
-      // } catch (error) {
-      //   console.error("Error->", error);
-      //   dispatch(hideLoader());
-      // }
     };
 
     fetchBrokerage();

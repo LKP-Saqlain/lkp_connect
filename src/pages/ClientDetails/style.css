@@ -1,0 +1,59 @@
+@media (max-width: 768px) {
+    .card-body details-card {
+      flex: 0 0 50% !important;
+      border-left: none !important;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .card-body details-card {
+      flex: 0 0 100% !important;
+      border-left: none !important;
+    }
+  }
+  
+  .card-body details-card:first-child {
+    border-left: none !important;
+  }
+
+  .box-content {
+    border-left: 1px solid #B2BEB5;
+    font-weight: bold;
+    font-size: 16px;
+    font-family: "Poppins";
+  }
+  .user-info {
+    color: rgb(119, 119, 119);
+    font-family: "Poppins";
+    margin-top: 8px;
+    font-size: 14px;
+  }
+
+  .chart-header {
+    font-family: "Poppins";
+    font-size: 25px;
+    font-weight: bold;
+    color:#11395C !important
+  }
+
+  .fixed-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height */
+    overflow: hidden; /* Prevent scrolling on the whole page */
+  }
+  
+  .fixed-content {
+    flex-grow: 1; /* Allow this part to take available space */
+    overflow-y: auto; /* Make content scrollable */
+    padding-bottom: 20px; /* Adjust padding if needed */
+  }
+  
+  .scrollable-chart {
+    overflow-y: auto;
+    max-height: 400px; /* Set max height for the chart to allow scrolling */
+    padding: 10px;
+    margin-top: 20px;
+  }
+  
+  
