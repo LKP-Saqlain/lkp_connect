@@ -9,7 +9,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { useTheme } from "@mui/material/styles";
 
 const barColors = ["#11395C", "#F57C00"];
-const GrossBrokerageColor = ["#FFAF6C"];
+// const GrossBrokerageColor = ["#FFAF6C"];
 
 const newSeries = [
   {
@@ -30,34 +30,30 @@ const newSeries = [
   },
 ];
 
-const PerformanceHistoryChart = ({
-  series,
-  brokerageData,
-  customClass,
-}: any) => {
+const PerformanceHistoryChart = ({ brokerageData, customClass }: any) => {
   const [latestDates, setLatestDates] = useState<any>("");
-  const [selectedButton, setSelectedButton] = useState<string>("Daily");
+  // const [selectedButton, setSelectedButton] = useState<string>("Daily");
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const selectedStyle = {
-    bgcolor: "#11395C",
-    color: "#fff",
-    borderRadius: "7px",
-    fontFamily: "Poppins",
-    borderColor: "#ABC4DA",
-    textTransform: "capitalize",
-  };
+  // const selectedStyle = {
+  //   bgcolor: "#11395C",
+  //   color: "#fff",
+  //   borderRadius: "7px",
+  //   fontFamily: "Poppins",
+  //   borderColor: "#ABC4DA",
+  //   textTransform: "capitalize",
+  // };
 
-  const nonSelectedStyle = {
-    bgcolor: "#ABC4DA",
-    color: "#11395C",
-    borderRadius: "7px",
-    fontFamily: "Poppins",
-    borderColor: "#ABC4DA",
-    textTransform: "capitalize",
-  };
+  // const nonSelectedStyle = {
+  //   bgcolor: "#ABC4DA",
+  //   color: "#11395C",
+  //   borderRadius: "7px",
+  //   fontFamily: "Poppins",
+  //   borderColor: "#ABC4DA",
+  //   textTransform: "capitalize",
+  // };
 
   useEffect(() => {
     console.log("brokData", brokerageData);
