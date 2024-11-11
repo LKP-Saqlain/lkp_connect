@@ -202,7 +202,7 @@ const DormantClient = () => {
     const start = (value - 1) * pageSize;
     const payload = {
       start: value === undefined ? 0 : start, // Calculate start based on the new page
-      pageSize: 10,
+      pageSize: 25,
       searchKey: "",
       loginName: user_id,
       zone: formik.values.selectedZone?.value,

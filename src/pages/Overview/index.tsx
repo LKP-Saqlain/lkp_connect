@@ -5,7 +5,7 @@ import StoreVisits from "./VisitorsCount";
 import Revenue from "./Revenue";
 
 const DashboardProject = () => {
-  document.title = "Projects | Velzon - React Admin & Dashboard Template";
+  document.title = "LKP Securities | User Overview";
   return (
     <React.Fragment>
       <div className="page-content">

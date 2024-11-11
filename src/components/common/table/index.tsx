@@ -19,7 +19,7 @@ const DataTable: React.FC<DormantClientProps> = ({
   totalRecords = 0,
   dynamicHeader,
   page = 0, // Use the page prop directly
-  pageSize = 10, // Use the pageSize prop directly
+  pageSize = 25, // Use the pageSize prop directly
   onPageChange,
 }) => {
   // Calculate the rows to display based on current page and page size

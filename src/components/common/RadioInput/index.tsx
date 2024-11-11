@@ -4,12 +4,28 @@ interface RadioInputProps {
   id: string;
   name: string;
   label: string;
+  onChange?: (data: any) => void;
+  value: string;
 }
 
-const RadioInput: React.FC<RadioInputProps> = ({ id, name, label }) => {
+const RadioInput: React.FC<RadioInputProps> = ({
+  id,
+  name,
+  label,
+  onChange,
+  value,
+}) => {
   return (
     <div className="form-check">
-      <input type="radio" name={name} className="form-check-input" id={id} />
+      <input
+        type="radio"
+        name={name}
+        value={value}
+        onChange={onChange}
+        className="form-check-input"
+        id={id}
+        // style={{backgroundColor:"#11395C"}}
+      />
       <label
         className="form-check-label"
         style={{
