@@ -5,7 +5,7 @@ import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { useDispatch } from "react-redux";
 import "./style.css";
-import UserInfoDetail from "./IndUserInfoDetails";
+// import UserInfoDetail from "./IndUserInfoDetails";
 import UserInfo from "./IndUserDetailsModal";
 
 const ClientDetails = ({ handleDrawerClose, handleDrawerOpen }: any) => {
