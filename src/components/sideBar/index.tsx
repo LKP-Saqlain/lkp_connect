@@ -308,7 +308,12 @@ const SideBar = () => {
       case "Referal Lead":
         switch (activeSubItem) {
           case "Referal Entry":
-            return <ClientDetails />;
+            return (
+              <ClientDetails
+                handleDrawerClose={handleDrawerClose}
+                handleDrawerOpen={handleDrawerOpen}
+              />
+            );
           case "Referal Entry Status":
             return "";
           default:

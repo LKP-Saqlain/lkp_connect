@@ -1,5 +1,8 @@
 import { Modal, ModalBody, Button, ModalHeader, Col, Row } from "reactstrap";
 import RadioInput from "../RadioInput";
+import { useState } from "react";
+import { useTheme } from "@mui/material/styles";
+import { useMediaQuery } from "@mui/material";
 
 interface ModalComponentProps {
   isOpen: boolean;
@@ -8,33 +11,58 @@ interface ModalComponentProps {
 }
 
 const ModalComponent = ({ isOpen, onClose }: ModalComponentProps) => {
+  const [selectedValue, setSelectedValue] = useState("");
+  const [equityDeliveryValue, setEquityDeliveryValue] = useState(false);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const handleProceedClick = () => {
+    console.log("selectedValue", selectedValue);
+    if (selectedValue !== "") {
+      setEquityDeliveryValue(true);
+    }
+  };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("values", event.target.value);
+    setSelectedValue(event.target.value);
+  };
+
+  const handleCloseClick = () => {
+    setEquityDeliveryValue(false);
+    onClose();
+  };
   return (
-    <>
-      <Modal
-        id="flipModal"
-        isOpen={isOpen}
+    <Modal
+      id="flipModal"
+      isOpen={isOpen}
+      toggle={handleCloseClick}
+      modalClassName="zoomIn"
+      centered
+      style={{
+        maxWidth: "90%",
+        width: isMobile ? "100%" : "50%",
+        maxHeight: "90vh",
+        height: "auto",
+        overflowY: "auto",
+      }}
+    >
+      <ModalHeader
+        id="flipModalLabel"
         toggle={onClose}
-        modalClassName="zoomIn"
-        centered
-        style={{
-          maxWidth: "90%", // Adjust the max width
-          width: "50%", // Width of the modal
-          maxHeight: "90vh",
-          height: "80vh" /* Adjust this value as needed */,
-        }}
+        style={{ color: "#11395C" }}
       >
-        <ModalHeader
-          // className="text-center"
-          id="flipModalLabel"
-          toggle={onClose}
-          style={{ color: "#11395C" }}
-        >
-          Brokerage Modification
-        </ModalHeader>
-        <ModalBody>
-          <Row>
-            {/* Column for Brokerage Plans */}
-            <Col style={{ borderRight: "2px solid grey" }}>
+        Brokerage Modification
+      </ModalHeader>
+      <ModalBody>
+        <Row>
+          {/* Column for Brokerage Plans */}
+          {!equityDeliveryValue ? (
+            <Col
+              xs={12}
+              md={6}
+              style={{ borderRight: "2px solid grey", marginBottom: "15px" }}
+            >
               <p
                 className="text-center"
                 style={{
@@ -47,38 +75,48 @@ const ModalComponent = ({ isOpen, onClose }: ModalComponentProps) => {
               </p>
               <Row>
                 {/* Column 1 */}
-                <Col md={6}>
+                <Col xs={12} md={6}>
                   <RadioInput
+                    onChange={handleChange}
+                    value={"0.50% of turnover"}
                     id="plan1"
                     name="brokeragePlan"
                     label="0.50% of turnover"
                   />
                   <RadioInput
+                    onChange={handleChange}
                     id="plan2"
+                    value={"0.30% of turnover"}
                     name="brokeragePlan"
                     label="0.30% of turnover"
                   />
                   <RadioInput
+                    onChange={handleChange}
                     id="plan3"
+                    value={"0.35% of turnover"}
                     name="brokeragePlan"
                     label="0.35% of turnover"
                   />
                 </Col>
-
-                {/* Column 2 */}
-                <Col md={6}>
+                <Col xs={12} md={6}>
                   <RadioInput
-                    id="plan1"
+                    onChange={handleChange}
+                    id="plan4"
+                    value={"0.40% of turnover"}
                     name="brokeragePlan"
                     label="0.40% of turnover"
                   />
                   <RadioInput
-                    id="plan2"
+                    onChange={handleChange}
+                    id="plan5"
+                    value={"0.25% of turnover"}
                     name="brokeragePlan"
                     label="0.25% of turnover"
                   />
                   <RadioInput
-                    id="plan3"
+                    onChange={handleChange}
+                    id="plan6"
+                    value={"0.20% of turnover"}
                     name="brokeragePlan"
                     label="0.20% of turnover"
                   />
@@ -98,9 +136,45 @@ const ModalComponent = ({ isOpen, onClose }: ModalComponentProps) => {
                 Note : Brokergae Plan can be modify after 90 days
               </span>
             </Col>
+          ) : equityDeliveryValue ? (
+            <Col
+              xs={12}
+              md={6}
+              style={{ borderRight: "2px solid grey", marginBottom: "15px" }}
+            >
+              <p
+                className="text-center"
+                style={{
+                  color: "#11395C",
+                  fontSize: "16px",
+                  fontFamily: "Poppins",
+                }}
+              >
+                Existent Plans
+              </p>
+              <Row>
+                {/* Column 1 */}
+                <Col>
+                  <p
+                    style={{
+                      color: "#11395C",
+                      fontSize: "12px",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    0.50% of turnover Plan <br />
+                    active seen 5-Mar-2024
+                  </p>
+                </Col>
+              </Row>
+            </Col>
+          ) : (
+            ""
+          )}
 
-            {/* Column for Modification History */}
-            <Col>
+          {/* Column for Modification History */}
+          {!equityDeliveryValue ? (
+            <Col xs={12} md={6}>
               <p
                 className="text-center"
                 style={{
@@ -112,36 +186,31 @@ const ModalComponent = ({ isOpen, onClose }: ModalComponentProps) => {
                 Modification History
               </p>
               <Row>
-                {/* Column 1 */}
-                <Col md={6}>
+                <Col xs={12} md={6}>
                   <p
                     style={{
                       color: "#11395C",
                       fontSize: "12px",
                       fontFamily: "Poppins",
-                      //   fontWeight: "lighter",
                     }}
                   >
                     5-Mar-24 <br />
                     0.50% of turnover
                   </p>
-                  <Col>
-                    <p
-                      style={{
-                        color: "#11395C",
-                        fontSize: "12px",
-                        fontFamily: "Poppins",
-                        //   fontWeight: "lighter",
-                      }}
-                    >
-                      5-Mar-24 <br />
-                      0.50% of turnover
-                    </p>
-                  </Col>
                 </Col>
-
-                {/* Column 2 */}
-                <Col md={6}>
+                <Col xs={12} md={6}>
+                  <p
+                    style={{
+                      color: "#11395C",
+                      fontSize: "12px",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    5-Mar-24 <br />
+                    0.50% of turnover
+                  </p>
+                </Col>
+                <Col>
                   <p
                     style={{
                       color: "#11395C",
@@ -153,50 +222,73 @@ const ModalComponent = ({ isOpen, onClose }: ModalComponentProps) => {
                     5-Mar-24 <br />
                     0.50% of turnover
                   </p>
-                  <Col>
-                    <p
-                      style={{
-                        color: "#11395C",
-                        fontSize: "12px",
-                        fontFamily: "Poppins",
-                        //   fontWeight: "lighter",
-                      }}
-                    >
-                      5-Mar-24 <br />
-                      0.50% of turnover
-                    </p>
-                  </Col>
+                </Col>
+                <Col xs={12} md={6}>
+                  <p
+                    style={{
+                      color: "#11395C",
+                      fontSize: "12px",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    5-Mar-24 <br />
+                    0.50% of turnover
+                  </p>
                 </Col>
               </Row>
             </Col>
-          </Row>
-        </ModalBody>
-        <div className="modal-footer d-flex  align-items-center justify-content-center">
-          <Button
-            color="secondary"
-            style={{
-              backgroundColor: "#01396B",
-              color: "#fff",
-            }}
-            onClick={onClose}
-          >
-            {" "}
-            Cancel{" "}
-          </Button>
-          <Button
-            onClick={onClose}
-            color="secondary"
-            style={{
-              backgroundColor: "#01396B",
-              color: "#fff",
-            }}
-          >
-            {" "}
-            Proceed{" "}
-          </Button>
-        </div>
-      </Modal>
-    </>
+          ) : (
+            <Col xs={12} md={6}>
+              <p
+                className="text-center"
+                style={{
+                  color: "#11395C",
+                  fontSize: "16px",
+                  fontFamily: "Poppins",
+                }}
+              >
+                Proposed Plans
+              </p>
+              <Row>
+                <Col xs={12} md={6}>
+                  <p
+                    style={{
+                      color: "#11395C",
+                      fontSize: "12px",
+                      fontFamily: "Poppins",
+                    }}
+                  >
+                    0.50% of turnover
+                  </p>
+                </Col>
+              </Row>
+            </Col>
+          )}
+        </Row>
+      </ModalBody>
+      <div className="modal-footer d-flex align-items-center justify-content-center">
+        <Button
+          color="secondary"
+          style={{
+            backgroundColor: "#01396B",
+            color: "#fff",
+          }}
+          onClick={handleCloseClick}
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={handleProceedClick}
+          color="secondary"
+          style={{
+            backgroundColor: "#01396B",
+            color: "#fff",
+          }}
+        >
+          Proceed
+        </Button>
+      </div>
+    </Modal>
   );
 };
 

@@ -6,11 +6,13 @@ import { apiServices } from "../../services";
 import { useDispatch } from "react-redux";
 import "./style.css";
 import UserInfoDetail from "./IndUserInfoDetails";
+import UserInfo from "./IndUserDetailsModal";
 
-const ClientDetails = () => {
+const ClientDetails = ({ handleDrawerClose, handleDrawerOpen }: any) => {
   const [selectedCapsule, setSelectedCapsule] = useState("");
   const [tableData, setTableData] = useState<[]>([]);
   const [userDetails, setUserDetails] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -47,8 +49,18 @@ const ClientDetails = () => {
     if (Object.keys(value).length > 0) {
       console.log("The object is not empty.");
       setUserDetails(true);
+      handleDrawerClose();
+      setIsModalOpen(!isModalOpen);
     } else {
       setUserDetails(false);
+    }
+  };
+  const handleModalClose = (value: any) => {
+    console.log("value", value);
+    if (value) {
+      setUserDetails(false);
+      setIsModalOpen(!isModalOpen);
+      handleDrawerOpen();
     }
   };
 
@@ -72,7 +84,12 @@ const ClientDetails = () => {
           />
         </>
       ) : (
-        <UserInfoDetail />
+        // <UserInfoDetail />
+        <UserInfo
+          isOpen={isModalOpen}
+          onClose={getUserDetails}
+          handleModalClose={handleModalClose}
+        />
       )}
     </>
   );
