@@ -249,7 +249,7 @@ const DormantClient = () => {
   };
 
   const handleSubmit = async (event?: any, value?: any) => {
-    console.log("newPage", value);
+    console.log("newPage", event, value);
     // let Id = localStorage.getItem("Id");
     const pageSize = 10; // Define pageSize
 
