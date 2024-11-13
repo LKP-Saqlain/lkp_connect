@@ -14,7 +14,7 @@ import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import axios from "axios";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
+import "../style.css";
 import Select from "react-select";
 import { endpoints } from "../../../services/endpoints";
 
@@ -124,7 +124,7 @@ const LastTrade = () => {
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Row style={{ fontFamily: "Public Sans" }}>
+          <Row className="row-font">
             <Col lg={12}>
               <Card style={{ minHeight: "85vh" }}>
                 <CardHeader>
@@ -138,7 +138,7 @@ const LastTrade = () => {
                           <div className="mb-3">
                             <Label
                               htmlFor="choices-single-no-sorting"
-                              className="form-label text-muted"
+                              className="form-label text-muted label-font"
                             >
                               Select Client Status
                             </Label>
@@ -149,6 +149,7 @@ const LastTrade = () => {
                               }
                               onBlur={formik.handleBlur}
                               options={ClientStatus}
+                              className="placeholder-font"
                               styles={{
                                 control: (base: any) => ({
                                   ...base,
@@ -169,10 +170,7 @@ const LastTrade = () => {
                             />
                             {formik.touched.clientStatus &&
                               formik.errors.clientStatus && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
+                                <div className="text-danger error-msg">
                                   {formik.errors.clientStatus}
                                 </div>
                               )}
@@ -193,7 +191,11 @@ const LastTrade = () => {
                           <div className="mb-3" />
                           <Button
                             className="w-50"
-                            style={{ backgroundColor: "#11395C" }}
+                            style={{
+                              backgroundColor: "#11395C",
+                              fontSize: "12px",
+                              height: "40px",
+                            }}
                             // onClick={handleExcel}
                             type="submit"
                           >

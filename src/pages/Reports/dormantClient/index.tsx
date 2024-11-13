@@ -21,6 +21,7 @@ import { endpoints } from "../../../services/endpoints";
 import ShowToast from "../../../utils/toastUtils";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import "../style.css";
 
 const ClientStatus = [
   { value: "ALL", label: "ALL" },
@@ -39,7 +40,9 @@ const DormantClient = () => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [responseStatus, setResponseStatus] = useState(false);
   const [totalEntries, setTotalEntries] = useState(null);
+  const [searchValue, setSearchValue] = React.useState("");
 
   const [page, setPage] = useState(1); // Track current page
 
@@ -193,8 +196,60 @@ const DormantClient = () => {
     handleSubmit(event, newPage); // Fetch data for the new page
   };
 
+  const handleSearchBasedOnInput = (value: string) => {
+    console.log("handleSearchBasedOnInputValue", value);
+    setSearchValue(value);
+  };
+  const handleSearchUser = async () => {
+    setUserData([]);
+    if (searchValue !== "") {
+      const pageSize = 10; // Define pageSize
+
+      // Calculate start based on the new page (0-indexed)
+      // const start = (value - 1) * pageSize;
+      const payload = {
+        start: pageSize, // Calculate start based on the new page
+        pageSize: 10,
+        searchKey: searchValue !== "" ? searchValue : "",
+        loginName: user_id,
+        zone: formik.values.selectedZone?.value,
+        branchCode: formik.values.selectedBranchCode?.value,
+        clientStatus:
+          formik.values.selectedClientStatus?.value === "ACTIVE"
+            ? "Y"
+            : formik.values.selectedClientStatus?.value === "INACTIVE"
+            ? "N"
+            : "ALL",
+      };
+      dispatch(showLoader(""));
+      await apiServices
+        .getDormantReport(payload)
+        .then((response) => {
+          dispatch(hideLoader());
+          if (response?.status === 200) {
+            setResponseStatus(true);
+            let { recordsTotal } = response?.data[0];
+            console.log("getDormantReport_response_1", response?.status);
+            setTotalEntries(recordsTotal);
+            setUserData(response.data);
+          }
+        })
+        .catch((error) => {
+          console.log("Error->", error.response.data.errors.Zone["0"]);
+          const zoneError = error.response.data.errors.Zone["0"];
+          const branchCodeError = error.response.data.errors.BranchCode["0"];
+          dispatch(hideLoader());
+          ShowToast("error", zoneError);
+          ShowToast("error", branchCodeError);
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+    }
+  };
+
   const handleSubmit = async (event?: any, value?: any) => {
-    console.log("newPage", event, value);
+    console.log("newPage", value);
     // let Id = localStorage.getItem("Id");
     const pageSize = 10; // Define pageSize
 
@@ -202,8 +257,8 @@ const DormantClient = () => {
     const start = (value - 1) * pageSize;
     const payload = {
       start: value === undefined ? 0 : start, // Calculate start based on the new page
-      pageSize: 25,
-      searchKey: "",
+      pageSize: 10,
+      searchKey: searchValue !== "" ? searchValue : "",
       loginName: user_id,
       zone: formik.values.selectedZone?.value,
       branchCode: formik.values.selectedBranchCode?.value,
@@ -222,9 +277,9 @@ const DormantClient = () => {
       .then((response) => {
         dispatch(hideLoader());
         if (response?.status === 200) {
+          setResponseStatus(true);
           let { recordsTotal } = response?.data[0];
-
-          console.log("getDormantReport_response_1", response?.data);
+          console.log("getDormantReport_response_1", response?.status);
           setTotalEntries(recordsTotal);
           setUserData(response.data);
         } else if (response?.status == 400) {
@@ -238,6 +293,9 @@ const DormantClient = () => {
         dispatch(hideLoader());
         ShowToast("error", zoneError);
         ShowToast("error", branchCodeError);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
       });
   };
 
@@ -358,7 +416,7 @@ const DormantClient = () => {
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Row style={{ fontFamily: "Public Sans" }}>
+          <Row className="row-font">
             <Col lg={12}>
               <Card>
                 <CardHeader>
@@ -369,10 +427,10 @@ const DormantClient = () => {
                     <div>
                       <Row>
                         <Col xl={3}>
-                          <div className="mb-3" style={{ maxWidth: "300px" }}>
+                          <div className="mb-3">
                             <Label
                               htmlFor="zone-select"
-                              className="form-label text-muted"
+                              className="form-label text-muted label-font"
                             >
                               ZONE
                             </Label>
@@ -384,6 +442,7 @@ const DormantClient = () => {
                               }
                               onBlur={formik.handleBlur}
                               options={noSortingGroup}
+                              className="placeholder-font"
                               isClearable
                               id="zone-select"
                               styles={{
@@ -406,10 +465,7 @@ const DormantClient = () => {
                             />
                             {formik.touched.selectedZone &&
                               formik.errors.selectedZone && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
+                                <div className="text-danger error-msg">
                                   {formik.errors.selectedZone}
                                 </div>
                               )}
@@ -417,10 +473,10 @@ const DormantClient = () => {
                         </Col>
 
                         <Col xl={3}>
-                          <div className="mb-3" style={{ maxWidth: "300px" }}>
+                          <div className="mb-3">
                             <Label
                               htmlFor="branch-code-select"
-                              className="form-label text-muted"
+                              className="form-label text-muted label-font"
                             >
                               BRANCH CODE
                             </Label>
@@ -434,6 +490,7 @@ const DormantClient = () => {
                               }
                               onBlur={formik.handleBlur}
                               options={branchCodeOptions}
+                              className="placeholder-font"
                               isClearable
                               id="branch-code-select"
                               styles={{
@@ -456,10 +513,7 @@ const DormantClient = () => {
                             />
                             {formik.touched.selectedBranchCode &&
                               formik.errors.selectedBranchCode && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
+                                <div className="text-danger error-msg">
                                   {formik.errors.selectedBranchCode}
                                 </div>
                               )}
@@ -470,7 +524,7 @@ const DormantClient = () => {
                           <div className="mb-3">
                             <Label
                               htmlFor="client-status-select"
-                              className="form-label text-muted"
+                              className="form-label text-muted label-font"
                             >
                               CLIENT STATUS
                             </Label>
@@ -484,6 +538,7 @@ const DormantClient = () => {
                               }
                               onBlur={formik.handleBlur}
                               options={ClientStatus}
+                              className="placeholder-font"
                               isClearable
                               id="client-status-select"
                               styles={{
@@ -506,10 +561,7 @@ const DormantClient = () => {
                             />
                             {formik.touched.selectedClientStatus &&
                               formik.errors.selectedClientStatus && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
+                                <div className="text-danger error-msg">
                                   {formik.errors.selectedClientStatus}
                                 </div>
                               )}
@@ -532,8 +584,10 @@ const DormantClient = () => {
                         >
                           <div className="mb-3" />
                           <Button
+                            className="btn-font"
                             style={{
                               backgroundColor: "#11395C",
+                              height: "40px",
                             }}
                             type="submit"
                           >
@@ -557,7 +611,11 @@ const DormantClient = () => {
                         >
                           <div className="mb-3" />
                           <Button
-                            style={{ backgroundColor: "#11395C" }}
+                            className="btn-font"
+                            style={{
+                              backgroundColor: "#11395C",
+                              height: "40px",
+                            }}
                             onClick={handleExcelDownload}
                             // type="submit"
                           >
@@ -570,6 +628,7 @@ const DormantClient = () => {
                   </form>
                 </CardBody>
               </Card>
+              {/* <SearchAppBar /> */}
               <Card>
                 <CardBody>
                   <DataTable
@@ -579,6 +638,9 @@ const DormantClient = () => {
                     page={page}
                     onPageChange={handlePageChange}
                     pageSize={10}
+                    handleSearchBasedOnInput={handleSearchBasedOnInput}
+                    handleSearchUser={handleSearchUser}
+                    showSearch={responseStatus}
                   />
                 </CardBody>
               </Card>

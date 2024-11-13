@@ -18,6 +18,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import ShowToast from "../../../utils/toastUtils";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import "../style.css";
 
 const FinancialYears = [{ value: "2024-2025", label: "2024-2025" }];
 const FinancialQuarters = [
@@ -30,6 +31,8 @@ const FinancialQuarters = [
 const QuarterlyPayout = () => {
   const [qPayoutData, setQpayoutData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(null);
+  const [searchValue, setSearchValue] = React.useState("");
+  const [responseStatus, setResponseStatus] = useState(false);
 
   const [page, setPage] = useState(1); // Track current page
   // const [pageSize, setPageSize] = useState(10); // Initial page size
@@ -98,6 +101,7 @@ const QuarterlyPayout = () => {
         setTotalEntries(recordsTotal);
         dispatch(hideLoader());
         if (response?.status === 200) {
+          setResponseStatus(true);
           setQpayoutData(response.data);
         }
       })
@@ -112,6 +116,9 @@ const QuarterlyPayout = () => {
           errorMessage ||
             "Sorry for the inconvenience, please try after some time."
         );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
       });
   };
 
@@ -127,13 +134,60 @@ const QuarterlyPayout = () => {
     { field: "extra_Payin", headerName: "Extra Payin", width: 150 },
   ];
 
+  const handleSearchBasedOnInput = (value: string) => {
+    console.log("handleSearchBasedOnInputValue", value);
+    setSearchValue(value);
+  };
+
+  const handleSearchUser = async () => {
+    const pageSize = 10; // Define pageSize
+
+    // Calculate start based on the new page (0-indexed)
+    // const start = (value - 1) * pageSize;
+
+    const payload = {
+      start: pageSize,
+      pageSize: 10,
+      searchKey: searchValue !== "" ? searchValue : "",
+      userId: user_id,
+      financialQtr: `2024-${formik.values.quarter?.value}`,
+    };
+    dispatch(showLoader(""));
+    await apiServices
+      .GetQuaterlyPayoutGrid(payload)
+      .then((response) => {
+        console.log("responseQpayout", response?.data);
+        const { recordsTotal } = response?.data[0];
+        setTotalEntries(recordsTotal);
+        dispatch(hideLoader());
+        if (response?.status === 200) {
+          setQpayoutData(response.data);
+        }
+      })
+      .catch((Err) => {
+        const { message } = Err.response.data;
+        console.log("Error->", message);
+        dispatch(hideLoader());
+        // formik.setFieldError("password", message);
+        const errorMessage = Err.response.data.message;
+        ShowToast(
+          "error",
+          errorMessage ||
+            "Sorry for the inconvenience, please try after some time."
+        );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   document.title = "LKP Securities | Quarterly Payout Recovery Report";
 
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Row style={{ fontFamily: "Public Sans" }}>
+          <Row className="row-font">
             <Col lg={12}>
               <Card>
                 <CardHeader>
@@ -149,7 +203,7 @@ const QuarterlyPayout = () => {
                           <div className="mb-3">
                             <Label
                               htmlFor="choices-single-no-sorting"
-                              className="form-label text-muted"
+                              className="form-label text-muted placeholder-font"
                             >
                               Financial Year
                             </Label>
@@ -163,6 +217,7 @@ const QuarterlyPayout = () => {
                               }
                               onBlur={formik.handleBlur}
                               options={FinancialYears}
+                              className="placeholder-font"
                               styles={{
                                 control: (base: any) => ({
                                   ...base,
@@ -183,10 +238,7 @@ const QuarterlyPayout = () => {
                             />
                             {formik.touched.selectedFinancialYear &&
                               formik.errors.selectedFinancialYear && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
+                                <div className="text-danger error-msg ">
                                   {formik.errors.selectedFinancialYear}
                                 </div>
                               )}
@@ -197,7 +249,7 @@ const QuarterlyPayout = () => {
                           <div className="mb-3">
                             <Label
                               htmlFor="branch-code-select"
-                              className="form-label text-muted"
+                              className="form-label text-muted placeholder-font"
                             >
                               QUARTER
                             </Label>
@@ -208,6 +260,7 @@ const QuarterlyPayout = () => {
                               }
                               options={FinancialQuarters}
                               isClearable
+                              className="placeholder-font"
                               id="branch-code-select"
                               styles={{
                                 control: (base: any) => ({
@@ -229,10 +282,7 @@ const QuarterlyPayout = () => {
                             />
                             {formik.touched.quarter &&
                               formik.errors.quarter && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
+                                <div className="text-danger error-msg ">
                                   {formik.errors.quarter}
                                 </div>
                               )}
@@ -252,8 +302,11 @@ const QuarterlyPayout = () => {
                         >
                           <div className="mb-3" />
                           <Button
-                            style={{ backgroundColor: "#11395C" }}
-                            // onClick={handleSubmit}
+                            style={{
+                              backgroundColor: "#11395C",
+                              fontSize: "12px",
+                              height: "40px",
+                            }}
                             type="submit"
                           >
                             Submit
@@ -273,6 +326,9 @@ const QuarterlyPayout = () => {
                     page={page}
                     onPageChange={handlePageChange}
                     pageSize={10}
+                    handleSearchBasedOnInput={handleSearchBasedOnInput}
+                    handleSearchUser={handleSearchUser}
+                    showSearch={responseStatus}
                   />
                 </CardBody>
               </Card>

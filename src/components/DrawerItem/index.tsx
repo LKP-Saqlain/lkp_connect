@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   ListItem,
   ListItemButton,
@@ -42,6 +43,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   activeMenu,
   handleSubItemClick,
 }) => {
+  const [activeSubItem, setActiveSubItem] = useState<string | null>(null);
   const isMenuOpen = activeMenu === title;
 
   const getIcon = (title: string) => {
@@ -108,6 +110,11 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     }
   };
 
+  const handleSubItemSelection = (menuName: string) => {
+    setActiveSubItem(menuName);
+    handleSubItemClick(menuName);
+  };
+
   return (
     <ListItem disablePadding sx={{ display: "block" }}>
       <ListItemButton
@@ -152,8 +159,19 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
             {subItems.map((subItem, index) => (
               <ListItemButton
                 key={index}
-                sx={{ pl: 4, color: "#fff" }}
-                onClick={() => handleSubItemClick(subItem.menu_name)}
+                sx={{
+                  pl: 4,
+                  color: activeSubItem === subItem.menu_name ? "black" : "#fff",
+                  backgroundColor:
+                    activeSubItem === subItem.menu_name
+                      ? "#708090"
+                      : "transparent",
+                  "&:hover": {
+                    backgroundColor: "#708090",
+                    color: "black",
+                  },
+                }}
+                onClick={() => handleSubItemSelection(subItem.menu_name)}
               >
                 <ArrowRightIcon />
                 <ListItemText

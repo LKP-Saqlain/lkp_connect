@@ -3,6 +3,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import Pagination from "@mui/material/Pagination";
 import "./style.css";
+import SearchAppBar from "../SearchBar";
 
 interface DormantClientProps {
   tableData?: any[];
@@ -12,6 +13,9 @@ interface DormantClientProps {
   page?: number; // Make sure to receive this as a required prop
   pageSize?: number; // Make sure to receive this as a required prop
   onPageChange?: (event: React.ChangeEvent<unknown>, page: number) => void;
+  handleSearchBasedOnInput?: (value: string) => void;
+  handleSearchUser?: () => void;
+  showSearch?: any;
 }
 
 const DataTable: React.FC<DormantClientProps> = ({
@@ -21,6 +25,9 @@ const DataTable: React.FC<DormantClientProps> = ({
   page = 0, // Use the page prop directly
   pageSize = 25, // Use the pageSize prop directly
   onPageChange,
+  handleSearchBasedOnInput,
+  handleSearchUser,
+  showSearch = false,
 }) => {
   // Calculate the rows to display based on current page and page size
   // const rows = React.useMemo(
@@ -64,11 +71,21 @@ const DataTable: React.FC<DormantClientProps> = ({
     }
   };
 
+  const handleSearchChange = (query: string) => {
+    handleSearchBasedOnInput?.(query);
+  };
+
   return (
     <>
+      {showSearch && (
+        <SearchAppBar
+          onSearchChange={handleSearchChange}
+          handleSearchUser={handleSearchUser}
+        />
+      )}
       <Paper
         sx={{
-          height: 450,
+          height: 400,
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",
@@ -87,10 +104,11 @@ const DataTable: React.FC<DormantClientProps> = ({
             fontFamily: '"Public Sans", sans-serif',
             "& .MuiDataGrid-columnHeader": {
               fontWeight: 500,
-              fontSize: "15px",
+              fontSize: "14px",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
+              fontSize: "12px",
             },
           }}
         />
@@ -104,7 +122,9 @@ const DataTable: React.FC<DormantClientProps> = ({
         }}
       >
         {totalRecords > 0 && (
-          <div>{`Total ${totalRecords} records available`}</div>
+          <div
+            style={{ fontSize: "13px" }}
+          >{`Total ${totalRecords} records available`}</div>
         )}
         <Pagination
           count={Math.ceil(totalRecords / pageSize)}
