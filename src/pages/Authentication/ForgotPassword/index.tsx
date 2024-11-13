@@ -105,13 +105,13 @@ const ForgotPassword = () => {
         formik.setFieldValue(name, value.replace(/\s/g, ""));
       }
     } else if (name === "password") {
-      if (regEx.alphaNumeric.test(value)) {
-        formik.setFieldValue(name, value.replace(/\s/g, ""));
-      }
+      // if (regEx.alphaNumeric.test(value)) {
+      formik.setFieldValue(name, value.replace(/\s/g, ""));
+      // }
     } else if (name === "confirmPassword") {
-      if (regEx.alphaNumeric.test(value)) {
-        formik.setFieldValue(name, value.replace(/\s/g, ""));
-      }
+      // if (regEx.alphaNumeric.test(value)) {
+      formik.setFieldValue(name, value.replace(/\s/g, ""));
+      // }
     } else {
       formik.handleChange(e);
     }

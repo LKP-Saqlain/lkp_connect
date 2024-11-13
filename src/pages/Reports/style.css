@@ -2,7 +2,7 @@
     color: rgba(0, 0, 0, 0.6);
     font-family: 'Public Sans' !important;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 13px !important;
     line-height: 1.4375em;
     letter-spacing: 0.00938em;
     padding: 0;
@@ -35,7 +35,7 @@
     color: rgba(0, 0, 0, 0.6);
     font-family: 'Public Sans' !important;
     font-weight: 400;
-    font-size: 0.75rem;
+    font-size: 13px !important;
     line-height: 1.66;
     letter-spacing: 0.03333em;
     text-align: left;
@@ -52,7 +52,7 @@
     color: #d32f2f;
     font-family: 'Public Sans' !important;
     font-weight: 400;
-    font-size: 0.75rem;
+    font-size: 13px !important;
     line-height: 1.66;
     letter-spacing: 0.03333em;
     text-align: left;
@@ -71,7 +71,7 @@
     color: rgba(0, 0, 0, 0.6);
     font-family: 'Public Sans' !important;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 13px !important;
     line-height: 1.4375em;
     letter-spacing: 0.00938em;
     padding: 0;
@@ -109,6 +109,7 @@
 }
 .css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input {
     font: inherit;
+    font-size: 13px !important;
     letter-spacing: inherit;
     color: currentColor;
     padding: 4px 0 5px;
@@ -134,7 +135,7 @@
 .css-sc8y68-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
     font-family: 'Public Sans' !important;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 13px !important;
     line-height: 1.4375em;
     letter-spacing: 0.00938em;
     color: rgba(0, 0, 0, 0.87);
@@ -153,3 +154,108 @@
     border-radius: 4px;
 }
 
+.row-font {
+    font-family: "Public Sans"!important;
+}
+
+.btn-font {
+    font-size: 13px !important;
+}
+
+.label-font {
+    font-size: 13px !important;
+}
+.placeholder-font {
+    font-size: 12px !important; 
+}
+
+.error-msg {
+    font-size: 12px !important; 
+}
+.custom-btn {
+    background-color: #11395C !important;
+    height: 40px !important;
+}
+
+
+.css-yimnyd-MuiInputBase-input {
+    font: inherit;
+    font-size: 13px !important;
+    letter-spacing: inherit;
+    color: currentColor;
+    padding: 4px 0 5px;
+    border: 0;
+    box-sizing: content-box;
+    background: none;
+    height: 1.4375em;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    min-width: 0;
+    width: 100%;
+    -webkit-animation-name: mui-auto-fill-cancel;
+    animation-name: mui-auto-fill-cancel;
+    -webkit-animation-duration: 10ms;
+    animation-duration: 10ms;
+}
+
+.search-btn {
+    background-color: #11395C !important;
+    color: #fff !important;
+    border-radius: 7px !important;
+    font-family: "Public Sans" !important;
+    border-color: #11395C !important;
+    text-transform: capitalize !important;
+    margin-left: 1rem !important; 
+    height: 40px !important;
+}
+
+
+.table-accordion {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.core-report-form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 14px !important;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    height: 40px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.css-1dune0f-MuiInputBase-input-MuiOutlinedInput-input {
+    font: inherit;
+    font-size: 14px !important;
+    letter-spacing: inherit;
+    color: currentColor;
+    padding: 4px 0 5px;
+    border: 0;
+    box-sizing: content-box;
+    background: none;
+    height: 40px !important;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    min-width: 0;
+    width: 100%;
+    -webkit-animation-name: mui-auto-fill-cancel;
+    animation-name: mui-auto-fill-cancel;
+    -webkit-animation-duration: 10ms;
+    animation-duration: 10ms;
+    padding: 16.5px 14px;
+    padding-right: 0;
+}

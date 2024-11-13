@@ -147,6 +147,11 @@ const CoreReport = () => {
   };
 
   const handleSubmit = () => {
+    // debugger
+    if (selectedDate === null) {
+      ShowToast("error", "Please select Date");
+      return;
+    }
     // Prepare the payload
     const payload = {
       clientCode: formData.clientCode || "",
@@ -228,7 +233,7 @@ const CoreReport = () => {
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Row style={{ fontFamily: "Public Sans" }}>
+          <Row className="row-font">
             <Col lg={12}>
               <Card>
                 <CardHeader>
@@ -241,7 +246,7 @@ const CoreReport = () => {
                         <div className="mb-3">
                           <Label
                             htmlFor="choices-text-remove-button"
-                            className="form-label text-muted"
+                            className="form-label text-muted label-font"
                           >
                             CLIENT CODE
                           </Label>
@@ -249,10 +254,10 @@ const CoreReport = () => {
                             // invalid={true}
                             name="ClientCode"
                             type="text"
-                            className="form-control"
+                            className="core-report-form-control"
                             value={formData.clientCode}
                             onChange={handleOnChange}
-                            id="choices-text-remove-button"
+                            // id="choices-text-remove-button"
                             data-choices
                             data-choices-limit="3"
                             placeholder="example : 12345"
@@ -266,19 +271,20 @@ const CoreReport = () => {
                         <div className="mb-3">
                           <Label
                             htmlFor="choices-text-remove-button"
-                            className="form-label text-muted"
+                            className="form-label text-muted label-font"
                           >
                             ACCOUNT NO.
                           </Label>
                           <Input
                             name="AccNo"
                             type="text"
-                            className="form-control"
+                            className="core-report-form-control"
                             value={formData.accNo}
                             onChange={handleOnChange}
                             id="choices-text-remove-button"
                             data-choices
                             data-choices-limit="3"
+                            placeholder="Please enter Account Number"
                           />
                         </div>
                       </Col>
@@ -286,26 +292,27 @@ const CoreReport = () => {
                         <div className="mb-3">
                           <Label
                             htmlFor="choices-text-remove-button"
-                            className="form-label text-muted"
+                            className="form-label text-muted label-font"
                           >
                             CHEQUE NO.
                           </Label>
                           <Input
                             name="checkNo"
                             type="text"
-                            className="form-control"
+                            className="core-report-form-control"
                             value={formData.chequeNo}
                             onChange={handleOnChange}
                             id="choices-text-remove-button"
                             data-choices
                             data-choices-limit="3"
+                            placeholder="Please enter Cheque Number"
                           />
                         </div>
                       </Col>
                       <Col xl={4}>
                         <Label
                           htmlFor="choices-text-remove-button"
-                          className="form-label text-muted"
+                          className="form-label text-muted label-font"
                         >
                           VALUE DATE
                         </Label>
@@ -341,11 +348,12 @@ const CoreReport = () => {
                         <div className="mb-3">
                           <Label
                             htmlFor="choices-single-no-sorting"
-                            className="form-label text-muted"
+                            className="form-label text-muted label-font"
                           >
                             LKP ACCOUNT NO.
                           </Label>
                           <Select
+                            className="placeholder-font"
                             value={lkpAccDropDownValue}
                             onChange={(selectedOption: any) =>
                               setLkpAccDropDownValue(selectedOption)
@@ -358,11 +366,12 @@ const CoreReport = () => {
                         <div className="mb-3">
                           <Label
                             htmlFor="choices-single-no-sorting"
-                            className="form-label text-muted"
+                            className="form-label text-muted label-font"
                           >
                             PAYMENT TYPE
                           </Label>
                           <Select
+                            className="placeholder-font"
                             value={paymentType}
                             onChange={(selectedOption: any) =>
                               setPaymentType(selectedOption)
@@ -378,18 +387,24 @@ const CoreReport = () => {
                       >
                         <Button
                           className="w-100 m-2"
-                          style={{ backgroundColor: "#11395C" }}
+                          style={{
+                            backgroundColor: "#11395C",
+                            fontSize: "12px",
+                          }}
                           onClick={handleSubmit}
                         >
                           Submit
                         </Button>
                         <Button
                           className="w-100 d-flex justify-content-center align-items-center"
-                          style={{ backgroundColor: "#11395C" }}
+                          style={{
+                            backgroundColor: "#11395C",
+                            fontSize: "12px",
+                          }}
                           onClick={handleDownloadExcel}
                         >
                           Excel
-                          <DownloadIcon />
+                          <DownloadIcon fontSize="small" />
                         </Button>
                       </Col>
                     </Row>

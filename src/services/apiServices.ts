@@ -6,7 +6,7 @@ const apiService = async (
   endpoint: string,
   payload?: any,
   customHeaders: any = {},
-  timeout: number = 20000 // Default timeout of 10 seconds
+  timeout: number = 30000 // Default timeout of 10 seconds
 ) => {
   const config = {
     headers: { ...customHeaders }, // Ensure headers are correctly passed

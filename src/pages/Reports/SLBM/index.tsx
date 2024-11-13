@@ -23,6 +23,7 @@ import { endpoints } from "../../../services/endpoints";
 import ShowToast from "../../../utils/toastUtils";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import "../style.css";
 
 // interface Option {
 //   label: string;
@@ -34,6 +35,8 @@ const SlbmHoling = () => {
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [userData, setUserData] = useState([]);
   const [totalEntries, setTotalEntries] = useState(null);
+  const [responseStatus, setResponseStatus] = useState(false);
+  const [searchValue, setSearchValue] = React.useState("");
 
   const [page, setPage] = useState(1); // Track current page
 
@@ -235,6 +238,7 @@ const SlbmHoling = () => {
         setTotalEntries(recordsTotal);
         dispatch(hideLoader());
         if (response?.status === 200) {
+          setResponseStatus(true);
           setUserData(response.data?.sLBMHoldings);
         }
       })
@@ -246,6 +250,9 @@ const SlbmHoling = () => {
         ShowToast("error", error.response?.data?.message);
         // ShowToast("error", zoneError);
         // ShowToast("error", branchCodeError);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
       });
   };
 
@@ -304,13 +311,64 @@ const SlbmHoling = () => {
     }
   };
 
+  const handleSearchBasedOnInput = (value: string) => {
+    console.log("handleSearchBasedOnInputValue", value);
+    setSearchValue(value);
+  };
+
+  const handleSearchUser = async () => {
+    setUserData([]);
+    if (searchValue !== "") {
+      const pageSize = 10; // Define pageSize
+
+      // Calculate start based on the new page (0-indexed)
+      // const start = (value - 1) * pageSize;
+
+      const payload = {
+        loginName: user_id,
+        start: pageSize, // Calculate start based on the new page
+        pageSize: 10,
+        searchKey: searchValue !== "" ? searchValue : "",
+        zone: formik.values.selectedZone?.value,
+        branchCode: formik.values.selectedBranchCode?.value,
+        symbolISIN: formik.values.isInValue,
+      };
+      dispatch(showLoader(""));
+      await apiServices
+        .SLBMHoldingsReport(payload)
+        .then((response) => {
+          console.log("response", response?.data);
+          console.log("response", response?.data?.sLBMHoldings[0]);
+          const { recordsTotal } = response?.data?.sLBMHoldings[0];
+          setTotalEntries(recordsTotal);
+          dispatch(hideLoader());
+          if (response?.status === 200) {
+            setResponseStatus(true);
+            setUserData(response.data?.sLBMHoldings);
+          }
+        })
+        .catch((error) => {
+          console.log("Error->", error.response);
+          // const zoneError = error.response?.data?.errors?.Zone["0"];
+          // const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
+          dispatch(hideLoader());
+          ShowToast("error", error.response?.data?.message);
+          // ShowToast("error", zoneError);
+          // ShowToast("error", branchCodeError);
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+    }
+  };
+
   document.title = "LKP Securities | Dormant Client Report";
 
   return (
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Row style={{ fontFamily: "Public Sans" }}>
+          <Row className="row-font">
             <Col lg={12}>
               <Card>
                 <CardHeader>
@@ -326,7 +384,7 @@ const SlbmHoling = () => {
                           <div className="mb-3" style={{ maxWidth: "300px" }}>
                             <Label
                               htmlFor="zone-select"
-                              className="form-label text-muted"
+                              className="form-label text-muted label-font"
                             >
                               ZONE
                             </Label>
@@ -338,6 +396,7 @@ const SlbmHoling = () => {
                               onBlur={formik.handleBlur}
                               options={noSortingGroup}
                               isClearable
+                              className="placeholder-font"
                               id="zone-select"
                               styles={{
                                 control: (base: any) => ({
@@ -373,7 +432,7 @@ const SlbmHoling = () => {
                           <div className="mb-3" style={{ maxWidth: "300px" }}>
                             <Label
                               htmlFor="branch-code-select"
-                              className="form-label text-muted"
+                              className="form-label text-muted label-font"
                             >
                               BRANCH CODE
                             </Label>
@@ -388,6 +447,7 @@ const SlbmHoling = () => {
                               onBlur={formik.handleBlur}
                               options={branchCodeOptions}
                               isClearable
+                              className="placeholder-font"
                               id="branch-code-select"
                               styles={{
                                 control: (base: any) => ({
@@ -423,20 +483,21 @@ const SlbmHoling = () => {
                           <div className="mb-3">
                             <Label
                               htmlFor="choices-text-remove-button"
-                              className="form-label text-muted"
+                              className="form-label text-muted label-font"
                             >
                               SYMBOL / ISIN
                             </Label>
                             <Input
                               name="isInValue"
                               type="text"
-                              className={`form-control ${
+                              className={`core-report-form-control ${
                                 formik.touched.isInValue &&
                                 formik.errors.isInValue
                                   ? "is-invalid"
                                   : ""
                               }`} // Add 'is-invalid' class if there's an error
                               value={formik.values.isInValue}
+                              placeholder="Please enter SYMBOL/ININ"
                               onChange={handleOnChange}
                               onBlur={formik.handleBlur}
                               id="choices-text-remove-button"
@@ -492,7 +553,11 @@ const SlbmHoling = () => {
                         >
                           <div className="mb-3" />
                           <Button
-                            style={{ backgroundColor: "#11395C" }}
+                            style={{
+                              backgroundColor: "#11395C",
+                              fontSize: "12px",
+                              height: "40px",
+                            }}
                             // onClick={handleSubmit}
                             type="submit"
                           >
@@ -516,11 +581,15 @@ const SlbmHoling = () => {
                         >
                           <div className="mb-3" />
                           <Button
-                            style={{ backgroundColor: "#11395C" }}
+                            style={{
+                              backgroundColor: "#11395C",
+                              fontSize: "12px",
+                              height: "40px",
+                            }}
                             onClick={handleDownloadExcel}
                           >
                             Excel
-                            <DownloadIcon />
+                            <DownloadIcon fontSize="small" />
                           </Button>
                         </Col>
                       </Row>
@@ -537,6 +606,9 @@ const SlbmHoling = () => {
                     page={page}
                     onPageChange={handlePageChange}
                     pageSize={10}
+                    handleSearchBasedOnInput={handleSearchBasedOnInput}
+                    handleSearchUser={handleSearchUser}
+                    showSearch={responseStatus}
                   />
                 </CardBody>
               </Card>

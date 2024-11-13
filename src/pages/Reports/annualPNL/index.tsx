@@ -94,7 +94,7 @@ const AnnualPNL = () => {
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Row style={{ fontFamily: "Public Sans" }}>
+          <Row className="row-font">
             <Col lg={12}>
               <Card>
                 <CardHeader>
@@ -176,6 +176,7 @@ const AnnualPNL = () => {
                           <Button
                             type="submit"
                             variant="contained"
+                            className="btn-font"
                             sx={{
                               width: isMobile ? "100%" : "50%",
                               backgroundColor: "#11395C",

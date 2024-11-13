@@ -66,7 +66,15 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       axisBorder: {
         show: false,
       },
+      labels: {
+        style: {
+          fontSize: "10px",
+          fontWeight: 400,
+          colors: "#333",
+        },
+      },
     },
+
     // Add yaxis configuration here
     yaxis: [
       {
