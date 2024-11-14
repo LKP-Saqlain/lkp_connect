@@ -271,40 +271,40 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       position: "bottom",
       horizontalAlign: "center",
     },
-    //  tooltip: {
-    //     enabled: true,
-    //     shared: true,
-    //     intersect: false,
-    //   },
     tooltip: {
-      shared: false,
-      y: [
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return y.toFixed(2);
-            }
-            return y;
-          },
-        },
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return y.toFixed(2);
-            }
-            return y;
-          },
-        },
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return y.toFixed(2);
-            }
-            return y;
-          },
-        },
-      ],
+      enabled: true,
+      shared: true,
+      intersect: false,
     },
+    // tooltip: {
+    //   shared: false,
+    //   y: [
+    //     {
+    //       formatter: function (y: any) {
+    //         if (typeof y !== "undefined") {
+    //           return y.toFixed(2);
+    //         }
+    //         return y;
+    //       },
+    //     },
+    //     {
+    //       formatter: function (y: any) {
+    //         if (typeof y !== "undefined") {
+    //           return y.toFixed(2);
+    //         }
+    //         return y;
+    //       },
+    //     },
+    //     {
+    //       formatter: function (y: any) {
+    //         if (typeof y !== "undefined") {
+    //           return y.toFixed(2);
+    //         }
+    //         return y;
+    //       },
+    //     },
+    //   ],
+    // },
   };
   return (
     <React.Fragment>

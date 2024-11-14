@@ -102,6 +102,7 @@ const DataTable = ({
             selectedWidget === "Clients With Cash Balance" ? tradeData : T6Data
           }
           columns={columns}
+          rowHeight={30}
           getRowId={(row: any) => row.ClientName} // Use the correct identifier for rows
           sx={{
             border: 0,
@@ -109,11 +110,11 @@ const DataTable = ({
             "& .MuiDataGrid-columnHeader": {
               // textAlign: "center",
               fontWeight: 500,
-              fontSize: "13px",
+              fontSize: "12px",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
-              fontSize: "12px",
+              fontSize: "10px",
               // textAlign: "center",
             },
           }}

@@ -13,7 +13,7 @@ const Search = styled("div")(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
   marginLeft: 0,
-  width: "100px",
+  width: "200px",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
     width: "220px",
@@ -38,7 +38,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     [theme.breakpoints.up("sm")]: {
-      width: "12ch",
+      width: "18ch",
       "&:focus": {
         width: "20ch",
       },
@@ -75,7 +75,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
         <StyledInputBase
           value={searchValue}
           onChange={handleInputChange}
-          placeholder="Search…"
+          placeholder="Search Client Name"
           inputProps={{ "aria-label": "search" }}
         />
       </Search>

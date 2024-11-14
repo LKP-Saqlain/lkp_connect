@@ -85,7 +85,7 @@ const DataTable: React.FC<DormantClientProps> = ({
       )}
       <Paper
         sx={{
-          height: 400,
+          height: 450,
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",
@@ -95,7 +95,7 @@ const DataTable: React.FC<DormantClientProps> = ({
           rows={tableData}
           columns={dynamicHeader}
           hideFooterPagination
-          autoHeight
+          rowHeight={30}
           getRowId={(row: any) =>
             row.clientName ? row.clientName : row.alertSequenceNo
           }
@@ -105,11 +105,11 @@ const DataTable: React.FC<DormantClientProps> = ({
             fontFamily: '"Public Sans", sans-serif',
             "& .MuiDataGrid-columnHeader": {
               fontWeight: 500,
-              fontSize: "13px",
+              fontSize: "12px",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
-              fontSize: "12px",
+              fontSize: "10px",
             },
           }}
         />
