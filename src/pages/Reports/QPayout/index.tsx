@@ -128,10 +128,28 @@ const QuarterlyPayout = () => {
     { field: "rm", headerName: "RM", width: 150 },
     { field: "branchcode", headerName: "Branch Code", width: 150 },
     { field: "zone", headerName: "Zone", width: 100 },
-    { field: "payout_Amt", headerName: "Payout Amt", width: 150 },
-    { field: "receipt_Amt", headerName: "Receipt Amt", width: 150 },
+    {
+      field: "payout_Amt",
+      headerName: "Payout Amt",
+      width: 150,
+      align: "right",
+      headerAlign: "center",
+    },
+    {
+      field: "receipt_Amt",
+      headerName: "Receipt Amt",
+      width: 150,
+      align: "right",
+      headerAlign: "center",
+    },
     // { field: "payout_Amt", headerName: "Pending Amt", width: 150 }, //COMMENTED THIS BCOZ TABLE BREAKS
-    { field: "extra_Payin", headerName: "Extra Payin", width: 150 },
+    {
+      field: "extra_Payin",
+      headerName: "Extra Payin",
+      width: 150,
+      align: "right",
+      headerAlign: "center",
+    },
   ];
 
   const handleSearchBasedOnInput = (value: string) => {

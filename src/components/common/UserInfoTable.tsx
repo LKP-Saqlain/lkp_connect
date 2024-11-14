@@ -109,10 +109,11 @@ const DataTable = ({
             "& .MuiDataGrid-columnHeader": {
               // textAlign: "center",
               fontWeight: 500,
-              fontSize: "15px",
+              fontSize: "13px",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
+              fontSize: "12px",
               // textAlign: "center",
             },
           }}

@@ -95,6 +95,7 @@ const DataTable: React.FC<DormantClientProps> = ({
           rows={tableData}
           columns={dynamicHeader}
           hideFooterPagination
+          autoHeight
           getRowId={(row: any) =>
             row.clientName ? row.clientName : row.alertSequenceNo
           }
@@ -104,7 +105,7 @@ const DataTable: React.FC<DormantClientProps> = ({
             fontFamily: '"Public Sans", sans-serif',
             "& .MuiDataGrid-columnHeader": {
               fontWeight: 500,
-              fontSize: "14px",
+              fontSize: "13px",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
