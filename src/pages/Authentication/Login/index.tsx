@@ -254,7 +254,7 @@ const LoginPage = () => {
               className="custom-font"
             >
               <FormControlLabel
-                value="Client"
+                value="Employee"
                 control={
                   <Radio
                     onChange={customHandleChange}
@@ -265,7 +265,7 @@ const LoginPage = () => {
                     }}
                   />
                 }
-                label="Client"
+                label="Employee"
               />
               <FormControlLabel
                 value="Partner"
@@ -280,20 +280,6 @@ const LoginPage = () => {
                   />
                 }
                 label="Partner"
-              />
-              <FormControlLabel
-                value="Employee"
-                control={
-                  <Radio
-                    onChange={customHandleChange}
-                    sx={{
-                      "&.Mui-checked": {
-                        color: "#11395C",
-                      },
-                    }}
-                  />
-                }
-                label="Employee"
               />
             </RadioGroup>
           </FormControl>

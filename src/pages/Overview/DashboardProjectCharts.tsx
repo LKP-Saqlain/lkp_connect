@@ -144,12 +144,12 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
     },
     colors: barColors,
     tooltip: {
-      shared: true,
+      shared: false,
       y: [
         {
           formatter: function (y: any) {
             if (typeof y !== "undefined") {
-              return y.toFixed(0);
+              return y.toFixed(2);
             }
             return y;
           },
@@ -165,7 +165,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
         {
           formatter: function (y: any) {
             if (typeof y !== "undefined") {
-              return y.toFixed(0);
+              return y.toFixed(2);
             }
             return y;
           },
@@ -271,10 +271,39 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       position: "bottom",
       horizontalAlign: "center",
     },
+    //  tooltip: {
+    //     enabled: true,
+    //     shared: true,
+    //     intersect: false,
+    //   },
     tooltip: {
-      enabled: true,
-      shared: true,
-      intersect: false,
+      shared: false,
+      y: [
+        {
+          formatter: function (y: any) {
+            if (typeof y !== "undefined") {
+              return y.toFixed(2);
+            }
+            return y;
+          },
+        },
+        {
+          formatter: function (y: any) {
+            if (typeof y !== "undefined") {
+              return y.toFixed(2);
+            }
+            return y;
+          },
+        },
+        {
+          formatter: function (y: any) {
+            if (typeof y !== "undefined") {
+              return y.toFixed(2);
+            }
+            return y;
+          },
+        },
+      ],
     },
   };
   return (
