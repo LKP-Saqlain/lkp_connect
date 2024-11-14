@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import Pagination from "@mui/material/Pagination";
 import "./style.css";
 import SearchAppBar from "../SearchBar";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 interface DormantClientProps {
   tableData?: any[];
@@ -29,32 +30,17 @@ const DataTable: React.FC<DormantClientProps> = ({
   handleSearchUser,
   showSearch = false,
 }) => {
-  // Calculate the rows to display based on current page and page size
-  // const rows = React.useMemo(
-  //   () =>
-  //     tableData
-  //       .slice((page - 1) * pageSize, page * pageSize)
-  //       .map((item, index) => {
-  //         let row: { [key: string]: any } = {
-  //           id: (page - 1) * pageSize + index + 1, // Set unique row id
-  //         };
+  const isMobile = useMediaQuery("(max-width:600px)");
 
-  //         dynamicHeader.forEach((header) => {
-  //           const field = header.field;
-  //           row[field] = item[field] ?? ""; // Assign field or default to empty string
-  //         });
-
-  //         // Add extra fields from item that aren’t part of dynamicHeader
-  //         Object.keys(item).forEach((key) => {
-  //           if (!(key in row)) {
-  //             row[key] = item[key];
-  //           }
-  //         });
-
-  //         return row;
-  //       }),
-  //   [tableData, page, pageSize, dynamicHeader] // Ensure all dependencies are here
-  // );
+  const formatNumber = (num: any) => {
+    if (num >= 1_000_000) {
+      return (num / 1_000_000).toFixed(1) + "M"; // Abbreviate to millions
+    } else if (num >= 1_000) {
+      return (num / 1_000).toFixed(1) + "K"; // Abbreviate to thousands
+    } else {
+      return num.toString(); // Return as is if less than 1,000
+    }
+  };
 
   React.useEffect(() => {
     console.log("tableData", tableData);
@@ -117,22 +103,31 @@ const DataTable: React.FC<DormantClientProps> = ({
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: isMobile ? "center" : "space-between",
+          flexDirection: isMobile ? "column" : "row",
           alignItems: "center",
-          padding: "10px 0",
+          padding: isMobile ? "5px 0" : "10px 0",
         }}
       >
         {totalRecords > 0 && (
           <div
-            style={{ fontSize: "13px" }}
-          >{`Total ${totalRecords} records available`}</div>
+            style={{
+              fontSize: isMobile ? "11px" : "13px",
+              marginBottom: isMobile ? "5px" : "0",
+            }}
+          >
+            {`Total ${formatNumber(totalRecords)} records available`}
+          </div>
         )}
         <Pagination
           count={Math.ceil(totalRecords / pageSize)}
           page={page}
           onChange={handlePaginationChange}
           color="primary"
-          sx={{ display: "flex" }}
+          sx={{
+            display: "flex",
+            justifyContent: isMobile ? "center" : "flex-end",
+          }}
         />
       </div>
     </>
