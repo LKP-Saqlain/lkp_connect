@@ -64,7 +64,7 @@ const AnnualAccStatement = () => {
             // Optionally, trigger the file download as well
             const link = document.createElement("a");
             link.href = URL.createObjectURL(file);
-            link.download = "PNL_Performance_Report.pdf";
+            link.download = `${clientCode}_Performance_Report.pdf`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
