@@ -82,7 +82,7 @@ const LoginPage = () => {
       username: "",
       password: "",
       authentication: "",
-      loginButtonGroup: "",
+      loginButtonGroup: "Employee",
       authenticationButtonGroup: "",
       DateOfBirth: "",
     },
@@ -247,6 +247,7 @@ const LoginPage = () => {
             }}
           >
             <RadioGroup
+              value={formik.values.loginButtonGroup}
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
               name="loginButtonGroup"

@@ -36,7 +36,7 @@ export const getClientActivityStatusColumns = (
         style={{
           padding: "2px 9px",
           backgroundColor: "#11395C",
-          fontSize: "13px",
+          fontSize: "10px",
           borderRadius: "10px",
           textTransform: "capitalize",
           fontFamily: "Public Sans",
@@ -102,7 +102,7 @@ export const getClientDormantStatus = (
         style={{
           padding: "2px 9px",
           backgroundColor: "#11395C",
-          fontSize: "13px",
+          fontSize: "10px",
           borderRadius: "10px",
           textTransform: "capitalize",
           fontFamily: "Public Sans",

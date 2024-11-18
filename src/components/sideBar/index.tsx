@@ -313,12 +313,7 @@ const SideBar = () => {
       case "Referal Lead":
         switch (activeSubItem) {
           case "Referal Entry":
-            return (
-              <ClientDetails
-                handleDrawerClose={handleDrawerClose}
-                handleDrawerOpen={handleDrawerOpen}
-              />
-            );
+            return "";
           case "Referal Entry Status":
             return "";
           case "Referal Lead Updation":
@@ -327,7 +322,12 @@ const SideBar = () => {
             return null;
         }
       case "Client Details":
-        return <Typography>Client Details render here</Typography>;
+        return (
+          <ClientDetails
+            handleDrawerClose={handleDrawerClose}
+            handleDrawerOpen={handleDrawerOpen}
+          />
+        );
       case "e-KYC Link":
         return <Typography>e-KYC Link section here</Typography>;
       default:
