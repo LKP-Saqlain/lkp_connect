@@ -22,6 +22,7 @@ import StackedBarChartIcon from "@mui/icons-material/StackedBarChart";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import List from "@mui/material/List";
 import { MenuItems } from "../../types/index";
+import StoreIcon from "@mui/icons-material/Store";
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -49,6 +50,8 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   const getIcon = (title: string) => {
     console.log("title", title);
     switch (title) {
+      case "Zone Overview":
+        return <StoreIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />;
       case "Overview":
         return <HomeIcon sx={{ color: isMenuOpen ? "black" : "#F9F6EE" }} />;
       case "Trading":

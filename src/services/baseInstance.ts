@@ -40,13 +40,12 @@ baseInstance.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    return config;
+    if (config.url?.includes(endpoints.GetPNLAccountDetailsPdf)) {
+      config.responseType = "blob"; // Set responseType to blob for PDF
+      config.headers["Accept"] = "application/pdf";
+    }
 
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    //   // config.headers.Authorization = LoginauthHeader;
-    // }
-    // return config;
+    return config;
   },
   (error) => {
     // Handle request error

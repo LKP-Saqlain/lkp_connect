@@ -98,7 +98,7 @@ const AnnualPNL = () => {
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Annual PNL Statement</h4>
+                  <h4 className="card-title mb-0">Tax PNL Statement</h4>
                 </CardHeader>
                 <CardBody>
                   <form onSubmit={formik.handleSubmit}>

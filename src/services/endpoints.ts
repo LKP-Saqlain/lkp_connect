@@ -3,6 +3,7 @@ export const endpoints = {
   TwoFactorAuthentication: "/api/Login/ValidateTwoFactorAuthentication",
   sendOtp: "/api/Common/SendOtp",
   GetPNL: "/api/PNL/GetPNL",
+  GetPNLAccountDetailsPdf: "/api/PNL/GetPNLAccountDetailsPdf",
   getDropDown: "/api/Common/MGetDropDowns",
   getDormantReport: "/api/Common/GetDormantReport",
   getDormantExcel: "/api/Common/GetDormantExcel",

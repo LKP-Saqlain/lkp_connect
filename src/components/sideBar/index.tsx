@@ -42,6 +42,8 @@ import ShowToast from "../../utils/toastUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { GetMenu } from "../../redux/thunk/GetMenus";
 import ClientDetails from "../../pages/ClientDetails";
+import RegOverview from "../../pages/regOverView";
+import AccStatement from "../../pages/AnnualAccStatement";
 
 const drawerWidth = 240;
 
@@ -262,10 +264,12 @@ const SideBar = () => {
     // handleMenuClick("");
   };
   const renderContent = () => {
-    console.log("activeMenu", activeMenu);
+    console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
     switch (activeMenu) {
       case "Overview":
         return <OverviewComponent />;
+      case "Zone Overview":
+        return <RegOverview />;
       case "Trading":
         return <TradeDashboard />;
       case "Revenue Details":
@@ -292,6 +296,8 @@ const SideBar = () => {
             return <SLBM />;
           case "Core Alerts Report":
             return <CoreReport />;
+          case "Account Performance Report":
+            return <AccStatement />;
           default:
             return null;
         }
@@ -314,6 +320,8 @@ const SideBar = () => {
               />
             );
           case "Referal Entry Status":
+            return "";
+          case "Referal Lead Updation":
             return "";
           default:
             return null;
