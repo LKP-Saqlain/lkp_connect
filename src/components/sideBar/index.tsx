@@ -44,6 +44,8 @@ import { GetMenu } from "../../redux/thunk/GetMenus";
 import ClientDetails from "../../pages/ClientDetails";
 import RegOverview from "../../pages/regOverView";
 import AccStatement from "../../pages/Reports/AnnualAccStatement";
+import { SlSizeFullscreen } from "react-icons/sl";
+import { BsFullscreen } from "react-icons/bs";
 
 const drawerWidth = 240;
 
@@ -126,6 +128,7 @@ const SideBar = () => {
   const [activeSubItem, setActiveSubItem] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   // const drawerWidth = isMobile ? 180 : 240;
   const settings = ["Logout"];
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
@@ -139,6 +142,27 @@ const SideBar = () => {
 
   const username = localStorage.getItem("userName");
   const firstLetter = username ? username.charAt(0).toUpperCase() : "";
+
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      setIsFullScreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullScreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullScreenChange);
+    };
+  }, []);
+
+  const openFullScreen = () => {
+    const elem = document.documentElement;
+    elem.requestFullscreen?.();
+  };
+
+  const closeFullScreen = () => {
+    document.exitFullscreen?.();
+  };
 
   useEffect(() => {
     // let userId = localStorage.getItem("Id");
@@ -367,6 +391,28 @@ const SideBar = () => {
           )}
 
           <Box sx={{ flexGrow: 1 }} />
+          <Box
+            sx={{
+              // border: "2px solid black",
+              padding: "10px",
+              marginRight: "2rem",
+            }}
+          >
+            {/* <SlSizeFullscreen style={{ color: "black", cursor: "pointer" }} />
+            <BsFullscreen style={{ color: "black", cursor: "pointer" }} /> */}
+            <div>
+              <IconButton
+                onClick={isFullScreen ? closeFullScreen : openFullScreen}
+                sx={{ p: 0 }}
+              >
+                {isFullScreen ? (
+                  <BsFullscreen style={{ cursor: "pointer" }} />
+                ) : (
+                  <SlSizeFullscreen style={{ cursor: "pointer" }} />
+                )}
+              </IconButton>
+            </div>
+          </Box>
           <Typography
             sx={{
               color: "black",
