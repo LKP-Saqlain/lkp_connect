@@ -114,8 +114,8 @@ const DropDown = ({ handleValues, tradeData }: table) => {
 
   const handleSubmit = async () => {
     tradeData([]);
-    setSelectedZone(null);
-    setSelectedBranchCode(null);
+    // setSelectedZone(null);
+    // setSelectedBranchCode(null);
     let Id = localStorage.getItem("Id");
     const payload = {
       user_id: Id,
@@ -126,7 +126,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
     apiServices
       .ClientCash(payload)
       .then((response) => {
-        console.log("ClientCashresponse", response?.data);
+        console.log("ClientCashresponse", response);
         handleValues(response?.data?.data);
         dispatch(hideLoader());
         if (response?.status === 200) {
@@ -138,6 +138,14 @@ const DropDown = ({ handleValues, tradeData }: table) => {
       })
       .catch((error) => {
         console.log("Error->", error);
+        // const zoneError = error.response?.data?.errors?.Zone["0"];
+        // const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
+        dispatch(hideLoader());
+        ShowToast("error", error.response?.data?.message);
+        // ShowToast("error", zoneError);
+        // ShowToast("error", branchCodeError);
+      })
+      .finally(() => {
         dispatch(hideLoader());
       });
   };
@@ -156,7 +164,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
                     <div className="mb-3" style={{ maxWidth: "300px" }}>
                       <Label
                         htmlFor="zone-select"
-                        className="form-label text-muted"
+                        className="form-label text-muted label-font"
                       >
                         ZONE
                       </Label>
@@ -167,6 +175,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
                         }
                         options={noSortingGroup}
                         isClearable
+                        className="placeholder-font"
                         id="zone-select"
                       />
                     </div>
@@ -176,7 +185,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
                     <div className="mb-3" style={{ maxWidth: "300px" }}>
                       <Label
                         htmlFor="branch-code-select"
-                        className="form-label text-muted"
+                        className="form-label text-muted label-font"
                       >
                         BRANCH CODE
                       </Label>
@@ -187,6 +196,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
                         }
                         options={branchCodeOptions}
                         isClearable
+                        className="placeholder-font"
                         id="branch-code-select"
                       />
                     </div>

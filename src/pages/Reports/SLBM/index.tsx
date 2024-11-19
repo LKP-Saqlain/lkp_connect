@@ -497,7 +497,7 @@ const SlbmHoling = () => {
                                   : ""
                               }`} // Add 'is-invalid' class if there's an error
                               value={formik.values.isInValue}
-                              placeholder="Please enter SYMBOL/ININ"
+                              placeholder="Please enter SYMBOL/ISIN"
                               onChange={handleOnChange}
                               onBlur={formik.handleBlur}
                               id="choices-text-remove-button"

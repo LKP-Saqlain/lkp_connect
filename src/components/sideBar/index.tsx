@@ -43,7 +43,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { GetMenu } from "../../redux/thunk/GetMenus";
 import ClientDetails from "../../pages/ClientDetails";
 import RegOverview from "../../pages/regOverView";
-import AccStatement from "../../pages/AnnualAccStatement";
+import AccStatement from "../../pages/Reports/AnnualAccStatement";
 
 const drawerWidth = 240;
 
@@ -169,18 +169,6 @@ const SideBar = () => {
       .finally(() => {
         // dispatch(hideLoader());
       });
-    // apiServices
-    //   .dashGetMenus(payload)
-    //   .then((res) => {
-    //     console.log("res", res?.data);
-    //     const processedMenus = buildMenuHierarchy(res?.data);
-    //     console.log("menuItems-->", processedMenus);
-    //     setMenuItems(processedMenus);
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error", error);
-    //   });
-
     const buildMenuHierarchy = (data: any) => {
       // Create a map of menu items with the `menu_code` as the key
       const menuMap = new Map();
@@ -256,7 +244,6 @@ const SideBar = () => {
         handleMobileDrawerClose();
       }, 400);
     }
-    // isMobile && handleMobileDrawerClose();
   };
 
   const handleMobileDrawerClose = () => {
@@ -284,7 +271,7 @@ const SideBar = () => {
         }
       case "Reports":
         switch (activeSubItem) {
-          case "Annual PNL Statement":
+          case "Tax PNL Statement":
             return <AnnualPNL />;
           case "Dormant Client Report":
             return <DormantClient />;

@@ -119,6 +119,7 @@ const RegOverview = ({ brokerageData, customClass }: any) => {
     plotOptions: {
       bar: {
         horizontal: false,
+        columnWidth: "50%",
       },
     },
     colors: barColors,

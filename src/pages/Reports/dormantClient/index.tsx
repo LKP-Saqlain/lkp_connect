@@ -287,12 +287,14 @@ const DormantClient = () => {
         }
       })
       .catch((error) => {
-        console.log("Error->", error.response.data.errors.Zone["0"]);
-        const zoneError = error.response.data.errors.Zone["0"];
-        const branchCodeError = error.response.data.errors.BranchCode["0"];
+        // console.log("Error->", error.response.data.errors.Zone["0"]);
+        console.log("Error->", error?.response?.data?.message);
+        // const zoneError = error.response.data.errors.Zone["0"];
+        // const branchCodeError = error.response.data.errors.BranchCode["0"];
         dispatch(hideLoader());
-        ShowToast("error", zoneError);
-        ShowToast("error", branchCodeError);
+        ShowToast("error", error?.response?.data?.message);
+        // ShowToast("error", zoneError);
+        // ShowToast("error", branchCodeError);
       })
       .finally(() => {
         dispatch(hideLoader());
@@ -306,8 +308,12 @@ const DormantClient = () => {
       pageSize: 20,
       searchKey: "",
       loginName: user_id,
-      zone: formik.values.selectedZone?.value,
-      branchCode: formik.values.selectedBranchCode?.value,
+      zone: formik.values.selectedZone?.value
+        ? formik.values.selectedZone?.value
+        : "",
+      branchCode: formik.values.selectedBranchCode?.value
+        ? formik.values.selectedBranchCode?.value
+        : "",
       clientStatus:
         formik.values.selectedClientStatus?.value === "ACTIVE"
           ? "Y"

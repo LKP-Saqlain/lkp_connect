@@ -1,19 +1,19 @@
 import React from "react";
 import { Card, CardBody, CardHeader, Col, Row, Button } from "reactstrap";
-import "../../pages/Reports/style.css";
+import "../style.css";
 import DownloadIcon from "@mui/icons-material/Download";
 // import PNLNote from "../../../components/common/pnlNote";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../../redux/store";
-import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+import { RootState, AppDispatch } from "../../../redux/store";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { regEx } from "../../helper/method";
+import { regEx } from "../../../helper/method";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { apiServices } from "../../services";
-import ShowToast from "../../utils/toastUtils";
+import { apiServices } from "../../../services";
+import ShowToast from "../../../utils/toastUtils";
 
 const AnnualAccStatement = () => {
   const isMobile = useMediaQuery("(max-width:600px)");
