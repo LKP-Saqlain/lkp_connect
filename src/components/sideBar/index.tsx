@@ -46,6 +46,8 @@ import RegOverview from "../../pages/regOverView";
 import AccStatement from "../../pages/Reports/AnnualAccStatement";
 import { SlSizeFullscreen } from "react-icons/sl";
 import { BsFullscreen } from "react-icons/bs";
+// import FullscreenIcon from '@mui/icons-material/Fullscreen';
+// import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
 const drawerWidth = 240;
 
@@ -406,9 +408,9 @@ const SideBar = () => {
                 sx={{ p: 0 }}
               >
                 {isFullScreen ? (
-                  <BsFullscreen style={{ cursor: "pointer" }} />
-                ) : (
                   <SlSizeFullscreen style={{ cursor: "pointer" }} />
+                ) : (
+                  <BsFullscreen style={{ cursor: "pointer" }} />
                 )}
               </IconButton>
             </div>
