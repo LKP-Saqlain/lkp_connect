@@ -30,8 +30,8 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
   }, [brokerageData]);
 
   // Dynamically calculate max for both series
-  const maxGrossBrokerage =
-    Math.max(...brokerageData.map((item: any) => item.GrossBrokerage)) * 1.1;
+  // const maxGrossBrokerage =
+  //   Math.max(...brokerageData.map((item: any) => item.GrossBrokerage)) * 1.1;
   // const maxAPbrokerage =
   //   Math.max(...brokerageData.map((item: any) => item.APbrokerage)) * 1.1;
 
