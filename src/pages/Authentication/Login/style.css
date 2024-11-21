@@ -215,3 +215,40 @@
     padding-right: 14px;
     height: 40px !important;
 }
+.css-1m7embp {
+    font-family: 'Public Sans' !important;
+    /* font: inherit; */
+    letter-spacing: inherit;
+    color: currentcolor;
+    border: 0px;
+    box-sizing: content-box;
+    background: none;
+    height: 1.4375em;
+    margin: 0px;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    min-width: 0px;
+    width: 100%;
+    animation-name: mui-auto-fill-cancel;
+    animation-duration: 10ms;
+    padding: 8.5px 14px 8.5px 0px;
+}
+
+.css-1xqp9nb {
+    /* font: inherit; */
+    font-family: 'Public Sans' !important;
+    letter-spacing: inherit;
+    color: currentcolor;
+    border: 0px;
+    box-sizing: content-box;
+    background: none;
+    height: 1.4375em;
+    margin: 0px;
+    -webkit-tap-highlight-color: transparent;
+    display: block;
+    min-width: 0px;
+    width: 100%;
+    animation-name: mui-auto-fill-cancel;
+    animation-duration: 10ms;
+    padding: 8.5px 0px;
+}
