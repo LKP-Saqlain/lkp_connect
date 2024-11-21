@@ -280,6 +280,7 @@ const SideBar = () => {
     console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
     const hasOverview = menuItems.some((item) => item.menu_name === "Overview");
     if (activeMenu === "" && hasOverview) {
+      setActiveMenu("Overview");
       return <OverviewComponent />;
     }
     switch (activeMenu) {
