@@ -6,6 +6,7 @@ import {
   CardBody,
   Col,
   Row,
+  Button,
 } from "reactstrap";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { ClientInfoCapsules } from "../../../components/common/Capsules";
@@ -29,9 +30,21 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
       <ModalHeader
         className="modal-title"
         id="fullscreeexampleModalLabel"
-        toggle={tog_fullscreen1}
+        // toggle={tog_fullscreen1}
       >
         User Details
+        <Button
+          // color="primary"
+          onClick={tog_fullscreen1}
+          style={{
+            marginLeft: "70rem", // Ensures the button is pushed to the right
+            padding: "0.5rem 1rem",
+            height: "40px",
+            marginBottom: "10px",
+          }}
+        >
+          Back
+        </Button>
       </ModalHeader>
       <ModalBody style={{ backgroundColor: "#E5E4E2" }}>
         <Card
