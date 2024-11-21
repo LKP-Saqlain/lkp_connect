@@ -76,33 +76,33 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
     },
 
     // Add yaxis configuration here
-    yaxis: [
-      {
-        title: {
-          text: "Bar Range",
-        },
-        min: 0,
-        max: maxGrossBrokerage, // Dynamic max for GrossBrokerage
-        labels: {
-          formatter: function (value: number) {
-            return value.toFixed(2);
-          },
-        },
-      },
-      // {
-      //   opposite: true,
-      //   title: {
-      //     text: "AP Share",
-      //   },
-      //   min: 0,
-      //   max: maxAPbrokerage,
-      //   labels: {
-      //     formatter: function (value: number) {
-      //       return value.toFixed(2);
-      //     },
-      //   },
-      // },
-    ],
+    // yaxis: [
+    //   {
+    //     title: {
+    //       text: "Bar Range",
+    //     },
+    //     min: 0,
+    //     max: maxGrossBrokerage, // Dynamic max for GrossBrokerage
+    //     labels: {
+    //       formatter: function (value: number) {
+    //         return value.toFixed(2);
+    //       },
+    //     },
+    //   },
+    //   // {
+    //   //   opposite: true,
+    //   //   title: {
+    //   //     text: "AP Share",
+    //   //   },
+    //   //   min: 0,
+    //   //   max: maxAPbrokerage,
+    //   //   labels: {
+    //   //     formatter: function (value: number) {
+    //   //       return value.toFixed(2);
+    //   //     },
+    //   //   },
+    //   // },
+    // ],
     grid: {
       show: true,
       xaxis: {
@@ -214,7 +214,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     chart: {
       type: "bar",
       height: 350,
-      stacked: true,
+      stacked: false,
       toolbar: {
         show: false, // Hide the toolbar
       },

@@ -99,55 +99,6 @@ const Revenue = () => {
         .finally(() => {
           dispatch(hideLoader());
         });
-
-      // try {
-      //   dispatch(showLoader(""));
-      //   const response = await apiServices.DealerPerformance(payload);
-      //   console.log("DealerPerformanceResponse", response?.data?.data?.Table);
-      //   setYearRevenue(response?.data?.data?.Table);
-      //   const fetchRevenueData = response?.data?.data?.Table;
-      //   if (fetchRevenueData) {
-      //     // Extract GrossBrokerage and APbrokerage data from the API response
-      //     const brokingValues = fetchRevenueData.map(
-      //       (item: any) => item.Ach_brok_dir
-      //     );
-      //     const nonBrokingValues = fetchRevenueData.map(
-      //       (item: any) => item.Tot_TPD_rev
-      //     );
-
-      //     const indirectValues = fetchRevenueData.map(
-      //       (item: any) => item.Ach_brok_indir + item.Ach_brok_ind_less2yrs
-      //     );
-
-      //     console.log("indirectValues-->", indirectValues);
-
-      //     // Update the monthProjectData array
-      //     setBrokingNonBrokingData([
-      //       {
-      //         name: "Broking",
-      //         group: "Broking",
-      //         data: brokingValues,
-      //       },
-      //       {
-      //         name: "Non-Broking",
-      //         group: "Non-Broking",
-      //         data: nonBrokingValues,
-      //       },
-      //       {
-      //         name: "Indirect Broking",
-      //         group: "Broking",
-      //         data: indirectValues,
-      //       },
-      //     ]);
-      //   }
-
-      //   if (response?.status === 200) {
-      //     dispatch(hideLoader());
-      //   }
-      // } catch (error) {
-      //   console.error("Error->", error);
-      //   dispatch(hideLoader());
-      // }
     };
 
     fetchBrokerage();
