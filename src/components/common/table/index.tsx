@@ -32,14 +32,8 @@ const DataTable: React.FC<DormantClientProps> = ({
 }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
 
-  const formatNumber = (num: any) => {
-    if (num >= 1_000_000) {
-      return (num / 1_000_000).toFixed(1) + "M"; // Abbreviate to millions
-    } else if (num >= 1_000) {
-      return (num / 1_000).toFixed(1) + "K"; // Abbreviate to thousands
-    } else {
-      return num.toString(); // Return as is if less than 1,000
-    }
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("en-IN").format(value);
   };
 
   React.useEffect(() => {
@@ -116,7 +110,7 @@ const DataTable: React.FC<DormantClientProps> = ({
               marginBottom: isMobile ? "5px" : "0",
             }}
           >
-            {`Total ${formatNumber(totalRecords)} records available`}
+            {`Total ${formatCurrency(totalRecords)} records available`}
           </div>
         )}
         <Pagination

@@ -40,7 +40,7 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
         }}
         // toggle={tog_fullscreen1}
       >
-        User Details
+        Client Details
         <Button
           // color="primary"
           onClick={tog_fullscreen1}
@@ -50,6 +50,7 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
             marginBottom: "10px",
             marginLeft: isMobile ? "185px" : "70rem",
             fontSize: isMobile ? "12px" : "16px",
+            backgroundColor: "#11395C",
           }}
         >
           Back
@@ -76,42 +77,102 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
                     fontFamily: "Public Sans",
                   }}
                 >
-                  <span>Client Name</span>
+                  <p
+                    style={{
+                      fontFamily: "Poppins",
+                      color: "#333",
+                      fontWeight: "500",
+                      fontSize: "12px",
+                      margin: "5px 0",
+                    }}
+                  >
+                    Client Name
+                  </p>
                   <h6 className="user-info">John Doe</h6>
                 </div>
               </Col>
               {/* Client Code */}
               <Col xs="12" md={2} className="text-center">
                 <div className="box-content">
-                  <span>Client Code</span>
+                  <p
+                    style={{
+                      fontFamily: "Poppins",
+                      color: "#333",
+                      fontWeight: "500",
+                      fontSize: "12px",
+                      margin: "5px 0",
+                    }}
+                  >
+                    Client Code
+                  </p>
                   <h6 className="user-info">ABCDEFGH</h6>
                 </div>
               </Col>
               {/* Mobile No */}
               <Col xs="12" md={2} className="text-center">
                 <div className="box-content">
-                  <span>Mobile No</span>
+                  <p
+                    style={{
+                      fontFamily: "Poppins",
+                      color: "#333",
+                      fontWeight: "500",
+                      fontSize: "12px",
+                      margin: "5px 0",
+                    }}
+                  >
+                    Mobile No
+                  </p>
                   <h6 className="user-info">+977 - 987451114</h6>
                 </div>
               </Col>
               {/* City */}
               <Col xs="12" md={2} className="text-center">
                 <div className="box-content">
-                  <span>City</span>
+                  <p
+                    style={{
+                      fontFamily: "Poppins",
+                      color: "#333",
+                      fontWeight: "500",
+                      fontSize: "12px",
+                      margin: "5px 0",
+                    }}
+                  >
+                    City
+                  </p>
                   <h6 className="user-info">New York</h6>
                 </div>
               </Col>
               {/* Age */}
               <Col xs="12" md={2} className="text-center">
                 <div className="box-content">
-                  <span>Age</span>
+                  <p
+                    style={{
+                      fontFamily: "Poppins",
+                      color: "#333",
+                      fontWeight: "500",
+                      fontSize: "12px",
+                      margin: "5px 0",
+                    }}
+                  >
+                    Age
+                  </p>
                   <h6 className="user-info">18+</h6>
                 </div>
               </Col>
               {/* Email Id */}
               <Col xs="12" md={2} className="text-center">
                 <div className="box-content">
-                  <span>Email Id</span>
+                  <p
+                    style={{
+                      fontFamily: "Poppins",
+                      color: "#333",
+                      fontWeight: "500",
+                      fontSize: "12px",
+                      margin: "5px 0",
+                    }}
+                  >
+                    Email Id
+                  </p>
                   <h6 className="user-info">Johndoe@tesla.co.in</h6>
                 </div>
               </Col>

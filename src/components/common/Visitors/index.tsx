@@ -22,6 +22,11 @@ const StoreVisitsCharts = ({ chartData }: any) => {
   useEffect(() => {
     console.log("chartData", chartData);
   }, [chartData]);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat("en-IN").format(value);
+  };
+
   // var chartDonutBasicColors = getChartColorsArray(dataColors);
   const series = seriess;
   var options: any = {
@@ -32,6 +37,10 @@ const StoreVisitsCharts = ({ chartData }: any) => {
     },
     legend: {
       position: "bottom",
+      formatter: function (label: string, opts: any) {
+        const value = opts.w.globals.series[opts.seriesIndex];
+        return `${label}: ${formatCurrency(value)}`; // Format label with its value in Indian format
+      },
     },
     stroke: {
       show: false,

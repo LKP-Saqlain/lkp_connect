@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Container, Row } from "reactstrap";
 import ProjectsOverview from "./ProjectsOverview";
-import StoreVisits from "./VisitorsCount";
+import UserCount from "./VisitorsCount";
 import Revenue from "./Revenue";
 
 const DashboardProject = () => {
@@ -19,7 +19,7 @@ const DashboardProject = () => {
                       <ProjectsOverview />
                     </div>
                   </Col>
-                  <StoreVisits />
+                  <UserCount />
                 </Row>
                 <Row>
                   <Col>
