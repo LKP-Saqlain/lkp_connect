@@ -13,8 +13,11 @@ import { ClientInfoCapsules } from "../../../components/common/Capsules";
 import PerformanceHistoryChart from "../PerformanceHistory";
 import SegmentWiseTable from "../../../components/common/fullTable";
 import BrokerageSlab from "../BrokerageSlab";
+import { useMediaQuery } from "@mui/material";
 
 const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
+  const isMobile = useMediaQuery("(max-width:768px)");
+
   function tog_fullscreen1() {
     handleModalClose(true);
   }
@@ -30,6 +33,11 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
       <ModalHeader
         className="modal-title"
         id="fullscreeexampleModalLabel"
+        style={{
+          display: "flex",
+          justifyContent: isMobile ? "space-between" : "flex-start",
+          alignItems: "center",
+        }}
         // toggle={tog_fullscreen1}
       >
         User Details
@@ -37,10 +45,11 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
           // color="primary"
           onClick={tog_fullscreen1}
           style={{
-            marginLeft: "70rem", // Ensures the button is pushed to the right
             padding: "0.5rem 1rem",
             height: "40px",
             marginBottom: "10px",
+            marginLeft: isMobile ? "185px" : "70rem",
+            fontSize: isMobile ? "12px" : "16px",
           }}
         >
           Back

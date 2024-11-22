@@ -55,5 +55,43 @@
     padding: 10px;
     margin-top: 20px;
   }
+
+  .modal-header-custom .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .modal-title-text {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-right: auto; /* Pushes the button away from the label */
+  }
+  
+  .back-button {
+    padding: 0.5rem 1rem;
+    height: 40px;
+    margin-bottom: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .modal-header-custom .header-content {
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.5rem; /* Adds spacing between items for mobile */
+    }
+  
+    .modal-title-text {
+      margin-right: 0; /* Reset margin for mobile */
+      text-align: center;
+    }
+  
+    .back-button {
+      height: 35px;
+      font-size: 14px;
+    }
+  }
+  
   
   
