@@ -126,7 +126,7 @@ const Drawer = styled(MuiDrawer, {
 const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<string>("");
+  const [activeMenu, setActiveMenu] = useState<string>("Overview");
   const [activeSubItem, setActiveSubItem] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -278,11 +278,11 @@ const SideBar = () => {
   };
   const renderContent = () => {
     console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
-    const hasOverview = menuItems.some((item) => item.menu_name === "Overview");
-    if (!activeMenu && hasOverview) {
-      setActiveMenu("Overview");
-      return <OverviewComponent />;
-    }
+    // const hasOverview = menuItems.some((item) => item.menu_name === "Overview");
+    // if (!activeMenu && hasOverview) {
+    //   setActiveMenu("Overview");
+    //   return <OverviewComponent />;
+    // }
     switch (activeMenu) {
       case "Overview":
         return <OverviewComponent />;
