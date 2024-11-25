@@ -6,6 +6,8 @@ import TradeCapsule from "./TradeCapsules";
 import TradeInfo from "../../components/common/UserInfoTable";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 interface T6Selling {
   ClientCode: string;
@@ -58,6 +60,45 @@ const DashboardCrypto = () => {
     fetchClientCash(); // Call the async function
   }, [selectedItem, dispatch]);
 
+  const handleExcel = async () => {
+    // alert("I am Clicked");
+    // if (selectedItem === "T6 Selling") {
+    const Id = localStorage.getItem("Id");
+    const payload = {
+      user_id: Id,
+    };
+    try {
+      dispatch(showLoader(""));
+      const response = await apiServices.T6Selling(payload);
+      console.log("ClientCashresponse", response?.data?.data?.Table);
+      if (response?.status === 200) {
+        dispatch(hideLoader());
+        // setT6Data(response?.data?.data?.Table);
+        const data: T6Selling[] = response?.data?.data?.Table;
+
+        // Convert data to a worksheet
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        // Create a workbook and append the worksheet
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "T6 Selling Data");
+        // Convert the workbook to a binary file
+        const excelBuffer = XLSX.write(workbook, {
+          bookType: "xlsx",
+          type: "array",
+        });
+        const excelFile = new Blob([excelBuffer], {
+          type: "application/octet-stream",
+        });
+        saveAs(excelFile, "T6_Selling_Data.xlsx");
+      }
+    } catch (error) {
+      // console.error("Error->", error);
+      dispatch(hideLoader());
+      // console.error("Error fetching T6 data:", error?.response || error?.message || error);
+      // }
+    }
+  };
+
   document.title =
     "Crypto Dashboard | Velzon - React Admin & Dashboard Template";
   return (
@@ -74,7 +115,11 @@ const DashboardCrypto = () => {
             {selectedItem === "Reasearch Calls" && <TradeCapsule />}
             {/* {selectedItem === "Clients With Cash Balance" && <DropDown />} */}
           </Row>
-          <TradeInfo T6Data={t6Data} selectedWidget={selectedItem} />
+          <TradeInfo
+            T6Data={t6Data}
+            selectedWidget={selectedItem}
+            handleExcel={handleExcel}
+          />
           {/* </Col> */}
           {/* </Row> */}
         </Container>

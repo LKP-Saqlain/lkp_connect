@@ -258,15 +258,15 @@ const SlbmHoling = () => {
 
   const slbmColumns: GridColDef[] = [
     { field: "zone", headerName: "Zone", width: 100 },
-    { field: "branchCode", headerName: "Branch Code", width: 150 },
-    { field: "clientCode", headerName: "Client Code", width: 150 },
-    { field: "clientName", headerName: "Client Name", width: 150 },
-    { field: "scripName", headerName: "Scrip Name", width: 150 },
-    { field: "isin", headerName: "ISIN", width: 150 },
+    { field: "branchCode", headerName: "Branch Code", width: 100 },
+    { field: "clientCode", headerName: "Client Code", width: 100 },
+    { field: "clientName", headerName: "Client Name", width: 100 },
+    { field: "scripName", headerName: "Scrip Name", width: 100 },
+    { field: "isin", headerName: "ISIN", width: 100 },
     { field: "qtny", headerName: "Qtny", width: 100 },
-    { field: "rmName", headerName: "RM Name", width: 150 },
-    { field: "dealerName", headerName: "Dealer Name", width: 150 },
-    { field: "slbmStatus", headerName: "SLBM Status", width: 150 },
+    { field: "rmName", headerName: "RM Name", width: 100 },
+    { field: "dealerName", headerName: "Dealer Name", width: 100 },
+    { field: "slbmStatus", headerName: "SLBM Status", width: 100 },
   ];
 
   const handleDownloadExcel = async () => {

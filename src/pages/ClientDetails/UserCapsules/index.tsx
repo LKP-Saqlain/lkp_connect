@@ -9,9 +9,18 @@ import { ClientDetailsCapsule } from "../../../components/common/Capsules";
 interface userCapsules {
   selectedCapsule: any;
   handleClick(arg: any): any;
+  totalCount: any;
+  activeClient: any;
+  inactiveClient: any;
 }
 
-const UserCapsules = ({ selectedCapsule, handleClick }: userCapsules) => {
+const UserCapsules = ({
+  selectedCapsule,
+  handleClick,
+  totalCount,
+  activeClient,
+  inactiveClient,
+}: userCapsules) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -58,7 +67,13 @@ const UserCapsules = ({ selectedCapsule, handleClick }: userCapsules) => {
                         display: item.count === undefined ? "none" : "",
                       }}
                     >
-                      {`Count - ${item.count}`}
+                      {item.label === "Total Clients"
+                        ? `Count - ${totalCount}`
+                        : item.label === "Active Clients"
+                        ? `Count - ${activeClient}`
+                        : item.label === "Inactive Clients"
+                        ? `Count - ${inactiveClient}`
+                        : ""}
                     </h1>
                     {/* )} */}
                   </div>

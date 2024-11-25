@@ -18,14 +18,10 @@ interface ClientRow {
 export const getClientActivityStatusColumns = (
   handleViewDetails: (row: ClientRow) => void
 ): GridColDef[] => [
-  { field: "ClientCode", headerName: "Client Code", width: 230 },
-  { field: "ClientName", headerName: "Client Name", width: 230 },
-  { field: "LastTradeDate", headerName: "Last Trade Date", width: 230 },
-  { field: "ClientStatus", headerName: "Client Status", width: 230 },
   {
     field: "viewDetails",
     headerName: "Action",
-    width: 150,
+    width: 100,
     sortable: false, // Disable sorting if desired
     filterable: false, // Disable filtering if desired
     renderCell: (params: any) => (
@@ -46,6 +42,17 @@ export const getClientActivityStatusColumns = (
       </Button>
     ),
   },
+  { field: "ClientCode", headerName: "Client Code", width: 90 },
+  { field: "ClientName", headerName: "Client Name", width: 120 },
+  { field: "LastTradeDate", headerName: "Last Trade Date", width: 120 },
+  { field: "ClientStatus", headerName: "Client Status", width: 100 },
+  { field: "BranchCode", headerName: "Branch Code", width: 100 },
+  { field: "ActivationDate", headerName: "Activation Date", width: 120 },
+  { field: "EMail", headerName: "Email", width: 120 },
+  { field: "MobileNo", headerName: "Mobile No", width: 120 },
+  { field: "PANNO", headerName: "PAN No", width: 120 },
+  { field: "MTFStatus", headerName: "MTF Status", width: 80 },
+  { field: "POAStatus", headerName: "POA Status", width: 80 },
 ];
 
 export const getClientDormantStatus = (

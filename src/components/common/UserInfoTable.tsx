@@ -10,6 +10,7 @@ import {
   getClientActivityStatusColumns,
   getClientDormantStatus,
 } from "../../pages/ClientDetails/ClientTableColumns";
+import { Box, Button } from "@mui/material";
 
 interface Trade {
   id: string;
@@ -26,12 +27,20 @@ interface SelectedWidgetProps {
   selectedWidget?: string;
   T6Data?: any;
   getUserDetails?: (value: any) => void;
+  handleExcel?: (value: any) => void;
+  apiStatus?: boolean;
+  activeGroupedClients?: any;
+  inactiveGroupedClients?: any;
 }
 
 const DataTable = ({
   selectedWidget,
   T6Data,
   getUserDetails,
+  handleExcel,
+  apiStatus,
+  activeGroupedClients,
+  inactiveGroupedClients,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -70,9 +79,10 @@ const DataTable = ({
         // filterable: false,
       }));
     } else if (
-      selectedWidget === "Total Clients" ||
-      selectedWidget === "Active Clients" ||
-      selectedWidget === "Inactive Clients"
+      // selectedWidget === "Total Clients" ||
+      // selectedWidget === "Active Clients" ||
+      // selectedWidget === "Inactive Clients"
+      apiStatus
     ) {
       return getClientActivityStatusColumns(handleViewDetails);
     } else if (selectedWidget === "Client Approaching  Dormant Status") {
@@ -89,6 +99,30 @@ const DataTable = ({
       {selectedWidget === "Clients With Cash Balance" && (
         <DropDown tradeData={setTradeData} handleValues={handleValues} />
       )}
+      {(selectedWidget === "Total Clients" ||
+        selectedWidget === "Active Clients" ||
+        selectedWidget === "Inactive Clients" ||
+        selectedWidget === "T6 Selling") && (
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            variant="outlined"
+            className="btn-font"
+            sx={{
+              bgcolor: "#11395C",
+              color: "#fff",
+              borderRadius: "7px",
+              fontFamily: "Public Sans",
+              borderColor: "#ABC4DA",
+              textTransform: "capitalize",
+              // marginBottom: "2",
+              // ml: 1,
+            }}
+            onClick={handleExcel}
+          >
+            Download Excel
+          </Button>
+        </Box>
+      )}
       <Paper
         sx={{
           height: 450,
@@ -99,7 +133,15 @@ const DataTable = ({
       >
         <DataGrid
           rows={
-            selectedWidget === "Clients With Cash Balance" ? tradeData : T6Data
+            selectedWidget === "Clients With Cash Balance"
+              ? tradeData
+              : selectedWidget === "Total Clients"
+              ? T6Data
+              : selectedWidget === "Active Clients"
+              ? activeGroupedClients
+              : selectedWidget === "Inactive Clients"
+              ? inactiveGroupedClients
+              : T6Data
           }
           columns={columns}
           rowHeight={30}

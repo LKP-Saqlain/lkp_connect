@@ -69,4 +69,7 @@ export const apiServices = {
   DealerPerformance: async (payload: any) => {
     return await apiService("POST", endpoints.DealerPerformance, payload);
   },
+  ClientDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.ClientDetails, payload);
+  },
 };

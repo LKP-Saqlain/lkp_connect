@@ -131,6 +131,7 @@ const SideBar = () => {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+  const [apiStatus, setApiStatus] = useState<boolean>(false);
   // const drawerWidth = isMobile ? 180 : 240;
   const settings = ["Logout"];
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
@@ -165,6 +166,13 @@ const SideBar = () => {
   const closeFullScreen = () => {
     document.exitFullscreen?.();
   };
+  useEffect(() => {
+    if (activeMenu === "Client Details") {
+      setApiStatus(true);
+    } else {
+      setApiStatus(false);
+    }
+  }, [activeMenu]);
 
   useEffect(() => {
     // let userId = localStorage.getItem("Id");
@@ -344,6 +352,7 @@ const SideBar = () => {
           <ClientDetails
             handleDrawerClose={handleDrawerClose}
             handleDrawerOpen={handleDrawerOpen}
+            apiStatus={apiStatus}
           />
         );
       case "e-KYC Link":

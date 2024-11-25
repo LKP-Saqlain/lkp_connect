@@ -21,4 +21,5 @@ export const endpoints = {
   GetClientStatusCnt: "/api/Client/GetClientStatusCnt",
   DealerPerformance: "/api/MIS/DEALERPERFORMANCE",
   forgetPassword: "/api/Login/ForgetPassword",
+  ClientDetails: "/api/Client/ClientDetails",
 };

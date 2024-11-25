@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
 import ShowToast from "../../../utils/toastUtils";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 interface Option {
   label: string;
@@ -14,6 +16,13 @@ interface Option {
 interface table {
   handleValues: (data: any) => void;
   tradeData: any;
+}
+
+interface CliWithCashBalance {
+  ClientName: string;
+  ClientCode: string;
+  LastTradeDate: string;
+  Cash: string;
 }
 const DropDown = ({ handleValues, tradeData }: table) => {
   const [selectedZone, setSelectedZone] = useState<Option | null>(null);
@@ -149,6 +158,45 @@ const DropDown = ({ handleValues, tradeData }: table) => {
         dispatch(hideLoader());
       });
   };
+  const handleExcelDownload = () => {
+    tradeData([]);
+    let Id = localStorage.getItem("Id");
+    const payload = {
+      user_id: Id,
+      zone: selectedZone?.value,
+      branchCode: selectedBranchCode?.value,
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .ClientCash(payload)
+      .then((response) => {
+        console.log("ClientCashresponse", response);
+        dispatch(hideLoader());
+        const data: CliWithCashBalance[] = response?.data?.data;
+        // Convert data to a worksheet
+        const worksheet = XLSX.utils.json_to_sheet(data);
+        // Create a workbook and append the worksheet
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "T6 Selling Data");
+        // Convert the workbook to a binary file
+        const excelBuffer = XLSX.write(workbook, {
+          bookType: "xlsx",
+          type: "array",
+        });
+        const excelFile = new Blob([excelBuffer], {
+          type: "application/octet-stream",
+        });
+        saveAs(excelFile, "Client_With_Cash_Balance.xlsx");
+      })
+      .catch((error) => {
+        console.log("Error->", error);
+        dispatch(hideLoader());
+        ShowToast("error", error.response?.data?.message);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
 
   document.title = "LKP Securities | Dormant Client Report";
 
@@ -204,13 +252,43 @@ const DropDown = ({ handleValues, tradeData }: table) => {
                   <Col className="d-flex flex-column-reverse">
                     <div className="mb-3" />
                     <Button
-                      className="w-50"
+                      // className="w-50"
                       style={{ backgroundColor: "#11395C" }}
                       onClick={handleSubmit}
                     >
                       Submit
                     </Button>
                   </Col>
+                  <Col className="d-flex flex-column-reverse">
+                    <div className="mb-3" />
+                    <Button
+                      style={{
+                        backgroundColor: "#11395C",
+                        border: "none",
+                      }}
+                      onClick={handleExcelDownload}
+                    >
+                      Download Excel
+                    </Button>
+                  </Col>
+                  {/* <Col className="d-flex align-items-end">
+                    <Button
+                      className="me-2"
+                      style={{ backgroundColor: "#11395C" }}
+                      onClick={handleSubmit}
+                    >
+                      Submit
+                    </Button>
+                    <Button
+                      style={{
+                        backgroundColor: "#4CAF50",
+                        border: "none",
+                      }}
+                      onClick={handleDownload}
+                    >
+                      Download Excel
+                    </Button>
+                  </Col> */}
                 </Row>
               </div>
             </Col>
