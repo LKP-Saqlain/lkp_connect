@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 // import getChartColorsArray from "../ChartsDynamicColor";
+import "../../../pages/Overview/style.css";
 
 const StoreVisitsCharts = ({ chartData }: any) => {
   const [labels, setLabels] = useState<string[]>([]);
@@ -40,6 +41,12 @@ const StoreVisitsCharts = ({ chartData }: any) => {
       formatter: function (label: string, opts: any) {
         const value = opts.w.globals.series[opts.seriesIndex];
         return `${label}: ${formatCurrency(value)}`; // Format label with its value in Indian format
+      },
+      onItemHover: {
+        highlightDataSeries: false, // Prevent dimming on hover
+      },
+      onItemClick: {
+        toggleDataSeries: false, // Prevent toggling of slices on click
       },
     },
     stroke: {

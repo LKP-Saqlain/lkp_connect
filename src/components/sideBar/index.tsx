@@ -437,7 +437,7 @@ const SideBar = () => {
               fontFamily: "Public Sans",
             }}
           >
-            <Typography
+            {/* <Typography
               sx={{
                 textAlign: "end",
                 fontFamily: "Public Sans",
@@ -447,8 +447,10 @@ const SideBar = () => {
             >
               {" "}
               Welcome
+            </Typography> */}
+            <Typography sx={{ fontSize: "14px", fontFamily: "Public Sans" }}>
+              {localStorage.getItem("userName")}
             </Typography>
-            {localStorage.getItem("userName")}
           </Typography>
           <Tooltip title="">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
