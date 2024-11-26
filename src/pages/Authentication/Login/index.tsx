@@ -188,6 +188,7 @@ const LoginPage = () => {
           flexDirection: isMobile ? "column" : "row",
           justifyContent: "center",
           alignItems: "center",
+          overflow: "hidden",
         }}
       >
         <Box
@@ -195,10 +196,11 @@ const LoginPage = () => {
           src={Banner}
           alt="Banner"
           sx={{
-            width: isMobile ? "100%" : "52%",
+            width: isMobile ? "100%" : "47.9%",
             borderRadius: "4px",
             marginBottom: isMobile ? 2 : 0,
             // border: "1px solid black",
+            marginRight: "35px",
             backgroundImage: `url(${Vector})`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right",
@@ -219,17 +221,6 @@ const LoginPage = () => {
             // border: "1px solid red",
           }}
         >
-          <Typography
-            variant="h6"
-            gutterBottom
-            sx={{
-              fontWeight: 600,
-              color: "#095192",
-              fontFamily: "Poppins",
-            }}
-          >
-            Welcome to
-          </Typography>
           <Typography
             variant="h4"
             gutterBottom

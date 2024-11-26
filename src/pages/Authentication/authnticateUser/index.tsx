@@ -177,10 +177,11 @@ const AuthenticateUser = () => {
           src={Banner}
           alt="Banner"
           sx={{
-            width: isMobile ? "100%" : "52%",
+            width: isMobile ? "100%" : "47.9%",
             borderRadius: "4px",
             marginBottom: isMobile ? 2 : 0,
             // border: "1px solid black",
+            marginRight: "35px",
             backgroundImage: `url(${Vector})`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right",

@@ -32,7 +32,7 @@ export const getClientActivityStatusColumns = (
         style={{
           padding: "2px 9px",
           backgroundColor: "#11395C",
-          fontSize: "10px",
+          fontSize: "9px",
           borderRadius: "10px",
           textTransform: "capitalize",
           fontFamily: "Public Sans",

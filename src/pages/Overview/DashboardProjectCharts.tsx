@@ -68,12 +68,41 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       },
       labels: {
         style: {
-          fontSize: "10px",
+          fontSize: "11px",
           fontWeight: 400,
           colors: "#333",
         },
       },
     },
+
+    yaxis: [
+      {
+        title: {
+          text: "Bar Range",
+        },
+        min: 0,
+        // max: maxGrossBrokerage, // Dynamic max for GrossBrokerage
+        labels: {
+          formatter: function (value: number) {
+            return new Intl.NumberFormat("en-IN").format(Math.round(value));
+          },
+        },
+      },
+      // Uncomment and modify the second axis if needed
+      // {
+      //   opposite: true,
+      //   title: {
+      //     text: "AP Share",
+      //   },
+      //   min: 0,
+      //   max: maxAPbrokerage,
+      //   labels: {
+      //     formatter: function (value: number) {
+      //       return Math.round(value).toString(); // Remove decimals
+      //     },
+      //   },
+      // },
+    ],
 
     // Add yaxis configuration here
     // yaxis: [
@@ -149,7 +178,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
         {
           formatter: function (y: any) {
             if (typeof y !== "undefined") {
-              return y.toFixed(2);
+              return new Intl.NumberFormat("en-IN").format(y.toFixed(2));
             }
             return y;
           },
@@ -157,7 +186,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
         {
           formatter: function (y: any) {
             if (typeof y !== "undefined") {
-              return y.toFixed(2);
+              return new Intl.NumberFormat("en-IN").format(y.toFixed(2));
             }
             return y;
           },
@@ -165,7 +194,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
         {
           formatter: function (y: any) {
             if (typeof y !== "undefined") {
-              return y.toFixed(2);
+              return new Intl.NumberFormat("en-IN").format(y.toFixed(2));
             }
             return y;
           },
@@ -200,6 +229,9 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     setMnthYRValues(latestMonths);
   }, [revenueMonths, series]);
 
+  const directBrokingData = series[0]?.data || [];
+  const indirectBrokingData = series[1]?.data || [];
+
   // var linechartcustomerColors = getChartColorsArray(dataColors);
 
   // const revenueBarColor = ["#01D28E", "#6DBBFF"];
@@ -210,11 +242,20 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
   //   Math.max(...revenueMonths.map((item: any) => item.Tot_TPD_rev)) * 1.1;
 
   var options: any = {
-    series: series,
+    series: [
+      {
+        name: "Direct-Broking",
+        data: directBrokingData,
+      },
+      {
+        name: "Indirect-Broking",
+        data: indirectBrokingData,
+      },
+    ],
     chart: {
       type: "bar",
       height: 350,
-      stacked: false,
+      stacked: true,
       toolbar: {
         show: false, // Hide the toolbar
       },
@@ -247,7 +288,8 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     },
     plotOptions: {
       bar: {
-        horizontal: false,
+        horizontal: false, // Keep bars vertical
+        columnWidth: "50%", // Adjust the width of bars
       },
     },
     xaxis: {
@@ -256,55 +298,163 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     fill: {
       opacity: 1,
     },
-    colors: ["#01D28E", "#008FFB", "#F57C00", "#00E396"],
+    colors: ["#01D28E", "#F57C00"],
     yaxis: {
       title: {
         text: "Bar Range",
       },
       labels: {
         formatter: (value: any) => {
-          return value.toFixed(0);
+          return new Intl.NumberFormat("en-IN").format(value);
         },
       },
     },
     legend: {
-      position: "bottom",
-      horizontalAlign: "center",
+      // show: false,
+      // position: "bottom",
+      // horizontalAlign: "center",
     },
     tooltip: {
       enabled: true,
       shared: true,
       intersect: false,
     },
-    // tooltip: {
-    //   shared: false,
-    //   y: [
-    //     {
-    //       formatter: function (y: any) {
-    //         if (typeof y !== "undefined") {
-    //           return y.toFixed(2);
-    //         }
-    //         return y;
-    //       },
-    //     },
-    //     {
-    //       formatter: function (y: any) {
-    //         if (typeof y !== "undefined") {
-    //           return y.toFixed(2);
-    //         }
-    //         return y;
-    //       },
-    //     },
-    //     {
-    //       formatter: function (y: any) {
-    //         if (typeof y !== "undefined") {
-    //           return y.toFixed(2);
-    //         }
-    //         return y;
-    //       },
-    //     },
-    //   ],
-    // },
+  };
+  return (
+    <React.Fragment>
+      <ReactApexChart
+        dir="ltr"
+        options={options}
+        series={options?.series}
+        type="bar"
+        height="370"
+        className="apex-charts"
+      />
+    </React.Fragment>
+  );
+};
+
+const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
+  const [mnthYRValues, setMnthYRValues] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log("series", revenueMonths, series);
+    const latestMonths = revenueMonths.map((item: any) => item.MnthYR);
+    console.log("latestMonts", latestMonths);
+    setMnthYRValues(latestMonths);
+  }, [revenueMonths, series]);
+
+  const TPD_Insurance = series[0]?.data || [];
+  const TPD_Liq_Loans = series[1]?.data || [];
+  const spIp = series[2]?.data || [];
+  const TPD_mutualfunds = series[3]?.data || [];
+
+  // var linechartcustomerColors = getChartColorsArray(dataColors);
+
+  // const revenueBarColor = ["#01D28E", "#6DBBFF"];
+
+  // const brokingRange =
+  //   Math.max(...revenueMonths.map((item: any) => item.Ach_brok_dir)) * 1.1;
+  // const NonBrokingRange =
+  //   Math.max(...revenueMonths.map((item: any) => item.Tot_TPD_rev)) * 1.1;
+
+  var options: any = {
+    series: [
+      {
+        name: "Insurance",
+        data: TPD_Insurance,
+      },
+      {
+        name: "Liquiloans",
+        data: TPD_Liq_Loans,
+      },
+      {
+        name: "SPIP",
+        data: spIp,
+      },
+      {
+        name: "Mutual Funds",
+        data: TPD_mutualfunds,
+      },
+    ],
+    chart: {
+      type: "bar",
+      height: 350,
+      stacked: true,
+      toolbar: {
+        show: false, // Hide the toolbar
+      },
+    },
+    stroke: {
+      width: 1,
+      colors: ["#fff"],
+    },
+    dataLabels: {
+      enabled: true,
+      style: {
+        colors: ["#fff"], // Text color
+        fontSize: "10px", // Adjust text size
+        fontWeight: "bold", // Bold for better visibility
+      },
+      formatter: function (val: number) {
+        return val > 0 ? new Intl.NumberFormat("en-IN").format(val) : ""; // Format numbers
+      },
+      offsetY: 0, // Adjust vertical position
+      // textAnchor: "middle", // Center-align the text horizontally
+      position: "top", // Position the label at the top/edge of the bar
+    },
+    grid: {
+      show: true,
+      xaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      yaxis: {
+        lines: {
+          show: false,
+        },
+      },
+      padding: {
+        top: 0,
+        right: -2,
+        bottom: 15,
+        left: 10,
+      },
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false, // Keep bars vertical
+        columnWidth: "50%", // Adjust the width of bars
+      },
+    },
+    xaxis: {
+      categories: mnthYRValues,
+    },
+    fill: {
+      opacity: 1,
+    },
+    colors: ["#01D28E", "#F57C00", "#008FFB", "#3D2785"],
+    yaxis: {
+      title: {
+        text: "Bar Range",
+      },
+      labels: {
+        formatter: (value: any) => {
+          return new Intl.NumberFormat("en-IN").format(value);
+        },
+      },
+    },
+    legend: {
+      // show: false,
+      // position: "bottom",
+      // horizontalAlign: "center",
+    },
+    tooltip: {
+      enabled: true,
+      shared: true,
+      intersect: false,
+    },
   };
   return (
     <React.Fragment>
@@ -419,4 +569,5 @@ export {
   TeamMembersCharts,
   PrjectsStatusCharts,
   RevenueCharts,
+  RevenueNonBrokingCharts,
 };

@@ -2,7 +2,8 @@ import React from "react";
 import { Col, Container, Row } from "reactstrap";
 import ProjectsOverview from "./ProjectsOverview";
 import UserCount from "./VisitorsCount";
-import Revenue from "./Revenue";
+// import BrokingRevenue from "./Revenue/BrokingRevenue";
+import RevenueDetails from "./Revenue";
 
 const DashboardProject = () => {
   document.title = "LKP Securities | User Overview";
@@ -23,7 +24,7 @@ const DashboardProject = () => {
                 </Row>
                 <Row>
                   <Col>
-                    <Revenue />
+                    <RevenueDetails />
                   </Col>
                 </Row>
               </div>

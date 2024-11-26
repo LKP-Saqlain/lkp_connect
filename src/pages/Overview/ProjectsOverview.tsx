@@ -18,11 +18,6 @@ const ProjectsOverview = () => {
       type: "bar",
       data: [],
     },
-    {
-      name: "AP Share",
-      type: "bar",
-      data: [],
-    },
   ]);
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -50,9 +45,9 @@ const ProjectsOverview = () => {
             const grossBrokerageData = fetchedBrokerageData.map(
               (item: any) => item.GrossBrokerage
             );
-            const apShareData = fetchedBrokerageData.map(
-              (item: any) => item.APbrokerage
-            );
+            // const apShareData = fetchedBrokerageData.map(
+            //   (item: any) => item.APbrokerage
+            // );
 
             // Update the monthProjectData array
             setMonthProjectData([
@@ -61,11 +56,11 @@ const ProjectsOverview = () => {
                 type: "bar",
                 data: grossBrokerageData, // Set GrossBrokerage data
               },
-              {
-                name: "AP Share",
-                type: "bar",
-                data: apShareData, // Set APbrokerage data
-              },
+              // {
+              //   name: "AP Share",
+              //   type: "bar",
+              //   data: apShareData, // Set APbrokerage data
+              // },
             ]);
           }
 
@@ -118,7 +113,7 @@ const ProjectsOverview = () => {
                       ></div>
                       <p className="mb-2 mb-md-0 me-4">Gross Brokerage</p>
 
-                      <div
+                      {/* <div
                         style={{
                           backgroundColor: "#f57c00",
                           width: "16px",
@@ -126,7 +121,7 @@ const ProjectsOverview = () => {
                           marginRight: "8px",
                         }}
                       ></div>
-                      <p className="mb-0">AP Share</p>
+                      <p className="mb-0">AP Share</p> */}
                     </div>
                   </div>
                 </Col>

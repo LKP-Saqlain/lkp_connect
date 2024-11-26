@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
-import { RevenueCharts } from "./DashboardProjectCharts";
-import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+import { RevenueCharts } from "../DashboardProjectCharts";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 // import { apiServices } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../../redux/store";
-import { DealerPerformance } from "../../redux/thunk/DealerPerformance";
-import ShowToast from "../../utils/toastUtils";
+import { RootState, AppDispatch } from "../../../redux/store";
+import { DealerPerformance } from "../../../redux/thunk/DealerPerformance";
+import ShowToast from "../../../utils/toastUtils";
 
 const Revenue = () => {
   const [yearRevenue, setYearRevenue] = useState<[]>([]);
   const [brokingNonBrokingData, setBrokingNonBrokingData] = useState([
     {
-      name: "Broking",
-      group: "Broking",
+      name: "Direct-Broking",
+      group: "Direct-Broking",
       data: [],
     },
     {
@@ -21,11 +21,11 @@ const Revenue = () => {
       group: "Non-Broking",
       data: [],
     },
-    {
-      name: "Indirect Broking",
-      group: "Broking",
-      data: [],
-    },
+    // {
+    //   name: "Indirect Broking",
+    //   group: "Broking",
+    //   data: [],
+    // },
   ]);
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -51,9 +51,9 @@ const Revenue = () => {
             const brokingValues = fetchRevenueData.map(
               (item: any) => item.Ach_brok_dir
             );
-            const nonBrokingValues = fetchRevenueData.map(
-              (item: any) => item.Tot_TPD_rev
-            );
+            // const nonBrokingValues = fetchRevenueData.map(
+            //   (item: any) => item.Tot_TPD_rev
+            // );
 
             const indirectValues = fetchRevenueData.map(
               (item: any) => item.Ach_brok_indir + item.Ach_brok_ind_less2yrs
@@ -64,20 +64,20 @@ const Revenue = () => {
             // Update the monthProjectData array
             setBrokingNonBrokingData([
               {
-                name: "Broking",
-                group: "Broking",
+                name: "Direct-Broking",
+                group: "Direct-Broking",
                 data: brokingValues,
               },
               {
-                name: "Non-Broking",
-                group: "Non-Broking",
-                data: nonBrokingValues,
-              },
-              {
-                name: "Indirect Broking",
+                name: "Indirect-Broking",
                 group: "Broking",
                 data: indirectValues,
               },
+              // {
+              //   name: "Non-Broking",
+              //   group: "Non-Broking",
+              //   data: nonBrokingValues,
+              // },
             ]);
           }
 
@@ -111,7 +111,7 @@ const Revenue = () => {
             <Col xs={12}>
               <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-sm-row">
                 <h4 className="card-title mb-0 flex-grow-1 text-md-start text-center">
-                  Revenue Summary For Current Financial Year
+                  Broking Revenue For last 12 Months
                 </h4>
                 <div
                   className="d-flex align-items-center flex-wrap mt-2 mt-sm-0"
@@ -126,7 +126,7 @@ const Revenue = () => {
                       marginRight: "8px",
                     }}
                   ></div>
-                  <p className="mb-0 me-3">Broking</p>
+                  <p className="mb-0 me-3">Direct-Broking</p>
                   <div
                     className="legend-color"
                     style={{
@@ -137,7 +137,7 @@ const Revenue = () => {
                     }}
                   ></div>
                   <p className="mb-0 me-3">Indirect-broking</p>
-                  <div
+                  {/* <div
                     className="legend-color"
                     style={{
                       backgroundColor: "#008FFB",
@@ -146,7 +146,7 @@ const Revenue = () => {
                       marginRight: "8px",
                     }}
                   ></div>
-                  <p className="mb-0">Non-broking</p>
+                  <p className="mb-0">Non-broking</p> */}
                 </div>
               </div>
             </Col>
