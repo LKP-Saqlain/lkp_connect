@@ -9,7 +9,7 @@ import {
   Button,
 } from "reactstrap";
 import { BrokSlabItems } from "../../components/common/Capsules";
-import { FiEdit } from "react-icons/fi";
+// import { FiEdit } from "react-icons/fi";
 
 const EKYCLink = () => {
   return (
