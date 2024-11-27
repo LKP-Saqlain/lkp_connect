@@ -67,7 +67,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   };
 
   return (
-    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end" }}>
+    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}>
       <Search sx={{ border: "1px solid #11395C" }}>
         <SearchIconWrapper>
           <SearchIcon />

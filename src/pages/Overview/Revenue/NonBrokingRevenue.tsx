@@ -126,27 +126,17 @@ const NonBrokingRevenue = () => {
                   <div
                     className="legend-color"
                     style={{
-                      backgroundColor: "#01D28E",
+                      backgroundColor: "#ff4d4f",
                       width: "16px",
                       height: "16px",
-                      marginRight: "8px",
+                      marginRight: "10px",
                     }}
                   ></div>
-                  <p className="mb-0 me-3">Insurance</p>
+                  <p className="mb-0 me-3">Mutual Funds</p>
                   <div
                     className="legend-color"
                     style={{
-                      backgroundColor: "#F57C00",
-                      width: "16px",
-                      height: "16px",
-                      marginRight: "8px",
-                    }}
-                  ></div>
-                  <p className="mb-0 me-3">Liquiloans</p>
-                  <div
-                    className="legend-color"
-                    style={{
-                      backgroundColor: "#008FFB",
+                      backgroundColor: "#52c41a",
                       width: "16px",
                       height: "16px",
                       marginRight: "8px",
@@ -156,13 +146,23 @@ const NonBrokingRevenue = () => {
                   <div
                     className="legend-color"
                     style={{
-                      backgroundColor: "#3D2785",
+                      backgroundColor: "#faad14",
                       width: "16px",
                       height: "16px",
-                      marginRight: "10px",
+                      marginRight: "8px",
                     }}
                   ></div>
-                  <p className="mb-0 me-3">Mutual Funds</p>
+                  <p className="mb-0 me-3">Insurance</p>
+                  <div
+                    className="legend-color"
+                    style={{
+                      backgroundColor: "#1890ff",
+                      width: "16px",
+                      height: "16px",
+                      marginRight: "8px",
+                    }}
+                  ></div>
+                  <p className="mb-0 me-3">Liquiloans</p>
                 </div>
               </div>
             </Col>

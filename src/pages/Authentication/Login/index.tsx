@@ -217,7 +217,7 @@ const LoginPage = () => {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            // mt: 12,
+            mt: 12,
             // border: "1px solid red",
           }}
         >

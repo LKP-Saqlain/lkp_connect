@@ -92,6 +92,10 @@
       font-size: 14px;
     }
   }
+
+  .modal-dialog:not(.modal-dialog-scrollable) .modal-header {
+    padding-bottom: 20px !important;
+}
   
   
   

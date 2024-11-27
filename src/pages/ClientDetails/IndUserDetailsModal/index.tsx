@@ -14,9 +14,11 @@ import PerformanceHistoryChart from "../PerformanceHistory";
 import SegmentWiseTable from "../../../components/common/fullTable";
 import BrokerageSlab from "../BrokerageSlab";
 import { useMediaQuery } from "@mui/material";
+import "../style.css";
 
 const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
   const isMobile = useMediaQuery("(max-width:768px)");
+  console.log(isMobile);
 
   function tog_fullscreen1() {
     handleModalClose(true);
@@ -35,22 +37,21 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
         id="fullscreeexampleModalLabel"
         style={{
           display: "flex",
-          justifyContent: isMobile ? "space-between" : "flex-start",
+          justifyContent: "space-between", // Keeps "Client Details" on the left and "Back" on the right
           alignItems: "center",
         }}
-        // toggle={tog_fullscreen1}
       >
-        Client Details
+        <span>Client Details</span>
         <Button
-          // color="primary"
           onClick={tog_fullscreen1}
           style={{
             padding: "0.5rem 1rem",
             height: "40px",
             marginBottom: "10px",
-            marginLeft: isMobile ? "185px" : "70rem",
-            fontSize: isMobile ? "12px" : "16px",
+            fontSize: "12px",
             backgroundColor: "#11395C",
+            position: "absolute", // Position it absolutely at the top-right corner
+            right: "10px", // Adjust as needed
           }}
         >
           Back

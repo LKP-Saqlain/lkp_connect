@@ -58,9 +58,55 @@ const UserCapsules = ({
                       onClick={() => handleClick(item.label)}
                     >
                       {item.label}
+                      {item.label === "Total Clients" && (
+                        <span
+                          style={{
+                            marginLeft: "8px",
+                            fontWeight: "600",
+                            color:
+                              selectedCapsule === item.label ? "#fff" : "#000",
+                          }}
+                        >
+                          -{" "}
+                          {new Intl.NumberFormat("en-IN").format(
+                            Math.round(totalCount)
+                          )}
+                        </span>
+                      )}
+                      {item.label === "Active Clients" && (
+                        <span
+                          style={{
+                            marginLeft: "8px",
+                            fontWeight: "600",
+                            color:
+                              selectedCapsule === item.label ? "#fff" : "#000",
+                          }}
+                        >
+                          -{" "}
+                          {new Intl.NumberFormat("en-IN").format(
+                            Math.round(activeClient)
+                          )}
+                        </span>
+                      )}
+                      {item.label === "Inactive Clients" && (
+                        <span
+                          style={{
+                            marginLeft: "10px",
+                            fontWeight: "600",
+                            color:
+                              selectedCapsule === item.label ? "#fff" : "#000",
+                          }}
+                        >
+                          -{" "}
+                          {new Intl.NumberFormat("en-IN").format(
+                            Math.round(inactiveClient)
+                          )}
+                        </span>
+                      )}
                     </p>
+
                     {/* {item.count !== undefined && ( */}
-                    <h1
+                    {/* <h1
                       className="text-center fs-10"
                       style={{
                         color: selectedCapsule === item.label ? "#fff" : "#000",
@@ -74,7 +120,7 @@ const UserCapsules = ({
                         : item.label === "Inactive Clients"
                         ? `Count - ${inactiveClient}`
                         : ""}
-                    </h1>
+                    </h1> */}
                     {/* )} */}
                   </div>
                 </div>

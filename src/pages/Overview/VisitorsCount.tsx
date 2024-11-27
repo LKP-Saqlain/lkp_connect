@@ -70,7 +70,7 @@ const StoreVisits = () => {
       <Col xl={4}>
         <Card className="card-height-100">
           <CardHeader className="align-items-center d-flex">
-            <h4 className="card-title mb-0 flex-grow-1">Client Summary</h4>
+            <h4 className="card-title  mb-3 flex-grow-1">Client Summary</h4>
           </CardHeader>
 
           <div className="card-body">

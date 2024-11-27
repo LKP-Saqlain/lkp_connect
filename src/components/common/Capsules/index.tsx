@@ -44,8 +44,8 @@ export const BrokSlabItems = [
   { id: 4, label: "Equity Options", subvalue: "₹ 50 per lot" },
   { id: 5, label: "Currency Futures", subvalue: "0.5% of Turnover" },
   { id: 6, label: "Currency Options", subvalue: "₹ 50 per lot" },
-  { id: 7, label: "Commodity Futures", subvalue: "Inactive" },
-  { id: 7, label: "Commodity Options", subvalue: "Inactive" },
+  { id: 7, label: "Commodity Futures", subvalue: "0.5% of Turnover" },
+  { id: 7, label: "Commodity Options", subvalue: "₹ 50 per lot" },
 ];
 
 export const LastTradeDates = [
@@ -60,4 +60,33 @@ export const LastTradeDates = [
 export const DPSchemes = [
   { id: 1, label: "Equity", status: "1-Jan-24" },
   { id: 2, label: "F&O", status: "1-Jan-24" },
+];
+
+export const EkycWidgets = [
+  {
+    id: 1,
+    icon: "ri-money-dollar-circle-fill",
+    label: "Total Investedddd",
+    counter: 2390.68,
+    badge: "ri-arrow-up-s-fill",
+    badgeColor: "success",
+    percentage: "6.24",
+    decimal: 2,
+    prefix: "$",
+    separator: ",",
+    color: "primary",
+  },
+  {
+    id: 2,
+    icon: "ri-arrow-up-circle-fill",
+    label: "Total Change",
+    counter: 19523.25,
+    badge: "ri-arrow-up-s-fill",
+    badgeColor: "success",
+    percentage: "3.67",
+    decimal: 2,
+    prefix: "$",
+    separator: ",",
+    color: "secondary",
+  },
 ];

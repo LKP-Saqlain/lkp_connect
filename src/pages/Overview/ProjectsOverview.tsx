@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
 import { userOverview } from "../../redux/thunk/Overview";
 import ShowToast from "../../utils/toastUtils";
-
+import "remixicon/fonts/remixicon.css";
 const ProjectsOverview = () => {
   const [brokerageData, setBrokerageData] = useState<[]>([]);
   const [monthProjectData, setMonthProjectData] = useState([

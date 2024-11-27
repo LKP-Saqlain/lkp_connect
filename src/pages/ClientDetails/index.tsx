@@ -27,6 +27,8 @@ const ClientDetails = ({
   const [inactiveGroupedClients, setInactiveGroupedClients] = useState<any[][]>(
     []
   );
+  const [responseStatus, setResponseStatus] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const dispatch = useDispatch();
 
@@ -53,6 +55,7 @@ const ClientDetails = ({
 
           if (response?.status === 200) {
             dispatch(hideLoader());
+            setResponseStatus(true);
             setTableData(response?.data);
 
             const totalCount = response?.data[0].RecordsTotal;
@@ -196,6 +199,81 @@ const ClientDetails = ({
     setSelectedCapsule(value);
   };
 
+  const handleSearchBasedOnInput = (value: string) => {
+    console.log("handleSearchBasedOnInputValue", value);
+    setSearchValue(value);
+  };
+
+  const handleSearchUser = async () => {
+    setTableData([]);
+    if (apiStatus) {
+      const Id = localStorage.getItem("Id");
+      const payload = {
+        loginName: Id,
+        branchCode: "ALL",
+        zone: "H.O.",
+        clientStatus: "ALL",
+        start: 0,
+        pageSize: 0,
+        searchkey: searchValue !== "" ? searchValue : "",
+      };
+      try {
+        dispatch(showLoader(""));
+        const response = await apiServices.ClientDetails(payload);
+        console.log(
+          "ClientClientDetailsResponse",
+          response?.data[0].RecordsTotal
+        );
+
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          setResponseStatus(true);
+          setTableData(response?.data);
+
+          const totalCount = response?.data[0].RecordsTotal;
+          setTotalCount(totalCount);
+
+          const activeClients = response?.data.filter(
+            (client: any) => client.ClientStatus === "Active"
+          ).length;
+          const inactiveClients = response?.data.filter(
+            (client: any) => client.ClientStatus === "InActive"
+          ).length;
+          setActiveClients(activeClients);
+          setinActiveClients(inactiveClients);
+          console.log("Active Clients:", activeClients);
+          console.log("Inactive Clients:", inactiveClients);
+
+          const activeGroupedClients: any[] = [];
+          const inactiveGroupedClients: any[] = [];
+
+          // Loop through the data and categorize clients as active or inactive
+          response?.data.forEach((client: any) => {
+            if (client.ClientStatus === "Active") {
+              activeGroupedClients.push(client);
+            } else if (client.ClientStatus === "InActive") {
+              inactiveGroupedClients.push(client);
+            }
+          });
+
+          console.log("Active Clients:", activeGroupedClients);
+          console.log("Inactive Clients:", inactiveGroupedClients);
+
+          // Optionally, set the grouped data to state
+          // setGroupedClients(groupedClients);
+          setActiveGroupedClients(activeGroupedClients);
+          setInactiveGroupedClients(inactiveGroupedClients);
+        }
+      } catch (error) {
+        dispatch(hideLoader());
+        // console.error(
+        //   "Error fetching data:",
+        //   error?.response || error?.message || error
+        // );
+      }
+    }
+  };
+
   return (
     <>
       {!userDetails ? (
@@ -215,6 +293,9 @@ const ClientDetails = ({
             getUserDetails={getUserDetails}
             apiStatus={apiStatus}
             handleExcel={handleExcel}
+            showSearch={responseStatus}
+            handleSearchBasedOnInput={handleSearchBasedOnInput}
+            handleSearchUser={handleSearchUser}
           />
         </>
       ) : (

@@ -46,6 +46,7 @@ import RegOverview from "../../pages/regOverView";
 import AccStatement from "../../pages/Reports/AnnualAccStatement";
 import { SlSizeFullscreen } from "react-icons/sl";
 import { BsFullscreen } from "react-icons/bs";
+import EkycLinks from "../../pages/ekycLinks";
 // import FullscreenIcon from '@mui/icons-material/Fullscreen';
 // import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
@@ -339,7 +340,7 @@ const SideBar = () => {
       case "Referal Lead":
         switch (activeSubItem) {
           case "Referal Entry":
-            return "";
+            return <EkycLinks />;
           case "Referal Entry Status":
             return "";
           case "Referal Lead Updation":
@@ -373,7 +374,7 @@ const SideBar = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ backgroundColor: "#F9F6EE" }}>
+      <AppBar position="fixed" open={open} sx={{ backgroundColor: "#FAF9F6" }}>
         <Toolbar>
           {open ? (
             <IconButton onClick={handleDrawerClose}>

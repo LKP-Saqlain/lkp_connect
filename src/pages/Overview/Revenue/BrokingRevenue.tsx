@@ -136,7 +136,7 @@ const Revenue = () => {
                       marginRight: "8px",
                     }}
                   ></div>
-                  <p className="mb-0 me-3">Indirect-broking</p>
+                  <p className="mb-0 me-3">Indirect-Broking</p>
                   {/* <div
                     className="legend-color"
                     style={{

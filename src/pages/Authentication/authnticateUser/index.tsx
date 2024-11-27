@@ -62,7 +62,7 @@ const AuthenticateUser = () => {
       password: "",
       authentication: "",
       loginButtonGroup: "",
-      authenticationButtonGroup: "",
+      authenticationButtonGroup: "Pan",
       DateOfBirth: "",
     },
     validationSchema: authenticationValidationSchema,
@@ -213,6 +213,7 @@ const AuthenticateUser = () => {
           </Typography>
           <FormControl sx={{ marginBottom: "6px" }}>
             <RadioGroup
+              value={formik.values.authenticationButtonGroup}
               row
               aria-labelledby="demo-row-radio-buttons-group-label"
               name="authenticationButtonGroup"
@@ -229,7 +230,7 @@ const AuthenticateUser = () => {
                     }}
                   />
                 }
-                label="Pan"
+                label="PAN"
               />
               <FormControlLabel
                 value="Date of Birth"
@@ -249,7 +250,7 @@ const AuthenticateUser = () => {
 
           {formik.values.authenticationButtonGroup === "Pan" ? (
             <TextField
-              label="Enter Pan"
+              label="Enter PAN"
               variant="outlined"
               size="small"
               name="authentication"

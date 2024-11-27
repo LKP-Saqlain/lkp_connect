@@ -10,7 +10,8 @@ import {
   getClientActivityStatusColumns,
   getClientDormantStatus,
 } from "../../pages/ClientDetails/ClientTableColumns";
-import { Box, Button } from "@mui/material";
+// import { Box, Button } from "@mui/material";
+import SearchAppBar from "../../components/common/SearchBar";
 
 interface Trade {
   id: string;
@@ -31,16 +32,22 @@ interface SelectedWidgetProps {
   apiStatus?: boolean;
   activeGroupedClients?: any;
   inactiveGroupedClients?: any;
+  showSearch?: any;
+  handleSearchBasedOnInput?: (value: string) => void;
+  handleSearchUser?: () => void;
 }
 
 const DataTable = ({
   selectedWidget,
   T6Data,
   getUserDetails,
-  handleExcel,
+  // handleExcel,
   apiStatus,
   activeGroupedClients,
   inactiveGroupedClients,
+  handleSearchBasedOnInput,
+  handleSearchUser,
+  showSearch = false,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -94,12 +101,16 @@ const DataTable = ({
 
   const columns = getColumns();
 
+  const handleSearchChange = (query: string) => {
+    handleSearchBasedOnInput?.(query);
+  };
+
   return (
     <>
       {selectedWidget === "Clients With Cash Balance" && (
         <DropDown tradeData={setTradeData} handleValues={handleValues} />
       )}
-      {(selectedWidget === "Total Clients" ||
+      {/* {(selectedWidget === "Total Clients" ||
         selectedWidget === "Active Clients" ||
         selectedWidget === "Inactive Clients" ||
         selectedWidget === "T6 Selling") && (
@@ -122,6 +133,12 @@ const DataTable = ({
             Download Excel
           </Button>
         </Box>
+      )} */}
+      {showSearch && (
+        <SearchAppBar
+          onSearchChange={handleSearchChange}
+          handleSearchUser={handleSearchUser}
+        />
       )}
       <Paper
         sx={{

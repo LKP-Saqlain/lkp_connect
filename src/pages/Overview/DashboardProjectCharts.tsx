@@ -8,37 +8,18 @@ const barColors = ["#11395C", "#F57C00"];
 const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
   const [latestDates, setLatestDates] = useState<any>("");
 
-  // var linechartcustomerColors = getChartColorsArray(dataColors);
-
   useEffect(() => {
     console.log("brokData", brokerageData);
-
-    //convert to proper date format
-    // const formatDate = (dateString: string) => {
-    //   const date = new Date(dateString);
-    //   const options: Intl.DateTimeFormatOptions = {
-    //     day: "numeric",
-    //     month: "short",
-    //     year: "2-digit",
-    //   };
-    //   return date.toLocaleDateString("en-US", options);
-    // };
 
     const categories = brokerageData.map((item: any) => item.Dtrandate);
     setLatestDates(categories);
     console.log("categories", categories);
   }, [brokerageData]);
 
-  // Dynamically calculate max for both series
-  // const maxGrossBrokerage =
-  //   Math.max(...brokerageData.map((item: any) => item.GrossBrokerage)) * 1.1;
-  // const maxAPbrokerage =
-  //   Math.max(...brokerageData.map((item: any) => item.APbrokerage)) * 1.1;
-
   var options: any = {
     chart: {
       height: 370,
-      type: "line",
+      type: "bar",
       toolbar: {
         show: false,
       },
@@ -57,6 +38,18 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       hover: {
         size: 4,
       },
+    },
+    dataLabels: {
+      enabled: true, // Enable data labels
+      style: {
+        fontSize: "12px",
+        fontWeight: 600,
+        colors: ["#333"], // Customize the color of labels
+      },
+      formatter: function (value: number) {
+        return new Intl.NumberFormat("en-IN").format(Math.round(value)); // Format the value
+      },
+      offsetY: -10, // Adjust the position of the labels
     },
     xaxis: {
       categories: latestDates,
@@ -78,7 +71,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
     yaxis: [
       {
         title: {
-          text: "Bar Range",
+          text: "Gross Brokerage",
         },
         min: 0,
         // max: maxGrossBrokerage, // Dynamic max for GrossBrokerage
@@ -88,50 +81,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
           },
         },
       },
-      // Uncomment and modify the second axis if needed
-      // {
-      //   opposite: true,
-      //   title: {
-      //     text: "AP Share",
-      //   },
-      //   min: 0,
-      //   max: maxAPbrokerage,
-      //   labels: {
-      //     formatter: function (value: number) {
-      //       return Math.round(value).toString(); // Remove decimals
-      //     },
-      //   },
-      // },
     ],
-
-    // Add yaxis configuration here
-    // yaxis: [
-    //   {
-    //     title: {
-    //       text: "Bar Range",
-    //     },
-    //     min: 0,
-    //     max: maxGrossBrokerage, // Dynamic max for GrossBrokerage
-    //     labels: {
-    //       formatter: function (value: number) {
-    //         return value.toFixed(2);
-    //       },
-    //     },
-    //   },
-    //   // {
-    //   //   opposite: true,
-    //   //   title: {
-    //   //     text: "AP Share",
-    //   //   },
-    //   //   min: 0,
-    //   //   max: maxAPbrokerage,
-    //   //   labels: {
-    //   //     formatter: function (value: number) {
-    //   //       return value.toFixed(2);
-    //   //     },
-    //   //   },
-    //   // },
-    // ],
     grid: {
       show: true,
       xaxis: {
@@ -221,25 +171,23 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
 
 const RevenueCharts = ({ series, revenueMonths }: any) => {
   const [mnthYRValues, setMnthYRValues] = useState<string[]>([]);
+  const [totals, setTotals] = useState<number[]>([]);
 
   useEffect(() => {
     console.log("series", revenueMonths, series);
     const latestMonths = revenueMonths.map((item: any) => item.MnthYR);
     console.log("latestMonts", latestMonths);
     setMnthYRValues(latestMonths);
+
+    // Calculate totals for each category (stack)
+    const calculatedTotals = revenueMonths.map((_: any, index: number) =>
+      series.reduce((sum: number, s: any) => sum + (s.data[index] || 0), 0)
+    );
+    setTotals(calculatedTotals);
   }, [revenueMonths, series]);
 
   const directBrokingData = series[0]?.data || [];
   const indirectBrokingData = series[1]?.data || [];
-
-  // var linechartcustomerColors = getChartColorsArray(dataColors);
-
-  // const revenueBarColor = ["#01D28E", "#6DBBFF"];
-
-  // const brokingRange =
-  //   Math.max(...revenueMonths.map((item: any) => item.Ach_brok_dir)) * 1.1;
-  // const NonBrokingRange =
-  //   Math.max(...revenueMonths.map((item: any) => item.Tot_TPD_rev)) * 1.1;
 
   var options: any = {
     series: [
@@ -265,7 +213,43 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       colors: ["#fff"],
     },
     dataLabels: {
-      enabled: false, // Disable data labels
+      enabled: true,
+      style: {
+        fontSize: "8px",
+        fontWeight: "bold",
+        colors: ["#fff"], // Individual stack values in white
+      },
+      formatter: function (val: number) {
+        // const stackIndex = opts.dataPointIndex;
+        // const seriesIndex = opts.seriesIndex;
+        // const stackTotal = totals[stackIndex];
+
+        // Show individual stack values
+        if (val > 0) {
+          return new Intl.NumberFormat("en-IN").format(val);
+        }
+
+        return ""; // Hide labels for zero values
+      },
+      offsetY: 0, // Adjust the vertical position for individual values
+    },
+    annotations: {
+      points: totals.map((total, index) => ({
+        x: mnthYRValues[index], // Bar category (month-year)
+        y: total, // Total value
+        marker: {
+          size: 0, // No marker
+        },
+        label: {
+          text: new Intl.NumberFormat("en-IN").format(total), // Show total
+          style: {
+            fontSize: "12px",
+            fontWeight: "bold",
+            background: "#333", // Background color for the total
+            color: "#fff", // Text color for the total
+          },
+        },
+      })),
     },
     grid: {
       show: true,
@@ -301,7 +285,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     colors: ["#01D28E", "#F57C00"],
     yaxis: {
       title: {
-        text: "Bar Range",
+        text: "Broking Revenue",
       },
       labels: {
         formatter: (value: any) => {
@@ -336,12 +320,19 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
 
 const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
   const [mnthYRValues, setMnthYRValues] = useState<string[]>([]);
+  const [totals, setTotals] = useState<number[]>([]);
 
   useEffect(() => {
     console.log("series", revenueMonths, series);
     const latestMonths = revenueMonths.map((item: any) => item.MnthYR);
     console.log("latestMonts", latestMonths);
     setMnthYRValues(latestMonths);
+
+    // Calculate totals for each category (stack)
+    const calculatedTotals = revenueMonths.map((_: any, index: number) =>
+      series.reduce((sum: number, s: any) => sum + (s.data[index] || 0), 0)
+    );
+    setTotals(calculatedTotals);
   }, [revenueMonths, series]);
 
   const TPD_Insurance = series[0]?.data || [];
@@ -361,20 +352,20 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
   var options: any = {
     series: [
       {
-        name: "Insurance",
-        data: TPD_Insurance,
-      },
-      {
-        name: "Liquiloans",
-        data: TPD_Liq_Loans,
+        name: "Mutual Funds",
+        data: TPD_mutualfunds,
       },
       {
         name: "SPIP",
         data: spIp,
       },
       {
-        name: "Mutual Funds",
-        data: TPD_mutualfunds,
+        name: "Insurance",
+        data: TPD_Insurance,
+      },
+      {
+        name: "Liquiloans",
+        data: TPD_Liq_Loans,
       },
     ],
     chart: {
@@ -392,16 +383,41 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
     dataLabels: {
       enabled: true,
       style: {
-        colors: ["#fff"], // Text color
-        fontSize: "10px", // Adjust text size
-        fontWeight: "bold", // Bold for better visibility
+        fontSize: "9px",
+        fontWeight: "bold",
+        colors: ["#fff"], // Individual stack values in white
       },
       formatter: function (val: number) {
-        return val > 0 ? new Intl.NumberFormat("en-IN").format(val) : ""; // Format numbers
+        // const stackIndex = opts.dataPointIndex;
+        // const seriesIndex = opts.seriesIndex;
+        // const stackTotal = totals[stackIndex];
+
+        // Show individual stack values
+        if (val > 0) {
+          return new Intl.NumberFormat("en-IN").format(val);
+        }
+
+        return ""; // Hide labels for zero values
       },
-      offsetY: 0, // Adjust vertical position
-      // textAnchor: "middle", // Center-align the text horizontally
-      position: "top", // Position the label at the top/edge of the bar
+      offsetY: 0, // Adjust the vertical position for individual values
+    },
+    annotations: {
+      points: totals.map((total, index) => ({
+        x: mnthYRValues[index], // Bar category (month-year)
+        y: total, // Total value
+        marker: {
+          size: 0, // No marker
+        },
+        label: {
+          text: new Intl.NumberFormat("en-IN").format(total), // Show total
+          style: {
+            fontSize: "12px",
+            fontWeight: "bold",
+            background: "#333", // Background color for the total
+            color: "#fff", // Text color for the total
+          },
+        },
+      })),
     },
     grid: {
       show: true,
@@ -434,10 +450,10 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
     fill: {
       opacity: 1,
     },
-    colors: ["#01D28E", "#F57C00", "#008FFB", "#3D2785"],
+    colors: ["#ff4d4f", "#52c41a", "#faad14", "#1890ff"],
     yaxis: {
       title: {
-        text: "Bar Range",
+        text: "Broking Revenue",
       },
       labels: {
         formatter: (value: any) => {
