@@ -283,3 +283,8 @@
     border-radius: 4px;
     padding-right: 14px;
 }
+
+.css-1hr2sou-MuiTablePagination-root:last-child {
+    padding: 0;
+    overflow: hidden !important;
+}

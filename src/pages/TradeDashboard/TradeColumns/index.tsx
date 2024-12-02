@@ -84,3 +84,27 @@ export const T6Columns: GridColDef[] = [
     headerAlign: "center",
   },
 ];
+
+export const T6OverViewColumns: GridColDef[] = [
+  {
+    field: "ClientCode",
+    headerName: "Client Code",
+    width: 100,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "T4",
+    headerName: "T4",
+    width: 100,
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "T5",
+    headerName: "T5",
+    width: 100,
+    align: "right",
+    headerAlign: "center",
+  },
+];

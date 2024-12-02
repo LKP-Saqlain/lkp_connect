@@ -252,3 +252,7 @@
     animation-duration: 10ms;
     padding: 8.5px 0px;
 }
+
+input[type="password"]::-ms-reveal {
+    display: none;
+  }

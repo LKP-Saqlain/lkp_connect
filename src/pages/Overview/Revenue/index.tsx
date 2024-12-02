@@ -1,9 +1,17 @@
 import Revenue from "./BrokingRevenue";
 import NonBrokingRevenue from "./NonBrokingRevenue";
-const RevenueDetails = () => {
+const RevenueDetails = ({
+  handleValues,
+  handleRevenueRange,
+  handleRevenueData,
+}: any) => {
   return (
     <>
-      <Revenue />
+      <Revenue
+        handleValues={handleValues}
+        handleRevenueRange={handleRevenueRange}
+        handleRevenueData={handleRevenueData}
+      />
       <NonBrokingRevenue />
     </>
   );

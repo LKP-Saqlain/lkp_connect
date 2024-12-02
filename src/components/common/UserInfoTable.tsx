@@ -5,6 +5,7 @@ import DropDown from "./customDropDown";
 import {
   ClientCashColumns,
   T6Columns,
+  T6OverViewColumns,
 } from "../../pages/TradeDashboard/TradeColumns";
 import {
   getClientActivityStatusColumns,
@@ -85,6 +86,12 @@ const DataTable = ({
         // sortable: false,
         // filterable: false,
       }));
+    } else if (selectedWidget === "T6Overview") {
+      return T6OverViewColumns.map((column) => ({
+        ...column,
+        // sortable: false,
+        // filterable: false,
+      }));
     } else if (
       // selectedWidget === "Total Clients" ||
       // selectedWidget === "Active Clients" ||
@@ -142,7 +149,7 @@ const DataTable = ({
       )}
       <Paper
         sx={{
-          height: 450,
+          height: 400,
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",
@@ -162,6 +169,7 @@ const DataTable = ({
           }
           columns={columns}
           rowHeight={30}
+          hideFooter
           getRowId={(row: any) => row.ClientName} // Use the correct identifier for rows
           sx={{
             border: 0,
