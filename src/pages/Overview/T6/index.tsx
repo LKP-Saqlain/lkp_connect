@@ -82,7 +82,11 @@ const T6Table = () => {
             <h4 className="card-title mb-0">Top 5 T6 Clients</h4>
           </CardHeader>
           <CardBody>
-            <TradeInfo T6Data={t6Data} selectedWidget={"T6Overview"} />
+            <TradeInfo
+              T6Data={t6Data}
+              selectedWidget={"T6Overview"}
+              customHide={true}
+            />
           </CardBody>
         </Card>
         <Card style={{ flex: "1", minWidth: "300px" }}>

@@ -36,6 +36,7 @@ interface SelectedWidgetProps {
   showSearch?: any;
   handleSearchBasedOnInput?: (value: string) => void;
   handleSearchUser?: () => void;
+  customHide?: any;
 }
 
 const DataTable = ({
@@ -49,6 +50,7 @@ const DataTable = ({
   handleSearchBasedOnInput,
   handleSearchUser,
   showSearch = false,
+  customHide,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -169,7 +171,7 @@ const DataTable = ({
           }
           columns={columns}
           rowHeight={30}
-          hideFooter
+          hideFooter={customHide ? true : false}
           getRowId={(row: any) => row.ClientName} // Use the correct identifier for rows
           sx={{
             border: 0,
