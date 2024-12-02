@@ -296,6 +296,7 @@ const ClientDetails = ({
             showSearch={responseStatus}
             handleSearchBasedOnInput={handleSearchBasedOnInput}
             handleSearchUser={handleSearchUser}
+            searchValue={searchValue}
           />
         </>
       ) : (

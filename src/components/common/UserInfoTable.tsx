@@ -37,6 +37,7 @@ interface SelectedWidgetProps {
   handleSearchBasedOnInput?: (value: string) => void;
   handleSearchUser?: () => void;
   customHide?: any;
+  searchValue?: any;
 }
 
 const DataTable = ({
@@ -51,6 +52,7 @@ const DataTable = ({
   handleSearchUser,
   showSearch = false,
   customHide,
+  searchValue,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -147,6 +149,7 @@ const DataTable = ({
         <SearchAppBar
           onSearchChange={handleSearchChange}
           handleSearchUser={handleSearchUser}
+          searchTableValue={searchValue}
         />
       )}
       <Paper

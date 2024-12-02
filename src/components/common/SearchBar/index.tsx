@@ -49,13 +49,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 interface SearchAppBarProps {
   onSearchChange: (query: string) => void;
   handleSearchUser?: () => void;
+  searchTableValue: any;
 }
 
 const SearchAppBar: React.FC<SearchAppBarProps> = ({
   onSearchChange,
   handleSearchUser,
+  searchTableValue,
 }) => {
-  const [searchValue, setSearchValue] = React.useState("");
+  const [searchValue, setSearchValue] = React.useState(searchTableValue);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

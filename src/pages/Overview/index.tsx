@@ -95,6 +95,10 @@ const DashboardProject = () => {
     }
   };
 
+  function formatIndianNumber(value: number): string {
+    return `₹${value.toLocaleString("en-IN")}`;
+  }
+
   document.title = "LKP Securities | User Overview";
   return (
     <React.Fragment>
@@ -188,16 +192,17 @@ const DashboardProject = () => {
                                       start={0}
                                       end={revenueValues[activeBadge]}
                                       separator=","
-                                      prefix="₹"
+                                      // prefix="₹"
+                                      formattingFn={formatIndianNumber}
                                       duration={3}
                                       style={{
                                         color: "#495057",
                                         fontSize: "15px", // Adjusted font size for CountUp
                                       }}
                                     />
-                                    {/* <small className="text-muted fs-12">
-                                      .12k
-                                    </small> */}
+                                    <small className="text-muted fs-12">
+                                      .00{" "}
+                                    </small>
                                   </h5>
                                 </div>
                               </div>

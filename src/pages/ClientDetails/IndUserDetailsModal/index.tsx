@@ -62,9 +62,9 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
           style={{
             borderRadius: "23px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
-            position: "sticky",
-            top: 0,
-            zIndex: 10,
+            // position: "sticky",
+            // top: 0,
+            // zIndex: 10,
           }}
         >
           <CardBody>
