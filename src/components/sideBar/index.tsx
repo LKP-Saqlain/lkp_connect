@@ -417,18 +417,20 @@ const SideBar = () => {
           >
             {/* <SlSizeFullscreen style={{ color: "black", cursor: "pointer" }} />
             <BsFullscreen style={{ color: "black", cursor: "pointer" }} /> */}
-            <div>
-              <IconButton
-                onClick={isFullScreen ? closeFullScreen : openFullScreen}
-                sx={{ p: 0 }}
-              >
-                {isFullScreen ? (
-                  <SlSizeFullscreen style={{ cursor: "pointer" }} />
-                ) : (
-                  <BsFullscreen style={{ cursor: "pointer" }} />
-                )}
-              </IconButton>
-            </div>
+            {!isMobile ? (
+              <div>
+                <IconButton
+                  onClick={isFullScreen ? closeFullScreen : openFullScreen}
+                  sx={{ p: 0 }}
+                >
+                  {isFullScreen ? (
+                    <SlSizeFullscreen style={{ cursor: "pointer" }} />
+                  ) : (
+                    <BsFullscreen style={{ cursor: "pointer" }} />
+                  )}
+                </IconButton>
+              </div>
+            ) : null}
           </Box>
           <Typography
             sx={{
