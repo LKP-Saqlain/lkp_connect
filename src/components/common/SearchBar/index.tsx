@@ -49,7 +49,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 interface SearchAppBarProps {
   onSearchChange: (query: string) => void;
   handleSearchUser?: () => void;
-  searchTableValue: any;
+  searchTableValue?: any;
 }
 
 const SearchAppBar: React.FC<SearchAppBarProps> = ({
