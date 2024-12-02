@@ -67,7 +67,6 @@ const UserCapsules = ({
                               selectedCapsule === item.label ? "#fff" : "#000",
                           }}
                         >
-                          -{" "}
                           {new Intl.NumberFormat("en-IN").format(
                             Math.round(totalCount)
                           )}
@@ -82,7 +81,6 @@ const UserCapsules = ({
                               selectedCapsule === item.label ? "#fff" : "#000",
                           }}
                         >
-                          -{" "}
                           {new Intl.NumberFormat("en-IN").format(
                             Math.round(activeClient)
                           )}
@@ -97,7 +95,6 @@ const UserCapsules = ({
                               selectedCapsule === item.label ? "#fff" : "#000",
                           }}
                         >
-                          -{" "}
                           {new Intl.NumberFormat("en-IN").format(
                             Math.round(inactiveClient)
                           )}
