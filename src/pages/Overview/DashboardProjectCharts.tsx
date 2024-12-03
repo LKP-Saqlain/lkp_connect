@@ -40,11 +40,11 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       },
     },
     dataLabels: {
-      enabled: true, // Enable data labels
+      enabled: true,
       style: {
         fontSize: "12px",
         fontWeight: 600,
-        colors: ["#333"], // Customize the color of labels
+        colors: ["#3d5d7a"],
       },
       formatter: function (value: number) {
         return new Intl.NumberFormat("en-IN").format(Math.round(value)); // Format the value
@@ -213,7 +213,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       colors: ["#fff"],
     },
     dataLabels: {
-      enabled: true,
+      enabled: false,
       style: {
         fontSize: "8px",
         fontWeight: "bold",
@@ -282,7 +282,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     fill: {
       opacity: 1,
     },
-    colors: ["#01D28E", "#F57C00"],
+    colors: ["#52c41a", "#faad14"],
     yaxis: {
       title: {
         text: "Broking Revenue",
@@ -381,7 +381,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
       colors: ["#fff"],
     },
     dataLabels: {
-      enabled: true,
+      enabled: false,
       style: {
         fontSize: "9px",
         fontWeight: "bold",
@@ -450,10 +450,10 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
     fill: {
       opacity: 1,
     },
-    colors: ["#ff4d4f", "#52c41a", "#faad14", "#1890ff"],
+    colors: ["#1890ff", "#52c41a", "#faad14", "#ff4d4f"],
     yaxis: {
       title: {
-        text: "Broking Revenue",
+        text: "Non-Broking Revenue",
       },
       labels: {
         formatter: (value: any) => {

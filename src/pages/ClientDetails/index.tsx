@@ -9,6 +9,7 @@ import "./style.css";
 import UserInfo from "./IndUserDetailsModal";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { Card, CardBody } from "reactstrap";
 
 const ClientDetails = ({
   handleDrawerClose,
@@ -31,6 +32,15 @@ const ClientDetails = ({
   const [searchValue, setSearchValue] = useState("");
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (searchValue.length === 0) {
+      setTotalCount(0);
+      setActiveClients(0);
+      setinActiveClients(0);
+      handleSearchUser();
+    }
+  }, [searchValue]);
 
   useEffect(() => {
     const fetchClientCash = async () => {
@@ -273,6 +283,53 @@ const ClientDetails = ({
       }
     }
   };
+  // const handleSearchUser = async () => {
+  //   // Reset the table data to ensure no previous results are shown during filtering
+  //   setTableData([]);
+
+  //   if (searchValue.trim() !== "") {
+  //     // Filter data locally based on the search value
+  //     const filteredData: any = tableData.filter((client: any) =>
+  //       Object.values(client).some((value) =>
+  //         value
+  //           ?.toString()
+  //           .toLowerCase()
+  //           .includes(searchValue.trim().toLowerCase())
+  //       )
+  //     );
+  //     console.log("filteredData", filteredData);
+
+  //     setTableData(filteredData);
+
+  //     // Calculate Active and Inactive Clients
+  //     const activeClients = filteredData.filter(
+  //       (client: any) => client.ClientStatus === "Active"
+  //     ).length;
+  //     const inactiveClients = filteredData.filter(
+  //       (client: any) => client.ClientStatus === "InActive"
+  //     ).length;
+
+  //     setActiveClients(activeClients);
+  //     setinActiveClients(inactiveClients);
+
+  //     // Optionally group clients by their status
+  //     const activeGroupedClients = filteredData.filter(
+  //       (client: any) => client.ClientStatus === "Active"
+  //     );
+  //     const inactiveGroupedClients = filteredData.filter(
+  //       (client: any) => client.ClientStatus === "InActive"
+  //     );
+
+  //     setActiveGroupedClients(activeGroupedClients);
+  //     setInactiveGroupedClients(inactiveGroupedClients);
+
+  //     console.log("Filtered Active Clients:", activeGroupedClients);
+  //     console.log("Filtered Inactive Clients:", inactiveGroupedClients);
+  //   } else {
+  //     // If no search value, reset to original table data or maintain current state
+  //     setTableData(tableData);
+  //   }
+  // };
 
   return (
     <>
@@ -285,19 +342,23 @@ const ClientDetails = ({
             activeClient={activeClients}
             inactiveClient={inactiveClients}
           />
-          <UserInfoTable
-            selectedWidget={selectedCapsule}
-            T6Data={tableData}
-            activeGroupedClients={activeGroupedClients}
-            inactiveGroupedClients={inactiveGroupedClients}
-            getUserDetails={getUserDetails}
-            apiStatus={apiStatus}
-            handleExcel={handleExcel}
-            showSearch={responseStatus}
-            handleSearchBasedOnInput={handleSearchBasedOnInput}
-            handleSearchUser={handleSearchUser}
-            searchValue={searchValue}
-          />
+          <Card>
+            <CardBody>
+              <UserInfoTable
+                selectedWidget={selectedCapsule}
+                T6Data={tableData}
+                activeGroupedClients={activeGroupedClients}
+                inactiveGroupedClients={inactiveGroupedClients}
+                getUserDetails={getUserDetails}
+                apiStatus={apiStatus}
+                handleExcel={handleExcel}
+                showSearch={responseStatus}
+                handleSearchBasedOnInput={handleSearchBasedOnInput}
+                handleSearchUser={handleSearchUser}
+                searchValue={searchValue}
+              />
+            </CardBody>
+          </Card>
         </>
       ) : (
         // <UserInfoDetail />

@@ -2,7 +2,7 @@ import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
 
 const Search = styled("div")(({ theme }) => ({
@@ -64,8 +64,11 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
     setSearchValue(value);
     onSearchChange(value); // Pass the value to the parent component
   };
-  const handleSearchClick = () => {
-    handleSearchUser?.();
+  // const handleSearchClick = () => {
+  //   handleSearchUser?.();
+  // };
+  const handleBlur = () => {
+    handleSearchUser?.(); // Call the search function when input loses focus
   };
 
   return (
@@ -77,11 +80,12 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
         <StyledInputBase
           value={searchValue}
           onChange={handleInputChange}
+          onBlur={handleBlur}
           placeholder="Search Client Name"
           inputProps={{ "aria-label": "search" }}
         />
       </Search>
-      <Button
+      {/* <Button
         variant="outlined"
         className="btn-font"
         sx={{
@@ -96,7 +100,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
         onClick={handleSearchClick}
       >
         Search
-      </Button>
+      </Button> */}
     </Box>
   );
 };

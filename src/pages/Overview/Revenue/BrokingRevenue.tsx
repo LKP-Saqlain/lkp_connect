@@ -218,7 +218,7 @@ const Revenue = ({ handleRevenueRange, handleRevenueData }: any) => {
                   <div
                     className="legend-color"
                     style={{
-                      backgroundColor: "#01D28E",
+                      backgroundColor: "#52c41a",
                       width: "16px",
                       height: "16px",
                       marginRight: "8px",
@@ -228,7 +228,7 @@ const Revenue = ({ handleRevenueRange, handleRevenueData }: any) => {
                   <div
                     className="legend-color"
                     style={{
-                      backgroundColor: "#F57C00",
+                      backgroundColor: "#faad14",
                       width: "16px",
                       height: "16px",
                       marginRight: "8px",

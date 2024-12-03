@@ -54,6 +54,7 @@ const UserCapsules = ({
                       className="fw-semibold fs-12 mb-1 trade-dash-txt text-center"
                       style={{
                         fontFamily: "Public Sans",
+                        marginBottom: 0,
                       }}
                       onClick={() => handleClick(item.label)}
                     >

@@ -96,6 +96,12 @@
   .modal-dialog:not(.modal-dialog-scrollable) .modal-header {
     padding-bottom: 20px !important;
 }
+
+.css-11cfq65-MuiTablePagination-displayedRows {
+  font-family: "Public Sans" !important;
+  margin: 0px !important;
+
+}
   
   
   

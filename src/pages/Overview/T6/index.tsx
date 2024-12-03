@@ -52,6 +52,7 @@ const T6Table = () => {
 
           // Get the first 5 records
           const top5Records = sortedData.slice(0, 5);
+          console.log("top5Records", top5Records);
 
           // Store the top 5 records
           setT6Data(top5Records);
@@ -99,7 +100,7 @@ const T6Table = () => {
         </Card>
         <Card style={{ flex: "1", minWidth: "300px" }}>
           <CardHeader>
-            <h4 className="card-title mb-0">Upcoming Birthday - Training</h4>
+            <h4 className="card-title mb-0">Upcoming Client Birthday</h4>
           </CardHeader>
           <CardBody>
             <Typography>Happy Birthday</Typography>

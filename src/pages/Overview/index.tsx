@@ -111,11 +111,15 @@ const DashboardProject = () => {
                   <Col>
                     <div className="h-100">
                       {/* Row for Four Boxes */}
+
                       <Row className="justify-content-center">
                         <Col xxl={3} lg={3} md={6} sm={12}>
                           <Card
                             className="card-animate position-relative shadow-card"
-                            style={{ maxWidth: "300px", overflow: "hidden" }}
+                            style={{
+                              maxWidth: "300px",
+                              overflow: "hidden",
+                            }}
                           >
                             <CardBody>
                               {/* Positioned badges */}
@@ -197,10 +201,18 @@ const DashboardProject = () => {
                                       duration={3}
                                       style={{
                                         color: "#495057",
-                                        fontSize: "15px", // Adjusted font size for CountUp
+                                        fontSize: "17px", // Adjusted font size for CountUp
+                                        fontWeight: "bold",
+                                        // marginRight: "15px",
                                       }}
                                     />
-                                    <small className="text-muted fs-12">
+                                    <small
+                                      className="text-muted fs-12"
+                                      style={{
+                                        fontWeight: "bold",
+                                        marginRight: "15px",
+                                      }}
+                                    >
                                       .00{" "}
                                     </small>
                                   </h5>
@@ -208,7 +220,7 @@ const DashboardProject = () => {
                               </div>
 
                               <h6 className="text-muted mb-0 fs-14">
-                                Revenue From{" "}
+                                Revenue
                                 <span
                                   style={{
                                     fontSize: "11px",
@@ -225,7 +237,10 @@ const DashboardProject = () => {
                         <Col xxl={3} lg={3} md={6} sm={12}>
                           <Card
                             className="card-animate position-relative shadow-card"
-                            style={{ maxWidth: "300px", overflow: "hidden" }}
+                            style={{
+                              maxWidth: "300px",
+                              overflow: "hidden",
+                            }}
                           >
                             <CardBody>
                               {/* Positioned badges */}
@@ -289,21 +304,30 @@ const DashboardProject = () => {
                                       start={0}
                                       end={multiRevenueMultiply}
                                       separator=","
+                                      decimals={2}
                                       // prefix="₹"
                                       duration={3}
                                       style={{
                                         color: "#495057",
-                                        fontSize: "15px", // Adjusted font size for CountUp
+                                        fontSize: "17px", // Adjusted font size for CountUp
+                                        fontWeight: "bold",
                                       }}
                                     />
-                                    <small className="text-muted fs-12">
+                                    <small
+                                      className="text-muted fs-12"
+                                      style={{
+                                        fontWeight: "bold",
+                                        marginRight: "1rem",
+                                      }}
+                                    >
+                                      {" "}
                                       x
                                     </small>
                                   </h5>
                                 </div>
                               </div>
                               <h6 className="text-muted mb-0 fs-14">
-                                Revenue Multiply
+                                Revenue Multiple
                               </h6>
                             </CardBody>
                           </Card>
@@ -313,7 +337,10 @@ const DashboardProject = () => {
                         <Col xxl={3} lg={3} md={6} sm={12}>
                           <Card
                             className="card-animate position-relative shadow-card"
-                            style={{ maxWidth: "300px", overflow: "hidden" }}
+                            style={{
+                              maxWidth: "300px",
+                              overflow: "hidden",
+                            }}
                           >
                             <CardBody>
                               {/* Positioned badges */}
@@ -380,7 +407,9 @@ const DashboardProject = () => {
                                       duration={3}
                                       style={{
                                         color: "#495057",
-                                        fontSize: "15px", // Adjusted font size for CountUp
+                                        fontSize: "17px",
+                                        fontWeight: "bold",
+                                        marginRight: "1rem",
                                       }}
                                     />
                                     {/* <small className="text-muted fs-12">
@@ -399,7 +428,10 @@ const DashboardProject = () => {
                         <Col xxl={3} lg={3} md={6} sm={12}>
                           <Card
                             className="card-animate position-relative shadow-card"
-                            style={{ maxWidth: "300px", overflow: "hidden" }}
+                            style={{
+                              maxWidth: "300px",
+                              overflow: "hidden",
+                            }}
                           >
                             <CardBody>
                               {/* Total Active Clients Badge */}

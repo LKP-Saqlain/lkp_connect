@@ -45,7 +45,14 @@ export const BrokSlabItems = [
   { id: 5, label: "Currency Futures", subvalue: "0.5% of Turnover" },
   { id: 6, label: "Currency Options", subvalue: "₹ 50 per lot" },
   { id: 7, label: "Commodity Futures", subvalue: "0.5% of Turnover" },
-  { id: 7, label: "Commodity Options", subvalue: "₹ 50 per lot" },
+  { id: 8, label: "Commodity Options", subvalue: "₹ 50 per lot" },
+];
+
+export const BrokSlabItemsPennypal = [
+  { id: 1, label: "Equity Delivery", subvalue: "0.5% of Turnover" },
+  { id: 2, label: "Equity Intraday", subvalue: "0.5% of Turnover" },
+  { id: 3, label: "Equity Futures", subvalue: "0.5% of Turnover" },
+  { id: 4, label: "Equity Options", subvalue: "₹ 50 per lot" },
 ];
 
 export const LastTradeDates = [

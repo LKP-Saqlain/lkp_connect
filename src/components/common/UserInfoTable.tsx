@@ -13,6 +13,7 @@ import {
 } from "../../pages/ClientDetails/ClientTableColumns";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
+import "../../pages/ClientDetails/style.css";
 
 interface Trade {
   id: string;
@@ -188,6 +189,23 @@ const DataTable = ({
               fontFamily: '"Public Sans", sans-serif',
               fontSize: "10px",
               // textAlign: "center",
+            },
+          }}
+          slotProps={{
+            pagination: {
+              sx: {
+                "& .MuiTablePagination-toolbar": {
+                  alignItems: "center",
+                },
+                "& .MuiTablePagination-selectLabel": {
+                  fontSize: "13px",
+                  marginBottom: 0,
+                  fontFamily: "Public Sans",
+                },
+                "& .MuiInputBase-root": {
+                  marginTop: 0,
+                },
+              },
             },
           }}
         />

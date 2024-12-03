@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { Col, Row, Card, CardBody, CardHeader } from "reactstrap";
-import { Button, useMediaQuery } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs";
-import { useTheme } from "@mui/material/styles";
+import { Button } from "@mui/material";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import dayjs, { Dayjs } from "dayjs";
+// import { useTheme } from "@mui/material/styles";
 
 const barColors = ["#11395C", "#F57C00"];
 // const GrossBrokerageColor = ["#FFAF6C"];
@@ -16,55 +16,58 @@ const newSeries = [
     name: "Gross Brokerage",
     type: "bar",
     data: [
-      680051.23, 538044.27, 483511.14, 1065669.67, 542258.31, 717772.02,
-      496766.77,
+      680051.23, 538044.27, 483511.14, 1065669.67, 542258.31, 496766.77,
+      838044.27, 480051.23, 942258.31, 796766.77,
     ],
   },
   {
     name: "AP Share",
     type: "bar",
     data: [
-      311562.76, 452921.84, 316700.94, 270955.77, 363095.8, 322153.66,
-      321967.26,
+      311562.76, 452921.84, 316700.94, 270955.77, 363095.8, 321967.26,
+      538044.27, 890051.23, 542258.31, 942258.31,
     ],
   },
 ];
 
-const PerformanceHistoryChart = ({ brokerageData, customClass }: any) => {
+const PerformanceHistoryChart = ({ brokerageData }: any) => {
   const [latestDates, setLatestDates] = useState<any>("");
+  const [selectedButton, setSelectedButton] = useState<string>("7 Days");
   // const [selectedButton, setSelectedButton] = useState<string>("Daily");
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // const selectedStyle = {
-  //   bgcolor: "#11395C",
-  //   color: "#fff",
-  //   borderRadius: "7px",
-  //   fontFamily: "Poppins",
-  //   borderColor: "#ABC4DA",
-  //   textTransform: "capitalize",
-  // };
+  const selectedStyle = {
+    bgcolor: "#11395C",
+    color: "#fff",
+    borderRadius: "7px",
+    fontFamily: "Poppins",
+    borderColor: "#ABC4DA",
+    textTransform: "capitalize",
+  };
 
-  // const nonSelectedStyle = {
-  //   bgcolor: "#ABC4DA",
-  //   color: "#11395C",
-  //   borderRadius: "7px",
-  //   fontFamily: "Poppins",
-  //   borderColor: "#ABC4DA",
-  //   textTransform: "capitalize",
-  // };
-
+  const nonSelectedStyle = {
+    bgcolor: "#ABC4DA",
+    color: "#11395C",
+    borderRadius: "7px",
+    fontFamily: "Poppins",
+    borderColor: "#ABC4DA",
+    textTransform: "capitalize",
+  };
   useEffect(() => {
     console.log("brokData", brokerageData);
     const categories = [
-      "31/10/2024",
-      "30/10/2024",
-      "29/10/2024",
-      "28/10/2024",
-      "25/10/2024",
-      "24/10/2024",
-      "23/10/2024",
+      "Equity Intraday",
+      "Equity Delivery",
+      "Equity Futures",
+      "Equity Options",
+      "Comm Futures",
+      "Comm Options",
+      "MF",
+      "SPIP",
+      "Insurance",
+      "Liquiloans",
     ];
     setLatestDates(categories);
     console.log("categories", categories);
@@ -103,7 +106,7 @@ const PerformanceHistoryChart = ({ brokerageData, customClass }: any) => {
       },
       labels: {
         style: {
-          fontSize: "8px",
+          fontSize: "12px",
           fontFamily: "Public Sans",
           fontWeight: 400,
           colors: "#333",
@@ -189,12 +192,10 @@ const PerformanceHistoryChart = ({ brokerageData, customClass }: any) => {
             <CardHeader className="p-0 border-0 bg-light-subtle">
               <Row className="g-0 text-center">
                 <Col xs={12}>
-                  <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-md-row">
-                    <h4 className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center chart-header">
-                      {customClass
-                        ? "Non Brokerage Product"
-                        : "Segment wise brokerage"}
-                    </h4>
+                  <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-md-row align-items-center">
+                    <span className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center chart-header">
+                      Segment wise Brokerage
+                    </span>
                     <div
                       className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end"
                       style={{ fontFamily: "Public Sans, sans-serif" }}
@@ -217,100 +218,85 @@ const PerformanceHistoryChart = ({ brokerageData, customClass }: any) => {
                           marginRight: "8px",
                         }}
                       ></div>
-                      <p className="mb-0">AP Share</p>
+                      <p className="mb-0" style={{ marginRight: "20px" }}>
+                        AP Share
+                      </p>
                     </div>
-                    <div>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label={"From date"}
-                          format="DD/MM/YYYY"
-                          value={
-                            null
-                            // formik.values.DateOfBirth
-                            //   ? dayjs(formik.values.DateOfBirth, "DD/MM/YYYY")
-                            //   : null
-                          }
-                          sx={{
-                            ml: 2,
-                            width: isMobile ? "30%" : "140px",
-                            height: isMobile ? "40px" : "40px",
-                          }}
-                          maxDate={dayjs().subtract(18, "year")}
-                          minDate={dayjs().subtract(64, "year")}
-                          onChange={
-                            (date: Dayjs | null) => console.log(date)
-                            // formik.setFieldValue(
-                            //   "DateOfBirth",
-                            //   date ? date.format("DD/MM/YYYY") : ""
-                            // )
-                          }
-                          //   slotProps={{
-                          //     textField: {
-                          //       error: Boolean(
-                          //         formik.touched.DateOfBirth &&
-                          //           formik.errors.DateOfBirth
-                          //       ),
-                          //       helperText:
-                          //         formik.touched.DateOfBirth &&
-                          //         formik.errors.DateOfBirth,
-                          //     },
-                          //   }}
-                        />
-                      </LocalizationProvider>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label={"To date"}
-                          format="DD/MM/YYYY"
-                          value={
-                            null
-                            // formik.values.DateOfBirth
-                            //   ? dayjs(formik.values.DateOfBirth, "DD/MM/YYYY")
-                            //   : null
-                          }
-                          sx={{
-                            ml: 2,
-                            width: isMobile ? "30%" : "140px",
-                            height: isMobile ? "40px" : "40px",
-                          }}
-                          maxDate={dayjs().subtract(18, "year")}
-                          minDate={dayjs().subtract(64, "year")}
-                          onChange={
-                            (date: Dayjs | null) => console.log(date)
-                            // formik.setFieldValue(
-                            //   "DateOfBirth",
-                            //   date ? date.format("DD/MM/YYYY") : ""
-                            // )
-                          }
-                          //   slotProps={{
-                          //     textField: {
-                          //       error: Boolean(
-                          //         formik.touched.DateOfBirth &&
-                          //           formik.errors.DateOfBirth
-                          //       ),
-                          //       helperText:
-                          //         formik.touched.DateOfBirth &&
-                          //         formik.errors.DateOfBirth,
-                          //     },
-                          //   }}
-                        />
-                      </LocalizationProvider>
+                    <div className="d-flex gap-1">
                       <Button
                         variant="outlined"
-                        // size="small"
-                        onClick={() => alert("I am Clicked")}
-                        sx={{
-                          bgcolor: "#11395C",
-                          color: "#fff",
-                          borderRadius: "7px",
-                          fontFamily: "Poppins",
-                          borderColor: "#ABC4DA",
-                          textTransform: "capitalize",
-                          ml: 2,
-                          height: "40px",
-                        }}
+                        size="small"
+                        onClick={() => setSelectedButton("7 Days")}
+                        sx={
+                          selectedButton === "7 Days"
+                            ? selectedStyle
+                            : nonSelectedStyle
+                        }
                       >
-                        {" "}
-                        View
+                        7 Days
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => setSelectedButton("15 Days")}
+                        sx={
+                          selectedButton === "15 Days"
+                            ? selectedStyle
+                            : nonSelectedStyle
+                        }
+                      >
+                        15 Days
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => setSelectedButton("1 Month")}
+                        sx={
+                          selectedButton === "1 Month"
+                            ? selectedStyle
+                            : nonSelectedStyle
+                        }
+                      >
+                        1 Month
+                      </Button>
+                      <Button
+                        variant="contained" // MUI equivalent of 'btn-soft-primary'
+                        size="small"
+                        color="primary" // 'primary' color corresponds to the blue style in MUI
+                        onClick={() => setSelectedButton("3 Months")}
+                        sx={
+                          selectedButton === "3 Months"
+                            ? selectedStyle
+                            : nonSelectedStyle
+                        }
+                      >
+                        3 Months
+                      </Button>
+                      <Button
+                        variant="contained" // MUI equivalent of 'btn-soft-primary'
+                        size="small"
+                        color="primary" // 'primary' color corresponds to the blue style in MUI
+                        onClick={() => setSelectedButton("6 Months")}
+                        sx={
+                          selectedButton === "6 Months"
+                            ? selectedStyle
+                            : nonSelectedStyle
+                        }
+                      >
+                        6 Months
+                      </Button>
+                      <Button
+                        variant="contained" // MUI equivalent of 'btn-soft-primary'
+                        size="small"
+                        color="primary" // 'primary' color corresponds to the blue style in MUI
+                        onClick={() => setSelectedButton("12 Months")}
+                        sx={
+                          selectedButton === "12 Months"
+                            ? selectedStyle
+                            : nonSelectedStyle
+                        }
+                      >
+                        12 Months
                       </Button>
                     </div>
                   </div>

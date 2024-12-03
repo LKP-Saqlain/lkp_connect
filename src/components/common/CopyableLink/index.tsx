@@ -12,12 +12,14 @@ export const CopyableLink = ({
   link,
   buttonText,
   onCopy,
+  customClass,
 }: {
   linkName: string;
   logo: string;
   link: string;
   buttonText: string;
   onCopy: () => void;
+  customClass?: any;
 }) => (
   <Row
     className="align-items-center mb-4"
@@ -39,14 +41,16 @@ export const CopyableLink = ({
             fontWeight: "bold",
           }}
         >
-          <img
-            src={logo}
-            height="50px"
-            width="50px"
-            style={{ marginRight: "10px" }}
-            alt={`${linkName} logo`}
-          />
-          EKYC Link
+          {!customClass && (
+            <img
+              src={logo}
+              height="50px"
+              width="50px"
+              style={{ marginRight: "10px" }}
+              alt={`${linkName} logo`}
+            />
+          )}
+          {customClass ? "RE-EKYC LINK" : "EKYC Link"}
         </InputGroupText>
         <Input
           value={link}

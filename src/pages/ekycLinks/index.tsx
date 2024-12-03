@@ -9,6 +9,7 @@ const EKYCLink = () => {
   const [buttonTexts, setButtonTexts] = useState({
     getSetGrow: "Copy",
     pennyPal: "Copy",
+    ReEkyc: "Copy",
   });
 
   const handleCopy = (linkName: string, link: string) => {
@@ -41,7 +42,17 @@ const EKYCLink = () => {
           handleCopy("pennyPal", "https://ekyc.pennypal.in/admin/lkpsec")
         }
       />
-      <BrokerageSection />
+      <BrokerageSection customBrokerage={true} />
+      <CopyableLink
+        customClass={true}
+        linkName="ReEkyc"
+        logo={PennyPalLogo}
+        link="https://ekyc.pennypal.in/admin/lkpsec"
+        buttonText={buttonTexts.ReEkyc}
+        onCopy={() =>
+          handleCopy("ReEkyc", "https://ekyc.pennypal.in/admin/lkpsec")
+        }
+      />
     </Card>
   );
 };

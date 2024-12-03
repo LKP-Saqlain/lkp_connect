@@ -6,7 +6,7 @@ import {
   DPSchemes,
 } from "../../../components/common/Capsules";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import SegmentWiseTable from "../../../components/common/fullTable";
+// import SegmentWiseTable from "../../../components/common/fullTable";
 import { FiEdit } from "react-icons/fi";
 import ModalComponent from "../../../components/common/Modal";
 
@@ -297,7 +297,7 @@ const BrokerageSlab = () => {
           </Col>
         </Row>
       </div>
-      <SegmentWiseTable customClass={true} />
+      {/* <SegmentWiseTable customClass={true} /> */}
     </>
   );
 };
