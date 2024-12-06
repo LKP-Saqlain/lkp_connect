@@ -43,8 +43,15 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       enabled: true,
       style: {
         fontSize: "12px",
-        fontWeight: 600,
-        colors: ["#3d5d7a"],
+        fontWeight: "bold",
+        colors: ["#70889d"], // Text color
+      },
+      background: {
+        enabled: true,
+        foreColor: "black", // Text color inside the background
+        // color: "#333", // Background color
+        borderRadius: 2,
+        padding: 4,
       },
       formatter: function (value: number) {
         return new Intl.NumberFormat("en-IN").format(Math.round(value)); // Format the value
@@ -245,8 +252,8 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
           style: {
             fontSize: "12px",
             fontWeight: "bold",
-            background: "#333", // Background color for the total
-            color: "#fff", // Text color for the total
+            background: "#70889d", // Background color for the total
+            color: "black", // Text color for the total
           },
         },
       })),
@@ -413,8 +420,8 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
           style: {
             fontSize: "12px",
             fontWeight: "bold",
-            background: "#333", // Background color for the total
-            color: "#fff", // Text color for the total
+            background: "#70889d", // Background color for the total
+            color: "black", // Text color for the total
           },
         },
       })),
