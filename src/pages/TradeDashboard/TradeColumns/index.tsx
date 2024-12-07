@@ -93,7 +93,7 @@ export const T6OverViewColumns: GridColDef[] = [
     headerAlign: "center",
     // align: "center",
     renderCell: (params) => (
-      <div style={{ textAlign: "center", lineHeight: "1.2" }}>
+      <div style={{ textAlign: "left", lineHeight: "1.2" }}>
         <div>{params.row.ClientCode}</div>
         <div>{params.row.ClientName}</div>
       </div>

@@ -71,6 +71,7 @@ const SlbmHoling = () => {
       // Only called if no validation errors
       console.log("values1-->", values);
       handleSubmit(values);
+      handleDownloadExcel();
     },
   });
 
@@ -270,11 +271,19 @@ const SlbmHoling = () => {
   ];
 
   const handleDownloadExcel = async () => {
+    if (!formik.values.selectedZone || !formik.values.selectedBranchCode) {
+      formik.setTouched({
+        selectedZone: true,
+        selectedBranchCode: true,
+      });
+      return; // Stop execution if validation fails
+    }
+
     // const Id = localStorage.getItem("Id");
     const payload = {
       loginName: user_id,
       start: 0,
-      pageSize: 10,
+      pageSize: 50,
       searchKey: "",
       zone: formik.values.selectedZone?.value,
       branchCode: formik.values.selectedBranchCode?.value,

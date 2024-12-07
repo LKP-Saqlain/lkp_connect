@@ -44,7 +44,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       style: {
         fontSize: "12px",
         fontWeight: "bold",
-        colors: ["#70889d"], // Text color
+        colors: ["#b7c3ce"], // Text color
       },
       background: {
         enabled: true,
@@ -68,9 +68,8 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       },
       labels: {
         style: {
-          fontSize: "11px",
-          fontWeight: 400,
-          colors: "#333",
+          fontSize: "12px",
+          fontWeight: 600,
         },
       },
     },
@@ -252,7 +251,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
           style: {
             fontSize: "12px",
             fontWeight: "bold",
-            background: "#70889d", // Background color for the total
+            background: "#b7c3ce", // Background color for the total
             color: "black", // Text color for the total
           },
         },
@@ -285,6 +284,12 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     },
     xaxis: {
       categories: mnthYRValues,
+      labels: {
+        style: {
+          fontSize: "12px",
+          fontWeight: 600,
+        },
+      },
     },
     fill: {
       opacity: 1,
@@ -297,6 +302,11 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       labels: {
         formatter: (value: any) => {
           return new Intl.NumberFormat("en-IN").format(value);
+        },
+        style: {
+          fontSize: "11px",
+          fontWeight: 600,
+          colors: "#333",
         },
       },
     },
@@ -420,7 +430,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
           style: {
             fontSize: "12px",
             fontWeight: "bold",
-            background: "#70889d", // Background color for the total
+            background: "#b7c3ce", // Background color for the total
             color: "black", // Text color for the total
           },
         },
@@ -453,6 +463,12 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
     },
     xaxis: {
       categories: mnthYRValues,
+      labels: {
+        style: {
+          fontSize: "12px",
+          fontWeight: 600,
+        },
+      },
     },
     fill: {
       opacity: 1,

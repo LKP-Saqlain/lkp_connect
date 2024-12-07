@@ -102,6 +102,11 @@
   margin: 0px !important;
 
 }
+
+.rounded-pill {
+  border-radius: var(--bs-border-radius-pill) !important;
+  margin: 12px 0px;
+}
   
   
   

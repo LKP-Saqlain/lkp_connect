@@ -5,6 +5,7 @@ import { Card, CardBody, Col, Row } from "reactstrap";
 import { ClientDetailsCapsule } from "../../../components/common/Capsules";
 // import { useMediaQuery } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
+import "../style.css";
 
 interface userCapsules {
   selectedCapsule: any;

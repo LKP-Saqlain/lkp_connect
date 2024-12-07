@@ -80,6 +80,7 @@ const DormantClient = () => {
       // Only called if no validation errors
       console.log("values1-->", values);
       handleSubmit(values);
+      handleExcelDownload();
     },
   });
 
@@ -303,6 +304,19 @@ const DormantClient = () => {
 
   const handleExcelDownload = () => {
     // const Id = localStorage.getItem("Id");
+
+    if (
+      !formik.values.selectedZone ||
+      !formik.values.selectedBranchCode ||
+      !formik.values.selectedClientStatus
+    ) {
+      formik.setTouched({
+        selectedZone: true,
+        selectedBranchCode: true,
+        selectedClientStatus: true,
+      });
+      return; // Stop execution if validation fails
+    }
     const payload = {
       start: 0,
       pageSize: 20,
