@@ -80,7 +80,7 @@ const DormantClient = () => {
       // Only called if no validation errors
       console.log("values1-->", values);
       handleSubmit(values);
-      handleExcelDownload();
+      // handleExcelDownload();
     },
   });
 
@@ -388,7 +388,7 @@ const DormantClient = () => {
   const dormantColumns: GridColDef[] = useMemo(
     () => [
       { field: "ctermcode", headerName: "Client Code", width: 100 },
-      { field: "clientName", headerName: "Client Name", width: 100 },
+      { field: "clientName", headerName: "Client Name", width: 120 },
       {
         field: "brokerageGeneratedinFY2223",
         headerName: "Bro FY2223",
@@ -425,7 +425,7 @@ const DormantClient = () => {
       {
         field: "zone",
         headerName: "Zone",
-        width: 100,
+        width: 60,
         align: "right",
         headerAlign: "center",
       },
@@ -442,21 +442,21 @@ const DormantClient = () => {
       {
         field: "brokerageGeneratedinFY1920",
         headerName: "Brok FY1920",
-        width: 80,
+        width: 60,
         align: "right",
         headerAlign: "center",
       },
       {
         field: "brokerageGeneratedinFY2021",
         headerName: "Brok FY2021",
-        width: 80,
+        width: 60,
         align: "right",
         headerAlign: "center",
       },
       {
         field: "brokerageGeneratedinFY2122",
         headerName: "Brok FY1922",
-        width: 80,
+        width: 60,
         align: "right",
         headerAlign: "center",
       },
@@ -671,7 +671,7 @@ const DormantClient = () => {
                               height: "40px",
                             }}
                             onClick={handleExcelDownload}
-                            // type="submit"
+                            type="button"
                           >
                             Excel
                             <DownloadIcon />

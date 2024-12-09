@@ -32,6 +32,22 @@ const DataTable: React.FC<DormantClientProps> = ({
 }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
 
+  const paginationStyles = {
+    display: "flex",
+    justifyContent: isMobile ? "center" : "flex-end",
+    "& .MuiPaginationItem-root": {
+      backgroundColor: "white", // Change the default background color
+      color: "black", // Change the text color
+    },
+    "& .Mui-selected": {
+      backgroundColor: "#11395C", // Change background for selected item
+      color: "white", // Change text color for selected item
+    },
+    "& .MuiPaginationItem-root:hover": {
+      backgroundColor: "lightgray", // Background color on hover
+    },
+  };
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-IN").format(value);
   };
@@ -118,21 +134,7 @@ const DataTable: React.FC<DormantClientProps> = ({
           page={page}
           onChange={handlePaginationChange}
           color="primary"
-          sx={{
-            display: "flex",
-            justifyContent: isMobile ? "center" : "flex-end",
-            "& .MuiPaginationItem-root": {
-              backgroundColor: "white", // Change the default background color
-              color: "black", // Change the text color
-            },
-            "& .Mui-selected": {
-              backgroundColor: "#11395C", // Change background for selected item
-              color: "white", // Change text color for selected item
-            },
-            "& .MuiPaginationItem-root:hover": {
-              backgroundColor: "lightgray", // Background color on hover
-            },
-          }}
+          sx={paginationStyles}
         />
       </div>
     </>

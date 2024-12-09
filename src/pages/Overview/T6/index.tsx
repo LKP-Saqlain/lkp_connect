@@ -44,19 +44,13 @@ const T6Table = () => {
           // Get the data from the API response
           const data = response?.data?.data?.Table;
           // Sort the data: prioritize records with negative T4 or T5
-          const sortedData = data.sort((a: any, b: any) => {
-            const isANegative = a.T4 < 0 || a.T5 < 0 ? -1 : 1;
-            const isBNegative = b.T4 < 0 || b.T5 < 0 ? -1 : 1;
-            return isANegative - isBNegative;
-          });
+          const sortedData = data.sort((a: any, b: any) => a.T5 - b.T5);
 
           // Get the first 5 records
           const top5Records = sortedData.slice(0, 5);
           console.log("top5Records", top5Records);
 
           // Store the top 5 records
-          setT6Data(top5Records);
-
           setT6Data(top5Records);
         }
       } catch (error) {

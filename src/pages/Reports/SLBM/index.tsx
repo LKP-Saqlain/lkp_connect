@@ -71,7 +71,7 @@ const SlbmHoling = () => {
       // Only called if no validation errors
       console.log("values1-->", values);
       handleSubmit(values);
-      handleDownloadExcel();
+      // handleDownloadExcel();
     },
   });
 
@@ -258,15 +258,15 @@ const SlbmHoling = () => {
   };
 
   const slbmColumns: GridColDef[] = [
-    { field: "zone", headerName: "Zone", width: 100 },
+    { field: "zone", headerName: "Zone", width: 60 },
     { field: "branchCode", headerName: "Branch Code", width: 100 },
     { field: "clientCode", headerName: "Client Code", width: 100 },
-    { field: "clientName", headerName: "Client Name", width: 100 },
-    { field: "scripName", headerName: "Scrip Name", width: 100 },
+    { field: "clientName", headerName: "Client Name", width: 200 },
+    { field: "scripName", headerName: "Scrip Name", width: 90 },
     { field: "isin", headerName: "ISIN", width: 100 },
-    { field: "qtny", headerName: "Qtny", width: 100 },
+    { field: "qtny", headerName: "Qtny", width: 70 },
     { field: "rmName", headerName: "RM Name", width: 100 },
-    { field: "dealerName", headerName: "Dealer Name", width: 100 },
+    { field: "dealerName", headerName: "Dealer Name", width: 80 },
     { field: "slbmStatus", headerName: "SLBM Status", width: 100 },
   ];
 
@@ -595,6 +595,7 @@ const SlbmHoling = () => {
                               fontSize: "12px",
                               height: "40px",
                             }}
+                            type="button"
                             onClick={handleDownloadExcel}
                           >
                             Excel

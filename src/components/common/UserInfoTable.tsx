@@ -94,8 +94,6 @@ const DataTable = ({
     } else if (selectedWidget === "T6Overview") {
       return T6OverViewColumns.map((column) => ({
         ...column,
-        // sortable: false,
-        // filterable: false,
       }));
     } else if (
       // selectedWidget === "Total Clients" ||
