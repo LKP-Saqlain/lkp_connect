@@ -8,7 +8,7 @@ import {
   Row,
   Button,
 } from "reactstrap";
-import DownloadIcon from "@mui/icons-material/Download";
+// import DownloadIcon from "@mui/icons-material/Download";
 import { apiServices } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../redux/store";
@@ -53,6 +53,11 @@ const DormantClient = () => {
     (state: RootState) => state.UserLogin?.data?.data
   );
 
+  const { accessType } = useSelector(
+    (state: RootState) => state.AuthUser?.data?.data
+  );
+  console.log("accessType", accessType);
+
   const validationSchema = Yup.object({
     selectedZone: Yup.object().nullable().required("Zone is required"),
     selectedBranchCode: Yup.object()
@@ -63,6 +68,11 @@ const DormantClient = () => {
       .required("Client status is required"),
   });
 
+  useEffect(() => {
+    if (accessType === "") {
+      handleSubmit();
+    }
+  }, [accessType]);
   interface FormValues {
     selectedZone: { label: string; value: string } | null;
     selectedBranchCode: { label: string; value: string } | null;
@@ -261,8 +271,9 @@ const DormantClient = () => {
       pageSize: 10,
       searchKey: searchValue !== "" ? searchValue : "",
       loginName: user_id,
-      zone: formik.values.selectedZone?.value,
-      branchCode: formik.values.selectedBranchCode?.value,
+      zone: accessType === "" ? "ALL" : formik.values.selectedZone?.value,
+      branchCode:
+        accessType === "" ? "ALL" : formik.values.selectedBranchCode?.value,
       clientStatus:
         formik.values.selectedClientStatus?.value === "ACTIVE"
           ? "Y"
@@ -305,17 +316,19 @@ const DormantClient = () => {
   const handleExcelDownload = () => {
     // const Id = localStorage.getItem("Id");
 
-    if (
-      !formik.values.selectedZone ||
-      !formik.values.selectedBranchCode ||
-      !formik.values.selectedClientStatus
-    ) {
-      formik.setTouched({
-        selectedZone: true,
-        selectedBranchCode: true,
-        selectedClientStatus: true,
-      });
-      return; // Stop execution if validation fails
+    if (accessType !== "") {
+      if (
+        !formik.values.selectedZone ||
+        !formik.values.selectedBranchCode ||
+        !formik.values.selectedClientStatus
+      ) {
+        formik.setTouched({
+          selectedZone: true,
+          selectedBranchCode: true,
+          selectedClientStatus: true,
+        });
+        return; // Stop execution if validation fails
+      }
     }
     const payload = {
       start: 0,
@@ -388,7 +401,7 @@ const DormantClient = () => {
   const dormantColumns: GridColDef[] = useMemo(
     () => [
       { field: "ctermcode", headerName: "Client Code", width: 100 },
-      { field: "clientName", headerName: "Client Name", width: 120 },
+      { field: "clientName", headerName: "Client Name", width: 175 },
       {
         field: "brokerageGeneratedinFY2223",
         headerName: "Bro FY2223",
@@ -406,19 +419,19 @@ const DormantClient = () => {
       {
         field: "active",
         headerName: "Active",
-        width: 100,
+        width: 60,
         align: "center",
         headerAlign: "center",
       },
       { field: "lastTradeDate", headerName: "Last Trade Date", width: 100 },
-      { field: "rmname", headerName: "RM Name", width: 100 },
+      { field: "rmname", headerName: "RM Name", width: 80 },
       { field: "rmstatus", headerName: "RM Status", width: 80 },
-      { field: "dealerName", headerName: "Dealer Name", width: 100 },
-      { field: "dealerSTATUS", headerName: "Dealer Status", width: 100 },
+      { field: "dealerName", headerName: "Dealer Name", width: 80 },
+      { field: "dealerSTATUS", headerName: "Dealer Status", width: 80 },
       {
         field: "branchcode",
-        headerName: "Branch Code",
-        width: 100,
+        headerName: "BR Code",
+        width: 70,
         align: "right",
         headerAlign: "center",
       },
@@ -432,13 +445,13 @@ const DormantClient = () => {
       {
         field: "branchtype",
         headerName: "Branch Type",
-        width: 100,
+        width: 89,
         align: "center",
         headerAlign: "center",
       },
-      { field: "activationDate", headerName: "Activation Date", width: 120 },
-      { field: "mobileNo", headerName: "Mobile No", width: 100 },
-      { field: "email", headerName: "Email", width: 120 },
+      { field: "activationDate", headerName: "Actv. Date", width: 80 },
+      { field: "mobileNo", headerName: "Mobile No", width: 80 },
+      { field: "email", headerName: "Email", width: 100 },
       {
         field: "brokerageGeneratedinFY1920",
         headerName: "Brok FY1920",
@@ -472,218 +485,224 @@ const DormantClient = () => {
         <div className="container-fluid">
           <Row className="row-font">
             <Col lg={12}>
-              <Card>
-                <CardHeader>
-                  <h4 className="card-title mb-0">Dormant Client Report</h4>
-                </CardHeader>
-                <CardBody>
-                  <form onSubmit={formik.handleSubmit}>
-                    <div>
-                      <Row>
-                        <Col xl={3}>
-                          <div className="mb-3">
-                            <Label
-                              htmlFor="zone-select"
-                              className="form-label text-muted label-font"
-                            >
-                              ZONE
-                            </Label>
-                            <Select
-                              // value={selectedZone}
-                              value={formik.values.selectedZone}
-                              onChange={(option: any) =>
-                                formik.setFieldValue("selectedZone", option)
-                              }
-                              onBlur={formik.handleBlur}
-                              options={noSortingGroup}
-                              className="placeholder-font"
-                              isClearable
-                              id="zone-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  borderColor:
-                                    formik.touched.selectedZone &&
-                                    formik.errors.selectedZone
-                                      ? "#DC4535"
-                                      : base.borderColor,
-                                  "&:hover": {
+              {accessType !== "" && (
+                <Card>
+                  <CardHeader>
+                    <h4 className="card-title mb-0">Dormant Client Report</h4>
+                  </CardHeader>
+                  <CardBody>
+                    <form onSubmit={formik.handleSubmit}>
+                      <div>
+                        <Row>
+                          <Col xl={3}>
+                            <div className="mb-3">
+                              <Label
+                                htmlFor="zone-select"
+                                className="form-label text-muted label-font"
+                              >
+                                ZONE
+                              </Label>
+                              <Select
+                                // value={selectedZone}
+                                value={formik.values.selectedZone}
+                                onChange={(option: any) =>
+                                  formik.setFieldValue("selectedZone", option)
+                                }
+                                onBlur={formik.handleBlur}
+                                options={noSortingGroup}
+                                className="placeholder-font"
+                                isClearable
+                                id="zone-select"
+                                styles={{
+                                  control: (base: any) => ({
+                                    ...base,
                                     borderColor:
                                       formik.touched.selectedZone &&
                                       formik.errors.selectedZone
                                         ? "#DC4535"
                                         : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.selectedZone &&
-                              formik.errors.selectedZone && (
-                                <div className="text-danger error-msg">
-                                  {formik.errors.selectedZone}
-                                </div>
-                              )}
-                          </div>
-                        </Col>
+                                    "&:hover": {
+                                      borderColor:
+                                        formik.touched.selectedZone &&
+                                        formik.errors.selectedZone
+                                          ? "#DC4535"
+                                          : base.borderColor,
+                                    },
+                                  }),
+                                }}
+                              />
+                              {formik.touched.selectedZone &&
+                                formik.errors.selectedZone && (
+                                  <div className="text-danger error-msg">
+                                    {formik.errors.selectedZone}
+                                  </div>
+                                )}
+                            </div>
+                          </Col>
 
-                        <Col xl={3}>
-                          <div className="mb-3">
-                            <Label
-                              htmlFor="branch-code-select"
-                              className="form-label text-muted label-font"
-                            >
-                              BRANCH CODE
-                            </Label>
-                            <Select
-                              value={formik.values.selectedBranchCode}
-                              onChange={(option) =>
-                                formik.setFieldValue(
-                                  "selectedBranchCode",
-                                  option
-                                )
-                              }
-                              onBlur={formik.handleBlur}
-                              options={branchCodeOptions}
-                              className="placeholder-font"
-                              isClearable
-                              id="branch-code-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  borderColor:
-                                    formik.touched.selectedBranchCode &&
-                                    formik.errors.selectedBranchCode
-                                      ? "#DC4535"
-                                      : base.borderColor,
-                                  "&:hover": {
+                          <Col xl={3}>
+                            <div className="mb-3">
+                              <Label
+                                htmlFor="branch-code-select"
+                                className="form-label text-muted label-font"
+                              >
+                                BRANCH CODE
+                              </Label>
+                              <Select
+                                value={formik.values.selectedBranchCode}
+                                onChange={(option) =>
+                                  formik.setFieldValue(
+                                    "selectedBranchCode",
+                                    option
+                                  )
+                                }
+                                onBlur={formik.handleBlur}
+                                options={branchCodeOptions}
+                                className="placeholder-font"
+                                isClearable
+                                id="branch-code-select"
+                                styles={{
+                                  control: (base: any) => ({
+                                    ...base,
                                     borderColor:
                                       formik.touched.selectedBranchCode &&
                                       formik.errors.selectedBranchCode
                                         ? "#DC4535"
                                         : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.selectedBranchCode &&
-                              formik.errors.selectedBranchCode && (
-                                <div className="text-danger error-msg">
-                                  {formik.errors.selectedBranchCode}
-                                </div>
-                              )}
-                          </div>
-                        </Col>
+                                    "&:hover": {
+                                      borderColor:
+                                        formik.touched.selectedBranchCode &&
+                                        formik.errors.selectedBranchCode
+                                          ? "#DC4535"
+                                          : base.borderColor,
+                                    },
+                                  }),
+                                }}
+                              />
+                              {formik.touched.selectedBranchCode &&
+                                formik.errors.selectedBranchCode && (
+                                  <div className="text-danger error-msg">
+                                    {formik.errors.selectedBranchCode}
+                                  </div>
+                                )}
+                            </div>
+                          </Col>
 
-                        <Col xl={3}>
-                          <div className="mb-3">
-                            <Label
-                              htmlFor="client-status-select"
-                              className="form-label text-muted label-font"
-                            >
-                              CLIENT STATUS
-                            </Label>
-                            <Select
-                              value={formik.values.selectedClientStatus}
-                              onChange={(option) =>
-                                formik.setFieldValue(
-                                  "selectedClientStatus",
-                                  option
-                                )
-                              }
-                              onBlur={formik.handleBlur}
-                              options={ClientStatus}
-                              className="placeholder-font"
-                              isClearable
-                              id="client-status-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  borderColor:
-                                    formik.touched.selectedClientStatus &&
-                                    formik.errors.selectedClientStatus
-                                      ? "#DC4535"
-                                      : base.borderColor,
-                                  "&:hover": {
+                          <Col xl={3}>
+                            <div className="mb-3">
+                              <Label
+                                htmlFor="client-status-select"
+                                className="form-label text-muted label-font"
+                              >
+                                CLIENT STATUS
+                              </Label>
+                              <Select
+                                value={formik.values.selectedClientStatus}
+                                onChange={(option) =>
+                                  formik.setFieldValue(
+                                    "selectedClientStatus",
+                                    option
+                                  )
+                                }
+                                onBlur={formik.handleBlur}
+                                options={ClientStatus}
+                                className="placeholder-font"
+                                isClearable
+                                id="client-status-select"
+                                styles={{
+                                  control: (base: any) => ({
+                                    ...base,
                                     borderColor:
                                       formik.touched.selectedClientStatus &&
                                       formik.errors.selectedClientStatus
                                         ? "#DC4535"
                                         : base.borderColor,
-                                  },
-                                }),
+                                    "&:hover": {
+                                      borderColor:
+                                        formik.touched.selectedClientStatus &&
+                                        formik.errors.selectedClientStatus
+                                          ? "#DC4535"
+                                          : base.borderColor,
+                                    },
+                                  }),
+                                }}
+                              />
+                              {formik.touched.selectedClientStatus &&
+                                formik.errors.selectedClientStatus && (
+                                  <div className="text-danger error-msg">
+                                    {formik.errors.selectedClientStatus}
+                                  </div>
+                                )}
+                            </div>
+                          </Col>
+
+                          <Col
+                            className="d-flex flex-column-reverse"
+                            style={{
+                              top:
+                                (formik.touched.selectedZone &&
+                                  formik.errors.selectedZone) ||
+                                (formik.touched.selectedBranchCode &&
+                                  formik.errors.selectedBranchCode) ||
+                                (formik.touched.selectedClientStatus &&
+                                  formik.errors.selectedClientStatus)
+                                  ? "-18px"
+                                  : "",
+                            }}
+                          >
+                            <div className="mb-3" />
+                            <Button
+                              className="btn-font"
+                              style={{
+                                backgroundColor: "#11395C",
+                                height: "40px",
+                                minWidth: "200px",
                               }}
-                            />
-                            {formik.touched.selectedClientStatus &&
-                              formik.errors.selectedClientStatus && (
-                                <div className="text-danger error-msg">
-                                  {formik.errors.selectedClientStatus}
-                                </div>
-                              )}
-                          </div>
-                        </Col>
+                              type="submit"
+                            >
+                              Submit
+                            </Button>
+                          </Col>
 
-                        <Col
-                          className="d-flex flex-column-reverse"
-                          style={{
-                            top:
-                              (formik.touched.selectedZone &&
-                                formik.errors.selectedZone) ||
-                              (formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode) ||
-                              (formik.touched.selectedClientStatus &&
-                                formik.errors.selectedClientStatus)
-                                ? "-18px"
-                                : "",
-                          }}
-                        >
-                          <div className="mb-3" />
-                          <Button
-                            className="btn-font"
+                          <Col
+                            className="d-flex flex-column-reverse"
                             style={{
-                              backgroundColor: "#11395C",
-                              height: "40px",
+                              top:
+                                (formik.touched.selectedZone &&
+                                  formik.errors.selectedZone) ||
+                                (formik.touched.selectedBranchCode &&
+                                  formik.errors.selectedBranchCode) ||
+                                (formik.touched.selectedClientStatus &&
+                                  formik.errors.selectedClientStatus)
+                                  ? "-18px"
+                                  : "",
                             }}
-                            type="submit"
                           >
-                            Submit
-                          </Button>
-                        </Col>
-
-                        <Col
-                          className="d-flex flex-column-reverse"
-                          style={{
-                            top:
-                              (formik.touched.selectedZone &&
-                                formik.errors.selectedZone) ||
-                              (formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode) ||
-                              (formik.touched.selectedClientStatus &&
-                                formik.errors.selectedClientStatus)
-                                ? "-18px"
-                                : "",
-                          }}
-                        >
-                          <div className="mb-3" />
-                          <Button
-                            className="btn-font"
-                            style={{
-                              backgroundColor: "#11395C",
-                              height: "40px",
-                            }}
-                            onClick={handleExcelDownload}
-                            type="button"
-                          >
-                            Excel
-                            <DownloadIcon />
-                          </Button>
-                        </Col>
-                      </Row>
-                    </div>
-                  </form>
-                </CardBody>
-              </Card>
+                            <div className="mb-3" />
+                            {/* <Button
+                              className="btn-font"
+                              style={{
+                                backgroundColor: "#11395C",
+                                height: "40px",
+                              }}
+                              onClick={handleExcelDownload}
+                              type="button"
+                            >
+                              Excel
+                              <DownloadIcon />
+                            </Button> */}
+                          </Col>
+                        </Row>
+                      </div>
+                    </form>
+                  </CardBody>
+                </Card>
+              )}
               {/* <SearchAppBar /> */}
               <Card>
+                <CardHeader>
+                  <h4 className="card-title mb-0">Dormant Client Report</h4>
+                </CardHeader>
                 <CardBody>
                   <DataTable
                     dynamicHeader={dormantColumns}
@@ -695,6 +714,8 @@ const DormantClient = () => {
                     handleSearchBasedOnInput={handleSearchBasedOnInput}
                     handleSearchUser={handleSearchUser}
                     showSearch={responseStatus}
+                    showExcel={true}
+                    handleExcelDownload={handleExcelDownload}
                   />
                 </CardBody>
               </Card>

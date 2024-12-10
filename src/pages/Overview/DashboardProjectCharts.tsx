@@ -44,10 +44,10 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       style: {
         fontSize: "12px",
         fontWeight: "bold",
-        colors: ["#b7c3ce"], // Text color
+        colors: ["#71797E"], // Text color
       },
       background: {
-        enabled: true,
+        enabled: false,
         foreColor: "black", // Text color inside the background
         // color: "#333", // Background color
         borderRadius: 2,
@@ -251,8 +251,8 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
           style: {
             fontSize: "12px",
             fontWeight: "bold",
-            background: "#b7c3ce", // Background color for the total
-            color: "black", // Text color for the total
+            // background: "#71797E", // Background color for the total
+            color: "#71797E", // Text color for the total
           },
         },
       })),
@@ -430,8 +430,8 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
           style: {
             fontSize: "12px",
             fontWeight: "bold",
-            background: "#b7c3ce", // Background color for the total
-            color: "black", // Text color for the total
+            // background: "#b7c3ce", // Background color for the total
+            color: "#71797E", // Text color for the total
           },
         },
       })),
@@ -473,7 +473,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
     fill: {
       opacity: 1,
     },
-    colors: ["#1890ff", "#52c41a", "#faad14", "#ff4d4f"],
+    colors: ["#1890ff", "#52c41a", "#faad14", "#00E396"],
     yaxis: {
       title: {
         text: "Non-Broking Revenue",

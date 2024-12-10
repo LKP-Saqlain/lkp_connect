@@ -104,7 +104,7 @@ const AuthenticateUser = () => {
     dispatch(AuthUser(payload))
       .unwrap()
       .then((response) => {
-        console.log("response", response);
+        console.log("2FAresponse", response);
         if (response?.status === 200) {
           const { token, name } = response?.data;
           console.log("2FA_Response", response?.data);

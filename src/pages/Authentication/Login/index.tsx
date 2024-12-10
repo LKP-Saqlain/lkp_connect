@@ -364,7 +364,7 @@ const LoginPage = () => {
                 }}
                 onClick={handleClick}
               >
-                Forgot Password / Unblocked User ?
+                Forgot Password / Unblock User ?
               </Typography>
             </Grid2>
           </Grid2>

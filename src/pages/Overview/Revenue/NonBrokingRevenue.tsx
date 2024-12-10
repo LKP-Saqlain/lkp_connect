@@ -156,7 +156,7 @@ const NonBrokingRevenue = () => {
                   <div
                     className="legend-color"
                     style={{
-                      backgroundColor: "#ff4d4f",
+                      backgroundColor: "#00E396",
                       width: "16px",
                       height: "16px",
                       marginRight: "8px",

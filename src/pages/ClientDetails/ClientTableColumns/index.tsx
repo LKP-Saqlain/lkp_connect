@@ -22,16 +22,16 @@ export const getClientActivityStatusColumns = (
   handleViewDetails: (row: ClientRow) => void
 ): GridColDef[] => [
   { field: "ClientCode", headerName: "Client Code", width: 90 },
-  { field: "ClientName", headerName: "Client Name", width: 180 },
+  { field: "ClientName", headerName: "Client Name", width: 200 },
   { field: "LastTradeDate", headerName: "Last TR Date", width: 100 },
-  { field: "ClientStatus", headerName: "Status", width: 80 },
+  { field: "ClientStatus", headerName: "Status", width: 110 },
   { field: "BranchCode", headerName: "BR Code", width: 80 },
   { field: "ActivationDate", headerName: "Activation Date", width: 120 },
   // { field: "MobileNo", headerName: "Mobile No", width: 120 },
   {
     field: "MobileNo",
     headerName: "Mobile No",
-    width: 90,
+    width: 120,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
       // Mask all except first 2 digits
@@ -52,39 +52,39 @@ export const getClientActivityStatusColumns = (
       );
     },
   },
-  { field: "MTFStatus", headerName: "MTF Status", width: 90 },
-  { field: "POAStatus", headerName: "POA Status", width: 90 },
-  {
-    field: "viewDetails",
-    headerName: "Action",
-    width: 100,
-    sortable: false, // Disable sorting if desired
-    filterable: false, // Disable filtering if desired
-    align: "center",
-    renderCell: (params: any) => (
-      // <Button
-      //   onClick={() => handleViewDetails(params.row)} // Pass the row to the handler
-      //   variant="contained"
-      //   color="primary"
-      //   style={{
-      //     padding: "2px 9px",
-      //     backgroundColor: "#11395C",
-      //     fontSize: "9px",
-      //     borderRadius: "10px",
-      //     textTransform: "capitalize",
-      //     fontFamily: "Public Sans",
-      //   }}
-      // >
-      // <PersonAddIcon
-      //   onClick={() => handleViewDetails(params.row)}
-      //   style={{ color: "#11395C", cursor: "pointer" }}
-      // />
-      <FaUserPen
-        onClick={() => handleViewDetails(params.row)}
-        style={{ color: "#11395C", fontSize: "22px", cursor: "pointer" }}
-      />
-    ),
-  },
+  { field: "MTFStatus", headerName: "MTF Status", width: 120 },
+  { field: "POAStatus", headerName: "POA Status", width: 120 },
+  // {
+  //   field: "viewDetails",
+  //   headerName: "Action",
+  //   width: 100,
+  //   sortable: false, // Disable sorting if desired
+  //   filterable: false, // Disable filtering if desired
+  //   align: "center",
+  //   renderCell: (params: any) => (
+  //     // <Button
+  //     //   onClick={() => handleViewDetails(params.row)} // Pass the row to the handler
+  //     //   variant="contained"
+  //     //   color="primary"
+  //     //   style={{
+  //     //     padding: "2px 9px",
+  //     //     backgroundColor: "#11395C",
+  //     //     fontSize: "9px",
+  //     //     borderRadius: "10px",
+  //     //     textTransform: "capitalize",
+  //     //     fontFamily: "Public Sans",
+  //     //   }}
+  //     // >
+  //     // <PersonAddIcon
+  //     //   onClick={() => handleViewDetails(params.row)}
+  //     //   style={{ color: "#11395C", cursor: "pointer" }}
+  //     // />
+  //     <FaUserPen
+  //       onClick={() => handleViewDetails(params.row)}
+  //       style={{ color: "#11395C", fontSize: "22px", cursor: "pointer" }}
+  //     />
+  //   ),
+  // },
 ];
 
 export const getClientDormantStatus = (

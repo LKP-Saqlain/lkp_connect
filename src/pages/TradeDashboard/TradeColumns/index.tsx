@@ -16,6 +16,8 @@ export const ClientCashColumns: GridColDef[] = [
     width: 150,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
 ];
 export const T6Columns: GridColDef[] = [
@@ -33,6 +35,8 @@ export const T6Columns: GridColDef[] = [
     width: 120,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "StockValue",
@@ -40,6 +44,8 @@ export const T6Columns: GridColDef[] = [
     width: 95,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "G5",
@@ -47,6 +53,8 @@ export const T6Columns: GridColDef[] = [
     width: 95,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "T5",
@@ -54,6 +62,8 @@ export const T6Columns: GridColDef[] = [
     width: 95,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "T4",
@@ -61,6 +71,8 @@ export const T6Columns: GridColDef[] = [
     width: 80,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "T3",
@@ -68,6 +80,8 @@ export const T6Columns: GridColDef[] = [
     width: 80,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "T2",
@@ -75,6 +89,8 @@ export const T6Columns: GridColDef[] = [
     width: 80,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "T1",
@@ -82,6 +98,8 @@ export const T6Columns: GridColDef[] = [
     width: 80,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
 ];
 
@@ -89,7 +107,7 @@ export const T6OverViewColumns: GridColDef[] = [
   {
     field: "ClientCode",
     headerName: "Client",
-    width: 200,
+    width: 180,
     headerAlign: "center",
     // align: "center",
     renderCell: (params) => (
@@ -102,8 +120,10 @@ export const T6OverViewColumns: GridColDef[] = [
   {
     field: "T5",
     headerName: "T5",
-    width: 100,
+    width: 90,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
 ];

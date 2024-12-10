@@ -4,6 +4,8 @@ import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
 // import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
+import { Button } from "reactstrap";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -50,12 +52,15 @@ interface SearchAppBarProps {
   onSearchChange: (query: string) => void;
   handleSearchUser?: () => void;
   searchTableValue?: any;
+  showExcel?: any;
+  handleExcelDownload?: () => void;
 }
 
 const SearchAppBar: React.FC<SearchAppBarProps> = ({
   onSearchChange,
   handleSearchUser,
   searchTableValue,
+  handleExcelDownload,
 }) => {
   const [searchValue, setSearchValue] = React.useState(searchTableValue);
 
@@ -72,7 +77,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   };
 
   return (
-    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}>
+    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "space-between" }}>
       <Search sx={{ border: "1px solid #11395C" }}>
         <SearchIconWrapper>
           <SearchIcon />
@@ -101,6 +106,18 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
       >
         Search
       </Button> */}
+      <Button
+        className="btn-font"
+        style={{
+          backgroundColor: "#11395C",
+          height: "40px",
+        }}
+        onClick={handleExcelDownload}
+        type="button"
+      >
+        Excel
+        <DownloadIcon />
+      </Button>
     </Box>
   );
 };

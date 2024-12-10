@@ -499,6 +499,12 @@ const DashboardProject = () => {
                     </div>
                   </Col>
                 </Row>
+                <div className="movable-note">
+                  <span>
+                    <strong>Note:</strong> I am the Note with no Information,
+                    Thank You!
+                  </span>
+                </div>
                 <Row>
                   <Col xl={8}>
                     <div className="card-body">

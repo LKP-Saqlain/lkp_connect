@@ -43,15 +43,21 @@ const T6Table = () => {
           dispatch(hideLoader());
           // Get the data from the API response
           const data = response?.data?.data?.Table;
-          // Sort the data: prioritize records with negative T4 or T5
+          // Sort the data: prioritize records with lower T5 values
           const sortedData = data.sort((a: any, b: any) => a.T5 - b.T5);
 
           // Get the first 5 records
           const top5Records = sortedData.slice(0, 5);
-          console.log("top5Records", top5Records);
 
-          // Store the top 5 records
-          setT6Data(top5Records);
+          // Remove records with T5 value of 0
+          const filteredRecords = top5Records.filter(
+            (record: any) => record.T5 !== 0
+          );
+
+          console.log("Filtered Records", filteredRecords);
+
+          // Store the filtered records
+          setT6Data(filteredRecords);
         }
       } catch (error) {
         // console.error("Error->", error);
@@ -76,7 +82,7 @@ const T6Table = () => {
           <CardHeader>
             <h4 className="card-title mb-0">Top 5 T6 Clients</h4>
           </CardHeader>
-          <CardBody>
+          <CardBody style={{ height: "250px", overflow: "hidden" }}>
             <TradeInfo
               T6Data={t6Data}
               selectedWidget={"T6Overview"}

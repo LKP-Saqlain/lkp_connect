@@ -17,6 +17,8 @@ interface DormantClientProps {
   handleSearchBasedOnInput?: (value: string) => void;
   handleSearchUser?: () => void;
   showSearch?: any;
+  showExcel?: any;
+  handleExcelDownload?: () => void;
 }
 
 const DataTable: React.FC<DormantClientProps> = ({
@@ -29,6 +31,7 @@ const DataTable: React.FC<DormantClientProps> = ({
   handleSearchBasedOnInput,
   handleSearchUser,
   showSearch = false,
+  handleExcelDownload,
 }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
 
@@ -77,6 +80,7 @@ const DataTable: React.FC<DormantClientProps> = ({
         <SearchAppBar
           onSearchChange={handleSearchChange}
           handleSearchUser={handleSearchUser}
+          handleExcelDownload={handleExcelDownload}
         />
       )}
       <Paper

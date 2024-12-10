@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Col, Label, Row, Button } from "reactstrap";
 import { apiServices } from "../../../services";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
 import ShowToast from "../../../utils/toastUtils";
@@ -35,11 +36,22 @@ const DropDown = ({ handleValues, tradeData }: table) => {
   const [totalEntries, setTotalEntries] = useState(null);
 
   // const data = useSelector((state: RootState) => state.dormantReport.data);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { accessType } = useSelector(
+    (state: RootState) => state.AuthUser?.data?.data
+  );
+  console.log("accessType", accessType);
 
   useEffect(() => {
     console.log(userData, totalEntries);
   }, []);
+
+  useEffect(() => {
+    if (accessType === "") {
+      handleSubmit();
+    }
+  }, [accessType]);
 
   useEffect(() => {
     const Id = localStorage.getItem("Id");
@@ -128,8 +140,8 @@ const DropDown = ({ handleValues, tradeData }: table) => {
     let Id = localStorage.getItem("Id");
     const payload = {
       user_id: Id,
-      zone: selectedZone?.value,
-      branchCode: selectedBranchCode?.value,
+      zone: accessType === "" ? "H.O." : selectedZone?.value,
+      branchCode: accessType === "" ? "ALL" : selectedBranchCode?.value,
     };
     dispatch(showLoader(""));
     apiServices
@@ -204,62 +216,63 @@ const DropDown = ({ handleValues, tradeData }: table) => {
     <React.Fragment>
       <div className="page-content">
         <div className="container-fluid">
-          <Row style={{ fontFamily: "Public Sans" }}>
-            <Col lg={12}>
-              <div>
-                <Row>
-                  <Col xl={3}>
-                    <div className="mb-3" style={{ maxWidth: "300px" }}>
-                      <Label
-                        htmlFor="zone-select"
-                        className="form-label text-muted label-font"
-                      >
-                        ZONE
-                      </Label>
-                      <Select
-                        value={selectedZone}
-                        onChange={(selectedOption) =>
-                          setSelectedZone(selectedOption)
-                        }
-                        options={noSortingGroup}
-                        isClearable
-                        className="placeholder-font"
-                        id="zone-select"
-                      />
-                    </div>
-                  </Col>
+          {accessType !== "" && (
+            <Row style={{ fontFamily: "Public Sans" }}>
+              <Col lg={12}>
+                <div>
+                  <Row>
+                    <Col xl={3}>
+                      <div className="mb-3" style={{ maxWidth: "300px" }}>
+                        <Label
+                          htmlFor="zone-select"
+                          className="form-label text-muted label-font"
+                        >
+                          ZONE
+                        </Label>
+                        <Select
+                          value={selectedZone}
+                          onChange={(selectedOption) =>
+                            setSelectedZone(selectedOption)
+                          }
+                          options={noSortingGroup}
+                          isClearable
+                          className="placeholder-font"
+                          id="zone-select"
+                        />
+                      </div>
+                    </Col>
 
-                  <Col xl={3}>
-                    <div className="mb-3" style={{ maxWidth: "300px" }}>
-                      <Label
-                        htmlFor="branch-code-select"
-                        className="form-label text-muted label-font"
+                    <Col xl={3}>
+                      <div className="mb-3" style={{ maxWidth: "300px" }}>
+                        <Label
+                          htmlFor="branch-code-select"
+                          className="form-label text-muted label-font"
+                        >
+                          BRANCH CODE
+                        </Label>
+                        <Select
+                          value={selectedBranchCode}
+                          onChange={(selectedOption) =>
+                            setSelectedBranchCode(selectedOption)
+                          }
+                          options={branchCodeOptions}
+                          isClearable
+                          className="placeholder-font"
+                          id="branch-code-select"
+                        />
+                      </div>
+                    </Col>
+                    <Col className="d-flex flex-column-reverse">
+                      <div className="mb-3" />
+                      <Button
+                        className="w-50"
+                        style={{ backgroundColor: "#11395C" }}
+                        onClick={handleSubmit}
                       >
-                        BRANCH CODE
-                      </Label>
-                      <Select
-                        value={selectedBranchCode}
-                        onChange={(selectedOption) =>
-                          setSelectedBranchCode(selectedOption)
-                        }
-                        options={branchCodeOptions}
-                        isClearable
-                        className="placeholder-font"
-                        id="branch-code-select"
-                      />
-                    </div>
-                  </Col>
-                  <Col className="d-flex flex-column-reverse">
-                    <div className="mb-3" />
-                    <Button
-                      className="w-50"
-                      style={{ backgroundColor: "#11395C" }}
-                      onClick={handleSubmit}
-                    >
-                      Submit
-                    </Button>
-                  </Col>
-                  {/* <Col className="d-flex flex-column-reverse">
+                        Submit
+                      </Button>
+                    </Col>
+                    {/* <Col className="d-flex flex-column-reverse">
                     <div className="mb-3" />
                     <Button
                       style={{
@@ -271,7 +284,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
                       Download Excel
                     </Button>
                   </Col> */}
-                  {/* <Col className="d-flex align-items-end">
+                    {/* <Col className="d-flex align-items-end">
                     <Button
                       className="me-2"
                       style={{ backgroundColor: "#11395C" }}
@@ -289,10 +302,11 @@ const DropDown = ({ handleValues, tradeData }: table) => {
                       Download Excel
                     </Button>
                   </Col> */}
-                </Row>
-              </div>
-            </Col>
-          </Row>
+                  </Row>
+                </div>
+              </Col>
+            </Row>
+          )}
         </div>
       </div>
     </React.Fragment>
