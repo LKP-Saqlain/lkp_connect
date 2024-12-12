@@ -100,14 +100,14 @@ const T6Table = () => {
           const top5Records = sortedData.slice(0, 5);
 
           // Remove records with T5 value of 0
-          const filteredRecords = top5Records.filter(
-            (record: any) => record.T5 !== 0
-          );
+          // const filteredRecords = top5Records.filter(
+          //   (record: any) => record.T5 !== 0
+          // );
 
-          console.log("Filtered Records", filteredRecords);
+          // console.log("Filtered Records", filteredRecords);
 
           // Store the filtered records
-          setT6Data(filteredRecords);
+          setT6Data(top5Records);
         }
       } catch (error) {
         // console.error("Error->", error);
