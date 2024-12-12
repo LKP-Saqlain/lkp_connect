@@ -4,6 +4,7 @@ const RevenueDetails = ({
   handleValues,
   handleRevenueRange,
   handleRevenueData,
+  setTradedClientCount,
 }: any) => {
   return (
     <>
@@ -11,6 +12,7 @@ const RevenueDetails = ({
         handleValues={handleValues}
         handleRevenueRange={handleRevenueRange}
         handleRevenueData={handleRevenueData}
+        setTradedClientCount={setTradedClientCount}
       />
       <NonBrokingRevenue />
     </>

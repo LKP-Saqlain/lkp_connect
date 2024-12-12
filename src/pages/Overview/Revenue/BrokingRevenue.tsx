@@ -8,7 +8,11 @@ import { RootState, AppDispatch } from "../../../redux/store";
 import { DealerPerformance } from "../../../redux/thunk/DealerPerformance";
 import ShowToast from "../../../utils/toastUtils";
 
-const Revenue = ({ handleRevenueRange, handleRevenueData }: any) => {
+const Revenue = ({
+  handleRevenueRange,
+  handleRevenueData,
+  setTradedClientCount,
+}: any) => {
   const [yearRevenue, setYearRevenue] = useState<[]>([]);
   const [brokingNonBrokingData, setBrokingNonBrokingData] = useState([
     {
@@ -164,12 +168,14 @@ const Revenue = ({ handleRevenueRange, handleRevenueData }: any) => {
               filteredRevenueData[0]?.Multi_net_rev_ach || 0;
             const newClientsAdded = filteredRevenueData[0]?.New_Clients || 0;
 
+            const tradedClient = filteredRevenueData[0]?.TradedClientCount || 0;
+
             console.log("Total:", total);
             console.log("Broking:", broking);
             console.log("Non-Broking:", nonBroking);
             console.log("multiRevenueMultiply", multiRevenueMultiply);
             console.log("newClientsAdded", newClientsAdded);
-
+            setTradedClientCount(tradedClient);
             handleRevenueData(
               total,
               broking,

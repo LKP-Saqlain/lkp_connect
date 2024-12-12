@@ -9,7 +9,7 @@ import { RootState, AppDispatch } from "../../redux/store";
 import { ClientSummary } from "../../redux/thunk/ClientSummary";
 import ShowToast from "../../utils/toastUtils";
 
-const StoreVisits = () => {
+const StoreVisits = ({ getActiveClients }: any) => {
   const [chartData, setChartData] = useState<[]>([]);
 
   const { user_id } = useSelector(
@@ -28,7 +28,9 @@ const StoreVisits = () => {
       dispatch(ClientSummary(payload))
         .unwrap()
         .then((response) => {
-          console.log("Response", response);
+          console.log("ClientSummaryResponse", response?.data?.data[0].Active);
+          const activeClient = response?.data?.data[0].Active;
+          getActiveClients(activeClient);
           setChartData(response?.data?.data[0]);
           // setBrokerageData(response?.data?.data);
           if (response?.status === 200) {

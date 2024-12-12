@@ -69,10 +69,16 @@ const DormantClient = () => {
   });
 
   useEffect(() => {
-    if (accessType === "") {
+    if (accessType === "" || searchValue.length === 0) {
       handleSubmit();
     }
-  }, [accessType]);
+  }, [accessType, searchValue]);
+
+  useEffect(() => {
+    if (searchValue.length === 0) {
+      handleSubmit();
+    }
+  }, [searchValue]);
   interface FormValues {
     selectedZone: { label: string; value: string } | null;
     selectedBranchCode: { label: string; value: string } | null;
@@ -246,12 +252,17 @@ const DormantClient = () => {
           }
         })
         .catch((error) => {
-          console.log("Error->", error.response.data.errors.Zone["0"]);
-          const zoneError = error.response.data.errors.Zone["0"];
-          const branchCodeError = error.response.data.errors.BranchCode["0"];
-          dispatch(hideLoader());
-          ShowToast("error", zoneError);
-          ShowToast("error", branchCodeError);
+          console.error("error", error.status);
+          if (error.status === 400) {
+            ShowToast("error", error?.response?.data?.message);
+          } else {
+            console.log("Error->", error.response.data.errors.Zone["0"]);
+            const zoneError = error.response.data.errors.Zone["0"];
+            const branchCodeError = error.response.data.errors.BranchCode["0"];
+            dispatch(hideLoader());
+            ShowToast("error", zoneError);
+            ShowToast("error", branchCodeError);
+          }
         })
         .finally(() => {
           dispatch(hideLoader());

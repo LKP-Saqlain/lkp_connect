@@ -22,4 +22,5 @@ export const endpoints = {
   DealerPerformance: "/api/MIS/DEALERPERFORMANCE",
   forgetPassword: "/api/Login/ForgetPassword",
   ClientDetails: "/api/Client/ClientDetails",
+  getUpcompingDormantReport: "/api/Common/GetUpcomingDormantReport",
 };

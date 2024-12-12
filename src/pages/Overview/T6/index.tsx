@@ -9,6 +9,7 @@ import { apiServices } from "../../../services";
 import { Typography } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 import "../style.css";
+import ShowToast from "../../../utils/toastUtils";
 
 interface T6Selling {
   ClientCode: string;
@@ -25,9 +26,58 @@ interface T6Selling {
 
 const T6Table = () => {
   const [t6Data, setT6Data] = useState<T6Selling[]>([]);
+  const [
+    upcomingOverviewDormantTableData,
+    setUpcomingOverviewDormantTableData,
+  ] = useState<[]>([]);
   const dispatch = useDispatch();
 
   const isMobile = useMediaQuery("(max-width:768px)");
+
+  useEffect(() => {
+    const Id = localStorage.getItem("Id");
+    setUpcomingOverviewDormantTableData([]); // Clear existing data before fetching new data
+    const payload = {
+      start: 0,
+      pageSize: 5000,
+      searchKey: "",
+      loginName: Id,
+      zone: "ALL",
+      branchCode: "ALL",
+      clientStatus: "ALL",
+    };
+
+    dispatch(showLoader("")); // Show loader while fetching data
+
+    apiServices
+      .getUpcompingDormantReport(payload)
+      .then((response) => {
+        console.log("API Response:", response?.data);
+        if (response?.status === 200) {
+          const data = response?.data || [];
+
+          const filterRecords = data
+            .filter((item: any) => item.dayCount === 0)
+            .slice(0, 5);
+          console.log("filterData", filterRecords);
+          setUpcomingOverviewDormantTableData(filterRecords);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        if (error.status === 400) {
+          ShowToast("error", error?.response?.data?.message);
+        } else {
+          const zoneError = error.response.data.errors.Zone?.[0];
+          const branchCodeError = error.response.data.errors.BranchCode?.[0];
+          ShowToast("error", zoneError || "Unknown zone error");
+          ShowToast("error", branchCodeError || "Unknown branch code error");
+        }
+      })
+      .finally(() => {
+        dispatch(hideLoader()); // Hide loader after fetching
+      });
+  }, []);
 
   useEffect(() => {
     const fetchClientCash = async () => {
@@ -95,7 +145,12 @@ const T6Table = () => {
             <h4 className="card-title mb-0">Upcoming Dormant Client</h4>
           </CardHeader>
           <CardBody>
-            <Typography>Upcoming Dormant Client</Typography>
+            {/* <Typography>Upcoming Dormant Client</Typography> */}
+            <TradeInfo
+              T6Data={upcomingOverviewDormantTableData}
+              selectedWidget={"dormantOverview"}
+              customHide={true}
+            />
           </CardBody>
         </Card>
         <Card style={{ flex: "1", minWidth: "300px" }}>

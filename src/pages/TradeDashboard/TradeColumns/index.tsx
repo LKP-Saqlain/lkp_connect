@@ -1,4 +1,5 @@
 import { GridColDef } from "@mui/x-data-grid";
+import Tooltip from "@mui/material/Tooltip";
 
 export const ClientCashColumns: GridColDef[] = [
   {
@@ -19,6 +20,35 @@ export const ClientCashColumns: GridColDef[] = [
     valueFormatter: (params: number) =>
       new Intl.NumberFormat("en-IN").format(params),
   },
+  {
+    field: "MobileNo",
+    headerName: "Mobile No",
+    width: 120,
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+      // Mask all except first 2 digits
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)/,
+        (_: any, prefix: any, rest: any) => {
+          console.log(prefix); //addded only for testing purpose
+          // return `${prefix}${"X".repeat(rest.length)}`;
+          // console.log(handleViewDetails);
+
+          return `${"X".repeat(rest.length)}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+  },
+  { field: "Brokerage_for_currentmonth", headerName: "CM", width: 120 },
+  { field: "Brokerage_for_1month", headerName: "LM", width: 120 },
+  { field: "Brokerage_for_3months", headerName: "1M", width: 120 },
 ];
 export const T6Columns: GridColDef[] = [
   {
@@ -107,7 +137,7 @@ export const T6OverViewColumns: GridColDef[] = [
   {
     field: "ClientCode",
     headerName: "Client",
-    width: 180,
+    width: 160,
     headerAlign: "center",
     // align: "center",
     renderCell: (params) => (
@@ -125,5 +155,35 @@ export const T6OverViewColumns: GridColDef[] = [
     headerAlign: "center",
     valueFormatter: (params: number) =>
       new Intl.NumberFormat("en-IN").format(params),
+  },
+];
+export const DormantOverViewColumns: GridColDef[] = [
+  {
+    field: "ctermcode",
+    headerName: "Client",
+    width: 100,
+    headerAlign: "center",
+    // align: "center",
+    renderCell: (params) => (
+      <div style={{ textAlign: "left", lineHeight: "1.2" }}>
+        <div>{params.row.ctermcode}</div>
+        <div>{params.row.clientName}</div>
+      </div>
+    ),
+  },
+  // {
+  //   field: "T5",
+  //   headerName: "T5",
+  //   width: 90,
+  //   align: "right",
+  //   headerAlign: "center",
+  //   valueFormatter: (params: number) =>
+  //     new Intl.NumberFormat("en-IN").format(params),
+  // },
+  {
+    field: "dayCount",
+    headerName: "Not traded since(Days)",
+    width: 150,
+    align: "center",
   },
 ];

@@ -17,6 +17,7 @@ interface Option {
 interface table {
   handleValues: (data: any) => void;
   tradeData: any;
+  selectedWidget: any;
 }
 
 // interface CliWithCashBalance {
@@ -25,7 +26,7 @@ interface table {
 //   LastTradeDate: string;
 //   Cash: string;
 // }
-const DropDown = ({ handleValues, tradeData }: table) => {
+const DropDown = ({ handleValues, tradeData, selectedWidget }: table) => {
   const [selectedZone, setSelectedZone] = useState<Option | null>(null);
   const [selectedBranchCode, setSelectedBranchCode] = useState<Option | null>(
     null
@@ -41,17 +42,18 @@ const DropDown = ({ handleValues, tradeData }: table) => {
   const { accessType } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
   );
-  console.log("accessType", accessType);
+  console.log("accessType", typeof accessType);
 
   useEffect(() => {
     console.log(userData, totalEntries);
   }, []);
 
   useEffect(() => {
-    if (accessType === "") {
+    console.log("selectedWidget", selectedWidget);
+    if (accessType === "" && selectedWidget === "Clients With Cash Balance") {
       handleSubmit();
     }
-  }, [accessType]);
+  }, [accessType, selectedWidget]);
 
   useEffect(() => {
     const Id = localStorage.getItem("Id");
@@ -134,6 +136,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
   }, [selectedZone, dispatch]); // This effect runs when `selectedZone` changes
 
   const handleSubmit = async () => {
+    dispatch(showLoader(""));
     tradeData([]);
     // setSelectedZone(null);
     // setSelectedBranchCode(null);

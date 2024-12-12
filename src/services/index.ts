@@ -31,6 +31,13 @@ export const apiServices = {
   getDormantReport: async (payload: any) => {
     return await apiService("POST", endpoints.getDormantReport, payload);
   },
+  getUpcompingDormantReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.getUpcompingDormantReport,
+      payload
+    );
+  },
   LastTradeDate: async (payload: any) => {
     return await apiService(
       "POST",

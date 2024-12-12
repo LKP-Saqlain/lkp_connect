@@ -79,10 +79,10 @@ const SlbmHoling = () => {
   });
 
   useEffect(() => {
-    if (accessType === "") {
+    if (accessType === "" || searchValue.length === 0) {
       handleSubmit();
     }
-  }, [accessType]);
+  }, [accessType, searchValue]);
 
   useEffect(() => {
     const str = user_id;

@@ -31,6 +31,8 @@ const DashboardProject = () => {
     useState<TotalClientKey>("total");
   const [multiRevenueMultiply, setMultiRevenueMultiply] = useState(0);
   const [newClients, setNewClients] = useState(0);
+  const [activeClients, setActiveClients] = useState(0);
+  const [tradedClientCount, setTradedClientCount] = useState(0);
 
   const handleValues = (revTotal: string) => {
     console.log("revTotal", revTotal);
@@ -98,6 +100,11 @@ const DashboardProject = () => {
   function formatIndianNumber(value: number): string {
     return `₹${value.toLocaleString("en-IN")}`;
   }
+
+  const getActiveClients = (clients: number) => {
+    console.log("activeClients", clients);
+    setActiveClients(clients);
+  };
 
   document.title = "LKP Securities | User Overview";
   return (
@@ -447,7 +454,10 @@ const DashboardProject = () => {
                                   to="#"
                                   className="badge bg-success-subtle text-success badge-border small px-2 py-1"
                                 >
-                                  Total Active Clients - 19k
+                                  Total Active Clients -{" "}
+                                  {new Intl.NumberFormat("en-IN").format(
+                                    activeClients
+                                  )}
                                 </Link>
                               </div>
 
@@ -474,23 +484,25 @@ const DashboardProject = () => {
                                   >
                                     <CountUp
                                       start={0}
-                                      end={65458}
+                                      end={tradedClientCount}
                                       separator=","
-                                      prefix="₹"
+                                      // prefix="₹"
                                       duration={3}
                                       style={{
                                         color: "#495057",
-                                        fontSize: "15px", // Adjusted font size for CountUp
+                                        fontSize: "17px",
+                                        fontWeight: "bold",
+                                        marginRight: "1rem",
                                       }}
                                     />
-                                    <small className="text-muted fs-12">
+                                    {/* <small className="text-muted fs-12">
                                       .12k
-                                    </small>
+                                    </small> */}
                                   </h5>
                                 </div>
                               </div>
                               <h6 className="text-muted mb-0 fs-14">
-                                New Client Added
+                                Traded Clients
                               </h6>
                             </CardBody>
                           </Card>
@@ -511,7 +523,7 @@ const DashboardProject = () => {
                       <ProjectsOverview />
                     </div>
                   </Col>
-                  <UserCount />
+                  <UserCount getActiveClients={getActiveClients} />
                 </Row>
                 <Row>
                   <Col>
@@ -519,6 +531,7 @@ const DashboardProject = () => {
                       handleValues={handleValues}
                       handleRevenueRange={handleRevenueRange}
                       handleRevenueData={handleRevenueData}
+                      setTradedClientCount={setTradedClientCount}
                     />
                   </Col>
                 </Row>

@@ -4,8 +4,10 @@ import Box from "@mui/material/Box";
 import InputBase from "@mui/material/InputBase";
 // import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
-import { Button } from "reactstrap";
+import { Button as ReactstrapButton } from "reactstrap";
+import { Button as MUIButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
+import { log } from "console";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -54,6 +56,8 @@ interface SearchAppBarProps {
   searchTableValue?: any;
   showExcel?: any;
   handleExcelDownload?: () => void;
+  selectedWidget?: any;
+  onFilterChange?: (filter: string) => void;
 }
 
 const SearchAppBar: React.FC<SearchAppBarProps> = ({
@@ -61,8 +65,29 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   handleSearchUser,
   searchTableValue,
   handleExcelDownload,
+  selectedWidget,
+  onFilterChange,
 }) => {
   const [searchValue, setSearchValue] = React.useState(searchTableValue);
+  const [selectedButton, setSelectedButton] = React.useState<string>("ALL");
+
+  const selectedStyle = {
+    bgcolor: "#11395C",
+    color: "#fff",
+    borderRadius: "7px",
+    fontFamily: "Poppins",
+    borderColor: "#ABC4DA",
+    textTransform: "capitalize",
+  };
+
+  const nonSelectedStyle = {
+    bgcolor: "#ABC4DA",
+    color: "#11395C",
+    borderRadius: "7px",
+    fontFamily: "Poppins",
+    borderColor: "#ABC4DA",
+    textTransform: "capitalize",
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -76,8 +101,23 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
     handleSearchUser?.(); // Call the search function when input loses focus
   };
 
+  const handleFilterClick = (filter: string) => {
+    console.log("filterValues", filter);
+    setSelectedButton(filter); // Update the local state to highlight the button
+    onFilterChange?.(filter); // Call the parent function with the selected filter
+  };
+
   return (
-    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "space-between" }}>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between", // Align search and buttons on opposite ends
+        alignItems: "center", // Vertically align elements
+        flexWrap: "wrap", // Ensure proper alignment on small screens
+        gap: 1,
+      }}
+    >
+      {/* Search Bar */}
       <Search sx={{ border: "1px solid #11395C" }}>
         <SearchIconWrapper>
           <SearchIcon />
@@ -90,34 +130,48 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
           inputProps={{ "aria-label": "search" }}
         />
       </Search>
-      {/* <Button
-        variant="outlined"
-        className="btn-font"
-        sx={{
-          bgcolor: "#11395C",
-          color: "#fff",
-          borderRadius: "7px",
-          fontFamily: "Public Sans",
-          borderColor: "#ABC4DA",
-          textTransform: "capitalize",
-          ml: 1,
-        }}
-        onClick={handleSearchClick}
-      >
-        Search
-      </Button> */}
-      <Button
-        className="btn-font"
-        style={{
-          backgroundColor: "#11395C",
-          height: "40px",
-        }}
-        onClick={handleExcelDownload}
-        type="button"
-      >
-        Excel
-        <DownloadIcon />
-      </Button>
+
+      {/* Buttons (Excel and Filters) */}
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        {/* Excel Button */}
+        {selectedWidget !== "Client Approaching  Dormant Status" && (
+          <ReactstrapButton
+            className="btn-font"
+            style={{
+              backgroundColor: "#11395C",
+              color: "#fff",
+              borderRadius: "7px",
+              fontFamily: "Poppins",
+              borderColor: "#ABC4DA",
+              textTransform: "capitalize",
+            }}
+            onClick={handleExcelDownload}
+            type="button"
+          >
+            Excel
+            <DownloadIcon />
+          </ReactstrapButton>
+        )}
+
+        {/* Filter Buttons */}
+        {selectedWidget === "Client Approaching  Dormant Status" && (
+          <div className="d-flex gap-1">
+            {["ALL", "7D", "15D", "1M"].map((filter) => (
+              <MUIButton
+                key={filter}
+                variant="outlined"
+                size="small"
+                onClick={() => handleFilterClick(filter)} // Call the new function
+                sx={
+                  selectedButton === filter ? selectedStyle : nonSelectedStyle
+                }
+              >
+                {filter}
+              </MUIButton>
+            ))}
+          </div>
+        )}
+      </Box>
     </Box>
   );
 };

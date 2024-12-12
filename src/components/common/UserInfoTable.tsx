@@ -4,6 +4,7 @@ import Paper from "@mui/material/Paper";
 import DropDown from "./customDropDown";
 import {
   ClientCashColumns,
+  DormantOverViewColumns,
   T6Columns,
   T6OverViewColumns,
 } from "../../pages/TradeDashboard/TradeColumns";
@@ -39,6 +40,7 @@ interface SelectedWidgetProps {
   handleSearchUser?: () => void;
   customHide?: any;
   searchValue?: any;
+  onFilterChange?: (filter: string) => void;
 }
 
 const DataTable = ({
@@ -46,7 +48,7 @@ const DataTable = ({
   T6Data,
   getUserDetails,
   // handleExcel,
-  apiStatus,
+  // apiStatus,
   activeGroupedClients,
   inactiveGroupedClients,
   handleSearchBasedOnInput,
@@ -54,9 +56,14 @@ const DataTable = ({
   showSearch = false,
   customHide,
   searchValue,
+  onFilterChange,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
+
+  useEffect(() => {
+    console.log("selectedWidgets", selectedWidget);
+  }, [selectedWidget]);
 
   useEffect(() => {
     console.log(totalRows);
@@ -79,6 +86,7 @@ const DataTable = ({
     getUserDetails?.(row);
   };
   const getColumns = () => {
+    // debugger;
     if (selectedWidget === "Clients With Cash Balance") {
       return ClientCashColumns.map((column) => ({
         ...column,
@@ -95,11 +103,15 @@ const DataTable = ({
       return T6OverViewColumns.map((column) => ({
         ...column,
       }));
+    } else if (selectedWidget === "dormantOverview") {
+      return DormantOverViewColumns.map((column) => ({
+        ...column,
+      }));
     } else if (
-      // selectedWidget === "Total Clients" ||
-      // selectedWidget === "Active Clients" ||
-      // selectedWidget === "Inactive Clients"
-      apiStatus
+      selectedWidget === "Total Clients" ||
+      selectedWidget === "Active Clients" ||
+      selectedWidget === "Inactive Clients"
+      // apiStatus
     ) {
       return getClientActivityStatusColumns(handleViewDetails);
     } else if (selectedWidget === "Client Approaching  Dormant Status") {
@@ -118,7 +130,11 @@ const DataTable = ({
   return (
     <>
       {selectedWidget === "Clients With Cash Balance" && (
-        <DropDown tradeData={setTradeData} handleValues={handleValues} />
+        <DropDown
+          tradeData={setTradeData}
+          handleValues={handleValues}
+          selectedWidget={selectedWidget}
+        />
       )}
       {/* {(selectedWidget === "Total Clients" ||
         selectedWidget === "Active Clients" ||
@@ -149,6 +165,8 @@ const DataTable = ({
           onSearchChange={handleSearchChange}
           handleSearchUser={handleSearchUser}
           searchTableValue={searchValue}
+          selectedWidget={selectedWidget}
+          onFilterChange={onFilterChange}
         />
       )}
       <Paper
@@ -169,12 +187,16 @@ const DataTable = ({
               ? activeGroupedClients
               : selectedWidget === "Inactive Clients"
               ? inactiveGroupedClients
+              : selectedWidget === "Client Approaching  Dormant Status"
+              ? T6Data
               : T6Data
           }
           columns={columns}
           rowHeight={30}
           hideFooter={customHide ? true : false}
-          getRowId={(row: any) => row.ClientName} // Use the correct identifier for rows
+          getRowId={(row: any) =>
+            row.clientName ? row.clientName : row.ClientName
+          } // Use the correct identifier for rows
           sx={{
             border: 0,
             fontFamily: '"Public Sans", sans-serif',
