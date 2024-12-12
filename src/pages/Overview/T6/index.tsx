@@ -57,7 +57,7 @@ const T6Table = () => {
           const data = response?.data || [];
 
           const filterRecords = data
-            .filter((item: any) => item.dayCount === 0)
+            .filter((item: any) => item.dayCount)
             .slice(0, 5);
           console.log("filterData", filterRecords);
           setUpcomingOverviewDormantTableData(filterRecords);

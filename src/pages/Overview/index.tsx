@@ -116,6 +116,12 @@ const DashboardProject = () => {
               <div className="h-100">
                 <Row>
                   <Col>
+                    <div className="movable-note">
+                      <span>
+                        <strong>Note:</strong> I am the Note with no
+                        Information, Thank You!
+                      </span>
+                    </div>
                     <div className="h-100">
                       {/* Row for Four Boxes */}
 
@@ -179,7 +185,10 @@ const DashboardProject = () => {
                               </div>
 
                               {/* Main content */}
-                              <div className="d-flex align-items-center justify-content-between mt-5">
+                              <div
+                                className="d-flex align-items-center justify-content-between"
+                                style={{ marginTop: "1.3rem" }}
+                              >
                                 {/* Lottie Animation */}
                                 <div className="mr-3">
                                   <Lottie
@@ -287,7 +296,10 @@ const DashboardProject = () => {
                               </div>
 
                               {/* Main content */}
-                              <div className="d-flex align-items-center justify-content-between mt-5">
+                              <div
+                                className="d-flex align-items-center justify-content-between"
+                                style={{ marginTop: "1.3rem" }}
+                              >
                                 {/* Lottie Animation */}
                                 <div className="mr-3">
                                   <Lottie
@@ -386,7 +398,10 @@ const DashboardProject = () => {
                               </div>
 
                               {/* Main content */}
-                              <div className="d-flex align-items-center justify-content-between mt-5">
+                              <div
+                                className="d-flex align-items-center justify-content-between"
+                                style={{ marginTop: "1.3rem" }}
+                              >
                                 {/* Lottie Animation */}
                                 <div className="mr-3">
                                   <Lottie
@@ -462,7 +477,10 @@ const DashboardProject = () => {
                               </div>
 
                               {/* Main content */}
-                              <div className="d-flex align-items-center justify-content-between mt-5">
+                              <div
+                                className="d-flex align-items-center justify-content-between"
+                                style={{ marginTop: "1.3rem" }}
+                              >
                                 {/* Lottie Animation */}
                                 <div className="mr-3">
                                   <Lottie
@@ -511,12 +529,7 @@ const DashboardProject = () => {
                     </div>
                   </Col>
                 </Row>
-                <div className="movable-note">
-                  <span>
-                    <strong>Note:</strong> I am the Note with no Information,
-                    Thank You!
-                  </span>
-                </div>
+
                 <Row>
                   <Col xl={8}>
                     <div className="card-body">
