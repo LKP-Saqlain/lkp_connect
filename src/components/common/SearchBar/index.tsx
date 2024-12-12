@@ -7,7 +7,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Button as ReactstrapButton } from "reactstrap";
 import { Button as MUIButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import { log } from "console";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
