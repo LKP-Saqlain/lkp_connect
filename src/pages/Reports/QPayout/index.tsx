@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardBody,
@@ -42,6 +42,13 @@ const QuarterlyPayout = () => {
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+
+  useEffect(() => {
+    if (responseStatus && searchValue.length === 0) {
+      handleSubmit();
+    }
+  }, [responseStatus, searchValue]);
+
   const validationSchema = Yup.object({
     selectedFinancialYear: Yup.object()
       .nullable()
@@ -79,6 +86,7 @@ const QuarterlyPayout = () => {
 
   const handleSubmit = async (event?: any, value?: any) => {
     console.log(event);
+    setQpayoutData([]);
     // const Id = localStorage.getItem("Id");
     const pageSize = 10; // Define pageSize
 
@@ -159,7 +167,7 @@ const QuarterlyPayout = () => {
 
   const handleSearchUser = async () => {
     const pageSize = 10; // Define pageSize
-
+    setQpayoutData([]);
     // Calculate start based on the new page (0-indexed)
     // const start = (value - 1) * pageSize;
 
@@ -347,6 +355,7 @@ const QuarterlyPayout = () => {
                     handleSearchBasedOnInput={handleSearchBasedOnInput}
                     handleSearchUser={handleSearchUser}
                     showSearch={responseStatus}
+                    showExcel={false}
                   />
                 </CardBody>
               </Card>

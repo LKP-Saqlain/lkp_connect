@@ -66,6 +66,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   handleExcelDownload,
   selectedWidget,
   onFilterChange,
+  showExcel,
 }) => {
   const [searchValue, setSearchValue] = React.useState(searchTableValue);
   const [selectedButton, setSelectedButton] = React.useState<string>("ALL");
@@ -110,47 +111,50 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
     <Box
       sx={{
         display: "flex",
-        justifyContent: "space-between", // Align search and buttons on opposite ends
+        justifyContent: "flex-end", // Align search and buttons on opposite ends
         alignItems: "center", // Vertically align elements
         flexWrap: "wrap", // Ensure proper alignment on small screens
         gap: 1,
       }}
     >
       {/* Search Bar */}
-      <Search sx={{ border: "1px solid #11395C" }}>
-        <SearchIconWrapper>
-          <SearchIcon />
-        </SearchIconWrapper>
-        <StyledInputBase
-          value={searchValue}
-          onChange={handleInputChange}
-          onBlur={handleBlur}
-          placeholder="Search Client Name"
-          inputProps={{ "aria-label": "search" }}
-        />
-      </Search>
+      {selectedWidget !== "Client Approaching  Dormant Status" && (
+        <Search sx={{ border: "1px solid #11395C" }}>
+          <SearchIconWrapper>
+            <SearchIcon />
+          </SearchIconWrapper>
+          <StyledInputBase
+            value={searchValue}
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            placeholder="Search Client Name"
+            inputProps={{ "aria-label": "search" }}
+          />
+        </Search>
+      )}
 
       {/* Buttons (Excel and Filters) */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         {/* Excel Button */}
-        {selectedWidget !== "Client Approaching  Dormant Status" && (
-          <ReactstrapButton
-            className="btn-font"
-            style={{
-              backgroundColor: "#11395C",
-              color: "#fff",
-              borderRadius: "7px",
-              fontFamily: "Poppins",
-              borderColor: "#ABC4DA",
-              textTransform: "capitalize",
-            }}
-            onClick={handleExcelDownload}
-            type="button"
-          >
-            Excel
-            <DownloadIcon />
-          </ReactstrapButton>
-        )}
+        {selectedWidget !== "Client Approaching  Dormant Status" &&
+          showExcel && (
+            <ReactstrapButton
+              className="btn-font"
+              style={{
+                backgroundColor: "#11395C",
+                color: "#fff",
+                borderRadius: "7px",
+                fontFamily: "Poppins",
+                borderColor: "#ABC4DA",
+                textTransform: "capitalize",
+              }}
+              onClick={handleExcelDownload}
+              type="button"
+            >
+              Excel
+              <DownloadIcon />
+            </ReactstrapButton>
+          )}
 
         {/* Filter Buttons */}
         {selectedWidget === "Client Approaching  Dormant Status" && (

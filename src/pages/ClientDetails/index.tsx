@@ -126,7 +126,7 @@ const ClientDetails = ({
         const payload = {
           start: 0, // Calculate start based on the new page
           pageSize: 5000,
-          searchKey: searchValue !== "" ? searchValue : "",
+          searchKey: "",
           loginName: user_id,
           zone: "ALL",
           branchCode: "ALL",
@@ -363,71 +363,128 @@ const ClientDetails = ({
 
   const handleSearchUser = async () => {
     setTableData([]);
-    if (apiStatus) {
-      const Id = localStorage.getItem("Id");
-      const payload = {
-        loginName: Id,
-        branchCode: "ALL",
-        zone: "H.O.",
-        clientStatus: "ALL",
-        start: 0,
-        pageSize: 0,
-        searchkey: searchValue !== "" ? searchValue : "",
-      };
-      try {
-        dispatch(showLoader(""));
-        const response = await apiServices.ClientDetails(payload);
-        console.log(
-          "ClientClientDetailsResponse",
-          response?.data[0].RecordsTotal
-        );
+    console.log("selecteWidget", selectedCapsule);
+    if (selectedCapsule === "Total Clients") {
+      if (apiStatus) {
+        const Id = localStorage.getItem("Id");
+        const payload = {
+          loginName: Id,
+          branchCode: "ALL",
+          zone: "H.O.",
+          clientStatus: "ALL",
+          start: 0,
+          pageSize: 0,
+          searchkey: searchValue !== "" ? searchValue : "",
+        };
+        try {
+          dispatch(showLoader(""));
+          const response = await apiServices.ClientDetails(payload);
+          console.log(
+            "ClientClientDetailsResponse",
+            response?.data[0].RecordsTotal
+          );
 
-        if (response?.status === 200) {
+          if (response?.status === 200) {
+            dispatch(hideLoader());
+            setResponseStatus(true);
+            setTableData(response?.data);
+
+            const totalCount = response?.data[0].RecordsTotal;
+            setTotalCount(totalCount);
+
+            const activeClients = response?.data.filter(
+              (client: any) => client.ClientStatus === "Active"
+            ).length;
+            const inactiveClients = response?.data.filter(
+              (client: any) => client.ClientStatus === "InActive"
+            ).length;
+            setActiveClients(activeClients);
+            setinActiveClients(inactiveClients);
+            console.log("Active Clients:", activeClients);
+            console.log("Inactive Clients:", inactiveClients);
+
+            const activeGroupedClients: any[] = [];
+            const inactiveGroupedClients: any[] = [];
+
+            // Loop through the data and categorize clients as active or inactive
+            response?.data.forEach((client: any) => {
+              if (client.ClientStatus === "Active") {
+                activeGroupedClients.push(client);
+              } else if (client.ClientStatus === "InActive") {
+                inactiveGroupedClients.push(client);
+              }
+            });
+
+            console.log("Active Clients:", activeGroupedClients);
+            console.log("Inactive Clients:", inactiveGroupedClients);
+
+            // Optionally, set the grouped data to state
+            // setGroupedClients(groupedClients);
+            setActiveGroupedClients(activeGroupedClients);
+            setInactiveGroupedClients(inactiveGroupedClients);
+          }
+        } catch (error) {
           dispatch(hideLoader());
-          setResponseStatus(true);
-          setTableData(response?.data);
-
-          const totalCount = response?.data[0].RecordsTotal;
-          setTotalCount(totalCount);
-
-          const activeClients = response?.data.filter(
-            (client: any) => client.ClientStatus === "Active"
-          ).length;
-          const inactiveClients = response?.data.filter(
-            (client: any) => client.ClientStatus === "InActive"
-          ).length;
-          setActiveClients(activeClients);
-          setinActiveClients(inactiveClients);
-          console.log("Active Clients:", activeClients);
-          console.log("Inactive Clients:", inactiveClients);
-
-          const activeGroupedClients: any[] = [];
-          const inactiveGroupedClients: any[] = [];
-
-          // Loop through the data and categorize clients as active or inactive
-          response?.data.forEach((client: any) => {
-            if (client.ClientStatus === "Active") {
-              activeGroupedClients.push(client);
-            } else if (client.ClientStatus === "InActive") {
-              inactiveGroupedClients.push(client);
-            }
-          });
-
-          console.log("Active Clients:", activeGroupedClients);
-          console.log("Inactive Clients:", inactiveGroupedClients);
-
-          // Optionally, set the grouped data to state
-          // setGroupedClients(groupedClients);
-          setActiveGroupedClients(activeGroupedClients);
-          setInactiveGroupedClients(inactiveGroupedClients);
+          // console.error(
+          //   "Error fetching data:",
+          //   error?.response || error?.message || error
+          // );
         }
-      } catch (error) {
-        dispatch(hideLoader());
-        // console.error(
-        //   "Error fetching data:",
-        //   error?.response || error?.message || error
-        // );
       }
+    } else if (selectedCapsule === "Client Approaching  Dormant Status") {
+      setTableData([]);
+      // alert(selectedCapsule);
+      const payload = {
+        start: 0, // Calculate start based on the new page
+        pageSize: 5000,
+        searchKey: searchValue !== "" ? searchValue : "",
+        loginName: user_id,
+        zone: "ALL",
+        branchCode: "ALL",
+        clientStatus: "ALL",
+      };
+      dispatch(showLoader(""));
+      await apiServices
+        .getUpcompingDormantReport(payload)
+        .then((response) => {
+          dispatch(hideLoader());
+          console.log("getUpcomingDormantReport_response_1", response?.data);
+          if (response?.status === 200) {
+            setResponseStatus(true);
+            let { recordsTotal } = response?.data[0];
+            console.log("getDormantReport_response_1", response?.status);
+            setTotalEntries(recordsTotal);
+            const seven_day_duration = response?.data.filter(
+              (item: any) => item.dayCount <= 7
+            );
+            const fifteen_day_duration = response?.data.filter(
+              (item: any) => item.dayCount <= 15
+            );
+            const one_months_duration = response?.data.filter(
+              (item: any) => item.dayCount <= 30
+            );
+            console.log("seven_day_duration", seven_day_duration);
+            console.log("fifteen_day_duration", fifteen_day_duration);
+            console.log("one_months_duration", one_months_duration);
+            setTableData(response?.data);
+          }
+        })
+        .catch((error) => {
+          console.error("error", error.status);
+          if (error.status === 400) {
+            ShowToast("error", error?.response?.data?.message);
+          } else {
+            console.log("Error->", error.response.data.errors.Zone["0"]);
+            const zoneError = error.response.data.errors.Zone["0"];
+            const branchCodeError = error.response.data.errors.BranchCode["0"];
+            dispatch(hideLoader());
+            ShowToast("error", zoneError);
+            ShowToast("error", branchCodeError);
+          }
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
     }
   };
   // const handleSearchUser = async () => {
@@ -547,7 +604,7 @@ const ClientDetails = ({
         });
     }
   };
-
+  document.title = document.title = "LKP Securities | Client Details";
   return (
     <>
       {!userDetails ? (

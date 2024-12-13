@@ -32,6 +32,7 @@ const DataTable: React.FC<DormantClientProps> = ({
   handleSearchUser,
   showSearch = false,
   handleExcelDownload,
+  showExcel,
 }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
 
@@ -81,6 +82,7 @@ const DataTable: React.FC<DormantClientProps> = ({
           onSearchChange={handleSearchChange}
           handleSearchUser={handleSearchUser}
           handleExcelDownload={handleExcelDownload}
+          showExcel={showExcel}
         />
       )}
       <Paper

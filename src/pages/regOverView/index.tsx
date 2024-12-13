@@ -69,7 +69,7 @@ const RegMain = () => {
       customClass: "chart-four",
     },
   ];
-
+  document.title = document.title = "LKP Securities | Zone Ovewview";
   return (
     <div>
       {DataSets.map((dataSet, index) => (

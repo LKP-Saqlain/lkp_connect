@@ -99,8 +99,7 @@ const DashboardCrypto = () => {
     }
   };
 
-  document.title =
-    "Crypto Dashboard | Velzon - React Admin & Dashboard Template";
+  document.title = document.title = "LKP Securities | Trading";
   return (
     <React.Fragment>
       <div className="page-content">

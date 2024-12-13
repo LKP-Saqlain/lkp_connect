@@ -711,9 +711,11 @@ const DormantClient = () => {
               )}
               {/* <SearchAppBar /> */}
               <Card>
-                <CardHeader>
-                  <h4 className="card-title mb-0">Dormant Client Report</h4>
-                </CardHeader>
+                {accessType === "" && (
+                  <CardHeader>
+                    <h4 className="card-title mb-0">Dormant Client Report</h4>
+                  </CardHeader>
+                )}
                 <CardBody>
                   <DataTable
                     dynamicHeader={dormantColumns}

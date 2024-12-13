@@ -118,8 +118,9 @@ const DashboardProject = () => {
                   <Col>
                     <div className="movable-note">
                       <span>
-                        <strong>Note:</strong> I am the Note with no
-                        Information, Thank You!
+                        <strong>Note:</strong>{" "}
+                        {`* Details mentioned below is for
+                        the period of ${startMonth} to ${endMonth}`}
                       </span>
                     </div>
                     <div className="h-100">

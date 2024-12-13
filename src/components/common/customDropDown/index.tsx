@@ -213,7 +213,7 @@ const DropDown = ({ handleValues, tradeData, selectedWidget }: table) => {
   //     });
   // };
 
-  document.title = "LKP Securities | Dormant Client Report";
+  document.title = "LKP Securities | Trading";
 
   return (
     <React.Fragment>
