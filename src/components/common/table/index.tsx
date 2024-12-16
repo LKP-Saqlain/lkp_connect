@@ -87,7 +87,7 @@ const DataTable: React.FC<DormantClientProps> = ({
       )}
       <Paper
         sx={{
-          height: "82vh",
+          height: "70vh",
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",
