@@ -176,7 +176,7 @@ const DataTable = ({
       )}
       <Paper
         sx={{
-          height: 400,
+          height: "82vh",
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",

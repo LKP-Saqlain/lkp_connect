@@ -315,6 +315,11 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       enabled: true,
       shared: true,
       intersect: false,
+      y: {
+        formatter: (value: number) => {
+          return new Intl.NumberFormat("en-IN").format(value); // Format value in Indian style
+        },
+      },
     },
   };
   return (
@@ -472,6 +477,11 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
       enabled: true,
       shared: true,
       intersect: false,
+      y: {
+        formatter: (value: number) => {
+          return new Intl.NumberFormat("en-IN").format(value); // Format value in Indian style
+        },
+      },
     },
   };
   return (
