@@ -541,8 +541,8 @@ const SideBar = () => {
           p: 1,
           backgroundColor: "#E5E4E2",
           overflow: "hidden",
-          width: "100vw", // Full width of the viewport
-          height: "100vh", // Full height of the viewport
+          // width: "100vw", // Full width of the viewport
+          // height: "100vh", // Full height of the viewport
         }}
       >
         <Box>{renderContent()}</Box>
