@@ -148,17 +148,20 @@ const T6Table = () => {
         style={{
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
-          gap: "20px",
-          height: "350px",
+          gap: isMobile ? "10px" : "20px",
+          height: isMobile ? "auto" : "350px",
         }}
       >
-        <Card className="main-card" style={{ flex: "1", minWidth: "300px" }}>
+        <Card
+          className="main-card"
+          style={{ flex: "1", width: isMobile ? "100%" : "auto" }}
+        >
           <CardHeader>
             <h4 className="card-title mb-0">Top 5 T6 Clients</h4>
           </CardHeader>
           <CardBody
             className="main-card-body"
-            style={{ height: "auto", overflow: "hidden", padding: "10px" }}
+            style={{ overflow: "hidden", padding: "10px" }}
           >
             <TradeInfo
               T6Data={t6Data}
@@ -167,13 +170,16 @@ const T6Table = () => {
             />
           </CardBody>
         </Card>
-        <Card className="main-card" style={{ flex: "1", minWidth: "300px" }}>
+        <Card
+          className="main-card"
+          style={{ flex: "1", width: isMobile ? "100%" : "auto" }}
+        >
           <CardHeader>
             <h4 className="card-title mb-0">Upcoming Dormant Client</h4>
           </CardHeader>
           <CardBody
             className="main-card-body"
-            style={{ height: "auto", overflow: "hidden", padding: "10px" }}
+            style={{ overflow: "hidden", padding: "10px" }}
           >
             <TradeInfo
               T6Data={upcomingOverviewDormantTableData}
@@ -182,7 +188,7 @@ const T6Table = () => {
             />
           </CardBody>
         </Card>
-        {/* <Card style={{ flex: "1", minWidth: "300px" }}>
+        {/* <Card style={{ flex: "1", width: isMobile ? "100%" : "auto" }}>
           <CardHeader>
             <h4 className="card-title mb-0">Client's Birthday Today</h4>
           </CardHeader>
@@ -194,13 +200,16 @@ const T6Table = () => {
             />
           </CardBody>
         </Card> */}
-        <Card className="main-card" style={{ flex: "1", minWidth: "300px" }}>
+        <Card
+          className="main-card"
+          style={{ flex: "1", width: isMobile ? "100%" : "auto" }}
+        >
           <CardHeader>
             <h4 className="card-title mb-0">Client's Birthday Today</h4>
           </CardHeader>
           <CardBody
             className="main-card-body"
-            style={{ height: "auto", overflow: "hidden", padding: "10px" }}
+            style={{ overflow: "hidden", padding: "10px" }}
           >
             <TradeInfo
               T6Data={top5Birthdays}

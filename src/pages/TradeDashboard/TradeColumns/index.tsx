@@ -188,7 +188,7 @@ export const topBirthdays: GridColDef[] = [
   {
     field: "Name",
     headerName: "Client",
-    width: 150,
+    width: 140,
     headerAlign: "center",
     // align: "center",
     renderCell: (params) => (

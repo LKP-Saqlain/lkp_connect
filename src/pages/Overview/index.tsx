@@ -341,7 +341,7 @@ const DashboardProject = () => {
                                       end={newClients}
                                       separator=","
                                       // prefix="₹"
-                                      duration={3}
+                                      duration={1}
                                       style={{
                                         color: "#495057",
                                         fontSize: "17px",
@@ -396,7 +396,7 @@ const DashboardProject = () => {
                                       start={0}
                                       end={tradedClientCount}
                                       separator=","
-                                      duration={3}
+                                      duration={1}
                                     />
                                   </h5>
                                 </div>
