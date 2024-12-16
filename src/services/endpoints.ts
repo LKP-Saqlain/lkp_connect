@@ -23,4 +23,5 @@ export const endpoints = {
   forgetPassword: "/api/Login/ForgetPassword",
   ClientDetails: "/api/Client/ClientDetails",
   getUpcompingDormantReport: "/api/Common/GetUpcomingDormantReport",
+  GetBirthdayList: "/api/Common/GetBirthdayList",
 };

@@ -74,20 +74,9 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       },
     },
 
-    yaxis: [
-      {
-        title: {
-          text: "Gross Brokerage",
-        },
-        min: 0,
-        // max: maxGrossBrokerage, // Dynamic max for GrossBrokerage
-        labels: {
-          formatter: function (value: number) {
-            return new Intl.NumberFormat("en-IN").format(Math.round(value));
-          },
-        },
-      },
-    ],
+    yaxis: {
+      show: false, // Completely hide the Y-axis
+    },
     grid: {
       show: true,
       xaxis: {
@@ -134,7 +123,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
         {
           formatter: function (y: any) {
             if (typeof y !== "undefined") {
-              return new Intl.NumberFormat("en-IN").format(y.toFixed(2));
+              return new Intl.NumberFormat("en-IN").format(Math.round(y)); // Remove decimals
             }
             return y;
           },
@@ -142,7 +131,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
         {
           formatter: function (y: any) {
             if (typeof y !== "undefined") {
-              return new Intl.NumberFormat("en-IN").format(y.toFixed(2));
+              return new Intl.NumberFormat("en-IN").format(Math.round(y)); // Remove decimals
             }
             return y;
           },
@@ -150,7 +139,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
         {
           formatter: function (y: any) {
             if (typeof y !== "undefined") {
-              return new Intl.NumberFormat("en-IN").format(y.toFixed(2));
+              return new Intl.NumberFormat("en-IN").format(Math.round(y)); // Remove decimals
             }
             return y;
           },
@@ -251,8 +240,12 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
           style: {
             fontSize: "12px",
             fontWeight: "bold",
-            // background: "#71797E", // Background color for the total
-            color: "#71797E", // Text color for the total
+            color: "#71797E", // Text color
+            // below style to remove top label bg box
+            background: "transparent", // Remove background box
+            borderWidth: 0, // Ensure no border
+            borderRadius: 0, // Remove any rounding
+            padding: 0, // Remove padding
           },
         },
       })),
@@ -295,20 +288,23 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       opacity: 1,
     },
     colors: ["#52c41a", "#faad14"],
+    // yaxis: {
+    //   title: {
+    //     text: "Broking Revenue",
+    //   },
+    //   labels: {
+    //     formatter: (value: any) => {
+    //       return new Intl.NumberFormat("en-IN").format(value);
+    //     },
+    //     style: {
+    //       fontSize: "11px",
+    //       fontWeight: 600,
+    //       colors: "#333",
+    //     },
+    //   },
+    // },
     yaxis: {
-      title: {
-        text: "Broking Revenue",
-      },
-      labels: {
-        formatter: (value: any) => {
-          return new Intl.NumberFormat("en-IN").format(value);
-        },
-        style: {
-          fontSize: "11px",
-          fontWeight: 600,
-          colors: "#333",
-        },
-      },
+      show: false, // Completely hide the Y-axis
     },
     legend: {
       // show: false,
@@ -357,15 +353,6 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
   const spIp = series[2]?.data || [];
   const TPD_mutualfunds = series[3]?.data || [];
 
-  // var linechartcustomerColors = getChartColorsArray(dataColors);
-
-  // const revenueBarColor = ["#01D28E", "#6DBBFF"];
-
-  // const brokingRange =
-  //   Math.max(...revenueMonths.map((item: any) => item.Ach_brok_dir)) * 1.1;
-  // const NonBrokingRange =
-  //   Math.max(...revenueMonths.map((item: any) => item.Tot_TPD_rev)) * 1.1;
-
   var options: any = {
     series: [
       {
@@ -390,7 +377,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
       height: 350,
       stacked: true,
       toolbar: {
-        show: false, // Hide the toolbar
+        show: false,
       },
     },
     stroke: {
@@ -402,36 +389,35 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
       style: {
         fontSize: "9px",
         fontWeight: "bold",
-        colors: ["#fff"], // Individual stack values in white
+        colors: ["#fff"],
       },
       formatter: function (val: number) {
-        // const stackIndex = opts.dataPointIndex;
-        // const seriesIndex = opts.seriesIndex;
-        // const stackTotal = totals[stackIndex];
-
-        // Show individual stack values
         if (val > 0) {
           return new Intl.NumberFormat("en-IN").format(val);
         }
 
-        return ""; // Hide labels for zero values
+        return "";
       },
-      offsetY: 0, // Adjust the vertical position for individual values
+      offsetY: 0,
     },
     annotations: {
       points: totals.map((total, index) => ({
-        x: mnthYRValues[index], // Bar category (month-year)
-        y: total, // Total value
+        x: mnthYRValues[index],
+        y: total,
         marker: {
-          size: 0, // No marker
+          size: 0,
         },
         label: {
-          text: new Intl.NumberFormat("en-IN").format(total), // Show total
+          text: new Intl.NumberFormat("en-IN").format(total),
           style: {
             fontSize: "12px",
             fontWeight: "bold",
-            // background: "#b7c3ce", // Background color for the total
-            color: "#71797E", // Text color for the total
+            color: "#71797E",
+            // below style to remove top label bg box
+            background: "transparent", // Remove background box
+            borderWidth: 0, // Ensure no border
+            borderRadius: 0, // Remove any rounding
+            padding: 0, // Remove padding
           },
         },
       })),
@@ -440,7 +426,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
       show: true,
       xaxis: {
         lines: {
-          show: true,
+          show: false,
         },
       },
       yaxis: {
@@ -457,8 +443,8 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
     },
     plotOptions: {
       bar: {
-        horizontal: false, // Keep bars vertical
-        columnWidth: "50%", // Adjust the width of bars
+        horizontal: false,
+        columnWidth: "50%",
       },
     },
     xaxis: {
@@ -475,14 +461,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
     },
     colors: ["#1890ff", "#52c41a", "#faad14", "#00E396"],
     yaxis: {
-      title: {
-        text: "Non-Broking Revenue",
-      },
-      labels: {
-        formatter: (value: any) => {
-          return new Intl.NumberFormat("en-IN").format(value);
-        },
-      },
+      show: false, // Completely hide the Y-axis
     },
     legend: {
       // show: false,

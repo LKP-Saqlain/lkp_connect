@@ -16,7 +16,7 @@ import PiggyBank from "../../assets/images/piggyBank.json";
 import ActiveClient from "../../assets/images/Clients.json";
 
 type RevenueKeys = "total" | "broking" | "nonBroking";
-type TotalClientKey = "total" | "broking" | "nonBroking";
+// type TotalClientKey = "total" | "broking" | "nonBroking";
 
 const DashboardProject = () => {
   const [startMonth, setStartMonth] = useState("");
@@ -27,8 +27,7 @@ const DashboardProject = () => {
     nonBroking: 0,
   });
   const [activeBadge, setActiveBadge] = useState<RevenueKeys>("total");
-  const [activeClientBadge, setActiveClientBadge] =
-    useState<TotalClientKey>("total");
+
   const [multiRevenueMultiply, setMultiRevenueMultiply] = useState(0);
   const [newClients, setNewClients] = useState(0);
   const [activeClients, setActiveClients] = useState(0);
@@ -41,8 +40,6 @@ const DashboardProject = () => {
   const playerRef = useRef<Player>(null);
 
   useEffect(() => {
-    console.log(activeClientBadge);
-
     playerRef.current?.playFromBeginning();
   }, []);
 
@@ -116,79 +113,24 @@ const DashboardProject = () => {
               <div className="h-100">
                 <Row>
                   <Col>
-                    <div className="movable-note">
-                      <span>
-                        <strong>Note:</strong>{" "}
-                        {`* Details mentioned below is for
-                        the period of ${startMonth} to ${endMonth}`}
-                      </span>
-                    </div>
                     <div className="h-100">
                       {/* Row for Four Boxes */}
 
                       <Row className="justify-content-center">
                         <Col xxl={3} lg={3} md={6} sm={12}>
                           <Card
-                            className="card-animate position-relative shadow-card"
+                            className="card-animate position-relative shadow-card custom-card"
                             style={{
                               maxWidth: "300px",
                               overflow: "hidden",
                             }}
                           >
                             <CardBody>
-                              {/* Positioned badges */}
-                              <div
-                                className="position-absolute"
-                                style={{
-                                  top: "10px",
-                                  right: "10px",
-                                  zIndex: 1,
-                                }}
-                              >
-                                <Link
-                                  to="#"
-                                  // className="badge bg-warning-subtle text-warning badge-border small px-2 py-1"
-                                  className={`badge ${
-                                    activeBadge === "total"
-                                      ? "bg-warning text-white"
-                                      : "bg-warning-subtle text-warning"
-                                  } badge-border small px-2 py-1`}
-                                  onClick={() => handleBadgeClick("total")}
-                                >
-                                  Total
-                                </Link>
-                                &nbsp;
-                                <Link
-                                  to="#"
-                                  // className="badge bg-info-subtle text-info badge-border small px-2 py-1"
-                                  className={`badge ${
-                                    activeBadge === "broking"
-                                      ? "bg-info text-white"
-                                      : "bg-info-subtle text-info"
-                                  } badge-border small px-2 py-1`}
-                                  onClick={() => handleBadgeClick("broking")}
-                                >
-                                  Broking
-                                </Link>
-                                &nbsp;
-                                <Link
-                                  to="#"
-                                  // className="badge bg-primary-subtle text-primary badge-border small px-2 py-1"
-                                  className={`badge ${
-                                    activeBadge === "nonBroking"
-                                      ? "bg-primary text-white"
-                                      : "bg-primary-subtle text-primary"
-                                  } badge-border small px-2 py-1`}
-                                  onClick={() => handleBadgeClick("nonBroking")}
-                                >
-                                  Non-Broking
-                                </Link>
-                              </div>
-
-                              {/* Main content */}
+                              {/* Revenue Display */}
+                              <h6 className="text-muted fs-14">Revenue*</h6>
                               <div
                                 className="d-flex align-items-center justify-content-between"
-                                style={{ marginTop: "1.3rem" }}
+                                style={{ marginBottom: "1rem" }}
                               >
                                 {/* Lottie Animation */}
                                 <div className="mr-3">
@@ -205,23 +147,17 @@ const DashboardProject = () => {
                                   <h5
                                     className="mb-0"
                                     style={{
-                                      fontSize: "7px",
-                                      color: "#red",
+                                      color: "#495057",
+                                      fontSize: "17px",
+                                      fontWeight: "bold",
                                     }}
                                   >
                                     <CountUp
                                       start={0}
                                       end={revenueValues[activeBadge]}
                                       separator=","
-                                      // prefix="₹"
                                       formattingFn={formatIndianNumber}
-                                      duration={3}
-                                      style={{
-                                        color: "#495057",
-                                        fontSize: "17px", // Adjusted font size for CountUp
-                                        fontWeight: "bold",
-                                        // marginRight: "15px",
-                                      }}
+                                      duration={1}
                                     />
                                     <small
                                       className="text-muted fs-12"
@@ -230,24 +166,66 @@ const DashboardProject = () => {
                                         marginRight: "15px",
                                       }}
                                     >
-                                      .00{" "}
+                                      .00
                                     </small>
                                   </h5>
                                 </div>
                               </div>
 
-                              <h6 className="text-muted mb-0 fs-14">
-                                Revenue
-                                <span
-                                  style={{
-                                    fontSize: "11px",
-                                    textDecoration: "underline",
-                                    marginLeft: "4px",
-                                  }}
-                                >{`${startMonth} to ${endMonth}`}</span>
-                              </h6>
+                              {/* Positioned badges */}
+                              <div
+                                className="position-absolute"
+                                style={{
+                                  bottom: "10px",
+                                  left: "10px",
+                                  zIndex: 1,
+                                  fontFamily: "Public Sans",
+                                }}
+                              >
+                                <Link
+                                  to="#"
+                                  className={`badge ${
+                                    activeBadge === "total"
+                                      ? "bg-warning text-white"
+                                      : "bg-warning-subtle text-warning"
+                                  } badge-border small px-2 py-1`}
+                                  onClick={() => handleBadgeClick("total")}
+                                >
+                                  Total
+                                </Link>
+                                &nbsp;
+                                <Link
+                                  to="#"
+                                  className={`badge ${
+                                    activeBadge === "broking"
+                                      ? "bg-info text-white"
+                                      : "bg-info-subtle text-info"
+                                  } badge-border small px-2 py-1`}
+                                  onClick={() => handleBadgeClick("broking")}
+                                >
+                                  Broking
+                                </Link>
+                                &nbsp;
+                                <Link
+                                  to="#"
+                                  className={`badge ${
+                                    activeBadge === "nonBroking"
+                                      ? "bg-primary text-white"
+                                      : "bg-primary-subtle text-primary"
+                                  } badge-border small px-2 py-1`}
+                                  onClick={() => handleBadgeClick("nonBroking")}
+                                >
+                                  Non-Broking
+                                </Link>
+                              </div>
                             </CardBody>
                           </Card>
+                          <div className="movable-note">
+                            <span style={{ fontFamily: "Public Sans" }}>
+                              {/* <strong>Note:</strong>{" "} */}
+                              {`* Period - ${startMonth} to ${endMonth}`}
+                            </span>
+                          </div>
                         </Col>
 
                         {/* Revenue Mulitply */}
@@ -261,45 +239,14 @@ const DashboardProject = () => {
                           >
                             <CardBody>
                               {/* Positioned badges */}
-                              <div
-                                className="position-absolute"
-                                style={{
-                                  top: "10px",
-                                  right: "10px",
-                                  zIndex: 1,
-                                }}
-                              >
-                                <Link
-                                  to="#"
-                                  // className="badge bg-warning-subtle text-warning badge-border small px-2 py-1"
-                                  className="badge bg-warning text-white badge-border small px-2 py-1"
-                                  onClick={() => {
-                                    setActiveBadge("total");
-                                    // setMultiRevenueMultiply(someDynamicValue); // Replace `someDynamicValue` with the actual value
-                                  }}
-                                >
-                                  Total
-                                </Link>
-                                {/* &nbsp;
-                                <Link
-                                  to="#"
-                                  className="badge bg-info-subtle text-info badge-border small px-2 py-1"
-                                >
-                                  Broking
-                                </Link>
-                                &nbsp;
-                                <Link
-                                  to="#"
-                                  className="badge bg-primary-subtle text-primary badge-border small px-2 py-1"
-                                >
-                                  Non-Broking
-                                </Link> */}
-                              </div>
+                              <h6 className="text-muted mb-0 fs-14">
+                                Revenue Multiple*
+                              </h6>
 
                               {/* Main content */}
                               <div
                                 className="d-flex align-items-center justify-content-between"
-                                style={{ marginTop: "1.3rem" }}
+                                style={{ marginTop: "1.5rem" }}
                               >
                                 {/* Lottie Animation */}
                                 <div className="mr-3">
@@ -326,7 +273,7 @@ const DashboardProject = () => {
                                       separator=","
                                       decimals={2}
                                       // prefix="₹"
-                                      duration={3}
+                                      duration={1}
                                       style={{
                                         color: "#495057",
                                         fontSize: "17px", // Adjusted font size for CountUp
@@ -346,9 +293,6 @@ const DashboardProject = () => {
                                   </h5>
                                 </div>
                               </div>
-                              <h6 className="text-muted mb-0 fs-14">
-                                Revenue Multiple
-                              </h6>
                             </CardBody>
                           </Card>
                         </Col>
@@ -364,44 +308,14 @@ const DashboardProject = () => {
                           >
                             <CardBody>
                               {/* Positioned badges */}
-                              <div
-                                className="position-absolute"
-                                style={{
-                                  top: "10px",
-                                  right: "10px",
-                                  zIndex: 1,
-                                }}
-                              >
-                                <Link
-                                  to="#"
-                                  className="badge bg-warning text-white badge-border small px-2 py-1"
-                                  onClick={() => {
-                                    setActiveClientBadge("total");
-                                    // setMultiRevenueMultiply(someDynamicValue); // Replace `someDynamicValue` with the actual value
-                                  }}
-                                >
-                                  Total
-                                </Link>
-                                {/* &nbsp;
-                                <Link
-                                  to="#"
-                                  className="badge bg-info-subtle text-info badge-border small px-2 py-1"
-                                >
-                                  Broking
-                                </Link>
-                                &nbsp;
-                                <Link
-                                  to="#"
-                                  className="badge bg-primary-subtle text-primary badge-border small px-2 py-1"
-                                >
-                                  Non-Broking
-                                </Link> */}
-                              </div>
+                              <h6 className="text-muted mb-0 fs-14">
+                                New Clients Added*
+                              </h6>
 
                               {/* Main content */}
                               <div
                                 className="d-flex align-items-center justify-content-between"
-                                style={{ marginTop: "1.3rem" }}
+                                style={{ marginTop: "1.5rem" }}
                               >
                                 {/* Lottie Animation */}
                                 <div className="mr-3">
@@ -435,19 +349,12 @@ const DashboardProject = () => {
                                         marginRight: "1rem",
                                       }}
                                     />
-                                    {/* <small className="text-muted fs-12">
-                                      .12k
-                                    </small> */}
                                   </h5>
                                 </div>
                               </div>
-                              <h6 className="text-muted mb-0 fs-14">
-                                New Clients Added
-                              </h6>
                             </CardBody>
                           </Card>
                         </Col>
-
                         <Col xxl={3} lg={3} md={6} sm={12}>
                           <Card
                             className="card-animate position-relative shadow-card"
@@ -457,30 +364,13 @@ const DashboardProject = () => {
                             }}
                           >
                             <CardBody>
-                              {/* Total Active Clients Badge */}
-                              <div
-                                className="position-absolute"
-                                style={{
-                                  top: "10px",
-                                  right: "10px",
-                                  zIndex: 1,
-                                }}
-                              >
-                                <Link
-                                  to="#"
-                                  className="badge bg-success-subtle text-success badge-border small px-2 py-1"
-                                >
-                                  Total Active Clients -{" "}
-                                  {new Intl.NumberFormat("en-IN").format(
-                                    activeClients
-                                  )}
-                                </Link>
-                              </div>
-
-                              {/* Main content */}
+                              {/* Revenue Display */}
+                              <h6 className="text-muted fs-14">
+                                Unique Traded Clients*
+                              </h6>
                               <div
                                 className="d-flex align-items-center justify-content-between"
-                                style={{ marginTop: "1.3rem" }}
+                                style={{ marginBottom: "1rem" }}
                               >
                                 {/* Lottie Animation */}
                                 <div className="mr-3">
@@ -497,32 +387,42 @@ const DashboardProject = () => {
                                   <h5
                                     className="mb-0"
                                     style={{
-                                      fontSize: "7px",
-                                      color: "#red",
+                                      color: "#495057",
+                                      fontSize: "17px",
+                                      fontWeight: "bold",
                                     }}
                                   >
                                     <CountUp
                                       start={0}
                                       end={tradedClientCount}
                                       separator=","
-                                      // prefix="₹"
                                       duration={3}
-                                      style={{
-                                        color: "#495057",
-                                        fontSize: "17px",
-                                        fontWeight: "bold",
-                                        marginRight: "1rem",
-                                      }}
                                     />
-                                    {/* <small className="text-muted fs-12">
-                                      .12k
-                                    </small> */}
                                   </h5>
                                 </div>
                               </div>
-                              <h6 className="text-muted mb-0 fs-14">
-                                Traded Clients
-                              </h6>
+
+                              {/* Positioned badges */}
+                              <div
+                                className="position-absolute"
+                                style={{
+                                  bottom: "10px",
+                                  left: "10px",
+                                  zIndex: 1,
+                                  fontFamily: "Public Sans",
+                                }}
+                              >
+                                <Link
+                                  to="#"
+                                  className="badge bg-success-subtle text-success badge-border small px-2 py-1"
+                                  style={{ fontFamily: "Public Sans" }}
+                                >
+                                  Total Active Clients -{" "}
+                                  {new Intl.NumberFormat("en-IN").format(
+                                    activeClients
+                                  )}
+                                </Link>
+                              </div>
                             </CardBody>
                           </Card>
                         </Col>

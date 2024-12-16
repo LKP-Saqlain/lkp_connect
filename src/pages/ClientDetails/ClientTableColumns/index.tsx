@@ -90,7 +90,7 @@ export const getClientDormantStatus = (
   { field: "lastTradeDate", headerName: "Last Trade Date", width: 200 },
   {
     field: "dayCount",
-    headerName: "Client not traded since (Days)",
+    headerName: "Days to Dormant",
     width: 200,
     align: "right",
   },

@@ -7,6 +7,7 @@ import {
   DormantOverViewColumns,
   T6Columns,
   T6OverViewColumns,
+  topBirthdays,
 } from "../../pages/TradeDashboard/TradeColumns";
 import {
   getClientActivityStatusColumns,
@@ -98,6 +99,10 @@ const DataTable = ({
         ...column,
         // sortable: false,
         // filterable: false,
+      }));
+    } else if (selectedWidget === "clientBirthday") {
+      return topBirthdays.map((column) => ({
+        ...column,
       }));
     } else if (selectedWidget === "T6Overview") {
       return T6OverViewColumns.map((column) => ({
@@ -195,7 +200,11 @@ const DataTable = ({
           rowHeight={30}
           hideFooter={customHide ? true : false}
           getRowId={(row: any) =>
-            row.clientName ? row.clientName : row.ClientName
+            row.clientName
+              ? row.clientName
+              : row.ClientName
+              ? row.ClientName
+              : row.Name
           } // Use the correct identifier for rows
           sx={{
             border: 0,
@@ -203,11 +212,11 @@ const DataTable = ({
             "& .MuiDataGrid-columnHeader": {
               // textAlign: "center",
               fontWeight: 500,
-              fontSize: "12px",
+              fontSize: "13px",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
-              fontSize: "10px",
+              fontSize: "11px",
               // textAlign: "center",
             },
           }}

@@ -107,11 +107,11 @@ const DataTable: React.FC<DormantClientProps> = ({
             fontFamily: '"Public Sans", sans-serif',
             "& .MuiDataGrid-columnHeader": {
               fontWeight: 500,
-              fontSize: "12px",
+              fontSize: "13px",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
-              fontSize: "10px",
+              fontSize: "11px",
             },
           }}
         />

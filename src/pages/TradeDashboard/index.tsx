@@ -23,7 +23,7 @@ interface T6Selling {
 }
 
 const DashboardCrypto = () => {
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItem, setSelectedItem] = useState("Clients With Cash Balance");
   const [t6Data, setT6Data] = useState<T6Selling[]>([]);
   const dispatch = useDispatch();
 
@@ -32,6 +32,9 @@ const DashboardCrypto = () => {
     setSelectedItem(data);
   };
 
+  useEffect(() => {
+    console.log("log", selectedItem);
+  }, [selectedItem]);
   useEffect(() => {
     const fetchClientCash = async () => {
       if (selectedItem === "T6 Selling") {

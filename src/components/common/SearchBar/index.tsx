@@ -5,7 +5,7 @@ import InputBase from "@mui/material/InputBase";
 // import Button from "@mui/material/Button";
 import SearchIcon from "@mui/icons-material/Search";
 import { Button as ReactstrapButton } from "reactstrap";
-import { Button as MUIButton } from "@mui/material";
+// import { Button as MUIButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 
 const Search = styled("div")(({ theme }) => ({
@@ -65,29 +65,29 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   searchTableValue,
   handleExcelDownload,
   selectedWidget,
-  onFilterChange,
+  // onFilterChange,
   showExcel,
 }) => {
   const [searchValue, setSearchValue] = React.useState(searchTableValue);
-  const [selectedButton, setSelectedButton] = React.useState<string>("ALL");
+  // const [selectedButton, setSelectedButton] = React.useState<string>("ALL");
 
-  const selectedStyle = {
-    bgcolor: "#11395C",
-    color: "#fff",
-    borderRadius: "7px",
-    fontFamily: "Poppins",
-    borderColor: "#ABC4DA",
-    textTransform: "capitalize",
-  };
+  // const selectedStyle = {
+  //   bgcolor: "#11395C",
+  //   color: "#fff",
+  //   borderRadius: "7px",
+  //   fontFamily: "Poppins",
+  //   borderColor: "#ABC4DA",
+  //   textTransform: "capitalize",
+  // };
 
-  const nonSelectedStyle = {
-    bgcolor: "#ABC4DA",
-    color: "#11395C",
-    borderRadius: "7px",
-    fontFamily: "Poppins",
-    borderColor: "#ABC4DA",
-    textTransform: "capitalize",
-  };
+  // const nonSelectedStyle = {
+  //   bgcolor: "#ABC4DA",
+  //   color: "#11395C",
+  //   borderRadius: "7px",
+  //   fontFamily: "Poppins",
+  //   borderColor: "#ABC4DA",
+  //   textTransform: "capitalize",
+  // };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -101,11 +101,11 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
     handleSearchUser?.(); // Call the search function when input loses focus
   };
 
-  const handleFilterClick = (filter: string) => {
-    console.log("filterValues", filter);
-    setSelectedButton(filter); // Update the local state to highlight the button
-    onFilterChange?.(filter); // Call the parent function with the selected filter
-  };
+  // const handleFilterClick = (filter: string) => {
+  //   console.log("filterValues", filter);
+  //   setSelectedButton(filter); // Update the local state to highlight the button
+  //   onFilterChange?.(filter); // Call the parent function with the selected filter
+  // };
 
   return (
     <Box
@@ -157,7 +157,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
           )}
 
         {/* Filter Buttons */}
-        {selectedWidget === "Client Approaching  Dormant Status" && (
+        {/* {selectedWidget === "Client Approaching  Dormant Status" && (
           <div className="d-flex gap-1">
             {["ALL", "7D", "15D", "1M"].map((filter) => (
               <MUIButton
@@ -173,7 +173,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
               </MUIButton>
             ))}
           </div>
-        )}
+        )} */}
       </Box>
     </Box>
   );

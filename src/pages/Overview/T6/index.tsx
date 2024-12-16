@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import TradeInfo from "../../../components/common/UserInfoTable";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
-import { Typography } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 import "../style.css";
 import ShowToast from "../../../utils/toastUtils";
@@ -30,9 +29,33 @@ const T6Table = () => {
     upcomingOverviewDormantTableData,
     setUpcomingOverviewDormantTableData,
   ] = useState<[]>([]);
+  const [top5Birthdays, setTop5Birthdays] = useState<[]>([]);
   const dispatch = useDispatch();
 
   const isMobile = useMediaQuery("(max-width:768px)");
+
+  useEffect(() => {
+    const Id = localStorage.getItem("Id");
+    let payload = {
+      user_id: Id,
+    };
+    apiServices
+      .GetBirthdayList(payload)
+      .then((response) => {
+        console.log("GetBirthdayCountresponse", response?.status);
+        if (response?.status === 200) {
+          const data = response?.data || [];
+
+          const filterRecords = data.slice(0, 5);
+          console.log("filterData", filterRecords);
+          // setUpcomingOverviewDormantTableData(filterRecords);
+          setTop5Birthdays(filterRecords);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   useEffect(() => {
     const Id = localStorage.getItem("Id");
@@ -126,13 +149,17 @@ const T6Table = () => {
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           gap: "20px",
+          height: "350px",
         }}
       >
-        <Card style={{ flex: "1", minWidth: "300px" }}>
+        <Card className="main-card" style={{ flex: "1", minWidth: "300px" }}>
           <CardHeader>
             <h4 className="card-title mb-0">Top 5 T6 Clients</h4>
           </CardHeader>
-          <CardBody style={{ height: "250px", overflow: "hidden" }}>
+          <CardBody
+            className="main-card-body"
+            style={{ height: "auto", overflow: "hidden", padding: "10px" }}
+          >
             <TradeInfo
               T6Data={t6Data}
               selectedWidget={"T6Overview"}
@@ -140,12 +167,14 @@ const T6Table = () => {
             />
           </CardBody>
         </Card>
-        <Card style={{ flex: "1", minWidth: "300px" }}>
+        <Card className="main-card" style={{ flex: "1", minWidth: "300px" }}>
           <CardHeader>
             <h4 className="card-title mb-0">Upcoming Dormant Client</h4>
           </CardHeader>
-          <CardBody>
-            {/* <Typography>Upcoming Dormant Client</Typography> */}
+          <CardBody
+            className="main-card-body"
+            style={{ height: "auto", overflow: "hidden", padding: "10px" }}
+          >
             <TradeInfo
               T6Data={upcomingOverviewDormantTableData}
               selectedWidget={"dormantOverview"}
@@ -153,12 +182,31 @@ const T6Table = () => {
             />
           </CardBody>
         </Card>
-        <Card style={{ flex: "1", minWidth: "300px" }}>
+        {/* <Card style={{ flex: "1", minWidth: "300px" }}>
           <CardHeader>
-            <h4 className="card-title mb-0">Upcoming Client Birthday</h4>
+            <h4 className="card-title mb-0">Client's Birthday Today</h4>
           </CardHeader>
-          <CardBody>
-            <Typography>Happy Birthday</Typography>
+          <CardBody style={{ height: "auto", padding: "10px" }}>
+            <TradeInfo
+              T6Data={top5Birthdays}
+              selectedWidget={"clientBirthday"}
+              customHide={true}
+            />
+          </CardBody>
+        </Card> */}
+        <Card className="main-card" style={{ flex: "1", minWidth: "300px" }}>
+          <CardHeader>
+            <h4 className="card-title mb-0">Client's Birthday Today</h4>
+          </CardHeader>
+          <CardBody
+            className="main-card-body"
+            style={{ height: "auto", overflow: "hidden", padding: "10px" }}
+          >
+            <TradeInfo
+              T6Data={top5Birthdays}
+              selectedWidget={"clientBirthday"}
+              customHide={true}
+            />
           </CardBody>
         </Card>
       </div>

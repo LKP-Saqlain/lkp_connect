@@ -117,7 +117,7 @@ const NonBrokingRevenue = () => {
             <Col xs={12}>
               <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-sm-row">
                 <h4 className="card-title mb-0 flex-grow-1 text-md-start text-center">
-                  Non-Broking Revenue For last 12 Months
+                  Non-Broking Revenue for Last 12 Months
                 </h4>
                 <div
                   className="d-flex align-items-center flex-wrap mt-2 mt-sm-0"
