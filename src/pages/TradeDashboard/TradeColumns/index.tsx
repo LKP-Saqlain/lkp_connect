@@ -48,7 +48,7 @@ export const ClientCashColumns: GridColDef[] = [
   },
   {
     field: "Brokerage_for_currentmonth",
-    headerName: "Currnet Month",
+    headerName: "Current Month",
     width: 120,
   },
   { field: "Brokerage_for_1month", headerName: "Last Month", width: 120 },
