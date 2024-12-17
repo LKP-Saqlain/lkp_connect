@@ -343,7 +343,7 @@ const DormantClient = () => {
     }
     const payload = {
       start: 0,
-      pageSize: 20,
+      pageSize: 1000,
       searchKey: "",
       loginName: user_id,
       zone: formik.values.selectedZone?.value

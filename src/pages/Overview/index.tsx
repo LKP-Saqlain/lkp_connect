@@ -276,7 +276,7 @@ const DashboardProject = () => {
                                       duration={1}
                                       style={{
                                         color: "#495057",
-                                        fontSize: "17px", // Adjusted font size for CountUp
+                                        fontSize: "17px",
                                         fontWeight: "bold",
                                       }}
                                     />
@@ -364,7 +364,7 @@ const DashboardProject = () => {
                             }}
                           >
                             <CardBody>
-                              {/* Revenue Display */}
+                              {/* Unique traded Clients */}
                               <h6 className="text-muted fs-14">
                                 Unique Traded Clients*
                               </h6>
