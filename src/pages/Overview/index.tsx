@@ -28,7 +28,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
 
   const [multiRevenueMultiply, setMultiRevenueMultiply] = useState(0);
   const [newClients, setNewClients] = useState(0);
-  const [activeClients, setActiveClients] = useState(0);
+  const [activeClients, setActiveClients] = useState(null);
   const [tradedClientCount, setTradedClientCount] = useState(0);
 
   const handleValues = (revTotal: string) => {
@@ -116,7 +116,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     return `₹${value.toLocaleString("en-IN")}`;
   }
 
-  const getActiveClients = (clients: number) => {
+  const getActiveClients = (clients: any) => {
     console.log("activeClients", clients);
     setActiveClients(clients);
   };

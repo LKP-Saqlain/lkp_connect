@@ -14,17 +14,17 @@ interface ClientRow {
 export const getClientActivityStatusColumns = (
   handleViewDetails: (row: ClientRow) => void
 ): GridColDef[] => [
-  { field: "ClientCode", headerName: "Client Code", width: 90 },
-  { field: "ClientName", headerName: "Client Name", width: 200 },
-  { field: "LastTradeDate", headerName: "Last TR Date", width: 100 },
-  { field: "ClientStatus", headerName: "Status", width: 110 },
-  { field: "BranchCode", headerName: "BR Code", width: 80 },
-  { field: "ActivationDate", headerName: "Activation Date", width: 120 },
+  { field: "ClientCode", headerName: "Client Code", flex: 1 },
+  { field: "ClientName", headerName: "Client Name", flex: 2 },
+  { field: "LastTradeDate", headerName: "Last TR Date", flex: 1 },
+  { field: "ClientStatus", headerName: "Status", flex: 1 },
+  { field: "BranchCode", headerName: "BR Code", flex: 1 },
+  { field: "ActivationDate", headerName: "Activation Date", flex: 1 },
   // { field: "MobileNo", headerName: "Mobile No", width: 120 },
   {
     field: "MobileNo",
     headerName: "Mobile No",
-    width: 120,
+    flex: 1,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
       // Mask all except first 2 digits
@@ -47,8 +47,8 @@ export const getClientActivityStatusColumns = (
       );
     },
   },
-  { field: "MTFStatus", headerName: "MTF Status", width: 120 },
-  { field: "POAStatus", headerName: "POA Status", width: 120 },
+  { field: "MTFStatus", headerName: "MTF Status", flex: 1 },
+  { field: "POAStatus", headerName: "POA Status", flex: 1 },
   // {
   //   field: "viewDetails",
   //   headerName: "Action",
@@ -85,19 +85,19 @@ export const getClientActivityStatusColumns = (
 export const getClientDormantStatus = (
   handleViewDetails: (row: ClientRow) => void
 ): GridColDef[] => [
-  { field: "ctermcode", headerName: "Client Code", width: 200 },
-  { field: "clientName", headerName: "Client Name", width: 200 },
-  { field: "lastTradeDate", headerName: "Last Trade Date", width: 200 },
+  { field: "ctermcode", headerName: "Client Code", flex: 2 },
+  { field: "clientName", headerName: "Client Name", flex: 2 },
+  { field: "lastTradeDate", headerName: "Last Trade Date", flex: 2 },
   {
     field: "dayCount",
     headerName: "Days to Dormant",
-    width: 200,
+    flex: 2,
     align: "right",
   },
   {
     field: "mobileNo",
     headerName: "Mobile No",
-    width: 200,
+    flex: 2,
     headerAlign: "center",
     align: "center",
     renderCell: (params: any) => {
