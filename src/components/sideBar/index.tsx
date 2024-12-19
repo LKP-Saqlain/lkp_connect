@@ -299,8 +299,14 @@ const SideBar = () => {
   const handleTradingOpen = (value: any) => {
     // alert("clicked from Trading page");
     console.log("ClickedValue", value);
-    setActiveMenu("Trading");
-    setSelectedViewMore(value);
+    if (value === "T6") {
+      setActiveMenu("Trading");
+      setSelectedViewMore(value);
+    }
+    if (value === "Dormant") {
+      setActiveMenu("Client Details");
+      setSelectedViewMore(value);
+    }
   };
 
   const handleMobileDrawerClose = () => {
@@ -376,6 +382,7 @@ const SideBar = () => {
             handleDrawerClose={handleDrawerClose}
             handleDrawerOpen={handleDrawerOpen}
             apiStatus={apiStatus}
+            selectedTrading={selectedViewMore}
           />
         );
       case "e-KYC Link":

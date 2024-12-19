@@ -17,6 +17,7 @@ const ClientDetails = ({
   handleDrawerClose,
   handleDrawerOpen,
   apiStatus,
+  selectedTrading,
 }: any) => {
   const [selectedCapsule, setSelectedCapsule] = useState("Total Clients");
   const [tableData, setTableData] = useState<[]>([]);
@@ -43,6 +44,11 @@ const ClientDetails = ({
   useEffect(() => {
     console.log(totalEntries, filter);
   }, []);
+  useEffect(() => {
+    if (selectedTrading === "Dormant") {
+      setSelectedCapsule("Client Approaching  Dormant Status");
+    }
+  }, [selectedTrading]);
   useEffect(() => {
     if (selectedCapsule === "Total Clients") {
       dispatch(showLoader(""));
@@ -192,7 +198,7 @@ const ClientDetails = ({
 
   useEffect(() => {
     const fetchClientCash = async () => {
-      if (apiStatus) {
+      if (apiStatus && selectedTrading !== "Dormant") {
         const Id = localStorage.getItem("Id");
         const payload = {
           loginName: Id,
