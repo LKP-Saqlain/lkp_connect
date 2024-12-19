@@ -68,7 +68,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       },
       labels: {
         style: {
-          fontSize: "11px",
+          fontSize: "10px",
           fontWeight: 600,
         },
       },

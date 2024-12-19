@@ -162,8 +162,11 @@ const Revenue = ({
           }
           if (filteredRevenueData) {
             const total = filteredRevenueData[0]?.Net_Rev_Ach || 0;
-            const broking = filteredRevenueData[0]?.Ach_brok_dir || 0;
-            const nonBroking = filteredRevenueData[0]?.Ach_brok_indir || 0;
+            const broking =
+              filteredRevenueData[0]?.Ach_brok_dir +
+                filteredRevenueData[0]?.Ach_brok_ind_less2yrs +
+                filteredRevenueData[0]?.Ach_brok_indir || 0;
+            const nonBroking = filteredRevenueData[0]?.Tot_TPD_rev || 0;
             const multiRevenueMultiply =
               filteredRevenueData[0]?.Multi_net_rev_ach || 0;
             const newClientsAdded = filteredRevenueData[0]?.New_Clients || 0;

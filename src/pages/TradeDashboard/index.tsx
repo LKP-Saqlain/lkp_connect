@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row } from "reactstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../redux/store";
+import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import Widgets from "./Widgets";
 import TradeCapsule from "./TradeCapsules";
 import TradeInfo from "../../components/common/UserInfoTable";
-import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import ShowToast from "../../utils/toastUtils";
 
 interface T6Selling {
   ClientCode: string;
@@ -22,10 +24,30 @@ interface T6Selling {
   StockValue: string;
 }
 
-const DashboardCrypto = () => {
+interface CWCB {
+  Brokerage_for_1month: number; // Brokerage for 1 month
+  Brokerage_for_3months: number; // Brokerage for 3 months
+  Brokerage_for_currentmonth: number; // Brokerage for the current month
+  Cash: number; // Cash balance
+  ClientCode: string; // Client code
+  ClientName: string; // Client name
+  LastTradeDate: string; // Last trade date (format: YYYY-MM-DD)
+  MobileNo: string; // Mobile number
+}
+interface DashboardCrypto {
+  selectedTrading?: any;
+}
+
+const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   const [selectedItem, setSelectedItem] = useState("Clients With Cash Balance");
   const [t6Data, setT6Data] = useState<T6Selling[]>([]);
-  const dispatch = useDispatch();
+  const [tradeCWCBData, setTradeCWCBData] = useState<CWCB[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { accessType } = useSelector(
+    (state: RootState) => state.AuthUser?.data?.data
+  );
+  console.log(accessType);
 
   const handleItemClick = (data: any) => {
     console.log("value->", data);
@@ -33,11 +55,61 @@ const DashboardCrypto = () => {
   };
 
   useEffect(() => {
-    console.log("log", selectedItem);
-  }, [selectedItem]);
+    if (selectedTrading === "T6") {
+      setSelectedItem("T6 Selling");
+    }
+  }, [selectedTrading, selectedItem]);
+
+  useEffect(() => {
+    if (selectedItem === "" || selectedItem === "Clients With Cash Balance") {
+      setT6Data([]);
+      dispatch(showLoader("Please wait"));
+      const fetchCWCBReport = async () => {
+        // tradeData([]);
+        // setSelectedZone(null);
+        // setSelectedBranchCode(null);
+        let Id = localStorage.getItem("Id");
+        const payload = {
+          user_id: Id,
+          zone: "H.O.",
+          branchCode: "ALL",
+        };
+        dispatch(showLoader(""));
+        apiServices
+          .ClientCash(payload)
+          .then((response) => {
+            console.log("ClientCashresponse", response?.data?.data);
+            // handleValues(response?.data?.data);
+            dispatch(hideLoader());
+            if (response?.status === 200) {
+              // ShowToast("error", response?.data);
+              // let { recordsTotal } = response?.data[0];
+              // setTotalEntries(recordsTotal);
+              // setUserData(response.data);
+              setTradeCWCBData(response?.data?.data);
+            }
+          })
+          .catch((error) => {
+            console.log("Error->", error);
+            // const zoneError = error.response?.data?.errors?.Zone["0"];
+            // const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
+            dispatch(hideLoader());
+            ShowToast("error", error.response?.data?.message);
+            // ShowToast("error", zoneError);
+            // ShowToast("error", branchCodeError);
+          })
+          .finally(() => {
+            dispatch(hideLoader());
+          });
+      };
+      fetchCWCBReport();
+    }
+  }, [dispatch, selectedItem]);
+
   useEffect(() => {
     const fetchClientCash = async () => {
       if (selectedItem === "T6 Selling") {
+        setTradeCWCBData([]);
         const Id = localStorage.getItem("Id");
         const payload = {
           user_id: Id,
@@ -119,6 +191,7 @@ const DashboardCrypto = () => {
           </Row>
           <TradeInfo
             T6Data={t6Data}
+            tradeCWCBData={tradeCWCBData}
             selectedWidget={selectedItem}
             handleExcel={handleExcel}
           />

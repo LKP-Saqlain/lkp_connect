@@ -26,6 +26,8 @@ const Widgets = ({ selectedWidget, handleItemClick }: SelectedWidgetProps) => {
                 border: "1px solid rgba(0, 0, 0, 0.2)",
                 backgroundColor: isSelected ? "#11395C" : "#fff",
                 color: isSelected ? "#fff" : "#000",
+                marginTop: "0px",
+                marginBottom: "8px",
               }}
             >
               <CardBody>

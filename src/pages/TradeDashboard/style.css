@@ -1,0 +1,7 @@
+.header-wrap {
+    white-space: normal; /* Allows text to wrap */
+    word-wrap: break-word; /* Break long words if needed */
+    text-align: center; /* Aligns text centrally */
+    line-height: 1.2; /* Adjusts line spacing for better readability */
+    font-size: 12px; /* Adjust font size if needed */
+  }

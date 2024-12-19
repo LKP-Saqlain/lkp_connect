@@ -281,8 +281,16 @@ const LoginPage = () => {
             onSubmit={formik.handleSubmit}
           >
             <TextField
-              label="Username"
-              placeholder="Please enter Username"
+              label={
+                formik.values.loginButtonGroup === "Employee"
+                  ? "Employee Code"
+                  : "AP Code"
+              }
+              placeholder={
+                formik.values.loginButtonGroup === "Employee"
+                  ? "Please Enter Employee Code"
+                  : "Please Enter AP Code"
+              }
               variant="outlined"
               size="small"
               name="username"
@@ -323,7 +331,7 @@ const LoginPage = () => {
                       edge="end"
                       aria-label="toggle password visibility"
                     >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 ),

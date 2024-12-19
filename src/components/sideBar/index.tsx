@@ -128,11 +128,13 @@ const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string>("Overview");
+  const [selectedViewMore, setSelectedViewMore] = useState<string>("");
   const [activeSubItem, setActiveSubItem] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [apiStatus, setApiStatus] = useState<boolean>(false);
+  const [dataStatus, setDataStatus] = useState("");
   // const drawerWidth = isMobile ? 180 : 240;
   const settings = ["Logout"];
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
@@ -142,6 +144,19 @@ const SideBar = () => {
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+  const lastBrokingValues = useSelector(
+    (state: RootState) => state.userOverView?.data?.data?.data
+  );
+  useEffect(() => {
+    if (lastBrokingValues && lastBrokingValues.length > 0) {
+      const brokingValue =
+        lastBrokingValues[lastBrokingValues.length - 1]?.Dtrandate;
+      setDataStatus(brokingValue || "No date available"); // Set default value if empty
+    } else {
+      setDataStatus("No data available");
+    }
+  }, [lastBrokingValues]); // Runs when `lastBrokingValues` changes
+
   console.log("user", user_id);
 
   const username = localStorage.getItem("userName");
@@ -281,6 +296,13 @@ const SideBar = () => {
     }
   };
 
+  const handleTradingOpen = (value: any) => {
+    // alert("clicked from Trading page");
+    console.log("ClickedValue", value);
+    setActiveMenu("Trading");
+    setSelectedViewMore(value);
+  };
+
   const handleMobileDrawerClose = () => {
     handleDrawerClose();
     // handleMenuClick("");
@@ -294,11 +316,11 @@ const SideBar = () => {
     // }
     switch (activeMenu) {
       case "Overview":
-        return <OverviewComponent />;
+        return <OverviewComponent handleTradingOpen={handleTradingOpen} />;
       case "Zone Overview":
         return <RegOverview />;
       case "Trading":
-        return <TradeDashboard />;
+        return <TradeDashboard selectedTrading={selectedViewMore} />;
       case "Revenue Details":
       case "Masters":
         switch (activeSubItem) {
@@ -453,6 +475,11 @@ const SideBar = () => {
             </Typography> */}
             <Typography sx={{ fontSize: "14px", fontFamily: "Public Sans" }}>
               {localStorage.getItem("userName")}
+            </Typography>
+            <Typography
+              sx={{ fontSize: "9px", color: "grey", fontFamily: "Public Sans" }}
+            >
+              {`Data as on- ${dataStatus}`}
             </Typography>
           </Typography>
           <Tooltip title="">

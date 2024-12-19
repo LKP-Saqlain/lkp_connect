@@ -45,6 +45,7 @@ const ClientDetails = ({
   }, []);
   useEffect(() => {
     if (selectedCapsule === "Total Clients") {
+      dispatch(showLoader(""));
       const fetchClientCash = async () => {
         if (apiStatus) {
           const Id = localStorage.getItem("Id");

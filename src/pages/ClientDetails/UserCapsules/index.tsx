@@ -43,6 +43,8 @@ const UserCapsules = ({
                 backgroundColor:
                   selectedCapsule === item.label ? "#11395C" : "#fff",
                 color: selectedCapsule === item.label ? "#fff" : "#000",
+                marginTop: "0px",
+                marginBottom: "8px",
               }}
             >
               <CardBody>

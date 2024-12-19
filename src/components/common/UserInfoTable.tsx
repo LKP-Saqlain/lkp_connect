@@ -42,6 +42,7 @@ interface SelectedWidgetProps {
   customHide?: any;
   searchValue?: any;
   onFilterChange?: (filter: string) => void;
+  tradeCWCBData?: any;
 }
 
 const DataTable = ({
@@ -58,6 +59,7 @@ const DataTable = ({
   customHide,
   searchValue,
   onFilterChange,
+  tradeCWCBData,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -67,7 +69,7 @@ const DataTable = ({
   }, [selectedWidget]);
 
   useEffect(() => {
-    console.log(totalRows);
+    console.log(totalRows, tradeData);
 
     if (selectedWidget !== "Clients With Cash Balance") {
       setTradeData([]);
@@ -135,11 +137,7 @@ const DataTable = ({
   return (
     <>
       {selectedWidget === "Clients With Cash Balance" && (
-        <DropDown
-          tradeData={setTradeData}
-          handleValues={handleValues}
-          selectedWidget={selectedWidget}
-        />
+        <DropDown tradeData={setTradeData} handleValues={handleValues} />
       )}
       {/* {(selectedWidget === "Total Clients" ||
         selectedWidget === "Active Clients" ||
@@ -176,7 +174,7 @@ const DataTable = ({
       )}
       <Paper
         sx={{
-          height: "82vh",
+          height: "70vh",
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",
@@ -185,7 +183,7 @@ const DataTable = ({
         <DataGrid
           rows={
             selectedWidget === "Clients With Cash Balance"
-              ? tradeData
+              ? tradeCWCBData
               : selectedWidget === "Total Clients"
               ? T6Data
               : selectedWidget === "Active Clients"
@@ -211,6 +209,8 @@ const DataTable = ({
             fontFamily: '"Public Sans", sans-serif',
             "& .MuiDataGrid-columnHeader": {
               // textAlign: "center",
+              backgroundColor: "#6C757D", // Set the header background color to grey
+              color: "#fff", // Optionally set the text color to white for better contrast
               fontWeight: 500,
               fontSize: "13px",
             },

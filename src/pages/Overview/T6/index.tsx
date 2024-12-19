@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Card, CardBody, CardHeader } from "reactstrap";
+import { Button, Card, CardBody, CardHeader } from "reactstrap";
 import { useDispatch } from "react-redux";
 // import Widgets from "./Widgets";
 // import TradeCapsule from "./TradeCapsules";
 import TradeInfo from "../../../components/common/UserInfoTable";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
-import { useMediaQuery } from "@mui/material";
+// import { useMediaQuery } from "@mui/material";
 import "../style.css";
 import ShowToast from "../../../utils/toastUtils";
 
@@ -23,7 +23,7 @@ interface T6Selling {
   StockValue: string;
 }
 
-const T6Table = () => {
+const T6Table = ({ handleTradingOpen }: any) => {
   const [t6Data, setT6Data] = useState<T6Selling[]>([]);
   const [
     upcomingOverviewDormantTableData,
@@ -32,7 +32,7 @@ const T6Table = () => {
   const [top5Birthdays, setTop5Birthdays] = useState<[]>([]);
   const dispatch = useDispatch();
 
-  const isMobile = useMediaQuery("(max-width:768px)");
+  // const isMobile = useMediaQuery("(max-width:768px)");
 
   useEffect(() => {
     const Id = localStorage.getItem("Id");
@@ -147,21 +147,39 @@ const T6Table = () => {
       <div
         style={{
           display: "flex",
-          flexDirection: isMobile ? "column" : "row",
-          gap: isMobile ? "10px" : "20px",
-          height: isMobile ? "auto" : "350px",
+          flexDirection: "column", // Stack all cards vertically
+          gap: "20px", // Space between cards
+          height: "auto", // Adjust to content height
         }}
       >
-        <Card
-          className="main-card"
-          style={{ flex: "1", width: isMobile ? "100%" : "auto" }}
-        >
-          <CardHeader>
-            <h4 className="card-title mb-0">Top 5 T6 Clients</h4>
+        <Card className="main-card">
+          <CardHeader
+            className="d-flex justify-content-between align-items-center"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <h4 className="card-title mb-0">Top 5 T6 Clients</h4>{" "}
+            <Button
+              style={{
+                height: "25px",
+                width: "80px",
+                borderRadius: "5px",
+                fontSize: "12px",
+                padding: "0",
+                fontFamily: "Public Sans",
+              }}
+              className="btn-sm"
+              onClick={() => handleTradingOpen("T6")}
+            >
+              View More
+            </Button>
           </CardHeader>
           <CardBody
             className="main-card-body"
-            style={{ overflow: "hidden", padding: "10px" }}
+            style={{ overflow: "hidden", height: "250px", padding: "10px" }}
           >
             <TradeInfo
               T6Data={t6Data}
@@ -170,16 +188,34 @@ const T6Table = () => {
             />
           </CardBody>
         </Card>
-        <Card
-          className="main-card"
-          style={{ flex: "1", width: isMobile ? "100%" : "auto" }}
-        >
-          <CardHeader>
+        <Card className="main-card">
+          <CardHeader
+            className="d-flex justify-content-between align-items-center"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <h4 className="card-title mb-0">Upcoming Dormant Client</h4>
+            <Button
+              style={{
+                height: "25px",
+                width: "80px",
+                borderRadius: "5px",
+                fontSize: "12px",
+                padding: "0",
+                fontFamily: "Public Sans",
+              }}
+              className="btn-sm"
+              onClick={() => handleTradingOpen("Dormant")}
+            >
+              View More
+            </Button>
           </CardHeader>
           <CardBody
             className="main-card-body"
-            style={{ overflow: "hidden", padding: "10px" }}
+            style={{ overflow: "hidden", height: "250px", padding: "10px" }}
           >
             <TradeInfo
               T6Data={upcomingOverviewDormantTableData}
@@ -188,28 +224,20 @@ const T6Table = () => {
             />
           </CardBody>
         </Card>
-        {/* <Card style={{ flex: "1", width: isMobile ? "100%" : "auto" }}>
-          <CardHeader>
-            <h4 className="card-title mb-0">Client's Birthday Today</h4>
-          </CardHeader>
-          <CardBody style={{ height: "auto", padding: "10px" }}>
-            <TradeInfo
-              T6Data={top5Birthdays}
-              selectedWidget={"clientBirthday"}
-              customHide={true}
-            />
-          </CardBody>
-        </Card> */}
-        <Card
-          className="main-card"
-          style={{ flex: "1", width: isMobile ? "100%" : "auto" }}
-        >
-          <CardHeader>
+        <Card className="main-card">
+          <CardHeader
+            className="d-flex justify-content-between align-items-center"
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <h4 className="card-title mb-0">Client's Birthday Today</h4>
           </CardHeader>
           <CardBody
             className="main-card-body"
-            style={{ overflow: "hidden", padding: "10px" }}
+            style={{ overflow: "hidden", height: "250px", padding: "10px" }}
           >
             <TradeInfo
               T6Data={top5Birthdays}

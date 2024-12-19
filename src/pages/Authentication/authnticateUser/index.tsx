@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  IconButton,
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -26,11 +27,14 @@ import { useTheme } from "@mui/material/styles";
 import Banner from "../../../assets/banner.png";
 import Vector from "../../../assets/vector.png";
 import ShowToast from "../../../utils/toastUtils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AppDispatch } from "../../../redux/store";
 import { AuthUser } from "../../../redux/thunk/AuthUser";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const AuthenticateUser = () => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
@@ -154,6 +158,10 @@ const AuthenticateUser = () => {
     }
   };
 
+  const handleTogglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   useEffect(() => {
     console.log("formikValls", formik.values);
     if (formik.values.authenticationButtonGroup !== "Date of Birth") {
@@ -250,6 +258,7 @@ const AuthenticateUser = () => {
 
           {formik.values.authenticationButtonGroup === "Pan" ? (
             <TextField
+              type={showPassword ? "text" : "password"}
               label="Enter PAN"
               variant="outlined"
               size="small"
@@ -258,6 +267,17 @@ const AuthenticateUser = () => {
                 startAdornment: (
                   <InputAdornment position="start">
                     <FaRegUserCircle />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={handleTogglePasswordVisibility}
+                      edge="end"
+                      aria-label="toggle password visibility"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
                   </InputAdornment>
                 ),
               }}
