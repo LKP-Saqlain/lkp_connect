@@ -58,7 +58,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
     if (selectedTrading === "T6") {
       setSelectedItem("T6 Selling");
     }
-  }, [selectedTrading, selectedItem]);
+  }, [selectedTrading]);
 
   useEffect(() => {
     if (selectedItem === "" || selectedItem === "Clients With Cash Balance") {
