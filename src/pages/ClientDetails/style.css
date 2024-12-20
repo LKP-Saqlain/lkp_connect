@@ -107,6 +107,14 @@
   border-radius: var(--bs-border-radius-pill) !important;
   margin: 12px 0px;
 }
+
+.even-row {
+  background-color: #f9f9f9; /* Light grey for even rows */
+}
+
+.odd-row {
+  background-color: #ffffff; /* White for odd rows */
+}
   
   
   

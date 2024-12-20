@@ -101,6 +101,9 @@ const DataTable: React.FC<DormantClientProps> = ({
           getRowId={(row: any) =>
             row.clientName ? row.clientName : row.alertSequenceNo
           }
+          getRowClassName={(params) =>
+            params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"
+          }
           // getRowId={(row: any) => console.log("row", row.TransactionDate)}
           sx={{
             border: 0,

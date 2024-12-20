@@ -361,7 +361,7 @@ const ForgotPassword = () => {
                           edge="end"
                           aria-label="toggle password visibility"
                         >
-                          {showOtp ? <VisibilityOff /> : <Visibility />}
+                          {showOtp ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -396,7 +396,7 @@ const ForgotPassword = () => {
                           edge="end"
                           aria-label="toggle password visibility"
                         >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -434,9 +434,9 @@ const ForgotPassword = () => {
                           aria-label="toggle password visibility"
                         >
                           {showConfirmPassword ? (
-                            <VisibilityOff />
-                          ) : (
                             <Visibility />
+                          ) : (
+                            <VisibilityOff />
                           )}
                         </IconButton>
                       </InputAdornment>

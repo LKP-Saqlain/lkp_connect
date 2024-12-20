@@ -69,16 +69,21 @@ const DormantClient = () => {
   });
 
   useEffect(() => {
-    if (accessType === "" || searchValue.length === 0) {
-      handleSubmit();
-    }
-  }, [accessType, searchValue]);
+    // if (accessType === "") {
+    handleSubmit();
+    // }
+  }, []);
 
   useEffect(() => {
-    if (searchValue.length === 0) {
+    if (searchValue.length === 0 && responseStatus) {
       handleSubmit();
     }
-  }, [searchValue]);
+  }, [searchValue, responseStatus]);
+
+  useEffect(() => {
+    console.log("accessType", typeof accessType);
+  }, [accessType]);
+
   interface FormValues {
     selectedZone: { label: string; value: string } | null;
     selectedBranchCode: { label: string; value: string } | null;

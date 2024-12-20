@@ -148,7 +148,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
         style={{
           display: "flex",
           flexDirection: "column", // Stack all cards vertically
-          gap: "20px", // Space between cards
+          // gap: "20px", // Space between cards
           height: "auto", // Adjust to content height
         }}
       >

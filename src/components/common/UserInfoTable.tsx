@@ -204,6 +204,9 @@ const DataTable = ({
               ? row.ClientName
               : row.Name
           } // Use the correct identifier for rows
+          getRowClassName={(params) =>
+            params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"
+          }
           sx={{
             border: 0,
             fontFamily: '"Public Sans", sans-serif',

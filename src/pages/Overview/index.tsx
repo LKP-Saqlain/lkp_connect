@@ -8,7 +8,8 @@ import RevenueDetails from "./Revenue";
 import T6Table from "./T6";
 import { Player } from "@lordicon/react";
 import CoinIcon from "../../assets/images/coins.json";
-import BriefCase from "../../assets/images/breifcase.json";
+// import BriefCase from "../../assets/images/breifcase.json";
+import RevenueImg from "../../assets/images/revenue_new.json";
 import PiggyBank from "../../assets/images/piggyBank.json";
 import ActiveClient from "../../assets/images/Clients.json";
 import DashboardCard from "../../components/common/DashboardCard";
@@ -139,7 +140,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                           <DashboardCard
                             title="Revenue*"
                             value={revenueValues[activeBadge]}
-                            animationData={BriefCase}
+                            animationData={RevenueImg}
                             badges={badges}
                             formatIndianNumber={formatIndianNumber}
                             suffix=".00"
@@ -162,7 +163,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                           <DashboardCard
                             title="New Clients Added*"
                             value={newClients}
-                            animationData={PiggyBank}
+                            animationData={ActiveClient}
                             activeClientsEmpty={true}
                             customClass={true}
                           />
@@ -171,7 +172,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                           <DashboardCard
                             title="Unique Traded Clients*"
                             value={tradedClientCount}
-                            animationData={ActiveClient}
+                            animationData={PiggyBank}
                             activeClients={activeClients}
                             customClass={true}
                           />
