@@ -48,7 +48,6 @@ const T6Table = ({ handleTradingOpen }: any) => {
 
           const filterRecords = data.slice(0, 5);
           console.log("filterData", filterRecords);
-          // setUpcomingOverviewDormantTableData(filterRecords);
           setTop5Birthdays(filterRecords);
         }
       })
@@ -82,7 +81,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
           const filterRecords = data
             .filter((item: any) => item.dayCount)
             .slice(0, 5);
-          console.log("filterData", filterRecords);
+          console.log("DormantfilterData", filterRecords);
           setUpcomingOverviewDormantTableData(filterRecords);
         }
       })

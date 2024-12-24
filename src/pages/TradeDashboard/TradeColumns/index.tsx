@@ -208,7 +208,7 @@ export const T6OverViewColumns: GridColDef[] = [
     headerName: "Client Code",
     flex: 2,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     // renderCell: (params) => (
     //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
     //     <div>{params.row.ClientName}</div>
@@ -221,7 +221,7 @@ export const T6OverViewColumns: GridColDef[] = [
     headerName: "Client Name",
     flex: 2,
     headerAlign: "center",
-    align: "center",
+    align: "left",
   },
   {
     field: "T5",
@@ -240,7 +240,7 @@ export const DormantOverViewColumns: GridColDef[] = [
     flex: 3, // Adjusts proportionally to the screen size
     // minWidth: 150, // Ensures a minimum width for usability
     headerAlign: "center",
-    align: "center",
+    align: "left",
     // renderCell: (params) => (
     //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
     //     <div>{params.row.clientName}</div>
@@ -254,7 +254,7 @@ export const DormantOverViewColumns: GridColDef[] = [
     flex: 3, // Adjusts proportionally to the screen size
     // minWidth: 150, // Ensures a minimum width for usability
     headerAlign: "center",
-    align: "center",
+    align: "left",
     // renderCell: (params) => (
     //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
     //     <div>{params.row.clientName}</div>
@@ -287,7 +287,7 @@ export const topBirthdays: GridColDef[] = [
     headerName: "Client Code",
     flex: 2,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     // renderCell: (params) => (
     //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
     //     <div>{params.row.Name}</div>
@@ -300,7 +300,7 @@ export const topBirthdays: GridColDef[] = [
     headerName: "Client Name",
     flex: 2,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     // renderCell: (params) => (
     //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
     //     <div>{params.row.Name}</div>
