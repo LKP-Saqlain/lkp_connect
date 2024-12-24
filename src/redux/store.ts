@@ -41,6 +41,10 @@ const store = configureStore({
 
 export const persistor = persistStore(store); // Create the persistor
 
+if (import.meta.env.VITE_NODE_ENV === "production") {
+  console.log = () => {};
+}
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
