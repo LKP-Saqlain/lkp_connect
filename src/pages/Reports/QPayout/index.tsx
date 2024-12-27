@@ -130,33 +130,52 @@ const QuarterlyPayout = () => {
       });
   };
 
+  const isSmallScreen = window.innerWidth < 768;
+
   const qpayoutColumns: GridColDef[] = [
-    { field: "accountcode", headerName: "Client Code", width: 130 },
-    { field: "clientName", headerName: "Client Name", width: 130 },
-    { field: "rm", headerName: "RM", width: 130 },
-    { field: "branchcode", headerName: "Branch Code", width: 130 },
-    { field: "zone", headerName: "Zone", width: 100 },
+    {
+      field: "accountcode",
+      headerName: "Client Code",
+      width: isSmallScreen ? 100 : 150,
+    },
+    {
+      field: "clientName",
+      headerName: "Client Name",
+      width: isSmallScreen ? 100 : 150,
+    },
+    { field: "rm", headerName: "RM", width: isSmallScreen ? 100 : 150 },
+    {
+      field: "branchcode",
+      headerName: "Branch Code",
+      width: isSmallScreen ? 100 : 150,
+    },
+    { field: "zone", headerName: "Zone", width: isSmallScreen ? 80 : 120 },
     {
       field: "payout_Amt",
       headerName: "Payout Amt",
-      width: 130,
+      width: isSmallScreen ? 100 : 150,
       align: "right",
       headerAlign: "center",
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
     },
     {
       field: "receipt_Amt",
       headerName: "Receipt Amt",
-      width: 130,
+      width: isSmallScreen ? 100 : 150,
       align: "right",
       headerAlign: "center",
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
     },
-    // { field: "payout_Amt", headerName: "Pending Amt", width: 130 }, //COMMENTED THIS BCOZ TABLE BREAKS
     {
       field: "extra_Payin",
       headerName: "Extra Payin",
-      width: 130,
+      width: isSmallScreen ? 100 : 150,
       align: "right",
       headerAlign: "center",
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
     },
   ];
 

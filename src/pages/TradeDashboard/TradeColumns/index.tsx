@@ -9,7 +9,7 @@ export const ClientCashColumns: GridColDef[] = [
     flex: 1.5, // Use flex for responsive column width
     minWidth: 150, // Ensure minimum width for proper readability
     headerAlign: "center",
-    align: "center",
+    align: "left",
     sortable: false,
     disableColumnMenu: true,
   },
@@ -115,7 +115,7 @@ export const T6Columns: GridColDef[] = [
     flex: 1,
     minWidth: 105,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     sortable: false,
     disableColumnMenu: true,
   },

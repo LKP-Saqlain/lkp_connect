@@ -22,6 +22,7 @@ import ShowToast from "../../../utils/toastUtils";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../style.css";
+import Tooltip from "@mui/material/Tooltip";
 
 const ClientStatus = [
   { value: "ALL", label: "ALL" },
@@ -440,9 +441,9 @@ const DormantClient = () => {
         headerAlign: "center",
       },
       { field: "lastTradeDate", headerName: "Last Trade Date", width: 100 },
-      { field: "rmname", headerName: "RM Name", width: 80 },
+      { field: "rmname", headerName: "RM Name", width: 180 },
       { field: "rmstatus", headerName: "RM Status", width: 80 },
-      { field: "dealerName", headerName: "Dealer Name", width: 80 },
+      { field: "dealerName", headerName: "Dealer Name", width: 180 },
       { field: "dealerSTATUS", headerName: "Dealer Status", width: 80 },
       {
         field: "branchcode",
@@ -466,26 +467,51 @@ const DormantClient = () => {
         headerAlign: "center",
       },
       { field: "activationDate", headerName: "Actv. Date", width: 80 },
-      { field: "mobileNo", headerName: "Mobile No", width: 80 },
-      { field: "email", headerName: "Email", width: 100 },
+      {
+        field: "mobileNo",
+        headerName: "Mobile No",
+        width: 90,
+        renderCell: (params: any) => {
+          const mobile = params.value || ""; // Extract the mobile number
+          // Mask all except first 2 digits
+          const maskedMobile = mobile.replace(
+            /^(\d{2})(\d+)/,
+            (_: any, prefix: any, rest: any) => {
+              console.log(prefix); //addded only for testing purpose
+              // return `${prefix}${"X".repeat(rest.length)}`;
+              // console.log(handleViewDetails);
+
+              return `${"X".repeat(rest.length)}`;
+            }
+          );
+
+          // Return tooltip with the masked mobile number
+          return (
+            <Tooltip title={mobile} arrow placement="top">
+              <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+            </Tooltip>
+          );
+        },
+      },
+      { field: "email", headerName: "Email", width: 180 },
       {
         field: "brokerageGeneratedinFY1920",
         headerName: "Brok FY1920",
-        width: 60,
+        width: 100,
         align: "right",
         headerAlign: "center",
       },
       {
         field: "brokerageGeneratedinFY2021",
         headerName: "Brok FY2021",
-        width: 60,
+        width: 100,
         align: "right",
         headerAlign: "center",
       },
       {
         field: "brokerageGeneratedinFY2122",
         headerName: "Brok FY1922",
-        width: 60,
+        width: 100,
         align: "right",
         headerAlign: "center",
       },

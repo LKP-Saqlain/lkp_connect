@@ -268,16 +268,16 @@ const SlbmHoling = () => {
   };
 
   const slbmColumns: GridColDef[] = [
-    { field: "zone", headerName: "Zone", width: 60 },
-    { field: "branchCode", headerName: "Branch Code", width: 100 },
-    { field: "clientCode", headerName: "Client Code", width: 100 },
-    { field: "clientName", headerName: "Client Name", width: 200 },
-    { field: "scripName", headerName: "Scrip Name", width: 90 },
-    { field: "isin", headerName: "ISIN", width: 100 },
-    { field: "qtny", headerName: "Qtny", width: 70 },
-    { field: "rmName", headerName: "RM Name", width: 100 },
-    { field: "dealerName", headerName: "Dealer Name", width: 80 },
-    { field: "slbmStatus", headerName: "SLBM Status", width: 100 },
+    { field: "zone", headerName: "Zone", width: 60, flex: 0.5 },
+    { field: "branchCode", headerName: "Branch Code", width: 100, flex: 1 },
+    { field: "clientCode", headerName: "Client Code", width: 100, flex: 1 },
+    { field: "clientName", headerName: "Client Name", width: 200, flex: 2 },
+    { field: "scripName", headerName: "Scrip Name", width: 90, flex: 1 },
+    { field: "isin", headerName: "ISIN", width: 100, flex: 1 },
+    { field: "qtny", headerName: "Qtny", width: 70, flex: 0.7 },
+    { field: "rmName", headerName: "RM Name", width: 100, flex: 1 },
+    { field: "dealerName", headerName: "Dealer Name", width: 80, flex: 1 },
+    { field: "slbmStatus", headerName: "SLBM Status", width: 100, flex: 1 },
   ];
 
   const handleDownloadExcel = async () => {
