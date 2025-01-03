@@ -1,42 +1,107 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { Col, Row, Card, CardBody, CardHeader } from "reactstrap";
-import { Button } from "@mui/material";
-// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-// import dayjs, { Dayjs } from "dayjs";
-// import { useTheme } from "@mui/material/styles";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { ClientSegBrok } from "../../../redux/thunk/ClientSegmentBrokerage";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
+import ButtonGroup from "../../common/ButtonGroup";
+import ShowToast from "../../../utils/toastUtils";
 
 const barColors = ["#11395C", "#F57C00"];
-// const GrossBrokerageColor = ["#FFAF6C"];
-
-const newSeries = [
-  {
-    name: "Gross Brokerage",
-    type: "bar",
-    data: [
-      680051.23, 538044.27, 483511.14, 1065669.67, 542258.31, 496766.77,
-      838044.27, 480051.23, 942258.31, 796766.77,
-    ],
-  },
-  {
-    name: "AP Share",
-    type: "bar",
-    data: [
-      311562.76, 452921.84, 316700.94, 270955.77, 363095.8, 321967.26,
-      538044.27, 890051.23, 542258.31, 942258.31,
-    ],
-  },
+const categories = [
+  "Equity Intraday",
+  "Equity Delivery",
+  "Equity Futures",
+  "Equity Options",
+  "Commodity Futures",
+  "Commodity Options",
 ];
 
-const PerformanceHistoryChart = ({ brokerageData }: any) => {
-  const [latestDates, setLatestDates] = useState<any>("");
+const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
   const [selectedButton, setSelectedButton] = useState<string>("7 Days");
-  // const [selectedButton, setSelectedButton] = useState<string>("Daily");
+
+  const [grossBrokerageData, setGrossBrokerageData] = useState<number[]>([]);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    const fetchClientBrokerage = () => {
+      const Id = localStorage.getItem("Id");
+      const currentDate = new Date();
+      let daysToSubtract;
+
+      switch (selectedButton) {
+        case "7 Days":
+          daysToSubtract = 7;
+          break;
+        case "15 Days":
+          daysToSubtract = 15;
+          break;
+        case "1 Month":
+          daysToSubtract = 30;
+          break;
+        case "3 Months":
+          daysToSubtract = 90;
+          break;
+        case "6 Months":
+          daysToSubtract = 180;
+          break;
+        case "12 Months":
+          daysToSubtract = 365;
+          break;
+        default:
+          daysToSubtract = 7; // Default to 7 days if no button is selected
+      }
+
+      const toDate = new Date(currentDate);
+      const fromDate = new Date(currentDate);
+      fromDate.setDate(currentDate.getDate() - daysToSubtract);
+
+      const formattedFromDate = fromDate.toISOString().split("T")[0]; // Format as YYYY-MM-DD
+      const formattedToDate = toDate.toISOString().split("T")[0];
+
+      let payload = {
+        user_id: Id,
+        clientCode: "24215", //24215 for show data in all btns
+        fromDate: formattedFromDate, //"2024/09/01",
+        toDate: formattedToDate, //"2024/12/01",
+      };
+      dispatch(showLoader("Please wait"));
+      dispatch(ClientSegBrok(payload))
+        .unwrap()
+        .then((res) => {
+          console.log("TypeCheck", typeof res?.data);
+          console.log("ClientSegmentBrokerageResponse", res?.data);
+          if (typeof res?.data === "string") {
+            ShowToast("error", res?.data);
+            setGrossBrokerageData([]);
+          }
+          if (typeof res?.data === "object") {
+            const responseData = res?.data?.data[0];
+            if (responseData) {
+              const mappedData = categories.map(
+                (category) => responseData[category.replace(/ /g, "_")]
+              );
+              console.log("responseData", mappedData);
+
+              setGrossBrokerageData(mappedData);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log("ResponseError-->", err);
+          dispatch(hideLoader());
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+    };
+    fetchClientBrokerage();
+  }, [dispatch, selectedButton, selectedClientCode]);
 
   const selectedStyle = {
     bgcolor: "#11395C",
@@ -55,31 +120,26 @@ const PerformanceHistoryChart = ({ brokerageData }: any) => {
     borderColor: "#ABC4DA",
     textTransform: "capitalize",
   };
-  useEffect(() => {
-    console.log("brokData", brokerageData);
-    const categories = [
-      "Equity Intraday",
-      "Equity Delivery",
-      "Equity Futures",
-      "Equity Options",
-      "Comm Futures",
-      "Comm Options",
-      "MF",
-      "SPIP",
-      "Insurance",
-      "Liquiloans",
-    ];
-    setLatestDates(categories);
-    console.log("categories", categories);
-  }, []);
-
   var options: any = {
     chart: {
       height: 370,
-      type: "line",
+      type: "bar",
       toolbar: {
         show: false,
       },
+    },
+    dataLabels: {
+      enabled: true, // Enable data labels
+      formatter: function (value: number) {
+        return new Intl.NumberFormat("en-IN").format(Math.round(value)); // Format the value
+      },
+      style: {
+        fontSize: "12px",
+        fontFamily: "Public Sans",
+        fontWeight: 500,
+        colors: ["#000"], // Label color
+      },
+      offsetY: -5, // Adjust the position of the labels (optional)
     },
     stroke: {
       curve: "straight",
@@ -97,7 +157,7 @@ const PerformanceHistoryChart = ({ brokerageData }: any) => {
       },
     },
     xaxis: {
-      categories: latestDates,
+      categories: categories,
       axisTicks: {
         show: false,
       },
@@ -108,8 +168,21 @@ const PerformanceHistoryChart = ({ brokerageData }: any) => {
         style: {
           fontSize: "12px",
           fontFamily: "Public Sans",
-          fontWeight: 400,
-          colors: "#333",
+          fontWeight: 500,
+          colors: "#000",
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        formatter: function (value: number) {
+          return new Intl.NumberFormat("en-IN").format(value); // Format y-axis labels
+        },
+        style: {
+          fontSize: "12px",
+          fontFamily: "Public Sans",
+          fontWeight: 500,
+          colors: "#000",
         },
       },
     },
@@ -154,35 +227,25 @@ const PerformanceHistoryChart = ({ brokerageData }: any) => {
     },
     colors: barColors,
     tooltip: {
-      shared: true,
-      y: [
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return y.toFixed(0);
-            }
-            return y;
-          },
+      shared: false,
+      y: {
+        formatter: function (y: any) {
+          if (typeof y !== "undefined") {
+            return new Intl.NumberFormat("en-IN").format(Math.round(y));
+          }
+          return y;
         },
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return y.toFixed(2);
-            }
-            return y;
-          },
-        },
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return y.toFixed(0);
-            }
-            return y;
-          },
-        },
-      ],
+      },
     },
   };
+
+  const series = [
+    {
+      name: "Gross Brokerage",
+      type: "bar",
+      data: grossBrokerageData,
+    },
+  ];
 
   return (
     <React.Fragment>
@@ -196,7 +259,7 @@ const PerformanceHistoryChart = ({ brokerageData }: any) => {
                     <span className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center chart-header">
                       Segment wise Brokerage
                     </span>
-                    <div
+                    {/* <div
                       className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end"
                       style={{ fontFamily: "Public Sans, sans-serif" }}
                     >
@@ -221,8 +284,8 @@ const PerformanceHistoryChart = ({ brokerageData }: any) => {
                       <p className="mb-0" style={{ marginRight: "20px" }}>
                         AP Share
                       </p>
-                    </div>
-                    <div className="d-flex gap-1">
+                    </div> */}
+                    {/* <div className="d-flex gap-1">
                       <Button
                         variant="outlined"
                         size="small"
@@ -298,7 +361,14 @@ const PerformanceHistoryChart = ({ brokerageData }: any) => {
                       >
                         12 Months
                       </Button>
-                    </div>
+                    </div> */}
+                    <ButtonGroup
+                      selectedButton={selectedButton}
+                      setSelectedButton={setSelectedButton}
+                      selectedStyle={selectedStyle}
+                      nonSelectedStyle={nonSelectedStyle}
+                      customClass={true}
+                    />
                   </div>
                 </Col>
               </Row>
@@ -310,7 +380,7 @@ const PerformanceHistoryChart = ({ brokerageData }: any) => {
                     <ReactApexChart
                       dir="ltr"
                       options={options}
-                      series={newSeries}
+                      series={series}
                       type="line"
                       height="374"
                       className="apex-charts"

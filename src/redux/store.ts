@@ -10,6 +10,8 @@ import Overview from "./slices/Overview";
 import DashMenuReducer from "./slices/GetMenus";
 import ClientSummaryReducer from "./slices/ClientSummary";
 import DealerPerformance from "./slices/DealerPerformance";
+import ClientUserDetails from "./slices/ClientUserDetails";
+import ClientSegmentBrokerage from "./slices/ClientSegmentBrokerage";
 
 // Configure the persist settings
 const persistConfig = {
@@ -31,6 +33,8 @@ const store = configureStore({
     UserMenu: DashMenuReducer,
     ClientSummary: ClientSummaryReducer,
     RevenueSummary: DealerPerformance,
+    ClientUserDashboardDetails: ClientUserDetails,
+    ClientSegmentBrokerageDetails: ClientSegmentBrokerage,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

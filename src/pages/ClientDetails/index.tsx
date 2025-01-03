@@ -13,6 +13,22 @@ import { Card, CardBody } from "reactstrap";
 import ShowToast from "../../utils/toastUtils";
 import { RootState, AppDispatch } from "../../redux/store";
 
+interface ClientRow {
+  BranchCode?: string;
+  BranchType?: string;
+  ClientCode?: string;
+  ClientName?: string;
+  PANNO?: string;
+  ActivationDate?: string;
+  MobileNo?: string;
+  EMail?: string;
+  ClientStatus?: string;
+  LastTradeDate?: string;
+  POAStatus?: string;
+  MTFStatus?: string;
+  RecordsTotal?: number;
+}
+
 const ClientDetails = ({
   handleDrawerClose,
   handleDrawerOpen,
@@ -35,6 +51,9 @@ const ClientDetails = ({
   const [searchValue, setSearchValue] = useState("");
   const [totalEntries, setTotalEntries] = useState(null);
   const [filter, setFilter] = useState<string>("ALL");
+  const [selectedUserInfo, setSelectedUserInfo] = useState<ClientRow | null>(
+    null
+  );
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -42,8 +61,13 @@ const ClientDetails = ({
     (state: RootState) => state.UserLogin?.data?.data
   );
   useEffect(() => {
-    console.log(totalEntries, filter);
-  }, []);
+    console.log(
+      "test12345",
+      totalEntries,
+      filter,
+      selectedUserInfo?.ClientCode
+    );
+  }, [selectedUserInfo]);
   useEffect(() => {
     if (selectedTrading === "Dormant") {
       setSelectedCapsule("Client Approaching  Dormant Status");
@@ -339,14 +363,16 @@ const ClientDetails = ({
   };
 
   const getUserDetails = (value: any) => {
-    // console.log("useDetails value", typeof value);
+    console.log("useDetails_value", value);
     if (Object.keys(value).length > 0) {
       console.log("The object is not empty.");
+      setSelectedUserInfo(value);
       setUserDetails(true);
       handleDrawerClose();
       setIsModalOpen(!isModalOpen);
     } else {
       setUserDetails(false);
+      setSelectedUserInfo(null);
     }
   };
   const handleModalClose = (value: any) => {
@@ -649,6 +675,7 @@ const ClientDetails = ({
           isOpen={isModalOpen}
           onClose={getUserDetails}
           handleModalClose={handleModalClose}
+          selectedClientCode={selectedUserInfo && selectedUserInfo?.ClientCode}
         />
       )}
     </>

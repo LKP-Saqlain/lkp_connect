@@ -15,10 +15,74 @@ import SegmentWiseTable from "../../../components/common/fullTable";
 import BrokerageSlab from "../BrokerageSlab";
 import { useMediaQuery } from "@mui/material";
 import "../style.css";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../redux/store";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
+import { ClientUserDetails } from "../../../redux/thunk/ClientUserDetails";
+import { useEffect, useState } from "react";
 
-const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
+const UserInfoModal = ({
+  isOpen,
+  onClose,
+  handleModalClose,
+  selectedClientCode,
+}: any) => {
+  const [clientDetails, setClientDetails] = useState({
+    Client_Name: "",
+    Clientcode: "",
+    Mobile_No: "",
+    City: "",
+    Age: 0,
+    Email_Id: "",
+    Equity: "",
+    "F & O": "",
+    Currency: "",
+    Commodity: "",
+    MTF: "",
+    SLBM: "",
+    Equity_Intraday: 0,
+    Equity_Delivery: 0,
+    Equity_Futures: 0,
+    Equity_Options: 0,
+    Currency_Futures: 0,
+    Currency_Options: 0,
+    Commodity_Futures: 0,
+    Commodity_Options: 0,
+  });
+
   const isMobile = useMediaQuery("(max-width:768px)");
   console.log(isMobile);
+
+  const dispatch = useDispatch<AppDispatch>();
+  // const { user_id } = useSelector(
+  //   (state: RootState) => state.UserLogin?.data?.data
+  // );
+
+  useEffect(() => {
+    const fetchClientUserDetails = async () => {
+      const Id = localStorage.getItem("Id");
+      let payload = {
+        user_id: Id,
+        clientCode: selectedClientCode,
+      };
+      dispatch(showLoader("Please wait"));
+      dispatch(ClientUserDetails(payload))
+        .unwrap()
+        .then((response) => {
+          dispatch(hideLoader());
+          console.log("ClientDetailsResponse", response);
+          setClientDetails(response?.data?.data[0]);
+        })
+        .catch((err) => {
+          console.log("ResponseError", err);
+          dispatch(hideLoader());
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+    };
+    fetchClientUserDetails();
+  }, [dispatch]);
 
   function tog_fullscreen1() {
     handleModalClose(true);
@@ -89,7 +153,7 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
                   >
                     Client Name
                   </p>
-                  <h6 className="user-info">John Doe</h6>
+                  <h6 className="user-info">{clientDetails.Client_Name}</h6>
                 </div>
               </Col>
               {/* Client Code */}
@@ -106,7 +170,7 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
                   >
                     Client Code
                   </p>
-                  <h6 className="user-info">ABCDEFGH</h6>
+                  <h6 className="user-info">{clientDetails.Clientcode}</h6>
                 </div>
               </Col>
               {/* Mobile No */}
@@ -123,7 +187,7 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
                   >
                     Mobile No
                   </p>
-                  <h6 className="user-info">+977 - 987451114</h6>
+                  <h6 className="user-info">{clientDetails.Mobile_No}</h6>
                 </div>
               </Col>
               {/* City */}
@@ -140,7 +204,7 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
                   >
                     City
                   </p>
-                  <h6 className="user-info">New York</h6>
+                  <h6 className="user-info">{clientDetails.City}</h6>
                 </div>
               </Col>
               {/* Age */}
@@ -157,7 +221,7 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
                   >
                     Age
                   </p>
-                  <h6 className="user-info">18+</h6>
+                  <h6 className="user-info">{clientDetails.Age}</h6>
                 </div>
               </Col>
               {/* Email Id */}
@@ -174,7 +238,7 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
                   >
                     Email Id
                   </p>
-                  <h6 className="user-info">Johndoe@tesla.co.in</h6>
+                  <h6 className="user-info">{clientDetails.Email_Id}</h6>
                 </div>
               </Col>
             </Row>
@@ -213,60 +277,59 @@ const UserInfoModal = ({ isOpen, onClose, handleModalClose }: any) => {
           {/* Right Side: BrokSlabItemstwo in a Single Row */}
           <Col md={9}>
             <Row className="gx-2 gy-2">
-              {ClientInfoCapsules.map((item) => (
-                <Col md={2} key={item.id}>
-                  <Card
-                    style={{
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                      border: "1px solid rgba(0, 0, 0, 0.1)",
-                      borderRadius: "10px",
-                      backgroundColor: "#fff",
-                    }}
-                  >
-                    <CardBody className="text-center">
-                      <p
-                        style={{
-                          fontFamily: "Poppins",
-                          color: "#333",
-                          fontWeight: "500",
-                          fontSize: "12px",
-                          margin: "5px 0",
-                        }}
-                      >
-                        {item.label}
-                      </p>
-                      <p
-                        style={{
-                          fontFamily: "Poppins",
-                          color: "#777",
-                          fontSize: "14px",
-                          margin: 0,
-                        }}
-                      >
-                        <FiberManualRecordIcon
-                          fontSize="small"
-                          sx={{
-                            color:
-                              item.status === undefined
-                                ? "red"
-                                : item.status === "active"
-                                ? "#01D28E"
-                                : "#FF0606",
-                            display: item.status === undefined ? "none" : "",
+              {ClientInfoCapsules.map((item) => {
+                const status = (
+                  clientDetails as Record<string, string | number>
+                )[item.label];
+                const color = status === "Active" ? "#01D28E" : "#FF0606";
+
+                return (
+                  <Col md={2} key={item.id}>
+                    <Card
+                      style={{
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                        border: "1px solid rgba(0, 0, 0, 0.1)",
+                        borderRadius: "10px",
+                        backgroundColor: "#fff",
+                      }}
+                    >
+                      <CardBody className="text-center">
+                        <p
+                          style={{
+                            fontFamily: "Poppins",
+                            color: "#333",
+                            fontWeight: "500",
+                            fontSize: "12px",
+                            margin: "5px 0",
                           }}
-                        />
-                        {item.status}
-                      </p>
-                    </CardBody>
-                  </Card>
-                </Col>
-              ))}
+                        >
+                          {item.label}
+                        </p>
+                        <p
+                          style={{
+                            fontFamily: "Poppins",
+                            color: "#777",
+                            fontSize: "14px",
+                            margin: 0,
+                          }}
+                        >
+                          <FiberManualRecordIcon
+                            fontSize="small"
+                            sx={{ color: color }}
+                          />
+                          {status}
+                        </p>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                );
+              })}
             </Row>
           </Col>
         </Row>
         <PerformanceHistoryChart />
-        <SegmentWiseTable />
-        <BrokerageSlab />
+        <SegmentWiseTable selectedClientCode={selectedClientCode} />
+        <BrokerageSlab setClientDetails={clientDetails} />
       </ModalBody>
       {/* <div className="modal-footer">
         <Link

@@ -24,4 +24,6 @@ export const endpoints = {
   ClientDetails: "/api/Client/ClientDetails",
   getUpcompingDormantReport: "/api/Common/GetUpcomingDormantReport",
   GetBirthdayList: "/api/Common/GetBirthdayList",
+  ClientDashboard: "/api/Client/ClientDashboard",
+  ClientSegmentBrok: "/api/Client/ClientSegmentBrok",
 };

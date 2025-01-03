@@ -1,0 +1,79 @@
+table {
+    font-family: "Poppins" !important;
+  }
+  
+  .MuiTableCell-root {
+    font-size: 13px !important;
+    font-weight: 500 !important;
+  }
+  
+  .MuiTableRow-root:hover {
+    background-color: #f9f9f9 !important;
+  }
+  
+  .MuiTableCell-head {
+    font-weight: bold !important;
+    color: #333 !important;
+  }
+  
+  .MuiPaper-root {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    /* border-radius: 12px !important; */
+  }
+
+  .css-1orzuox-MuiTableCell-root {
+    font-family: "Poppins" !important;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.43;
+    letter-spacing: 0.01071em;
+    display: table-cell;
+    vertical-align: inherit;
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+    text-align: left;
+    padding: 10px;
+    color: rgba(0, 0, 0, 0.87);
+    line-height: 1.5rem;
+    font-weight: 500;
+}
+
+.css-1dc80h3-MuiTableCell-root {
+    font-family: 'Poppins' !important;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.43;
+    letter-spacing: 0.01071em;
+    display: table-cell;
+    vertical-align: inherit;
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+    text-align: left;
+    padding: 10px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.css-jiabcu-MuiTableCell-root {
+    font-family: 'Poppins' !important;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.43;
+    letter-spacing: 0.01071em;
+    display: table-cell;
+    vertical-align: inherit;
+    border-bottom: 1px solid rgba(224, 224, 224, 1);
+    text-align: left;
+    color: rgba(0, 0, 0, 0.87);
+    padding: 6px 30px;
+}
+
+.subpoint-container {
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  height: 0;
+  opacity: 0;
+}
+
+.subpoint-container.expanded {
+  height: auto;
+  opacity: 1;
+}
+

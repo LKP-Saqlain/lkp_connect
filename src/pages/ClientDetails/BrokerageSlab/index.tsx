@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Row, Card, CardBody, Col } from "reactstrap";
 import {
   BrokSlabItems,
@@ -14,12 +14,17 @@ import ModalComponent from "../../../components/common/Modal";
 //   handleClick: (data: any) => void;
 // }
 
-const BrokerageSlab = () => {
+const BrokerageSlab = ({ setClientDetails }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    console.log("test124", setClientDetails);
+  }, [setClientDetails]);
 
   const handleBrokeragePlan = () => {
     setIsModalOpen(!isModalOpen);
   };
+
   return (
     <>
       <ModalComponent isOpen={isModalOpen} onClose={handleBrokeragePlan} />
@@ -56,70 +61,82 @@ const BrokerageSlab = () => {
         {/* Right Side: Brokerage Items */}
         <Col md={9}>
           <Row className="gx-2 gy-2">
-            {BrokSlabItems.map((item) => (
-              <Col md={3} key={item.id}>
-                <Card
-                  style={{
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                    border: "1px solid rgba(0, 0, 0, 0.1)",
-                    borderRadius: "10px",
-                    backgroundColor: "#fff",
-                  }}
-                >
-                  <CardBody className="d-flex justify-content-between align-items-center">
-                    <div className="text-container">
-                      <p
-                        style={{
-                          fontFamily: "Poppins",
-                          color: "#333",
-                          fontWeight: "500",
-                          fontSize: "12px",
-                          margin: "5px 0",
-                        }}
-                      >
-                        {item.label}
-                      </p>
-                      <p
-                        style={{
-                          fontFamily: "Poppins",
-                          color: "#777",
-                          fontSize: "14px",
-                          margin: 0,
-                        }}
-                      >
-                        <FiberManualRecordIcon
-                          fontSize="small"
-                          sx={{
-                            color:
-                              item.subvalue === undefined
-                                ? ""
-                                : item.subvalue === "Inactive"
-                                ? "#FF0606"
-                                : "#fff",
-                            display:
-                              item.subvalue === undefined
-                                ? "none"
-                                : item.subvalue !== "Inactive"
-                                ? "none"
-                                : "",
+            {BrokSlabItems.map((item) => {
+              // Retrieve the correct subvalue from the API response
+              const subvalue = setClientDetails[item.subvalueKey];
+              const displaySubvalue =
+                subvalue !== undefined ? subvalue : item.subvalue;
+
+              // Check if the value is an integer or a decimal
+              const isDecimal = !Number.isInteger(displaySubvalue);
+
+              // Determine the suffix based on whether it's a decimal or integer
+              const suffix = isDecimal ? "of turnover" : "per lot";
+              const formattedValue = isDecimal
+                ? displaySubvalue
+                : `₹ ${displaySubvalue}`;
+
+              return (
+                <Col md={3} key={item.id}>
+                  <Card
+                    style={{
+                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                      border: "1px solid rgba(0, 0, 0, 0.1)",
+                      borderRadius: "10px",
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <CardBody className="d-flex justify-content-between align-items-center">
+                      <div className="text-container">
+                        <p
+                          style={{
+                            fontFamily: "Poppins",
+                            color: "#333",
+                            fontWeight: "500",
+                            fontSize: "12px",
+                            margin: "5px 0",
                           }}
-                        />
-                        {item.subvalue}
-                      </p>
-                    </div>
-                    <FiEdit
-                      style={{
-                        cursor: "pointer",
-                        fontSize: "16px",
-                        color: "#777",
-                      }}
-                      onClick={handleBrokeragePlan}
-                    />
-                    {/* <ModalComponent/> */}
-                  </CardBody>
-                </Card>
-              </Col>
-            ))}
+                        >
+                          {item.label}
+                        </p>
+                        <p
+                          style={{
+                            fontFamily: "Poppins",
+                            color: "#777",
+                            fontSize: "14px",
+                            margin: 0,
+                          }}
+                        >
+                          <FiberManualRecordIcon
+                            fontSize="small"
+                            sx={{
+                              color:
+                                displaySubvalue === "Inactive"
+                                  ? "#FF0606"
+                                  : "#fff",
+                              display:
+                                displaySubvalue === "Inactive"
+                                  ? "block"
+                                  : "none",
+                            }}
+                          />
+                          {formattedValue} {suffix}
+                        </p>
+                      </div>
+                      <FiEdit
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "16px",
+                          color: "#777",
+                        }}
+                        onClick={handleBrokeragePlan}
+                      />
+                      {/* <ModalComponent/> */}
+                    </CardBody>
+                  </Card>
+                </Col>
+              );
+            })}
           </Row>
         </Col>
       </Row>

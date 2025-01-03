@@ -29,23 +29,63 @@ export const ClientDetailsCapsule = [
 ];
 
 export const ClientInfoCapsules = [
-  { id: 1, label: "Equity", status: "active" },
-  { id: 2, label: "F&O", status: "active" },
-  { id: 3, label: "Currency", status: "active" },
+  { id: 1, label: "Equity", status: "Active" },
+  { id: 2, label: "F & O", status: "Active" },
+  { id: 3, label: "Currency", status: "Active" },
   { id: 4, label: "Commodity", status: "Inactive" },
-  { id: 5, label: "MTF", status: "active" },
+  { id: 5, label: "MTF", status: "Active" },
   { id: 6, label: "SLBM", status: "Inactive" },
 ];
 
 export const BrokSlabItems = [
-  { id: 1, label: "Equity Delivery", subvalue: "0.5% of Turnover" },
-  { id: 2, label: "Equity Intraday", subvalue: "0.5% of Turnover" },
-  { id: 3, label: "Equity Futures", subvalue: "0.5% of Turnover" },
-  { id: 4, label: "Equity Options", subvalue: "₹ 50 per lot" },
-  { id: 5, label: "Currency Futures", subvalue: "0.5% of Turnover" },
-  { id: 6, label: "Currency Options", subvalue: "₹ 50 per lot" },
-  { id: 7, label: "Commodity Futures", subvalue: "0.5% of Turnover" },
-  { id: 8, label: "Commodity Options", subvalue: "₹ 50 per lot" },
+  {
+    id: 1,
+    label: "Equity Delivery",
+    subvalue: "0.5% of Turnover",
+    subvalueKey: "Equity_Delivery",
+  },
+  {
+    id: 2,
+    label: "Equity Intraday",
+    subvalue: "0.5% of Turnover",
+    subvalueKey: "Equity_Intraday",
+  },
+  {
+    id: 3,
+    label: "Equity Futures",
+    subvalue: "0.5% of Turnover",
+    subvalueKey: "Equity_Futures",
+  },
+  {
+    id: 4,
+    label: "Equity Options",
+    subvalue: "₹ 50 per lot",
+    subvalueKey: "Equity_Options",
+  },
+  {
+    id: 5,
+    label: "Currency Futures",
+    subvalue: "0.5% of Turnover",
+    subvalueKey: "Currency_Futures",
+  },
+  {
+    id: 6,
+    label: "Currency Options",
+    subvalue: "₹ 50 per lot",
+    subvalueKey: "Currency_Options",
+  },
+  {
+    id: 7,
+    label: "Commodity Futures",
+    subvalue: "0.5% of Turnover",
+    subvalueKey: "Commodity_Futures",
+  },
+  {
+    id: 8,
+    label: "Commodity Options",
+    subvalue: "₹ 50 per lot",
+    subvalueKey: "Commodity_Options",
+  },
 ];
 
 export const BrokSlabItemsPennypal = [

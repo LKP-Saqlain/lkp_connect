@@ -82,4 +82,10 @@ export const apiServices = {
   GetBirthdayList: async (payload: any) => {
     return await apiService("POST", endpoints.GetBirthdayList, payload);
   },
+  ClientDashboard: async (payload: any) => {
+    return await apiService("POST", endpoints.ClientDashboard, payload);
+  },
+  ClientSegmentBrok: async (payload: any) => {
+    return await apiService("POST", endpoints.ClientSegmentBrok, payload);
+  },
 };

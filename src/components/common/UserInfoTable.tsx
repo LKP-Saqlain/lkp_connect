@@ -89,7 +89,6 @@ const DataTable = ({
     getUserDetails?.(row);
   };
   const getColumns = () => {
-    // debugger;
     if (selectedWidget === "Clients With Cash Balance") {
       return ClientCashColumns.map((column) => ({
         ...column,

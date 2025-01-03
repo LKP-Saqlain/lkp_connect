@@ -147,7 +147,6 @@ const CoreReport = () => {
   };
 
   const handleSubmit = () => {
-    // debugger
     if (selectedDate === null) {
       ShowToast("error", "Please select Date");
       return;

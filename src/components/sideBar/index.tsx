@@ -47,8 +47,7 @@ import AccStatement from "../../pages/Reports/AnnualAccStatement";
 import { SlSizeFullscreen } from "react-icons/sl";
 import { BsFullscreen } from "react-icons/bs";
 import EkycLinks from "../../pages/ekycLinks";
-// import FullscreenIcon from '@mui/icons-material/Fullscreen';
-// import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
+import StockStudy from "../../pages/StockStudy";
 
 const drawerWidth = 240;
 
@@ -370,7 +369,7 @@ const SideBar = () => {
           case "Referal Entry":
             return <EkycLinks />;
           case "Referal Entry Status":
-            return "";
+            return <StockStudy />;
           case "Referal Lead Updation":
             return "";
           default:

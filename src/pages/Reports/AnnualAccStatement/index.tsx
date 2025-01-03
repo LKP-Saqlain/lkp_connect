@@ -44,7 +44,6 @@ const AnnualAccStatement = () => {
       apiServices
         .GetPNLAccountDetailsPdf(payload) // <-- specify responseType as 'blob'
         .then((response) => {
-          //   debugger;
           console.log("GetPNLAccountDetailsPdf_response", response?.data);
 
           // Ensure the response data is a Blob (PDF file)
