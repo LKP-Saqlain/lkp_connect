@@ -244,6 +244,8 @@ export const DPDebitRecovery: GridColDef[] = [
     width: 150,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "TotalDebit",
@@ -251,6 +253,8 @@ export const DPDebitRecovery: GridColDef[] = [
     width: 150,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "Holding_value",
@@ -258,6 +262,8 @@ export const DPDebitRecovery: GridColDef[] = [
     width: 150,
     align: "right",
     headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "Client_Mobile_No",
