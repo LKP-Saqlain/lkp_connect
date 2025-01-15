@@ -87,45 +87,99 @@ const Revenue = ({
 
             const now = new Date();
             const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
             const currentMonthYear =
               now.toLocaleString("default", { month: "short" }) +
               "-" +
               String(now.getFullYear()).slice(-2);
             console.log("currentMonthYear", currentMonthYear);
 
-            // Find the current entry
-            const currentData = mappedData.find(
-              (entry: any) => entry.MnthYR === currentMonthYear
-            );
-            console.log("currentData", currentData);
-            if (currentData) {
-              setCurrentQuarter(currentData.FinancialQuarter);
+            // -----------------------Below code is used only for Jan Month --------------------------//
 
-              // Get all months for the current quarter and filter out previous year months
-              const quarterMonths = mappedData.filter(
+            let adjustedQuarterMonths;
+            if (currentMonth === 0) {
+              // January
+              const previousYear = currentYear - 1;
+              const previousDecember = `Dec-${String(previousYear).slice(-2)}`;
+              const currentJanuary = `Jan-${String(currentYear).slice(-2)}`;
+
+              adjustedQuarterMonths = mappedData.filter(
                 (entry: any) =>
-                  entry.FinancialQuarter === currentData.FinancialQuarter &&
-                  parseInt("20" + entry.MnthYR.split("-")[1]) >= currentYear // Include only months from the current year or later
+                  entry.MnthYR === previousDecember ||
+                  entry.MnthYR === currentJanuary
               );
-              console.log("quarterMonths", quarterMonths);
-
-              if (quarterMonths.length > 0) {
-                const startMonth = quarterMonths[0].MnthYR;
-                const endMonth = quarterMonths[quarterMonths.length - 1].MnthYR;
-                setRevenueText(`Revenue from ${startMonth} to ${endMonth}`);
-                console.log(
-                  "revenueTxt:",
-                  `Revenue from ${startMonth} to ${endMonth}`
-                );
-                handleRevenueRange(startMonth, endMonth);
-              } else {
-                setRevenueText("No valid revenue data for the current year.");
-              }
             } else {
-              console.warn("No matching data found for:", currentMonthYear);
-              setCurrentQuarter("N/A");
-              setRevenueText("No revenue data available for this period.");
+              // Find the current entry
+              const currentData = mappedData.find(
+                (entry: any) => entry.MnthYR === currentMonthYear
+              );
+
+              if (currentData) {
+                setCurrentQuarter(currentData.FinancialQuarter);
+
+                // Get all months for the current quarter
+                adjustedQuarterMonths = mappedData.filter(
+                  (entry: any) =>
+                    entry.FinancialQuarter === currentData.FinancialQuarter &&
+                    parseInt("20" + entry.MnthYR.split("-")[1]) >= currentYear // Include only months from the current year or later
+                );
+              }
             }
+
+            if (adjustedQuarterMonths && adjustedQuarterMonths.length > 0) {
+              const startMonth = adjustedQuarterMonths[0].MnthYR;
+              const endMonth =
+                adjustedQuarterMonths[adjustedQuarterMonths.length - 1].MnthYR;
+              setRevenueText(`Revenue from ${startMonth} to ${endMonth}`);
+              console.log(
+                "revenueTxt:",
+                `Revenue from ${startMonth} to ${endMonth}`
+              );
+              handleRevenueRange(startMonth, endMonth);
+            } else {
+              setRevenueText("No valid revenue data for the current year.");
+            }
+
+            // ------------------------------End ----------------------------------------//
+
+            //////////////////////////////////////////////////////////////////////////////////////////////
+            // It is used for after crossing Jan Month till next Jan
+
+            // Find the current entry
+            // const currentData = mappedData.find(
+            //   (entry: any) => entry.MnthYR === currentMonthYear
+            // );
+            // console.log("currentData", currentData);
+            // if (currentData) {
+            //   setCurrentQuarter(currentData.FinancialQuarter);
+
+            //   // Get all months for the current quarter and filter out previous year months
+            //   const quarterMonths = mappedData.filter(
+            //     (entry: any) =>
+            //       entry.FinancialQuarter === currentData.FinancialQuarter &&
+            //       parseInt("20" + entry.MnthYR.split("-")[1]) >= currentYear // Include only months from the current year or later
+            //   );
+            //   console.log("quarterMonths", quarterMonths);
+
+            //   if (quarterMonths.length > 0) {
+            //     const startMonth = quarterMonths[0].MnthYR;
+            //     const endMonth = quarterMonths[quarterMonths.length - 1].MnthYR;
+            //     setRevenueText(`Revenue from ${startMonth} to ${endMonth}`);
+            //     console.log(
+            //       "revenueTxt:",
+            //       `Revenue from ${startMonth} to ${endMonth}`
+            //     );
+            //     console.log("quarterLength", quarterMonths.length);
+
+            //     handleRevenueRange(startMonth, endMonth);
+            //   } else {
+            //     setRevenueText("No valid revenue data for the current year.");
+            //   }
+            // } else {
+            //   console.warn("No matching data found for:", currentMonthYear);
+            //   setCurrentQuarter("N/A");
+            //   setRevenueText("No revenue data available for this period.");
+            // }
 
             // Extract GrossBrokerage and APbrokerage data from the API response
             const brokingValues = fetchRevenueData.map(

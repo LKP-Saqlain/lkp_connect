@@ -252,7 +252,7 @@ const DormantClient = () => {
           if (response?.status === 200) {
             setResponseStatus(true);
             let { recordsTotal } = response?.data[0];
-            console.log("getDormantReport_response_1", response?.status);
+            console.log("getDormantReport_response_1", response?.data);
             setTotalEntries(recordsTotal);
             setUserData(response.data);
           }
@@ -308,7 +308,7 @@ const DormantClient = () => {
         if (response?.status === 200) {
           setResponseStatus(true);
           let { recordsTotal } = response?.data[0];
-          console.log("getDormantReport_response_1", response?.status);
+          console.log("getDormantReport_response_1", response?.data);
           setTotalEntries(recordsTotal);
           setUserData(response.data);
         } else if (response?.status == 400) {

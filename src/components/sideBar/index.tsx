@@ -48,6 +48,7 @@ import { SlSizeFullscreen } from "react-icons/sl";
 import { BsFullscreen } from "react-icons/bs";
 import EkycLinks from "../../pages/ekycLinks";
 import StockStudy from "../../pages/StockStudy";
+import DPRecovery from "../../pages/Reports/DPRecovery";
 
 const drawerWidth = 240;
 
@@ -371,7 +372,7 @@ const SideBar = () => {
           case "Referal Entry Status":
             return <StockStudy />;
           case "Referal Lead Updation":
-            return "";
+            return <DPRecovery />;
           default:
             return null;
         }

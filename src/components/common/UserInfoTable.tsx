@@ -8,6 +8,7 @@ import {
   T6Columns,
   T6OverViewColumns,
   topBirthdays,
+  DPDebitRecovery,
 } from "../../pages/TradeDashboard/TradeColumns";
 import {
   getClientActivityStatusColumns,
@@ -43,6 +44,13 @@ interface SelectedWidgetProps {
   searchValue?: any;
   onFilterChange?: (filter: string) => void;
   tradeCWCBData?: any;
+  handleEmailSend?: (
+    Payment_link: string,
+    EnCAccountCode: string,
+    setEmailSent: React.Dispatch<React.SetStateAction<boolean>>
+  ) => void;
+  emailSent?: boolean;
+  emailSentStatus?: any;
 }
 
 const DataTable = ({
@@ -60,6 +68,7 @@ const DataTable = ({
   searchValue,
   onFilterChange,
   tradeCWCBData,
+  emailSentStatus,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -123,7 +132,38 @@ const DataTable = ({
     } else if (selectedWidget === "Client Approaching  Dormant Status") {
       return getClientDormantStatus(handleViewDetails);
     } else {
-      return [];
+      // return [];
+      // Inject handleEmailSend into the column definition
+      return DPDebitRecovery.map((column) => {
+        if (column.field === "Email_link") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isEmailSent = emailSentStatus[params.row.BOID]; // Check status for this BOID
+              return (
+                <button
+                  onClick={() => {
+                    // Call both functions
+                    // handleEmailSend?.();
+                    handleViewDetails?.(params.row);
+                  }}
+                  disabled={isEmailSent}
+                  style={{
+                    color: isEmailSent ? "green" : "blue",
+                    textDecoration: isEmailSent ? "none" : "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: isEmailSent ? "default" : "pointer",
+                  }}
+                >
+                  {isEmailSent ? "Email Sent!" : "Click here to send Email"}
+                </button>
+              );
+            },
+          };
+        }
+        return column;
+      });
     }
   };
 
@@ -201,6 +241,8 @@ const DataTable = ({
               ? row.clientName
               : row.ClientName
               ? row.ClientName
+              : row.BOID
+              ? row.BOID || `${row.BOName}-${row.TotalDebit}-${Math.random()}`
               : row.Name
           } // Use the correct identifier for rows
           getRowClassName={(params) =>

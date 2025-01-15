@@ -1,6 +1,7 @@
 import { GridColDef } from "@mui/x-data-grid";
 import Tooltip from "@mui/material/Tooltip";
 import "../style.css";
+// import { useMemo, useState } from "react";
 
 export const ClientCashColumns: GridColDef[] = [
   {
@@ -134,7 +135,7 @@ export const T6Columns: GridColDef[] = [
     field: "StockValue",
     headerName: "Stock Value",
     flex: 1,
-    minWidth: 95,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     valueFormatter: (params: number) =>
@@ -233,6 +234,95 @@ export const T6OverViewColumns: GridColDef[] = [
       new Intl.NumberFormat("en-IN").format(params),
   },
 ];
+
+export const DPDebitRecovery: GridColDef[] = [
+  { field: "BOID", headerName: "BOID", width: 140 },
+  { field: "BOName", headerName: "Name of Client", width: 200 },
+  {
+    field: "Ledger_DebitAmt",
+    headerName: "Ledger Debit",
+    width: 150,
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "TotalDebit",
+    headerName: "Total Debit",
+    width: 150,
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "Holding_value",
+    headerName: "Holding Value",
+    width: 150,
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "Client_Mobile_No",
+    headerName: "Mobile No",
+    headerAlign: "center",
+    flex: 1,
+    minWidth: 120,
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+      // Mask all except first 2 digits
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)/,
+        (_: any, prefix: any, rest: any) => {
+          console.log(prefix); //addded only for testing purpose
+          // return `${prefix}${"X".repeat(rest.length)}`;
+          // console.log(handleViewDetails);
+
+          return `${"X".repeat(rest.length)}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+    sortable: false,
+    disableColumnMenu: true,
+    align: "center",
+  },
+  {
+    field: "payment_link",
+    headerName: "Payment Link",
+    width: 300,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params: any) => {
+      const { Payment_link, EnCAccountCode } = params.row;
+      if (!Payment_link || !EnCAccountCode)
+        return <span>No Link Available</span>;
+
+      const fullLink = `${Payment_link}${EnCAccountCode}`;
+      return (
+        <a
+          href={fullLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "blue", textDecoration: "underline" }}
+        >
+          Click here
+        </a>
+      );
+    },
+  },
+  {
+    field: "Email_link",
+    headerName: "Email Link",
+    width: 180,
+    align: "center",
+    headerAlign: "center",
+  },
+];
+
 export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "ctermcode",

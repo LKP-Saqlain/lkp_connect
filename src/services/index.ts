@@ -88,4 +88,10 @@ export const apiServices = {
   ClientSegmentBrok: async (payload: any) => {
     return await apiService("POST", endpoints.ClientSegmentBrok, payload);
   },
+  DPDebitRecovery: async (payload: any) => {
+    return await apiService("POST", endpoints.DPDebitRecovery, payload);
+  },
+  DPEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.DPEmail, payload);
+  },
 };

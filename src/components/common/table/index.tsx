@@ -19,6 +19,7 @@ interface DormantClientProps {
   showSearch?: any;
   showExcel?: any;
   handleExcelDownload?: () => void;
+  customFlag?: any;
 }
 
 const DataTable: React.FC<DormantClientProps> = ({
@@ -33,6 +34,7 @@ const DataTable: React.FC<DormantClientProps> = ({
   showSearch = false,
   handleExcelDownload,
   showExcel,
+  customFlag,
 }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
 
@@ -99,7 +101,13 @@ const DataTable: React.FC<DormantClientProps> = ({
           hideFooterPagination
           rowHeight={30}
           getRowId={(row: any) =>
-            row.clientName ? row.clientName : row.alertSequenceNo
+            row.clientName
+              ? row.clientName
+              : row.alertSequenceNo
+              ? row.alertSequenceNo
+              : row.BOID
+              ? row.BOID || `${row.BOName}-${row.TotalDebit}-${Math.random()}`
+              : ""
           }
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"
@@ -140,13 +148,15 @@ const DataTable: React.FC<DormantClientProps> = ({
             {`Total ${formatCurrency(totalRecords)} records available`}
           </div>
         )}
-        <Pagination
-          count={Math.ceil(totalRecords / pageSize)}
-          page={page}
-          onChange={handlePaginationChange}
-          color="primary"
-          sx={paginationStyles}
-        />
+        {!customFlag && (
+          <Pagination
+            count={Math.ceil(totalRecords / pageSize)}
+            page={page}
+            onChange={handlePaginationChange}
+            color="primary"
+            sx={paginationStyles}
+          />
+        )}
       </div>
     </>
   );

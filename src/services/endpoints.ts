@@ -26,4 +26,6 @@ export const endpoints = {
   GetBirthdayList: "/api/Common/GetBirthdayList",
   ClientDashboard: "/api/Client/ClientDashboard",
   ClientSegmentBrok: "/api/Client/ClientSegmentBrok",
+  DPDebitRecovery: "/api/Client/DPDebitRecovery",
+  DPEmail: "/api/Client/DPEmail",
 };

@@ -29,18 +29,19 @@ const ButtonGroup = ({
 
   return (
     <div className="d-flex gap-1">
-      {renderBtn.map(({ label, variant }: any) => (
-        <Button
-          key={label}
-          //   variant={variant}
-          size="small"
-          color={variant === "contained" ? "primary" : undefined}
-          onClick={() => setSelectedButton(label)}
-          sx={selectedButton === label ? selectedStyle : nonSelectedStyle}
-        >
-          {label}
-        </Button>
-      ))}
+      {renderBtn &&
+        renderBtn.map(({ label, variant }: any) => (
+          <Button
+            key={label}
+            //   variant={variant}
+            size="small"
+            color={variant === "contained" ? "primary" : undefined}
+            onClick={() => setSelectedButton(label)}
+            sx={selectedButton === label ? selectedStyle : nonSelectedStyle}
+          >
+            {label}
+          </Button>
+        ))}
     </div>
   );
 };
