@@ -19,6 +19,7 @@ import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import StackedBarChartIcon from "@mui/icons-material/StackedBarChart";
+import BallotIcon from "@mui/icons-material/Ballot";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import List from "@mui/material/List";
 import { MenuItems } from "../../types/index";
@@ -53,6 +54,12 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
       case "Zone Overview":
         return (
           <StoreIcon
+            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
+          />
+        );
+      case "Stock Study":
+        return (
+          <BallotIcon
             sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
           />
         );

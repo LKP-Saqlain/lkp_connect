@@ -325,6 +325,8 @@ const SideBar = () => {
         return <OverviewComponent handleTradingOpen={handleTradingOpen} />;
       case "Zone Overview":
         return <RegOverview />;
+      case "Stock Study":
+        return <StockStudy />;
       case "Trading":
         return <TradeDashboard selectedTrading={selectedViewMore} />;
       case "Revenue Details":
@@ -353,6 +355,8 @@ const SideBar = () => {
             return <CoreReport />;
           case "Account Performance Report":
             return <AccStatement />;
+          case "DP Debit Recovery":
+            return <DPRecovery />;
           default:
             return null;
         }
@@ -370,9 +374,18 @@ const SideBar = () => {
           case "Referal Entry":
             return <EkycLinks />;
           case "Referal Entry Status":
-            return <StockStudy />;
+            return "";
           case "Referal Lead Updation":
-            return <DPRecovery />;
+            return (
+              <>
+                <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
+                  Welcome to LKP Dashboard
+                </Typography>
+                <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
+                  Please select anyone from left
+                </Typography>
+              </>
+            );
           default:
             return null;
         }
