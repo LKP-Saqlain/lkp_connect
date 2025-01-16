@@ -27,7 +27,7 @@ interface ClientRow {
   POAStatus?: string;
   MTFStatus?: string;
   RecordsTotal?: number;
-  activeMenu?: any;
+  // activeMenu?: any;
 }
 
 const ClientDetails = ({
@@ -35,8 +35,8 @@ const ClientDetails = ({
   handleDrawerOpen,
   apiStatus,
   selectedTrading,
-  activeMenu,
-}: any) => {
+}: // activeMenu,
+any) => {
   const [selectedCapsule, setSelectedCapsule] = useState("Total Clients");
   const [tableData, setTableData] = useState<[]>([]);
   const [userDetails, setUserDetails] = useState(false);
