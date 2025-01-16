@@ -11,6 +11,8 @@ import CoinIcon from "../../assets/images/coins.json";
 import RevenueImg from "../../assets/images/revenue_new.json";
 import ActiveClient from "../../assets/images/Clients.json";
 import DashboardCard from "../../components/common/DashboardCard";
+import { useTheme } from "@mui/material/styles";
+import { useMediaQuery } from "@mui/material";
 
 type RevenueKeys = "total" | "broking" | "nonBroking";
 // type TotalClientKey = "total" | "broking" | "nonBroking";
@@ -29,6 +31,9 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const [newClients, setNewClients] = useState(0);
   const [activeClients, setActiveClients] = useState(null);
   const [tradedClientCount, setTradedClientCount] = useState(0);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleValues = (revTotal: string) => {
     console.log("revTotal", revTotal);
@@ -128,55 +133,59 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
           <Row>
             <Col>
               <div className="h-100">
+                {/* Row for Four Boxes */}
                 <Row>
-                  <Col>
-                    <div className="h-100">
-                      {/* Row for Four Boxes */}
-
-                      <Row className="justify-content-center">
-                        <Col xxl={3} lg={3} md={6} sm={12}>
-                          <DashboardCard
-                            title="Revenue*"
-                            value={revenueValues[activeBadge]}
-                            animationData={RevenueImg}
-                            badges={badges}
-                            formatIndianNumber={formatIndianNumber}
-                            suffix=".00"
-                            note={`* Period - ${startMonth} to ${endMonth}`}
-                            customClass={true}
-                          />
-                        </Col>
-                        <Col xxl={3} lg={3} md={6} sm={12}>
-                          <DashboardCard
-                            title="Revenue Multiple*"
-                            value={multiRevenueMultiply}
-                            animationData={CoinIcon}
-                            decimals={2}
-                            suffix="x"
-                            activeClientsEmpty={true}
-                            customClass={true}
-                          />
-                        </Col>
-                        <Col xxl={3} lg={3} md={6} sm={12}>
-                          <DashboardCard
-                            title="New Clients Added*"
-                            value={newClients}
-                            animationData={ActiveClient}
-                            activeClientsEmpty={true}
-                            customClass={true}
-                          />
-                        </Col>
-                        <Col xxl={3} lg={3} md={6} sm={12}>
-                          <DashboardCard
-                            title="Unique Traded Clients*"
-                            value={tradedClientCount}
-                            animationData={ActiveClient}
-                            activeClients={activeClients}
-                            customClass={true}
-                          />
-                        </Col>
-                      </Row>
-                    </div>
+                  <Col
+                    xxl={3}
+                    lg={3}
+                    md={6}
+                    sm={12}
+                    style={{ marginTop: isMobile ? "10px" : "" }}
+                  >
+                    <DashboardCard
+                      title="Revenue*"
+                      value={revenueValues[activeBadge]}
+                      animationData={RevenueImg}
+                      badges={badges}
+                      formatIndianNumber={formatIndianNumber}
+                      suffix=".00"
+                      note={
+                        !isMobile && `* Period - ${startMonth} to ${endMonth}`
+                      }
+                      customClass={true}
+                    />
+                  </Col>
+                  <Col xxl={3} lg={3} md={6} sm={12}>
+                    <DashboardCard
+                      title="Revenue Multiple*"
+                      value={multiRevenueMultiply}
+                      animationData={CoinIcon}
+                      decimals={2}
+                      suffix="x"
+                      activeClientsEmpty={true}
+                      customClass={true}
+                    />
+                  </Col>
+                  <Col xxl={3} lg={3} md={6} sm={12}>
+                    <DashboardCard
+                      title="New Clients Added*"
+                      value={newClients}
+                      animationData={ActiveClient}
+                      activeClientsEmpty={true}
+                      customClass={true}
+                    />
+                  </Col>
+                  <Col xxl={3} lg={3} md={6} sm={12}>
+                    <DashboardCard
+                      title="Unique Traded Clients*"
+                      value={tradedClientCount}
+                      animationData={ActiveClient}
+                      activeClients={activeClients}
+                      customClass={true}
+                      note={
+                        isMobile && `* Period - ${startMonth} to ${endMonth}`
+                      }
+                    />
                   </Col>
                 </Row>
 

@@ -3,6 +3,8 @@ import { Card, CardBody } from "reactstrap";
 import Lottie from "react-lottie-player";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
+import { useMediaQuery } from "@mui/material";
 import "./style.css";
 
 interface Badge {
@@ -19,7 +21,7 @@ interface DashboardCardProps {
   prefix?: string;
   suffix?: string;
   badges?: Badge[];
-  note?: string;
+  note?: any;
   decimals?: any;
   formatIndianNumber?: (value: number) => string;
   customClass?: any;
@@ -41,15 +43,18 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   activeClients,
   activeClientsEmpty,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <>
       <Card
         className="card-animate position-relative shadow-card custom-card"
-        style={{ maxWidth: "300px", overflow: "hidden" }}
+        style={{ maxWidth: isMobile ? "400px" : "300px", overflow: "hidden" }}
       >
         <CardBody>
           {/* Title */}
-          <h6 className="text-muted fs-13">{title}</h6>
+          <h6 className="text-muted fs-14">{title}</h6>
 
           {/* Value and Animation */}
           <div
