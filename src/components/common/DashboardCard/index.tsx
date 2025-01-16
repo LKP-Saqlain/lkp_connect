@@ -3,6 +3,7 @@ import { Card, CardBody } from "reactstrap";
 import Lottie from "react-lottie-player";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
+import "./style.css";
 
 interface Badge {
   type: string;
@@ -48,7 +49,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
       >
         <CardBody>
           {/* Title */}
-          <h6 className="text-muted fs-14">{title}</h6>
+          <h6 className="text-muted fs-13">{title}</h6>
 
           {/* Value and Animation */}
           <div

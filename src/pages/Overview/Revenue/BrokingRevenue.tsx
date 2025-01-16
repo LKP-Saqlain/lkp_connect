@@ -31,9 +31,9 @@ const Revenue = ({
     //   data: [],
     // },
   ]);
-  const [currentQuarter, setCurrentQuarter] = useState("");
+  // const [currentQuarter, setCurrentQuarter] = useState("");
   const [revenueText, setRevenueText] = useState("");
-  const [apiMonths, setApiMonths] = useState([]);
+  // const [apiMonths, setApiMonths] = useState([]);
 
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -42,12 +42,14 @@ const Revenue = ({
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    console.log(currentQuarter, revenueText, apiMonths);
+    // console.log(currentQuarter, revenueText, apiMonths);
+    console.log(revenueText);
+
     const fetchBrokerage = async () => {
-      // const Id = localStorage.getItem("Id");
       const payload = {
         user_id: user_id,
       };
+
       dispatch(showLoader(""));
       dispatch(DealerPerformance(payload))
         .unwrap()
@@ -56,146 +58,70 @@ const Revenue = ({
           setYearRevenue(response?.data?.data?.Table);
           const fetchRevenueData = response?.data?.data?.Table;
           const filteredRevenueData = response?.data?.data?.Table1;
-          console.log("filteredRevenueData", filteredRevenueData);
 
           if (fetchRevenueData) {
-            function getFinancialQuarter(dateStr: any) {
-              const date = new Date(dateStr);
-              const month = date.getMonth(); // Months are 0-based in JavaScript
+            function getQuarterMonths(quarter: string) {
+              switch (quarter) {
+                case "Q1":
+                  return ["Apr", "May", "Jun"];
+                case "Q2":
+                  return ["Jul", "Aug", "Sep"];
+                case "Q3":
+                  return ["Oct", "Nov", "Dec"];
+                case "Q4":
+                  return ["Jan", "Feb", "Mar"];
+                default:
+                  return [];
+              }
+            }
+
+            function getFinancialQuarter(date: Date) {
+              const month = date.getMonth(); // 0 = Jan, 1 = Feb, ..., 11 = Dec
               if (month >= 0 && month <= 2) return "Q4"; // Jan-Mar
               if (month >= 3 && month <= 5) return "Q1"; // Apr-Jun
               if (month >= 6 && month <= 8) return "Q2"; // Jul-Sep
               if (month >= 9 && month <= 11) return "Q3"; // Oct-Dec
+              return "Q1";
             }
-
-            const apiData = response?.data?.data?.Table.map(
-              (item: any) => item.MnthYR
-            );
-            setApiMonths(apiData);
-            console.log("apiData", apiData);
-
-            const mappedData = apiData.map((entry: any) => {
-              const [month, year] = entry.split("-");
-              const dateStr = `01-${month}-${year}`; // Construct a full date (e.g., "01-Dec-23")
-              return {
-                MnthYR: entry,
-                FinancialQuarter: getFinancialQuarter(dateStr),
-              };
-            });
-
-            console.log("mappedData", mappedData);
 
             const now = new Date();
+            const currentQuarter = getFinancialQuarter(now) || "Q1"; // Ensure it's not undefined
+            const quarterMonths = getQuarterMonths(currentQuarter); // This is now safe
             const currentYear = now.getFullYear();
-            const currentMonth = now.getMonth();
-            const currentMonthYear =
-              now.toLocaleString("default", { month: "short" }) +
-              "-" +
-              String(now.getFullYear()).slice(-2);
-            console.log("currentMonthYear", currentMonthYear);
 
-            // -----------------------Below code is used only for Jan Month --------------------------//
+            let startMonthYear, endMonthYear;
 
-            let adjustedQuarterMonths;
-            if (currentMonth === 0) {
-              // January
-              const previousYear = currentYear - 1;
-              const previousDecember = `Dec-${String(previousYear).slice(-2)}`;
-              const currentJanuary = `Jan-${String(currentYear).slice(-2)}`;
-
-              adjustedQuarterMonths = mappedData.filter(
-                (entry: any) =>
-                  entry.MnthYR === previousDecember ||
-                  entry.MnthYR === currentJanuary
-              );
+            if (currentQuarter === "Q4") {
+              startMonthYear = `${quarterMonths[0]}-${String(currentYear).slice(
+                -2
+              )}`;
+              endMonthYear = `${quarterMonths[2]}-${String(currentYear).slice(
+                -2
+              )}`;
             } else {
-              // Find the current entry
-              const currentData = mappedData.find(
-                (entry: any) => entry.MnthYR === currentMonthYear
-              );
-
-              if (currentData) {
-                setCurrentQuarter(currentData.FinancialQuarter);
-
-                // Get all months for the current quarter
-                adjustedQuarterMonths = mappedData.filter(
-                  (entry: any) =>
-                    entry.FinancialQuarter === currentData.FinancialQuarter &&
-                    parseInt("20" + entry.MnthYR.split("-")[1]) >= currentYear // Include only months from the current year or later
-                );
-              }
+              startMonthYear = `${quarterMonths[0]}-${String(currentYear).slice(
+                -2
+              )}`;
+              endMonthYear = `${quarterMonths[2]}-${String(currentYear).slice(
+                -2
+              )}`;
             }
 
-            if (adjustedQuarterMonths && adjustedQuarterMonths.length > 0) {
-              const startMonth = adjustedQuarterMonths[0].MnthYR;
-              const endMonth =
-                adjustedQuarterMonths[adjustedQuarterMonths.length - 1].MnthYR;
-              setRevenueText(`Revenue from ${startMonth} to ${endMonth}`);
-              console.log(
-                "revenueTxt:",
-                `Revenue from ${startMonth} to ${endMonth}`
-              );
-              handleRevenueRange(startMonth, endMonth);
-            } else {
-              setRevenueText("No valid revenue data for the current year.");
-            }
+            setRevenueText(`Revenue from ${startMonthYear} to ${endMonthYear}`);
+            console.log(
+              "revenueText:",
+              `Revenue from ${startMonthYear} to ${endMonthYear}`
+            );
+            handleRevenueRange(startMonthYear, endMonthYear);
 
-            // ------------------------------End ----------------------------------------//
-
-            //////////////////////////////////////////////////////////////////////////////////////////////
-            // It is used for after crossing Jan Month till next Jan
-
-            // Find the current entry
-            // const currentData = mappedData.find(
-            //   (entry: any) => entry.MnthYR === currentMonthYear
-            // );
-            // console.log("currentData", currentData);
-            // if (currentData) {
-            //   setCurrentQuarter(currentData.FinancialQuarter);
-
-            //   // Get all months for the current quarter and filter out previous year months
-            //   const quarterMonths = mappedData.filter(
-            //     (entry: any) =>
-            //       entry.FinancialQuarter === currentData.FinancialQuarter &&
-            //       parseInt("20" + entry.MnthYR.split("-")[1]) >= currentYear // Include only months from the current year or later
-            //   );
-            //   console.log("quarterMonths", quarterMonths);
-
-            //   if (quarterMonths.length > 0) {
-            //     const startMonth = quarterMonths[0].MnthYR;
-            //     const endMonth = quarterMonths[quarterMonths.length - 1].MnthYR;
-            //     setRevenueText(`Revenue from ${startMonth} to ${endMonth}`);
-            //     console.log(
-            //       "revenueTxt:",
-            //       `Revenue from ${startMonth} to ${endMonth}`
-            //     );
-            //     console.log("quarterLength", quarterMonths.length);
-
-            //     handleRevenueRange(startMonth, endMonth);
-            //   } else {
-            //     setRevenueText("No valid revenue data for the current year.");
-            //   }
-            // } else {
-            //   console.warn("No matching data found for:", currentMonthYear);
-            //   setCurrentQuarter("N/A");
-            //   setRevenueText("No revenue data available for this period.");
-            // }
-
-            // Extract GrossBrokerage and APbrokerage data from the API response
+            // Extract data for broking and indirect values
             const brokingValues = fetchRevenueData.map(
               (item: any) => item.Ach_brok_dir
             );
-            // const nonBrokingValues = fetchRevenueData.map(
-            //   (item: any) => item.Tot_TPD_rev
-            // );
-
             const indirectValues = fetchRevenueData.map(
               (item: any) => item.Ach_brok_indir + item.Ach_brok_ind_less2yrs
             );
 
-            console.log("indirectValues-->", indirectValues);
-
-            // Update the monthProjectData array
             setBrokingNonBrokingData([
               {
                 name: "Direct-Broking",
@@ -207,13 +133,9 @@ const Revenue = ({
                 group: "Broking",
                 data: indirectValues,
               },
-              // {
-              //   name: "Non-Broking",
-              //   group: "Non-Broking",
-              //   data: nonBrokingValues,
-              // },
             ]);
           }
+
           if (filteredRevenueData) {
             const total = filteredRevenueData[0]?.Net_Rev_Ach || 0;
             const broking =
@@ -227,11 +149,6 @@ const Revenue = ({
 
             const tradedClient = filteredRevenueData[0]?.TradedClientCount || 0;
 
-            console.log("Total:", total);
-            console.log("Broking:", broking);
-            console.log("Non-Broking:", nonBroking);
-            console.log("multiRevenueMultiply", multiRevenueMultiply);
-            console.log("newClientsAdded", newClientsAdded);
             setTradedClientCount(tradedClient);
             handleRevenueData(
               total,
@@ -250,7 +167,6 @@ const Revenue = ({
           const { message } = Err;
           console.log("Error->", message);
           dispatch(hideLoader());
-          // formik.setFieldError("password", message);
           ShowToast(
             "error",
             message ||
@@ -264,6 +180,7 @@ const Revenue = ({
 
     fetchBrokerage();
   }, [dispatch]);
+
   return (
     <React.Fragment>
       <Card>

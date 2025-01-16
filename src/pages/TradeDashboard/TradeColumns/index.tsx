@@ -1,6 +1,9 @@
 import { GridColDef } from "@mui/x-data-grid";
 import Tooltip from "@mui/material/Tooltip";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import "../style.css";
+import React from "react";
+
 // import { useMemo, useState } from "react";
 
 export const ClientCashColumns: GridColDef[] = [
@@ -49,15 +52,13 @@ export const ClientCashColumns: GridColDef[] = [
     minWidth: 120,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
-      // Mask all except first 2 digits
-      const maskedMobile = mobile.replace(
-        /^(\d{2})(\d+)/,
-        (_: any, prefix: any, rest: any) => {
-          console.log(prefix); //addded only for testing purpose
-          // return `${prefix}${"X".repeat(rest.length)}`;
-          // console.log(handleViewDetails);
 
-          return `${"X".repeat(rest.length)}`;
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
         }
       );
 
@@ -241,25 +242,25 @@ export const DPDebitRecovery: GridColDef[] = [
   {
     field: "Ledger_DebitAmt",
     headerName: "Ledger Debit",
-    width: 150,
+    width: 120,
     align: "right",
     headerAlign: "center",
     valueFormatter: (params: number) =>
       new Intl.NumberFormat("en-IN").format(params),
   },
-  {
-    field: "TotalDebit",
-    headerName: "Total Debit",
-    width: 150,
-    align: "right",
-    headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-  },
+  // {
+  //   field: "TotalDebit",
+  //   headerName: "Total Debit",
+  //   width: 150,
+  //   align: "right",
+  //   headerAlign: "center",
+  //   valueFormatter: (params: number) =>
+  //     new Intl.NumberFormat("en-IN").format(params),
+  // },
   {
     field: "Holding_value",
     headerName: "Holding Value",
-    width: 150,
+    width: 120,
     align: "right",
     headerAlign: "center",
     valueFormatter: (params: number) =>
@@ -273,15 +274,13 @@ export const DPDebitRecovery: GridColDef[] = [
     minWidth: 120,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
-      // Mask all except first 2 digits
-      const maskedMobile = mobile.replace(
-        /^(\d{2})(\d+)/,
-        (_: any, prefix: any, rest: any) => {
-          console.log(prefix); //addded only for testing purpose
-          // return `${prefix}${"X".repeat(rest.length)}`;
-          // console.log(handleViewDetails);
 
-          return `${"X".repeat(rest.length)}`;
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
         }
       );
 
@@ -297,9 +296,16 @@ export const DPDebitRecovery: GridColDef[] = [
     align: "center",
   },
   {
+    field: "Email_link",
+    headerName: "Email Link",
+    width: 180,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
     field: "payment_link",
     headerName: "Payment Link",
-    width: 300,
+    width: 180,
     align: "center",
     headerAlign: "center",
     renderCell: (params: any) => {
@@ -308,24 +314,45 @@ export const DPDebitRecovery: GridColDef[] = [
         return <span>No Link Available</span>;
 
       const fullLink = `${Payment_link}${EnCAccountCode}`;
+      const [copied, setCopied] = React.useState(false);
+
+      const handleCopy = () => {
+        navigator.clipboard
+          .writeText(fullLink)
+          .then(() => {
+            console.log("Copied to clipboard:", fullLink);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 3000);
+          })
+          .catch((error) => {
+            console.error("Failed to copy:", error);
+          });
+      };
+
       return (
-        <a
-          href={fullLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "blue", textDecoration: "underline" }}
-        >
-          Click here
-        </a>
+        <>
+          <a
+            href={fullLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#11395C", textDecoration: "underline" }}
+          >
+            Click here
+          </a>{" "}
+          or{" "}
+          {copied ? (
+            <span style={{ color: "#11395C" }}>Copied!</span> // Show "Copied!" text
+          ) : (
+            <ContentCopyIcon
+              fontSize="small"
+              style={{ color: "#11395C", cursor: "pointer" }}
+              onClick={handleCopy}
+              titleAccess="Copy to clipboard"
+            />
+          )}
+        </>
       );
     },
-  },
-  {
-    field: "Email_link",
-    headerName: "Email Link",
-    width: 180,
-    align: "center",
-    headerAlign: "center",
   },
 ];
 
@@ -412,15 +439,13 @@ export const topBirthdays: GridColDef[] = [
     headerAlign: "center",
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
-      // Mask all except first 2 digits
-      const maskedMobile = mobile.replace(
-        /^(\d{2})(\d+)/,
-        (_: any, prefix: any, rest: any) => {
-          console.log(prefix); //addded only for testing purpose
-          // return `${prefix}${"X".repeat(rest.length)}`;
-          // console.log(handleViewDetails);
 
-          return `${"X".repeat(rest.length)}`;
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
         }
       );
 

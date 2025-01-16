@@ -147,6 +147,16 @@ const SideBar = () => {
   const lastBrokingValues = useSelector(
     (state: RootState) => state.userOverView?.data?.data?.data
   );
+
+  useEffect(() => {
+    if (selectedViewMore) {
+      const timeoutId = setTimeout(() => {
+        setSelectedViewMore("");
+      }, 3000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [selectedViewMore]);
+
   useEffect(() => {
     if (lastBrokingValues && lastBrokingValues.length > 0) {
       const brokingValue =
@@ -396,6 +406,7 @@ const SideBar = () => {
             handleDrawerOpen={handleDrawerOpen}
             apiStatus={apiStatus}
             selectedTrading={selectedViewMore}
+            activeMenu={activeMenu}
           />
         );
       case "e-KYC Link":

@@ -17,6 +17,8 @@ import {
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
 import "../../pages/ClientDetails/style.css";
+import EmailIcon from "@mui/icons-material/Email";
+import CustomModal from "./DPModal";
 
 interface Trade {
   id: string;
@@ -72,6 +74,8 @@ const DataTable = ({
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
+  const [modal_center, setmodal_center] = useState<boolean>(false);
+  const [selectedRow, setSelectedRow] = useState<any>(null); // Store selected row data
 
   useEffect(() => {
     console.log("selectedWidgets", selectedWidget);
@@ -93,9 +97,16 @@ const DataTable = ({
     setTotalRows(totalCount);
   };
 
+  const tog_center = () => {
+    setmodal_center(!modal_center);
+  };
+
   const handleViewDetails = (row: any) => {
+    // debugger;
     console.log("View Details clicked for:", row);
-    getUserDetails?.(row);
+    // getUserDetails?.(row);
+    setSelectedRow(row);
+    // tog_center();
   };
   const getColumns = () => {
     if (selectedWidget === "Clients With Cash Balance") {
@@ -146,17 +157,23 @@ const DataTable = ({
                     // Call both functions
                     // handleEmailSend?.();
                     handleViewDetails?.(params.row);
+                    setSelectedRow(params.row); // Store the selected row data
+                    tog_center(); // Open the modal
                   }}
                   disabled={isEmailSent}
                   style={{
-                    color: isEmailSent ? "green" : "blue",
+                    color: isEmailSent && "green",
                     textDecoration: isEmailSent ? "none" : "underline",
                     background: "none",
                     border: "none",
                     cursor: isEmailSent ? "default" : "pointer",
                   }}
                 >
-                  {isEmailSent ? "Email Sent!" : "Click here to send Email"}
+                  {isEmailSent ? (
+                    "Email Sent!"
+                  ) : (
+                    <EmailIcon style={{ color: "#11395C" }} />
+                  )}
                 </button>
               );
             },
@@ -175,6 +192,13 @@ const DataTable = ({
 
   return (
     <>
+      <CustomModal
+        tog_center={() => setmodal_center(!modal_center)}
+        modal_center={modal_center}
+        setmodal_center={setmodal_center}
+        getUserDetails={getUserDetails} // Pass the API call function
+        row={selectedRow} // Pass the selected row data
+      />
       {selectedWidget === "Clients With Cash Balance" && (
         <DropDown tradeData={setTradeData} handleValues={handleValues} />
       )}
@@ -242,8 +266,9 @@ const DataTable = ({
               : row.ClientName
               ? row.ClientName
               : row.BOID
-              ? row.BOID || `${row.BOName}-${row.TotalDebit}-${Math.random()}`
-              : row.Name
+              ? `${row.BOName}-${row.TotalDebit}-${Math.random()}` // this is just for when data comes repetative
+              : // ? row.BOID
+                row.Name
           } // Use the correct identifier for rows
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"

@@ -87,7 +87,7 @@ const DPRecovery = () => {
   return (
     <Card>
       <CardHeader style={{ fontFamily: "Poppins" }}>
-        DP Debit Recovery
+        DP Debit Outstanding
       </CardHeader>
       <CardBody>
         {/* <DataTable

@@ -27,6 +27,7 @@ interface ClientRow {
   POAStatus?: string;
   MTFStatus?: string;
   RecordsTotal?: number;
+  activeMenu?: any;
 }
 
 const ClientDetails = ({
@@ -34,6 +35,7 @@ const ClientDetails = ({
   handleDrawerOpen,
   apiStatus,
   selectedTrading,
+  activeMenu,
 }: any) => {
   const [selectedCapsule, setSelectedCapsule] = useState("Total Clients");
   const [tableData, setTableData] = useState<[]>([]);
@@ -60,6 +62,7 @@ const ClientDetails = ({
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+
   useEffect(() => {
     console.log(
       "test12345",

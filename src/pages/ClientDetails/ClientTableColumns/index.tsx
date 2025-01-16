@@ -27,15 +27,13 @@ export const getClientActivityStatusColumns = (
     flex: 1,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
-      // Mask all except first 2 digits
-      const maskedMobile = mobile.replace(
-        /^(\d{2})(\d+)/,
-        (_: any, prefix: any, rest: any) => {
-          console.log(prefix); //addded only for testing purpose
-          // return `${prefix}${"X".repeat(rest.length)}`;
-          console.log(handleViewDetails);
 
-          return `${"X".repeat(rest.length)}`;
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix, handleViewDetails); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
         }
       );
 
@@ -102,15 +100,13 @@ export const getClientDormantStatus = (
     align: "center",
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
-      // Mask all except first 2 digits
-      const maskedMobile = mobile.replace(
-        /^(\d{2})(\d+)/,
-        (_: any, prefix: any, rest: any) => {
-          console.log(prefix); //addded only for testing purpose
-          // return `${prefix}${"X".repeat(rest.length)}`;
-          console.log(handleViewDetails);
 
-          return `${"X".repeat(rest.length)}`;
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix, handleViewDetails); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
         }
       );
 
