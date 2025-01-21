@@ -237,83 +237,19 @@ export const T6OverViewColumns: GridColDef[] = [
 ];
 
 export const DPDebitRecovery: GridColDef[] = [
-  { field: "BOID", headerName: "BOID", width: 140 },
-  { field: "BOName", headerName: "Name of Client", width: 200 },
-  {
-    field: "Ledger_DebitAmt",
-    headerName: "Ledger Debit",
-    width: 120,
-    align: "right",
-    headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-  },
-  // {
-  //   field: "TotalDebit",
-  //   headerName: "Total Debit",
-  //   width: 150,
-  //   align: "right",
-  //   headerAlign: "center",
-  //   valueFormatter: (params: number) =>
-  //     new Intl.NumberFormat("en-IN").format(params),
-  // },
-  {
-    field: "Holding_value",
-    headerName: "Holding Value",
-    width: 120,
-    align: "right",
-    headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-  },
-  {
-    field: "Last_Trade_date",
-    headerName: "Last TR Date",
-    width: 120,
-    align: "center",
-    headerAlign: "center",
-  },
-
-  {
-    field: "Client_Mobile_No",
-    headerName: "Mobile No",
-    headerAlign: "center",
-    flex: 1,
-    minWidth: 120,
-    renderCell: (params: any) => {
-      const mobile = params.value || ""; // Extract the mobile number
-
-      // Mask all digits except the first 2 and the last 2
-      const maskedMobile = mobile.replace(
-        /^(\d{2})(\d+)(\d{2})$/,
-        (_: any, prefix: any, middle: any, suffix: any) => {
-          console.log(prefix, suffix); // Added only for testing purpose
-          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
-      );
-
-      // Return tooltip with the masked mobile number
-      return (
-        <Tooltip title={mobile} arrow placement="top">
-          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
-        </Tooltip>
-      );
-    },
-    sortable: false,
-    disableColumnMenu: true,
-    align: "center",
-  },
   {
     field: "Email_link",
-    headerName: "Email Link",
-    width: 100,
+    headerName: "Send Email",
+    headerClassName: "header-wrap-custom",
+    width: 60,
     align: "center",
     headerAlign: "center",
   },
   {
     field: "payment_link",
-    headerName: "Payment Link",
-    width: 180,
+    headerName: "Payment\nLink",
+    headerClassName: "header-wrap-custom",
+    width: 72,
     align: "center",
     headerAlign: "center",
     renderCell: (params: any) => {
@@ -339,15 +275,15 @@ export const DPDebitRecovery: GridColDef[] = [
 
       return (
         <>
-          <a
+          {/* <a
             href={fullLink}
             target="_blank"
             rel="noopener noreferrer"
             style={{ color: "#11395C", textDecoration: "underline" }}
           >
             Click here
-          </a>{" "}
-          or{" "}
+          </a>{" "} */}
+          {/* or{" "} */}
           {copied ? (
             <span style={{ color: "#11395C" }}>Copied!</span> // Show "Copied!" text
           ) : (
@@ -361,6 +297,111 @@ export const DPDebitRecovery: GridColDef[] = [
         </>
       );
     },
+  },
+  {
+    field: "ClientCode",
+    headerName: "Client Code",
+    width: 90,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "BOID",
+    headerName: "BOID",
+    width: 140,
+    align: "center",
+    headerAlign: "center",
+  },
+  { field: "BOName", headerName: "Name of Client", width: 200 },
+  {
+    field: "Ledger_DebitAmt",
+    headerName: "Ledger Debit",
+    headerClassName: "header-wrap-custom",
+    width: 70,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+  {
+    field: "Holding_value",
+    headerName: "Holding Value",
+    headerClassName: "header-wrap-custom",
+    width: 90,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+  {
+    field: "Client_Mobile_No",
+    headerName: "Mobile No",
+    headerAlign: "center",
+    flex: 1,
+    minWidth: 100,
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+    sortable: false,
+    disableColumnMenu: true,
+    align: "center",
+  },
+  {
+    field: "Client_Mail_ID",
+    headerName: "Email ID",
+    minWidth: 190,
+    flex: 1,
+    align: "left",
+    headerAlign: "center",
+    renderCell: (params: any) => {
+      const email = params.value || ""; // Extract the email ID
+
+      // Mask the email if it exists
+      const maskedEmail = email.replace(
+        /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
+        (_: any, firstChar: any, middleChars: any, domain: any) => {
+          return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
+        }
+      );
+
+      // Return tooltip with the original email and masked email for display
+      return (
+        <Tooltip title={email} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "AcStatus",
+    headerName: "Status",
+    width: 110,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "Last_Trade_date",
+    headerName: "Last Trade Date",
+    headerClassName: "header-wrap-custom",
+    width: 80,
+    align: "center",
+    headerAlign: "center",
   },
 ];
 

@@ -150,7 +150,12 @@ const DataTable = ({
           return {
             ...column,
             renderCell: (params: any) => {
+              const emailID = params.row.Client_Mail_ID;
               const isEmailSent = emailSentStatus[params.row.BOID]; // Check status for this BOID
+
+              if (!emailID) {
+                return <span style={{ color: "gray" }}></span>; // Placeholder if no email ID
+              }
               return (
                 <button
                   onClick={() => {

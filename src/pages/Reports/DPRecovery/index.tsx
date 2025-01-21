@@ -13,9 +13,12 @@ import "../style.css";
 
 const DPRecovery = () => {
   const [userData, setUserData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [emailSentStatus, setEmailSentStatus] = useState<
     Record<string, boolean>
   >({});
+  // const [searchValue, setSearchValue] = useState("");
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
@@ -35,6 +38,7 @@ const DPRecovery = () => {
         const response = await apiServices.DPDebitRecovery(payload);
         dispatch(hideLoader());
         setUserData(response?.data?.data || []);
+        setFilteredData(response?.data?.data || []);
       } catch (error) {
         dispatch(hideLoader());
         console.error("Error fetching DP debit recovery data:", error);
@@ -85,6 +89,21 @@ const DPRecovery = () => {
     handleEmailSend(value?.BOID);
   };
 
+  const handleSearchBasedOnInput = (value: string) => {
+    console.log("handleSearchBasedOnInputValue", value.toUpperCase());
+    // setSearchValue(value);
+
+    const query = value;
+    setSearchQuery(query);
+
+    const filtered = userData.filter(
+      (item: any) => item.BOName.toLowerCase().includes(query) // Check if the client name includes the query
+    );
+
+    setFilteredData(filtered);
+    console.log("filteredSearch Records", filteredData);
+  };
+
   return (
     <Card>
       <CardHeader style={{ fontFamily: "Poppins" }}>
@@ -97,7 +116,10 @@ const DPRecovery = () => {
           tableData={userData}
         /> */}
         <UserInfoTable
-          T6Data={userData}
+          showSearch={true}
+          handleSearchBasedOnInput={handleSearchBasedOnInput}
+          searchValue={searchQuery}
+          T6Data={userData ? filteredData : filteredData}
           getUserDetails={getUserDetails}
           emailSentStatus={emailSentStatus}
         />
