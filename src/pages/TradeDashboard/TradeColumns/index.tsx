@@ -241,7 +241,7 @@ export const DPDebitRecovery: GridColDef[] = [
     field: "Email_link",
     headerName: "Send Email",
     headerClassName: "header-wrap-custom",
-    width: 60,
+    width: 74,
     align: "center",
     headerAlign: "center",
   },
