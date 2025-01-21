@@ -132,6 +132,8 @@ const QuarterlyPayout = () => {
 
   const isSmallScreen = window.innerWidth < 768;
 
+  console.log(isSmallScreen);
+
   const qpayoutColumns: GridColDef[] = [
     {
       field: "accountcode",
