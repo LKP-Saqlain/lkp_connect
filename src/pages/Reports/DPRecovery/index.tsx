@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import ShowToast from "../../../utils/toastUtils";
 import UserInfoTable from "../../../components/common/UserInfoTable";
+import "../style.css";
 
 const DPRecovery = () => {
   const [userData, setUserData] = useState([]);
