@@ -16,7 +16,12 @@ export const getClientActivityStatusColumns = (
 ): GridColDef[] => [
   { field: "ClientCode", headerName: "Client Code", flex: 1 },
   { field: "ClientName", headerName: "Client Name", flex: 2 },
-  { field: "LastTradeDate", headerName: "Last TR Date", flex: 1 },
+  {
+    field: "LastTradeDate",
+    headerClassName: "header-wrap-custom",
+    headerName: "Last Trade Date",
+    flex: 1,
+  },
   {
     field: "ClientStatus",
     headerName: "Status",
@@ -34,6 +39,7 @@ export const getClientActivityStatusColumns = (
   {
     field: "ActivationDate",
     headerName: "Activation Date",
+    headerClassName: "header-wrap-custom",
     flex: 1,
     align: "center",
     headerAlign: "center",
