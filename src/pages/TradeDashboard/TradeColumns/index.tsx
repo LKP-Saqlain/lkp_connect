@@ -301,7 +301,8 @@ export const DPDebitRecovery: GridColDef[] = [
   {
     field: "ClientCode",
     headerName: "Client Code",
-    width: 90,
+    headerClassName: "header-wrap-custom",
+    width: 75,
     align: "center",
     headerAlign: "center",
   },
