@@ -267,6 +267,14 @@ export const DPDebitRecovery: GridColDef[] = [
       new Intl.NumberFormat("en-IN").format(params),
   },
   {
+    field: "Last_Trade_date",
+    headerName: "Last TR Date",
+    width: 120,
+    align: "center",
+    headerAlign: "center",
+  },
+
+  {
     field: "Client_Mobile_No",
     headerName: "Mobile No",
     headerAlign: "center",
@@ -298,7 +306,7 @@ export const DPDebitRecovery: GridColDef[] = [
   {
     field: "Email_link",
     headerName: "Email Link",
-    width: 180,
+    width: 100,
     align: "center",
     headerAlign: "center",
   },

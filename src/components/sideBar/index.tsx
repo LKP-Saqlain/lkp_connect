@@ -158,6 +158,15 @@ const SideBar = () => {
   }, [selectedViewMore]);
 
   useEffect(() => {
+    if (activeMenu !== "Reports" && activeSubItem) {
+      const timeoutId = setTimeout(() => {
+        setActiveSubItem("");
+      }, 3000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [activeMenu, activeSubItem]);
+
+  useEffect(() => {
     if (lastBrokingValues && lastBrokingValues.length > 0) {
       const brokingValue =
         lastBrokingValues[lastBrokingValues.length - 1]?.Dtrandate;

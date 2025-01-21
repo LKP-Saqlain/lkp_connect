@@ -136,24 +136,26 @@ const QuarterlyPayout = () => {
     {
       field: "accountcode",
       headerName: "Client Code",
-      width: isSmallScreen ? 100 : 150,
+      minWidth: 100,
     },
     {
       field: "clientName",
       headerName: "Client Name",
-      width: isSmallScreen ? 100 : 150,
+      minWidth: 100,
+      flex: 2,
     },
-    { field: "rm", headerName: "RM", width: isSmallScreen ? 100 : 150 },
+    { field: "rm", headerName: "RM", minWidth: 140 },
     {
       field: "branchcode",
       headerName: "Branch Code",
-      width: isSmallScreen ? 100 : 150,
+      minWidth: 100,
+      flex: 1,
     },
-    { field: "zone", headerName: "Zone", width: isSmallScreen ? 80 : 120 },
+    { field: "zone", headerName: "Zone", minWidth: 100 },
     {
       field: "payout_Amt",
       headerName: "Payout Amt",
-      width: isSmallScreen ? 100 : 150,
+      minWidth: 100,
       align: "right",
       headerAlign: "center",
       valueFormatter: (params: number) =>
@@ -162,7 +164,7 @@ const QuarterlyPayout = () => {
     {
       field: "receipt_Amt",
       headerName: "Receipt Amt",
-      width: isSmallScreen ? 100 : 150,
+      minWidth: 100,
       align: "right",
       headerAlign: "center",
       valueFormatter: (params: number) =>
@@ -171,7 +173,7 @@ const QuarterlyPayout = () => {
     {
       field: "extra_Payin",
       headerName: "Extra Payin",
-      width: isSmallScreen ? 100 : 150,
+      minWidth: 100,
       align: "right",
       headerAlign: "center",
       valueFormatter: (params: number) =>

@@ -192,38 +192,38 @@ const CoreReport = () => {
   };
 
   const Corecolumns: GridColDef[] = [
-    { field: "clientCode", headerName: "Client Code", width: 80 },
-    { field: "alertSequenceNo", headerName: "Alert Sequence No", width: 80 },
-    { field: "virtualAccount", headerName: "Virtual Account", width: 80 },
+    { field: "clientCode", headerName: "Client Code", minWidth: 80 },
+    { field: "alertSequenceNo", headerName: "Alert Sequence No", minWidth: 80 },
+    { field: "virtualAccount", headerName: "Virtual Account", minWidth: 80 },
     {
       field: "lkP_AccountNumber",
       headerName: "LKP Account Number",
-      width: 180,
+      minWidth: 180,
     },
-    { field: "debitCredit", headerName: "Debit/Credit", width: 80 },
-    { field: "amount", headerName: "Amount", width: 100 },
-    { field: "client_Name", headerName: "Client Name", width: 80 },
+    { field: "debitCredit", headerName: "Debit/Credit", minWidth: 80 },
+    { field: "amount", headerName: "Amount", minWidth: 100 },
+    { field: "client_Name", headerName: "Client Name", minWidth: 80 },
     {
       field: "client_AccountNumber",
       headerName: "Client Account Number",
-      width: 180,
+      minWidth: 180,
     },
-    { field: "client_Bank", headerName: "Client Bank", width: 80 },
-    { field: "client_IFSC", headerName: "Client IFSC", width: 80 },
-    { field: "chequeNo", headerName: "Cheque No", width: 80 },
+    { field: "client_Bank", headerName: "Client Bank", minWidth: 80 },
+    { field: "client_IFSC", headerName: "Client IFSC", minWidth: 80 },
+    { field: "chequeNo", headerName: "Cheque No", minWidth: 80 },
     {
       field: "userReferenceNumber",
       headerName: "User Reference Number",
-      width: 180,
+      minWidth: 180,
     },
-    { field: "payment_Type", headerName: "Payment Type", width: 80 },
-    { field: "valueDate", headerName: "Value Date", width: 80 },
+    { field: "payment_Type", headerName: "Payment Type", minWidth: 80 },
+    { field: "valueDate", headerName: "Value Date", minWidth: 80 },
     {
       field: "transactionDescription",
       headerName: "Transaction Description",
-      width: 200,
+      minWidth: 200,
     },
-    { field: "transactionDate", headerName: "Transaction Date", width: 80 },
+    { field: "transactionDate", headerName: "Transaction Date", minWidth: 80 },
   ];
 
   document.title = "LKP Securities | Core Alert Report";

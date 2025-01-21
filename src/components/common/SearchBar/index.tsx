@@ -118,7 +118,11 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
       }}
     >
       {/* Search Bar */}
-      {selectedWidget !== "Client Approaching  Dormant Status" && (
+      {![
+        "Client Approaching  Dormant Status",
+        "Active Clients",
+        "Inactive Clients",
+      ].includes(selectedWidget) && (
         <Search sx={{ border: "1px solid #11395C" }}>
           <SearchIconWrapper>
             <SearchIcon />
