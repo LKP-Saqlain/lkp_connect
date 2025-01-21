@@ -12,7 +12,7 @@ export const ClientCashColumns: GridColDef[] = [
     headerName: "Client Code",
     flex: 1.5, // Use flex for responsive column width
     minWidth: 150, // Ensure minimum width for proper readability
-    headerAlign: "center",
+    headerAlign: "left",
     align: "left",
     sortable: false,
     disableColumnMenu: true,

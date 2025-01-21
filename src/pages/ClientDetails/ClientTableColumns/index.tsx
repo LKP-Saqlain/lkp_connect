@@ -17,14 +17,34 @@ export const getClientActivityStatusColumns = (
   { field: "ClientCode", headerName: "Client Code", flex: 1 },
   { field: "ClientName", headerName: "Client Name", flex: 2 },
   { field: "LastTradeDate", headerName: "Last TR Date", flex: 1 },
-  { field: "ClientStatus", headerName: "Status", flex: 1 },
-  { field: "BranchCode", headerName: "BR Code", flex: 1 },
-  { field: "ActivationDate", headerName: "Activation Date", flex: 1 },
+  {
+    field: "ClientStatus",
+    headerName: "Status",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "BranchCode",
+    headerName: "BR Code",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "ActivationDate",
+    headerName: "Activation Date",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
   // { field: "MobileNo", headerName: "Mobile No", width: 120 },
   {
     field: "MobileNo",
     headerName: "Mobile No",
     flex: 1,
+    align: "center",
+    headerAlign: "center",
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
 
@@ -45,8 +65,20 @@ export const getClientActivityStatusColumns = (
       );
     },
   },
-  { field: "MTFStatus", headerName: "MTF Status", flex: 1 },
-  { field: "POAStatus", headerName: "POA Status", flex: 1 },
+  {
+    field: "MTFStatus",
+    headerName: "MTF Status",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "POAStatus",
+    headerName: "POA Status",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
   // {
   //   field: "viewDetails",
   //   headerName: "Action",
@@ -85,7 +117,13 @@ export const getClientDormantStatus = (
 ): GridColDef[] => [
   { field: "ctermcode", headerName: "Client Code", flex: 2 },
   { field: "clientName", headerName: "Client Name", flex: 2 },
-  { field: "lastTradeDate", headerName: "Last Trade Date", flex: 2 },
+  {
+    field: "lastTradeDate",
+    headerName: "Last Trade Date",
+    flex: 2,
+    align: "center",
+    headerAlign: "center",
+  },
   {
     field: "dayCount",
     headerName: "Days to Dormant",
