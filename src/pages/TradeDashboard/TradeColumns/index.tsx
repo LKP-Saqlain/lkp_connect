@@ -321,8 +321,13 @@ export const DPDebitRecovery: GridColDef[] = [
     width: 70,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "Holding_value",
