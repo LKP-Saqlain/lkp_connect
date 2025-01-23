@@ -15,3 +15,8 @@
   .odd-row {
     background-color: #ffffff; /* White for odd rows */
   }
+
+  .css-sq16uu-MuiDataGrid-root .MuiDataGrid-withBorderColor {
+    border-color: rgba(224, 224, 224, 1);
+    display: none !important;
+}
