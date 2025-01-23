@@ -111,7 +111,7 @@ any) => {
                 (client: any) => client.ClientStatus === "Active"
               ).length;
               const inactiveClients = response?.data.filter(
-                (client: any) => client.ClientStatus === "InActive"
+                (client: any) => client.ClientStatus === "Inactive"
               ).length;
               setActiveClients(activeClients);
               setinActiveClients(inactiveClients);
@@ -125,7 +125,7 @@ any) => {
               response?.data.forEach((client: any) => {
                 if (client.ClientStatus === "Active") {
                   activeGroupedClients.push(client);
-                } else if (client.ClientStatus === "InActive") {
+                } else if (client.ClientStatus === "Inactive") {
                   inactiveGroupedClients.push(client);
                 }
               });
@@ -256,7 +256,7 @@ any) => {
               (client: any) => client.ClientStatus === "Active"
             ).length;
             const inactiveClients = response?.data.filter(
-              (client: any) => client.ClientStatus === "InActive"
+              (client: any) => client.ClientStatus === "Inactive"
             ).length;
             setActiveClients(activeClients);
             setinActiveClients(inactiveClients);
@@ -270,7 +270,7 @@ any) => {
             response?.data.forEach((client: any) => {
               if (client.ClientStatus === "Active") {
                 activeGroupedClients.push(client);
-              } else if (client.ClientStatus === "InActive") {
+              } else if (client.ClientStatus === "Inactive") {
                 inactiveGroupedClients.push(client);
               }
             });
@@ -325,7 +325,7 @@ any) => {
         response?.data.forEach((client: any) => {
           if (client.ClientStatus === "Active") {
             activeGroupedClients.push(client); // Add to active clients
-          } else if (client.ClientStatus === "InActive") {
+          } else if (client.ClientStatus === "Inactive") {
             inactiveGroupedClients.push(client); // Add to inactive clients
           }
         });
@@ -432,7 +432,7 @@ any) => {
               (client: any) => client.ClientStatus === "Active"
             ).length;
             const inactiveClients = response?.data.filter(
-              (client: any) => client.ClientStatus === "InActive"
+              (client: any) => client.ClientStatus === "Inactive"
             ).length;
             setActiveClients(activeClients);
             setinActiveClients(inactiveClients);
@@ -446,7 +446,7 @@ any) => {
             response?.data.forEach((client: any) => {
               if (client.ClientStatus === "Active") {
                 activeGroupedClients.push(client);
-              } else if (client.ClientStatus === "InActive") {
+              } else if (client.ClientStatus === "Inactive") {
                 inactiveGroupedClients.push(client);
               }
             });
@@ -546,7 +546,7 @@ any) => {
   //       (client: any) => client.ClientStatus === "Active"
   //     ).length;
   //     const inactiveClients = filteredData.filter(
-  //       (client: any) => client.ClientStatus === "InActive"
+  //       (client: any) => client.ClientStatus === "Inactive"
   //     ).length;
 
   //     setActiveClients(activeClients);
@@ -557,7 +557,7 @@ any) => {
   //       (client: any) => client.ClientStatus === "Active"
   //     );
   //     const inactiveGroupedClients = filteredData.filter(
-  //       (client: any) => client.ClientStatus === "InActive"
+  //       (client: any) => client.ClientStatus === "Inactive"
   //     );
 
   //     setActiveGroupedClients(activeGroupedClients);
