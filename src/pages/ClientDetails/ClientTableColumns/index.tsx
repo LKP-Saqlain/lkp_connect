@@ -32,11 +32,12 @@ export const getClientActivityStatusColumns = (
     headerName: "Last Trade Date",
     flex: 1,
     disableColumnMenu: true,
+    align: "center",
   },
   {
     field: "ClientStatus",
     headerName: "Status",
-    flex: 1,
+    flex: 0.8,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -44,7 +45,7 @@ export const getClientActivityStatusColumns = (
   {
     field: "BranchCode",
     headerName: "BR Code",
-    flex: 1,
+    flex: 0.8,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -63,7 +64,7 @@ export const getClientActivityStatusColumns = (
   {
     field: "MobileNo",
     headerName: "Mobile No",
-    flex: 1,
+    width: 110,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
