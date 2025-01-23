@@ -14,13 +14,24 @@ interface ClientRow {
 export const getClientActivityStatusColumns = (
   handleViewDetails: (row: ClientRow) => void
 ): GridColDef[] => [
-  { field: "ClientCode", headerName: "Client Code", flex: 1 },
-  { field: "ClientName", headerName: "Client Name", flex: 2 },
+  {
+    disableColumnMenu: true,
+    field: "ClientCode",
+    headerName: "Client Code",
+    flex: 1,
+  },
+  {
+    disableColumnMenu: true,
+    field: "ClientName",
+    headerName: "Client Name",
+    flex: 2,
+  },
   {
     field: "LastTradeDate",
     headerClassName: "header-wrap-custom",
     headerName: "Last Trade Date",
     flex: 1,
+    disableColumnMenu: true,
   },
   {
     field: "ClientStatus",
@@ -28,6 +39,7 @@ export const getClientActivityStatusColumns = (
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "BranchCode",
@@ -35,14 +47,17 @@ export const getClientActivityStatusColumns = (
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "ActivationDate",
     headerName: "Activation Date",
     headerClassName: "header-wrap-custom",
-    flex: 1,
+    // flex: 1,
+    width: 110,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   // { field: "MobileNo", headerName: "Mobile No", width: 120 },
   {
@@ -51,6 +66,7 @@ export const getClientActivityStatusColumns = (
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
 
@@ -77,6 +93,7 @@ export const getClientActivityStatusColumns = (
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "POAStatus",
@@ -84,6 +101,7 @@ export const getClientActivityStatusColumns = (
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   // {
   //   field: "viewDetails",
@@ -121,20 +139,32 @@ export const getClientActivityStatusColumns = (
 export const getClientDormantStatus = (
   handleViewDetails: (row: ClientRow) => void
 ): GridColDef[] => [
-  { field: "ctermcode", headerName: "Client Code", flex: 2 },
-  { field: "clientName", headerName: "Client Name", flex: 2 },
+  {
+    field: "ctermcode",
+    headerName: "Client Code",
+    flex: 2,
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 2,
+    disableColumnMenu: true,
+  },
   {
     field: "lastTradeDate",
     headerName: "Last Trade Date",
     flex: 2,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "dayCount",
     headerName: "Days to Dormant",
     flex: 2,
     align: "right",
+    disableColumnMenu: true,
   },
   {
     field: "mobileNo",
@@ -142,6 +172,7 @@ export const getClientDormantStatus = (
     flex: 2,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
 

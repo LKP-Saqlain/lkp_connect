@@ -1,7 +1,6 @@
 import { GridColDef } from "@mui/x-data-grid";
 import Tooltip from "@mui/material/Tooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import "../style.css";
 import React from "react";
 
 // import { useMemo, useState } from "react";
@@ -11,10 +10,10 @@ export const ClientCashColumns: GridColDef[] = [
     field: "ClientCode",
     headerName: "Client Code",
     flex: 1.5, // Use flex for responsive column width
-    minWidth: 150, // Ensure minimum width for proper readability
+    minWidth: 120, // Ensure minimum width for proper readability
     headerAlign: "left",
     align: "left",
-    sortable: false,
+    // sortable: false,
     disableColumnMenu: true,
   },
   {
@@ -22,13 +21,14 @@ export const ClientCashColumns: GridColDef[] = [
     headerName: "Client Name",
     flex: 4, // Allocate more space for the client name
     minWidth: 200,
+    disableColumnMenu: true,
   },
   {
     field: "LastTradeDate",
-    headerName: "Last TR Date",
+    headerName: "Last Trade Date",
     flex: 1,
-    minWidth: 100,
-    sortable: false,
+    minWidth: 115,
+    // sortable: false,
     disableColumnMenu: true,
     align: "center",
   },
@@ -39,9 +39,18 @@ export const ClientCashColumns: GridColDef[] = [
     minWidth: 120,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-    sortable: false,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+
+    // sortable: false,
     disableColumnMenu: true,
   },
 
@@ -69,7 +78,7 @@ export const ClientCashColumns: GridColDef[] = [
         </Tooltip>
       );
     },
-    sortable: false,
+    // sortable: false,
     disableColumnMenu: true,
     align: "center",
   },
@@ -80,9 +89,14 @@ export const ClientCashColumns: GridColDef[] = [
     minWidth: 120,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-    sortable: false,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+    // sortable: false,
     disableColumnMenu: true,
   },
   {
@@ -92,9 +106,14 @@ export const ClientCashColumns: GridColDef[] = [
     headerName: "Last Month",
     flex: 1.2,
     minWidth: 120,
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-    sortable: false,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+    // sortable: false,
     disableColumnMenu: true,
   },
   {
@@ -104,9 +123,14 @@ export const ClientCashColumns: GridColDef[] = [
     headerAlign: "center",
     flex: 1.2,
     minWidth: 120,
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-    sortable: false,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+    // sortable: false,
     disableColumnMenu: true,
   },
 ];
@@ -118,10 +142,16 @@ export const T6Columns: GridColDef[] = [
     minWidth: 105,
     headerAlign: "center",
     align: "left",
-    sortable: false,
+    // sortable: false,
     disableColumnMenu: true,
   },
-  { field: "ClientName", headerName: "Client Name", flex: 2.2, minWidth: 220 },
+  {
+    field: "ClientName",
+    headerName: "Client Name",
+    disableColumnMenu: true,
+    flex: 2.2,
+    minWidth: 220,
+  },
   {
     field: "ClosingBal",
     headerName: "Closing Balance",
@@ -129,6 +159,7 @@ export const T6Columns: GridColDef[] = [
     minWidth: 120,
     align: "right",
     headerAlign: "center",
+    disableColumnMenu: true,
     valueFormatter: (params: number) =>
       new Intl.NumberFormat("en-IN").format(params),
   },
@@ -139,6 +170,7 @@ export const T6Columns: GridColDef[] = [
     minWidth: 100,
     align: "right",
     headerAlign: "center",
+    disableColumnMenu: true,
     valueFormatter: (params: number) =>
       new Intl.NumberFormat("en-IN").format(params),
   },
@@ -149,18 +181,34 @@ export const T6Columns: GridColDef[] = [
     minWidth: 95,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "T5",
     headerName: "T5",
     flex: 1,
-    minWidth: 95,
+    minWidth: 80,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "T4",
@@ -169,8 +217,16 @@ export const T6Columns: GridColDef[] = [
     minWidth: 80,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "T3",
@@ -179,8 +235,16 @@ export const T6Columns: GridColDef[] = [
     minWidth: 80,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "T2",
@@ -189,18 +253,34 @@ export const T6Columns: GridColDef[] = [
     minWidth: 80,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "T1",
     headerName: "T1",
     flex: 0.9,
-    minWidth: 80,
+    minWidth: 110,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
 ];
 
@@ -211,6 +291,7 @@ export const T6OverViewColumns: GridColDef[] = [
     flex: 2,
     headerAlign: "center",
     align: "left",
+    disableColumnMenu: true,
     // renderCell: (params) => (
     //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
     //     <div>{params.row.ClientName}</div>
@@ -224,6 +305,7 @@ export const T6OverViewColumns: GridColDef[] = [
     flex: 2,
     headerAlign: "center",
     align: "left",
+    disableColumnMenu: true,
   },
   {
     field: "T5",
@@ -231,6 +313,7 @@ export const T6OverViewColumns: GridColDef[] = [
     flex: 1,
     align: "right",
     headerAlign: "center",
+    disableColumnMenu: true,
     valueFormatter: (params: number) =>
       new Intl.NumberFormat("en-IN").format(params),
   },
@@ -241,17 +324,20 @@ export const DPDebitRecovery: GridColDef[] = [
     field: "Email_link",
     headerName: "Send Email",
     headerClassName: "header-wrap-custom",
-    width: 74,
+    width: 75,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
+    sortable: false,
   },
   {
     field: "payment_link",
     headerName: "Payment\nLink",
     headerClassName: "header-wrap-custom",
-    width: 72,
+    width: 105,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
     renderCell: (params: any) => {
       const { Payment_link, EnCAccountCode } = params.row;
       if (!Payment_link || !EnCAccountCode)
@@ -302,9 +388,10 @@ export const DPDebitRecovery: GridColDef[] = [
     field: "ClientCode",
     headerName: "Client Code",
     headerClassName: "header-wrap-custom",
-    width: 75,
+    width: 85,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "BOID",
@@ -312,15 +399,22 @@ export const DPDebitRecovery: GridColDef[] = [
     width: 140,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
-  { field: "BOName", headerName: "Name of Client", width: 200 },
+  {
+    field: "BOName",
+    headerName: "Client Name",
+    width: 200,
+    disableColumnMenu: true,
+  },
   {
     field: "Ledger_DebitAmt",
     headerName: "Ledger Debit",
     headerClassName: "header-wrap-custom",
-    width: 70,
+    width: 95,
     align: "right",
     headerAlign: "center",
+    disableColumnMenu: true,
     valueFormatter: (params: any) => {
       const value = parseFloat(params); // Convert the value to a number
       return new Intl.NumberFormat("en-IN", {
@@ -333,18 +427,26 @@ export const DPDebitRecovery: GridColDef[] = [
     field: "Holding_value",
     headerName: "Holding Value",
     headerClassName: "header-wrap-custom",
-    width: 90,
+    width: 100,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "Client_Mobile_No",
     headerName: "Mobile No",
     headerAlign: "center",
     flex: 1,
-    minWidth: 100,
+    minWidth: 120,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
 
@@ -364,7 +466,7 @@ export const DPDebitRecovery: GridColDef[] = [
         </Tooltip>
       );
     },
-    sortable: false,
+    // sortable: false,
     disableColumnMenu: true,
     align: "center",
   },
@@ -375,6 +477,7 @@ export const DPDebitRecovery: GridColDef[] = [
     flex: 1,
     align: "left",
     headerAlign: "center",
+    disableColumnMenu: true,
     renderCell: (params: any) => {
       const email = params.value || ""; // Extract the email ID
 
@@ -396,18 +499,20 @@ export const DPDebitRecovery: GridColDef[] = [
   },
   {
     field: "AcStatus",
-    headerName: "Status",
+    headerName: "Category",
     width: 110,
     align: "center",
+    disableColumnMenu: true,
     headerAlign: "center",
   },
   {
     field: "Last_Trade_date",
     headerName: "Last Trade Date",
     headerClassName: "header-wrap-custom",
-    width: 80,
+    width: 110,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
 ];
 
@@ -415,39 +520,28 @@ export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "ctermcode",
     headerName: "Client Code",
-    flex: 3, // Adjusts proportionally to the screen size
-    // minWidth: 150, // Ensures a minimum width for usability
+    flex: 3,
     headerAlign: "center",
     align: "left",
-    // renderCell: (params) => (
-    //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
-    //     <div>{params.row.clientName}</div>
-    //     <div>{params.row.ctermcode}</div>
-    //   </div>
-    // ),
+    disableColumnMenu: true,
   },
   {
     field: "clientName",
     headerName: "Client Name",
-    flex: 3, // Adjusts proportionally to the screen size
-    // minWidth: 150, // Ensures a minimum width for usability
+    flex: 3,
     headerAlign: "center",
     align: "left",
-    // renderCell: (params) => (
-    //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
-    //     <div>{params.row.clientName}</div>
-    //     <div>{params.row.ctermcode}</div>
-    //   </div>
-    // ),
+    disableColumnMenu: true,
   },
   {
     field: "dayCount",
     headerName: "Days to Dormant",
-    flex: 2, // Smaller relative to "Client"
+    flex: 1, // Smaller relative to "Client"
     // minWidth: 80, // Minimum width to avoid being too narrow
     align: "right",
     headerAlign: "center",
     headerClassName: "header-wrap",
+    disableColumnMenu: true,
   },
   {
     field: "lastTradeDate",
@@ -455,6 +549,7 @@ export const DormantOverViewColumns: GridColDef[] = [
     flex: 1,
     // minWidth: 150,
     headerAlign: "center",
+    disableColumnMenu: true,
     align: "center", // Optional: Align data as needed
   },
 ];
@@ -466,12 +561,7 @@ export const topBirthdays: GridColDef[] = [
     flex: 2,
     headerAlign: "center",
     align: "left",
-    // renderCell: (params) => (
-    //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
-    //     <div>{params.row.Name}</div>
-    //     <div>{params.row.Code}</div>
-    //   </div>
-    // ),
+    disableColumnMenu: true,
   },
   {
     field: "Name",
@@ -479,12 +569,7 @@ export const topBirthdays: GridColDef[] = [
     flex: 2,
     headerAlign: "center",
     align: "left",
-    // renderCell: (params) => (
-    //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
-    //     <div>{params.row.Name}</div>
-    //     <div>{params.row.Code}</div>
-    //   </div>
-    // ),
+    disableColumnMenu: true,
   },
   {
     field: "MobileNumber",
@@ -492,6 +577,7 @@ export const topBirthdays: GridColDef[] = [
     flex: 1.5,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
 
@@ -518,6 +604,7 @@ export const topBirthdays: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
     renderCell: () => {
       const currentDate = new Date();
       const day = String(currentDate.getDate()).padStart(2, "0"); // Ensure 2 digits for day

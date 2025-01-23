@@ -1,13 +1,1 @@
-.header-wrap {
-    white-space: normal; /* Allows text to wrap */
-    word-wrap: break-word; /* Break long words if needed */
-    text-align: center; /* Aligns text centrally */
-    line-height: 1.2; /* Adjusts line spacing for better readability */
-    font-size: 12px; /* Adjust font size if needed */
-  }
 
-  .header-wrap-custom .MuiDataGrid-columnHeaderTitle {
-    white-space: pre-wrap; /* Allow line breaks */
-    line-height: 1.2; /* Adjust line spacing if necessary */
-    text-align: center; /* Center-align text */
-  }

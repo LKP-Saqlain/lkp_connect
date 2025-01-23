@@ -583,6 +583,7 @@ const SideBar = () => {
               src={Logo1}
               width={"auto"}
               height="50px"
+              style={{ marginLeft: isMobile ? "0px" : "-60px" }}
             />
           </Box>
 

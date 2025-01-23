@@ -417,12 +417,19 @@ const DormantClient = () => {
 
   const dormantColumns: GridColDef[] = useMemo(
     () => [
-      { field: "ctermcode", headerName: "Client Code", flex: 2, minWidth: 90 },
+      {
+        field: "ctermcode",
+        headerName: "Client Code",
+        flex: 2,
+        minWidth: 100,
+        disableColumnMenu: true,
+      },
       {
         field: "clientName",
         headerName: "Client Name",
         flex: 2,
         minWidth: 160,
+        disableColumnMenu: true,
       },
       {
         field: "lastTradeDate",
@@ -431,6 +438,7 @@ const DormantClient = () => {
         flex: 2,
         minWidth: 90,
         align: "center",
+        disableColumnMenu: true,
       },
       {
         field: "active",
@@ -438,22 +446,35 @@ const DormantClient = () => {
         width: 70,
         align: "center",
         headerAlign: "center",
+        disableColumnMenu: true,
       },
-      { field: "rmname", headerName: "RM Name", minWidth: 180 },
+      {
+        field: "rmname",
+        headerName: "RM Name",
+        minWidth: 140,
+        disableColumnMenu: true,
+      },
       {
         field: "rmstatus",
         headerName: "RM Status",
-        width: 70,
+        width: 100,
         headerClassName: "header-wrap-custom",
         align: "center",
+        disableColumnMenu: true,
       },
-      { field: "dealerName", headerName: "Dealer Name", minWidth: 180 },
+      {
+        field: "dealerName",
+        headerName: "Dealer Name",
+        minWidth: 180,
+        disableColumnMenu: true,
+      },
       {
         field: "dealerSTATUS",
         headerName: "Dealer Status",
-        width: 90,
+        width: 100,
         headerClassName: "header-wrap-custom",
         align: "center",
+        disableColumnMenu: true,
       },
       {
         field: "branchcode",
@@ -461,6 +482,7 @@ const DormantClient = () => {
         minWidth: 70,
         align: "right",
         headerAlign: "center",
+        disableColumnMenu: true,
       },
       {
         field: "zone",
@@ -468,25 +490,31 @@ const DormantClient = () => {
         minWidth: 60,
         align: "right",
         headerAlign: "center",
+        disableColumnMenu: true,
       },
       {
         field: "branchtype",
         headerName: "Branch Type",
-        width: 80,
+        width: 100,
         headerClassName: "header-wrap-custom",
         align: "center",
         headerAlign: "center",
+        disableColumnMenu: true,
       },
       {
         field: "activationDate",
         headerName: "Activation Date",
-        width: 80,
+        width: 115,
         headerClassName: "header-wrap-custom",
+        disableColumnMenu: true,
+        align: "center",
+        headerAlign: "center",
       },
       {
         field: "mobileNo",
         headerName: "Mobile No",
         minWidth: 90,
+        disableColumnMenu: true,
         renderCell: (params: any) => {
           const mobile = params.value || ""; // Extract the mobile number
 
@@ -510,7 +538,8 @@ const DormantClient = () => {
       {
         field: "email",
         headerName: "Email",
-        minWidth: 180,
+        minWidth: 210,
+        disableColumnMenu: true,
         renderCell: (params: any) => {
           const email = params.value || ""; // Extract the email ID
 
@@ -533,42 +562,47 @@ const DormantClient = () => {
       {
         field: "brokerageGeneratedinFY1920",
         headerName: "Brok FY1920",
-        width: 70,
+        width: 100,
         align: "right",
         headerAlign: "center",
         headerClassName: "header-wrap-custom",
+        disableColumnMenu: true,
       },
       {
         field: "brokerageGeneratedinFY2021",
         headerName: "Brok FY2021",
-        width: 70,
+        width: 100,
         align: "right",
         headerAlign: "center",
         headerClassName: "header-wrap-custom",
+        disableColumnMenu: true,
       },
       {
         field: "brokerageGeneratedinFY2122",
         headerName: "Brok FY1922",
-        width: 70,
+        width: 100,
         align: "right",
         headerAlign: "center",
         headerClassName: "header-wrap-custom",
+        disableColumnMenu: true,
       },
       {
         field: "brokerageGeneratedinFY2223",
         headerName: "Brok FY2223",
-        width: 70,
+        width: 100,
         align: "right",
         headerAlign: "center",
         headerClassName: "header-wrap-custom",
+        disableColumnMenu: true,
       },
       {
         field: "brokerageGeneratedinFY2324",
         headerName: "Brok FY2324",
-        width: 70,
+        width: 100,
         align: "right",
         headerAlign: "center",
         headerClassName: "header-wrap-custom",
+        disableColumnMenu: true,
       },
     ],
     []
