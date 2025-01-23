@@ -281,7 +281,6 @@ const SideBar = () => {
 
   // Unified handler for toggling the drawer submenus
   const handleMenuClick = (menuTitle: string) => {
-    debugger;
     // setActiveMenu((prevActive) => (prevActive === menuTitle ? "" : menuTitle));
     setActiveMenu((prevActive) =>
       prevActive === menuTitle ? menuTitle : menuTitle
