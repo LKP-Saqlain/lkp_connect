@@ -226,13 +226,13 @@ const DormantClient = () => {
   const handleSearchUser = async () => {
     setUserData([]);
     if (searchValue !== "") {
-      const pageSize = 10; // Define pageSize
+      const pageSize = 100; // Define pageSize
 
       // Calculate start based on the new page (0-indexed)
       // const start = (value - 1) * pageSize;
       const payload = {
         start: pageSize, // Calculate start based on the new page
-        pageSize: 10,
+        pageSize: 100,
         searchKey: searchValue !== "" ? searchValue : "",
         loginName: user_id,
         zone: formik.values.selectedZone?.value,
@@ -279,13 +279,13 @@ const DormantClient = () => {
   const handleSubmit = async (event?: any, value?: any) => {
     console.log("newPage", event, value);
     // let Id = localStorage.getItem("Id");
-    const pageSize = 10; // Define pageSize
+    const pageSize = 100; // Define pageSize
 
     // Calculate start based on the new page (0-indexed)
     const start = (value - 1) * pageSize;
     const payload = {
       start: value === undefined ? 0 : start, // Calculate start based on the new page
-      pageSize: 10,
+      pageSize: 100,
       searchKey: searchValue !== "" ? searchValue : "",
       loginName: user_id,
       zone: accessType === "" ? "ALL" : formik.values.selectedZone?.value,
@@ -844,6 +844,7 @@ const DormantClient = () => {
                     page={page}
                     onPageChange={handlePageChange}
                     pageSize={10}
+                    customPageSize={true}
                     handleSearchBasedOnInput={handleSearchBasedOnInput}
                     handleSearchUser={handleSearchUser}
                     showSearch={responseStatus}

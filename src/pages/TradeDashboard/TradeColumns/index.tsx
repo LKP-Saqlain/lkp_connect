@@ -171,8 +171,13 @@ export const T6Columns: GridColDef[] = [
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "G5",
@@ -415,6 +420,8 @@ export const DPDebitRecovery: GridColDef[] = [
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
+
+    // used to show .00 (fraction values)
     valueFormatter: (params: any) => {
       const value = parseFloat(params); // Convert the value to a number
       return new Intl.NumberFormat("en-IN", {
@@ -422,6 +429,21 @@ export const DPDebitRecovery: GridColDef[] = [
         maximumFractionDigits: 2,
       }).format(value);
     },
+
+    // below code is used when we have rounded value eg 142
+
+    // valueFormatter: (params: any) => {
+    //   const value = parseFloat(params?.value); // Safely parse the value
+    //   if (isNaN(value)) {
+    //     return ""; // Return an empty string for invalid values
+    //   }
+    //   return value % 1 === 0
+    //     ? new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(value)
+    //     : new Intl.NumberFormat("en-IN", {
+    //         minimumFractionDigits: 2,
+    //         maximumFractionDigits: 2,
+    //       }).format(value);
+    // },
   },
   {
     field: "Holding_value",

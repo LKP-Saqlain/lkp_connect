@@ -20,6 +20,7 @@ interface DormantClientProps {
   showExcel?: any;
   handleExcelDownload?: () => void;
   customFlag?: any;
+  customPageSize?: any;
 }
 
 const DataTable: React.FC<DormantClientProps> = ({
@@ -35,6 +36,7 @@ const DataTable: React.FC<DormantClientProps> = ({
   handleExcelDownload,
   showExcel,
   customFlag,
+  customPageSize,
 }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
 
@@ -76,6 +78,8 @@ const DataTable: React.FC<DormantClientProps> = ({
   const handleSearchChange = (query: string) => {
     handleSearchBasedOnInput?.(query);
   };
+
+  const customPage = customPageSize ? 100 : pageSize;
 
   return (
     <>
@@ -150,7 +154,7 @@ const DataTable: React.FC<DormantClientProps> = ({
         )}
         {!customFlag && (
           <Pagination
-            count={Math.ceil(totalRecords / pageSize)}
+            count={Math.ceil(totalRecords / customPage)}
             page={page}
             onChange={handlePaginationChange}
             color="primary"
