@@ -16,7 +16,7 @@
     background-color: #ffffff; /* White for odd rows */
   }
 
-  .css-sq16uu-MuiDataGrid-root .MuiDataGrid-withBorderColor {
+  /* .css-sq16uu-MuiDataGrid-root .MuiDataGrid-withBorderColor {
     border-color: rgba(224, 224, 224, 1);
     display: none !important;
 }
@@ -24,4 +24,4 @@
 .css-kto9zn .MuiDataGrid-withBorderColor {
   border-color: rgb(224, 224, 224);
   display: none !important;
-}
+} */
