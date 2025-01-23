@@ -281,7 +281,11 @@ const SideBar = () => {
 
   // Unified handler for toggling the drawer submenus
   const handleMenuClick = (menuTitle: string) => {
-    setActiveMenu((prevActive) => (prevActive === menuTitle ? "" : menuTitle));
+    debugger;
+    // setActiveMenu((prevActive) => (prevActive === menuTitle ? "" : menuTitle));
+    setActiveMenu((prevActive) =>
+      prevActive === menuTitle ? menuTitle : menuTitle
+    );
   };
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
