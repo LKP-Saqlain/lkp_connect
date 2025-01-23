@@ -299,3 +299,9 @@
     flex-shrink: 0;
     margin-bottom: 0rem !important; 
 }
+
+.header-wrap-custom .MuiDataGrid-columnHeaderTitle {
+    white-space: pre-wrap; /* Allow line breaks */
+    line-height: 1.2; /* Adjust line spacing if necessary */
+    text-align: center; /* Center-align text */
+  }

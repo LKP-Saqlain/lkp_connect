@@ -417,7 +417,7 @@ const DormantClient = () => {
 
   const dormantColumns: GridColDef[] = useMemo(
     () => [
-      { field: "ctermcode", headerName: "Client Code", flex: 2, minWidth: 100 },
+      { field: "ctermcode", headerName: "Client Code", flex: 2, minWidth: 90 },
       {
         field: "clientName",
         headerName: "Client Name",
@@ -426,21 +426,35 @@ const DormantClient = () => {
       },
       {
         field: "lastTradeDate",
-        headerName: "Last TR Date",
+        headerName: "Last Trade Date",
+        headerClassName: "header-wrap-custom",
         flex: 2,
-        minWidth: 100,
+        minWidth: 90,
+        align: "center",
       },
       {
         field: "active",
         headerName: "Active",
-        minWidth: 80,
+        width: 70,
         align: "center",
         headerAlign: "center",
       },
       { field: "rmname", headerName: "RM Name", minWidth: 180 },
-      { field: "rmstatus", headerName: "RM Status", minWidth: 80 },
+      {
+        field: "rmstatus",
+        headerName: "RM Status",
+        width: 70,
+        headerClassName: "header-wrap-custom",
+        align: "center",
+      },
       { field: "dealerName", headerName: "Dealer Name", minWidth: 180 },
-      { field: "dealerSTATUS", headerName: "Dealer Status", minWidth: 110 },
+      {
+        field: "dealerSTATUS",
+        headerName: "Dealer Status",
+        width: 90,
+        headerClassName: "header-wrap-custom",
+        align: "center",
+      },
       {
         field: "branchcode",
         headerName: "BR Code",
@@ -458,26 +472,30 @@ const DormantClient = () => {
       {
         field: "branchtype",
         headerName: "Branch Type",
-        minWidth: 89,
+        width: 80,
+        headerClassName: "header-wrap-custom",
         align: "center",
         headerAlign: "center",
       },
-      { field: "activationDate", headerName: "Actv. Date", minWidth: 80 },
+      {
+        field: "activationDate",
+        headerName: "Activation Date",
+        width: 80,
+        headerClassName: "header-wrap-custom",
+      },
       {
         field: "mobileNo",
         headerName: "Mobile No",
         minWidth: 90,
         renderCell: (params: any) => {
           const mobile = params.value || ""; // Extract the mobile number
-          // Mask all except first 2 digits
-          const maskedMobile = mobile.replace(
-            /^(\d{2})(\d+)/,
-            (_: any, prefix: any, rest: any) => {
-              console.log(prefix); //addded only for testing purpose
-              // return `${prefix}${"X".repeat(rest.length)}`;
-              // console.log(handleViewDetails);
 
-              return `${"X".repeat(rest.length)}`;
+          // Mask all digits except the first 2 and the last 2
+          const maskedMobile = mobile.replace(
+            /^(\d{2})(\d+)(\d{2})$/,
+            (_: any, prefix: any, middle: any, suffix: any) => {
+              console.log(prefix, suffix); // Added only for testing purpose
+              return `${prefix}${"X".repeat(middle.length)}${suffix}`;
             }
           );
 
@@ -489,41 +507,68 @@ const DormantClient = () => {
           );
         },
       },
-      { field: "email", headerName: "Email", minWidth: 180 },
+      {
+        field: "email",
+        headerName: "Email",
+        minWidth: 180,
+        renderCell: (params: any) => {
+          const email = params.value || ""; // Extract the email ID
+
+          // Mask the email if it exists
+          const maskedEmail = email.replace(
+            /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
+            (_: any, firstChar: any, middleChars: any, domain: any) => {
+              return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
+            }
+          );
+
+          // Return tooltip with the original email and masked email for display
+          return (
+            <Tooltip title={email} arrow placement="top">
+              <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
+            </Tooltip>
+          );
+        },
+      },
       {
         field: "brokerageGeneratedinFY1920",
         headerName: "Brok FY1920",
-        minWidth: 100,
+        width: 70,
         align: "right",
         headerAlign: "center",
+        headerClassName: "header-wrap-custom",
       },
       {
         field: "brokerageGeneratedinFY2021",
         headerName: "Brok FY2021",
-        minWidth: 100,
+        width: 70,
         align: "right",
         headerAlign: "center",
+        headerClassName: "header-wrap-custom",
       },
       {
         field: "brokerageGeneratedinFY2122",
         headerName: "Brok FY1922",
-        minWidth: 100,
+        width: 70,
         align: "right",
         headerAlign: "center",
+        headerClassName: "header-wrap-custom",
       },
       {
         field: "brokerageGeneratedinFY2223",
-        headerName: "Bro FY2223",
-        flex: 1,
+        headerName: "Brok FY2223",
+        width: 70,
         align: "right",
         headerAlign: "center",
+        headerClassName: "header-wrap-custom",
       },
       {
         field: "brokerageGeneratedinFY2324",
-        headerName: "Bro FY2324",
-        minWidth: 80,
+        headerName: "Brok FY2324",
+        width: 70,
         align: "right",
         headerAlign: "center",
+        headerClassName: "header-wrap-custom",
       },
     ],
     []

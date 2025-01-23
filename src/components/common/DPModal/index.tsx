@@ -29,8 +29,12 @@ const CustomModal = ({
       <ModalBody className="text-center p-5">
         <i className="ri-alert-line display-5 text-warning"></i>
 
-        <div className="mt-4">
-          <h4 className="mb-3">Are you sure want to sent Email?</h4>
+        <div className="mt-4" style={{ fontFamily: "Public Sans" }}>
+          <h6 className="mb-4">
+            An email will be sent informing the client about his DP Debit dues
+            along with link for payment.
+          </h6>
+          <h6 className="mb-3">Are you sure you want to send the email?</h6>
           <div className="hstack gap-2 justify-content-center">
             <Button className="btn btn-success" onClick={handleConfirm}>
               Yes
