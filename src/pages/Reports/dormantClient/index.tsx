@@ -235,8 +235,9 @@ const DormantClient = () => {
         pageSize: 100,
         searchKey: searchValue !== "" ? searchValue : "",
         loginName: user_id,
-        zone: formik.values.selectedZone?.value,
-        branchCode: formik.values.selectedBranchCode?.value,
+        zone: accessType === "" ? "ALL" : formik.values.selectedZone?.value,
+        branchCode:
+          accessType === "" ? "ALL" : formik.values.selectedBranchCode?.value,
         clientStatus:
           formik.values.selectedClientStatus?.value === "ACTIVE"
             ? "Y"
@@ -559,15 +560,15 @@ const DormantClient = () => {
           );
         },
       },
-      {
-        field: "brokerageGeneratedinFY1920",
-        headerName: "Brok FY1920",
-        width: 100,
-        align: "right",
-        headerAlign: "center",
-        headerClassName: "header-wrap-custom",
-        disableColumnMenu: true,
-      },
+      // {
+      //   field: "brokerageGeneratedinFY1920",
+      //   headerName: "Brok FY1920",
+      //   width: 100,
+      //   align: "right",
+      //   headerAlign: "center",
+      //   headerClassName: "header-wrap-custom",
+      //   disableColumnMenu: true,
+      // },
       {
         field: "brokerageGeneratedinFY2021",
         headerName: "Brok FY2021",
@@ -579,7 +580,7 @@ const DormantClient = () => {
       },
       {
         field: "brokerageGeneratedinFY2122",
-        headerName: "Brok FY1922",
+        headerName: "Brok FY2122",
         width: 100,
         align: "right",
         headerAlign: "center",
