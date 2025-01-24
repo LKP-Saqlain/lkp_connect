@@ -130,6 +130,9 @@ const DataTable: React.FC<DormantClientProps> = ({
               fontFamily: '"Public Sans", sans-serif',
               fontSize: "11px",
             },
+            "& .MuiDataGrid-footerContainer": {
+              display: "none", // Completely hide the footer container
+            },
           }}
         />
       </Paper>
