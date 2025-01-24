@@ -577,6 +577,8 @@ const DormantClient = () => {
         headerAlign: "center",
         headerClassName: "header-wrap-custom",
         disableColumnMenu: true,
+        valueFormatter: (params: number) =>
+          new Intl.NumberFormat("en-IN").format(params),
       },
       {
         field: "brokerageGeneratedinFY2122",
@@ -586,6 +588,8 @@ const DormantClient = () => {
         headerAlign: "center",
         headerClassName: "header-wrap-custom",
         disableColumnMenu: true,
+        valueFormatter: (params: number) =>
+          new Intl.NumberFormat("en-IN").format(params),
       },
       {
         field: "brokerageGeneratedinFY2223",
@@ -595,6 +599,8 @@ const DormantClient = () => {
         headerAlign: "center",
         headerClassName: "header-wrap-custom",
         disableColumnMenu: true,
+        valueFormatter: (params: number) =>
+          new Intl.NumberFormat("en-IN").format(params),
       },
       {
         field: "brokerageGeneratedinFY2324",
@@ -604,6 +610,8 @@ const DormantClient = () => {
         headerAlign: "center",
         headerClassName: "header-wrap-custom",
         disableColumnMenu: true,
+        valueFormatter: (params: number) =>
+          new Intl.NumberFormat("en-IN").format(params),
       },
     ],
     []
