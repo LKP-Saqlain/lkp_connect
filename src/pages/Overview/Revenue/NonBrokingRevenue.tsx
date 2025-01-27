@@ -58,7 +58,7 @@ const NonBrokingRevenue = () => {
             const TPD_Liq_loans = fetchRevenueData.map(
               (item: any) => item.TPD_Liq_loans
             );
-            const spIp = fetchRevenueData.map((item: any) => item.TPD_Others);
+            const spIp = fetchRevenueData.map((item: any) => item.RA_Rev);
             const TPD_mutualfunds = fetchRevenueData.map(
               (item: any) => item.TPD_mutualfunds
             );

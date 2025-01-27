@@ -42,7 +42,7 @@ const DormantClient = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [userData, setUserData] = useState([]);
-  // const [responseStatus, setResponseStatus] = useState(false);
+  const [responseStatus, setResponseStatus] = useState(false);
   // const [totalEntries, setTotalEntries] = useState(null);
   // const [searchValue, setSearchValue] = React.useState("");
   const [filteredData, setFilteredData] = useState([]);
@@ -97,7 +97,7 @@ const DormantClient = ({ activeSubItem }: any) => {
         .then((response) => {
           dispatch(hideLoader());
           if (response?.status === 200) {
-            // setResponseStatus(true);
+            setResponseStatus(true);
             // let { recordsTotal } = response?.data[0];
             console.log("getDormantReport_response_1", response?.data);
             // setTotalEntries(recordsTotal);
@@ -364,7 +364,7 @@ const DormantClient = ({ activeSubItem }: any) => {
       .then((response) => {
         dispatch(hideLoader());
         if (response?.status === 200) {
-          // setResponseStatus(true);
+          setResponseStatus(true);
           // let { recordsTotal } = response?.data[0];
           console.log("getDormantReport_response_1", response?.data);
           // setTotalEntries(recordsTotal);
@@ -919,7 +919,7 @@ const DormantClient = ({ activeSubItem }: any) => {
                     handleExcelDownload={handleExcelDownload}
                   /> */}
                   <UserInfoTable
-                    showSearch={true}
+                    showSearch={responseStatus}
                     activeSubItem={activeSubItem}
                     T6Data={userData ? filteredData : filteredData}
                     handleSearchBasedOnInput={handleSearchBasedOnInput}
