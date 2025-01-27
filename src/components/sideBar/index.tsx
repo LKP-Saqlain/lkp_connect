@@ -366,7 +366,7 @@ const SideBar = () => {
           case "Tax PNL Statement":
             return <AnnualPNL />;
           case "Dormant Client Report":
-            return <DormantClient />;
+            return <DormantClient activeSubItem={activeSubItem} />;
           case "Last Trade Data":
             return <LastTrade />;
           case "Quarterly Payout Recovery":

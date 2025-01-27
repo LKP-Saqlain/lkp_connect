@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardBody,
@@ -14,15 +14,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
-import DataTable from "../../../components/common/table";
-import { GridColDef } from "@mui/x-data-grid";
+// import DataTable from "../../../components/common/table";
+// import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { endpoints } from "../../../services/endpoints";
 import ShowToast from "../../../utils/toastUtils";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../style.css";
-import Tooltip from "@mui/material/Tooltip";
+// import Tooltip from "@mui/material/Tooltip";
+import UserInfoTable from "../../../components/common/UserInfoTable";
 
 const ClientStatus = [
   { value: "ALL", label: "ALL" },
@@ -37,15 +38,17 @@ const ClientStatus = [
 //   value: string;
 // }
 
-const DormantClient = () => {
+const DormantClient = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [responseStatus, setResponseStatus] = useState(false);
-  const [totalEntries, setTotalEntries] = useState(null);
-  const [searchValue, setSearchValue] = React.useState("");
+  // const [responseStatus, setResponseStatus] = useState(false);
+  // const [totalEntries, setTotalEntries] = useState(null);
+  // const [searchValue, setSearchValue] = React.useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const [page, setPage] = useState(1); // Track current page
+  // const [page, setPage] = useState(1); // Track current page
 
   // const data = useSelector((state: RootState) => state.dormantReport.data);
   const dispatch = useDispatch<AppDispatch>();
@@ -74,12 +77,6 @@ const DormantClient = () => {
     handleSubmit();
     // }
   }, []);
-
-  useEffect(() => {
-    if (searchValue.length === 0 && responseStatus) {
-      handleSubmit();
-    }
-  }, [searchValue, responseStatus]);
 
   useEffect(() => {
     console.log("accessType", typeof accessType);
@@ -211,83 +208,93 @@ const DormantClient = () => {
   //     setPnlValues(value.toUpperCase().replace(/\s/g, ""));
   //   }
   // };
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    handleSubmit(event, newPage); // Fetch data for the new page
-  };
+  // const handlePageChange = (
+  //   event: React.ChangeEvent<unknown>,
+  //   newPage: number
+  // ) => {
+  //   setPage(newPage);
+  //   handleSubmit(event, newPage); // Fetch data for the new page
+  // };
 
   const handleSearchBasedOnInput = (value: string) => {
     console.log("handleSearchBasedOnInputValue", value);
-    setSearchValue(value);
-  };
-  const handleSearchUser = async () => {
-    setUserData([]);
-    if (searchValue !== "") {
-      const pageSize = 100; // Define pageSize
+    // setSearchValue(value);
 
-      // Calculate start based on the new page (0-indexed)
-      // const start = (value - 1) * pageSize;
-      const payload = {
-        start: pageSize, // Calculate start based on the new page
-        pageSize: 100,
-        searchKey: searchValue !== "" ? searchValue : "",
-        loginName: user_id,
-        zone: accessType === "" ? "ALL" : formik.values.selectedZone?.value,
-        branchCode:
-          accessType === "" ? "ALL" : formik.values.selectedBranchCode?.value,
-        clientStatus:
-          formik.values.selectedClientStatus?.value === "ACTIVE"
-            ? "Y"
-            : formik.values.selectedClientStatus?.value === "INACTIVE"
-            ? "N"
-            : "ALL",
-      };
-      dispatch(showLoader(""));
-      await apiServices
-        .getDormantReport(payload)
-        .then((response) => {
-          dispatch(hideLoader());
-          if (response?.status === 200) {
-            setResponseStatus(true);
-            let { recordsTotal } = response?.data[0];
-            console.log("getDormantReport_response_1", response?.data);
-            setTotalEntries(recordsTotal);
-            setUserData(response.data);
-          }
-        })
-        .catch((error) => {
-          console.error("error", error.status);
-          if (error.status === 400) {
-            ShowToast("error", error?.response?.data?.message);
-          } else {
-            console.log("Error->", error.response.data.errors.Zone["0"]);
-            const zoneError = error.response.data.errors.Zone["0"];
-            const branchCodeError = error.response.data.errors.BranchCode["0"];
-            dispatch(hideLoader());
-            ShowToast("error", zoneError);
-            ShowToast("error", branchCodeError);
-          }
-        })
-        .finally(() => {
-          dispatch(hideLoader());
-        });
-    }
+    const query = value;
+    setSearchQuery(query);
+
+    const filtered = userData.filter(
+      (item: any) => item.clientName.toLowerCase().includes(query) // Check if the client name includes the query
+    );
+
+    setFilteredData(filtered);
+    console.log("filteredSearch Records", filteredData);
   };
+  // const handleSearchUser = async () => {
+  //   setUserData([]);
+  //   if (searchValue !== "") {
+  //     const pageSize = 100; // Define pageSize
+
+  //     // Calculate start based on the new page (0-indexed)
+  //     // const start = (value - 1) * pageSize;
+  //     const payload = {
+  //       start: pageSize, // Calculate start based on the new page
+  //       pageSize: 100,
+  //       searchKey: searchValue !== "" ? searchValue : "",
+  //       loginName: user_id,
+  //       zone: accessType === "" ? "ALL" : formik.values.selectedZone?.value,
+  //       branchCode:
+  //         accessType === "" ? "ALL" : formik.values.selectedBranchCode?.value,
+  //       clientStatus:
+  //         formik.values.selectedClientStatus?.value === "ACTIVE"
+  //           ? "Y"
+  //           : formik.values.selectedClientStatus?.value === "INACTIVE"
+  //           ? "N"
+  //           : "ALL",
+  //     };
+  //     dispatch(showLoader(""));
+  //     await apiServices
+  //       .getDormantReport(payload)
+  //       .then((response) => {
+  //         dispatch(hideLoader());
+  //         if (response?.status === 200) {
+  //           setResponseStatus(true);
+  //           let { recordsTotal } = response?.data[0];
+  //           console.log("getDormantReport_response_1", response?.data);
+  //           setTotalEntries(recordsTotal);
+  //           setUserData(response.data);
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error("error", error.status);
+  //         if (error.status === 400) {
+  //           ShowToast("error", error?.response?.data?.message);
+  //         } else {
+  //           console.log("Error->", error.response.data.errors.Zone["0"]);
+  //           const zoneError = error.response.data.errors.Zone["0"];
+  //           const branchCodeError = error.response.data.errors.BranchCode["0"];
+  //           dispatch(hideLoader());
+  //           ShowToast("error", zoneError);
+  //           ShowToast("error", branchCodeError);
+  //         }
+  //       })
+  //       .finally(() => {
+  //         dispatch(hideLoader());
+  //       });
+  //   }
+  // };
 
   const handleSubmit = async (event?: any, value?: any) => {
     console.log("newPage", event, value);
     // let Id = localStorage.getItem("Id");
-    const pageSize = 100; // Define pageSize
+    const pageSize = 1000; // Define pageSize
 
     // Calculate start based on the new page (0-indexed)
     const start = (value - 1) * pageSize;
     const payload = {
       start: value === undefined ? 0 : start, // Calculate start based on the new page
-      pageSize: 100,
-      searchKey: searchValue !== "" ? searchValue : "",
+      pageSize: 1000,
+      searchKey: "",
       loginName: user_id,
       zone: accessType === "" ? "ALL" : formik.values.selectedZone?.value,
       branchCode:
@@ -307,11 +314,12 @@ const DormantClient = () => {
       .then((response) => {
         dispatch(hideLoader());
         if (response?.status === 200) {
-          setResponseStatus(true);
-          let { recordsTotal } = response?.data[0];
+          // setResponseStatus(true);
+          // let { recordsTotal } = response?.data[0];
           console.log("getDormantReport_response_1", response?.data);
-          setTotalEntries(recordsTotal);
-          setUserData(response.data);
+          // setTotalEntries(recordsTotal);
+          setUserData(response?.data || []);
+          setFilteredData(response?.data || []);
         } else if (response?.status == 400) {
           console.log("getDormantReport_response", response);
         }
@@ -416,206 +424,206 @@ const DormantClient = () => {
       });
   };
 
-  const dormantColumns: GridColDef[] = useMemo(
-    () => [
-      {
-        field: "ctermcode",
-        headerName: "Client Code",
-        flex: 2,
-        minWidth: 100,
-        disableColumnMenu: true,
-      },
-      {
-        field: "clientName",
-        headerName: "Client Name",
-        flex: 2,
-        minWidth: 160,
-        disableColumnMenu: true,
-      },
-      {
-        field: "lastTradeDate",
-        headerName: "Last Trade Date",
-        headerClassName: "header-wrap-custom",
-        flex: 2,
-        minWidth: 90,
-        align: "center",
-        disableColumnMenu: true,
-      },
-      {
-        field: "active",
-        headerName: "Active",
-        width: 70,
-        align: "center",
-        headerAlign: "center",
-        disableColumnMenu: true,
-      },
-      {
-        field: "rmname",
-        headerName: "RM Name",
-        minWidth: 140,
-        disableColumnMenu: true,
-      },
-      {
-        field: "rmstatus",
-        headerName: "RM Status",
-        width: 100,
-        headerClassName: "header-wrap-custom",
-        align: "center",
-        disableColumnMenu: true,
-      },
-      {
-        field: "dealerName",
-        headerName: "Dealer Name",
-        minWidth: 180,
-        disableColumnMenu: true,
-      },
-      {
-        field: "dealerSTATUS",
-        headerName: "Dealer Status",
-        width: 100,
-        headerClassName: "header-wrap-custom",
-        align: "center",
-        disableColumnMenu: true,
-      },
-      {
-        field: "branchcode",
-        headerName: "BR Code",
-        minWidth: 70,
-        align: "right",
-        headerAlign: "center",
-        disableColumnMenu: true,
-      },
-      {
-        field: "zone",
-        headerName: "Zone",
-        minWidth: 60,
-        align: "right",
-        headerAlign: "center",
-        disableColumnMenu: true,
-      },
-      {
-        field: "branchtype",
-        headerName: "Branch Type",
-        width: 100,
-        headerClassName: "header-wrap-custom",
-        align: "center",
-        headerAlign: "center",
-        disableColumnMenu: true,
-      },
-      {
-        field: "activationDate",
-        headerName: "Activation Date",
-        width: 115,
-        headerClassName: "header-wrap-custom",
-        disableColumnMenu: true,
-        align: "center",
-        headerAlign: "center",
-      },
-      {
-        field: "mobileNo",
-        headerName: "Mobile No",
-        minWidth: 90,
-        disableColumnMenu: true,
-        renderCell: (params: any) => {
-          const mobile = params.value || ""; // Extract the mobile number
+  // const dormantColumns: GridColDef[] = useMemo(
+  //   () => [
+  //     {
+  //       field: "ctermcode",
+  //       headerName: "Client Code",
+  //       flex: 2,
+  //       minWidth: 100,
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "clientName",
+  //       headerName: "Client Name",
+  //       flex: 2,
+  //       minWidth: 160,
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "lastTradeDate",
+  //       headerName: "Last Trade Date",
+  //       headerClassName: "header-wrap-custom",
+  //       flex: 2,
+  //       minWidth: 90,
+  //       align: "center",
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "active",
+  //       headerName: "Active",
+  //       width: 70,
+  //       align: "center",
+  //       headerAlign: "center",
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "rmname",
+  //       headerName: "RM Name",
+  //       minWidth: 140,
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "rmstatus",
+  //       headerName: "RM Status",
+  //       width: 100,
+  //       headerClassName: "header-wrap-custom",
+  //       align: "center",
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "dealerName",
+  //       headerName: "Dealer Name",
+  //       minWidth: 180,
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "dealerSTATUS",
+  //       headerName: "Dealer Status",
+  //       width: 100,
+  //       headerClassName: "header-wrap-custom",
+  //       align: "center",
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "branchcode",
+  //       headerName: "BR Code",
+  //       minWidth: 70,
+  //       align: "right",
+  //       headerAlign: "center",
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "zone",
+  //       headerName: "Zone",
+  //       minWidth: 60,
+  //       align: "right",
+  //       headerAlign: "center",
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "branchtype",
+  //       headerName: "Branch Type",
+  //       width: 100,
+  //       headerClassName: "header-wrap-custom",
+  //       align: "center",
+  //       headerAlign: "center",
+  //       disableColumnMenu: true,
+  //     },
+  //     {
+  //       field: "activationDate",
+  //       headerName: "Activation Date",
+  //       width: 115,
+  //       headerClassName: "header-wrap-custom",
+  //       disableColumnMenu: true,
+  //       align: "center",
+  //       headerAlign: "center",
+  //     },
+  //     {
+  //       field: "mobileNo",
+  //       headerName: "Mobile No",
+  //       minWidth: 90,
+  //       disableColumnMenu: true,
+  //       renderCell: (params: any) => {
+  //         const mobile = params.value || ""; // Extract the mobile number
 
-          // Mask all digits except the first 2 and the last 2
-          const maskedMobile = mobile.replace(
-            /^(\d{2})(\d+)(\d{2})$/,
-            (_: any, prefix: any, middle: any, suffix: any) => {
-              console.log(prefix, suffix); // Added only for testing purpose
-              return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-            }
-          );
+  //         // Mask all digits except the first 2 and the last 2
+  //         const maskedMobile = mobile.replace(
+  //           /^(\d{2})(\d+)(\d{2})$/,
+  //           (_: any, prefix: any, middle: any, suffix: any) => {
+  //             console.log(prefix, suffix); // Added only for testing purpose
+  //             return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+  //           }
+  //         );
 
-          // Return tooltip with the masked mobile number
-          return (
-            <Tooltip title={mobile} arrow placement="top">
-              <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
-            </Tooltip>
-          );
-        },
-      },
-      {
-        field: "email",
-        headerName: "Email",
-        minWidth: 210,
-        disableColumnMenu: true,
-        renderCell: (params: any) => {
-          const email = params.value || ""; // Extract the email ID
+  //         // Return tooltip with the masked mobile number
+  //         return (
+  //           <Tooltip title={mobile} arrow placement="top">
+  //             <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+  //           </Tooltip>
+  //         );
+  //       },
+  //     },
+  //     {
+  //       field: "email",
+  //       headerName: "Email",
+  //       minWidth: 210,
+  //       disableColumnMenu: true,
+  //       renderCell: (params: any) => {
+  //         const email = params.value || ""; // Extract the email ID
 
-          // Mask the email if it exists
-          const maskedEmail = email.replace(
-            /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
-            (_: any, firstChar: any, middleChars: any, domain: any) => {
-              return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
-            }
-          );
+  //         // Mask the email if it exists
+  //         const maskedEmail = email.replace(
+  //           /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
+  //           (_: any, firstChar: any, middleChars: any, domain: any) => {
+  //             return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
+  //           }
+  //         );
 
-          // Return tooltip with the original email and masked email for display
-          return (
-            <Tooltip title={email} arrow placement="top">
-              <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
-            </Tooltip>
-          );
-        },
-      },
-      // {
-      //   field: "brokerageGeneratedinFY1920",
-      //   headerName: "Brok FY1920",
-      //   width: 100,
-      //   align: "right",
-      //   headerAlign: "center",
-      //   headerClassName: "header-wrap-custom",
-      //   disableColumnMenu: true,
-      // },
-      {
-        field: "brokerageGeneratedinFY2021",
-        headerName: "Brok FY2021",
-        width: 100,
-        align: "right",
-        headerAlign: "center",
-        headerClassName: "header-wrap-custom",
-        disableColumnMenu: true,
-        valueFormatter: (params: number) =>
-          new Intl.NumberFormat("en-IN").format(params),
-      },
-      {
-        field: "brokerageGeneratedinFY2122",
-        headerName: "Brok FY2122",
-        width: 100,
-        align: "right",
-        headerAlign: "center",
-        headerClassName: "header-wrap-custom",
-        disableColumnMenu: true,
-        valueFormatter: (params: number) =>
-          new Intl.NumberFormat("en-IN").format(params),
-      },
-      {
-        field: "brokerageGeneratedinFY2223",
-        headerName: "Brok FY2223",
-        width: 100,
-        align: "right",
-        headerAlign: "center",
-        headerClassName: "header-wrap-custom",
-        disableColumnMenu: true,
-        valueFormatter: (params: number) =>
-          new Intl.NumberFormat("en-IN").format(params),
-      },
-      {
-        field: "brokerageGeneratedinFY2324",
-        headerName: "Brok FY2324",
-        width: 100,
-        align: "right",
-        headerAlign: "center",
-        headerClassName: "header-wrap-custom",
-        disableColumnMenu: true,
-        valueFormatter: (params: number) =>
-          new Intl.NumberFormat("en-IN").format(params),
-      },
-    ],
-    []
-  );
+  //         // Return tooltip with the original email and masked email for display
+  //         return (
+  //           <Tooltip title={email} arrow placement="top">
+  //             <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
+  //           </Tooltip>
+  //         );
+  //       },
+  //     },
+  //     // {
+  //     //   field: "brokerageGeneratedinFY1920",
+  //     //   headerName: "Brok FY1920",
+  //     //   width: 100,
+  //     //   align: "right",
+  //     //   headerAlign: "center",
+  //     //   headerClassName: "header-wrap-custom",
+  //     //   disableColumnMenu: true,
+  //     // },
+  //     {
+  //       field: "brokerageGeneratedinFY2021",
+  //       headerName: "Brok FY2021",
+  //       width: 100,
+  //       align: "right",
+  //       headerAlign: "center",
+  //       headerClassName: "header-wrap-custom",
+  //       disableColumnMenu: true,
+  //       valueFormatter: (params: number) =>
+  //         new Intl.NumberFormat("en-IN").format(params),
+  //     },
+  //     {
+  //       field: "brokerageGeneratedinFY2122",
+  //       headerName: "Brok FY2122",
+  //       width: 100,
+  //       align: "right",
+  //       headerAlign: "center",
+  //       headerClassName: "header-wrap-custom",
+  //       disableColumnMenu: true,
+  //       valueFormatter: (params: number) =>
+  //         new Intl.NumberFormat("en-IN").format(params),
+  //     },
+  //     {
+  //       field: "brokerageGeneratedinFY2223",
+  //       headerName: "Brok FY2223",
+  //       width: 100,
+  //       align: "right",
+  //       headerAlign: "center",
+  //       headerClassName: "header-wrap-custom",
+  //       disableColumnMenu: true,
+  //       valueFormatter: (params: number) =>
+  //         new Intl.NumberFormat("en-IN").format(params),
+  //     },
+  //     {
+  //       field: "brokerageGeneratedinFY2324",
+  //       headerName: "Brok FY2324",
+  //       width: 100,
+  //       align: "right",
+  //       headerAlign: "center",
+  //       headerClassName: "header-wrap-custom",
+  //       disableColumnMenu: true,
+  //       valueFormatter: (params: number) =>
+  //         new Intl.NumberFormat("en-IN").format(params),
+  //     },
+  //   ],
+  //   []
+  // );
 
   document.title = "LKP Securities | Dormant Client Report";
 
@@ -846,7 +854,7 @@ const DormantClient = () => {
                   </CardHeader>
                 )}
                 <CardBody>
-                  <DataTable
+                  {/* <DataTable
                     dynamicHeader={dormantColumns}
                     tableData={userData}
                     totalRecords={totalEntries}
@@ -857,6 +865,15 @@ const DormantClient = () => {
                     handleSearchBasedOnInput={handleSearchBasedOnInput}
                     handleSearchUser={handleSearchUser}
                     showSearch={responseStatus}
+                    showExcel={true}
+                    handleExcelDownload={handleExcelDownload}
+                  /> */}
+                  <UserInfoTable
+                    showSearch={true}
+                    activeSubItem={activeSubItem}
+                    T6Data={userData ? filteredData : filteredData}
+                    handleSearchBasedOnInput={handleSearchBasedOnInput}
+                    searchValue={searchQuery}
                     showExcel={true}
                     handleExcelDownload={handleExcelDownload}
                   />

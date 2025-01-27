@@ -9,6 +9,7 @@ import {
   T6OverViewColumns,
   topBirthdays,
   DPDebitRecovery,
+  dormantColumns,
 } from "../../pages/TradeDashboard/TradeColumns";
 import {
   getClientActivityStatusColumns,
@@ -53,6 +54,9 @@ interface SelectedWidgetProps {
   ) => void;
   emailSent?: boolean;
   emailSentStatus?: any;
+  activeSubItem?: any;
+  showExcel?: any;
+  handleExcelDownload?: () => void;
 }
 
 const DataTable = ({
@@ -71,11 +75,18 @@ const DataTable = ({
   onFilterChange,
   tradeCWCBData,
   emailSentStatus,
+  activeSubItem,
+  showExcel,
+  handleExcelDownload,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
   const [modal_center, setmodal_center] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<any>(null); // Store selected row data
+
+  useEffect(() => {
+    console.log("subItem", activeSubItem);
+  }, [activeSubItem]);
 
   useEffect(() => {
     console.log("selectedWidgets", selectedWidget);
@@ -142,6 +153,10 @@ const DataTable = ({
       return getClientActivityStatusColumns(handleViewDetails);
     } else if (selectedWidget === "Client Approaching  Dormant Status") {
       return getClientDormantStatus(handleViewDetails);
+    } else if (activeSubItem === "Dormant Client Report") {
+      return dormantColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       // return [];
       // Inject handleEmailSend into the column definition
@@ -238,6 +253,8 @@ const DataTable = ({
           searchTableValue={searchValue}
           selectedWidget={selectedWidget}
           onFilterChange={onFilterChange}
+          showExcel={showExcel}
+          handleExcelDownload={handleExcelDownload}
         />
       )}
       <Paper

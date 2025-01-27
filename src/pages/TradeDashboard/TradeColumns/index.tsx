@@ -576,6 +576,204 @@ export const DormantOverViewColumns: GridColDef[] = [
   },
 ];
 
+export const dormantColumns: GridColDef[] = [
+  {
+    field: "ctermcode",
+    headerName: "Client Code",
+    flex: 2,
+    minWidth: 100,
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 2,
+    minWidth: 160,
+    disableColumnMenu: true,
+  },
+  {
+    field: "lastTradeDate",
+    headerName: "Last Trade Date",
+    headerClassName: "header-wrap-custom",
+    flex: 2,
+    minWidth: 90,
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "active",
+    headerName: "Active",
+    width: 70,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "rmname",
+    headerName: "RM Name",
+    minWidth: 140,
+    disableColumnMenu: true,
+  },
+  {
+    field: "rmstatus",
+    headerName: "RM Status",
+    width: 100,
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "dealerName",
+    headerName: "Dealer Name",
+    minWidth: 180,
+    disableColumnMenu: true,
+  },
+  {
+    field: "dealerSTATUS",
+    headerName: "Dealer Status",
+    width: 100,
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "branchcode",
+    headerName: "BR Code",
+    minWidth: 70,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    minWidth: 60,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "branchtype",
+    headerName: "Branch Type",
+    width: 100,
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "activationDate",
+    headerName: "Activation Date",
+    width: 115,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile No",
+    minWidth: 90,
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "email",
+    headerName: "Email",
+    minWidth: 210,
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const email = params.value || ""; // Extract the email ID
+
+      // Mask the email if it exists
+      const maskedEmail = email.replace(
+        /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
+        (_: any, firstChar: any, middleChars: any, domain: any) => {
+          return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
+        }
+      );
+
+      // Return tooltip with the original email and masked email for display
+      return (
+        <Tooltip title={email} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
+        </Tooltip>
+      );
+    },
+  },
+  // {
+  //   field: "brokerageGeneratedinFY1920",
+  //   headerName: "Brok FY1920",
+  //   width: 100,
+  //   align: "right",
+  //   headerAlign: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   disableColumnMenu: true,
+  // },
+  {
+    field: "brokerageGeneratedinFY2021",
+    headerName: "Brok FY2021",
+    width: 100,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+  {
+    field: "brokerageGeneratedinFY2122",
+    headerName: "Brok FY2122",
+    width: 100,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+  {
+    field: "brokerageGeneratedinFY2223",
+    headerName: "Brok FY2223",
+    width: 100,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+  {
+    field: "brokerageGeneratedinFY2324",
+    headerName: "Brok FY2324",
+    width: 100,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+];
+
 export const topBirthdays: GridColDef[] = [
   {
     field: "Code",
