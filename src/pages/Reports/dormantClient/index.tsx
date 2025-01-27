@@ -73,13 +73,61 @@ const DormantClient = ({ activeSubItem }: any) => {
   });
 
   useEffect(() => {
-    // if (accessType === "") {
-    handleSubmit();
-    // }
-  }, []);
+    const fetchDormantData = async () => {
+      const payload = {
+        start: 0, // Calculate start based on the new page
+        pageSize: 1000,
+        searchKey: "",
+        loginName: user_id,
+        zone: accessType === "" ? "ALL" : formik.values.selectedZone?.value,
+        branchCode:
+          accessType === "" ? "ALL" : formik.values.selectedBranchCode?.value,
+        clientStatus:
+          formik.values.selectedClientStatus?.value === "ACTIVE"
+            ? "Y"
+            : formik.values.selectedClientStatus?.value === "INACTIVE"
+            ? "N"
+            : "ALL",
+      };
+      dispatch(showLoader(""));
+      // const test = dispatch(fetchDormantReport(payload));
+      // console.log("testReduxThnk", test);
+      await apiServices
+        .getDormantReport(payload)
+        .then((response) => {
+          dispatch(hideLoader());
+          if (response?.status === 200) {
+            // setResponseStatus(true);
+            // let { recordsTotal } = response?.data[0];
+            console.log("getDormantReport_response_1", response?.data);
+            // setTotalEntries(recordsTotal);
+            setUserData(response?.data || []);
+            setFilteredData(response?.data || []);
+          } else if (response?.status == 400) {
+            console.log("getDormantReport_response", response);
+          }
+        })
+        .catch((error) => {
+          // console.log("Error->", error.response.data.errors.Zone["0"]);
+          console.log("Error->", error?.response?.data?.message);
+          // const zoneError = error.response.data.errors.Zone["0"];
+          // const branchCodeError = error.response.data.errors.BranchCode["0"];
+          dispatch(hideLoader());
+          ShowToast("error", error?.response?.data?.message);
+          // ShowToast("error", zoneError);
+          // ShowToast("error", branchCodeError);
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+    };
+    if (accessType === "") {
+      fetchDormantData();
+    }
+  }, [dispatch]);
 
   useEffect(() => {
-    console.log("accessType", typeof accessType);
+    console.log("accessType", accessType, typeof accessType);
   }, [accessType]);
 
   interface FormValues {
@@ -109,45 +157,47 @@ const DormantClient = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     // const Id = localStorage.getItem("Id");
-    let payload = {
-      user_id: user_id,
-      option: "zone",
-      userType: "EMP",
-      zone: formik.values.selectedZone?.value,
-    };
+    if (accessType === "ALL") {
+      let payload = {
+        user_id: user_id,
+        option: "zone",
+        userType: "EMP",
+        zone: formik.values.selectedZone?.value,
+      };
 
-    const username = "admin";
-    const password = "admin";
-    const credentials = `${username}:${password}`;
-    const encodedCredentials = btoa(credentials); // Base64 encode
-    const LoginauthHeader = `Basic ${encodedCredentials}`;
+      const username = "admin";
+      const password = "admin";
+      const credentials = `${username}:${password}`;
+      const encodedCredentials = btoa(credentials); // Base64 encode
+      const LoginauthHeader = `Basic ${encodedCredentials}`;
 
-    const customHeaders = {
-      Authorization: LoginauthHeader, // Use LoginauthHeader for this request
-    };
+      const customHeaders = {
+        Authorization: LoginauthHeader, // Use LoginauthHeader for this request
+      };
 
-    dispatch(showLoader(""));
-    apiServices
-      .getDropDown(payload, customHeaders)
-      .then((res) => {
-        console.log("Response-->", res);
-        if (res?.status === 200) {
-          let zoneDropdown = res?.data.map((item: any) => ({
-            label: item.itemVal, // This will be displayed in the dropdown
-            value: item.itemVal, // This will be the actual value
-          }));
-          console.log("dropdown value", zoneDropdown);
-          setNoSortingGroup(zoneDropdown);
+      dispatch(showLoader(""));
+      apiServices
+        .getDropDown(payload, customHeaders)
+        .then((res) => {
+          console.log("Response-->", res);
+          if (res?.status === 200) {
+            let zoneDropdown = res?.data.map((item: any) => ({
+              label: item.itemVal, // This will be displayed in the dropdown
+              value: item.itemVal, // This will be the actual value
+            }));
+            console.log("dropdown value", zoneDropdown);
+            setNoSortingGroup(zoneDropdown);
 
-          // setSelectedNoSortingGroup(selectedNoSortingGroup);
-        }
-      })
-      .catch((Err) => {
-        console.log("Error", Err);
-      });
+            // setSelectedNoSortingGroup(selectedNoSortingGroup);
+          }
+        })
+        .catch((Err) => {
+          console.log("Error", Err);
+        });
 
-    dispatch(hideLoader());
-  }, [dispatch]);
+      dispatch(hideLoader());
+    }
+  }, [dispatch, accessType]);
 
   useEffect(() => {
     if (formik.values.selectedZone) {

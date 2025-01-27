@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardBody,
@@ -13,12 +13,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
-import DataTable from "../../../components/common/table";
-import { GridColDef } from "@mui/x-data-grid";
+// import DataTable from "../../../components/common/table";
+// import { GridColDef } from "@mui/x-data-grid";
 import ShowToast from "../../../utils/toastUtils";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../style.css";
+import UserInfoTable from "../../../components/common/UserInfoTable";
 
 const FinancialYears = [{ value: "2024-2025", label: "2024-2025" }];
 const FinancialQuarters = [
@@ -28,13 +29,15 @@ const FinancialQuarters = [
   { value: "Q4", label: "Q4" },
 ];
 
-const QuarterlyPayout = () => {
+const QuarterlyPayout = ({ activeSubItem }: any) => {
   const [qPayoutData, setQpayoutData] = useState([]);
-  const [totalEntries, setTotalEntries] = useState(null);
-  const [searchValue, setSearchValue] = React.useState("");
+  // const [totalEntries, setTotalEntries] = useState(null);
+  // const [searchValue, setSearchValue] = React.useState("");
   const [responseStatus, setResponseStatus] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const [page, setPage] = useState(1); // Track current page
+  // const [page, setPage] = useState(1); // Track current page
   // const [pageSize, setPageSize] = useState(10); // Initial page size
 
   const dispatch = useDispatch<AppDispatch>();
@@ -43,11 +46,11 @@ const QuarterlyPayout = () => {
     (state: RootState) => state.UserLogin?.data?.data
   );
 
-  useEffect(() => {
-    if (responseStatus && searchValue.length === 0) {
-      handleSubmit();
-    }
-  }, [responseStatus, searchValue]);
+  // useEffect(() => {
+  //   if (responseStatus && searchValue.length === 0) {
+  //     handleSubmit();
+  //   }
+  // }, [responseStatus, searchValue]);
 
   const validationSchema = Yup.object({
     selectedFinancialYear: Yup.object()
@@ -76,17 +79,18 @@ const QuarterlyPayout = () => {
     },
   });
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    handleSubmit(event, newPage); // Fetch data for the new page
-  };
+  // const handlePageChange = (
+  //   event: React.ChangeEvent<unknown>,
+  //   newPage: number
+  // ) => {
+  //   setPage(newPage);
+  //   handleSubmit(event, newPage); // Fetch data for the new page
+  // };
 
   const handleSubmit = async (event?: any, value?: any) => {
     console.log(event);
     setQpayoutData([]);
+    setResponseStatus(false);
     // const Id = localStorage.getItem("Id");
     const pageSize = 10; // Define pageSize
 
@@ -95,7 +99,7 @@ const QuarterlyPayout = () => {
 
     const payload = {
       start: value === undefined ? 0 : start,
-      pageSize: 10,
+      pageSize: 1000,
       searchKey: "",
       userId: user_id,
       financialQtr: `2024-${formik.values.quarter?.value}`,
@@ -105,12 +109,13 @@ const QuarterlyPayout = () => {
       .GetQuaterlyPayoutGrid(payload)
       .then((response) => {
         console.log("responseQpayout", response?.data);
-        const { recordsTotal } = response?.data[0];
-        setTotalEntries(recordsTotal);
+        // const { recordsTotal } = response?.data[0];
+        // setTotalEntries(recordsTotal);
         dispatch(hideLoader());
         if (response?.status === 200) {
           setResponseStatus(true);
-          setQpayoutData(response.data);
+          setQpayoutData(response?.data || []);
+          setFilteredData(response?.data || []);
         }
       })
       .catch((Err) => {
@@ -134,133 +139,61 @@ const QuarterlyPayout = () => {
 
   console.log(isSmallScreen);
 
-  const qpayoutColumns: GridColDef[] = [
-    {
-      field: "accountcode",
-      headerName: "Client Code",
-      minWidth: 100,
-      disableColumnMenu: true,
-    },
-    {
-      field: "clientName",
-      headerName: "Client Name",
-      minWidth: 100,
-      flex: 2,
-      disableColumnMenu: true,
-    },
-    { field: "rm", headerName: "RM", minWidth: 140, disableColumnMenu: true },
-    {
-      field: "branchcode",
-      headerName: "Branch Code",
-      minWidth: 100,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "zone",
-      headerName: "Zone",
-      minWidth: 100,
-      disableColumnMenu: true,
-    },
-    {
-      field: "payout_Amt",
-      headerName: "Payout Amt",
-      minWidth: 100,
-      align: "right",
-      disableColumnMenu: true,
-      headerAlign: "center",
-      valueFormatter: (params: any) => {
-        const value = parseFloat(params); // Convert the value to a number
-        return new Intl.NumberFormat("en-IN", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }).format(value);
-      },
-    },
-    {
-      field: "receipt_Amt",
-      headerName: "Receipt Amt",
-      minWidth: 100,
-      align: "right",
-      disableColumnMenu: true,
-      headerAlign: "center",
-      // valueFormatter: (params: number) =>
-      //   new Intl.NumberFormat("en-IN").format(params),
-
-      valueFormatter: (params: any) => {
-        const value = parseFloat(params); // Convert the value to a number
-        return new Intl.NumberFormat("en-IN", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }).format(value);
-      },
-    },
-    {
-      field: "extra_Payin",
-      headerName: "Extra Payin",
-      minWidth: 100,
-      align: "right",
-      headerAlign: "center",
-      disableColumnMenu: true,
-      // valueFormatter: (params: number) =>
-      //   new Intl.NumberFormat("en-IN").format(params),
-
-      valueFormatter: (params: any) => {
-        const value = parseFloat(params); // Convert the value to a number
-        return new Intl.NumberFormat("en-IN", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }).format(value);
-      },
-    },
-  ];
-
   const handleSearchBasedOnInput = (value: string) => {
     console.log("handleSearchBasedOnInputValue", value);
-    setSearchValue(value);
+    // setSearchValue(value);
+    const query = value;
+    setSearchQuery(query);
+
+    const filtered = qPayoutData.filter(
+      (item: any) => item.clientName.toLowerCase().includes(query) // Check if the client name includes the query
+    );
+
+    setFilteredData(filtered);
+    console.log("filteredSearch Records", filteredData);
   };
 
-  const handleSearchUser = async () => {
-    const pageSize = 10; // Define pageSize
-    setQpayoutData([]);
-    // Calculate start based on the new page (0-indexed)
-    // const start = (value - 1) * pageSize;
+  // const handleSearchUser = async () => {
+  //   const pageSize = 10; // Define pageSize
+  //   setQpayoutData([]);
+  //   // Calculate start based on the new page (0-indexed)
+  //   // const start = (value - 1) * pageSize;
 
-    const payload = {
-      start: pageSize,
-      pageSize: 10,
-      searchKey: searchValue !== "" ? searchValue : "",
-      userId: user_id,
-      financialQtr: `2024-${formik.values.quarter?.value}`,
-    };
-    dispatch(showLoader(""));
-    await apiServices
-      .GetQuaterlyPayoutGrid(payload)
-      .then((response) => {
-        console.log("responseQpayout", response?.data);
-        const { recordsTotal } = response?.data[0];
-        setTotalEntries(recordsTotal);
-        dispatch(hideLoader());
-        if (response?.status === 200) {
-          setQpayoutData(response.data);
-        }
-      })
-      .catch((Err) => {
-        const { message } = Err.response.data;
-        console.log("Error->", message);
-        dispatch(hideLoader());
-        // formik.setFieldError("password", message);
-        const errorMessage = Err.response.data.message;
-        ShowToast(
-          "error",
-          errorMessage ||
-            "Sorry for the inconvenience, please try after some time."
-        );
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
-  };
+  //   const payload = {
+  //     start: pageSize,
+  //     pageSize: 10,
+  //     searchKey: searchValue !== "" ? searchValue : "",
+  //     userId: user_id,
+  //     financialQtr: `2024-${formik.values.quarter?.value}`,
+  //   };
+  //   dispatch(showLoader(""));
+  //   await apiServices
+  //     .GetQuaterlyPayoutGrid(payload)
+  //     .then((response) => {
+  //       console.log("responseQpayout", response?.data);
+  //       const { recordsTotal } = response?.data[0];
+  //       setTotalEntries(recordsTotal);
+  //       dispatch(hideLoader());
+  //       if (response?.status === 200) {
+  //         setQpayoutData(response.data);
+  //       }
+  //     })
+  //     .catch((Err) => {
+  //       const { message } = Err.response.data;
+  //       console.log("Error->", message);
+  //       dispatch(hideLoader());
+  //       // formik.setFieldError("password", message);
+  //       const errorMessage = Err.response.data.message;
+  //       ShowToast(
+  //         "error",
+  //         errorMessage ||
+  //           "Sorry for the inconvenience, please try after some time."
+  //       );
+  //     })
+  //     .finally(() => {
+  //       dispatch(hideLoader());
+  //     });
+  // };
 
   document.title = "LKP Securities | Quarterly Payout Recovery Report";
 
@@ -400,7 +333,7 @@ const QuarterlyPayout = () => {
               </Card>
               <Card>
                 <CardBody>
-                  <DataTable
+                  {/* <DataTable
                     dynamicHeader={qpayoutColumns}
                     tableData={qPayoutData}
                     totalRecords={totalEntries}
@@ -411,6 +344,14 @@ const QuarterlyPayout = () => {
                     handleSearchUser={handleSearchUser}
                     showSearch={responseStatus}
                     showExcel={false}
+                  /> */}
+
+                  <UserInfoTable
+                    showSearch={responseStatus}
+                    activeSubItem={activeSubItem}
+                    T6Data={qPayoutData ? filteredData : filteredData}
+                    handleSearchBasedOnInput={handleSearchBasedOnInput}
+                    searchValue={searchQuery}
                   />
                 </CardBody>
               </Card>

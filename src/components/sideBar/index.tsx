@@ -370,7 +370,7 @@ const SideBar = () => {
           case "Last Trade Data":
             return <LastTrade />;
           case "Quarterly Payout Recovery":
-            return <QuarterlyPayout />;
+            return <QuarterlyPayout activeSubItem={activeSubItem} />;
           case "SLBM ClientHolding":
             return <SLBM />;
           case "Core Alerts Report":

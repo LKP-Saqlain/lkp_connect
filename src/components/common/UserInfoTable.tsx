@@ -10,6 +10,7 @@ import {
   topBirthdays,
   DPDebitRecovery,
   dormantColumns,
+  QPayoutColumns,
 } from "../../pages/TradeDashboard/TradeColumns";
 import {
   getClientActivityStatusColumns,
@@ -155,6 +156,10 @@ const DataTable = ({
       return getClientDormantStatus(handleViewDetails);
     } else if (activeSubItem === "Dormant Client Report") {
       return dormantColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Quarterly Payout Recovery") {
+      return QPayoutColumns.map((column) => ({
         ...column,
       }));
     } else {

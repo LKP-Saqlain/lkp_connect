@@ -576,6 +576,87 @@ export const DormantOverViewColumns: GridColDef[] = [
   },
 ];
 
+export const QPayoutColumns: GridColDef[] = [
+  {
+    field: "accountcode",
+    headerName: "Client Code",
+    minWidth: 100,
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 100,
+    flex: 2,
+    disableColumnMenu: true,
+  },
+  { field: "rm", headerName: "RM", minWidth: 140, disableColumnMenu: true },
+  {
+    field: "branchcode",
+    headerName: "Branch Code",
+    minWidth: 100,
+    flex: 1,
+    disableColumnMenu: true,
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    minWidth: 100,
+    disableColumnMenu: true,
+  },
+  {
+    field: "payout_Amt",
+    headerName: "Payout Amt",
+    minWidth: 100,
+    align: "right",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "receipt_Amt",
+    headerName: "Receipt Amt",
+    minWidth: 100,
+    align: "right",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "extra_Payin",
+    headerName: "Extra Payin",
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+];
+
 export const dormantColumns: GridColDef[] = [
   {
     field: "ctermcode",
