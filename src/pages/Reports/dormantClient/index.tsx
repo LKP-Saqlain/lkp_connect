@@ -19,7 +19,7 @@ import Select from "react-select";
 import axios from "axios";
 import { endpoints } from "../../../services/endpoints";
 import ShowToast from "../../../utils/toastUtils";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../style.css";
 // import Tooltip from "@mui/material/Tooltip";
@@ -62,15 +62,15 @@ const DormantClient = ({ activeSubItem }: any) => {
   );
   console.log("accessType", accessType);
 
-  const validationSchema = Yup.object({
-    selectedZone: Yup.object().nullable().required("Zone is required"),
-    selectedBranchCode: Yup.object()
-      .nullable()
-      .required("Branch code is required"),
-    selectedClientStatus: Yup.object()
-      .nullable()
-      .required("Client status is required"),
-  });
+  // const validationSchema = Yup.object({
+  //   selectedZone: Yup.object().nullable().required("Zone is required"),
+  //   selectedBranchCode: Yup.object()
+  //     .nullable()
+  //     .required("Branch code is required"),
+  //   selectedClientStatus: Yup.object()
+  //     .nullable()
+  //     .required("Client status is required"),
+  // });
 
   useEffect(() => {
     const fetchDormantData = async () => {
@@ -142,7 +142,7 @@ const DormantClient = ({ activeSubItem }: any) => {
       selectedBranchCode: null,
       selectedClientStatus: null,
     },
-    validationSchema,
+    // validationSchema,
     onSubmit: (values) => {
       // Only called if no validation errors
       console.log("values1-->", values);
@@ -375,14 +375,26 @@ const DormantClient = ({ activeSubItem }: any) => {
         }
       })
       .catch((error) => {
-        // console.log("Error->", error.response.data.errors.Zone["0"]);
-        console.log("Error->", error?.response?.data?.message);
-        // const zoneError = error.response.data.errors.Zone["0"];
-        // const branchCodeError = error.response.data.errors.BranchCode["0"];
         dispatch(hideLoader());
-        ShowToast("error", error?.response?.data?.message);
-        // ShowToast("error", zoneError);
-        // ShowToast("error", branchCodeError);
+
+        const errors = error?.response?.data?.errors;
+
+        if (errors) {
+          // Extract error messages
+          const zoneError = errors?.Zone?.[0];
+          const branchError = errors?.BranchCode?.[0];
+
+          // Display the errors in ShowToast
+          if (zoneError) {
+            ShowToast("error", zoneError);
+          }
+          if (branchError) {
+            ShowToast("error", branchError);
+          }
+        } else {
+          // Default error message for unexpected errors
+          ShowToast("error", "An unexpected error occurred. Please try again.");
+        }
       })
       .finally(() => {
         dispatch(hideLoader());

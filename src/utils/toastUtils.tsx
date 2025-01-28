@@ -1,5 +1,6 @@
 import { toast, Bounce, TypeOptions } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./style.css";
 
 // Function to trigger toast notifications
 const ShowToast = (type: TypeOptions, message: string) => {
@@ -7,7 +8,7 @@ const ShowToast = (type: TypeOptions, message: string) => {
   toast(message, {
     type,
     position: "bottom-right",
-    autoClose: 1500,
+    autoClose: 3500,
     hideProgressBar: false,
     closeOnClick: true,
     rtl: false,

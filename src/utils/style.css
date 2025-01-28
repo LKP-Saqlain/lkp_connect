@@ -1,0 +1,6 @@
+.Toastify__toast-body > div:last-child {
+    word-break: break-word;
+    -ms-flex: 1;
+    flex: 1;
+    font-family: "Public Sans" !important;
+}

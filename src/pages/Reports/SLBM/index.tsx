@@ -21,7 +21,7 @@ import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { endpoints } from "../../../services/endpoints";
 import ShowToast from "../../../utils/toastUtils";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../style.css";
 
@@ -49,13 +49,13 @@ const SlbmHoling = () => {
     (state: RootState) => state.AuthUser?.data?.data
   );
 
-  const validationSchema = Yup.object({
-    selectedZone: Yup.object().nullable().required("Zone is required"),
-    selectedBranchCode: Yup.object()
-      .nullable()
-      .required("Branch code is required"),
-    // isInValue: Yup.string().required("SYMBOL / ISIN is required"),
-  });
+  // const validationSchema = Yup.object({
+  //   selectedZone: Yup.object().nullable().required("Zone is required"),
+  //   selectedBranchCode: Yup.object()
+  //     .nullable()
+  //     .required("Branch code is required"),
+  //   // isInValue: Yup.string().required("SYMBOL / ISIN is required"),
+  // });
 
   interface FormValues {
     selectedZone: { label: string; value: string } | null;
@@ -69,7 +69,7 @@ const SlbmHoling = () => {
       selectedBranchCode: null,
       isInValue: "",
     },
-    validationSchema,
+    // validationSchema,
     onSubmit: (values) => {
       // Only called if no validation errors
       console.log("values1-->", values);
@@ -79,7 +79,7 @@ const SlbmHoling = () => {
   });
 
   useEffect(() => {
-    if (accessType === "" || searchValue.length === 0) {
+    if (accessType === "") {
       handleSubmit();
     }
   }, [accessType, searchValue]);
@@ -254,13 +254,26 @@ const SlbmHoling = () => {
         }
       })
       .catch((error) => {
-        console.log("Error->", error.response);
-        // const zoneError = error.response?.data?.errors?.Zone["0"];
-        // const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
         dispatch(hideLoader());
-        ShowToast("error", error.response?.data?.message);
-        // ShowToast("error", zoneError);
-        // ShowToast("error", branchCodeError);
+
+        const errors = error?.response?.data?.errors;
+
+        if (errors) {
+          // Extract error messages
+          const zoneError = errors?.Zone?.[0];
+          const branchError = errors?.BranchCode?.[0];
+
+          // Display the errors in ShowToast
+          if (zoneError) {
+            ShowToast("error", zoneError);
+          }
+          if (branchError) {
+            ShowToast("error", branchError);
+          }
+        } else {
+          // Default error message for unexpected errors
+          ShowToast("error", "An unexpected error occurred. Please try again.");
+        }
       })
       .finally(() => {
         dispatch(hideLoader());
