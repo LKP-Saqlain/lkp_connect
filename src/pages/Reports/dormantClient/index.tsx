@@ -343,7 +343,7 @@ const DormantClient = ({ activeSubItem }: any) => {
     const start = (value - 1) * pageSize;
     const payload = {
       start: value === undefined ? 0 : start, // Calculate start based on the new page
-      pageSize: 1000,
+      pageSize: 35000,
       searchKey: "",
       loginName: user_id,
       zone: accessType === "" ? "ALL" : formik.values.selectedZone?.value,
@@ -403,24 +403,19 @@ const DormantClient = ({ activeSubItem }: any) => {
 
   const handleExcelDownload = () => {
     // const Id = localStorage.getItem("Id");
-
+    debugger;
     if (accessType !== "") {
-      if (
-        !formik.values.selectedZone ||
-        !formik.values.selectedBranchCode ||
-        !formik.values.selectedClientStatus
-      ) {
+      if (!formik.values.selectedZone || !formik.values.selectedBranchCode) {
         formik.setTouched({
           selectedZone: true,
           selectedBranchCode: true,
-          selectedClientStatus: true,
         });
         return; // Stop execution if validation fails
       }
     }
     const payload = {
       start: 0,
-      pageSize: 1000,
+      pageSize: 35000,
       searchKey: "",
       loginName: user_id,
       zone: formik.values.selectedZone?.value
