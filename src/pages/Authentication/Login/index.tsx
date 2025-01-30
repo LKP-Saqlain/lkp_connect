@@ -143,7 +143,7 @@ const LoginPage = () => {
 
   const customHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    console.log("name->", name, "value->", value);
+    console.log("name->", name, "value--->", value);
     if (name === "authenticationButtonGroup") {
       formik.setFieldValue("authentication", "");
     }
