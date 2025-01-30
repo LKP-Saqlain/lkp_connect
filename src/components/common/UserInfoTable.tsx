@@ -11,6 +11,7 @@ import {
   DPDebitRecovery,
   dormantColumns,
   QPayoutColumns,
+  communicationColumns,
 } from "../../pages/TradeDashboard/TradeColumns";
 import {
   getClientActivityStatusColumns,
@@ -143,6 +144,10 @@ const DataTable = ({
       }));
     } else if (selectedWidget === "dormantOverview") {
       return DormantOverViewColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Referal Entry Status") {
+      return communicationColumns.map((column) => ({
         ...column,
       }));
     } else if (

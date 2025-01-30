@@ -855,6 +855,72 @@ export const dormantColumns: GridColDef[] = [
   },
 ];
 
+export const communicationColumns: GridColDef[] = [
+  {
+    field: "srNo",
+    headerName: "Sr No",
+    width: 80,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "dateOfCommunication",
+    headerName: "Date of Communication",
+    width: 160,
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "typeOfDocuments",
+    headerName: "Type of Documents",
+    minWidth: 180,
+    disableColumnMenu: true,
+  },
+  {
+    field: "communicationType",
+    headerName: "Communication Type",
+    minWidth: 180,
+    disableColumnMenu: true,
+  },
+  {
+    field: "emailLogReport",
+    headerName: "Email Log Report",
+    minWidth: 200,
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const emailLog = params.value || "N/A"; // Handle null/undefined values
+      return (
+        <Tooltip title={emailLog} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{emailLog}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "physicalDispatchProof",
+    headerName: "Physical Dispatch Proof",
+    minWidth: 200,
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const dispatchProof = params.value || "N/A";
+      return (
+        <Tooltip title={dispatchProof} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{dispatchProof}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "department",
+    headerName: "Department",
+    minWidth: 140,
+    disableColumnMenu: true,
+  },
+];
+
 export const topBirthdays: GridColDef[] = [
   {
     field: "Code",
