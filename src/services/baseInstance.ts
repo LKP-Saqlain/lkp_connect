@@ -2,9 +2,12 @@
 import axios from "axios";
 import { endpoints } from "./endpoints";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const FUNDAMENTAL_URL = import.meta.env.VITE_FUNDAMENTAL_URL;
+
 // Create an Axios instance
 const baseInstance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: BASE_URL,
   timeout: 10000, // Timeout for the requests
   headers: {
     "Content-Type": "application/json",
@@ -16,6 +19,12 @@ const password = "admin";
 const credentials = `${username}:${password}`;
 const encodedCredentials = btoa(credentials); // Base64 encode
 const LoginauthHeader = `Basic ${encodedCredentials}`;
+
+const privateUsername = "WP19T48LKP";
+const privatePassword = "Int@ll@ct#1948";
+const privateCredentials = `${privateUsername}:${privatePassword}`;
+const encodedprivateCredentials = btoa(privateCredentials); // Base64 encode
+const PrivateLoginauthHeader = `Basic ${encodedprivateCredentials}`;
 
 const publicEndpoints = [
   endpoints.Login,
@@ -33,11 +42,26 @@ baseInstance.interceptors.request.use(
       config.url?.includes(endpoint)
     );
 
-    // Use `LoginauthHeader` for public endpoints or `Bearer` token for others
-    if (isPublicEndpoint || !token) {
-      config.headers.Authorization = LoginauthHeader;
+    // if (config.url?.includes("/Fundamental/fundamental/INE009A01021")) {
+    //   config.baseURL = FUNDAMENTAL_URL;
+    // } else {
+    //   config.baseURL = BASE_URL;
+    // }
+
+    // // Use `LoginauthHeader` for public endpoints or `Bearer` token for others
+    // if (isPublicEndpoint || !token) {
+    //   config.headers.Authorization = LoginauthHeader;
+    // } else {
+    //   config.headers.Authorization = `Bearer ${token}`;
+    // }
+
+    if (config.url?.includes("/Fundamental/fundamental/INE467B01029")) {
+      config.baseURL = FUNDAMENTAL_URL;
+      config.headers.Authorization = PrivateLoginauthHeader; // Use private credentials
     } else {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.baseURL = BASE_URL;
+      config.headers.Authorization =
+        isPublicEndpoint || !token ? LoginauthHeader : `Bearer ${token}`;
     }
 
     if (config.url?.includes(endpoints.GetPNLAccountDetailsPdf)) {

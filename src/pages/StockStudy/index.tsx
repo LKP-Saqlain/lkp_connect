@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import "./style.css";
 import CashFlow from "../../components/common/stockStudyTable";
-import Overview from "../../components/common/stockOverview";
+import FundamentalOverview from "../../components/common/stockOverview";
 import ShareHolding from "./shareHoldings";
 import { regEx } from "../../helper/method";
+import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
+import { useDispatch } from "react-redux";
 
 interface MenuItem {
   title: string;
@@ -43,12 +46,12 @@ const menuData: MenuItem[] = [
   },
 ];
 
-const componentsMap: Record<string, JSX.Element> = {
-  "Cash Flow": <CashFlow />,
-  "Quarterly P&L": <CashFlow />,
-  "Annual P&L": <CashFlow />,
-  Overview: <Overview />,
-};
+// const componentsMap: Record<string, JSX.Element> = {
+//   "Cash Flow": <CashFlow />,
+//   "Quarterly P&L": <CashFlow />,
+//   "Annual P&L": <CashFlow />,
+//   Overview: <FundamentalOverview />,
+// };
 
 const SearchBar = ({ handleChange, inputValue }: any) => (
   <div className="search-bar">
@@ -98,11 +101,23 @@ const Submenu = ({ items, activeSubmenu, setActiveSubmenu }: any) => (
   </div>
 );
 
-const ContentArea = ({ activeMenu, activeSubmenu }: any) => {
-  const activeComponent =
-    componentsMap[activeSubmenu] ||
-    menuData.find((menu) => menu.title === activeMenu)?.component ||
-    null;
+const ContentArea = ({ activeMenu, activeSubmenu, records }: any) => {
+  let activeComponent = null;
+
+  if (activeSubmenu === "Overview") {
+    activeComponent = <FundamentalOverview records={records} />;
+  } else if (
+    ["Cash Flow", "Quarterly P&L", "Annual P&L"].includes(activeSubmenu)
+  ) {
+    activeComponent = <CashFlow />;
+  } else {
+    activeComponent =
+      menuData.find((menu) => menu.title === activeMenu)?.component || null;
+  }
+
+  useEffect(() => {
+    console.log("records", records);
+  }, [records]);
 
   return <div className="content-area">{activeComponent}</div>;
 };
@@ -111,6 +126,29 @@ const StockStudy = () => {
   const [activeMenu, setActiveMenu] = useState<string>("Fundamental");
   const [activeSubmenu, setActiveSubmenu] = useState<string>("Overview");
   const [inputValue, setInputValue] = useState<string>("");
+  const [fundamentalRecords, setFundamentalRecords] = useState<[]>([]);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchFundamentalRecords = async () => {
+      dispatch(showLoader("Please wait we are processing your request"));
+      apiServices
+        .Fundamental({})
+        .then((response) => {
+          dispatch(hideLoader());
+          console.log(
+            "fetchFundamentalRecordsResponse",
+            response?.data?.fundamentalData
+          );
+          setFundamentalRecords(response?.data?.fundamentalData);
+        })
+        .catch((error) => {
+          dispatch(hideLoader());
+          console.log("error", error);
+        });
+    };
+    fetchFundamentalRecords();
+  }, []);
 
   useEffect(() => {
     console.log("Active Menu:", activeMenu);
@@ -156,7 +194,11 @@ const StockStudy = () => {
         activeSubmenu={activeSubmenu}
         setActiveSubmenu={setActiveSubmenu}
       />
-      <ContentArea activeMenu={activeMenu} activeSubmenu={activeSubmenu} />
+      <ContentArea
+        records={fundamentalRecords}
+        activeMenu={activeMenu}
+        activeSubmenu={activeSubmenu}
+      />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-const StatItem = ({ label, value }: any) => {
+const StatItem = ({ label, value, dynamicColor }: any) => {
   return (
     <div
       style={{
@@ -24,13 +24,20 @@ const StatItem = ({ label, value }: any) => {
       <span
         style={{
           fontFamily: "Poppins",
-          color: "black",
+          color:
+            dynamicColor === "negative"
+              ? "red"
+              : dynamicColor === "positive"
+              ? "black"
+              : dynamicColor === "neutral"
+              ? "black"
+              : "black",
           fontWeight: "500",
           fontSize: "12px",
           paddingBottom: "2px", // Space between the value and the underline
         }}
       >
-        {value}
+        {dynamicColor === "negative" ? `-${value}` : `${value}`}
       </span>
     </div>
   );

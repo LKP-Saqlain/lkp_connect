@@ -94,4 +94,7 @@ export const apiServices = {
   DPEmail: async (payload: any) => {
     return await apiService("POST", endpoints.DPEmail, payload);
   },
+  Fundamental: async (payload: any) => {
+    return await apiService("POST", endpoints.getFundamentalRecord, payload);
+  },
 };

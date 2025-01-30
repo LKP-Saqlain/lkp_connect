@@ -1,18 +1,16 @@
 import baseInstance from "./baseInstance";
 
-// Generic function to handle API calls
 const apiService = async (
   method: "GET" | "POST",
   endpoint: string,
   payload?: any,
   customHeaders: any = {},
-  timeout: number = 60000 // Default timeout of 10 seconds
+  timeout: number = 60000
 ) => {
   const config = {
-    headers: { ...customHeaders }, // Ensure headers are correctly passed
+    headers: { ...customHeaders },
     timeout: timeout,
   };
-
   try {
     let response;
     if (method === "GET") {
@@ -23,9 +21,8 @@ const apiService = async (
       return response;
     } else if (method === "POST") {
       response = await baseInstance.post(endpoint, payload, config);
-      return response; // Return the response data
+      return response;
     }
-
     return response; // This line is probably unreachable, but can be kept for safety
   } catch (error) {
     console.error(`Error in ${method} request to ${endpoint}:`, error);
