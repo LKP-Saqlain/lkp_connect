@@ -49,7 +49,7 @@ import { BsFullscreen } from "react-icons/bs";
 import EkycLinks from "../../pages/ekycLinks";
 import StockStudy from "../../pages/StockStudy";
 import DPRecovery from "../../pages/Reports/DPRecovery";
-
+import RefCard from "../../pages/refCard";
 const drawerWidth = 240;
 
 // Utility functions for Drawer
@@ -158,7 +158,7 @@ const SideBar = () => {
   }, [selectedViewMore]);
 
   useEffect(() => {
-    if (activeMenu !== "Reports" && activeSubItem) {
+    if ((activeMenu !== "Reports" && activeMenu !== "Referal Lead") && activeSubItem) {
       const timeoutId = setTimeout(() => {
         setActiveSubItem("");
       }, 3000);
@@ -396,9 +396,10 @@ const SideBar = () => {
           case "Referal Entry":
             return <EkycLinks />;
           case "Referal Entry Status":
-            return "";
+            return  <RefCard  activeSubItem={activeSubItem} />;
           case "Referal Lead Updation":
-            return (
+            return 
+            (
               <>
                 <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
                   Welcome to LKP Dashboard
@@ -407,7 +408,7 @@ const SideBar = () => {
                   Please select anyone from left
                 </Typography>
               </>
-            );
+            );         
           default:
             return null;
         }

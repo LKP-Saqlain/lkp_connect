@@ -1,0 +1,114 @@
+import { useState, useEffect } from 'react';
+import { Button, Card, CardBody, CardHeader } from 'reactstrap';
+import DataTable from '../../components/common/UserInfoTable';
+import { monthlyData } from '../ClientDetails/ClientTableColumns';
+import { DateRangePicker } from 'rsuite';
+import moment from 'moment';
+import "./style.css";
+import { useTheme } from "@mui/material/styles";
+import { useMediaQuery } from "@mui/material";
+import { ButtonsLabel } from '../../helper/commmon';
+import AccountButton from '../../components/common/AccountButton/index'
+
+const Refcard = ({ activeSubItem }: any) => {
+    const [selectedButton, setSelectedButton] = useState<string>();
+    const [data, setData] = useState<any>([]);
+
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+    const { afterToday } = DateRangePicker;
+
+    const selectedStyle = {
+        backgroundColor: "#464b51", height: "23px", borderRadius: "4px", fontSize: "10px", padding: "3px", fontFamily: "Public Sans"
+    };
+
+    const nonSelectedStyle = {
+        height: "23px", borderRadius: "4px", fontSize: "10px", padding: "3px", fontFamily: "Public Sans"
+    };
+
+    useEffect(() => {
+        // setData([]);
+        switch (selectedButton) {
+            case "Daily":
+                const filteredDaily = monthlyData.filter(data => data?.datatype === "Daily");
+                setData(filteredDaily);
+                break;
+            case "Weekly":
+                const filteredWeekly = monthlyData.filter(data => data?.datatype === "weekly");
+                setData(filteredWeekly);
+                break;
+            case "Monthly":
+                const filteredMonthly = monthlyData.filter(data => data?.datatype === "monthly");
+                setData(filteredMonthly);
+                break;
+            case "Yearly":
+                const filteredYearly = monthlyData.filter(data => data?.datatype === "yearly");
+                setData(filteredYearly);
+                break;
+            case "last7days":
+                const filteredLastDays = monthlyData.filter(data => data?.datatype === "last7days");
+                setData(filteredLastDays);
+                break;
+            default:
+                break;
+        }
+    }, [selectedButton]);
+
+    const renderTime = (value: string) => {
+        setSelectedButton((curr) => (curr === value ? undefined : value));
+        console.log(value);
+    };
+
+    const handleDateChange = (value: any) => {
+        const formattedStartDate = moment(value[0]).format('DD/MM/YYYY');
+        const formattedEndDate = moment(value[1]).format('DD/MM/YYYY');
+        console.log("Selected Date Range:", `${formattedStartDate} - ${formattedEndDate}`);
+    }
+
+    return (
+        <Card className="main-card" style={{ top: isMobile ? "35px" : "0" }} >
+            <CardHeader
+                className=""
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    flexDirection: isMobile ? "column" : "row",
+                    alignItems: isMobile ? "stretch" : "center"
+                }}
+            >
+
+                <h4 className="card-title mb-0">Account Opening</h4>
+                <div className="gap-1" style={{
+                    flexDirection: isMobile ? "column" : "row",
+                    display: "flex",
+
+                }}>
+                    {ButtonsLabel.map((button) => (
+                        <AccountButton
+                            key={button.id}
+                            label={button.label}
+                            onClick={() => renderTime(button.label)}
+                            isSelected={selectedButton === button.label}
+                        />
+                    ))}
+                    <Button
+                        style={selectedButton === "fromToDate" ? selectedStyle : nonSelectedStyle} className="btn-sm"
+
+                        onClick={() => renderTime("fromToDate")}
+             >
+                        From and To Date
+                    </Button>
+                    {selectedButton === "fromToDate" && (
+                        <DateRangePicker size="xs" onOk={handleDateChange} placeholder="Select Start date & End date" showOneCalendar shouldDisableDate={afterToday()} />
+                    )}
+                </div >
+            </CardHeader>
+            <CardBody className="main-card-body">
+                <DataTable activeSubItem={activeSubItem} T6Data={selectedButton ? data : monthlyData} />
+            </CardBody>
+        </Card>
+    );
+};
+
+export default Refcard;

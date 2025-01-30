@@ -13,7 +13,7 @@ import {
 } from "../../pages/TradeDashboard/TradeColumns";
 import {
   getClientActivityStatusColumns,
-  getClientDormantStatus,
+  getClientDormantStatus, getAccountDetails
 } from "../../pages/ClientDetails/ClientTableColumns";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -153,6 +153,11 @@ const DataTable = ({
       return getClientActivityStatusColumns(handleViewDetails);
     } else if (selectedWidget === "Client Approaching  Dormant Status") {
       return getClientDormantStatus(handleViewDetails);
+    }
+    else if (activeSubItem === "Referal Entry Status") {
+      return getAccountDetails.map((column) => ({
+        ...column,
+      }));
     } else if (activeSubItem === "Dormant Client Report") {
       return dormantColumns.map((column) => ({
         ...column,
@@ -270,14 +275,14 @@ const DataTable = ({
             selectedWidget === "Clients With Cash Balance"
               ? tradeCWCBData
               : selectedWidget === "Total Clients"
-              ? T6Data
-              : selectedWidget === "Active Clients"
-              ? activeGroupedClients
-              : selectedWidget === "Inactive Clients"
-              ? inactiveGroupedClients
-              : selectedWidget === "Client Approaching  Dormant Status"
-              ? T6Data
-              : T6Data
+                ? T6Data
+                : selectedWidget === "Active Clients"
+                  ? activeGroupedClients
+                  : selectedWidget === "Inactive Clients"
+                    ? inactiveGroupedClients
+                    : selectedWidget === "Client Approaching  Dormant Status"
+                      ? T6Data
+                      : T6Data
           }
           columns={columns}
           rowHeight={30}
@@ -285,12 +290,14 @@ const DataTable = ({
           getRowId={(row: any) =>
             row.clientName
               ? row.clientName
-              : row.ClientName
-              ? row.ClientName
-              : row.BOID
-              ? `${row.BOName}-${row.TotalDebit}-${Math.random()}` // this is just for when data comes repetative
-              : // ? row.BOID
-                row.Name
+              : row.dummyId
+                ? row.dummyId
+                : row.ClientName
+                  ? row.ClientName
+                  : row.BOID
+                    ? `${row.BOName}-${row.TotalDebit}-${Math.random()}` // this is just for when data comes repetative
+                    : // ? row.BOID
+                    row.Name
           } // Use the correct identifier for rows
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"
