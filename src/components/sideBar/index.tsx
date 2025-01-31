@@ -49,7 +49,7 @@ import { BsFullscreen } from "react-icons/bs";
 import EkycLinks from "../../pages/ekycLinks";
 import StockStudy from "../../pages/StockStudy";
 import DPRecovery from "../../pages/Reports/DPRecovery";
-import RefCard from "../../pages/refCard";
+import Main from "../../pages/refCard";
 const drawerWidth = 240;
 
 // Utility functions for Drawer
@@ -396,7 +396,7 @@ const SideBar = () => {
           case "Referal Entry":
             return <EkycLinks />;
           case "Referal Entry Status":
-            return  <RefCard  activeSubItem={activeSubItem} />;
+            return  <Main  activeSubItem={activeSubItem} />;
           case "Referal Lead Updation":
             return 
             (
