@@ -29,6 +29,7 @@ const TypeOfDocument = [
 
 const ModalComponent = ({
   tog_grid,
+  modal_grid,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
@@ -114,7 +115,7 @@ const ModalComponent = ({
   return (
     <Modal
       style={{ fontFamily: "Public Sans" }}
-      isOpen={true}
+      isOpen={modal_grid}
       toggle={tog_grid}
       centered
     >
