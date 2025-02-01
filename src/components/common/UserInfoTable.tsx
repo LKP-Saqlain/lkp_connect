@@ -16,6 +16,8 @@ import {
 import {
   getClientActivityStatusColumns,
   getClientDormantStatus,
+  getAccountDetails,
+  getCommChecker,
 } from "../../pages/ClientDetails/ClientTableColumns";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -159,6 +161,70 @@ const DataTable = ({
       return getClientActivityStatusColumns(handleViewDetails);
     } else if (selectedWidget === "Client Approaching  Dormant Status") {
       return getClientDormantStatus(handleViewDetails);
+    } else if (activeSubItem === "Referal Entry Status") {
+      return getAccountDetails.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Kyc Summary") {
+      return getCommChecker.map((column) => {
+        if (column.field === "status") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const [rowApproval, setRowApproval] = useState(false);
+
+              return (
+                <button
+                  onClick={() => {
+                    setRowApproval(!rowApproval);
+                    setSelectedRow(params.row);
+                  }}
+                  disabled={rowApproval}
+                  style={{
+                    color: rowApproval ? "green" : "#11395C",
+                    textDecoration: rowApproval ? "none" : "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: rowApproval ? "default" : "pointer",
+                  }}
+                >
+                  {rowApproval ? "Approved !" : "Approve "}
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "document") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const documentLink = params.row.document;
+
+              return (
+                <button
+                  onClick={() => {
+                    console.log("clicked  link ");
+                    window.open(documentLink, "_blank");
+                    setSelectedRow(params.row);
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Download
+                </button>
+              );
+            },
+          };
+        }
+
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
     } else if (activeSubItem === "Dormant Client Report") {
       return dormantColumns.map((column) => ({
         ...column,
@@ -303,6 +369,8 @@ const DataTable = ({
               ? row.clientName
               : row.ClientName
               ? row.ClientName
+              : row.dummyId
+              ? row.dummyId
               : row.id
               ? row.id
               : row.BOID

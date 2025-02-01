@@ -53,7 +53,9 @@ import Retrival from "../../pages/Reports/commRetrival";
 import OTDetails from "../../pages/OT";
 import CommChecker from "../../pages/Compilance/commEntry";
 
+import Main from "../../pages/refCard";
 const drawerWidth = 240;
+import ComChecker from "../../pages/Checker";
 
 // Utility functions for Drawer
 const openedMixin = (theme: Theme, drawerWidth: any): CSSObject => ({
@@ -165,6 +167,7 @@ const SideBar = () => {
       activeMenu !== "Reports" &&
       activeMenu !== "Referal Lead" &&
       activeMenu !== "Compliance" &&
+      activeMenu !== "Kyc Dashboard" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -414,7 +417,7 @@ const SideBar = () => {
           case "Referal Entry":
             return <EkycLinks />;
           case "Referal Entry Status":
-            return "";
+            return <Main activeSubItem={activeSubItem} />;
           case "Referal Lead Updation":
             return <OTDetails />;
           //  (
@@ -442,19 +445,13 @@ const SideBar = () => {
             activeMenu={activeMenu}
           />
         );
-      case "e-KYC Link":
-        return <Typography>e-KYC Link section here</Typography>;
-      default:
-        return (
-          <>
-            <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-              Welcome to LKP Dashboard
-            </Typography>
-            <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-              Please select anyone from left
-            </Typography>
-          </>
-        );
+      case "Kyc Dashboard":
+        switch (activeSubItem) {
+          case "Kyc Summary":
+            return <ComChecker activeSubItem={activeSubItem} />;
+          default:
+            return null;
+        }
     }
   };
   return (

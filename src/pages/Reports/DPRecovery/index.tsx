@@ -72,7 +72,7 @@ const DPRecovery = () => {
       if (response?.data) {
         setEmailSentStatus((prevStatus) => ({
           ...prevStatus,
-          [BOID]: true, // Update the emailSentStatus for this BOID
+          [BOID]: true, // Update the emailSentStatus for this BkOID
         }));
         ShowToast("success", response?.data?.Message);
       } else {

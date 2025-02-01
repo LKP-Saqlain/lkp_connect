@@ -1,0 +1,33 @@
+.rs-picker-popup.rs-picker-popup-daterange {
+    padding: 0;
+    top: 138px !important;
+    left: 1070px !important;
+}
+  
+  @media (max-width: 1200px) {
+    .rs-picker-popup.rs-picker-popup-daterange {
+      left: 620px !important;
+    }
+  }
+  
+  @media (max-width: 972px) {
+    .rs-picker-popup.rs-picker-popup-daterange {
+      left: 300px !important;
+      top: 180px !important;
+    }
+  }
+  
+  @media (max-width: 868px) {
+    .rs-picker-popup.rs-picker-popup-daterange {
+      left: 260px !important;
+      top: 380px !important;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .rs-picker-popup.rs-picker-popup-daterange {
+      left: 90px !important;
+      top: 330px !important;
+    }
+  }
+  
