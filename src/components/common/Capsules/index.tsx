@@ -28,6 +28,11 @@ export const ClientDetailsCapsule = [
   { id: 4, label: "Client Approaching  Dormant Status" },
 ];
 
+export const ODCapsules = [
+  { id: 1, label: "Backoffice Report" },
+  { id: 2, label: "Template" },
+];
+
 export const ClientInfoCapsules = [
   { id: 1, label: "Equity", status: "Active" },
   { id: 2, label: "F & O", status: "Active" },

@@ -1,42 +1,59 @@
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import UserInfoTable from "../../../components/common/UserInfoTable";
-import { Button } from "@mui/material";
-import { useState } from "react";
+import { Box, Button, InputLabel, MenuItem } from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-const selectedStyle = {
-  bgcolor: "#11395C",
-  color: "#fff",
-  borderRadius: "7px",
-  fontFamily: "Poppins",
-  borderColor: "#ABC4DA",
-  textTransform: "capitalize",
-};
-
-const nonSelectedStyle = {
-  bgcolor: "#ABC4DA",
-  color: "#11395C",
-  borderRadius: "7px",
-  fontFamily: "Poppins",
-  borderColor: "#ABC4DA",
-  textTransform: "capitalize",
-};
+const financialYears = [
+  { value: "2019-2020", label: "2019-2020" },
+  { value: "2020-2021", label: "2020-2021" },
+  { value: "2021-2022", label: "2021-2022" },
+  { value: "2022-2023", label: "2022-2023" },
+  { value: "2023-2024", label: "2023-2024" },
+  { value: "2024-2025", label: "2024-2025" },
+];
+const documentType = [{ value: "Circular", label: "Circular" }];
+const department = [
+  { value: "IT", label: "IT" },
+  { value: "Account", label: "Account" },
+  { value: "RMS", label: "RMS" },
+];
 
 const Retrival = ({ activeSubItem }: any) => {
-  const [selectedButton, setSelectedButton] = useState<string>("Daily");
+  // const [selectedButton, setSelectedButton] = useState<string>("Daily");
+
+  const isMobile = useMediaQuery("(max-width:600px)");
+
+  const formik = useFormik({
+    initialValues: {
+      finYear: "",
+      documentType: "",
+      department: "",
+    },
+    validationSchema: Yup.object({
+      finYear: Yup.string().required("Please select a Financial Year"),
+      documentType: Yup.string().required("Please select  Document Type"),
+      department: Yup.string().required("Please select Department"),
+    }),
+    onSubmit: async (values) => {
+      const { finYear } = values;
+      console.log("submitClick", finYear);
+    },
+  });
 
   return (
     <Card>
-      {/* <CardHeader style={{ fontFamily: "Poppins" }}>
-        Communication Retrival
-      </CardHeader> */}
       <CardHeader className="p-0 border-0 bg-light-subtle">
         <Row className="g-0 text-center">
           <Col xs={12}>
             <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-md-row align-items-center">
               <span className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center chart-header">
-                Communication Retrival
+                Communication Retrival Report
               </span>
-              <div className="d-flex gap-1">
+              {/* <div className="d-flex gap-1">
                 <Button
                   variant="outlined"
                   size="small"
@@ -73,11 +90,159 @@ const Retrival = ({ activeSubItem }: any) => {
                 >
                   Department
                 </Button>
-              </div>
+              </div> */}
             </div>
           </Col>
         </Row>
       </CardHeader>
+      <CardBody>
+        {" "}
+        <form onSubmit={formik.handleSubmit}>
+          <Row>
+            <Col xs={12} md={3} lg={4}>
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl
+                  fullWidth
+                  error={
+                    formik.touched.finYear && Boolean(formik.errors.finYear)
+                  }
+                >
+                  <InputLabel id="financial-year-select-label">
+                    Financial Year
+                  </InputLabel>
+                  <Select
+                    size="small"
+                    labelId="financial-year-select-label"
+                    id="financial-year-select"
+                    name="finYear"
+                    value={formik.values.finYear}
+                    label="Financial Year"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    sx={{ fontFamily: "Public Sans" }}
+                  >
+                    {financialYears.map((year) => (
+                      <MenuItem key={year.value} value={year.value}>
+                        {year.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {formik.touched.finYear && formik.errors.finYear && (
+                    <p className="text-error">{formik.errors.finYear}</p>
+                  )}
+                </FormControl>
+              </Box>
+            </Col>
+            <Col
+              xs={12}
+              md={3}
+              lg={4}
+              style={{ marginTop: isMobile ? "16px" : "0" }}
+            >
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl
+                  fullWidth
+                  error={
+                    formik.touched.documentType &&
+                    Boolean(formik.errors.documentType)
+                  }
+                >
+                  <InputLabel
+                    id="documentType-select-label"
+                    // sx={{
+                    //   backgroundColor: "white", // Helps avoid overlap
+                    //   px: 0.5, // Adds some padding around text
+                    // }}
+                  >
+                    Types Of Documents
+                  </InputLabel>
+                  <Select
+                    size="small"
+                    labelId="documentType-select-label"
+                    id="documentType-select"
+                    name="documentType"
+                    value={formik.values.documentType}
+                    label="Financial Year"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    sx={{ fontFamily: "Public Sans" }}
+                  >
+                    {documentType.map((docType) => (
+                      <MenuItem key={docType.value} value={docType.value}>
+                        {docType.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {formik.touched.documentType &&
+                    formik.errors.documentType && (
+                      <p className="text-error">{formik.errors.documentType}</p>
+                    )}
+                </FormControl>
+              </Box>
+            </Col>
+            <Col
+              xs={12}
+              md={3}
+              lg={4}
+              style={{ marginTop: isMobile ? "16px" : "0" }}
+            >
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl
+                  fullWidth
+                  error={
+                    formik.touched.department &&
+                    Boolean(formik.errors.department)
+                  }
+                >
+                  <InputLabel id="department-select-label">
+                    Department
+                  </InputLabel>
+                  <Select
+                    size="small"
+                    labelId="department-select-label"
+                    id="department-select"
+                    name="department"
+                    value={formik.values.department}
+                    label="Department"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    sx={{ fontFamily: "Public Sans" }}
+                  >
+                    {department.map((dept) => (
+                      <MenuItem key={dept.value} value={dept.value}>
+                        {dept.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {formik.touched.department && formik.errors.department && (
+                    <p className="text-error">{formik.errors.department}</p>
+                  )}
+                </FormControl>
+              </Box>
+            </Col>
+            <Col xs={12} md={4} lg={4}>
+              <Box>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className="btn-font"
+                  sx={{
+                    width: isMobile ? "100%" : "50%",
+                    backgroundColor: "#11395C",
+                    "&:hover": {
+                      backgroundColor: "#0d2d4a",
+                    },
+                    fontFamily: "Public Sans",
+                    marginTop: "0.8rem",
+                  }}
+                >
+                  View Report
+                </Button>
+              </Box>
+            </Col>
+          </Row>
+        </form>
+      </CardBody>
       <CardBody>
         {/* <DataTable
           customFlag={true}

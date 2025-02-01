@@ -59,6 +59,7 @@ interface SelectedWidgetProps {
   activeSubItem?: any;
   showExcel?: any;
   handleExcelDownload?: () => void;
+  handleEditClick?: (data: any) => void;
 }
 
 const DataTable = ({
@@ -80,6 +81,7 @@ const DataTable = ({
   activeSubItem,
   showExcel,
   handleExcelDownload,
+  handleEditClick,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -146,10 +148,8 @@ const DataTable = ({
       return DormantOverViewColumns.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Referal Entry Status") {
-      return communicationColumns.map((column) => ({
-        ...column,
-      }));
+    } else if (activeSubItem === "Communication Retrival Entry") {
+      return communicationColumns(handleEditClick);
     } else if (
       selectedWidget === "Total Clients" ||
       selectedWidget === "Active Clients" ||
@@ -167,7 +167,13 @@ const DataTable = ({
       return QPayoutColumns.map((column) => ({
         ...column,
       }));
-    } else {
+    }
+    //  else if (activeSubItem === "Referal Product Wise MIS Report") {
+    //   return communicationColumns.map((column) => ({
+    //     ...column,
+    //   }));
+    // }
+    else {
       // return [];
       // Inject handleEmailSend into the column definition
       return DPDebitRecovery.map((column) => {
@@ -297,6 +303,8 @@ const DataTable = ({
               ? row.clientName
               : row.ClientName
               ? row.ClientName
+              : row.id
+              ? row.id
               : row.BOID
               ? `${row.BOName}-${row.TotalDebit}-${Math.random()}` // this is just for when data comes repetative
               : // ? row.BOID

@@ -651,6 +651,7 @@ any) => {
             totalCount={totalCount}
             activeClient={activeClients}
             inactiveClient={inactiveClients}
+            capsuleType="ClientDetails"
           />
           <Card>
             <CardBody>

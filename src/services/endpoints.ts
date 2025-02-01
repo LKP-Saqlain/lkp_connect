@@ -28,5 +28,5 @@ export const endpoints = {
   ClientSegmentBrok: "/api/Client/ClientSegmentBrok",
   DPDebitRecovery: "/api/Client/DPDebitRecovery",
   DPEmail: "/api/Client/DPEmail",
-  getFundamentalRecord: "/Fundamental/fundamental/INE009A01021",
+  getFundamentalRecord: "/Fundamental/fundamental/INE467B01029",
 };

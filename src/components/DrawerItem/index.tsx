@@ -24,6 +24,8 @@ import PostAddIcon from "@mui/icons-material/PostAdd";
 import List from "@mui/material/List";
 import { MenuItems } from "../../types/index";
 import StoreIcon from "@mui/icons-material/Store";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import DvrIcon from "@mui/icons-material/Dvr";
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -54,6 +56,18 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
       case "Zone Overview":
         return (
           <StoreIcon
+            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
+          />
+        );
+      case "Compliance":
+        return (
+          <ReceiptLongIcon
+            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
+          />
+        );
+      case "DashBoard":
+        return (
+          <DvrIcon
             sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
           />
         );

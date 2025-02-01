@@ -2,17 +2,21 @@ import * as React from "react";
 // import Chip from "@mui/material/Chip";
 // import Stack from "@mui/material/Stack";
 import { Card, CardBody, Col, Row } from "reactstrap";
-import { ClientDetailsCapsule } from "../../../components/common/Capsules";
+import {
+  ClientDetailsCapsule,
+  ODCapsules,
+} from "../../../components/common/Capsules";
 // import { useMediaQuery } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
 import "../style.css";
 
 interface userCapsules {
-  selectedCapsule: any;
-  handleClick(arg: any): any;
-  totalCount: any;
-  activeClient: any;
-  inactiveClient: any;
+  selectedCapsule?: any;
+  handleClick?(arg: any): any;
+  totalCount?: any;
+  activeClient?: any;
+  inactiveClient?: any;
+  capsuleType?: string;
 }
 
 const UserCapsules = ({
@@ -21,14 +25,18 @@ const UserCapsules = ({
   totalCount,
   activeClient,
   inactiveClient,
+  capsuleType,
 }: userCapsules) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const capsules =
+    capsuleType === "ClientDetails" ? ClientDetailsCapsule : ODCapsules;
+
   return (
     <React.Fragment>
       <Row>
-        {(ClientDetailsCapsule || []).map((item, key) => (
+        {capsules.map((item, key) => (
           <Col md={3} key={key}>
             <Card
               className={`rounded-pill capsule-hover ${
@@ -59,7 +67,7 @@ const UserCapsules = ({
                         fontFamily: "Public Sans",
                         marginBottom: 0,
                       }}
-                      onClick={() => handleClick(item.label)}
+                      onClick={() => handleClick?.(item.label)}
                     >
                       {item.label}
                       {item.label === "Total Clients" && (
@@ -105,24 +113,6 @@ const UserCapsules = ({
                         </span>
                       )}
                     </p>
-
-                    {/* {item.count !== undefined && ( */}
-                    {/* <h1
-                      className="text-center fs-10"
-                      style={{
-                        color: selectedCapsule === item.label ? "#fff" : "#000",
-                        display: item.count === undefined ? "none" : "",
-                      }}
-                    >
-                      {item.label === "Total Clients"
-                        ? `Count - ${totalCount}`
-                        : item.label === "Active Clients"
-                        ? `Count - ${activeClient}`
-                        : item.label === "Inactive Clients"
-                        ? `Count - ${inactiveClient}`
-                        : ""}
-                    </h1> */}
-                    {/* )} */}
                   </div>
                 </div>
               </CardBody>

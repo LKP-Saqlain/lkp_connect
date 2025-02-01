@@ -2,6 +2,8 @@ import { GridColDef } from "@mui/x-data-grid";
 import Tooltip from "@mui/material/Tooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import React from "react";
+import { IconButton } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 
 // import { useMemo, useState } from "react";
 
@@ -854,15 +856,33 @@ export const dormantColumns: GridColDef[] = [
       new Intl.NumberFormat("en-IN").format(params),
   },
 ];
-
-export const communicationColumns: GridColDef[] = [
+export const communicationColumns = (
+  handleEditClick?: (row: any) => void
+): GridColDef[] => [
   {
-    field: "srNo",
-    headerName: "Sr No",
-    width: 80,
+    field: "action",
+    headerName: "Action",
+    width: 120,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
+    renderCell: (params: any) => {
+      // const handleEditClick = () => {
+      //   console.log("Edit clicked for ID:", params.row);
+      //   // Open modal logic here
+      // };
+
+      return (
+        <Tooltip title="Edit" arrow placement="top">
+          <IconButton
+            color="primary"
+            onClick={() => handleEditClick?.(params.row)}
+          >
+            <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+          </IconButton>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "dateOfCommunication",

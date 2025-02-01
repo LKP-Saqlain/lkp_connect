@@ -50,6 +50,8 @@ import EkycLinks from "../../pages/ekycLinks";
 import StockStudy from "../../pages/StockStudy";
 import DPRecovery from "../../pages/Reports/DPRecovery";
 import Retrival from "../../pages/Reports/commRetrival";
+import OTDetails from "../../pages/OT";
+import CommChecker from "../../pages/Compilance/commEntry";
 
 const drawerWidth = 240;
 
@@ -162,6 +164,7 @@ const SideBar = () => {
     if (
       activeMenu !== "Reports" &&
       activeMenu !== "Referal Lead" &&
+      activeMenu !== "Compliance" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -387,6 +390,16 @@ const SideBar = () => {
           default:
             return null;
         }
+      case "Compliance":
+        switch (activeSubItem) {
+          case "Communication Retrival Report":
+            return <Retrival activeSubItem={activeSubItem} />;
+          case "Communication Retrival Entry":
+            return <CommChecker activeSubItem={activeSubItem} />;
+          default:
+            return null;
+        }
+
       case "RMS":
         switch (activeSubItem) {
           case "RMS Allocation":
@@ -401,18 +414,21 @@ const SideBar = () => {
           case "Referal Entry":
             return <EkycLinks />;
           case "Referal Entry Status":
-            return <Retrival activeSubItem={activeSubItem} />;
+            return "";
           case "Referal Lead Updation":
-            return (
-              <>
-                <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-                  Welcome to LKP Dashboard
-                </Typography>
-                <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-                  Please select anyone from left
-                </Typography>
-              </>
-            );
+            return <OTDetails />;
+          //  (
+          //   <>
+          //     <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
+          //       Welcome to LKP Dashboard
+          //     </Typography>
+          //     <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
+          //       Please select anyone from left
+          //     </Typography>
+          //   </>
+          // );
+          case "Referal Product Wise MIS Report":
+            return "";
           default:
             return null;
         }
