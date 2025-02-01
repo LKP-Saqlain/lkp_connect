@@ -51,6 +51,7 @@ import StockStudy from "../../pages/StockStudy";
 import DPRecovery from "../../pages/Reports/DPRecovery";
 import Main from "../../pages/refCard";
 const drawerWidth = 240;
+import ComChecker from "../../pages/Checker";
 
 // Utility functions for Drawer
 const openedMixin = (theme: Theme, drawerWidth: any): CSSObject => ({
@@ -158,7 +159,12 @@ const SideBar = () => {
   }, [selectedViewMore]);
 
   useEffect(() => {
-    if ((activeMenu !== "Reports" && activeMenu !== "Referal Lead") && activeSubItem) {
+    if (
+      activeMenu !== "Reports" &&
+      activeMenu !== "Referal Lead" &&
+      activeMenu !== "Kyc Dashboard" &&
+      activeSubItem
+    ) {
       const timeoutId = setTimeout(() => {
         setActiveSubItem("");
       }, 3000);
@@ -396,19 +402,10 @@ const SideBar = () => {
           case "Referal Entry":
             return <EkycLinks />;
           case "Referal Entry Status":
-            return  <Main  activeSubItem={activeSubItem} />;
+            return <Main activeSubItem={activeSubItem} />;
           case "Referal Lead Updation":
-            return 
-            (
-              <>
-                <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-                  Welcome to LKP Dashboard
-                </Typography>
-                <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-                  Please select anyone from left
-                </Typography>
-              </>
-            );         
+            return;
+
           default:
             return null;
         }
@@ -422,19 +419,13 @@ const SideBar = () => {
             activeMenu={activeMenu}
           />
         );
-      case "e-KYC Link":
-        return <Typography>e-KYC Link section here</Typography>;
-      default:
-        return (
-          <>
-            <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-              Welcome to LKP Dashboard
-            </Typography>
-            <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-              Please select anyone from left
-            </Typography>
-          </>
-        );
+      case "Kyc Dashboard":
+        switch (activeSubItem) {
+          case "Kyc Summary":
+            return <ComChecker activeSubItem={activeSubItem} />;
+          default:
+            return null;
+        }   
     }
   };
   return (

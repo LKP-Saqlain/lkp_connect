@@ -13,7 +13,9 @@ import {
 } from "../../pages/TradeDashboard/TradeColumns";
 import {
   getClientActivityStatusColumns,
-  getClientDormantStatus, getAccountDetails
+  getClientDormantStatus,
+  getAccountDetails,
+  getCommChecker,
 } from "../../pages/ClientDetails/ClientTableColumns";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -153,11 +155,70 @@ const DataTable = ({
       return getClientActivityStatusColumns(handleViewDetails);
     } else if (selectedWidget === "Client Approaching  Dormant Status") {
       return getClientDormantStatus(handleViewDetails);
-    }
-    else if (activeSubItem === "Referal Entry Status") {
+    } else if (activeSubItem === "Referal Entry Status") {
       return getAccountDetails.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Kyc Summary") {
+      return getCommChecker.map((column) => {
+        if (column.field === "status") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const [rowApproval, setRowApproval] = useState(false);
+
+              return (
+                <button
+                  onClick={() => {
+                    setRowApproval(!rowApproval);
+                    setSelectedRow(params.row);
+                  }}
+                  disabled={rowApproval}
+                  style={{
+                    color: rowApproval ? "green" : "#11395C",
+                    textDecoration: rowApproval ? "none" : "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: rowApproval ? "default" : "pointer",
+                  }}
+                >
+                  {rowApproval ? "Approved !" : "Approve "}
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "document") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const documentLink = params.row.document;
+
+              return (
+                <button
+                  onClick={() => {
+                    console.log("clicked  link ");
+                    window.open(documentLink, "_blank");
+                    setSelectedRow(params.row);
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Download 
+                </button>
+              );
+            },
+          };
+        }
+
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
     } else if (activeSubItem === "Dormant Client Report") {
       return dormantColumns.map((column) => ({
         ...column,
@@ -275,14 +336,14 @@ const DataTable = ({
             selectedWidget === "Clients With Cash Balance"
               ? tradeCWCBData
               : selectedWidget === "Total Clients"
-                ? T6Data
-                : selectedWidget === "Active Clients"
-                  ? activeGroupedClients
-                  : selectedWidget === "Inactive Clients"
-                    ? inactiveGroupedClients
-                    : selectedWidget === "Client Approaching  Dormant Status"
-                      ? T6Data
-                      : T6Data
+              ? T6Data
+              : selectedWidget === "Active Clients"
+              ? activeGroupedClients
+              : selectedWidget === "Inactive Clients"
+              ? inactiveGroupedClients
+              : selectedWidget === "Client Approaching  Dormant Status"
+              ? T6Data
+              : T6Data
           }
           columns={columns}
           rowHeight={30}
@@ -291,13 +352,13 @@ const DataTable = ({
             row.clientName
               ? row.clientName
               : row.dummyId
-                ? row.dummyId
-                : row.ClientName
-                  ? row.ClientName
-                  : row.BOID
-                    ? `${row.BOName}-${row.TotalDebit}-${Math.random()}` // this is just for when data comes repetative
-                    : // ? row.BOID
-                    row.Name
+              ? row.dummyId
+              : row.ClientName
+              ? row.ClientName
+              : row.BOID
+              ? `${row.BOName}-${row.TotalDebit}-${Math.random()}` // this is just for when data comes repetative
+              : // ? row.BOID
+                row.Name
           } // Use the correct identifier for rows
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"

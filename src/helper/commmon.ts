@@ -8,31 +8,19 @@ export const ButtonsLabel = [
 ]
 
 
-export const monthlyDataO= [
-  { dummyId: 1, month: "Sep-24", directChannelDIY: 111, DirectSalesTeam: 352, APReferrals: 951, EmployeeReferrals: 15, REChannel: 25, Total: 1454, datatype: "weekly" },
-  { dummyId: 2, month: "Feb-24", directChannelDIY: 105, DirectSalesTeam: 491, APReferrals: 920, EmployeeReferrals: 36, REChannel: 18, Total: 1570, datatype: "monthly" },
-  { dummyId: 3, month: "Dec-24", directChannelDIY: 96, DirectSalesTeam: 381, APReferrals: 1101, EmployeeReferrals: 26, REChannel: 20, Total: 1624, datatype: "yearly" },
-  { dummyId: 4, month: "May-23", directChannelDIY: 118, DirectSalesTeam: 289, APReferrals: 1135, EmployeeReferrals: 19, REChannel: 22, Total: 1584, datatype: "Daily" },
-  { dummyId: 5, month: "Aug-23", directChannelDIY: 87, DirectSalesTeam: 368, APReferrals: 808, EmployeeReferrals: 27, REChannel: 28, Total: 1318, datatype: "tilldate" },
-  { dummyId: 6, month: "Jan-24", directChannelDIY: 97, DirectSalesTeam: 437, APReferrals: 968, EmployeeReferrals: 23, REChannel: 26, Total: 1551, datatype: "weekly" },
-  { dummyId: 7, month: "Jun-23", directChannelDIY: 90, DirectSalesTeam: 475, APReferrals: 1045, EmployeeReferrals: 13, REChannel: 24, Total: 1647, datatype: "monthly" },
-  { dummyId: 8, month: "Oct-23", directChannelDIY: 79, DirectSalesTeam: 406, APReferrals: 1110, EmployeeReferrals: 31, REChannel: 19, Total: 1645, datatype: "yearly" },
-  { dummyId: 9, month: "Jul-24", directChannelDIY: 113, DirectSalesTeam: 444, APReferrals: 1034, EmployeeReferrals: 29, REChannel: 21, Total: 1641, datatype: "Daily" },
-  { dummyId: 10, month: "Mar-24", directChannelDIY: 80, DirectSalesTeam: 385, APReferrals: 1009, EmployeeReferrals: 34, REChannel: 23, Total: 1531, datatype: "tilldate" },
-  { dummyId: 11, month: "May-23", directChannelDIY: 104, DirectSalesTeam: 289, APReferrals: 1004, EmployeeReferrals: 38, REChannel: 20, Total: 1455, datatype: "yearly" },
-  { dummyId: 12, month: "Jan-23", directChannelDIY: 95, DirectSalesTeam: 424, APReferrals: 1127, EmployeeReferrals: 32, REChannel: 16, Total: 1694, datatype: "monthly" },
-  { dummyId: 13, month: "Dec-24", directChannelDIY: 83, DirectSalesTeam: 350, APReferrals: 1013, EmployeeReferrals: 21, REChannel: 28, Total: 1495, datatype: "yearly" },
-  { dummyId: 14, month: "Oct-23", directChannelDIY: 90, DirectSalesTeam: 389, APReferrals: 926, EmployeeReferrals: 17, REChannel: 29, Total: 1451, datatype: "Daily" },
-  { dummyId: 15, month: "Mar-23", directChannelDIY: 105, DirectSalesTeam: 442, APReferrals: 1182, EmployeeReferrals: 25, REChannel: 20, Total: 1774, datatype: "weekly" },
-  { dummyId: 16, month: "Jul-23", directChannelDIY: 80, DirectSalesTeam: 333, APReferrals: 1044, EmployeeReferrals: 15, REChannel: 27, Total: 1499, datatype: "monthly" },
-  { dummyId: 17, month: "Apr-23", directChannelDIY: 120, DirectSalesTeam: 410, APReferrals: 985, EmployeeReferrals: 30, REChannel: 24, Total: 1569, datatype: "yearly" },
-  { dummyId: 18, month: "Jun-23", directChannelDIY: 97, DirectSalesTeam: 475, APReferrals: 1135, EmployeeReferrals: 34, REChannel: 21, Total: 1762, datatype: "Daily" },
-  { dummyId: 19, month: "Aug-23", directChannelDIY: 113, DirectSalesTeam: 421, APReferrals: 1108, EmployeeReferrals: 29, REChannel: 18, Total: 1689, datatype: "tilldate" },
-  { dummyId: 20, month: "Sep-23", directChannelDIY: 90, DirectSalesTeam: 488, APReferrals: 1007, EmployeeReferrals: 26, REChannel: 22, Total: 1633, datatype: "weekly" },
-  { dummyId: 21, month: "Feb-24", directChannelDIY: 81, DirectSalesTeam: 361, APReferrals: 1053, EmployeeReferrals: 27, REChannel: 24, Total: 1546, datatype: "monthly" },
-  { dummyId: 22, month: "Apr-24", directChannelDIY: 115, DirectSalesTeam: 453, APReferrals: 1127, EmployeeReferrals: 29, REChannel: 22, Total: 1746, datatype: "yearly" },
-  { dummyId: 23, month: "Jul-24", directChannelDIY: 85, DirectSalesTeam: 378, APReferrals: 1067, EmployeeReferrals: 17, REChannel: 25, Total: 1572, datatype: "Daily" },
-]
+export const monthlyDataO = [
+  { dummyId: 1, date: "2025-01-15", documentType: "Invoice", communicationType: "Email", proofOfCommunicationDescription: "Customer confirmation", department: "Sales", document: "https://example.com/download/invoice1.pdf" },
+  { dummyId: 2, date: "2025-01-16", documentType: "Receipt", communicationType: "Phone", proofOfCommunicationDescription: "Phone call log", department: "Customer Service", document: "https://example.com/download/receipt2.pdf" },
+  { dummyId: 3, date: "2025-01-17", documentType: "Contract", communicationType: "Email", proofOfCommunicationDescription: "Signed contract", department: "Legal", document: "https://example.com/download/contract3.pdf" },
+  { dummyId: 4, date: "2025-01-18", documentType: "Proposal", communicationType: "Fax", proofOfCommunicationDescription: "Fax received", department: "Marketing", document: "https://example.com/download/proposal4.pdf" },
+  { dummyId: 5, date: "2025-01-19", documentType: "Invoice", communicationType: "Email", proofOfCommunicationDescription: "Invoice confirmation", department: "Sales", document: "https://example.com/download/invoice5.pdf" },
+  { dummyId: 6, date: "2025-01-20", documentType: "Receipt", communicationType: "Phone", proofOfCommunicationDescription: "Customer call details", department: "Customer Service", document: "https://example.com/download/receipt6.pdf" },
+  { dummyId: 7, date: "2025-01-21", documentType: "Contract", communicationType: "Email", proofOfCommunicationDescription: "Signed contract", department: "Legal", document: "https://example.com/download/contract7.pdf" },
+  { dummyId: 8, date: "2025-01-22", documentType: "Proposal", communicationType: "Fax", proofOfCommunicationDescription: "Fax sent", department: "Marketing", document: "https://example.com/download/proposal8.pdf" },
+];
+
+
+
   export const ActiveUserLoggedIn=[
   { dummyId: 24, month: "Nov-23", directChannelDIY: 104, DirectSalesTeam: 352, APReferrals: 975, EmployeeReferrals: 31, REChannel: 16, Total: 1578, datatype: "tilldate" },
   { dummyId: 25, month: "Aug-23", directChannelDIY: 94, DirectSalesTeam: 390, APReferrals: 1052, EmployeeReferrals: 27, REChannel: 28, Total: 1591, datatype: "weekly" },

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button, Card, CardBody, CardHeader } from "reactstrap";
 import DataTable from "../../components/common/UserInfoTable";
-// import { tableData } from "../ClientDetails/ClientTableColumns";
 import { DateRangePicker } from "rsuite";
 import moment from "moment";
 import "./style.css";
@@ -10,13 +9,9 @@ import { useMediaQuery } from "@mui/material";
 import { ButtonsLabel } from "../../helper/commmon";
 import AccountButton from "../../components/common/AccountButton/index";
 
-const CardTable = ({ activeSubItem, tableData, customTableFlag }: any) => {
+const CardTable = ({ activeSubItem,tableData, customTableFlag }: any) => {
   const [selectedButton, setSelectedButton] = useState<string>();
   const [data, setData] = useState<any>([]);
-
-  useEffect(() => {
-    console.log("tableData", tableData);
-  }, [tableData]);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -42,6 +37,8 @@ const CardTable = ({ activeSubItem, tableData, customTableFlag }: any) => {
 
   useEffect(() => {
     // setData([]);
+    
+    
     switch (selectedButton) {
       case "Daily":
         const filteredDaily = tableData.filter(
