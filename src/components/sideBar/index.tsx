@@ -51,11 +51,10 @@ import StockStudy from "../../pages/StockStudy";
 import DPRecovery from "../../pages/Reports/DPRecovery";
 import Retrival from "../../pages/Reports/commRetrival";
 import OTDetails from "../../pages/OT";
-import CommChecker from "../../pages/Compilance/commEntry";
-
+import CommEntry from "../../pages/Compilance/commEntry";
+import ComChecker from "../../pages/Compilance/commChecker";
 import Main from "../../pages/refCard";
 const drawerWidth = 240;
-import ComChecker from "../../pages/Checker";
 
 // Utility functions for Drawer
 const openedMixin = (theme: Theme, drawerWidth: any): CSSObject => ({
@@ -398,7 +397,9 @@ const SideBar = () => {
           case "Communication Retrival Report":
             return <Retrival activeSubItem={activeSubItem} />;
           case "Communication Retrival Entry":
-            return <CommChecker activeSubItem={activeSubItem} />;
+            return <CommEntry activeSubItem={activeSubItem} />;
+          case "Communication Retrival Checker":
+            return <ComChecker activeSubItem={activeSubItem} />;
           default:
             return null;
         }
@@ -448,7 +449,7 @@ const SideBar = () => {
       case "Kyc Dashboard":
         switch (activeSubItem) {
           case "Kyc Summary":
-            return <ComChecker activeSubItem={activeSubItem} />;
+            return "";
           default:
             return null;
         }

@@ -165,7 +165,7 @@ const DataTable = ({
       return getAccountDetails.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Kyc Summary") {
+    } else if (activeSubItem === "Communication Retrival Checker") {
       return getCommChecker.map((column) => {
         if (column.field === "status") {
           return {
