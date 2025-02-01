@@ -159,12 +159,7 @@ const SideBar = () => {
   }, [selectedViewMore]);
 
   useEffect(() => {
-    if (
-      activeMenu !== "Reports" &&
-      activeMenu !== "Referal Lead" &&
-      activeMenu !== "Kyc Dashboard" &&
-      activeSubItem
-    ) {
+    if (activeMenu !== "Reports" && activeMenu !== "Referal Lead" && activeMenu !== "Kyc Dashboard" && activeSubItem) {
       const timeoutId = setTimeout(() => {
         setActiveSubItem("");
       }, 3000);
@@ -402,10 +397,19 @@ const SideBar = () => {
           case "Referal Entry":
             return <EkycLinks />;
           case "Referal Entry Status":
-            return <Main activeSubItem={activeSubItem} />;
+            return  <Main   activeSubItem={activeSubItem} />;
           case "Referal Lead Updation":
             return;
-
+            (
+              <>
+                <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
+                  Welcome to LKP Dashboard
+                </Typography>
+                <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
+                  Please select anyone from left
+                </Typography>
+              </>
+            );
           default:
             return null;
         }
@@ -425,7 +429,7 @@ const SideBar = () => {
             return <ComChecker activeSubItem={activeSubItem} />;
           default:
             return null;
-        }   
+        }
     }
   };
   return (

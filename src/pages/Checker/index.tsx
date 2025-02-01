@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  {  useEffect } from "react";
 import { Card, CardBody, CardHeader } from "reactstrap";
 import DataTable from "../../components/common/UserInfoTable";
 import { monthlyDataO } from "../../helper/commmon";

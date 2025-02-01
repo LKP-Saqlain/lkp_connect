@@ -9,7 +9,7 @@ import { useMediaQuery } from "@mui/material";
 import { ButtonsLabel } from "../../helper/commmon";
 import AccountButton from "../../components/common/AccountButton/index";
 
-const CardTable = ({ activeSubItem,tableData, customTableFlag }: any) => {
+const CardTable = ({ activeSubItem, tableData, customTableFlag }: any) => {
   const [selectedButton, setSelectedButton] = useState<string>();
   const [data, setData] = useState<any>([]);
 
