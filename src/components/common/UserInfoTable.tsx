@@ -374,6 +374,8 @@ const DataTable = ({
           getRowId={(row: any) =>
             row.clientName
               ? row.clientName
+              : row.ClientName
+              ? row.ClientName
               : row.RowId
               ? row.RowId
               : row.id
