@@ -316,7 +316,7 @@ const ModalComponent = ({
                 }
               >
                 <InputLabel id="documentType-modal-select-label">
-                  Type of Document
+                  Type of Documents
                 </InputLabel>
                 <Select
                   size="small"
@@ -324,7 +324,7 @@ const ModalComponent = ({
                   id="documentType-select"
                   name="documentType"
                   value={formik.values.documentType}
-                  label="documentType"
+                  label="Types Of Documentss"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
@@ -343,16 +343,12 @@ const ModalComponent = ({
               <FormControl
                 fullWidth
                 error={
-                  formik.touched.department && Boolean(formik.errors.department)
+                  formik.touched.communicationType &&
+                  Boolean(formik.errors.communicationType)
                 }
               >
-                <InputLabel
-                // id="communicationType-modal-select-label"
-                // sx={{
-                //   backgroundColor: "white",
-                // }}
-                >
-                  Communication Type
+                <InputLabel id="communicationType-modal-select-label">
+                  Communication Types
                 </InputLabel>
                 <Select
                   size="small"
@@ -360,7 +356,7 @@ const ModalComponent = ({
                   id="communicationType-select"
                   name="communicationType"
                   value={formik.values.communicationType}
-                  label="communicationType"
+                  label=" Communicationss Typess" 
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
