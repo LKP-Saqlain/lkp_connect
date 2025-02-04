@@ -85,7 +85,7 @@ const ComChecker = ({ activeSubItem }: any) => {
 
   return (
     <Card>
-      <CardHeader style={{ display: "flex" }}>
+      <CardHeader>
         <h4 className="card-title mb-0">Communication Checker</h4>
       </CardHeader>
       <CardBody>
