@@ -111,10 +111,10 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
     <Box
       sx={{
         display: "flex",
-        justifyContent: "flex-end", // Align search and buttons on opposite ends
+        justifyContent: "flex-start", // Align search and buttons on opposite ends
         alignItems: "center", // Vertically align elements
         flexWrap: "wrap", // Ensure proper alignment on small screens
-        gap: 1,
+        paddingBottom: "10px",
       }}
     >
       {/* Search Bar */}
