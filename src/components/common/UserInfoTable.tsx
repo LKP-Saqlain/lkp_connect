@@ -12,6 +12,7 @@ import {
   dormantColumns,
   QPayoutColumns,
   communicationColumns,
+  CompliancneReport,
 } from "../../pages/TradeDashboard/TradeColumns";
 import {
   getClientActivityStatusColumns,
@@ -61,7 +62,7 @@ interface SelectedWidgetProps {
   activeSubItem?: any;
   showExcel?: any;
   handleExcelDownload?: () => void;
-  handleEditClick?: (data: any) => void;
+  handleEditClick?: (data: any, editCheck: boolean) => void;
 }
 
 const DataTable = ({
@@ -152,6 +153,10 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "Communication Retrival Entry") {
       return communicationColumns(handleEditClick);
+    } else if (activeSubItem === "Communication Retrival Report") {
+      return CompliancneReport.map((column) => ({
+        ...column,
+      }));
     } else if (
       selectedWidget === "Total Clients" ||
       selectedWidget === "Active Clients" ||
@@ -264,7 +269,7 @@ const DataTable = ({
                   }}
                   disabled={isEmailSent}
                   style={{
-                    color: isEmailSent && "green",
+                    color: isEmailSent && "red",
                     textDecoration: isEmailSent ? "none" : "underline",
                     background: "none",
                     border: "none",
@@ -371,6 +376,8 @@ const DataTable = ({
               ? row.ClientName
               : row.dummyId
               ? row.dummyId
+              : row.RowId
+              ? row.RowId
               : row.id
               ? row.id
               : row.BOID

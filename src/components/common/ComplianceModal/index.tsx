@@ -10,59 +10,177 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
+import * as Yup from "yup";
+import { apiServices } from "../../../services";
+import ShowToast from "../../../utils/toastUtils";
 
 const CommunicationMenu = [
   { value: "Email", label: "Email" },
   { value: "Physical", label: "Physical" },
+  { value: "string", label: "string" },
 ];
 
 const department = [
   { value: "IT", label: "IT" },
   { value: "Account", label: "Account" },
   { value: "RMS", label: "RMS" },
+  { value: "ALL", label: "ALL" },
 ];
 
 const TypeOfDocument = [
   { value: "Circular", label: "Circular" },
   { value: "SEBI", label: "SEBI" },
+  { value: "string", label: "string" },
 ];
 
 const ModalComponent = ({
   tog_grid,
   modal_grid,
+  onSubmit,
+  editData,
+  editUserCheck,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
+  onSubmit: (data: any, apiStatus?: any) => void;
+  editData: any;
+  editUserCheck: boolean;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [fileExtension, setFileExtension] = useState("");
   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
+  const [fileBase64, setFileBase64] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const allowedFormats = ["doc", "docx", "pdf", "xls", "xlsx", "jpg", "jpeg"];
 
   const dispatch = useDispatch<AppDispatch>();
 
+  useEffect(() => {
+    console.log("editInfoData", editData, fileExtension);
+  }, [editData]);
+
+  useEffect(() => {
+    if (editData) {
+      formik.setValues({
+        documentType: TypeOfDocument.some(
+          (item) => item.value === editData.typeOfDocuments
+        )
+          ? editData.typeOfDocuments
+          : "",
+
+        department: department.some(
+          (item) => item.value === editData.department
+        )
+          ? editData.department
+          : "",
+
+        communicationType: CommunicationMenu.some(
+          (item) => item.value === editData.communicationType
+        )
+          ? editData.communicationType
+          : "",
+
+        proofOfCommunication: editData.proofOfCommunication || "",
+
+        dateOfCommunication: editData.dateOfCommunication
+          ? dayjs(editData.dateOfCommunication).format("DD/MM/YYYY")
+          : "",
+      });
+    }
+  }, [editData]);
+
+  const validationSchema = Yup.object().shape({
+    documentType: Yup.string().required("Type of Document is required"),
+    department: Yup.string().required("Department is required"),
+    communicationType: Yup.string().required("Communication Type is required"),
+    dateOfCommunication: Yup.string().required(
+      "Date of Communication is required"
+    ),
+    proofOfCommunication: Yup.string().required(
+      "Proof of Communication is required"
+    ),
+  });
+
   const formik = useFormik({
     initialValues: {
-      documentType: "", // Default value for Type of Document
-      department: "",
-      communicationType: "",
-      dateOfCommunication: "",
+      documentType: "", //ADDED
+      department: "", //ADDED
+      communicationType: "", //ADDED
+      dateOfCommunication: null as string | null, //ADDED
+      proofOfCommunication: "",
     },
-    validate: (values) => {
-      const errors = {};
-      // if (!values.finYear) errors.finYear = "Financial Year is required";
-      // if (!values.department) errors.department = "Department is required";
-      console.log("values", values);
-
-      return errors;
-    },
+    validationSchema,
     onSubmit: (values) => {
-      console.log("Submitted values:", values);
+      const formData = {
+        ...values,
+        uploadedFile,
+      };
+      onSubmit(formData, true); // Pass form data to the parent component
+      fetchSubmitForm();
+      formik.resetForm();
+      setUploadedFile(null); // Reset uploaded file
+      setFileExtension(""); // Reset file extension
     },
   });
+
+  const fetchSubmitForm = async () => {
+    let payload = {
+      financialYear: "2024-2025",
+      department: formik.values.department ? formik.values.department : "",
+      action: editUserCheck ? "update" : "insert",
+      documentType: formik.values.documentType
+        ? formik.values.documentType
+        : "",
+      typeOfDocuments: "ALL",
+      communicationType: formik.values.communicationType
+        ? formik.values.communicationType
+        : "",
+      communicationProof: formik.values.proofOfCommunication
+        ? formik.values.proofOfCommunication
+        : "",
+      communicationProofPath: "string",
+      dateOfCommunication: formik.values.dateOfCommunication
+        ? formik.values.dateOfCommunication
+        : "",
+      rowId: 0,
+      userId: "",
+    };
+    dispatch(showLoader("Please wait"));
+    apiServices
+      .ComplainceReport(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+        console.log("apiResponseModal", response?.data?.Table[0].MSG);
+        // setUserData(response?.data?.Table);
+        if (editUserCheck) {
+          ShowToast("success", response?.data?.Table[0].Message);
+        } else {
+          ShowToast("success", response?.data?.Table[0].MSG);
+        }
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        console.log("Error", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
+  useEffect(() => {
+    if (editData) {
+      formik.setValues({
+        documentType: editData.TypeOfDocuments || "",
+        department: editData.Department || "",
+        communicationType: editData.CommunicationType || "",
+        proofOfCommunication: editData.CommunicationProof || "",
+        dateOfCommunication: editData.DateOfCommunication
+          ? dayjs(editData.DateOfCommunication).format("DD/MM/YYYY") // Convert to string
+          : "",
+      });
+    }
+  }, [editData]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -71,19 +189,30 @@ const ModalComponent = ({
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
 
       if (allowedFormats.includes(fileExt)) {
-        dispatch(showLoader("")); // Show loader before setting state
-        console.log(fileExtension);
+        dispatch(showLoader("Uploading file...")); // Show loader before processing
 
-        setTimeout(() => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const base64String = reader.result as string;
           setUploadedFile(file);
+          setFileBase64(base64String); // Store base64
           setFileExtension(fileExt);
-          dispatch(hideLoader()); // Hide loader after file processing
-        }, 1000);
+          dispatch(hideLoader());
+        };
+        reader.onerror = (error) => {
+          console.error("Error reading file:", error);
+          dispatch(hideLoader());
+        };
       } else {
         alert("Invalid file format! Allowed: DOC, PDF, XLS, XLSX, JPG, JPEG");
       }
     }
   };
+
+  useEffect(() => {
+    console.log("base64FILE-->", fileBase64);
+  }, [fileBase64]);
 
   const handleFileDelete = () => {
     dispatch(showLoader("")); // Show loader before deleting
@@ -112,6 +241,12 @@ const ModalComponent = ({
     console.log("formValues", formik.values);
   }, [formik.values]);
 
+  const handleChange = (event: any) => {
+    console.log("eventValue", event.target.value);
+    const { value } = event.target;
+    formik.setFieldValue("proofOfCommunication", value);
+  };
+
   return (
     <Modal
       style={{ fontFamily: "Public Sans" }}
@@ -123,7 +258,7 @@ const ModalComponent = ({
         Add Entry
       </ModalHeader>
       <ModalBody>
-        <form action="#">
+        <form onSubmit={formik.handleSubmit}>
           <div className="row g-3">
             <Col lg={12}>
               <div>
@@ -142,8 +277,8 @@ const ModalComponent = ({
                             )
                           : null
                       }
-                      maxDate={dayjs().subtract(18, "year")}
-                      minDate={dayjs().subtract(64, "year")}
+                      // maxDate={dayjs().subtract(18, "year")}
+                      // minDate={dayjs().subtract(64, "year")}
                       onChange={(date: Dayjs | null) =>
                         formik.setFieldValue(
                           "dateOfCommunication",
@@ -162,6 +297,12 @@ const ModalComponent = ({
                       //   },
                       // }}
                     />
+                    {formik.touched.dateOfCommunication &&
+                      formik.errors.dateOfCommunication && (
+                        <p className="text-error">
+                          {formik.errors.dateOfCommunication}
+                        </p>
+                      )}
                   </LocalizationProvider>
                 </FormControl>
               </div>
@@ -193,12 +334,9 @@ const ModalComponent = ({
                     </MenuItem>
                   ))}
                 </Select>
-                {formik.touched.communicationType &&
-                  formik.errors.communicationType && (
-                    <p className="text-error">
-                      {formik.errors.communicationType}
-                    </p>
-                  )}
+                {formik.touched.documentType && formik.errors.documentType && (
+                  <p className="text-error">{formik.errors.documentType}</p>
+                )}
               </FormControl>
             </Col>
             <Col xxl={6}>
@@ -250,11 +388,24 @@ const ModalComponent = ({
                   Proof of Communication
                 </label>
                 <Input
+                  value={formik.values.proofOfCommunication}
                   type="text"
-                  className="form-control"
+                  onChange={handleChange}
+                  className={`form-control ${
+                    formik.touched.proofOfCommunication &&
+                    formik.errors.proofOfCommunication
+                      ? "is-invalid"
+                      : ""
+                  }`}
                   id="lastName"
                   placeholder="Enter Proof of Communication"
                 />
+                {formik.touched.proofOfCommunication &&
+                  formik.errors.proofOfCommunication && (
+                    <div className="invalid-feedback">
+                      {formik.errors.proofOfCommunication}
+                    </div>
+                  )}
               </div>
             </Col>
             <Col lg={12}>
@@ -327,7 +478,7 @@ const ModalComponent = ({
                     height: "35px",
                     width: "auto",
                   }}
-                  onClick={tog_grid}
+                  type="submit"
                 >
                   Submit
                 </Button>

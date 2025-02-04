@@ -16,7 +16,8 @@ import {
 import "./style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import Banner from "../../../assets/banner.png";
+// import Banner from "../../../assets/banner.png";
+import LeftArm from "../../../assets/images/leftArm.png";
 import Vector from "../../../assets/vector.png";
 import { useTheme } from "@mui/material/styles";
 import { FaRegUserCircle } from "react-icons/fa";
@@ -31,6 +32,7 @@ import { useDispatch } from "react-redux";
 import ShowToast from "../../../utils/toastUtils";
 import { AppDispatch } from "../../../redux/store";
 import { UserLogin } from "../../../redux/thunk/Login/login";
+import Logo from "../../../assets/logo.png";
 
 const LoginPage = () => {
   const [submitted, setSubmiited] = useState(false);
@@ -183,7 +185,7 @@ const LoginPage = () => {
     <>
       <Box
         sx={{
-          borderRadius: "4px",
+          position: "relative", // Allows absolute positioning of the logo
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           justifyContent: "center",
@@ -193,8 +195,22 @@ const LoginPage = () => {
       >
         <Box
           component="img"
-          src={Banner}
-          alt="Banner"
+          alt="Logo"
+          src={Logo}
+          width={"auto"}
+          height="50px"
+          sx={{
+            position: "absolute",
+            top: 10, // Adjust as needed
+            right: 26, // Adjust as needed
+            zIndex: 10, // Ensures it appears above other elements
+            // border: "4px solid red",
+          }}
+        />
+        <Box
+          component="img"
+          src={LeftArm}
+          alt="LeftArm"
           sx={{
             width: isMobile ? "100%" : "47.9%",
             borderRadius: "4px",
@@ -204,7 +220,9 @@ const LoginPage = () => {
             backgroundImage: `url(${Vector})`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right",
-            backgroundSize: "740px 900px",
+            // backgroundSize: "740px 900px",
+            height: "100vh",
+            // border: "4px solid red",
           }}
         />
         {/* Right side - Text fields */}
@@ -212,13 +230,14 @@ const LoginPage = () => {
         <Box
           sx={{
             width: isMobile ? "100%" : "50%",
-            padding: 2,
+            // padding: 2,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            mt: 12,
-            // border: "1px solid red",
+            // mt: 12,
+            mb: 4,
+            // border: "1px solid blue",
           }}
         >
           <Typography

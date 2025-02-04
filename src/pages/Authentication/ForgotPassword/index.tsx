@@ -14,7 +14,8 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import Banner from "../../../assets/banner.png";
+// import Banner from "../../../assets/banner.png";
+import LeftArm from "../../../assets/images/leftArm.png";
 import Vector from "../../../assets/vector.png";
 import { useTheme } from "@mui/material/styles";
 import { FaRegUserCircle } from "react-icons/fa";
@@ -32,6 +33,8 @@ import {
   SendOtp,
   ForgotUserPassword,
 } from "../../../redux/thunk/ForgotPassword";
+import Logo from "../../../assets/logo.png";
+import "./style.css";
 
 const ForgotPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -196,17 +199,32 @@ const ForgotPassword = () => {
     <>
       <Box
         sx={{
-          borderRadius: "4px",
+          position: "relative", // Allows absolute positioning of the logo
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           justifyContent: "center",
           alignItems: "center",
+          overflow: "hidden",
         }}
       >
         <Box
           component="img"
-          src={Banner}
-          alt="Banner"
+          alt="Logo"
+          src={Logo}
+          width={"auto"}
+          height="50px"
+          sx={{
+            position: "absolute",
+            top: 10, // Adjust as needed
+            right: 26, // Adjust as needed
+            zIndex: 10, // Ensures it appears above other elements
+            // border: "4px solid red",
+          }}
+        />
+        <Box
+          component="img"
+          src={LeftArm}
+          alt="LeftArm"
           sx={{
             width: isMobile ? "100%" : "50%",
             borderRadius: "4px",
@@ -215,7 +233,8 @@ const ForgotPassword = () => {
             backgroundImage: `url(${Vector})`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right",
-            backgroundSize: "740px 900px",
+            // backgroundSize: "740px 900px",
+            height: "100vh",
           }}
         />
         {/* Right side - Text fields */}

@@ -86,7 +86,7 @@ const DPRecovery = () => {
 
   const getUserDetails = (value: any) => {
     console.log("userBOID", value?.BOID);
-    handleEmailSend(value?.BOID);
+    // handleEmailSend(value?.BOID);
   };
 
   const handleSearchBasedOnInput = (value: string) => {

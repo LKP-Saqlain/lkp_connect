@@ -1,47 +1,168 @@
 import { Box } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import UserInfoTable from "../../components/common/UserInfoTable";
 import ModalComponent from "../../components/common/ComplianceModal";
+import { apiServices } from "../../services";
+import { useDispatch } from "react-redux";
+import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 
-const dummyData = [
-  {
-    id: 1,
-    dateOfCommunication: "2024-01-01",
-    typeOfDocuments: "Circular",
-    communicationType: "Internal",
-    emailLogReport: "log_1.pdf",
-    physicalDispatchProof: "proof_1.pdf",
-    department: "IT",
-  },
-  {
-    id: 2,
-    dateOfCommunication: "2024-01-05",
-    typeOfDocuments: "Report",
-    communicationType: "External",
-    emailLogReport: "log_2.pdf",
-    physicalDispatchProof: "proof_2.pdf",
-    department: "Account",
-  },
-  // Add more dummy data here...
-];
+// const dummyData = [
+//   {
+//     id: 1,
+//     dateOfCommunication: "2024-01-01",
+//     typeOfDocuments: "Circular",
+//     communicationType: "Email",
+//     proofOfCommunication: "Digital",
+//     ProofOfDescription: "PAN",
+//     department: "IT",
+//   },
+//   {
+//     id: 2,
+//     dateOfCommunication: "2024-01-05",
+//     typeOfDocuments: "SEBI",
+//     communicationType: "Physical",
+//     proofOfCommunication: "Digital",
+//     ProofOfDescription: "AADHAAR",
+//     department: "Account",
+//   },
+//   // Add more dummy data here...
+// ];
+interface ComplianceEntry {
+  RowId: number;
+  FinancialYear: string;
+  DateOfCommunication: string;
+  TypeOfDocuments: string;
+  CommunicationType: string;
+  CommunicationProof: string;
+  CommunicationProofPath: string;
+  Department: string;
+  DocumentType: string;
+  CreatedBy: string;
+  CreatedDateTime: string;
+  CheckerBy: string;
+  CheckerDatetime: string;
+  ModifiedBy?: string | null;
+  ModifiedDatetime?: string | null;
+  IsDeleted: string;
+}
 
 const CommEntry = ({ activeSubItem }: any) => {
   // const [modal_backdrop, setmodal_backdrop] = useState<boolean>(false);
   const [modal_grid, setmodal_grid] = useState<boolean>(false);
+  const [formData, setFormData] = useState(null);
+  const [editData, setEditData] = useState<ComplianceEntry | null>(null);
+  const [userData, setUserData] = useState([]);
+  const [apiStatus, setApiStatus] = useState(false);
+  const [editUserCheck, setEditUserCheck] = useState(false);
+  const dispatch = useDispatch();
 
   function tog_grid() {
     setmodal_grid(!modal_grid);
   }
 
-  const handleEditClick = (data: any) => {
-    console.log("TestModalData", data);
+  const handleEditClick = (data: any, editCheck: boolean) => {
+    console.log("TestModalData", data, editCheck);
     setmodal_grid(true);
+    setEditData(data);
+    setEditUserCheck(editCheck);
   };
+
+  const handleFormSubmit = (data: any, apiStatus: any) => {
+    console.log("Received form data in parent:", data, formData, apiStatus);
+    setFormData(data);
+    setmodal_grid(false);
+    setApiStatus(apiStatus);
+  };
+
+  useEffect(() => {
+    if (editData?.RowId) {
+      const fetchComplianceEntry = async () => {
+        let payload = {
+          financialYear: editData.FinancialYear || "2024-2025",
+          department: editData.Department || "ALL",
+          action: "view",
+          documentType: editData.DocumentType || "string",
+          typeOfDocuments: editData.TypeOfDocuments || "ALL",
+          communicationType: editData.CommunicationType || "string",
+          communicationProof: editData.CommunicationProof || "string",
+          communicationProofPath: editData.CommunicationProofPath || "string",
+          dateOfCommunication: editData.DateOfCommunication
+            ? new Date(editData.DateOfCommunication).toLocaleDateString("en-GB")
+            : "02/03/2025",
+          rowId: editData.RowId || 0,
+          userId: editData.CreatedBy || "",
+        };
+        dispatch(showLoader("Please wait"));
+        apiServices
+          .ComplainceReport(payload)
+          .then((response) => {
+            dispatch(hideLoader());
+            console.log("apiResponse", response?.data?.Table);
+            setUserData(response?.data?.Table);
+          })
+          .catch((error) => {
+            dispatch(hideLoader());
+            console.log("Error", error);
+          })
+          .finally(() => {
+            dispatch(hideLoader());
+          });
+      };
+      fetchComplianceEntry();
+    }
+  }, [dispatch, editData]);
+
+  useEffect(() => {
+    if (apiStatus) {
+      const fetchComplianceEntry = async () => {
+        let payload = {
+          financialYear: "2024-2025",
+          department: "ALL",
+          action: "view",
+          documentType: "string",
+          typeOfDocuments: "ALL",
+          communicationType: "string",
+          communicationProof: "string",
+          communicationProofPath: "string",
+          dateOfCommunication: "02/03/2025",
+          rowId: 0,
+          userId: "",
+        };
+        dispatch(showLoader("Please wait"));
+        apiServices
+          .ComplainceReport(payload)
+          .then((response) => {
+            dispatch(hideLoader());
+            console.log("apiResponse", response?.data?.Table);
+            setUserData(response?.data?.Table);
+          })
+          .catch((error) => {
+            dispatch(hideLoader());
+            console.log("Error", error);
+          })
+          .finally(() => {
+            dispatch(hideLoader());
+          });
+      };
+      fetchComplianceEntry();
+
+      const timeoutId = setTimeout(() => {
+        setApiStatus(false);
+      }, 3000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [dispatch, apiStatus]);
 
   return (
     <React.Fragment>
-      <ModalComponent modal_grid={modal_grid} tog_grid={tog_grid} />
+      <ModalComponent
+        modal_grid={modal_grid}
+        tog_grid={tog_grid}
+        editData={editData}
+        onSubmit={handleFormSubmit}
+        editUserCheck={editUserCheck}
+      />
       <div className="page-content">
         <div className="container-fluid">
           <Row className="row-font">
@@ -70,7 +191,7 @@ const CommEntry = ({ activeSubItem }: any) => {
                 <CardBody>
                   <UserInfoTable
                     activeSubItem={activeSubItem}
-                    T6Data={dummyData}
+                    T6Data={userData}
                     handleEditClick={handleEditClick}
                   />
                 </CardBody>

@@ -857,7 +857,7 @@ export const dormantColumns: GridColDef[] = [
   },
 ];
 export const communicationColumns = (
-  handleEditClick?: (row: any) => void
+  handleEditClick?: (row: any, editCheck: boolean) => void
 ): GridColDef[] => [
   {
     field: "action",
@@ -876,7 +876,7 @@ export const communicationColumns = (
         <Tooltip title="Edit" arrow placement="top">
           <IconButton
             color="primary"
-            onClick={() => handleEditClick?.(params.row)}
+            onClick={() => handleEditClick?.(params.row, true)}
           >
             <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
           </IconButton>
@@ -885,7 +885,7 @@ export const communicationColumns = (
     },
   },
   {
-    field: "dateOfCommunication",
+    field: "DateOfCommunication",
     headerName: "Date of Communication",
     width: 160,
     headerClassName: "header-wrap-custom",
@@ -894,35 +894,22 @@ export const communicationColumns = (
     disableColumnMenu: true,
   },
   {
-    field: "typeOfDocuments",
-    headerName: "Type of Documents",
+    field: "DocumentType",
+    headerName: "Type of Document",
     minWidth: 180,
     disableColumnMenu: true,
   },
   {
-    field: "communicationType",
+    field: "CommunicationType",
     headerName: "Communication Type",
     minWidth: 180,
     disableColumnMenu: true,
   },
   {
-    field: "emailLogReport",
-    headerName: "Email Log Report",
+    field: "CommunicationProof",
+    headerName: "Proof of Communication Description",
     minWidth: 200,
-    disableColumnMenu: true,
-    renderCell: (params: any) => {
-      const emailLog = params.value || "N/A"; // Handle null/undefined values
-      return (
-        <Tooltip title={emailLog} arrow placement="top">
-          <span style={{ cursor: "pointer" }}>{emailLog}</span>
-        </Tooltip>
-      );
-    },
-  },
-  {
-    field: "physicalDispatchProof",
-    headerName: "Physical Dispatch Proof",
-    minWidth: 200,
+    flex: 2,
     disableColumnMenu: true,
     renderCell: (params: any) => {
       const dispatchProof = params.value || "N/A";
@@ -934,10 +921,87 @@ export const communicationColumns = (
     },
   },
   {
-    field: "department",
+    field: "Department",
     headerName: "Department",
     minWidth: 140,
     disableColumnMenu: true,
+  },
+];
+
+export const CompliancneReport: GridColDef[] = [
+  {
+    field: "RowId",
+    headerName: "Sr No.",
+    width: 60,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    // renderCell: (params: any) => {
+    //   // const handleEditClick = () => {
+    //   //   console.log("Edit clicked for ID:", params.row);
+    //   //   // Open modal logic here
+    //   // };
+
+    //   return (
+    //     <Tooltip title="Edit" arrow placement="top">
+    //       <IconButton
+    //         color="primary"
+    //         // onClick={() => handleEditClick?.(params.row)}
+    //       >
+    //         <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+    //       </IconButton>
+    //     </Tooltip>
+    //   );
+    // },
+  },
+  {
+    field: "DateOfCommunication",
+    headerName: "Date of Communication",
+    width: 160,
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "TypeOfDocuments",
+    headerName: "Type of Document",
+    minWidth: 140,
+    disableColumnMenu: true,
+  },
+  {
+    field: "CommunicationType",
+    headerName: "Communication Type",
+    minWidth: 150,
+    disableColumnMenu: true,
+  },
+  {
+    field: "ProofOfDescription",
+    headerName: "Email Log Report",
+    minWidth: 150,
+
+    disableColumnMenu: true,
+    // renderCell: (params: any) => {
+    //   const dispatchProof = params.value || "N/A";
+    //   return (
+    //     <Tooltip title={dispatchProof} arrow placement="top">
+    //       <span style={{ cursor: "pointer" }}>{dispatchProof}</span>
+    //     </Tooltip>
+    //   );
+    // },
+  },
+  {
+    field: "",
+    headerName: "Physical Dispatch Proof",
+    minWidth: 200,
+    disableColumnMenu: true,
+  },
+  {
+    field: "Department",
+    headerName: "Department",
+    minWidth: 100,
+    disableColumnMenu: true,
+    flex: 2,
   },
 ];
 

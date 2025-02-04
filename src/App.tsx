@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/common/Header";
+// import Header from "./components/common/Header";
 import LoginPage from "./pages/Authentication/Login";
 import AuthenticateUser from "./pages/Authentication/authnticateUser";
 import ForgotPassword from "./pages/Authentication/ForgotPassword";
@@ -16,7 +16,7 @@ function App() {
     <>
       <Router>
         <ToastContainer />
-        <Header />
+        {/* <Header /> */}
         <Loader />
         <Routes>
           <Route path="/" element={<LoginPage />} />

@@ -39,3 +39,14 @@
     height: "35px" !important;
 }
   
+
+.input-error {
+    border: 1px solid red !important;
+    background-color: #ffe6e6; /* Light red background */
+  }
+  
+  .text-error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }

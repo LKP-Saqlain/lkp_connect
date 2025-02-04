@@ -49,7 +49,7 @@ import { BsFullscreen } from "react-icons/bs";
 import EkycLinks from "../../pages/ekycLinks";
 import StockStudy from "../../pages/StockStudy";
 import DPRecovery from "../../pages/Reports/DPRecovery";
-import Retrival from "../../pages/Reports/commRetrival";
+import Retrival from "../../pages/Reports/ComplianceReport";
 import OTDetails from "../../pages/OT";
 import CommEntry from "../../pages/Compilance/commEntry";
 import ComChecker from "../../pages/Compilance/commChecker";
@@ -629,6 +629,7 @@ const SideBar = () => {
         sx={{
           flexGrow: 1,
           p: 1,
+          mt: 8,
           backgroundColor: "#E5E4E2",
           overflow: "hidden",
           // width: "100vw", // Full width of the viewport

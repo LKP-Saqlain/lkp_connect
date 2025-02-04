@@ -6,6 +6,10 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { apiServices } from "../../../services";
+import { useDispatch } from "react-redux";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
+import { useEffect, useState } from "react";
 
 const financialYears = [
   { value: "2019-2020", label: "2019-2020" },
@@ -15,16 +19,22 @@ const financialYears = [
   { value: "2023-2024", label: "2023-2024" },
   { value: "2024-2025", label: "2024-2025" },
 ];
-const documentType = [{ value: "Circular", label: "Circular" }];
+const documentType = [
+  { value: "Circular", label: "Circular" },
+  { value: "ALL", label: "ALL" },
+];
 const department = [
   { value: "IT", label: "IT" },
   { value: "Account", label: "Account" },
   { value: "RMS", label: "RMS" },
+  { value: "ALL", label: "ALL" },
 ];
 
 const Retrival = ({ activeSubItem }: any) => {
   // const [selectedButton, setSelectedButton] = useState<string>("Daily");
+  const [userData, setUserData] = useState([]);
 
+  const dispatch = useDispatch();
   const isMobile = useMediaQuery("(max-width:600px)");
 
   const formik = useFormik({
@@ -41,8 +51,43 @@ const Retrival = ({ activeSubItem }: any) => {
     onSubmit: async (values) => {
       const { finYear } = values;
       console.log("submitClick", finYear);
+      fetchComplianceReport();
     },
   });
+  useEffect(() => {
+    console.log("formikValls", formik.values);
+  }, [formik.values]);
+
+  const fetchComplianceReport = async () => {
+    let payload = {
+      financialYear: "2024-2025",
+      department: "ALL",
+      action: "viewReport",
+      documentType: "",
+      typeOfDocuments: "ALL",
+      communicationType: "",
+      communicationProof: "",
+      communicationProofPath: "",
+      dateOfCommunication: "02/03/2025",
+      rowId: 0,
+      userId: "",
+    };
+    dispatch(showLoader("Please wait"));
+    apiServices
+      .ComplainceReport(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+        console.log("apiResponse", response?.data?.Table);
+        setUserData(response?.data?.Table);
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        console.log("Error", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
 
   return (
     <Card>
@@ -53,44 +98,6 @@ const Retrival = ({ activeSubItem }: any) => {
               <span className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center chart-header">
                 Communication Retrival Report
               </span>
-              {/* <div className="d-flex gap-1">
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setSelectedButton("Daily")}
-                  sx={
-                    selectedButton === "Daily"
-                      ? selectedStyle
-                      : nonSelectedStyle
-                  }
-                >
-                  F.Y.
-                </Button>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setSelectedButton("Weekly")}
-                  sx={
-                    selectedButton === "Weekly"
-                      ? selectedStyle
-                      : nonSelectedStyle
-                  }
-                >
-                  Type of document
-                </Button>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setSelectedButton("Monthly")}
-                  sx={
-                    selectedButton === "Monthly"
-                      ? selectedStyle
-                      : nonSelectedStyle
-                  }
-                >
-                  Department
-                </Button>
-              </div> */}
             </div>
           </Col>
         </Row>
@@ -244,20 +251,7 @@ const Retrival = ({ activeSubItem }: any) => {
         </form>
       </CardBody>
       <CardBody>
-        {/* <DataTable
-          customFlag={true}
-          dynamicHeader={dormantColumns}
-          tableData={userData}
-        /> */}
-        <UserInfoTable
-          //   showSearch={true}
-          activeSubItem={activeSubItem}
-          //   handleSearchBasedOnInput={handleSearchBasedOnInput}
-          //   searchValue={searchQuery}
-          T6Data={[]}
-          //   getUserDetails={getUserDetails}
-          //   emailSentStatus={emailSentStatus}
-        />
+        <UserInfoTable activeSubItem={activeSubItem} T6Data={userData} />
       </CardBody>
     </Card>
   );
