@@ -148,9 +148,10 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
                 backgroundColor: "#11395C",
                 color: "#fff",
                 borderRadius: "7px",
-                fontFamily: "Poppins",
+                fontFamily: "Public Sans",
                 borderColor: "#ABC4DA",
                 textTransform: "capitalize",
+                marginLeft:"10px"
               }}
               onClick={handleExcelDownload}
               type="button"
