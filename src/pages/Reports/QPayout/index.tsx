@@ -145,8 +145,12 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
     const query = value;
     setSearchQuery(query);
 
-    const filtered = qPayoutData.filter(
-      (item: any) => item.clientName.toLowerCase().includes(query) // Check if the client name includes the query
+    const lowerCaseValue = value.toLowerCase();
+
+    const filtered = qPayoutData.filter((item: any) =>
+      Object.keys(item).some((key) =>
+        item[key]?.toString().toLowerCase().includes(lowerCaseValue)
+      )
     );
 
     setFilteredData(filtered);

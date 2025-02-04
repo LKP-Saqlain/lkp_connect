@@ -273,10 +273,17 @@ const DormantClient = ({ activeSubItem }: any) => {
     const query = value;
     setSearchQuery(query);
 
-    const filtered = userData.filter(
-      (item: any) => item.clientName.toLowerCase().includes(query) // Check if the client name includes the query
-    );
+    // const filtered = userData.filter(
+    //   (item: any) => item.clientName.toLowerCase().includes(value.toLowerCase()) // Check if the client name includes the query
+    // );
 
+    const lowerCaseValue = value.toLowerCase();
+
+    const filtered = userData.filter((item: any) =>
+      Object.keys(item).some((key) =>
+        item[key]?.toString().toLowerCase().includes(lowerCaseValue)
+      )
+    );
     setFilteredData(filtered);
     console.log("filteredSearch Records", filteredData);
   };
