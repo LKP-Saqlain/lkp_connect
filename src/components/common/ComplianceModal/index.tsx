@@ -277,8 +277,8 @@ const ModalComponent = ({
                             )
                           : null
                       }
-                      // maxDate={dayjs().subtract(18, "year")}
-                      // minDate={dayjs().subtract(64, "year")}
+                      maxDate={dayjs().subtract(0, "year")}
+                      minDate={dayjs().subtract(64, "year")}
                       onChange={(date: Dayjs | null) =>
                         formik.setFieldValue(
                           "dateOfCommunication",
