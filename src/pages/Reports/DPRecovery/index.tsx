@@ -96,8 +96,8 @@ const DPRecovery = () => {
     const query = value;
     setSearchQuery(query);
 
-    const filtered = userData.filter(
-      (item: any) => item.BOName.toLowerCase().includes(query) // Check if the client name includes the query
+    const filtered = userData.filter((item: any) =>
+      item.BOName.toLowerCase().includes(value.toLowerCase())
     );
 
     setFilteredData(filtered);

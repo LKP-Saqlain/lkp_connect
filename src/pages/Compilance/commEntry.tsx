@@ -113,46 +113,55 @@ const CommEntry = ({ activeSubItem }: any) => {
     }
   }, [dispatch, editData]);
 
+  //this useEffect call direct after insert api calls from modalComponent
   useEffect(() => {
-    if (apiStatus) {
-      const fetchComplianceEntry = async () => {
-        let payload = {
-          financialYear: "2024-2025",
-          department: "ALL",
-          action: "view",
-          documentType: "string",
-          typeOfDocuments: "ALL",
-          communicationType: "string",
-          communicationProof: "string",
-          communicationProofPath: "string",
-          dateOfCommunication: "02/03/2025",
-          rowId: 0,
-          userId: "",
-        };
-        dispatch(showLoader("Please wait"));
-        apiServices
-          .ComplainceReport(payload)
-          .then((response) => {
-            dispatch(hideLoader());
-            console.log("apiResponse", response?.data?.Table);
-            setUserData(response?.data?.Table);
-          })
-          .catch((error) => {
-            dispatch(hideLoader());
-            console.log("Error", error);
-          })
-          .finally(() => {
-            dispatch(hideLoader());
-          });
-      };
-      fetchComplianceEntry();
+    const fetchComplianceEntry = async () => {
+      const today = new Date();
+      const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(
+        today.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${today.getFullYear()}`;
 
+      let payload = {
+        financialYear: "",
+        department: "",
+        action: "view",
+        documentType: "",
+        typeOfDocuments: "",
+        communicationType: "",
+        communicationProof: "",
+        communicationProofPath: "",
+        dateOfCommunication: formattedDate,
+        rowId: 0,
+        userId: "",
+      };
+
+      dispatch(showLoader("Please wait"));
+      try {
+        const response = await apiServices.ComplainceReport(payload);
+        dispatch(hideLoader());
+        console.log("apiResponse", response?.data?.Table);
+        setUserData(response?.data?.Table);
+      } catch (error) {
+        console.error("Error", error);
+        dispatch(hideLoader());
+      }
+    };
+
+    // Call API on first render or when apiStatus is true
+    if (apiStatus || apiStatus === false) {
+      fetchComplianceEntry();
+    }
+
+    // Reset apiStatus to false after execution
+    if (apiStatus) {
       const timeoutId = setTimeout(() => {
         setApiStatus(false);
       }, 3000);
       return () => clearTimeout(timeoutId);
     }
-  }, [dispatch, apiStatus]);
+  }, [dispatch, apiStatus]); // Add apiStatus as dependency
 
   return (
     <React.Fragment>
