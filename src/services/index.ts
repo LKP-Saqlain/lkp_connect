@@ -97,4 +97,7 @@ export const apiServices = {
   Fundamental: async (payload: any) => {
     return await apiService("POST", endpoints.getFundamentalRecord, payload);
   },
+  Compliance:async(payload:any)=>{
+    return await apiService("POST",endpoints.ComplianceData,payload);
+  }
 };

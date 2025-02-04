@@ -895,7 +895,7 @@ export const communicationColumns = (
   },
   {
     field: "typeOfDocuments",
-    headerName: "Type of Documents",
+    headerName: "Type of Document",
     minWidth: 180,
     disableColumnMenu: true,
   },
@@ -907,7 +907,7 @@ export const communicationColumns = (
   },
   {
     field: "emailLogReport",
-    headerName: "Email Log Report",
+    headerName: "Proof of Communication Description",
     minWidth: 200,
     disableColumnMenu: true,
     renderCell: (params: any) => {

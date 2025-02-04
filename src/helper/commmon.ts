@@ -8,7 +8,7 @@ export const ButtonsLabel = [
 ]
 
 
-export const monthlyDataO = [
+export const CheckerData = [
   { dummyId: 1, date: "2025-01-15", documentType: "Invoice", communicationType: "Email", proofOfCommunicationDescription: "Customer confirmation", department: "Sales", document: "https://example.com/download/invoice1.pdf" },
   { dummyId: 2, date: "2025-01-16", documentType: "Receipt", communicationType: "Phone", proofOfCommunicationDescription: "Phone call log", department: "Customer Service", document: "https://example.com/download/receipt2.pdf" },
   { dummyId: 3, date: "2025-01-17", documentType: "Contract", communicationType: "Email", proofOfCommunicationDescription: "Signed contract", department: "Legal", document: "https://example.com/download/contract3.pdf" },
