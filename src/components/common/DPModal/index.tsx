@@ -36,18 +36,19 @@ const CustomModal = ({
           </h6>
           <h6 className="mb-3">Are you sure you want to send the email?</h6>
           <div className="hstack gap-2 justify-content-center">
-            <Button className="btn btn-success" onClick={handleConfirm}>
+            <Button
+              className="btn btn-success p-6"
+              style={{ width:"80px" }}
+              onClick={handleConfirm}
+            >
               Yes
             </Button>
-            <Link
-              to="#"
+            <Button
               className="btn btn-success"
-              color="light"
-              // style={{ color: "#fff", backgroundColor: "#11395C" }}
               onClick={() => setmodal_center(false)}
             >
               Cancel
-            </Link>
+            </Button>
           </div>
         </div>
       </ModalBody>

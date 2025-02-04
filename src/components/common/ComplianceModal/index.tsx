@@ -385,7 +385,7 @@ const ModalComponent = ({
                   htmlFor="lastName"
                   className="form-label"
                 >
-                  Proof of Communication
+                  Proof of Communication Description
                 </label>
                 <Input
                   value={formik.values.proofOfCommunication}

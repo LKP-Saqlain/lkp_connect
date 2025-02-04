@@ -30,4 +30,5 @@ export const endpoints = {
   DPEmail: "/api/Client/DPEmail",
   getFundamentalRecord: "/Fundamental/fundamental/INE467B01029",
   ComplainceReport: "/api/Compliance/ComplianceData",
+  ComplianceData: "/api/Compliance/ComplianceData",
 };

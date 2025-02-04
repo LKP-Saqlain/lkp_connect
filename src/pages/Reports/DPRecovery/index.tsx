@@ -106,8 +106,8 @@ const DPRecovery = () => {
 
   return (
     <Card>
-      <CardHeader style={{ fontFamily: "Poppins" }}>
-        DP Debit Outstanding
+      <CardHeader>
+        <h4 className="card-title mb-0">  DP Debit Outstanding</h4>
       </CardHeader>
       <CardBody>
         {/* <DataTable

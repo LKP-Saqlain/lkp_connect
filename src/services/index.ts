@@ -100,4 +100,7 @@ export const apiServices = {
   ComplainceReport: async (payload: any) => {
     return await apiService("POST", endpoints.ComplainceReport, payload);
   },
+  Compliance: async (payload: any) => {
+    return await apiService("POST", endpoints.ComplianceData, payload);
+  },
 };

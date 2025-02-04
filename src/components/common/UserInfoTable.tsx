@@ -63,6 +63,7 @@ interface SelectedWidgetProps {
   showExcel?: any;
   handleExcelDownload?: () => void;
   handleEditClick?: (data: any, editCheck: boolean) => void;
+  handleApproval?: any;
 }
 
 const DataTable = ({
@@ -85,6 +86,7 @@ const DataTable = ({
   showExcel,
   handleExcelDownload,
   handleEditClick,
+  handleApproval,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -182,7 +184,7 @@ const DataTable = ({
                 <button
                   onClick={() => {
                     setRowApproval(!rowApproval);
-                    setSelectedRow(params.row);
+                    handleApproval(params.row.RowId);
                   }}
                   disabled={rowApproval}
                   style={{
@@ -193,7 +195,7 @@ const DataTable = ({
                     cursor: rowApproval ? "default" : "pointer",
                   }}
                 >
-                  {rowApproval ? "Approved !" : "Approve "}
+                  {rowApproval ? "Approved!" : "Approve"}
                 </button>
               );
             },
@@ -380,6 +382,8 @@ const DataTable = ({
               ? row.RowId
               : row.id
               ? row.id
+              : row.RowId
+              ? row.RowId
               : row.BOID
               ? `${row.BOName}-${row.TotalDebit}-${Math.random()}` // this is just for when data comes repetative
               : // ? row.BOID

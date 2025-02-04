@@ -224,14 +224,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
           </CardBody>
         </Card>
         <Card className="main-card">
-          <CardHeader
-            className="d-flex justify-content-between align-items-center"
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <CardHeader>
             <h4 className="card-title mb-0">Client's Birthday Today</h4>
           </CardHeader>
           <CardBody

@@ -522,6 +522,14 @@ export const DPDebitRecovery: GridColDef[] = [
     },
   },
   {
+    field: "BOStatus",
+    headerName: "Status",
+    width: 110,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
     field: "AcStatus",
     headerName: "Category",
     width: 110,
