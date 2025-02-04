@@ -1,5 +1,5 @@
 import { Button, Modal as ReactstrapModal, ModalBody } from "reactstrap";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 interface CustomModalProps {
   tog_center: () => void;
@@ -38,7 +38,7 @@ const CustomModal = ({
           <div className="hstack gap-2 justify-content-center">
             <Button
               className="btn btn-success p-6"
-              style={{ width:"80px" }}
+              style={{ width: "80px" }}
               onClick={handleConfirm}
             >
               Yes

@@ -86,7 +86,7 @@ const DPRecovery = () => {
 
   const getUserDetails = (value: any) => {
     console.log("userBOID", value?.BOID);
-    // handleEmailSend(value?.BOID);
+    handleEmailSend(value?.BOID);
   };
 
   const handleSearchBasedOnInput = (value: string) => {
@@ -107,7 +107,7 @@ const DPRecovery = () => {
   return (
     <Card>
       <CardHeader>
-        <h4 className="card-title mb-0">  DP Debit Outstanding</h4>
+        <h4 className="card-title mb-0"> DP Debit Outstanding</h4>
       </CardHeader>
       <CardBody>
         {/* <DataTable
