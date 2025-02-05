@@ -39,7 +39,7 @@ interface DashboardCrypto {
 }
 
 const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
-  const [selectedItem, setSelectedItem] = useState("Clients With Cash Balance");
+  const [selectedItem, setSelectedItem] = useState("Clients With Ledger Balance");
   const [t6Data, setT6Data] = useState<T6Selling[]>([]);
   const [tradeCWCBData, setTradeCWCBData] = useState<CWCB[]>([]);
   const dispatch = useDispatch<AppDispatch>();
@@ -61,7 +61,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   }, [selectedTrading]);
 
   useEffect(() => {
-    if (selectedItem === "" || selectedItem === "Clients With Cash Balance") {
+    if (selectedItem === "" || selectedItem === "Clients With Ledger Balance") {
       setT6Data([]);
       dispatch(showLoader("Please wait"));
       const fetchCWCBReport = async () => {
@@ -187,7 +187,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
               handleItemClick={handleItemClick}
             />
             {selectedItem === "Reasearch Calls" && <TradeCapsule />}
-            {/* {selectedItem === "Clients With Cash Balance" && <DropDown />} */}
+            {/* {selectedItem === "Clients With Ledger Balance" && <DropDown />} */}
           </Row>
           <TradeInfo
             T6Data={t6Data}

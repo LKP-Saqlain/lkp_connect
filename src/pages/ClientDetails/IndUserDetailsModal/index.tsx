@@ -257,7 +257,7 @@ const UserInfoModal = ({
             >
               <CardBody
                 className="d-flex justify-content-center align-items-center"
-                style={{ height: "80px" }}
+                style={{ height: "50px" }}
               >
                 <p
                   style={{
@@ -293,14 +293,23 @@ const UserInfoModal = ({
                         backgroundColor: "#fff",
                       }}
                     >
-                      <CardBody className="text-center">
+                      <CardBody
+                        className="text-center"
+                        style={{
+                          height: "50px",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
                         <p
                           style={{
-                            fontFamily: "Poppins",
+                            fontFamily: "Public Sans",
                             color: "#333",
                             fontWeight: "500",
                             fontSize: "12px",
-                            margin: "5px 0",
+                            margin: "4px 0",
                           }}
                         >
                           {item.label}

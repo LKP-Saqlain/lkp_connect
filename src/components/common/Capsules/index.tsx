@@ -7,7 +7,7 @@ export const cyptoWidgets = [
   {
     id: 2,
 
-    label: "Clients With Cash Balance",
+    label: "Clients With Ledger Balance",
   },
   { id: 3, label: "T6 Selling" },
   // { id: 4, label: "MTF Open Position" },

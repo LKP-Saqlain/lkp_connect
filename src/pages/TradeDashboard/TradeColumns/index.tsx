@@ -36,7 +36,7 @@ export const ClientCashColumns: GridColDef[] = [
   },
   {
     field: "Cash",
-    headerName: "Cash",
+    headerName: "Ledger Balance",
     flex: 1.2,
     minWidth: 120,
     align: "right",
@@ -86,7 +86,7 @@ export const ClientCashColumns: GridColDef[] = [
   },
   {
     field: "Brokerage_for_currentmonth",
-    headerName: "Current Month",
+    headerName: "Current Month Brokerage",
     flex: 1.2,
     minWidth: 120,
     align: "right",
@@ -100,12 +100,13 @@ export const ClientCashColumns: GridColDef[] = [
     },
     // sortable: false,
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "Brokerage_for_1month",
     align: "right",
     headerAlign: "center",
-    headerName: "Last Month",
+    headerName: "Last Month Brokerage",
     flex: 1.2,
     minWidth: 120,
     valueFormatter: (params: any) => {
@@ -117,10 +118,11 @@ export const ClientCashColumns: GridColDef[] = [
     },
     // sortable: false,
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "Brokerage_for_3months",
-    headerName: "3 Month",
+    headerName: "3 Month Brokerage",
     align: "right",
     headerAlign: "center",
     flex: 1.2,
@@ -134,6 +136,7 @@ export const ClientCashColumns: GridColDef[] = [
     },
     // sortable: false,
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
 ];
 export const T6Columns: GridColDef[] = [

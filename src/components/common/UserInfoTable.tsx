@@ -104,7 +104,7 @@ const DataTable = ({
   useEffect(() => {
     console.log(totalRows, tradeData);
 
-    if (selectedWidget !== "Clients With Cash Balance") {
+    if (selectedWidget !== "Clients With Ledger Balance") {
       setTradeData([]);
     }
   }, [selectedWidget]);
@@ -129,7 +129,7 @@ const DataTable = ({
     // tog_center();
   };
   const getColumns = () => {
-    if (selectedWidget === "Clients With Cash Balance") {
+    if (selectedWidget === "Clients With Ledger Balance") {
       return ClientCashColumns.map((column) => ({
         ...column,
         // sortable: false,
@@ -308,7 +308,7 @@ const DataTable = ({
         getUserDetails={getUserDetails} // Pass the API call function
         row={selectedRow} // Pass the selected row data
       />
-      {selectedWidget === "Clients With Cash Balance" && (
+      {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown tradeData={setTradeData} handleValues={handleValues} />
       )}
       {/* {(selectedWidget === "Total Clients" ||
@@ -355,8 +355,9 @@ const DataTable = ({
         }}
       >
         <DataGrid
+        disableRowSelectionOnClick
           rows={
-            selectedWidget === "Clients With Cash Balance"
+            selectedWidget === "Clients With Ledger Balance"
               ? tradeCWCBData
               : selectedWidget === "Total Clients"
               ? T6Data
