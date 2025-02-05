@@ -300,15 +300,16 @@ const UserInfoModal = ({
                           display: "flex",
                           flexDirection: "column",
                           justifyContent: "center",
+                          alignItems: "center",
                         }}
                       >
                         <p
                           style={{
-                            fontFamily: "Poppins",
+                            fontFamily: "Public Sans",
                             color: "#333",
                             fontWeight: "500",
                             fontSize: "12px",
-                            // margin: "5px 0",
+                            margin: "4px 0",
                           }}
                         >
                           {item.label}

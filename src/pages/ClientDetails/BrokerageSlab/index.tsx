@@ -35,13 +35,13 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
             style={{
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
               backgroundColor: "#11395C",
-              borderRadius: "23px",
+              borderRadius: "13px",
               height: "100%", // Make the height 100% to match the content
             }}
           >
             <CardBody
               className="d-flex justify-content-center align-items-center"
-              style={{ height: "200px" }}
+              style={{ height: "100px" }}
             >
               <p
                 style={{
@@ -84,9 +84,14 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
                       border: "1px solid rgba(0, 0, 0, 0.1)",
                       borderRadius: "10px",
                       backgroundColor: "#fff",
+                      // height: "50px",
+                      margin: 0,
                     }}
                   >
-                    <CardBody className="d-flex justify-content-between align-items-center">
+                    <CardBody
+                      className="d-flex justify-content-between align-items-center"
+                      style={{ padding: "0px 10px" }}
+                    >
                       <div className="text-container">
                         <p
                           style={{
@@ -94,7 +99,7 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
                             color: "#333",
                             fontWeight: "500",
                             fontSize: "12px",
-                            margin: "5px 0",
+                            margin: "5px 0 0 0",
                           }}
                         >
                           {item.label}
@@ -103,8 +108,8 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
                           style={{
                             fontFamily: "Poppins",
                             color: "#777",
-                            fontSize: "14px",
-                            margin: 0,
+                            fontSize: "11px",
+                            margin: "0 0 5px 0",
                           }}
                         >
                           <FiberManualRecordIcon
@@ -149,13 +154,13 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
               style={{
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
                 backgroundColor: "#11395C",
-                borderRadius: "23px",
+                borderRadius: "13px",
                 height: "100%", // Matches height of items on the right
               }}
             >
               <CardBody
                 className="d-flex justify-content-center align-items-center"
-                style={{ height: "80px" }}
+                style={{ height: "50px" }}
               >
                 <p
                   style={{
@@ -185,7 +190,16 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
                       backgroundColor: "#fff",
                     }}
                   >
-                    <CardBody className="text-center">
+                    <CardBody
+                      className="text-center"
+                      style={{
+                        height: "50px",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
                       <p
                         style={{
                           fontFamily: "Poppins",
@@ -236,13 +250,13 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
               style={{
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
                 backgroundColor: "#11395C",
-                borderRadius: "23px",
+                borderRadius: "13px",
                 height: "100%", // Matches height of items on the right
               }}
             >
               <CardBody
                 className="d-flex justify-content-center align-items-center"
-                style={{ height: "80px" }}
+                style={{ height: "50px" }}
               >
                 <p
                   style={{
@@ -272,7 +286,16 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
                       backgroundColor: "#fff",
                     }}
                   >
-                    <CardBody className="text-center">
+                    <CardBody
+                      className="text-center"
+                      style={{
+                        height: "50px",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
                       <p
                         style={{
                           fontFamily: "Poppins",

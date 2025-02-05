@@ -508,9 +508,9 @@ const SideBar = () => {
                   sx={{ p: 0 }}
                 >
                   {isFullScreen ? (
-                    <SlSizeFullscreen style={{ cursor: "pointer" }} />
-                  ) : (
                     <BsFullscreen style={{ cursor: "pointer" }} />
+                  ) : (
+                    <SlSizeFullscreen style={{ cursor: "pointer" }} />
                   )}
                 </IconButton>
               </div>
@@ -546,7 +546,12 @@ const SideBar = () => {
           </Typography>
           <Tooltip title="">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar src="/static/images/avatar/2.jpg">{firstLetter}</Avatar>
+              <Avatar
+                src="/static/images/avatar/2.jpg"
+                style={{ backgroundColor: "#284c6c" }}
+              >
+                {firstLetter}
+              </Avatar>
             </IconButton>
           </Tooltip>
 
