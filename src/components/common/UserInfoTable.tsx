@@ -64,6 +64,9 @@ interface SelectedWidgetProps {
   handleExcelDownload?: () => void;
   handleEditClick?: (data: any, editCheck: boolean) => void;
   handleApproval?: any;
+  totalCount?: any;
+  activeClient?: any;
+  inactiveClient?: any;
 }
 
 const DataTable = ({
@@ -87,6 +90,9 @@ const DataTable = ({
   handleExcelDownload,
   handleEditClick,
   handleApproval,
+  totalCount,
+  activeClient,
+  inactiveClient,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -166,7 +172,9 @@ const DataTable = ({
       // apiStatus
     ) {
       return getClientActivityStatusColumns(handleViewDetails);
-    } else if (selectedWidget === "Client Approaching  Dormant Status") {
+    } else if (
+      selectedWidget === "Upcoming Client Approaching Dormant Status"
+    ) {
       return getClientDormantStatus(handleViewDetails);
     } else if (activeSubItem === "Referal Entry Status") {
       return getAccountDetails.map((column) => ({
@@ -344,6 +352,9 @@ const DataTable = ({
           onFilterChange={onFilterChange}
           showExcel={showExcel}
           handleExcelDownload={handleExcelDownload}
+          totalCount={totalCount}
+          activeClient={activeClient}
+          inactiveClient={inactiveClient}
         />
       )}
       <Paper
@@ -364,7 +375,7 @@ const DataTable = ({
               ? activeGroupedClients
               : selectedWidget === "Inactive Clients"
               ? inactiveGroupedClients
-              : selectedWidget === "Client Approaching  Dormant Status"
+              : selectedWidget === "Upcoming Client Approaching Dormant Status"
               ? T6Data
               : T6Data
           }

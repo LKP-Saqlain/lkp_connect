@@ -7,6 +7,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Button as ReactstrapButton } from "reactstrap";
 // import { Button as MUIButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
+import { Typography } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,6 +58,9 @@ interface SearchAppBarProps {
   handleExcelDownload?: () => void;
   selectedWidget?: any;
   onFilterChange?: (filter: string) => void;
+  totalCount?: any;
+  activeClient?: any;
+  inactiveClient?: any;
 }
 
 const SearchAppBar: React.FC<SearchAppBarProps> = ({
@@ -67,6 +71,9 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   selectedWidget,
   // onFilterChange,
   showExcel,
+  totalCount,
+  activeClient,
+  inactiveClient,
 }) => {
   const [searchValue, setSearchValue] = React.useState(searchTableValue);
   // const [selectedButton, setSelectedButton] = React.useState<string>("ALL");
@@ -111,18 +118,14 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
     <Box
       sx={{
         display: "flex",
-        justifyContent: "flex-start", // Align search and buttons on opposite ends
+        justifyContent: "space-between", // Align search and buttons on opposite ends
         alignItems: "center", // Vertically align elements
         flexWrap: "wrap", // Ensure proper alignment on small screens
         paddingBottom: "10px",
       }}
     >
       {/* Search Bar */}
-      {![
-        "Client Approaching  Dormant Status",
-        "Active Clients",
-        "Inactive Clients",
-      ].includes(selectedWidget) && (
+      {selectedWidget && (
         <Search sx={{ border: "1px solid #11395C" }}>
           <SearchIconWrapper>
             <SearchIcon />
@@ -140,7 +143,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
       {/* Buttons (Excel and Filters) */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         {/* Excel Button */}
-        {selectedWidget !== "Client Approaching  Dormant Status" &&
+        {selectedWidget !== "Upcoming Client Approaching Dormant Status" &&
           showExcel && (
             <ReactstrapButton
               className="btn-font"
@@ -151,7 +154,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
                 fontFamily: "Public Sans",
                 borderColor: "#ABC4DA",
                 textTransform: "capitalize",
-                marginLeft:"10px"
+                marginLeft: "10px",
               }}
               onClick={handleExcelDownload}
               type="button"
@@ -160,9 +163,26 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
               <DownloadIcon />
             </ReactstrapButton>
           )}
+        {selectedWidget !== "Upcoming Client Approaching Dormant Status" && (
+          <Box sx={{ mr: 2 }}>
+            <Typography>{`Record Count - ${new Intl.NumberFormat(
+              "en-IN"
+            ).format(
+              Math.round(
+                selectedWidget === "Total Clients"
+                  ? totalCount
+                  : selectedWidget === "Active Clients"
+                  ? activeClient
+                  : selectedWidget === "Inactive Clients"
+                  ? inactiveClient
+                  : ""
+              )
+            )}`}</Typography>
+          </Box>
+        )}
 
         {/* Filter Buttons */}
-        {/* {selectedWidget === "Client Approaching  Dormant Status" && (
+        {/* {selectedWidget === "Upcoming Client Approaching Dormant Status" && (
           <div className="d-flex gap-1">
             {["ALL", "7D", "15D", "1M"].map((filter) => (
               <MUIButton

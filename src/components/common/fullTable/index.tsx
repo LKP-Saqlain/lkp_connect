@@ -131,7 +131,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
     dataLabels: {
       enabled: true, // Enable data labels
       formatter: function (value: number) {
-        return new Intl.NumberFormat("en-IN").format(Math.round(value)); // Format the value
+        return new Intl.NumberFormat("en-IN").format(value); // Format the value
       },
       style: {
         fontSize: "12px",

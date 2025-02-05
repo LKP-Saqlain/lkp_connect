@@ -94,7 +94,7 @@ const UserInfoModal = ({
       toggle={onClose}
       className="modal-fullscreen"
       id="fullscreeexampleModal"
-      style={{ marginTop: "65px", paddingRight: "10px" }}
+      style={{ marginTop: "50px", paddingRight: "10px" }}
     >
       <ModalHeader
         className="modal-title"
@@ -257,7 +257,7 @@ const UserInfoModal = ({
             >
               <CardBody
                 className="d-flex justify-content-center align-items-center"
-                style={{ height: "80px" }}
+                style={{ height: "50px" }}
               >
                 <p
                   style={{
@@ -276,7 +276,7 @@ const UserInfoModal = ({
 
           {/* Right Side: BrokSlabItemstwo in a Single Row */}
           <Col md={9}>
-            <Row className="gx-2 gy-2">
+            <Row className="">
               {ClientInfoCapsules.map((item) => {
                 const status = (
                   clientDetails as Record<string, string | number>
@@ -293,14 +293,22 @@ const UserInfoModal = ({
                         backgroundColor: "#fff",
                       }}
                     >
-                      <CardBody className="text-center">
+                      <CardBody
+                        className="text-center"
+                        style={{
+                          height: "50px",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                        }}
+                      >
                         <p
                           style={{
                             fontFamily: "Poppins",
                             color: "#333",
                             fontWeight: "500",
                             fontSize: "12px",
-                            margin: "5px 0",
+                            // margin: "5px 0",
                           }}
                         >
                           {item.label}

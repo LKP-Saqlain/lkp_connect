@@ -64,6 +64,10 @@ any) => {
   );
 
   useEffect(() => {
+    console.log("SelectedCapsule", selectedCapsule);
+  }, [selectedCapsule]);
+
+  useEffect(() => {
     console.log(
       "test12345",
       totalEntries,
@@ -73,7 +77,7 @@ any) => {
   }, [selectedUserInfo]);
   useEffect(() => {
     if (selectedTrading === "Dormant") {
-      setSelectedCapsule("Client Approaching  Dormant Status");
+      setSelectedCapsule("Upcoming Client Approaching Dormant Status");
     }
   }, [selectedTrading]);
   useEffect(() => {
@@ -154,7 +158,7 @@ any) => {
   useEffect(() => {
     console.log("selected Capsules", selectedCapsule);
     const getUpcomingDormants = async () => {
-      if (selectedCapsule === "Client Approaching  Dormant Status") {
+      if (selectedCapsule === "Upcoming Client Approaching Dormant Status") {
         setTableData([]);
         // alert(selectedCapsule);
         const payload = {
@@ -467,7 +471,9 @@ any) => {
           // );
         }
       }
-    } else if (selectedCapsule === "Client Approaching  Dormant Status") {
+    } else if (
+      selectedCapsule === "Upcoming Client Approaching Dormant Status"
+    ) {
       setTableData([]);
       // alert(selectedCapsule);
       const payload = {
@@ -575,7 +581,7 @@ any) => {
     console.log("Selected Filter:", selectedFilter);
     setFilter(selectedFilter);
 
-    if (selectedCapsule === "Client Approaching  Dormant Status") {
+    if (selectedCapsule === "Upcoming Client Approaching Dormant Status") {
       setTableData([]); // Clear existing data before fetching new data
 
       const payload = {
@@ -669,6 +675,9 @@ any) => {
                 handleSearchUser={handleSearchUser}
                 searchValue={searchValue}
                 onFilterChange={handleFilterChange}
+                totalCount={totalCount}
+                activeClient={activeClients}
+                inactiveClient={inactiveClients}
               />
             </CardBody>
           </Card>

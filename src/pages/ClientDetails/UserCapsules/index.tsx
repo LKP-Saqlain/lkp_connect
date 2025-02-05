@@ -22,9 +22,9 @@ interface userCapsules {
 const UserCapsules = ({
   selectedCapsule,
   handleClick,
-  totalCount,
-  activeClient,
-  inactiveClient,
+  // totalCount,
+  // activeClient,
+  // inactiveClient,
   capsuleType,
 }: userCapsules) => {
   // const theme = useTheme();
@@ -79,9 +79,9 @@ const UserCapsules = ({
                               selectedCapsule === item.label ? "#fff" : "#000",
                           }}
                         >
-                          {new Intl.NumberFormat("en-IN").format(
+                          {/* {new Intl.NumberFormat("en-IN").format(
                             Math.round(totalCount)
-                          )}
+                          )} */}
                         </span>
                       )}
                       {item.label === "Active Clients" && (
@@ -93,9 +93,9 @@ const UserCapsules = ({
                               selectedCapsule === item.label ? "#fff" : "#000",
                           }}
                         >
-                          {new Intl.NumberFormat("en-IN").format(
+                          {/* {new Intl.NumberFormat("en-IN").format(
                             Math.round(activeClient)
-                          )}
+                          )} */}
                         </span>
                       )}
                       {item.label === "Inactive Clients" && (
@@ -107,9 +107,9 @@ const UserCapsules = ({
                               selectedCapsule === item.label ? "#fff" : "#000",
                           }}
                         >
-                          {new Intl.NumberFormat("en-IN").format(
+                          {/* {new Intl.NumberFormat("en-IN").format(
                             Math.round(inactiveClient)
-                          )}
+                          )} */}
                         </span>
                       )}
                     </p>
