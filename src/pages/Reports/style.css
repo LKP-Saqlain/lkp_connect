@@ -15,7 +15,7 @@
     max-width: 100%;
     position: absolute;
     left: 0;
-    top: -7px !important;
+    top: 0; /*  the financial placeholder issue */
     -webkit-transform: translate(0, 20px) scale(1);
     -moz-transform: translate(0, 20px) scale(1);
     -ms-transform: translate(0, 20px) scale(1);

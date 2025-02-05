@@ -382,6 +382,8 @@ const DataTable = ({
               ? row.id
               : row.RowId
               ? row.RowId
+              : row.dummyId
+              ? row.dummyId
               : row.BOID
               ? `${row.BOName}-${row.TotalDebit}-${Math.random()}` // this is just for when data comes repetative
               : // ? row.BOID
