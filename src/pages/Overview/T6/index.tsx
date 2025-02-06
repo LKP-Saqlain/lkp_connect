@@ -35,6 +35,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
   // const isMobile = useMediaQuery("(max-width:768px)");
 
   useEffect(() => {
+    console.log(top5Birthdays);
     const Id = localStorage.getItem("Id");
     let payload = {
       user_id: Id,
@@ -223,7 +224,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
             />
           </CardBody>
         </Card>
-        <Card className="main-card">
+        {/* <Card className="main-card">
           <CardHeader>
             <h4 className="card-title mb-0">Client's Birthday Today</h4>
           </CardHeader>
@@ -237,7 +238,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
               customHide={true}
             />
           </CardBody>
-        </Card>
+        </Card> */}
       </div>
     </>
   );
