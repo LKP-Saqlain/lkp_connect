@@ -95,7 +95,7 @@
   }
 
   .modal-dialog:not(.modal-dialog-scrollable) .modal-header {
-    padding-bottom: 20px !important;
+    padding: 4px 9px!important;
 }
 
 .css-11cfq65-MuiTablePagination-displayedRows {

@@ -103,4 +103,8 @@ export const apiServices = {
   Compliance: async (payload: any) => {
     return await apiService("POST", endpoints.ComplianceData, payload);
   },
+  ComplianceDownload: async (payload: any) => {
+    return await apiService("POST", endpoints.ComplainceFileDownload, payload);
+  },
+
 };
