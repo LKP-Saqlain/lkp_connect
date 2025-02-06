@@ -37,7 +37,7 @@ interface ComplianceEntry {
   CommunicationProof: string;
   CommunicationProofPath: string;
   Department: string;
-  DocumentType: string;
+  documentType: string;
   CreatedBy: string;
   CreatedDateTime: string;
   CheckerBy: string;
@@ -68,6 +68,12 @@ const CommEntry = ({ activeSubItem }: any) => {
     setEditUserCheck(editCheck);
   };
 
+  useEffect(() => {
+    if (apiStatus) {
+      setEditData(null);
+    }
+  }, [apiStatus]);
+
   const handleFormSubmit = (data: any, apiStatus: any) => {
     console.log("Received form data in parent:", data, formData, apiStatus);
     setFormData(data);
@@ -82,7 +88,7 @@ const CommEntry = ({ activeSubItem }: any) => {
           financialYear: editData.FinancialYear || "2024-2025",
           department: editData.Department || "ALL",
           action: "view",
-          documentType: editData.DocumentType || "string",
+          documentType: editData.documentType || "string",
           typeOfDocuments: editData.TypeOfDocuments || "ALL",
           communicationType: editData.CommunicationType || "string",
           communicationProof: editData.CommunicationProof || "string",

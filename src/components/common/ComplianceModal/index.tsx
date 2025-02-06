@@ -27,7 +27,7 @@ const department = [
   { value: "ALL", label: "ALL" },
 ];
 
-const TypeOfDocument = [
+const DocumentType = [
   { value: "Circular", label: "Circular" },
   { value: "SEBI", label: "SEBI" },
   { value: "string", label: "string" },
@@ -57,16 +57,20 @@ const ModalComponent = ({
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    console.log("editInfoData", editData, fileExtension);
-  }, [editData]);
+    console.log("editInfoData", editData?.RowId, editUserCheck, fileExtension);
+    // debugger;
+    if (editData?.RowId > 0) {
+      console.log("editInfoData not zero");
+    }
+  }, [editData, editUserCheck]);
 
   useEffect(() => {
     if (editData) {
       formik.setValues({
-        documentType: TypeOfDocument.some(
-          (item) => item.value === editData.typeOfDocuments
+        DocumentType: DocumentType.some(
+          (item) => item.value === editData.DocumentType
         )
-          ? editData.typeOfDocuments
+          ? editData.DocumentType
           : "",
 
         department: department.some(
@@ -91,7 +95,7 @@ const ModalComponent = ({
   }, [editData]);
 
   const validationSchema = Yup.object().shape({
-    documentType: Yup.string().required("Type of Document is required"),
+    DocumentType: Yup.string().required("Type of Document is required"),
     department: Yup.string().required("Department is required"),
     communicationType: Yup.string().required("Communication Type is required"),
     dateOfCommunication: Yup.string().required(
@@ -104,7 +108,7 @@ const ModalComponent = ({
 
   const formik = useFormik({
     initialValues: {
-      documentType: "", //ADDED
+      DocumentType: "", //ADDED
       department: "", //ADDED
       communicationType: "", //ADDED
       dateOfCommunication: null as string | null, //ADDED
@@ -128,9 +132,9 @@ const ModalComponent = ({
     let payload = {
       financialYear: "2024-2025",
       department: formik.values.department ? formik.values.department : "",
-      action: editUserCheck ? "update" : "insert",
-      documentType: formik.values.documentType
-        ? formik.values.documentType
+      action: editData?.RowId > 0 ? "update" : "insert",
+      DocumentType: formik.values.DocumentType
+        ? formik.values.DocumentType
         : "",
       typeOfDocuments: "ALL",
       communicationType: formik.values.communicationType
@@ -143,7 +147,7 @@ const ModalComponent = ({
       dateOfCommunication: formik.values.dateOfCommunication
         ? formik.values.dateOfCommunication
         : "",
-      rowId: 0,
+      rowId: editData?.RowId ? editData?.RowId : 0,
       userId: "",
     };
     dispatch(showLoader("Please wait"));
@@ -152,6 +156,9 @@ const ModalComponent = ({
       .then((response) => {
         dispatch(hideLoader());
         console.log("apiResponseModal", response?.data?.Table[0].MSG);
+        let suceessCheck = response?.data?.Table.length;
+        if (suceessCheck.length >= 0) {
+        }
         // setUserData(response?.data?.Table);
         if (editUserCheck) {
           ShowToast("success", response?.data?.Table[0].Message);
@@ -171,7 +178,7 @@ const ModalComponent = ({
   useEffect(() => {
     if (editData) {
       formik.setValues({
-        documentType: editData.TypeOfDocuments || "",
+        DocumentType: editData.DocumentType || "",
         department: editData.Department || "",
         communicationType: editData.CommunicationType || "",
         proofOfCommunication: editData.CommunicationProof || "",
@@ -190,6 +197,8 @@ const ModalComponent = ({
 
       if (allowedFormats.includes(fileExt)) {
         dispatch(showLoader("Uploading file...")); // Show loader before processing
+
+        console.log("File", file);
 
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -311,31 +320,31 @@ const ModalComponent = ({
               <FormControl
                 fullWidth
                 error={
-                  formik.touched.documentType &&
-                  Boolean(formik.errors.documentType)
+                  formik.touched.DocumentType &&
+                  Boolean(formik.errors.DocumentType)
                 }
               >
-                <InputLabel id="documentType-modal-select-label">
+                <InputLabel id="DocumentType-modal-select-label">
                   Type of Documents
                 </InputLabel>
                 <Select
                   size="small"
-                  labelId="documentType-modal-select-label"
-                  id="documentType-select"
-                  name="documentType"
-                  value={formik.values.documentType}
+                  labelId="DocumentType-modal-select-label"
+                  id="DocumentType-select"
+                  name="DocumentType"
+                  value={formik.values.DocumentType}
                   label="Types Of Documentss"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {TypeOfDocument.map((docType) => (
+                  {DocumentType.map((docType) => (
                     <MenuItem key={docType.value} value={docType.value}>
                       {docType.label}
                     </MenuItem>
                   ))}
                 </Select>
-                {formik.touched.documentType && formik.errors.documentType && (
-                  <p className="text-error">{formik.errors.documentType}</p>
+                {formik.touched.DocumentType && formik.errors.DocumentType && (
+                  <p className="text-error">{formik.errors.DocumentType}</p>
                 )}
               </FormControl>
             </Col>
@@ -356,7 +365,7 @@ const ModalComponent = ({
                   id="communicationType-select"
                   name="communicationType"
                   value={formik.values.communicationType}
-                  label=" Communicationss Typess" 
+                  label=" Communicationss Typess"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
