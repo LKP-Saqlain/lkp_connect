@@ -209,16 +209,16 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "document") {
+        if (column.field === "CommunicationProofPath") {
           return {
             ...column,
             renderCell: (params: any) => {
-              const documentLink = params.row.document;
+              const documentLink = params.row.CommunicationProofPath;
 
               return (
                 <button
                   onClick={() => {
-                    console.log("clicked  link ");
+                    console.log("clicked  link ", documentLink);
                     window.open(documentLink, "_blank");
                     setSelectedRow(params.row);
                   }}
