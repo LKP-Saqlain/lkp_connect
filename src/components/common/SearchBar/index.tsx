@@ -143,26 +143,25 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
       {/* Buttons (Excel and Filters) */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         {/* Excel Button */}
-        {selectedWidget !== "Upcoming Client Approaching Dormant Status" &&
-          showExcel && (
-            <ReactstrapButton
-              className="btn-font"
-              style={{
-                backgroundColor: "#11395C",
-                color: "#fff",
-                borderRadius: "7px",
-                fontFamily: "Public Sans",
-                borderColor: "#ABC4DA",
-                textTransform: "capitalize",
-                marginLeft: "10px",
-              }}
-              onClick={handleExcelDownload}
-              type="button"
-            >
-              Excel
-              <DownloadIcon />
-            </ReactstrapButton>
-          )}
+        {selectedWidget !== "Upcoming Dormant Client" && showExcel && (
+          <ReactstrapButton
+            className="btn-font"
+            style={{
+              backgroundColor: "#11395C",
+              color: "#fff",
+              borderRadius: "7px",
+              fontFamily: "Public Sans",
+              borderColor: "#ABC4DA",
+              textTransform: "capitalize",
+              marginLeft: "10px",
+            }}
+            onClick={handleExcelDownload}
+            type="button"
+          >
+            Excel
+            <DownloadIcon />
+          </ReactstrapButton>
+        )}
         {selectedWidget === undefined ||
           (selectedWidget !== "Upcoming Client Approaching Dormant Status" && (
             <Box sx={{ mr: 2 }}>
@@ -183,7 +182,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
           ))}
 
         {/* Filter Buttons */}
-        {/* {selectedWidget === "Upcoming Client Approaching Dormant Status" && (
+        {/* {selectedWidget === "Upcoming Dormant Client" && (
           <div className="d-flex gap-1">
             {["ALL", "7D", "15D", "1M"].map((filter) => (
               <MUIButton
