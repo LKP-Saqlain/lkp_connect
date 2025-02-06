@@ -125,20 +125,20 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
       }}
     >
       {/* Search Bar */}
-      {selectedWidget && (
-        <Search sx={{ border: "1px solid #11395C" }}>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            value={searchValue}
-            onChange={handleInputChange}
-            onBlur={handleBlur}
-            placeholder="Search Client Name"
-            inputProps={{ "aria-label": "search" }}
-          />
-        </Search>
-      )}
+      {/* {selectedWidget && ( */}
+      <Search sx={{ border: "1px solid #11395C" }}>
+        <SearchIconWrapper>
+          <SearchIcon />
+        </SearchIconWrapper>
+        <StyledInputBase
+          value={searchValue}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
+          placeholder="Search Client Name"
+          inputProps={{ "aria-label": "search" }}
+        />
+      </Search>
+      {/* )} */}
 
       {/* Buttons (Excel and Filters) */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -163,23 +163,24 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
               <DownloadIcon />
             </ReactstrapButton>
           )}
-        {selectedWidget !== "Upcoming Client Approaching Dormant Status" && (
-          <Box sx={{ mr: 2 }}>
-            <Typography>{`Record Count - ${new Intl.NumberFormat(
-              "en-IN"
-            ).format(
-              Math.round(
-                selectedWidget === "Total Clients"
-                  ? totalCount
-                  : selectedWidget === "Active Clients"
-                  ? activeClient
-                  : selectedWidget === "Inactive Clients"
-                  ? inactiveClient
-                  : ""
-              )
-            )}`}</Typography>
-          </Box>
-        )}
+        {selectedWidget === undefined ||
+          (selectedWidget !== "Upcoming Client Approaching Dormant Status" && (
+            <Box sx={{ mr: 2 }}>
+              <Typography>{`Record Count - ${new Intl.NumberFormat(
+                "en-IN"
+              ).format(
+                Math.round(
+                  selectedWidget === "Total Clients"
+                    ? totalCount
+                    : selectedWidget === "Active Clients"
+                    ? activeClient
+                    : selectedWidget === "Inactive Clients"
+                    ? inactiveClient
+                    : ""
+                )
+              )}`}</Typography>
+            </Box>
+          ))}
 
         {/* Filter Buttons */}
         {/* {selectedWidget === "Upcoming Client Approaching Dormant Status" && (
