@@ -107,4 +107,7 @@ export const apiServices = {
     return await apiService("POST", endpoints.ComplainceFileDownload, payload);
   },
 
+  ComplainceFileUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.ComplainceFileUpload, payload);
+  },
 };

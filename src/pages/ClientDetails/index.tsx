@@ -37,7 +37,9 @@ const ClientDetails = ({
   selectedTrading,
 }: // activeMenu,
 any) => {
-  const [selectedCapsule, setSelectedCapsule] = useState("Total Clients");
+  const [selectedCapsule, setSelectedCapsule] = useState(
+    "Upcoming Dormant Client"
+  );
   const [tableData, setTableData] = useState<[]>([]);
   const [userDetails, setUserDetails] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -471,9 +473,7 @@ any) => {
           // );
         }
       }
-    } else if (
-      selectedCapsule === "Upcoming Dormant Client"
-    ) {
+    } else if (selectedCapsule === "Upcoming Dormant Client") {
       setTableData([]);
       // alert(selectedCapsule);
       const payload = {

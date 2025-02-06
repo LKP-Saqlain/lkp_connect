@@ -125,61 +125,61 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
       }}
     >
       {/* Search Bar */}
-      {selectedWidget && (
-        <Search sx={{ border: "1px solid #11395C" }}>
-          <SearchIconWrapper>
-            <SearchIcon />
-          </SearchIconWrapper>
-          <StyledInputBase
-            value={searchValue}
-            onChange={handleInputChange}
-            onBlur={handleBlur}
-            placeholder="Search Client Name"
-            inputProps={{ "aria-label": "search" }}
-          />
-        </Search>
-      )}
+      {/* {selectedWidget && ( */}
+      <Search sx={{ border: "1px solid #11395C" }}>
+        <SearchIconWrapper>
+          <SearchIcon />
+        </SearchIconWrapper>
+        <StyledInputBase
+          value={searchValue}
+          onChange={handleInputChange}
+          onBlur={handleBlur}
+          placeholder="Search Client Name"
+          inputProps={{ "aria-label": "search" }}
+        />
+      </Search>
+      {/* )} */}
 
       {/* Buttons (Excel and Filters) */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         {/* Excel Button */}
-        {selectedWidget !== "Upcoming Dormant Client" &&
-          showExcel && (
-            <ReactstrapButton
-              className="btn-font"
-              style={{
-                backgroundColor: "#11395C",
-                color: "#fff",
-                borderRadius: "7px",
-                fontFamily: "Public Sans",
-                borderColor: "#ABC4DA",
-                textTransform: "capitalize",
-                marginLeft: "10px",
-              }}
-              onClick={handleExcelDownload}
-              type="button"
-            >
-              Excel
-              <DownloadIcon />
-            </ReactstrapButton>
-          )}
-        {selectedWidget !== "Upcoming Dormant Client" && (
-          <Box sx={{ mr: 2 }}>
-            <Typography>{`Record Count - ${new Intl.NumberFormat(
-              "en-IN"
-            ).format(
-              Math.round(
-                selectedWidget === "Total Clients"
-                  ? totalCount
-                  : selectedWidget === "Active Clients"
-                  ? activeClient
-                  : selectedWidget === "Inactive Clients"
-                  ? inactiveClient
-                  : ""
-              )
-            )}`}</Typography>
-          </Box>
+        {selectedWidget !== "Upcoming Dormant Client" && showExcel && (
+          <ReactstrapButton
+            className="btn-font"
+            style={{
+              backgroundColor: "#11395C",
+              color: "#fff",
+              borderRadius: "7px",
+              fontFamily: "Public Sans",
+              borderColor: "#ABC4DA",
+              textTransform: "capitalize",
+              marginLeft: "10px",
+            }}
+            onClick={handleExcelDownload}
+            type="button"
+          >
+            Excel
+            <DownloadIcon />
+          </ReactstrapButton>
         )}
+        {selectedWidget === undefined ||
+          (selectedWidget !== "Upcoming Dormant Client" && (
+            <Box sx={{ mr: 2 }}>
+              <Typography>{`Record Count - ${new Intl.NumberFormat(
+                "en-IN"
+              ).format(
+                Math.round(
+                  selectedWidget === "Total Clients"
+                    ? totalCount
+                    : selectedWidget === "Active Clients"
+                    ? activeClient
+                    : selectedWidget === "Inactive Clients"
+                    ? inactiveClient
+                    : ""
+                )
+              )}`}</Typography>
+            </Box>
+          ))}
 
         {/* Filter Buttons */}
         {/* {selectedWidget === "Upcoming Dormant Client" && (

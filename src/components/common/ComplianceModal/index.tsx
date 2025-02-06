@@ -27,7 +27,7 @@ const department = [
   { value: "ALL", label: "ALL" },
 ];
 
-const TypeOfDocument = [
+const DocumentType = [
   { value: "Circular", label: "Circular" },
   { value: "SEBI", label: "SEBI" },
   { value: "string", label: "string" },
@@ -57,16 +57,20 @@ const ModalComponent = ({
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    console.log("editInfoData", editData, fileExtension);
-  }, [editData]);
+    console.log("editInfoData", editData?.RowId, editUserCheck, fileExtension);
+    // debugger;
+    if (editData?.RowId > 0) {
+      console.log("editInfoData not zero");
+    }
+  }, [editData, editUserCheck]);
 
   useEffect(() => {
     if (editData) {
       formik.setValues({
-        documentType: TypeOfDocument.some(
-          (item) => item.value === editData.typeOfDocuments
+        DocumentType: DocumentType.some(
+          (item) => item.value === editData.DocumentType
         )
-          ? editData.typeOfDocuments
+          ? editData.DocumentType
           : "",
 
         department: department.some(
@@ -86,12 +90,13 @@ const ModalComponent = ({
         dateOfCommunication: editData.dateOfCommunication
           ? dayjs(editData.dateOfCommunication).format("DD/MM/YYYY")
           : "",
+        uploadProof: "",
       });
     }
   }, [editData]);
 
   const validationSchema = Yup.object().shape({
-    documentType: Yup.string().required("Type of Document is required"),
+    DocumentType: Yup.string().required("Type of Document is required"),
     department: Yup.string().required("Department is required"),
     communicationType: Yup.string().required("Communication Type is required"),
     dateOfCommunication: Yup.string().required(
@@ -100,15 +105,17 @@ const ModalComponent = ({
     proofOfCommunication: Yup.string().required(
       "Proof of Communication is required"
     ),
+    uploadProof: Yup.string().required("Please Upload Proof"),
   });
 
   const formik = useFormik({
     initialValues: {
-      documentType: "", //ADDED
+      DocumentType: "", //ADDED
       department: "", //ADDED
       communicationType: "", //ADDED
       dateOfCommunication: null as string | null, //ADDED
       proofOfCommunication: "",
+      uploadProof: "",
     },
     validationSchema,
     onSubmit: (values) => {
@@ -128,9 +135,9 @@ const ModalComponent = ({
     let payload = {
       financialYear: "2024-2025",
       department: formik.values.department ? formik.values.department : "",
-      action: editUserCheck ? "update" : "insert",
-      documentType: formik.values.documentType
-        ? formik.values.documentType
+      action: editData?.RowId > 0 ? "update" : "insert",
+      DocumentType: formik.values.DocumentType
+        ? formik.values.DocumentType
         : "",
       typeOfDocuments: "ALL",
       communicationType: formik.values.communicationType
@@ -143,7 +150,7 @@ const ModalComponent = ({
       dateOfCommunication: formik.values.dateOfCommunication
         ? formik.values.dateOfCommunication
         : "",
-      rowId: 0,
+      rowId: editData?.RowId ? editData?.RowId : 0,
       userId: "",
     };
     dispatch(showLoader("Please wait"));
@@ -152,6 +159,9 @@ const ModalComponent = ({
       .then((response) => {
         dispatch(hideLoader());
         console.log("apiResponseModal", response?.data?.Table[0].MSG);
+        let suceessCheck = response?.data?.Table.length;
+        if (suceessCheck.length >= 0) {
+        }
         // setUserData(response?.data?.Table);
         if (editUserCheck) {
           ShowToast("success", response?.data?.Table[0].Message);
@@ -171,13 +181,14 @@ const ModalComponent = ({
   useEffect(() => {
     if (editData) {
       formik.setValues({
-        documentType: editData.TypeOfDocuments || "",
+        DocumentType: editData.DocumentType || "",
         department: editData.Department || "",
         communicationType: editData.CommunicationType || "",
         proofOfCommunication: editData.CommunicationProof || "",
         dateOfCommunication: editData.DateOfCommunication
           ? dayjs(editData.DateOfCommunication).format("DD/MM/YYYY") // Convert to string
           : "",
+        uploadProof: "",
       });
     }
   }, [editData]);
@@ -189,16 +200,46 @@ const ModalComponent = ({
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
 
       if (allowedFormats.includes(fileExt)) {
-        dispatch(showLoader("Uploading file...")); // Show loader before processing
+        // dispatch(showLoader("Uploading file...")); // Show loader before processing
 
+        const { name } = file;
+        const fileName = name.substring(0, name.lastIndexOf("."));
+        console.log("FileNameOnly", fileName);
         const reader = new FileReader();
         reader.readAsDataURL(file);
+        // debugger;
         reader.onload = () => {
           const base64String = reader.result as string;
+          const base64Only = base64String.split(",")[1] || base64String;
           setUploadedFile(file);
-          setFileBase64(base64String); // Store base64
+          setFileBase64(base64Only); // Store base64
           setFileExtension(fileExt);
-          dispatch(hideLoader());
+
+          dispatch(showLoader("Uploading file..."));
+
+          let payload = {
+            fileName: fileName,
+            filePath: "D:\\FileUpload\\Compliance",
+            fileType: `.${fileExt}`,
+            contentType: base64Only,
+          };
+          apiServices
+            .ComplainceFileUpload(payload)
+            .then((response) => {
+              console.log("Response", response);
+              dispatch(hideLoader());
+              if (response?.status === 200) {
+                ShowToast("success", response?.data);
+                formik.setFieldError("uploadProof", "");
+              }
+            })
+            .catch((error) => {
+              console.log("ERROR-->", error);
+              dispatch(hideLoader());
+            })
+            .finally(() => {
+              dispatch(hideLoader());
+            });
         };
         reader.onerror = (error) => {
           console.error("Error reading file:", error);
@@ -222,6 +263,7 @@ const ModalComponent = ({
       setFileExtension("");
       if (fileInputRef.current) {
         fileInputRef.current.value = ""; // Reset the file input value
+        formik.setFieldError("uploadProof", "");
       }
       dispatch(hideLoader()); // Hide loader after reset
     }, 500);
@@ -311,31 +353,31 @@ const ModalComponent = ({
               <FormControl
                 fullWidth
                 error={
-                  formik.touched.documentType &&
-                  Boolean(formik.errors.documentType)
+                  formik.touched.DocumentType &&
+                  Boolean(formik.errors.DocumentType)
                 }
               >
-                <InputLabel id="documentType-modal-select-label">
+                <InputLabel id="DocumentType-modal-select-label">
                   Type of Documents
                 </InputLabel>
                 <Select
                   size="small"
-                  labelId="documentType-modal-select-label"
-                  id="documentType-select"
-                  name="documentType"
-                  value={formik.values.documentType}
+                  labelId="DocumentType-modal-select-label"
+                  id="DocumentType-select"
+                  name="DocumentType"
+                  value={formik.values.DocumentType}
                   label="Types Of Documentss"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {TypeOfDocument.map((docType) => (
+                  {DocumentType.map((docType) => (
                     <MenuItem key={docType.value} value={docType.value}>
                       {docType.label}
                     </MenuItem>
                   ))}
                 </Select>
-                {formik.touched.documentType && formik.errors.documentType && (
-                  <p className="text-error">{formik.errors.documentType}</p>
+                {formik.touched.DocumentType && formik.errors.DocumentType && (
+                  <p className="text-error">{formik.errors.DocumentType}</p>
                 )}
               </FormControl>
             </Col>
@@ -356,7 +398,7 @@ const ModalComponent = ({
                   id="communicationType-select"
                   name="communicationType"
                   value={formik.values.communicationType}
-                  label=" Communicationss Typess" 
+                  label=" Communicationss Typess"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
@@ -409,12 +451,16 @@ const ModalComponent = ({
                 Upload Proof of Communication
               </label>
               <Input
+                name="uploadProof"
                 innerRef={fileInputRef}
                 type="file"
                 accept=".doc,.docx,.pdf,.xls,.xlsx,.jpg,.jpeg"
                 className="form-control"
                 onChange={handleFileUpload}
               />
+              {formik.touched.uploadProof && formik.errors.uploadProof && (
+                <p className="text-error">{formik.errors.uploadProof}</p>
+              )}
               {uploadedFile && (
                 <div
                   style={{
