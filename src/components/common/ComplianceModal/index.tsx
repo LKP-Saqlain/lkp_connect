@@ -90,6 +90,7 @@ const ModalComponent = ({
         dateOfCommunication: editData.dateOfCommunication
           ? dayjs(editData.dateOfCommunication).format("DD/MM/YYYY")
           : "",
+        uploadProof: "",
       });
     }
   }, [editData]);
@@ -104,6 +105,7 @@ const ModalComponent = ({
     proofOfCommunication: Yup.string().required(
       "Proof of Communication is required"
     ),
+    uploadProof: Yup.string().required("Please Upload Proof"),
   });
 
   const formik = useFormik({
@@ -113,6 +115,7 @@ const ModalComponent = ({
       communicationType: "", //ADDED
       dateOfCommunication: null as string | null, //ADDED
       proofOfCommunication: "",
+      uploadProof: "",
     },
     validationSchema,
     onSubmit: (values) => {
@@ -185,6 +188,7 @@ const ModalComponent = ({
         dateOfCommunication: editData.DateOfCommunication
           ? dayjs(editData.DateOfCommunication).format("DD/MM/YYYY") // Convert to string
           : "",
+        uploadProof: "",
       });
     }
   }, [editData]);
@@ -196,18 +200,46 @@ const ModalComponent = ({
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
 
       if (allowedFormats.includes(fileExt)) {
-        dispatch(showLoader("Uploading file...")); // Show loader before processing
+        // dispatch(showLoader("Uploading file...")); // Show loader before processing
 
-        console.log("File", file);
-
+        const { name } = file;
+        const fileName = name.substring(0, name.lastIndexOf("."));
+        console.log("FileNameOnly", fileName);
         const reader = new FileReader();
         reader.readAsDataURL(file);
+        // debugger;
         reader.onload = () => {
           const base64String = reader.result as string;
+          const base64Only = base64String.split(",")[1] || base64String;
           setUploadedFile(file);
-          setFileBase64(base64String); // Store base64
+          setFileBase64(base64Only); // Store base64
           setFileExtension(fileExt);
-          dispatch(hideLoader());
+
+          dispatch(showLoader("Uploading file..."));
+
+          let payload = {
+            fileName: fileName,
+            filePath: "D:\\FileUpload\\Compliance",
+            fileType: `.${fileExt}`,
+            contentType: base64Only,
+          };
+          apiServices
+            .ComplainceFileUpload(payload)
+            .then((response) => {
+              console.log("Response", response);
+              dispatch(hideLoader());
+              if (response?.status === 200) {
+                ShowToast("success", response?.data);
+                formik.setFieldError("uploadProof", "");
+              }
+            })
+            .catch((error) => {
+              console.log("ERROR-->", error);
+              dispatch(hideLoader());
+            })
+            .finally(() => {
+              dispatch(hideLoader());
+            });
         };
         reader.onerror = (error) => {
           console.error("Error reading file:", error);
@@ -231,6 +263,7 @@ const ModalComponent = ({
       setFileExtension("");
       if (fileInputRef.current) {
         fileInputRef.current.value = ""; // Reset the file input value
+        formik.setFieldError("uploadProof", "");
       }
       dispatch(hideLoader()); // Hide loader after reset
     }, 500);
@@ -418,12 +451,16 @@ const ModalComponent = ({
                 Upload Proof of Communication
               </label>
               <Input
+                name="uploadProof"
                 innerRef={fileInputRef}
                 type="file"
                 accept=".doc,.docx,.pdf,.xls,.xlsx,.jpg,.jpeg"
                 className="form-control"
                 onChange={handleFileUpload}
               />
+              {formik.touched.uploadProof && formik.errors.uploadProof && (
+                <p className="text-error">{formik.errors.uploadProof}</p>
+              )}
               {uploadedFile && (
                 <div
                   style={{
