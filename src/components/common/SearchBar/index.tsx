@@ -163,7 +163,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
           </ReactstrapButton>
         )}
         {selectedWidget === undefined ||
-          (selectedWidget !== "Upcoming Client Approaching Dormant Status" && (
+          (selectedWidget !== "Upcoming Dormant Client" && (
             <Box sx={{ mr: 2 }}>
               <Typography>{`Record Count - ${new Intl.NumberFormat(
                 "en-IN"
