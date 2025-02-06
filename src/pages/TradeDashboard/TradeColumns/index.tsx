@@ -909,18 +909,24 @@ export const communicationColumns = (
     headerName: "Type of Document",
     minWidth: 180,
     disableColumnMenu: true,
+    align: "center",
+    headerAlign: "center"
   },
   {
     field: "CommunicationType",
     headerName: "Communication Type",
     minWidth: 180,
     disableColumnMenu: true,
+    align: "center",
+    headerAlign: "center"
   },
   {
     field: "CommunicationProof",
     headerName: "Proof of Communication Description",
     minWidth: 200,
+    headerAlign: "center",
     flex: 2,
+    align: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
       const dispatchProof = params.value || "N/A";
@@ -936,6 +942,8 @@ export const communicationColumns = (
     headerName: "Department",
     minWidth: 140,
     disableColumnMenu: true,
+    align: "center",
+    headerAlign: "center"
   },
 ];
 

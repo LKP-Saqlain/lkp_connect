@@ -222,6 +222,7 @@ export const getCommChecker: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "CommunicationProof",
@@ -229,6 +230,7 @@ export const getCommChecker: GridColDef[] = [
     flex: 1.8,
     disableColumnMenu: true,
     headerAlign: "center",
+    align:"center"
   },
   {
     field: "Department",
