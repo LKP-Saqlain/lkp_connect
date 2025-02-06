@@ -77,7 +77,7 @@ any) => {
   }, [selectedUserInfo]);
   useEffect(() => {
     if (selectedTrading === "Dormant") {
-      setSelectedCapsule("Upcoming Client Approaching Dormant Status");
+      setSelectedCapsule("Upcoming Dormant Client");
     }
   }, [selectedTrading]);
   useEffect(() => {
@@ -158,7 +158,7 @@ any) => {
   useEffect(() => {
     console.log("selected Capsules", selectedCapsule);
     const getUpcomingDormants = async () => {
-      if (selectedCapsule === "Upcoming Client Approaching Dormant Status") {
+      if (selectedCapsule === "Upcoming Dormant Client") {
         setTableData([]);
         // alert(selectedCapsule);
         const payload = {
@@ -472,7 +472,7 @@ any) => {
         }
       }
     } else if (
-      selectedCapsule === "Upcoming Client Approaching Dormant Status"
+      selectedCapsule === "Upcoming Dormant Client"
     ) {
       setTableData([]);
       // alert(selectedCapsule);
@@ -581,7 +581,7 @@ any) => {
     console.log("Selected Filter:", selectedFilter);
     setFilter(selectedFilter);
 
-    if (selectedCapsule === "Upcoming Client Approaching Dormant Status") {
+    if (selectedCapsule === "Upcoming Dormant Client") {
       setTableData([]); // Clear existing data before fetching new data
 
       const payload = {

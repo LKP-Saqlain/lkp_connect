@@ -173,7 +173,7 @@ const DataTable = ({
     ) {
       return getClientActivityStatusColumns(handleViewDetails);
     } else if (
-      selectedWidget === "Upcoming Client Approaching Dormant Status"
+      selectedWidget === "Upcoming Dormant Client"
     ) {
       return getClientDormantStatus(handleViewDetails);
     } else if (activeSubItem === "Referal Entry Status") {
@@ -376,7 +376,7 @@ const DataTable = ({
               ? activeGroupedClients
               : selectedWidget === "Inactive Clients"
               ? inactiveGroupedClients
-              : selectedWidget === "Upcoming Client Approaching Dormant Status"
+              : selectedWidget === "Upcoming Dormant Client"
               ? T6Data
               : T6Data
           }

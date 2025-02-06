@@ -143,7 +143,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
       {/* Buttons (Excel and Filters) */}
       <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
         {/* Excel Button */}
-        {selectedWidget !== "Upcoming Client Approaching Dormant Status" &&
+        {selectedWidget !== "Upcoming Dormant Client" &&
           showExcel && (
             <ReactstrapButton
               className="btn-font"
@@ -163,7 +163,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
               <DownloadIcon />
             </ReactstrapButton>
           )}
-        {selectedWidget !== "Upcoming Client Approaching Dormant Status" && (
+        {selectedWidget !== "Upcoming Dormant Client" && (
           <Box sx={{ mr: 2 }}>
             <Typography>{`Record Count - ${new Intl.NumberFormat(
               "en-IN"
@@ -182,7 +182,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
         )}
 
         {/* Filter Buttons */}
-        {/* {selectedWidget === "Upcoming Client Approaching Dormant Status" && (
+        {/* {selectedWidget === "Upcoming Dormant Client" && (
           <div className="d-flex gap-1">
             {["ALL", "7D", "15D", "1M"].map((filter) => (
               <MUIButton

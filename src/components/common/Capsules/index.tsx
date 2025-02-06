@@ -22,10 +22,11 @@ export const TradeCapsules = [
 ];
 
 export const ClientDetailsCapsule = [
-  { id: 1, label: "Total Clients", count: 100 },
+  { id: 1, label: "Upcoming Dormant Client" },
   { id: 2, label: "Active Clients", count: 150 },
   { id: 3, label: "Inactive Clients", count: 200 },
-  { id: 4, label: "Upcoming Client Approaching Dormant Status" },
+  { id: 4, label: "Total Clients", count: 100 },
+
 ];
 
 export const ODCapsules = [
