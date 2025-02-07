@@ -14,7 +14,10 @@ import * as Yup from "yup";
 import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
 
-const CommunicationMenu = [{ value: "Email", label: "Email" }];
+const CommunicationMenu = [
+  { value: "Email", label: "Email" },
+  { value: "Physical", label: "Physical" },
+];
 
 const department = [
   { value: "IT", label: "IT" },
@@ -134,10 +137,10 @@ const ModalComponent = ({
       financialYear: "2024-2025",
       department: formik.values.department ? formik.values.department : "",
       action: editData?.RowId > 0 ? "update" : "insert",
-      DocumentType: formik.values.DocumentType
+      DocumentType: fileExtension,
+      typeOfDocuments: formik.values.DocumentType
         ? formik.values.DocumentType
         : "",
-      typeOfDocuments: "ALL",
       communicationType: formik.values.communicationType
         ? formik.values.communicationType
         : "",

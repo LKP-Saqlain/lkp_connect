@@ -917,7 +917,7 @@ export const communicationColumns = (
     disableColumnMenu: true,
   },
   {
-    field: "DocumentType",
+    field: "TypeOfDocuments",
     headerName: "Type of Document",
     minWidth: 180,
     disableColumnMenu: true,
