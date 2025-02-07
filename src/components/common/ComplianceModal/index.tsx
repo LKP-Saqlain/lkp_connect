@@ -17,6 +17,7 @@ import ShowToast from "../../../utils/toastUtils";
 const CommunicationMenu = [
   { value: "Email", label: "Email" },
   { value: "Physical", label: "Physical" },
+  { value: "string", label: "string" },
 ];
 
 const department = [
@@ -26,7 +27,11 @@ const department = [
   { value: "ALL", label: "ALL" },
 ];
 
-const DocumentType = [{ value: "Circular", label: "Circular" }];
+const DocumentType = [
+  { value: "Circular", label: "Circular" },
+  { value: "SEBI", label: "SEBI" },
+  { value: "string", label: "string" },
+];
 
 const ModalComponent = ({
   tog_grid,
@@ -52,18 +57,12 @@ const ModalComponent = ({
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    console.log(
-      "editInfoData",
-      editData,
-      editUserCheck,
-      fileExtension,
-      uploadedFile
-    );
+    console.log("editInfoData", editData?.RowId, editUserCheck, fileExtension);
     // debugger;
     if (editData?.RowId > 0) {
       console.log("editInfoData not zero");
     }
-  }, [editData, editUserCheck, uploadedFile]);
+  }, [editData, editUserCheck]);
 
   useEffect(() => {
     if (editData) {
@@ -145,9 +144,9 @@ const ModalComponent = ({
       department: formik.values.department ? formik.values.department : "",
       action: editData?.RowId > 0 ? "update" : "insert",
       DocumentType: fileExtension,
-      typeOfDocuments: formik.values.DocumentType
-        ? formik.values.DocumentType
-        : "",
+      typeOfDocuments:  formik.values.DocumentType
+      ? formik.values.DocumentType
+      : "",
       communicationType: formik.values.communicationType
         ? formik.values.communicationType
         : "",

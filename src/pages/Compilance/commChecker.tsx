@@ -94,14 +94,14 @@ const ComChecker = ({ activeSubItem }: any) => {
 
   const handleDownload = async (row: any) => {
     const payload = {
-      fileName: "MISTemplate",
+      fileName: row.CommunicationProofPath,
       filePath: "D:\\FileUpload\\Compliance",
-      fileType: ".xlsx",
+      fileType: `.${row.DocumentType}`,
       contentType: "",
     };
 
     dispatch(showLoader("Downloading..."));
-    console.log("row data", row);
+    console.log("row data", row,payload.fileType);
 
     apiServices
       .ComplianceDownload(payload)
