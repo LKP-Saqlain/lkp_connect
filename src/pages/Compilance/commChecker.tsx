@@ -12,6 +12,13 @@ const ComChecker = ({ activeSubItem }: any) => {
   // const [ext, setExt] = useState<any>();
   const dispatch = useDispatch<AppDispatch>();
 
+  const today = new Date();
+  const day = today.getDate().toString().padStart(2, "0");
+  const month = (today.getMonth() + 1).toString().padStart(2, "0");
+  const year = today.getFullYear();
+
+  const formattedDate = `${day}/${month}/${year}`;
+
   useEffect(() => {
     const fetchComplianceData = () => {
       const payload = {
@@ -54,12 +61,12 @@ const ComChecker = ({ activeSubItem }: any) => {
       financialYear: "",
       department: "",
       action: "approve",
-      documentType: "string",
-      typeOfDocuments: "string",
-      communicationType: "string",
-      communicationProof: "string",
-      communicationProofPath: "string",
-      dateOfCommunication: "02/03/2025",
+      documentType: "",
+      typeOfDocuments: "",
+      communicationType: "",
+      communicationProof: "",
+      communicationProofPath: "",
+      dateOfCommunication: formattedDate,
       rowId: rid,
       userId: "",
     };
@@ -83,7 +90,8 @@ const ComChecker = ({ activeSubItem }: any) => {
         dispatch(hideLoader());
       });
   };
-  const handleDownload = async () => {
+
+  const handleDownload = async (row: any) => {
     const payload = {
       fileName: "MISTemplate",
       filePath: "D:\\FileUpload\\Compliance",
@@ -92,6 +100,7 @@ const ComChecker = ({ activeSubItem }: any) => {
     };
 
     dispatch(showLoader("Downloading..."));
+    console.log("row data", row);
 
     apiServices
       .ComplianceDownload(payload)
@@ -99,12 +108,10 @@ const ComChecker = ({ activeSubItem }: any) => {
         console.log("response", response);
 
         if (response?.status === 200 && response?.data) {
-          console.log();
-          
           const url = window.URL.createObjectURL(new Blob([response?.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "sample.xlsx");
+          link.setAttribute("download", `sample.${payload.fileType}`);
           document.body.appendChild(link);
           link.click();
           dispatch(hideLoader());

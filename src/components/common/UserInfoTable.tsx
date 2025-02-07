@@ -212,11 +212,11 @@ const DataTable = ({
         if (column.field === "CommunicationProofPath") {
           return {
             ...column,
-            renderCell: () => {
+            renderCell: (params: any) => {
               return (
                 <button
                   onClick={() => {
-                    handleDownload();
+                    handleDownload(params.row);
                   }}
                   style={{
                     color: "#11395C",
