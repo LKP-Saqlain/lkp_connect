@@ -65,6 +65,7 @@ interface SelectedWidgetProps {
   handleEditClick?: (data: any, editCheck: boolean) => void;
   handleDeleteClick?: (data: any) => void;
   handleApproval?: any;
+  handleDownload?: any;
   totalCount?: any;
   activeClient?: any;
   inactiveClient?: any;
@@ -91,6 +92,7 @@ const DataTable = ({
   handleExcelDownload,
   handleEditClick,
   handleApproval,
+  handleDownload,
   totalCount,
   activeClient,
   inactiveClient,
@@ -213,14 +215,10 @@ SelectedWidgetProps) => {
           return {
             ...column,
             renderCell: (params: any) => {
-              const documentLink = params.row.CommunicationProofPath;
-
               return (
                 <button
                   onClick={() => {
-                    console.log("clicked  link ", documentLink);
-                    window.open(documentLink, "_blank");
-                    setSelectedRow(params.row);
+                    handleDownload(params.row);
                   }}
                   style={{
                     color: "#11395C",

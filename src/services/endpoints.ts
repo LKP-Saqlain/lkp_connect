@@ -31,5 +31,6 @@ export const endpoints = {
   getFundamentalRecord: "/Fundamental/fundamental/INE467B01029",
   ComplainceReport: "/api/Compliance/ComplianceData",
   ComplianceData: "/api/Compliance/ComplianceData",
+  ComplainceFileDownload:"/api/Compliance/ComplainceFileDownload",
   ComplainceFileUpload: "/api/Compliance/ComplainceFileUpload",
 };

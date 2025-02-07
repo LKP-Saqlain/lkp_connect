@@ -64,7 +64,10 @@ baseInstance.interceptors.request.use(
         isPublicEndpoint || !token ? LoginauthHeader : `Bearer ${token}`;
     }
 
-    if (config.url?.includes(endpoints.GetPNLAccountDetailsPdf)) {
+    if (
+      config.url?.includes(endpoints.GetPNLAccountDetailsPdf) ||
+      config.url?.includes(endpoints.ComplainceFileDownload)
+    ) {
       config.responseType = "blob"; // Set responseType to blob for PDF
       config.headers["Accept"] = "application/pdf";
     }
