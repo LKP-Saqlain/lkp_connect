@@ -39,11 +39,12 @@ const ComChecker = ({ activeSubItem }: any) => {
       apiServices
         .Compliance(payload)
         .then((response) => {
-          if (response?.status === 200) {
-            setData(response?.data.Table);
-          } else {
-            console.log("Error fetching data", response);
-          }
+          setData(response?.data.Table);
+          // if (response?.status === 200) {
+          //   setData(response?.data.Table);
+          // } else {
+          //   console.log("Error fetching data", response);
+          // }
         })
         .catch((error) => {
           console.error("Error fetching compliance data:", error);

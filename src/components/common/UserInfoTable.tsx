@@ -63,6 +63,7 @@ interface SelectedWidgetProps {
   showExcel?: any;
   handleExcelDownload?: () => void;
   handleEditClick?: (data: any, editCheck: boolean) => void;
+  handleDeleteClick?: (data: any) => void;
   handleApproval?: any;
   handleDownload?: any;
   totalCount?: any;
@@ -95,7 +96,8 @@ const DataTable = ({
   totalCount,
   activeClient,
   inactiveClient,
-}: SelectedWidgetProps) => {
+}: // handleDeleteClick,
+SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
   const [modal_center, setmodal_center] = useState<boolean>(false);
@@ -362,7 +364,7 @@ const DataTable = ({
         }}
       >
         <DataGrid
-        disableRowSelectionOnClick
+          disableRowSelectionOnClick
           rows={
             selectedWidget === "Clients With Ledger Balance"
               ? tradeCWCBData
