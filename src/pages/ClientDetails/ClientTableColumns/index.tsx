@@ -226,7 +226,7 @@ export const getCommChecker: GridColDef[] = [
   },
   {
     field: "CommunicationProof",
-    headerName: "Proof of Communication Description",
+    headerName: "Communication Description",
     flex: 1.8,
     disableColumnMenu: true,
     headerAlign: "center",

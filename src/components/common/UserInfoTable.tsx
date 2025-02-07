@@ -64,6 +64,7 @@ interface SelectedWidgetProps {
   handleExcelDownload?: () => void;
   handleEditClick?: (data: any, editCheck: boolean) => void;
   handleApproval?: any;
+  handleDownload?: any;
   totalCount?: any;
   activeClient?: any;
   inactiveClient?: any;
@@ -90,6 +91,7 @@ const DataTable = ({
   handleExcelDownload,
   handleEditClick,
   handleApproval,
+  handleDownload,
   totalCount,
   activeClient,
   inactiveClient,
@@ -172,9 +174,7 @@ const DataTable = ({
       // apiStatus
     ) {
       return getClientActivityStatusColumns(handleViewDetails);
-    } else if (
-      selectedWidget === "Upcoming Dormant Client"
-    ) {
+    } else if (selectedWidget === "Upcoming Dormant Client") {
       return getClientDormantStatus(handleViewDetails);
     } else if (activeSubItem === "Referal Entry Status") {
       return getAccountDetails.map((column) => ({
@@ -212,15 +212,11 @@ const DataTable = ({
         if (column.field === "CommunicationProofPath") {
           return {
             ...column,
-            renderCell: (params: any) => {
-              const documentLink = params.row.CommunicationProofPath;
-
+            renderCell: () => {
               return (
                 <button
                   onClick={() => {
-                    console.log("clicked  link ", documentLink);
-                    window.open(documentLink, "_blank");
-                    setSelectedRow(params.row);
+                    handleDownload();
                   }}
                   style={{
                     color: "#11395C",

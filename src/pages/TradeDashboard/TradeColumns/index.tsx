@@ -922,7 +922,7 @@ export const communicationColumns = (
   },
   {
     field: "CommunicationProof",
-    headerName: "Proof of Communication Description",
+    headerName: "Communication Description",
     minWidth: 200,
     headerAlign: "center",
     flex: 2,
