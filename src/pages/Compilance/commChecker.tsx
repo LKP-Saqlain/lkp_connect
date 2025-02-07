@@ -94,9 +94,9 @@ const ComChecker = ({ activeSubItem }: any) => {
 
   const handleDownload = async (row: any) => {
     const payload = {
-      fileName: "sample",
+      fileName: row.CommunicationProofPath,
       filePath: "D:\\FileUpload\\Compliance",
-      fileType: row.DocumentType,
+      fileType: `.${row.DocumentType}`,
       contentType: "",
     };
 
