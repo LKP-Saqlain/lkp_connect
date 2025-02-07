@@ -133,6 +133,13 @@ const ModalComponent = ({
   });
 
   const fetchSubmitForm = async () => {
+    let currentTime = dayjs().format("DD/MM/YYYY_hh:mm A"); // Current date and time
+    let documentType = formik.values.DocumentType
+      ? formik.values.DocumentType
+      : "Unknown"; // Use the document type from formik, default to "Unknown"
+
+    let communicationProofPath = `${currentTime}_${documentType}`;
+
     let payload = {
       financialYear: "2024-2025",
       department: formik.values.department ? formik.values.department : "",
@@ -147,7 +154,7 @@ const ModalComponent = ({
       communicationProof: formik.values.proofOfCommunication
         ? formik.values.proofOfCommunication
         : "",
-      communicationProofPath: "string",
+      communicationProofPath: communicationProofPath,
       dateOfCommunication: formik.values.dateOfCommunication
         ? formik.values.dateOfCommunication
         : "",
