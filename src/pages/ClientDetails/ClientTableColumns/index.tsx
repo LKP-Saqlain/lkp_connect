@@ -208,7 +208,7 @@ export const getCommChecker: GridColDef[] = [
     align: "center",
   },
   {
-    field: "DocumentType",
+    field: "TypeOfDocuments",
     headerName: "Type of Document",
     flex: 1.1,
     disableColumnMenu: true,
