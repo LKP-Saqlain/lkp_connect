@@ -14,11 +14,7 @@ import * as Yup from "yup";
 import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
 
-const CommunicationMenu = [
-  { value: "Email", label: "Email" },
-  { value: "Physical", label: "Physical" },
-  { value: "string", label: "string" },
-];
+const CommunicationMenu = [{ value: "Email", label: "Email" }];
 
 const department = [
   { value: "IT", label: "IT" },
@@ -27,11 +23,7 @@ const department = [
   { value: "ALL", label: "ALL" },
 ];
 
-const DocumentType = [
-  { value: "Circular", label: "Circular" },
-  { value: "SEBI", label: "SEBI" },
-  { value: "string", label: "string" },
-];
+const DocumentType = [{ value: "Circular", label: "Circular" }];
 
 const ModalComponent = ({
   tog_grid,
@@ -57,12 +49,18 @@ const ModalComponent = ({
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    console.log("editInfoData", editData?.RowId, editUserCheck, fileExtension);
+    console.log(
+      "editInfoData",
+      editData,
+      editUserCheck,
+      fileExtension,
+      uploadedFile
+    );
     // debugger;
     if (editData?.RowId > 0) {
       console.log("editInfoData not zero");
     }
-  }, [editData, editUserCheck]);
+  }, [editData, editUserCheck, uploadedFile]);
 
   useEffect(() => {
     if (editData) {
@@ -105,7 +103,7 @@ const ModalComponent = ({
     proofOfCommunication: Yup.string().required(
       "Proof of Communication is required"
     ),
-    uploadProof: Yup.string().required("Please Upload Proof"),
+    // uploadProof: Yup.string().required("Please Upload Proof"),
   });
 
   const formik = useFormik({

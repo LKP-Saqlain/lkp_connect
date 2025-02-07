@@ -68,6 +68,42 @@ const CommEntry = ({ activeSubItem }: any) => {
     setEditUserCheck(editCheck);
   };
 
+  const handleDeleteClick = (row: any) => {
+    console.log("Delete Data", row);
+
+    let payload = {
+      financialYear: row.FinancialYear,
+      department: row.Department,
+      action: "delete",
+      documentType: row.documentType,
+      typeOfDocuments: row.DocumentType,
+      communicationType: row.CommunicationType,
+      communicationProof: row.CommunicationProof,
+      communicationProofPath: row.CommunicationProofPath,
+      dateOfCommunication: row.DateOfCommunication
+        ? new Date(row.DateOfCommunication).toLocaleDateString("en-GB")
+        : "02/03/2025",
+      rowId: row.RowId || 0,
+      userId: "",
+      DocumentType: "",
+    };
+    dispatch(showLoader("Please wait"));
+    apiServices
+      .ComplainceReport(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+        console.log("apiResponse", response?.data?.Table);
+        setUserData(response?.data?.Table);
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        console.log("Error", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   useEffect(() => {
     if (apiStatus) {
       setEditData(null);
@@ -208,6 +244,7 @@ const CommEntry = ({ activeSubItem }: any) => {
                     activeSubItem={activeSubItem}
                     T6Data={userData}
                     handleEditClick={handleEditClick}
+                    handleDeleteClick={handleDeleteClick}
                   />
                 </CardBody>
               </Card>

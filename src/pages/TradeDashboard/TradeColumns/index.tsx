@@ -3,6 +3,7 @@ import Tooltip from "@mui/material/Tooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import React from "react";
 import { IconButton } from "@mui/material";
+// import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 // import { useMemo, useState } from "react";
@@ -869,6 +870,7 @@ export const dormantColumns: GridColDef[] = [
 ];
 export const communicationColumns = (
   handleEditClick?: (row: any, editCheck: boolean) => void
+  // handleDeleteClick?: (row: any) => void
 ): GridColDef[] => [
   {
     field: "action",
@@ -884,14 +886,24 @@ export const communicationColumns = (
       // };
 
       return (
-        <Tooltip title="Edit" arrow placement="top">
-          <IconButton
-            color="primary"
-            onClick={() => handleEditClick?.(params.row, true)}
-          >
-            <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
-          </IconButton>
-        </Tooltip>
+        <>
+          <Tooltip title="Edit" arrow placement="top">
+            <IconButton
+              color="primary"
+              onClick={() => handleEditClick?.(params.row, true)}
+            >
+              <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+            </IconButton>
+          </Tooltip>
+          {/* <Tooltip title="Delete" arrow placement="top">
+            <IconButton
+              color="primary"
+              onClick={() => handleDeleteClick?.(params.row)}
+            >
+              <DeleteIcon fontSize="small" sx={{ color: "#11395C" }} />
+            </IconButton>
+          </Tooltip> */}
+        </>
       );
     },
   },
@@ -910,7 +922,7 @@ export const communicationColumns = (
     minWidth: 180,
     disableColumnMenu: true,
     align: "center",
-    headerAlign: "center"
+    headerAlign: "center",
   },
   {
     field: "CommunicationType",
@@ -918,7 +930,7 @@ export const communicationColumns = (
     minWidth: 180,
     disableColumnMenu: true,
     align: "center",
-    headerAlign: "center"
+    headerAlign: "center",
   },
   {
     field: "CommunicationProof",
@@ -943,7 +955,7 @@ export const communicationColumns = (
     minWidth: 140,
     disableColumnMenu: true,
     align: "center",
-    headerAlign: "center"
+    headerAlign: "center",
   },
 ];
 
