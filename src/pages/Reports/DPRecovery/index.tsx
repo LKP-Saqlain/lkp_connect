@@ -11,7 +11,7 @@ import ShowToast from "../../../utils/toastUtils";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import "../style.css";
 
-const DPRecovery = () => {
+const DPRecovery = ({ activeSubItem }: any) => {
   const [userData, setUserData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -122,6 +122,7 @@ const DPRecovery = () => {
           T6Data={userData ? filteredData : filteredData}
           getUserDetails={getUserDetails}
           emailSentStatus={emailSentStatus}
+          activeSubItem={activeSubItem}
         />
       </CardBody>
     </Card>

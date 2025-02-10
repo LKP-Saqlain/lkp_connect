@@ -7,6 +7,8 @@ interface CustomModalProps {
   setmodal_center: React.Dispatch<React.SetStateAction<boolean>>;
   getUserDetails?: (value: any) => void;
   row?: any; // The selected row data
+  Msg?: string;
+  activeSubItem?: any;
 }
 
 const CustomModal = ({
@@ -15,6 +17,8 @@ const CustomModal = ({
   setmodal_center,
   getUserDetails,
   row,
+  Msg,
+  activeSubItem,
 }: CustomModalProps) => {
   const handleConfirm = () => {
     // debugger;
@@ -30,11 +34,13 @@ const CustomModal = ({
         <i className="ri-alert-line display-5 text-warning"></i>
 
         <div className="mt-4" style={{ fontFamily: "Public Sans" }}>
-          <h6 className="mb-4">
-            An email will be sent informing the client about his DP Debit dues
-            along with link for payment.
-          </h6>
-          <h6 className="mb-3">Are you sure you want to send the email?</h6>
+          {activeSubItem !== "Communication Retrival Entry" && (
+            <h6 className="mb-4">
+              An email will be sent informing the client about his DP Debit dues
+              along with link for payment.
+            </h6>
+          )}
+          <h6 className="mb-3">{Msg}</h6>
           <div className="hstack gap-2 justify-content-center">
             <Button
               className="btn"

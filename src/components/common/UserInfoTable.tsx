@@ -26,6 +26,11 @@ import "../../pages/ClientDetails/style.css";
 import EmailIcon from "@mui/icons-material/Email";
 import CustomModal from "./DPModal";
 
+import Tooltip from "@mui/material/Tooltip";
+import { IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+
 interface Trade {
   id: string;
   date: string;
@@ -96,20 +101,16 @@ const DataTable = ({
   totalCount,
   activeClient,
   inactiveClient,
-}: // handleDeleteClick,
-SelectedWidgetProps) => {
+  handleDeleteClick,
+}: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
   const [modal_center, setmodal_center] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<any>(null); // Store selected row data
 
   useEffect(() => {
-    console.log("subItem", activeSubItem);
-  }, [activeSubItem]);
-
-  useEffect(() => {
-    console.log("selectedWidgets", selectedWidget);
-  }, [selectedWidget]);
+    console.log("subItem and selectedWidgets", activeSubItem, selectedWidget);
+  }, [activeSubItem, selectedWidget]);
 
   useEffect(() => {
     console.log(totalRows, tradeData);
@@ -138,6 +139,11 @@ SelectedWidgetProps) => {
     setSelectedRow(row);
     // tog_center();
   };
+
+  const handleDeleteEntry = (row: any) => {
+    handleDeleteClick?.(row);
+  };
+
   const getColumns = () => {
     if (selectedWidget === "Clients With Ledger Balance") {
       return ClientCashColumns.map((column) => ({
@@ -164,7 +170,63 @@ SelectedWidgetProps) => {
         ...column,
       }));
     } else if (activeSubItem === "Communication Retrival Entry") {
-      return communicationColumns(handleEditClick);
+      // This section is where the delete functionality will be added
+      return communicationColumns().map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted; // Add condition based on your row data
+
+              const handleEdit = () => {
+                handleEditClick?.(params.row, true); // Call edit function for Communication Retrieval Entry
+              };
+
+              return (
+                <>
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton color="primary" onClick={handleEdit}>
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <button
+                    onClick={() => {
+                      handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
+                      setSelectedRow(params.row); // Store the selected row for confirmation
+                      tog_center(); // Open the modal for deletion confirmation
+                    }}
+                    disabled={isDeleted}
+                    style={{
+                      color: isDeleted ? "red" : "#11395C",
+                      textDecoration: isDeleted ? "none" : "underline",
+                      background: "none",
+                      border: "none",
+                      cursor: isDeleted ? "default" : "pointer",
+                    }}
+                  >
+                    {isDeleted ? (
+                      "Deleted"
+                    ) : (
+                      <Tooltip title="Delete" arrow placement="top">
+                        <IconButton
+                          color="primary"
+                          onClick={() => handleDeleteEntry?.(params.row)}
+                        >
+                          <DeleteIcon
+                            fontSize="small"
+                            sx={{ color: "#11395C" }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </button>
+                </>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else if (activeSubItem === "Communication Retrival Report") {
       return CompliancneReport.map((column) => ({
         ...column,
@@ -313,6 +375,12 @@ SelectedWidgetProps) => {
         setmodal_center={setmodal_center}
         getUserDetails={getUserDetails} // Pass the API call function
         row={selectedRow} // Pass the selected row data
+        Msg={
+          activeSubItem === "Communication Retrival Entry"
+            ? "Are you sure want to delete this entry"
+            : "Are you sure you want to send the email?"
+        }
+        activeSubItem={activeSubItem}
       />
       {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown tradeData={setTradeData} handleValues={handleValues} />
