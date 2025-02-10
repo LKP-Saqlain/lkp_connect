@@ -130,7 +130,7 @@ const ModalComponent = ({
       fetchSubmitForm();
       formik.resetForm();
       setUploadedFile(null); // Reset uploaded file
-      setFileExtension(""); // Reset file extension
+      setFileExtension(""); // Reset file extension  
     },
   });
 
@@ -206,7 +206,7 @@ const ModalComponent = ({
 
   const handleFileUpload = (file: any) => {
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
-
+      
       if (allowedFormats.includes(fileExt)) {
         // dispatch(showLoader("Uploading file...")); // Show loader before processing
 
@@ -326,7 +326,7 @@ const ModalComponent = ({
                             )
                           : null
                       }
-                      maxDate={dayjs().subtract(0, "year")}
+                      maxDate={dayjs()}
                       minDate={dayjs().subtract(64, "year")}
                       onChange={(date: Dayjs | null) =>
                         formik.setFieldValue(
