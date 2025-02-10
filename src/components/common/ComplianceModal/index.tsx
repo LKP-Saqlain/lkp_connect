@@ -324,7 +324,7 @@ const ModalComponent = ({
                   </label>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
-                      // format="DD/MM/YYYY"
+                      format="DD/MM/YYYY"
                       value={
                         formik.values.dateOfCommunication
                           ? dayjs(
