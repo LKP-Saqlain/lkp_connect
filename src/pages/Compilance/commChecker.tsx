@@ -22,14 +22,14 @@ const ComChecker = ({ activeSubItem }: any) => {
   useEffect(() => {
     const fetchComplianceData = () => {
       const payload = {
-        financialYear: "string",
-        department: "string",
+        financialYear: "",
+        department: "",
         action: "viewchecker",
-        documentType: "string",
-        typeOfDocuments: "string",
-        communicationType: "string",
-        communicationProof: "string",
-        communicationProofPath: "string",
+        documentType: "",
+        typeOfDocuments: "",
+        communicationType: "",
+        communicationProof: "",
+        communicationProofPath: "",
         dateOfCommunication: "02/03/2025",
         rowId: 0,
         userId: "",
@@ -94,11 +94,9 @@ const ComChecker = ({ activeSubItem }: any) => {
 
   const handleDownload = async (row: any) => {
     const payload = {
-      fileName: "JS CORE",
-      // fileName: row.CommunicationProofPath,
+      fileName: row.CommunicationProofPath,
       filePath: "D:\\FileUpload\\Compliance",
-      fileType: ".pdf",
-      // fileType: `.${row.DocumentType}`,
+      fileType: `.${row.DocumentType}`,
       contentType: "",
     };
 
@@ -114,7 +112,7 @@ const ComChecker = ({ activeSubItem }: any) => {
           const url = window.URL.createObjectURL(new Blob([response?.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", `sample.${payload.fileType}`);
+          link.setAttribute("download", `${payload.fileName}${payload.fileType}`);
           document.body.appendChild(link);
           link.click();
           dispatch(hideLoader());

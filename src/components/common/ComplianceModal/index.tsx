@@ -224,7 +224,7 @@ const ModalComponent = ({
           setFileBase64(base64Only); // Store base64
           setFileExtension(fileExt);
 
-          dispatch(showLoader("Uploading file..."));
+        dispatch(showLoader("Uploading file..."));
 
           let payload = {
             fileName: communicationProofPath,
@@ -333,7 +333,7 @@ const ModalComponent = ({
                             )
                           : null
                       }
-                      maxDate={dayjs().subtract(0, "year")}
+                      maxDate={dayjs()}
                       minDate={dayjs().subtract(64, "year")}
                       onChange={(date: Dayjs | null) =>
                         formik.setFieldValue(
