@@ -3,8 +3,6 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import "./style.css";
 import { useFormik } from "formik";
 import { useState, useRef, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -13,24 +11,27 @@ import dayjs, { Dayjs } from "dayjs";
 import * as Yup from "yup";
 import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../redux/store";
+
+interface EditData {
+  CommunicationProofPath?: string;
+}
 
 const CommunicationMenu = [
   { value: "Email", label: "Email" },
   { value: "Physical", label: "Physical" },
-  { value: "string", label: "string" },
 ];
 
 const department = [
   { value: "IT", label: "IT" },
   { value: "Account", label: "Account" },
   { value: "RMS", label: "RMS" },
-  { value: "ALL", label: "ALL" },
 ];
 
-const DocumentType = [
+const TypeOfDocuments = [
   { value: "Circular", label: "Circular" },
   { value: "SEBI", label: "SEBI" },
-  { value: "string", label: "string" },
 ];
 
 const ModalComponent = ({
@@ -54,59 +55,39 @@ const ModalComponent = ({
 
   const allowedFormats = ["doc", "docx", "pdf", "xls", "xlsx", "jpg", "jpeg"];
 
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    console.log("editInfoData", editData?.RowId, editUserCheck, fileExtension);
+    console.log("editInfoData", editData, editUserCheck, fileExtension);
     // debugger;
     if (editData?.RowId > 0) {
       console.log("editInfoData not zero");
     }
   }, [editData, editUserCheck]);
 
-  useEffect(() => {
-    if (editData) {
-      formik.setValues({
-        DocumentType: DocumentType.some(
-          (item) => item.value === editData.DocumentType
-        )
-          ? editData.DocumentType
-          : "",
-
-        department: department.some(
-          (item) => item.value === editData.department
-        )
-          ? editData.department
-          : "",
-
-        communicationType: CommunicationMenu.some(
-          (item) => item.value === editData.communicationType
-        )
-          ? editData.communicationType
-          : "",
-
-        proofOfCommunication: editData.proofOfCommunication || "",
-
-        dateOfCommunication: editData.dateOfCommunication
-          ? dayjs(editData.dateOfCommunication).format("DD/MM/YYYY")
-          : "",
-        uploadProof: "",
-      });
-    }
-  }, [editData]);
-
-  const validationSchema = Yup.object().shape({
-    DocumentType: Yup.string().required("Type of Document is required"),
-    department: Yup.string().required("Department is required"),
-    communicationType: Yup.string().required("Communication Type is required"),
-    dateOfCommunication: Yup.string().required(
-      "Date of Communication is required"
-    ),
-    proofOfCommunication: Yup.string().required(
-      "Proof of Communication is required"
-    ),
-    // uploadProof: Yup.string().required("Please Upload Proof"),
-  });
+  const getValidationSchema = (editData: EditData) =>
+    Yup.object().shape({
+      TypeOfDocuments: Yup.string().required("Type of Document is required"),
+      department: Yup.string().required("Department is required"),
+      communicationType: Yup.string().required(
+        "Communication Type is required"
+      ),
+      dateOfCommunication: Yup.string().required(
+        "Date of Communication is required"
+      ),
+      proofOfCommunication: Yup.string().required(
+        "Proof of Communication is required"
+      ),
+      uploadProof: Yup.mixed().when([], {
+        is: () => !editData?.CommunicationProofPath, // Check if empty
+        then: (schema) => schema.required("Please Upload Proof"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+    });
 
   const formik = useFormik({
     initialValues: {
@@ -116,39 +97,52 @@ const ModalComponent = ({
       dateOfCommunication: null as string | null, //ADDED
       proofOfCommunication: "",
       uploadProof: "",
+      TypeOfDocuments: "",
     },
-    validationSchema,
-    onSubmit: (values) => {
-      if (uploadedFile) {
-        handleFileUpload(uploadedFile);
-      }
+    validationSchema: getValidationSchema(editData),
+    onSubmit: async (values) => {
+      let currentTime = dayjs().format("DD/MM/YYYY_hh:mmA");
+      let TypeOfDocuments = values.TypeOfDocuments
+        ? values.TypeOfDocuments
+        : "Unknown";
+      let communicationProofPath = `${currentTime}_${TypeOfDocuments}`;
+
       const formData = {
         ...values,
         uploadedFile,
       };
       onSubmit(formData, true); // Pass form data to the parent component
-      fetchSubmitForm();
-      formik.resetForm();
+
+      let uploadedFileExt: string = "";
+      if (uploadedFile) {
+        try {
+          uploadedFileExt = await handleFileUploadAsync(
+            uploadedFile,
+            communicationProofPath
+          ); // Wait for file upload
+          setFileExtension(uploadedFileExt);
+        } catch (error) {
+          console.error("File upload failed", error);
+          return; // Stop submission if file upload fails
+        }
+      }
+      fetchSubmitForm(uploadedFileExt, communicationProofPath); // Call submit function after file upload completes
       setUploadedFile(null); // Reset uploaded file
       setFileExtension(""); // Reset file extension
+      formik.resetForm();
     },
   });
-
-  const fetchSubmitForm = async () => {
-    let currentTime = dayjs().format("DD/MM/YYYY_hh:mm A"); // Current date and time
-    let documentType = formik.values.DocumentType
-      ? formik.values.DocumentType
-      : "Unknown"; // Use the document type from formik, default to "Unknown"
-
-    let communicationProofPath = `${currentTime}_${documentType}`;
-
+  const fetchSubmitForm = async (
+    uploadedFileExt: string,
+    communicationProofPath: string
+  ) => {
+    console.log("uploadedFileExtension", uploadedFileExt);
     let payload = {
       financialYear: "2024-2025",
       department: formik.values.department ? formik.values.department : "",
       action: editData?.RowId > 0 ? "update" : "insert",
-      DocumentType: fileExtension,
-      typeOfDocuments:  formik.values.DocumentType
-        ? formik.values.DocumentType
+      typeOfDocuments: formik.values.TypeOfDocuments
+        ? formik.values.TypeOfDocuments
         : "",
       communicationType: formik.values.communicationType
         ? formik.values.communicationType
@@ -161,14 +155,15 @@ const ModalComponent = ({
         ? formik.values.dateOfCommunication
         : "",
       rowId: editData?.RowId ? editData?.RowId : 0,
-      userId: "",
+      userId: user_id,
+      DocumentType: uploadedFileExt,
     };
     dispatch(showLoader("Please wait"));
     apiServices
       .ComplainceReport(payload)
       .then((response) => {
         dispatch(hideLoader());
-        console.log("fileExtension",fileExtension);
+        console.log("fileExtension", fileExtension);
         console.log("apiResponseModal", response?.data?.Table[0].MSG);
         let suceessCheck = response?.data?.Table.length;
         if (suceessCheck.length >= 0) {
@@ -200,62 +195,74 @@ const ModalComponent = ({
           ? dayjs(editData.DateOfCommunication).format("DD/MM/YYYY") // Convert to string
           : "",
         uploadProof: "",
+        TypeOfDocuments: editData.TypeOfDocuments || "",
       });
     }
   }, [editData]);
 
-  const handleFileUpload = (file: any) => {
-    const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
-
-    if (allowedFormats.includes(fileExt)) {
-      // dispatch(showLoader("Uploading file...")); // Show loader before processing
-
-      const { name } = file;
-      const fileName = name.substring(0, name.lastIndexOf("."));
-      console.log("FileNameOnly", fileName);
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+  const handleFileUploadAsync = (
+    file: any,
+    communicationProofPath: string
+  ): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
       // debugger;
-      reader.onload = () => {
-        const base64String = reader.result as string;
-        const base64Only = base64String.split(",")[1] || base64String;
-        setUploadedFile(file);
-        setFileBase64(base64Only); // Store base64
-        setFileExtension(fileExt);
+      if (allowedFormats.includes(fileExt)) {
+        const { name } = file;
+        const fileName = name.substring(0, name.lastIndexOf("."));
+        console.log("fileName", fileName);
+
+        const reader = new FileReader();
+
+        reader.readAsDataURL(file);
+
+        reader.onload = () => {
+          const base64String = reader.result as string;
+          const base64Only = base64String.split(",")[1] || base64String;
+
+          setUploadedFile(file);
+          setFileBase64(base64Only); // Store base64
+          setFileExtension(fileExt);
 
         dispatch(showLoader("Uploading file..."));
 
-        let payload = {
-          fileName: fileName,
-          filePath: "D:\\FileUpload\\Compliance",
-          fileType: `.${fileExt}`,
-          contentType: base64Only,
+          let payload = {
+            fileName: communicationProofPath,
+            filePath: "D:\\FileUpload\\Compliance",
+            // filePath: `D:\\FileUpload\\Compliance\\${communicationProofPath}
+            fileType: `.${fileExt}`,
+            contentType: base64Only,
+          };
+
+          apiServices
+            .ComplainceFileUpload(payload)
+            .then((response) => {
+              dispatch(hideLoader());
+              if (response?.status === 200) {
+                ShowToast("success", response?.data);
+                formik.setFieldError("uploadProof", "");
+                resolve(fileExt); // Resolve the promise on success
+              } else {
+                reject(new Error("File upload failed"));
+              }
+            })
+            .catch((error) => {
+              dispatch(hideLoader());
+              console.error("ERROR-->", error);
+              reject(error); // Reject the promise on error
+            });
         };
-        apiServices
-          .ComplainceFileUpload(payload)
-          .then((response) => {
-            console.log("Response", response);
-            dispatch(hideLoader());
-            if (response?.status === 200) {
-              ShowToast("success", response?.data);
-              formik.setFieldError("uploadProof", "");
-            }
-          })
-          .catch((error) => {
-            console.log("ERROR-->", error);
-            dispatch(hideLoader());
-          })
-          .finally(() => {
-            dispatch(hideLoader());
-          });
-      };
-      reader.onerror = (error) => {
-        console.error("Error reading file:", error);
-        dispatch(hideLoader());
-      };
-    } else {
-      alert("Invalid file format! Allowed: DOC, PDF, XLS, XLSX, JPG, JPEG");
-    }
+
+        reader.onerror = (error) => {
+          console.error("Error reading file:", error);
+          dispatch(hideLoader());
+          reject(error); // Reject the promise on error
+        };
+      } else {
+        alert("Invalid file format! Allowed: DOC, PDF, XLS, XLSX, JPG, JPEG");
+        reject(new Error("Invalid file format"));
+      }
+    });
   };
 
   useEffect(() => {
@@ -334,24 +341,18 @@ const ModalComponent = ({
                           date ? date.format("DD/MM/YYYY") : ""
                         )
                       }
-                      // slotProps={{
-                      //   textField: {
-                      //     error: Boolean(
-                      //       formik.touched.dateOfCommunication &&
-                      //         formik.errors.dateOfCommunication
-                      //     ),
-                      //     helperText:
-                      //       formik.touched.dateOfCommunication &&
-                      //       formik.errors.dateOfCommunication,
-                      //   },
-                      // }}
+                      slotProps={{
+                        textField: {
+                          error: Boolean(
+                            formik.touched.dateOfCommunication &&
+                              formik.errors.dateOfCommunication
+                          ),
+                          helperText:
+                            formik.touched.dateOfCommunication &&
+                            formik.errors.dateOfCommunication,
+                        },
+                      }}
                     />
-                    {formik.touched.dateOfCommunication &&
-                      formik.errors.dateOfCommunication && (
-                        <p className="text-error">
-                          {formik.errors.dateOfCommunication}
-                        </p>
-                      )}
                   </LocalizationProvider>
                 </FormControl>
               </div>
@@ -360,8 +361,8 @@ const ModalComponent = ({
               <FormControl
                 fullWidth
                 error={
-                  formik.touched.DocumentType &&
-                  Boolean(formik.errors.DocumentType)
+                  formik.touched.TypeOfDocuments &&
+                  Boolean(formik.errors.TypeOfDocuments)
                 }
               >
                 <InputLabel id="DocumentType-modal-select-label">
@@ -371,21 +372,24 @@ const ModalComponent = ({
                   size="small"
                   labelId="DocumentType-modal-select-label"
                   id="DocumentType-select"
-                  name="DocumentType"
-                  value={formik.values.DocumentType}
+                  name="TypeOfDocuments"
+                  value={formik.values.TypeOfDocuments}
                   label="Types Of Documentss"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {DocumentType.map((docType) => (
+                  {TypeOfDocuments.map((docType) => (
                     <MenuItem key={docType.value} value={docType.value}>
                       {docType.label}
                     </MenuItem>
                   ))}
                 </Select>
-                {formik.touched.DocumentType && formik.errors.DocumentType && (
-                  <p className="text-error">{formik.errors.DocumentType}</p>
-                )}
+                {formik.touched.TypeOfDocuments &&
+                  formik.errors.TypeOfDocuments && (
+                    <p className="text-error">
+                      {formik.errors.TypeOfDocuments}
+                    </p>
+                  )}
               </FormControl>
             </Col>
             <Col xxl={6}>
@@ -467,6 +471,8 @@ const ModalComponent = ({
                   const file = e.target.files?.[0];
                   if (file) {
                     setUploadedFile(file); // Save file to uploadedFile state
+                    formik.setFieldValue("uploadProof", file.name);
+                    formik.setFieldError("uploadProof", "");
                   }
                 }}
               />

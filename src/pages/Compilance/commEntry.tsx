@@ -6,6 +6,7 @@ import ModalComponent from "../../components/common/ComplianceModal";
 import { apiServices } from "../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+import ShowToast from "../../utils/toastUtils";
 
 // const dummyData = [
 //   {
@@ -55,7 +56,51 @@ const CommEntry = ({ activeSubItem }: any) => {
   const [userData, setUserData] = useState([]);
   const [apiStatus, setApiStatus] = useState(false);
   const [editUserCheck, setEditUserCheck] = useState(false);
+  const [isRowDeleted, setIsRowDeleted] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isRowDeleted) {
+      const fetchComplianceEntry = async () => {
+        const today = new Date();
+        const formattedDate = `${today
+          .getDate()
+          .toString()
+          .padStart(2, "0")}/${(today.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}/${today.getFullYear()}`;
+
+        let payload = {
+          financialYear: "",
+          department: "",
+          action: "view",
+          documentType: "",
+          typeOfDocuments: "",
+          communicationType: "",
+          communicationProof: "",
+          communicationProofPath: "",
+          dateOfCommunication: formattedDate,
+          rowId: 0,
+          userId: "",
+        };
+
+        dispatch(showLoader("Please wait"));
+        try {
+          const response = await apiServices.ComplainceReport(payload);
+          dispatch(hideLoader());
+          console.log("apiResponse", response?.data?.Table);
+          // setUserData(response?.data?.Table);
+        } catch (error) {
+          console.error("Error", error);
+          dispatch(hideLoader());
+        } finally {
+          dispatch(hideLoader());
+          setIsRowDeleted(false); // Reset flag in Redux store
+        }
+      };
+      fetchComplianceEntry();
+    }
+  }, [dispatch, isRowDeleted]);
 
   function tog_grid() {
     setmodal_grid(!modal_grid);
@@ -68,15 +113,16 @@ const CommEntry = ({ activeSubItem }: any) => {
     setEditUserCheck(editCheck);
   };
 
-  const handleDeleteClick = (row: any) => {
+  const getUserDetails = (row: any) => {
+    console.log("ValueComm", row);
+    // handleEmailSend(value?.BOID);
     console.log("Delete Data", row);
 
     let payload = {
       financialYear: row.FinancialYear,
       department: row.Department,
       action: "delete",
-      documentType: row.documentType,
-      typeOfDocuments: row.DocumentType,
+      typeOfDocuments: row.TypeOfDocuments,
       communicationType: row.CommunicationType,
       communicationProof: row.CommunicationProof,
       communicationProofPath: row.CommunicationProofPath,
@@ -85,7 +131,7 @@ const CommEntry = ({ activeSubItem }: any) => {
         : "02/03/2025",
       rowId: row.RowId || 0,
       userId: "",
-      DocumentType: "",
+      DocumentType: row.DocumentType,
     };
     dispatch(showLoader("Please wait"));
     apiServices
@@ -93,7 +139,8 @@ const CommEntry = ({ activeSubItem }: any) => {
       .then((response) => {
         dispatch(hideLoader());
         console.log("apiResponse", response?.data?.Table);
-        setUserData(response?.data?.Table);
+        // setUserData(response?.data?.Table);
+        ShowToast("success", response?.data?.Table[0].Message);
       })
       .catch((error) => {
         dispatch(hideLoader());
@@ -233,7 +280,7 @@ const CommEntry = ({ activeSubItem }: any) => {
                         backgroundColor: "#11395C",
                       }}
                     >
-                      Add User
+                      Add
                     </Button>
                   </Box>
                 </CardBody>
@@ -244,7 +291,8 @@ const CommEntry = ({ activeSubItem }: any) => {
                     activeSubItem={activeSubItem}
                     T6Data={userData}
                     handleEditClick={handleEditClick}
-                    handleDeleteClick={handleDeleteClick}
+                    // handleDeleteClick={handleDeleteClick}
+                    getUserDetails={getUserDetails}
                   />
                 </CardBody>
               </Card>

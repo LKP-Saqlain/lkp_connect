@@ -21,6 +21,7 @@ const financialYears = [
 ];
 const documentType = [
   { value: "Circular", label: "Circular" },
+  { value: "SEBI", label: "SEBI" },
   { value: "ALL", label: "ALL" },
 ];
 const department = [
@@ -60,11 +61,11 @@ const Retrival = ({ activeSubItem }: any) => {
 
   const fetchComplianceReport = async () => {
     let payload = {
-      financialYear: "2024-2025",
-      department: "ALL",
+      financialYear: formik.values.finYear,
+      department: formik.values.department,
       action: "viewReport",
       documentType: "",
-      typeOfDocuments: "ALL",
+      typeOfDocuments: formik.values.documentType,
       communicationType: "",
       communicationProof: "",
       communicationProofPath: "",
@@ -173,42 +174,46 @@ const Retrival = ({ activeSubItem }: any) => {
               </Box>
             </Col>
             <Col
-  xs={12}
-  md={3}
-  lg={4}
-  style={{ marginTop: isMobile ? "16px" : "0" }}
->
-  <Box sx={{ minWidth: 120 }}>
-    <FormControl
-      fullWidth
-      error={
-        formik.touched.documentType && Boolean(formik.errors.documentType)
-      }
-    >
-      <InputLabel id="documentType-select-label">Types Of Documents</InputLabel>
-      <Select
-        size="small"
-        labelId="documentType-select-label"
-        id="documentType-select"
-        name="documentType"
-        value={formik.values.documentType}
-        label="Types Of Documents"  
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        sx={{ fontFamily: "Public Sans" }}
-      >
-        {documentType.map((docType) => (
-          <MenuItem key={docType.value} value={docType.value}>
-            {docType.label}
-          </MenuItem>
-        ))}
-      </Select>
-      {formik.touched.documentType && formik.errors.documentType && (
-        <p className="text-error">{formik.errors.documentType}</p>
-      )}
-    </FormControl>
-  </Box>
-</Col>
+              xs={12}
+              md={3}
+              lg={4}
+              style={{ marginTop: isMobile ? "16px" : "0" }}
+            >
+              <Box sx={{ minWidth: 120 }}>
+                <FormControl
+                  fullWidth
+                  error={
+                    formik.touched.documentType &&
+                    Boolean(formik.errors.documentType)
+                  }
+                >
+                  <InputLabel id="documentType-select-label">
+                    Types Of Documents
+                  </InputLabel>
+                  <Select
+                    size="small"
+                    labelId="documentType-select-label"
+                    id="documentType-select"
+                    name="documentType"
+                    value={formik.values.documentType}
+                    label="Types Of Documents"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    sx={{ fontFamily: "Public Sans" }}
+                  >
+                    {documentType.map((docType) => (
+                      <MenuItem key={docType.value} value={docType.value}>
+                        {docType.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {formik.touched.documentType &&
+                    formik.errors.documentType && (
+                      <p className="text-error">{formik.errors.documentType}</p>
+                    )}
+                </FormControl>
+              </Box>
+            </Col>
 
             <Col
               xs={12}
