@@ -120,7 +120,7 @@ const ModalComponent = ({
     validationSchema,
     onSubmit: (values) => {
       if (uploadedFile) {
-        handleFileUpload(uploadedFile); 
+        handleFileUpload(uploadedFile);
       }
       const formData = {
         ...values,
@@ -130,7 +130,7 @@ const ModalComponent = ({
       fetchSubmitForm();
       formik.resetForm();
       setUploadedFile(null); // Reset uploaded file
-      setFileExtension(""); // Reset file extension  
+      setFileExtension(""); // Reset file extension
     },
   });
 
@@ -148,8 +148,8 @@ const ModalComponent = ({
       action: editData?.RowId > 0 ? "update" : "insert",
       DocumentType: fileExtension,
       typeOfDocuments:  formik.values.DocumentType
-      ? formik.values.DocumentType
-      : "",
+        ? formik.values.DocumentType
+        : "",
       communicationType: formik.values.communicationType
         ? formik.values.communicationType
         : "",
@@ -205,56 +205,56 @@ const ModalComponent = ({
   }, [editData]);
 
   const handleFileUpload = (file: any) => {
-      const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
-      
-      if (allowedFormats.includes(fileExt)) {
-        // dispatch(showLoader("Uploading file...")); // Show loader before processing
+    const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
 
-        const { name } = file;
-        const fileName = name.substring(0, name.lastIndexOf("."));
-        console.log("FileNameOnly", fileName);
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        // debugger;
-        reader.onload = () => {
-          const base64String = reader.result as string;
-          const base64Only = base64String.split(",")[1] || base64String;
-          setUploadedFile(file);
-          setFileBase64(base64Only); // Store base64
-          setFileExtension(fileExt);
+    if (allowedFormats.includes(fileExt)) {
+      // dispatch(showLoader("Uploading file...")); // Show loader before processing
 
-          dispatch(showLoader("Uploading file..."));
+      const { name } = file;
+      const fileName = name.substring(0, name.lastIndexOf("."));
+      console.log("FileNameOnly", fileName);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      // debugger;
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        const base64Only = base64String.split(",")[1] || base64String;
+        setUploadedFile(file);
+        setFileBase64(base64Only); // Store base64
+        setFileExtension(fileExt);
 
-          let payload = {
-            fileName: fileName,
-            filePath: "D:\\FileUpload\\Compliance",
-            fileType: `.${fileExt}`,
-            contentType: base64Only,
-          };
-          apiServices
-            .ComplainceFileUpload(payload)
-            .then((response) => {
-              console.log("Response", response);
-              dispatch(hideLoader());
-              if (response?.status === 200) {
-                ShowToast("success", response?.data);
-                formik.setFieldError("uploadProof", "");
-              }
-            })
-            .catch((error) => {
-              console.log("ERROR-->", error);
-              dispatch(hideLoader());
-            })
-            .finally(() => {
-              dispatch(hideLoader());
-            });
+        dispatch(showLoader("Uploading file..."));
+
+        let payload = {
+          fileName: fileName,
+          filePath: "D:\\FileUpload\\Compliance",
+          fileType: `.${fileExt}`,
+          contentType: base64Only,
         };
-        reader.onerror = (error) => {
-          console.error("Error reading file:", error);
-          dispatch(hideLoader());
-        };
-      } else {
-        alert("Invalid file format! Allowed: DOC, PDF, XLS, XLSX, JPG, JPEG");
+        apiServices
+          .ComplainceFileUpload(payload)
+          .then((response) => {
+            console.log("Response", response);
+            dispatch(hideLoader());
+            if (response?.status === 200) {
+              ShowToast("success", response?.data);
+              formik.setFieldError("uploadProof", "");
+            }
+          })
+          .catch((error) => {
+            console.log("ERROR-->", error);
+            dispatch(hideLoader());
+          })
+          .finally(() => {
+            dispatch(hideLoader());
+          });
+      };
+      reader.onerror = (error) => {
+        console.error("Error reading file:", error);
+        dispatch(hideLoader());
+      };
+    } else {
+      alert("Invalid file format! Allowed: DOC, PDF, XLS, XLSX, JPG, JPEG");
     }
   };
 
@@ -317,7 +317,7 @@ const ModalComponent = ({
                   </label>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
-                      // format="DD/MM/YYYY"
+                      format="DD/MM/YYYY"
                       value={
                         formik.values.dateOfCommunication
                           ? dayjs(
