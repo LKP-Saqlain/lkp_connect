@@ -94,14 +94,16 @@ const ComChecker = ({ activeSubItem }: any) => {
 
   const handleDownload = async (row: any) => {
     const payload = {
-      fileName: row.CommunicationProofPath,
+      fileName: "JS CORE",
+      // fileName: row.CommunicationProofPath,
       filePath: "D:\\FileUpload\\Compliance",
-      fileType: `.${row.DocumentType}`,
+      fileType: ".pdf",
+      // fileType: `.${row.DocumentType}`,
       contentType: "",
     };
 
     dispatch(showLoader("Downloading..."));
-    console.log("row data", row,payload.fileType);
+    console.log("row data", row, payload.fileType);
 
     apiServices
       .ComplianceDownload(payload)

@@ -119,6 +119,9 @@ const ModalComponent = ({
     },
     validationSchema,
     onSubmit: (values) => {
+      if (uploadedFile) {
+        handleFileUpload(uploadedFile); 
+      }
       const formData = {
         ...values,
         uploadedFile,
@@ -165,6 +168,7 @@ const ModalComponent = ({
       .ComplainceReport(payload)
       .then((response) => {
         dispatch(hideLoader());
+        console.log("fileExtension",fileExtension);
         console.log("apiResponseModal", response?.data?.Table[0].MSG);
         let suceessCheck = response?.data?.Table.length;
         if (suceessCheck.length >= 0) {
@@ -200,10 +204,7 @@ const ModalComponent = ({
     }
   }, [editData]);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-
-    if (file) {
+  const handleFileUpload = (file: any) => {
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
 
       if (allowedFormats.includes(fileExt)) {
@@ -254,7 +255,6 @@ const ModalComponent = ({
         };
       } else {
         alert("Invalid file format! Allowed: DOC, PDF, XLS, XLSX, JPG, JPEG");
-      }
     }
   };
 
@@ -463,7 +463,12 @@ const ModalComponent = ({
                 type="file"
                 accept=".doc,.docx,.pdf,.xls,.xlsx,.jpg,.jpeg"
                 className="form-control"
-                onChange={handleFileUpload}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    setUploadedFile(file); // Save file to uploadedFile state
+                  }
+                }}
               />
               {formik.touched.uploadProof && formik.errors.uploadProof && (
                 <p className="text-error">{formik.errors.uploadProof}</p>
