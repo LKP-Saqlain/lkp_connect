@@ -212,8 +212,7 @@ export const getCommChecker: GridColDef[] = [
     headerName: "Type of Document",
     flex: 1.1,
     disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
+    headerAlign: "center",  
   },
   {
     field: "CommunicationType",
@@ -221,7 +220,6 @@ export const getCommChecker: GridColDef[] = [
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
     headerClassName: "header-wrap-custom",
   },
   {
@@ -229,16 +227,14 @@ export const getCommChecker: GridColDef[] = [
     headerName: "Communication Description",
     flex: 1.8,
     disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
+    headerAlign: "center", 
   },
   {
     field: "Department",
     headerName: "Department",
     flex: 1,
     disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
+    headerAlign: "center", 
   },
   {
     field: "CommunicationProofPath",
