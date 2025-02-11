@@ -101,6 +101,12 @@ const ModalComponent = ({
     },
     validationSchema: getValidationSchema(editData),
     onSubmit: async (values) => {
+      // debugger;
+      // if (formik.errors.uploadProof !== "") {
+      //   ShowToast("error", "Please upload a proof document");
+      //   return; // Stop submission if there's an error in uploadProof
+      // }
+
       let currentTime = dayjs().format("DD/MM/YYYY_hh:mmA");
       let TypeOfDocuments = values.TypeOfDocuments
         ? values.TypeOfDocuments
@@ -192,13 +198,17 @@ const ModalComponent = ({
         communicationType: editData.CommunicationType || "",
         proofOfCommunication: editData.CommunicationProof || "",
         dateOfCommunication: editData.DateOfCommunication
-          ? dayjs(editData.DateOfCommunication).format("YYYY/MM/DD") // Convert to string
+          ? dayjs(editData.DateOfCommunication).format("DD/MM/YYYY") // Convert to string
           : "",
         uploadProof: "",
         TypeOfDocuments: editData.TypeOfDocuments || "",
       });
     }
   }, [editData]);
+
+  useEffect(() => {
+    console.log("errorFormik", formik.errors);
+  }, [formik.errors]);
 
   const handleFileUploadAsync = (
     file: any,
@@ -304,6 +314,14 @@ const ModalComponent = ({
     formik.setFieldValue("proofOfCommunication", value);
   };
 
+  // useEffect(() => {
+  //   if (!uploadedFile) {
+  //     formik.setFieldError("uploadProof", "Please upload a proof document");
+  //   } else {
+  //     formik.setFieldError("uploadProof", ""); // Clear the error if file is uploaded
+  //   }
+  // }, [uploadedFile]);
+
   return (
     <Modal
       style={{ fontFamily: "Public Sans" }}
@@ -330,7 +348,7 @@ const ModalComponent = ({
                         formik.values.dateOfCommunication
                           ? dayjs(
                               formik.values.dateOfCommunication,
-                              "YYYY/MM/DD"
+                              "DD/MM/YYYY"
                             )
                           : null
                       }
@@ -339,7 +357,7 @@ const ModalComponent = ({
                       onChange={(date: Dayjs | null) =>
                         formik.setFieldValue(
                           "dateOfCommunication",
-                          date ? date.format("YYYY/MM/DD") : ""
+                          date ? date.format("DD/MM/YYYY") : ""
                         )
                       }
                       slotProps={{
