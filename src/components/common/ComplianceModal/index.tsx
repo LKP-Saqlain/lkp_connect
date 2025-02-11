@@ -68,7 +68,7 @@ const ModalComponent = ({
       console.log("editInfoData not zero");
     }
   }, [editData, editUserCheck]);
-  
+
   const getValidationSchema = (editData: EditData) =>
     Yup.object().shape({
       TypeOfDocuments: Yup.string().required("Type of Document is required"),
@@ -191,9 +191,7 @@ const ModalComponent = ({
         department: editData.Department || "",
         communicationType: editData.CommunicationType || "",
         proofOfCommunication: editData.CommunicationProof || "",
-        dateOfCommunication: editData.DateOfCommunication
-          ? dayjs(editData.DateOfCommunication).format("DD/MM/YYYY") // Convert to string
-          : "",
+        dateOfCommunication: editData.DateOfCommunication || "",
         uploadProof: "",
         TypeOfDocuments: editData.TypeOfDocuments || "",
       });
@@ -295,8 +293,8 @@ const ModalComponent = ({
   };
 
   const toggleModal = () => {
-    handleCancel(); 
-   tog_grid() 
+    handleCancel();
+    tog_grid();
   };
 
   useEffect(() => {
