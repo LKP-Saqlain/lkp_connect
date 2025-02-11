@@ -68,7 +68,7 @@ const ModalComponent = ({
       console.log("editInfoData not zero");
     }
   }, [editData, editUserCheck]);
-
+  
   const getValidationSchema = (editData: EditData) =>
     Yup.object().shape({
       TypeOfDocuments: Yup.string().required("Type of Document is required"),
@@ -293,6 +293,11 @@ const ModalComponent = ({
     tog_grid(); // Close the modal
   };
 
+  const toggleModal = () => {
+    handleCancel(); 
+   tog_grid() 
+  };
+
   useEffect(() => {
     console.log("formValues", formik.values);
   }, [formik.values]);
@@ -310,7 +315,7 @@ const ModalComponent = ({
       toggle={tog_grid}
       centered
     >
-      <ModalHeader className="modal-title" toggle={tog_grid}>
+      <ModalHeader className="modal-title" toggle={toggleModal}>
         Add Entry
       </ModalHeader>
       <ModalBody>

@@ -930,31 +930,6 @@ export const communicationColumns =
 
 export const CompliancneReport: GridColDef[] = [
   {
-    field: "RowId",
-    headerName: "Sr No.",
-    width: 60,
-    align: "center",
-    headerAlign: "center",
-    disableColumnMenu: true,
-    // renderCell: (params: any) => {
-    //   // const handleEditClick = () => {
-    //   //   console.log("Edit clicked for ID:", params.row);
-    //   //   // Open modal logic here
-    //   // };
-
-    //   return (
-    //     <Tooltip title="Edit" arrow placement="top">
-    //       <IconButton
-    //         color="primary"
-    //         // onClick={() => handleEditClick?.(params.row)}
-    //       >
-    //         <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
-    //       </IconButton>
-    //     </Tooltip>
-    //   );
-    // },
-  },
-  {
     field: "DateOfCommunication",
     headerName: "Date of Communication",
     width: 160,
@@ -976,9 +951,9 @@ export const CompliancneReport: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ProofOfDescription",
-    headerName: "Email Log Report",
-    minWidth: 150,
+    field: "CommunicationDesc",
+    headerName: "Communication Description",
+    minWidth: 300,
 
     disableColumnMenu: true,
     // renderCell: (params: any) => {
@@ -991,9 +966,9 @@ export const CompliancneReport: GridColDef[] = [
     // },
   },
   {
-    field: "",
-    headerName: "Physical Dispatch Proof",
-    minWidth: 200,
+    field: "CommunicationProofPath",
+    headerName: "Document",
+    minWidth: 150,
     disableColumnMenu: true,
   },
   {
