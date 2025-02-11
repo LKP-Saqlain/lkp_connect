@@ -191,7 +191,9 @@ const ModalComponent = ({
         department: editData.Department || "",
         communicationType: editData.CommunicationType || "",
         proofOfCommunication: editData.CommunicationProof || "",
-        dateOfCommunication: editData.DateOfCommunication || "",
+        dateOfCommunication: editData.DateOfCommunication
+          ? dayjs(editData.DateOfCommunication).format("DD/MM/YYYY") // Convert to string
+          : "",
         uploadProof: "",
         TypeOfDocuments: editData.TypeOfDocuments || "",
       });
@@ -292,11 +294,6 @@ const ModalComponent = ({
     tog_grid(); // Close the modal
   };
 
-  const toggleModal = () => {
-    handleCancel();
-    tog_grid();
-  };
-
   useEffect(() => {
     console.log("formValues", formik.values);
   }, [formik.values]);
@@ -314,7 +311,7 @@ const ModalComponent = ({
       toggle={tog_grid}
       centered
     >
-      <ModalHeader className="modal-title" toggle={toggleModal}>
+      <ModalHeader className="modal-title" toggle={tog_grid}>
         Add Entry
       </ModalHeader>
       <ModalBody>
@@ -338,7 +335,7 @@ const ModalComponent = ({
                           : null
                       }
                       maxDate={dayjs()}
-                      // minDate={dayjs().subtract(64, "year")}
+                      minDate={dayjs().subtract(64, "year")}
                       onChange={(date: Dayjs | null) =>
                         formik.setFieldValue(
                           "dateOfCommunication",
