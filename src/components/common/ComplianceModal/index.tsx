@@ -224,7 +224,7 @@ const ModalComponent = ({
           setFileBase64(base64Only); // Store base64
           setFileExtension(fileExt);
 
-        dispatch(showLoader("Uploading file..."));
+          dispatch(showLoader("Uploading file..."));
 
           let payload = {
             fileName: communicationProofPath,
@@ -277,7 +277,8 @@ const ModalComponent = ({
       setFileExtension("");
       if (fileInputRef.current) {
         fileInputRef.current.value = ""; // Reset the file input value
-        formik.setFieldError("uploadProof", "");
+        // formik.setFieldError("uploadProof", "");
+        formik.setFieldError("uploadProof", "Please upload a proof document");
       }
       dispatch(hideLoader()); // Hide loader after reset
     }, 500);
@@ -334,7 +335,7 @@ const ModalComponent = ({
                           : null
                       }
                       maxDate={dayjs()}
-                      minDate={dayjs().subtract(64, "year")}
+                      // minDate={dayjs().subtract(64, "year")}
                       onChange={(date: Dayjs | null) =>
                         formik.setFieldValue(
                           "dateOfCommunication",

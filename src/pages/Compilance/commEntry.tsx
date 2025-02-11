@@ -57,10 +57,12 @@ const CommEntry = ({ activeSubItem }: any) => {
   const [apiStatus, setApiStatus] = useState(false);
   const [editUserCheck, setEditUserCheck] = useState(false);
   const [isRowDeleted, setIsRowDeleted] = useState(false);
+  const [deletedRow, setDeletedRow] = useState<ComplianceEntry | null>(null);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isRowDeleted) {
+    if (isRowDeleted && deletedRow) {
       const fetchComplianceEntry = async () => {
         const today = new Date();
         const formattedDate = `${today
@@ -80,7 +82,7 @@ const CommEntry = ({ activeSubItem }: any) => {
           communicationProof: "",
           communicationProofPath: "",
           dateOfCommunication: formattedDate,
-          rowId: 0,
+          rowId: deletedRow?.RowId || 0,
           userId: "",
         };
 
@@ -89,18 +91,18 @@ const CommEntry = ({ activeSubItem }: any) => {
           const response = await apiServices.ComplainceReport(payload);
           dispatch(hideLoader());
           console.log("apiResponse", response?.data?.Table);
-          // setUserData(response?.data?.Table);
+          setUserData(response?.data?.Table);
         } catch (error) {
           console.error("Error", error);
           dispatch(hideLoader());
         } finally {
           dispatch(hideLoader());
-          setIsRowDeleted(false); // Reset flag in Redux store
+          // setIsRowDeleted(false); // Reset flag in Redux store
         }
       };
       fetchComplianceEntry();
     }
-  }, [dispatch, isRowDeleted]);
+  }, [dispatch, isRowDeleted, deletedRow]);
 
   function tog_grid() {
     setmodal_grid(!modal_grid);
@@ -113,10 +115,11 @@ const CommEntry = ({ activeSubItem }: any) => {
     setEditUserCheck(editCheck);
   };
 
-  const getUserDetails = (row: any) => {
-    console.log("ValueComm", row);
+  const getUserDetails = async (row: any) => {
+    console.log("ValueComm", typeof row);
     // handleEmailSend(value?.BOID);
     console.log("Delete Data", row);
+    setDeletedRow(row);
 
     let payload = {
       financialYear: row.FinancialYear,
@@ -133,22 +136,18 @@ const CommEntry = ({ activeSubItem }: any) => {
       userId: "",
       DocumentType: row.DocumentType,
     };
+
     dispatch(showLoader("Please wait"));
-    apiServices
-      .ComplainceReport(payload)
-      .then((response) => {
-        dispatch(hideLoader());
-        console.log("apiResponse", response?.data?.Table);
-        // setUserData(response?.data?.Table);
-        ShowToast("success", response?.data?.Table[0].Message);
-      })
-      .catch((error) => {
-        dispatch(hideLoader());
-        console.log("Error", error);
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
+    try {
+      const response = await apiServices.ComplainceReport(payload);
+      dispatch(hideLoader());
+      console.log("apiResponse", response?.data?.Table);
+      ShowToast("success", response?.data?.Table[0].Message);
+      setIsRowDeleted(true);
+    } catch (error) {
+      console.error("Error", error);
+      dispatch(hideLoader());
+    }
   };
 
   useEffect(() => {
