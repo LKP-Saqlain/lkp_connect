@@ -2,20 +2,25 @@ import { useState, useEffect } from "react";
 import { Card, CardBody, CardHeader } from "reactstrap";
 import DataTable from "../../components/common/UserInfoTable";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
-import { AppDispatch } from "../../redux/store";
-import { useDispatch } from "react-redux";
 import { apiServices } from "../../services";
 import ShowToast from "../../utils/toastUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../redux/store";
 
 const ComChecker = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any>();
-  // const [ext, setExt] = useState<any>();
-  const dispatch = useDispatch<AppDispatch>();
+  const [flag, setFlag] = useState<boolean>(false);
 
   const today = new Date();
   const day = today.getDate().toString().padStart(2, "0");
   const month = (today.getMonth() + 1).toString().padStart(2, "0");
   const year = today.getFullYear();
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   const formattedDate = `${day}/${month}/${year}`;
 
@@ -30,7 +35,7 @@ const ComChecker = ({ activeSubItem }: any) => {
         communicationType: "",
         communicationProof: "",
         communicationProofPath: "",
-        dateOfCommunication: "02/03/2025",
+        dateOfCommunication: formattedDate,
         rowId: 0,
         userId: "",
       };
@@ -40,11 +45,6 @@ const ComChecker = ({ activeSubItem }: any) => {
         .Compliance(payload)
         .then((response) => {
           setData(response?.data.Table);
-          // if (response?.status === 200) {
-          //   setData(response?.data.Table);
-          // } else {
-          //   console.log("Error fetching data", response);
-          // }
         })
         .catch((error) => {
           console.error("Error fetching compliance data:", error);
@@ -55,7 +55,7 @@ const ComChecker = ({ activeSubItem }: any) => {
     };
 
     fetchComplianceData();
-  }, [dispatch]);
+  }, [dispatch, flag]); 
 
   const handleApproval = (rid: number) => {
     const payload = {
@@ -69,7 +69,7 @@ const ComChecker = ({ activeSubItem }: any) => {
       communicationProofPath: "",
       dateOfCommunication: formattedDate,
       rowId: rid,
-      userId: "",
+      userId: user_id,
     };
 
     dispatch(showLoader("Approving..."));
@@ -78,6 +78,7 @@ const ComChecker = ({ activeSubItem }: any) => {
       .Compliance(payload)
       .then((response) => {
         if (response?.status === 200) {
+          setFlag(!flag); 
           ShowToast("success", response?.data.Table[0]?.Message);
         } else {
           console.log("Error during approval", response);
