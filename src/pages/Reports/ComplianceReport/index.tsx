@@ -10,6 +10,7 @@ import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { useEffect, useState } from "react";
+import ShowToast from "../../../utils/toastUtils";
 
 const financialYears = [
   { value: "2019-2020", label: "2019-2020" },
@@ -89,7 +90,45 @@ const Retrival = ({ activeSubItem }: any) => {
         dispatch(hideLoader());
       });
   };
+  const handleDownload = async (row: any) => {
+    const payload = {
+      fileName: row.CommunicationProofPath,
+      filePath: "D:\\FileUpload\\Compliance",
+      fileType: `.${row.DocumentType}`,
+      contentType: "",
+    };
 
+    dispatch(showLoader("Downloading..."));
+    console.log("row data", row, payload.fileType);
+
+    apiServices
+      .ComplianceDownload(payload)
+      .then((response) => {
+        console.log("response", response);
+
+        if (response?.status === 200 && response?.data) {
+          const url = window.URL.createObjectURL(new Blob([response?.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `${payload.fileName}${payload.fileType}`);
+          document.body.appendChild(link);
+          link.click();
+          dispatch(hideLoader());
+        } else {
+          console.log("Error during download", response);
+          ShowToast("info", "Error downloading file");
+        }
+      })
+      .catch((error) => {
+        ShowToast(
+          "info",
+          error.message || "An error occurred while downloading"
+        );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };CardHeader
   return (
     <Card>
       <CardHeader className="p-0 border-0 bg-light-subtle">
@@ -279,7 +318,7 @@ const Retrival = ({ activeSubItem }: any) => {
         </form>
       </CardBody>
       <CardBody>
-        <UserInfoTable activeSubItem={activeSubItem} T6Data={userData} />
+        <UserInfoTable activeSubItem={activeSubItem} T6Data={userData}   handleDownload={handleDownload}/>
       </CardBody>
     </Card>
   );

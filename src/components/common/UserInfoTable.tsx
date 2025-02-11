@@ -228,10 +228,34 @@ const DataTable = ({
         return column;
       });
     } else if (activeSubItem === "Communication Retrival Report") {
-      return CompliancneReport.map((column) => ({
-        ...column,
-      }));
-    } else if (
+      return CompliancneReport.map((column) => {
+        if (column.field === "CommunicationProofPath") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row);  // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Download
+                </button>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    }
+     else if (
       selectedWidget === "Total Clients" ||
       selectedWidget === "Active Clients" ||
       selectedWidget === "Inactive Clients"
