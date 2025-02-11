@@ -192,7 +192,7 @@ const ModalComponent = ({
         communicationType: editData.CommunicationType || "",
         proofOfCommunication: editData.CommunicationProof || "",
         dateOfCommunication: editData.DateOfCommunication
-          ? dayjs(editData.DateOfCommunication).format("DD/MM/YYYY") // Convert to string
+          ? dayjs(editData.DateOfCommunication).format("YYYY/MM/DD") // Convert to string
           : "",
         uploadProof: "",
         TypeOfDocuments: editData.TypeOfDocuments || "",
@@ -330,7 +330,7 @@ const ModalComponent = ({
                         formik.values.dateOfCommunication
                           ? dayjs(
                               formik.values.dateOfCommunication,
-                              "DD/MM/YYYY"
+                              "YYYY/MM/DD"
                             )
                           : null
                       }
@@ -339,7 +339,7 @@ const ModalComponent = ({
                       onChange={(date: Dayjs | null) =>
                         formik.setFieldValue(
                           "dateOfCommunication",
-                          date ? date.format("DD/MM/YYYY") : ""
+                          date ? date.format("YYYY/MM/DD") : ""
                         )
                       }
                       slotProps={{
