@@ -890,7 +890,6 @@ export const communicationColumns =
       headerName: "Type of Document",
       minWidth: 180,
       disableColumnMenu: true,
-      align: "center",
       headerAlign: "center",
     },
     {
@@ -898,7 +897,6 @@ export const communicationColumns =
       headerName: "Communication Type",
       minWidth: 180,
       disableColumnMenu: true,
-      align: "center",
       headerAlign: "center",
     },
     {
@@ -907,7 +905,6 @@ export const communicationColumns =
       minWidth: 200,
       headerAlign: "center",
       flex: 2,
-      align: "center",
       disableColumnMenu: true,
       renderCell: (params: any) => {
         const dispatchProof = params.value || "N/A";
@@ -923,7 +920,6 @@ export const communicationColumns =
       headerName: "Department",
       minWidth: 140,
       disableColumnMenu: true,
-      align: "center",
       headerAlign: "center",
     },
   ];
@@ -943,18 +939,20 @@ export const CompliancneReport: GridColDef[] = [
     headerName: "Type of Document",
     minWidth: 140,
     disableColumnMenu: true,
+    headerAlign: "center",
   },
   {
     field: "CommunicationType",
     headerName: "Communication Type",
     minWidth: 150,
     disableColumnMenu: true,
+    headerAlign: "center",
   },
   {
     field: "CommunicationDesc",
     headerName: "Communication Description",
     minWidth: 300,
-
+    headerAlign: "center",
     disableColumnMenu: true,
     // renderCell: (params: any) => {
     //   const dispatchProof = params.value || "N/A";
@@ -970,11 +968,14 @@ export const CompliancneReport: GridColDef[] = [
     headerName: "Document",
     minWidth: 150,
     disableColumnMenu: true,
+    align: "center",
+    headerAlign: "center",
   },
   {
     field: "Department",
     headerName: "Department",
     minWidth: 100,
+    headerAlign: "center",
     disableColumnMenu: true,
     flex: 2,
   },
