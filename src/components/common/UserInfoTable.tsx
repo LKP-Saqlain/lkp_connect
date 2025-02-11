@@ -486,8 +486,6 @@ const DataTable = ({
               ? row.RowId
               : row.dummyId
               ? row.dummyId
-              : row.CommunicationProofPath
-              ? row.CommunicationProofPath
               : row.BOID
               ? `${row.BOName}-${row.TotalDebit}-${Math.random()}` // this is just for when data comes repetative
               : // ? row.BOID
