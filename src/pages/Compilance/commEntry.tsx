@@ -7,7 +7,7 @@ import { apiServices } from "../../services";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import ShowToast from "../../utils/toastUtils";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 
 // const dummyData = [
 //   {
@@ -112,13 +112,13 @@ const CommEntry = ({ activeSubItem }: any) => {
   const handleEditClick = (data: any, editCheck: boolean) => {
     console.log("TestModalData", data, editCheck);
 
-    const formattedDate = data.DateOfCommunication
-      ? dayjs(data.DateOfCommunication, "DD-MMM-YY").format("DD/MM/YYYY")
-      : "";
-    const updatedData = { ...data, DateOfCommunication: formattedDate };
+    // const formattedDate = data.DateOfCommunication
+    //   ? dayjs(data.DateOfCommunication, "DD-MMM-YY").format("DD/MM/YYYY")
+    //   : "";
+    // const updatedData = { ...data, DateOfCommunication: formattedDate };
 
     setmodal_grid(true);
-    setEditData(updatedData);
+    setEditData(data);
     setEditUserCheck(editCheck);
   };
 
