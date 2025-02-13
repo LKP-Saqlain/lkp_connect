@@ -47,7 +47,7 @@ const ModalComponent = ({
   onSubmit: (data: any, apiStatus?: any) => void;
   editData: any;
   editUserCheck: boolean;
-  editTitle: boolean;
+  editTitle?: boolean;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [fileExtension, setFileExtension] = useState("");

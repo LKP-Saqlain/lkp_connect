@@ -26,7 +26,12 @@ export const ClientDetailsCapsule = [
   { id: 2, label: "Active Clients", count: 150 },
   { id: 3, label: "Inactive Clients", count: 200 },
   { id: 4, label: "Total Clients", count: 100 },
+];
 
+export const DPDebitCapsules = [
+  { id: 2, label: "Active Clients" },
+  { id: 3, label: "Inactive Clients" },
+  { id: 4, label: "Total Clients" },
 ];
 
 export const ODCapsules = [

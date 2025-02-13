@@ -74,6 +74,7 @@ interface SelectedWidgetProps {
   totalCount?: any;
   activeClient?: any;
   inactiveClient?: any;
+  totalLedgerDebitAmt?: any;
 }
 
 const DataTable = ({
@@ -102,6 +103,7 @@ const DataTable = ({
   activeClient,
   inactiveClient,
   handleDeleteClick,
+  totalLedgerDebitAmt,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -236,7 +238,7 @@ const DataTable = ({
               return (
                 <button
                   onClick={() => {
-                    handleDownload(params.row);  // This will trigger the download function
+                    handleDownload(params.row); // This will trigger the download function
                   }}
                   style={{
                     color: "#11395C",
@@ -254,14 +256,6 @@ const DataTable = ({
         }
         return column;
       });
-    }
-     else if (
-      selectedWidget === "Total Clients" ||
-      selectedWidget === "Active Clients" ||
-      selectedWidget === "Inactive Clients"
-      // apiStatus
-    ) {
-      return getClientActivityStatusColumns(handleViewDetails);
     } else if (selectedWidget === "Upcoming Dormant Client") {
       return getClientDormantStatus(handleViewDetails);
     } else if (activeSubItem === "Referal Entry Status") {
@@ -332,13 +326,7 @@ const DataTable = ({
       return QPayoutColumns.map((column) => ({
         ...column,
       }));
-    }
-    //  else if (activeSubItem === "Referal Product Wise MIS Report") {
-    //   return communicationColumns.map((column) => ({
-    //     ...column,
-    //   }));
-    // }
-    else {
+    } else if (activeSubItem === "DP Debit Recovery") {
       // return [];
       // Inject handleEmailSend into the column definition
       return DPDebitRecovery.map((column) => {
@@ -382,6 +370,15 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (
+      selectedWidget === "Total Clients" ||
+      selectedWidget === "Active Clients" ||
+      selectedWidget === "Inactive Clients"
+      // apiStatus
+    ) {
+      return getClientActivityStatusColumns(handleViewDetails);
+    } else {
+      return [];
     }
   };
 
@@ -445,6 +442,7 @@ const DataTable = ({
           totalCount={totalCount}
           activeClient={activeClient}
           inactiveClient={inactiveClient}
+          totalLedgerDebitAmt={totalLedgerDebitAmt}
         />
       )}
       <Paper
@@ -465,6 +463,12 @@ const DataTable = ({
               : selectedWidget === "Active Clients"
               ? activeGroupedClients
               : selectedWidget === "Inactive Clients"
+              ? inactiveGroupedClients
+              : selectedWidget === "Active Clients" &&
+                activeSubItem === "DP Debit Recovery"
+              ? activeGroupedClients
+              : selectedWidget === "Inactive Clients" &&
+                activeSubItem === "DP Debit Recovery"
               ? inactiveGroupedClients
               : selectedWidget === "Upcoming Dormant Client"
               ? T6Data

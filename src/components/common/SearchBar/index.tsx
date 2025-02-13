@@ -61,6 +61,7 @@ interface SearchAppBarProps {
   totalCount?: any;
   activeClient?: any;
   inactiveClient?: any;
+  totalLedgerDebitAmt?: any;
 }
 
 const SearchAppBar: React.FC<SearchAppBarProps> = ({
@@ -74,6 +75,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   totalCount,
   activeClient,
   inactiveClient,
+  totalLedgerDebitAmt,
 }) => {
   const [searchValue, setSearchValue] = React.useState(searchTableValue);
   // const [selectedButton, setSelectedButton] = React.useState<string>("ALL");
@@ -95,6 +97,8 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   //   borderColor: "#ABC4DA",
   //   textTransform: "capitalize",
   // };
+
+  console.log(totalLedgerDebitAmt);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

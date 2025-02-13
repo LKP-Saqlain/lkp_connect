@@ -54,7 +54,6 @@ const today = new Date();
 const day = today.getDate().toString().padStart(2, "0");
 const month = (today.getMonth() + 1).toString().padStart(2, "0");
 const year = today.getFullYear();
-
 const formattedDate = `${year}/${month}/${day}`;
 
 const CommEntry = ({ activeSubItem }: any) => {
@@ -67,7 +66,7 @@ const CommEntry = ({ activeSubItem }: any) => {
   const [editUserCheck, setEditUserCheck] = useState(false);
   const [isRowDeleted, setIsRowDeleted] = useState(false);
   const [deletedRow, setDeletedRow] = useState<ComplianceEntry | null>(null);
-  const [editTitle, setEditTitle] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -107,7 +106,6 @@ const CommEntry = ({ activeSubItem }: any) => {
 
   function tog_grid() {
     setmodal_grid(!modal_grid);
-    setEditTitle(false);
   }
 
   const handleEditClick = (data: any, editCheck: boolean) => {
@@ -121,7 +119,6 @@ const CommEntry = ({ activeSubItem }: any) => {
     setmodal_grid(true);
     setEditData(data);
     setEditUserCheck(editCheck);
-    setEditTitle(true);
   };
 
   const getUserDetails = async (row: any) => {
@@ -257,7 +254,6 @@ const CommEntry = ({ activeSubItem }: any) => {
         editData={editData}
         onSubmit={handleFormSubmit}
         editUserCheck={editUserCheck}
-        editTitle={editTitle}
       />
       <div className="page-content">
         <div className="container-fluid">

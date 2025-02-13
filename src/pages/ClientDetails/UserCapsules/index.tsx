@@ -5,6 +5,7 @@ import { Card, CardBody, Col, Row } from "reactstrap";
 import {
   ClientDetailsCapsule,
   ODCapsules,
+  DPDebitCapsules,
 } from "../../../components/common/Capsules";
 // import { useMediaQuery } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
@@ -31,13 +32,17 @@ const UserCapsules = ({
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const capsules =
-    capsuleType === "ClientDetails" ? ClientDetailsCapsule : ODCapsules;
+    capsuleType === "ClientDetails"
+      ? ClientDetailsCapsule
+      : capsuleType === "DPDebit"
+      ? DPDebitCapsules
+      : ODCapsules;
 
   return (
     <React.Fragment>
       <Row>
         {capsules.map((item, key) => (
-          <Col md={3} key={key}>
+          <Col md={capsuleType === "DPDebit" ? 4 : 3} key={key}>
             <Card
               className={`rounded-pill capsule-hover ${
                 selectedCapsule ? "selected-widget" : ""

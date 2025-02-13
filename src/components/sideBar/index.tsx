@@ -388,7 +388,7 @@ const SideBar = () => {
           case "Account Performance Report":
             return <AccStatement />;
           case "DP Debit Recovery":
-            return <DPRecovery />;
+            return <DPRecovery activeSubItem={activeSubItem} />;
           default:
             return null;
         }

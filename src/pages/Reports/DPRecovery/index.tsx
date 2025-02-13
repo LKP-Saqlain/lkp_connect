@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiServices } from "../../../services";
-import { Card, CardBody, CardHeader } from "reactstrap";
+import { Card, CardBody } from "reactstrap";
 // import DataTable from "../../../components/common/table";
 // import { GridColDef } from "@mui/x-data-grid";
 // import { Tooltip } from "@mui/material";
@@ -9,15 +9,26 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import ShowToast from "../../../utils/toastUtils";
 import UserInfoTable from "../../../components/common/UserInfoTable";
+import UserCapsules from "../../ClientDetails/UserCapsules";
 import "../style.css";
 
 const DPRecovery = ({ activeSubItem }: any) => {
-  const [userData, setUserData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [userData, setUserData] = useState<any[]>([]);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [emailSentStatus, setEmailSentStatus] = useState<
     Record<string, boolean>
   >({});
+  const [totalCount, setTotalCount] = useState(0);
+  const [activeClients, setActiveClients] = useState(0);
+  const [inactiveClients, setinActiveClients] = useState(0);
+  const [activeGroupedClients, setActiveGroupedClients] = useState<any[][]>([]);
+  const [inactiveGroupedClients, setInactiveGroupedClients] = useState<any[][]>(
+    []
+  );
+  const [ledgerSum, setLedgerSum] = useState(0);
+
+  const [selectedCapsule, setSelectedCapsule] = useState("Active Clients");
   // const [searchValue, setSearchValue] = useState("");
   const dispatch = useDispatch<AppDispatch>();
 
@@ -37,8 +48,59 @@ const DPRecovery = ({ activeSubItem }: any) => {
         dispatch(showLoader("Please wait"));
         const response = await apiServices.DPDebitRecovery(payload);
         dispatch(hideLoader());
-        setUserData(response?.data?.data || []);
-        setFilteredData(response?.data?.data || []);
+
+        // Log the response structure
+        console.log("API Response:", response?.data?.data.length);
+
+        // Extract data safely
+        const responseData = response?.data?.data ?? [];
+
+        if (!Array.isArray(responseData)) {
+          console.error("Error: Expected an array but got:", responseData);
+          return; // Stop execution if responseData is not an array
+        }
+
+        setUserData(responseData);
+        setFilteredData(responseData);
+
+        const activeClients = responseData.filter(
+          (client: any) => client.BOStatus === "Active"
+        ).length;
+        const inactiveClients = responseData.filter(
+          (client: any) => client.BOStatus === "Inactive"
+        ).length;
+        setActiveClients(activeClients);
+        setinActiveClients(inactiveClients);
+        setTotalCount(response?.data?.data.length);
+
+        console.log("Active Clients:", activeClients);
+        console.log("Inactive Clients:", inactiveClients);
+
+        const activeGroupedClients: any[] = [];
+        const inactiveGroupedClients: any[] = [];
+
+        console.log("responseData:", responseData, Array.isArray(responseData));
+
+        const totalLedgerDebitAmt = responseData.reduce(
+          (sum, client) => sum + (client.Ledger_DebitAmt || 0),
+          0
+        );
+        console.log("Total Ledger Debit Amount:", totalLedgerDebitAmt);
+        setLedgerSum(totalLedgerDebitAmt);
+
+        responseData.forEach((client: any) => {
+          if (client.BOStatus === "Active") {
+            activeGroupedClients.push(client);
+          } else if (client.BOStatus === "Inactive") {
+            inactiveGroupedClients.push(client);
+          }
+        });
+
+        console.log("Active Clients Grouped:", activeGroupedClients);
+        console.log("Inactive Clients Grouped:", inactiveGroupedClients);
+
+        setActiveGroupedClients(activeGroupedClients);
+        setInactiveGroupedClients(inactiveGroupedClients);
       } catch (error) {
         dispatch(hideLoader());
         console.error("Error fetching DP debit recovery data:", error);
@@ -104,28 +166,51 @@ const DPRecovery = ({ activeSubItem }: any) => {
     console.log("filteredSearch Records", filteredData);
   };
 
+  const handleClick = (value: string) => {
+    console.log("You clicked the Chip.", value);
+    setSelectedCapsule(value);
+  };
+
   return (
-    <Card>
-      <CardHeader>
-        <h4 className="card-title mb-0"> DP Debit Outstanding</h4>
-      </CardHeader>
-      <CardBody>
-        {/* <DataTable
+    <>
+      <UserCapsules
+        selectedCapsule={selectedCapsule}
+        handleClick={handleClick}
+        // totalCount={totalCount}
+        // activeClient={activeClients}
+        // inactiveClient={inactiveClients}
+        capsuleType="DPDebit"
+      />
+      <Card>
+        {/* <CardHeader>
+          <h4 className="card-title mb-0"> DP Debit Outstanding</h4>
+        </CardHeader> */}
+        <CardBody>
+          {/* <DataTable
           customFlag={true}
           dynamicHeader={dormantColumns}
           tableData={userData}
         /> */}
-        <UserInfoTable
-          showSearch={true}
-          handleSearchBasedOnInput={handleSearchBasedOnInput}
-          searchValue={searchQuery}
-          T6Data={userData ? filteredData : filteredData}
-          getUserDetails={getUserDetails}
-          emailSentStatus={emailSentStatus}
-          activeSubItem={activeSubItem}
-        />
-      </CardBody>
-    </Card>
+
+          <UserInfoTable
+            showSearch={true}
+            handleSearchBasedOnInput={handleSearchBasedOnInput}
+            searchValue={searchQuery}
+            T6Data={userData ? filteredData : filteredData}
+            getUserDetails={getUserDetails}
+            emailSentStatus={emailSentStatus}
+            activeSubItem={activeSubItem}
+            activeGroupedClients={activeGroupedClients}
+            inactiveGroupedClients={inactiveGroupedClients}
+            selectedWidget={selectedCapsule}
+            activeClient={activeClients}
+            inactiveClient={inactiveClients}
+            totalCount={totalCount}
+            totalLedgerDebitAmt={ledgerSum}
+          />
+        </CardBody>
+      </Card>
+    </>
   );
 };
 

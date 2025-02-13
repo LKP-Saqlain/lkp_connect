@@ -56,7 +56,7 @@ const ComChecker = ({ activeSubItem }: any) => {
     };
 
     fetchComplianceData();
-  }, [dispatch, flag]); 
+  }, [dispatch, flag]);
 
   const handleApproval = (rid: number) => {
     const payload = {
@@ -79,7 +79,7 @@ const ComChecker = ({ activeSubItem }: any) => {
       .Compliance(payload)
       .then((response) => {
         if (response?.status === 200) {
-          setFlag(!flag); 
+          setFlag(!flag);
           ShowToast("success", response?.data.Table[0]?.Message);
         } else {
           console.log("Error during approval", response);
@@ -114,7 +114,10 @@ const ComChecker = ({ activeSubItem }: any) => {
           const url = window.URL.createObjectURL(new Blob([response?.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", `${payload.fileName}${payload.fileType}`);
+          link.setAttribute(
+            "download",
+            `${payload.fileName}${payload.fileType}`
+          );
           document.body.appendChild(link);
           link.click();
           dispatch(hideLoader());
