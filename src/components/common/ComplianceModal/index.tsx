@@ -40,14 +40,14 @@ const ModalComponent = ({
   onSubmit,
   editData,
   editUserCheck,
-  editTitle
+  editTitle,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
   onSubmit: (data: any, apiStatus?: any) => void;
   editData: any;
   editUserCheck: boolean;
-  editTitle: boolean
+  editTitle: boolean;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [fileExtension, setFileExtension] = useState("");
@@ -134,15 +134,23 @@ const ModalComponent = ({
           return; // Stop submission if file upload fails
         }
       }
-      // if (uploadedFile===null && editData ){
-      //   console.log("Still pending communicationProofPath - 0",communicationProofPath);
-      //   communicationProofPath = editData.CommunicationProofPath || communicationProofPath;
-      //   console.log("Still pending communicationProofPath",communicationProofPath);
-      // }
-      fetchSubmitForm(uploadedFileExt, communicationProofPath); // Call submit function after file upload completes
+      if (uploadedFile === null && editData) {
+        communicationProofPath =
+          editData.CommunicationProofPath || communicationProofPath;
+
+        uploadedFileExt = editData?.DocumentType || fileExtension || "unknown";
+
+        console.log(
+          "Still pending communicationProofPath",
+          communicationProofPath,
+          "File Extension:",
+          uploadedFileExt
+        );
+      }
+      fetchSubmitForm(uploadedFileExt, communicationProofPath);
+      // Reset states
       setUploadedFile(null); // Reset uploaded file
-      setFileExtension(""); // Reset file extension
-      formik.resetForm();
+      formik.resetForm(); // Reset Formik form
     },
   });
   const fetchSubmitForm = async (
@@ -256,7 +264,7 @@ const ModalComponent = ({
             .then((response) => {
               dispatch(hideLoader());
               if (response?.status === 200) {
-                ShowToast("success", response?.data);
+                ShowToast("success", "File Successfully Uploaded");
                 formik.setFieldError("uploadProof", "");
                 resolve(fileExt); // Resolve the promise on success
               } else {
