@@ -50,6 +50,13 @@ interface ComplianceEntry {
   IsDeleted: string;
 }
 
+const today = new Date();
+const day = today.getDate().toString().padStart(2, "0");
+const month = (today.getMonth() + 1).toString().padStart(2, "0");
+const year = today.getFullYear();
+
+const formattedDate = `${year}/${month}/${day}`;
+
 const CommEntry = ({ activeSubItem }: any) => {
   // const [modal_backdrop, setmodal_backdrop] = useState<boolean>(false);
   const [modal_grid, setmodal_grid] = useState<boolean>(false);
@@ -60,20 +67,12 @@ const CommEntry = ({ activeSubItem }: any) => {
   const [editUserCheck, setEditUserCheck] = useState(false);
   const [isRowDeleted, setIsRowDeleted] = useState(false);
   const [deletedRow, setDeletedRow] = useState<ComplianceEntry | null>(null);
-
+  const [editTitle, setEditTitle] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (isRowDeleted && deletedRow) {
       const fetchComplianceEntry = async () => {
-        const today = new Date();
-        const formattedDate = `${today
-          .getDate()
-          .toString()
-          .padStart(2, "0")}/${(today.getMonth() + 1)
-          .toString()
-          .padStart(2, "0")}/${today.getFullYear()}`;
-
         let payload = {
           financialYear: "",
           department: "",
@@ -108,6 +107,7 @@ const CommEntry = ({ activeSubItem }: any) => {
 
   function tog_grid() {
     setmodal_grid(!modal_grid);
+    setEditTitle(false);
   }
 
   const handleEditClick = (data: any, editCheck: boolean) => {
@@ -121,6 +121,7 @@ const CommEntry = ({ activeSubItem }: any) => {
     setmodal_grid(true);
     setEditData(data);
     setEditUserCheck(editCheck);
+    setEditTitle(true);
   };
 
   const getUserDetails = async (row: any) => {
@@ -137,9 +138,7 @@ const CommEntry = ({ activeSubItem }: any) => {
       communicationType: row.CommunicationType,
       communicationProof: row.CommunicationProof,
       communicationProofPath: row.CommunicationProofPath,
-      dateOfCommunication: row.DateOfCommunication
-        ? new Date(row.DateOfCommunication).toLocaleDateString("en-GB")
-        : "02/03/2025",
+      dateOfCommunication: formattedDate,
       rowId: row.RowId || 0,
       userId: "",
       DocumentType: row.DocumentType,
@@ -183,9 +182,7 @@ const CommEntry = ({ activeSubItem }: any) => {
           communicationType: editData.CommunicationType || "string",
           communicationProof: editData.CommunicationProof || "string",
           communicationProofPath: editData.CommunicationProofPath || "string",
-          dateOfCommunication: editData.DateOfCommunication
-            ? new Date(editData.DateOfCommunication).toLocaleDateString("en-GB")
-            : "02/03/2025",
+          dateOfCommunication: formattedDate,
           rowId: editData.RowId || 0,
           userId: editData.CreatedBy || "",
         };
@@ -212,13 +209,6 @@ const CommEntry = ({ activeSubItem }: any) => {
   //this useEffect call direct after insert api calls from modalComponent
   useEffect(() => {
     const fetchComplianceEntry = async () => {
-      const today = new Date();
-      const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(
-        today.getMonth() + 1
-      )
-        .toString()
-        .padStart(2, "0")}/${today.getFullYear()}`;
-
       let payload = {
         financialYear: "",
         department: "",
@@ -267,6 +257,7 @@ const CommEntry = ({ activeSubItem }: any) => {
         editData={editData}
         onSubmit={handleFormSubmit}
         editUserCheck={editUserCheck}
+        editTitle={editTitle}
       />
       <div className="page-content">
         <div className="container-fluid">

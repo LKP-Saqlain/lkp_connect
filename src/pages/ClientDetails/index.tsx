@@ -231,7 +231,7 @@ any) => {
 
   useEffect(() => {
     const fetchClientCash = async () => {
-      if (apiStatus && selectedTrading !== "Dormant") {
+      if (selectedCapsule !== "Upcoming Dormant Client") {
         const Id = localStorage.getItem("Id");
         const payload = {
           loginName: Id,
@@ -300,7 +300,7 @@ any) => {
     };
 
     fetchClientCash(); // Call the async function
-  }, [apiStatus, dispatch]);
+  }, [apiStatus, dispatch, selectedCapsule]);
 
   const handleExcel = async () => {
     const Id = localStorage.getItem("Id");

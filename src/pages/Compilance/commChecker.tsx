@@ -11,18 +11,18 @@ const ComChecker = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any>();
   const [flag, setFlag] = useState<boolean>(false);
 
-  const today = new Date();
-  const day = today.getDate().toString().padStart(2, "0");
-  const month = (today.getMonth() + 1).toString().padStart(2, "0");
-  const year = today.getFullYear();
-
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+  const today = new Date();
+  const day = today.getDate().toString().padStart(2, "0");
+  const month = (today.getMonth() + 1).toString().padStart(2, "0");
+  const year = today.getFullYear();
 
-  const formattedDate = `${day}/${month}/${year}`;
+
+  const formattedDate = `${year}/${month}/${day}`;
 
   useEffect(() => {
     const fetchComplianceData = () => {
@@ -36,6 +36,7 @@ const ComChecker = ({ activeSubItem }: any) => {
         communicationProof: "",
         communicationProofPath: "",
         dateOfCommunication: formattedDate,
+        // dateOfCommunication: "2025/02/05",
         rowId: 0,
         userId: "",
       };

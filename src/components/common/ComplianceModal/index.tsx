@@ -40,12 +40,14 @@ const ModalComponent = ({
   onSubmit,
   editData,
   editUserCheck,
+  editTitle
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
   onSubmit: (data: any, apiStatus?: any) => void;
   editData: any;
   editUserCheck: boolean;
+  editTitle: boolean
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [fileExtension, setFileExtension] = useState("");
@@ -132,6 +134,11 @@ const ModalComponent = ({
           return; // Stop submission if file upload fails
         }
       }
+      // if (uploadedFile===null && editData ){
+      //   console.log("Still pending communicationProofPath - 0",communicationProofPath);
+      //   communicationProofPath = editData.CommunicationProofPath || communicationProofPath;
+      //   console.log("Still pending communicationProofPath",communicationProofPath);
+      // }
       fetchSubmitForm(uploadedFileExt, communicationProofPath); // Call submit function after file upload completes
       setUploadedFile(null); // Reset uploaded file
       setFileExtension(""); // Reset file extension
@@ -303,6 +310,10 @@ const ModalComponent = ({
     }
     tog_grid(); // Close the modal
   };
+  const toggle = () => {
+    handleCancel();
+    tog_grid();
+  };
 
   useEffect(() => {
     console.log("formValues", formik.values);
@@ -326,11 +337,11 @@ const ModalComponent = ({
     <Modal
       style={{ fontFamily: "Public Sans" }}
       isOpen={modal_grid}
-      toggle={tog_grid}
+      toggle={toggle}
       centered
     >
-      <ModalHeader className="modal-title" toggle={tog_grid}>
-        Add Entry
+      <ModalHeader className="modal-title" toggle={toggle}>
+        {editTitle ? "Edit Entry" : "Add Entry"}
       </ModalHeader>
       <ModalBody>
         <form onSubmit={formik.handleSubmit}>
