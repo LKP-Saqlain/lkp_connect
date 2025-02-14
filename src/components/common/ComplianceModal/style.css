@@ -46,7 +46,13 @@
   }
   
   .text-error {
-    color: red;
+    color: #d32f2f;
     font-size: 12px;
     margin-top: 5px;
   }
+
+  .css-er619e-MuiFormHelperText-root.Mui-error { 
+    color: #d32f2f;
+    font-family: 'Public Sans';
+    font-size: 13px;
+}

@@ -272,15 +272,12 @@ const CommEntry = ({ activeSubItem }: any) => {
                       onClick={tog_grid}
                       style={{
                         backgroundColor: "#11395C",
+                        marginBottom: "1rem",
                       }}
                     >
                       Add
                     </Button>
                   </Box>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardBody>
                   <UserInfoTable
                     activeSubItem={activeSubItem}
                     T6Data={userData}

@@ -1,5 +1,11 @@
 import { Button, Col, Input, Modal, ModalBody, ModalHeader } from "reactstrap";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import "./style.css";
 import { useFormik } from "formik";
 import { useState, useRef, useEffect } from "react";
@@ -327,33 +333,31 @@ const ModalComponent = ({
     console.log("formValues", formik.values);
   }, [formik.values]);
 
-  const handleChange = (event: any) => {
-    console.log("eventValue", event.target.value);
-    const { value } = event.target;
-    formik.setFieldValue("proofOfCommunication", value);
-  };
-
-  // useEffect(() => {
-  //   if (!uploadedFile) {
-  //     formik.setFieldError("uploadProof", "Please upload a proof document");
-  //   } else {
-  //     formik.setFieldError("uploadProof", ""); // Clear the error if file is uploaded
-  //   }
-  // }, [uploadedFile]);
+  // const handleChange = (event: any) => {
+  //   console.log("eventValue", event.target.value);
+  //   const { value } = event.target;
+  //   formik.setFieldValue("proofOfCommunication", value);
+  // };
 
   return (
     <Modal
-      style={{ fontFamily: "Public Sans" }}
+      style={{ fontFamily: "Public Sans", maxWidth: "500px", width: "100%" }}
       isOpen={modal_grid}
       toggle={toggle}
       centered
     >
-      <ModalHeader className="modal-title" toggle={toggle}>
+      <ModalHeader
+        className="modal-title"
+        toggle={toggle}
+        style={{ padding: "10px 15px" }}
+      >
         {editTitle ? "Edit Entry" : "Add Entry"}
       </ModalHeader>
-      <ModalBody>
+      <ModalBody
+        style={{ maxHeight: "70vh", overflowY: "auto", padding: "10px 15px" }}
+      >
         <form onSubmit={formik.handleSubmit}>
-          <div className="row g-3">
+          <div className="row g-2">
             <Col lg={12}>
               <div>
                 <FormControl fullWidth>
@@ -395,7 +399,7 @@ const ModalComponent = ({
                 </FormControl>
               </div>
             </Col>
-            <Col xxl={6}>
+            <Col lg={12}>
               <FormControl
                 fullWidth
                 error={
@@ -415,6 +419,7 @@ const ModalComponent = ({
                   label="Types Of Documentss"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  sx={{ width: "100%", minHeight: "40px" }}
                 >
                   {TypeOfDocuments.map((docType) => (
                     <MenuItem key={docType.value} value={docType.value}>
@@ -430,7 +435,7 @@ const ModalComponent = ({
                   )}
               </FormControl>
             </Col>
-            <Col xxl={6}>
+            <Col lg={12}>
               <FormControl
                 fullWidth
                 error={
@@ -450,6 +455,7 @@ const ModalComponent = ({
                   label=" Communicationss Typess"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  sx={{ width: "100%", minHeight: "40px" }}
                 >
                   {CommunicationMenu.map((dept) => (
                     <MenuItem key={dept.value} value={dept.value}>
@@ -465,7 +471,7 @@ const ModalComponent = ({
                   )}
               </FormControl>
             </Col>
-            <Col xxl={6}>
+            {/* <Col lg={12}>
               <div>
                 <label
                   style={{ fontSize: "12px" }}
@@ -494,6 +500,28 @@ const ModalComponent = ({
                     </div>
                   )}
               </div>
+            </Col> */}
+            <Col lg={12}>
+              <TextField
+                fullWidth
+                id="proofOfCommunication"
+                name="proofOfCommunication"
+                label="Communication Description"
+                variant="outlined"
+                size="small"
+                value={formik.values.proofOfCommunication}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.proofOfCommunication &&
+                  Boolean(formik.errors.proofOfCommunication)
+                }
+                helperText={
+                  formik.touched.proofOfCommunication &&
+                  formik.errors.proofOfCommunication
+                }
+                InputProps={{ sx: { fontSize: "14px" } }} // Adjust font size if needed
+              />
             </Col>
             <Col lg={12}>
               <label style={{ fontSize: "12px" }} className="form-label">
@@ -513,6 +541,7 @@ const ModalComponent = ({
                     formik.setFieldError("uploadProof", "");
                   }
                 }}
+                style={{ width: "100%", minHeight: "40px" }}
               />
               {formik.touched.uploadProof && formik.errors.uploadProof && (
                 <p className="text-error">{formik.errors.uploadProof}</p>
@@ -553,7 +582,11 @@ const ModalComponent = ({
                   label="Department"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  sx={{ fontFamily: "Public Sans" }}
+                  sx={{
+                    fontFamily: "Public Sans",
+                    width: "100%",
+                    minHeight: "40px",
+                  }}
                 >
                   {department.map((dept) => (
                     <MenuItem key={dept.value} value={dept.value}>
@@ -571,10 +604,9 @@ const ModalComponent = ({
                 <Button
                   style={{
                     backgroundColor: "#11395C",
-                    padding: "6px 12px",
                     fontSize: "11px",
-                    height: "35px",
-                    width: "auto",
+                    minHeight: "35px",
+                    width: "80px",
                   }}
                   type="submit"
                 >
@@ -583,10 +615,9 @@ const ModalComponent = ({
                 <Button
                   style={{
                     backgroundColor: "#11395C",
-                    padding: "6px 12px",
                     fontSize: "11px",
-                    height: "35px",
-                    width: "auto",
+                    minHeight: "35px",
+                    width: "80px",
                   }}
                   onClick={handleCancel}
                 >
