@@ -443,6 +443,7 @@ const DataTable = ({
           activeClient={activeClient}
           inactiveClient={inactiveClient}
           totalLedgerDebitAmt={totalLedgerDebitAmt}
+          activeSubItem={activeSubItem}
         />
       )}
       <Paper

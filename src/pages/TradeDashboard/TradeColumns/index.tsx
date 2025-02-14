@@ -869,17 +869,9 @@ export const communicationColumns =
   (): // handleEditClick?: (row: any, editCheck: boolean) => void
   GridColDef[] => [
     {
-      field: "action",
-      headerName: "Action",
-      width: 120,
-      align: "center",
-      headerAlign: "center",
-      disableColumnMenu: true,
-    },
-    {
       field: "DateOfCommunication",
       headerName: "Date of Communication",
-      width: 160,
+      width: 120,
       headerClassName: "header-wrap-custom",
       align: "center",
       headerAlign: "center",
@@ -888,14 +880,14 @@ export const communicationColumns =
     {
       field: "TypeOfDocuments",
       headerName: "Type of Document",
-      minWidth: 180,
+      minWidth: 140,
       disableColumnMenu: true,
       headerAlign: "center",
     },
     {
       field: "CommunicationType",
       headerName: "Communication Type",
-      minWidth: 180,
+      minWidth: 150,
       disableColumnMenu: true,
       headerAlign: "center",
     },
@@ -918,9 +910,25 @@ export const communicationColumns =
     {
       field: "Department",
       headerName: "Department",
-      minWidth: 140,
+      minWidth: 100,
       disableColumnMenu: true,
       headerAlign: "center",
+    },
+    {
+      field: "remarks",
+      headerName: "Remarks",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+      disableColumnMenu: true,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 120,
+      align: "center",
+      headerAlign: "center",
+      disableColumnMenu: true,
     },
   ];
 

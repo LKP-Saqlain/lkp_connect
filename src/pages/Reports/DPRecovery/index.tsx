@@ -23,9 +23,14 @@ const DPRecovery = ({ activeSubItem }: any) => {
   const [activeClients, setActiveClients] = useState(0);
   const [inactiveClients, setinActiveClients] = useState(0);
   const [activeGroupedClients, setActiveGroupedClients] = useState<any[][]>([]);
+  const [filteredActiveGroupClients, setFilteredActiveGroupClients] = useState<
+    any[][]
+  >([]);
   const [inactiveGroupedClients, setInactiveGroupedClients] = useState<any[][]>(
     []
   );
+  const [filteredInActiveGroupClients, setFilteredInActiveGroupClients] =
+    useState<any[][]>([]);
   const [ledgerSum, setLedgerSum] = useState(0);
 
   const [selectedCapsule, setSelectedCapsule] = useState("Active Clients");
@@ -158,11 +163,41 @@ const DPRecovery = ({ activeSubItem }: any) => {
     const query = value;
     setSearchQuery(query);
 
-    const filtered = userData.filter((item: any) =>
+    const filteredAllClients = userData.filter((item: any) =>
       item.BOName.toLowerCase().includes(value.toLowerCase())
     );
 
-    setFilteredData(filtered);
+    if (value.trim() === "") {
+      setFilteredActiveGroupClients(activeGroupedClients);
+      setFilteredInActiveGroupClients(inactiveGroupedClients);
+    } else {
+      const filteredActiveClients = activeGroupedClients
+        .flat()
+        .filter(
+          (item: any) =>
+            item.BOStatus === "Active" &&
+            item.BOName.toLowerCase().includes(value.toLowerCase())
+        );
+
+      const filteredInactiveClients = inactiveGroupedClients
+        .flat()
+        .filter(
+          (item: any) =>
+            item.BOStatus === "Inactive" &&
+            item.BOName.toLowerCase().includes(value.toLowerCase())
+        );
+
+      setFilteredActiveGroupClients(filteredActiveClients);
+      setFilteredInActiveGroupClients(filteredInactiveClients);
+
+      console.log("Filtered Active Clients:", filteredActiveClients);
+      console.log("Filtered Inactive Clients:", filteredInactiveClients);
+    }
+
+    const combinedFilteredData = [...filteredAllClients];
+
+    setFilteredData(combinedFilteredData); //Total filtered Records //filteredActive group client
+    // setFilteredInActiveGroupClients(filteredInActiveClients); //filtered Inactive grouped Client
     console.log("filteredSearch Records", filteredData);
   };
 
@@ -200,8 +235,14 @@ const DPRecovery = ({ activeSubItem }: any) => {
             getUserDetails={getUserDetails}
             emailSentStatus={emailSentStatus}
             activeSubItem={activeSubItem}
-            activeGroupedClients={activeGroupedClients}
-            inactiveGroupedClients={inactiveGroupedClients}
+            activeGroupedClients={
+              searchQuery ? filteredActiveGroupClients : activeGroupedClients
+            } // Show filtered when searching
+            inactiveGroupedClients={
+              searchQuery
+                ? filteredInActiveGroupClients
+                : inactiveGroupedClients
+            } // Show filtered when searching
             selectedWidget={selectedCapsule}
             activeClient={activeClients}
             inactiveClient={inactiveClients}

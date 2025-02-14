@@ -62,6 +62,7 @@ interface SearchAppBarProps {
   activeClient?: any;
   inactiveClient?: any;
   totalLedgerDebitAmt?: any;
+  activeSubItem?: any;
 }
 
 const SearchAppBar: React.FC<SearchAppBarProps> = ({
@@ -76,6 +77,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   activeClient,
   inactiveClient,
   totalLedgerDebitAmt,
+  activeSubItem,
 }) => {
   const [searchValue, setSearchValue] = React.useState(searchTableValue);
   // const [selectedButton, setSelectedButton] = React.useState<string>("ALL");
@@ -117,6 +119,10 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   //   setSelectedButton(filter); // Update the local state to highlight the button
   //   onFilterChange?.(filter); // Call the parent function with the selected filter
   // };
+
+  React.useEffect(() => {
+    console.log("tes1121t", selectedWidget, activeSubItem);
+  }, [selectedWidget, activeSubItem]);
 
   return (
     <Box
@@ -167,7 +173,8 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
           </ReactstrapButton>
         )}
         {selectedWidget === undefined ||
-          (selectedWidget !== "Upcoming Dormant Client" && (
+          selectedWidget !== "Upcoming Dormant Client" ||
+          (selectedWidget !== "DP Debit Recovery" && (
             <Box sx={{ mr: 2 }}>
               <Typography>{`Record Count - ${new Intl.NumberFormat(
                 "en-IN"
@@ -184,6 +191,15 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
               )}`}</Typography>
             </Box>
           ))}
+        {activeSubItem === "DP Debit Recovery" && (
+          <Typography>
+            {" "}
+            {`Total Due Amount - ₹${new Intl.NumberFormat("en-IN", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            }).format(totalLedgerDebitAmt)}`}
+          </Typography>
+        )}
 
         {/* Filter Buttons */}
         {/* {selectedWidget === "Upcoming Dormant Client" && (
