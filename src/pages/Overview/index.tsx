@@ -13,6 +13,7 @@ import ActiveClient from "../../assets/images/Clients.json";
 import DashboardCard from "../../components/common/DashboardCard";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
+// import Nudge from "../../components/common/Nudge";
 
 type RevenueKeys = "total" | "broking" | "nonBroking";
 // type TotalClientKey = "total" | "broking" | "nonBroking";
@@ -188,6 +189,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                     />
                   </Col>
                 </Row>
+                {/* <Nudge /> */}
 
                 <Row>
                   <Col xl={8}>
