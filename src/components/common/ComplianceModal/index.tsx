@@ -178,6 +178,8 @@ const ModalComponent = ({
       rowId: editData?.RowId ? editData?.RowId : 0,
       userId: user_id,
       DocumentType: uploadedFileExt,
+      entryFlag: "",
+      remark: "",
     };
     dispatch(showLoader("Please wait"));
     apiServices
