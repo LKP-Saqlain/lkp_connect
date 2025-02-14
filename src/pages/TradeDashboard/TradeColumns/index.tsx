@@ -915,7 +915,7 @@ export const communicationColumns =
       headerAlign: "center",
     },
     {
-      field: "remarks",
+      field: "Remark",
       headerName: "Remarks",
       width: 120,
       align: "center",
