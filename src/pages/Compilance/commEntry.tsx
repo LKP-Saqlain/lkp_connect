@@ -85,6 +85,8 @@ const CommEntry = ({ activeSubItem }: any) => {
           dateOfCommunication: formattedDate,
           rowId: deletedRow?.RowId || 0,
           userId: "",
+          entryFlag: "",
+          remark: "",
         };
 
         dispatch(showLoader("Please wait"));
@@ -142,6 +144,8 @@ const CommEntry = ({ activeSubItem }: any) => {
       rowId: row.RowId || 0,
       userId: "",
       DocumentType: row.DocumentType,
+      entryFlag: "",
+      remark: "",
     };
 
     dispatch(showLoader("Please wait"));
@@ -185,6 +189,8 @@ const CommEntry = ({ activeSubItem }: any) => {
           dateOfCommunication: formattedDate,
           rowId: editData.RowId || 0,
           userId: editData.CreatedBy || "",
+          entryFlag: "",
+          remark: "",
         };
         dispatch(showLoader("Please wait"));
         apiServices
@@ -221,6 +227,8 @@ const CommEntry = ({ activeSubItem }: any) => {
         dateOfCommunication: formattedDate,
         rowId: 0,
         userId: "",
+        entryFlag: "",
+        remark: "",
       };
 
       dispatch(showLoader("Please wait"));

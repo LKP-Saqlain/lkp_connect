@@ -141,7 +141,7 @@ const ModalComponent = ({
         uploadedFileExt = editData?.DocumentType || fileExtension || "unknown";
 
         console.log(
-          "Still pending communicationProofPath",
+          "EditData communicationProofPath",
           communicationProofPath,
           "File Extension:",
           uploadedFileExt
