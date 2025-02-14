@@ -21,7 +21,6 @@ const ComChecker = ({ activeSubItem }: any) => {
   const month = (today.getMonth() + 1).toString().padStart(2, "0");
   const year = today.getFullYear();
 
-
   const formattedDate = `${year}/${month}/${day}`;
 
   useEffect(() => {
@@ -39,6 +38,8 @@ const ComChecker = ({ activeSubItem }: any) => {
         // dateOfCommunication: "2025/02/05",
         rowId: 0,
         userId: "",
+        entryFlag: "",
+        remark: "",
       };
       dispatch(showLoader("Loading data..."));
 
@@ -58,7 +59,7 @@ const ComChecker = ({ activeSubItem }: any) => {
     fetchComplianceData();
   }, [dispatch, flag]);
 
-  const handleApproval = (rid: number) => {
+  const handleApproval = (rid: number, remark: string, flag: string) => {
     const payload = {
       financialYear: "",
       department: "",
@@ -71,8 +72,9 @@ const ComChecker = ({ activeSubItem }: any) => {
       dateOfCommunication: formattedDate,
       rowId: rid,
       userId: user_id,
+      entryFlag: flag,
+      remark: remark,
     };
-
     dispatch(showLoader("Approving..."));
 
     apiServices

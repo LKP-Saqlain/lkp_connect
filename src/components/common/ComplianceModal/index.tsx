@@ -147,7 +147,7 @@ const ModalComponent = ({
         uploadedFileExt = editData?.DocumentType || fileExtension || "unknown";
 
         console.log(
-          "Still pending communicationProofPath",
+          "EditData communicationProofPath",
           communicationProofPath,
           "File Extension:",
           uploadedFileExt
@@ -184,6 +184,8 @@ const ModalComponent = ({
       rowId: editData?.RowId ? editData?.RowId : 0,
       userId: user_id,
       DocumentType: uploadedFileExt,
+      entryFlag: "",
+      remark: "",
     };
     dispatch(showLoader("Please wait"));
     apiServices

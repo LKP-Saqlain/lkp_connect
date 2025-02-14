@@ -25,7 +25,8 @@ import SearchAppBar from "../../components/common/SearchBar";
 import "../../pages/ClientDetails/style.css";
 import EmailIcon from "@mui/icons-material/Email";
 import CustomModal from "./DPModal";
-
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 import Tooltip from "@mui/material/Tooltip";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -109,6 +110,7 @@ const DataTable = ({
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
   const [modal_center, setmodal_center] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<any>(null); // Store selected row data
+  const [action, setAction] = useState<"approve" | "reject">("approve");
 
   useEffect(() => {
     console.log("subItem and selectedWidgets", activeSubItem, selectedWidget);
@@ -132,6 +134,10 @@ const DataTable = ({
 
   const tog_center = () => {
     setmodal_center(!modal_center);
+  };
+  const HandleApprovalModal = (actionType: "approve" | "reject") => {
+    setAction(actionType);
+    tog_center();
   };
 
   const handleViewDetails = (row: any) => {
@@ -256,6 +262,13 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (
+      selectedWidget === "Total Clients" ||
+      selectedWidget === "Active Clients" ||
+      selectedWidget === "Inactive Clients"
+      // apiStatus
+    ) {
+      return getClientActivityStatusColumns(handleViewDetails);
     } else if (selectedWidget === "Upcoming Dormant Client") {
       return getClientDormantStatus(handleViewDetails);
     } else if (activeSubItem === "Referal Entry Status") {
@@ -268,25 +281,44 @@ const DataTable = ({
           return {
             ...column,
             renderCell: (params: any) => {
-              const [rowApproval, setRowApproval] = useState(false);
-
               return (
-                <button
-                  onClick={() => {
-                    setRowApproval(!rowApproval);
-                    handleApproval(params.row.RowId);
-                  }}
-                  disabled={rowApproval}
+                <div
                   style={{
-                    color: rowApproval ? "green" : "#11395C",
-                    textDecoration: rowApproval ? "none" : "underline",
-                    background: "none",
-                    border: "none",
-                    cursor: rowApproval ? "default" : "pointer",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
                   }}
                 >
-                  {rowApproval ? "Approved!" : "Approve"}
-                </button>
+                  <div
+                    onClick={() => {
+                      HandleApprovalModal("approve");
+                      setSelectedRow(params.row.RowId);
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span>Approve</span>
+                    <CheckCircleIcon style={{ color: "green" }} />
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      margin: "0 5px 0 5px",
+                    }}
+                  >
+                    |
+                  </div>
+                  <div
+                    onClick={() => {
+                      HandleApprovalModal("reject");
+                      setSelectedRow(params.row.RowId);
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <span>Reject</span>
+                    <CancelIcon style={{ color: "red" }} />
+                  </div>
+                </div>
               );
             },
           };
@@ -396,9 +428,13 @@ const DataTable = ({
         setmodal_center={setmodal_center}
         getUserDetails={getUserDetails} // Pass the API call function
         row={selectedRow} // Pass the selected row data
+        action={action}
+        handleApproval={handleApproval}
         Msg={
           activeSubItem === "Communication Retrival Entry"
             ? "Are you sure want to delete this entry"
+            : activeSubItem === "Communication Retrival Checker"
+            ? `Are you sure want to ${action} this entry`
             : "Are you sure you want to send the email?"
         }
         activeSubItem={activeSubItem}

@@ -73,6 +73,8 @@ const Retrival = ({ activeSubItem }: any) => {
       dateOfCommunication: "02/03/2025",
       rowId: 0,
       userId: "",
+      entryFlag: "",
+      remark: "",
     };
     dispatch(showLoader("Please wait"));
     apiServices
@@ -110,7 +112,10 @@ const Retrival = ({ activeSubItem }: any) => {
           const url = window.URL.createObjectURL(new Blob([response?.data]));
           const link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", `${payload.fileName}${payload.fileType}`);
+          link.setAttribute(
+            "download",
+            `${payload.fileName}${payload.fileType}`
+          );
           document.body.appendChild(link);
           link.click();
           dispatch(hideLoader());
@@ -128,7 +133,8 @@ const Retrival = ({ activeSubItem }: any) => {
       .finally(() => {
         dispatch(hideLoader());
       });
-  };CardHeader
+  };
+  CardHeader;
   return (
     <Card>
       <CardHeader className="p-0 border-0 bg-light-subtle">
@@ -318,7 +324,11 @@ const Retrival = ({ activeSubItem }: any) => {
         </form>
       </CardBody>
       <CardBody>
-        <UserInfoTable activeSubItem={activeSubItem} T6Data={userData}   handleDownload={handleDownload}/>
+        <UserInfoTable
+          activeSubItem={activeSubItem}
+          T6Data={userData}
+          handleDownload={handleDownload}
+        />
       </CardBody>
     </Card>
   );

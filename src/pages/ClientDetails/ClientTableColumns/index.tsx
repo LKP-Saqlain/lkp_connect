@@ -191,9 +191,9 @@ export const getAccountDetails: GridColDef[] = [
 export const getCommChecker: GridColDef[] = [
   {
     field: "status",
-    headerName: "Status",
+    headerName: "Approve | Reject",
     headerClassName: "header-wrap-custom",
-    width: 90,
+    width: 160,
     align: "center",
     disableColumnMenu: true,
     sortable: false,
