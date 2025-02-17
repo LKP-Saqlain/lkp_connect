@@ -1,13 +1,4 @@
 
-.modal-dialog:not(.modal-dialog-scrollable) {
-    .modal-header {
-        padding-bottom: 0;
-    }
-    .modal-footer {
-        padding-top: 0;
-    }
-}
-
 .modal {
 	&.zoomIn {
 		.modal-dialog {
@@ -30,9 +21,9 @@
 	width: 800px !important;
   }
   
-  .modal-body {
+  .modal-body-custom {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	/* gap: 1px; */
 	overflow-y: auto;
 	min-height: 100px;
@@ -47,24 +38,11 @@
 	width: 100%;
   }
 
-@keyframes zoomIn {
-	0% {
-		opacity: 0;
-		transform: scale3d(.3, .3, .3);
-	}
 
-	50% {
-		opacity: 1
-	}
-}
-.modal-header .close {
-	color: #fff !important; /* Change this to the color you want */
-  }
 
-  .modal-footer {
-	border: thin !important;
-	background-color: #f0f0f0 !important;
-  }
+
+
+  
 
 
 

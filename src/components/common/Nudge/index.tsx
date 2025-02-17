@@ -53,7 +53,10 @@ const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
         >
           <h5 style={{ color: "#fff" }}>Notifications</h5>
         </ModalHeader>
-        <ModalBody style={{ backgroundColor: "#f0f0f0" }}>
+        <ModalBody
+          className="modal-body-custom"
+          style={{ backgroundColor: "#f0f0f0" }}
+        >
           <Box display="flex" flexWrap="wrap" gap={1}>
             {notificationsQns.map((question, index) => (
               <Box
