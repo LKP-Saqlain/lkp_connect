@@ -54,6 +54,10 @@ import OTDetails from "../../pages/OT";
 import CommEntry from "../../pages/Compilance/commEntry";
 import ComChecker from "../../pages/Compilance/commChecker";
 import Main from "../../pages/refCard";
+// import Badge from "@mui/material/Badge";
+// import NotificationsIcon from "@mui/icons-material/Notifications";
+// import Nudge from "../common/Nudge";
+
 const drawerWidth = 240;
 
 // Utility functions for Drawer
@@ -139,6 +143,10 @@ const SideBar = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [apiStatus, setApiStatus] = useState<boolean>(false);
   const [dataStatus, setDataStatus] = useState("");
+
+  // const [isNudgeOpen, setIsNudgeOpen] = useState(false);
+  // const [modal_animationZoom, setmodal_animationZoom] = useState(false);
+
   // const drawerWidth = isMobile ? 180 : 240;
   const settings = ["Logout"];
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
@@ -455,76 +463,115 @@ const SideBar = () => {
         }
     }
   };
-  return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open} sx={{ backgroundColor: "#FAF9F6" }}>
-        <Toolbar>
-          {open ? (
-            <IconButton onClick={handleDrawerClose}>
-              {theme.direction === "rtl" ? (
-                <ChevronRightIcon />
-              ) : (
-                <ChevronLeftIcon />
-              )}
-            </IconButton>
-          ) : (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={[{ marginRight: 5 }, open && { display: "none" }]}
-            >
-              <MenuIcon sx={{ color: "black" }} />
-            </IconButton>
-          )}
-          {!open && (
-            <Box sx={{ flexGrow: 0, backgroundColor: "#F9F6EE" }}>
-              <Box
-                component="img"
-                alt="Logo"
-                src={Logo}
-                width={"auto"}
-                height="50px"
-              />
-            </Box>
-          )}
 
-          <Box sx={{ flexGrow: 1 }} />
-          <Box
-            sx={{
-              // border: "2px solid black",
-              padding: "10px",
-              marginRight: "2rem",
-            }}
-          >
-            {/* <SlSizeFullscreen style={{ color: "black", cursor: "pointer" }} />
+  // const handleNotificationClick = () => {
+  //   setIsNudgeOpen(!isNudgeOpen); // Toggle the visibility of Nudge component
+  //   setmodal_animationZoom((prev) => !prev);
+  // };
+
+  // function tog_animationZoom() {
+  //   setmodal_animationZoom((prev) => !prev);
+  //   setIsNudgeOpen(false);
+  // }
+
+  // useEffect(() => {
+  //   setmodal_animationZoom((prev) => !prev);
+  //   tog_animationZoom();
+  // }, [isNudgeOpen]); // Empty dependency array ensures it only runs once when the component mounts
+
+  return (
+    <>
+      {/* {isNudgeOpen && (
+        <Nudge
+          modal_animationZoom={modal_animationZoom}
+          tog_animationZoom={tog_animationZoom}
+        />
+      )} */}
+      <Box sx={{ display: "flex" }}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          open={open}
+          sx={{ backgroundColor: "#FAF9F6" }}
+        >
+          <Toolbar>
+            {open ? (
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === "rtl" ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ChevronLeftIcon />
+                )}
+              </IconButton>
+            ) : (
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={[{ marginRight: 5 }, open && { display: "none" }]}
+              >
+                <MenuIcon sx={{ color: "black" }} />
+              </IconButton>
+            )}
+            {!open && (
+              <Box sx={{ flexGrow: 0, backgroundColor: "#F9F6EE" }}>
+                <Box
+                  component="img"
+                  alt="Logo"
+                  src={Logo}
+                  width={"auto"}
+                  height="50px"
+                />
+              </Box>
+            )}
+
+            <Box sx={{ flexGrow: 1 }} />
+            <Box
+              sx={{
+                // border: "2px solid black",
+                padding: "10px",
+                marginRight: "2rem",
+              }}
+            >
+              {/* <SlSizeFullscreen style={{ color: "black", cursor: "pointer" }} />
             <BsFullscreen style={{ color: "black", cursor: "pointer" }} /> */}
-            {!isMobile ? (
-              <div>
-                <IconButton
-                  onClick={isFullScreen ? closeFullScreen : openFullScreen}
-                  sx={{ p: 0 }}
-                >
-                  {isFullScreen ? (
-                    <BsFullscreen style={{ cursor: "pointer" }} />
-                  ) : (
-                    <SlSizeFullscreen style={{ cursor: "pointer" }} />
-                  )}
-                </IconButton>
-              </div>
-            ) : null}
-          </Box>
-          <Typography
-            sx={{
-              color: "black",
-              fontSize: "10px",
-              mr: 1,
-              fontFamily: "Public Sans",
-            }}
-          >
-            {/* <Typography
+              {!isMobile ? (
+                <div>
+                  <IconButton
+                    onClick={isFullScreen ? closeFullScreen : openFullScreen}
+                    sx={{ p: 0 }}
+                  >
+                    {isFullScreen ? (
+                      <BsFullscreen style={{ cursor: "pointer" }} />
+                    ) : (
+                      <SlSizeFullscreen style={{ cursor: "pointer" }} />
+                    )}
+                  </IconButton>
+                </div>
+              ) : null}
+            </Box>
+            {/* <MenuItem>
+              <IconButton
+                size="large"
+                aria-label="show 6 new notifications"
+                color="inherit"
+                onClick={handleNotificationClick}
+              >
+                <Badge badgeContent={6} color="error">
+                  <NotificationsIcon sx={{ color: "#11395C" }} />
+                </Badge>
+              </IconButton>
+            </MenuItem> */}
+            <Typography
+              sx={{
+                color: "black",
+                fontSize: "10px",
+                mr: 1,
+                fontFamily: "Public Sans",
+              }}
+            >
+              {/* <Typography
               sx={{
                 textAlign: "end",
                 fontFamily: "Public Sans",
@@ -535,115 +582,122 @@ const SideBar = () => {
               {" "}
               Welcome
             </Typography> */}
-            <Typography sx={{ fontSize: "14px", fontFamily: "Public Sans" }}>
-              {localStorage.getItem("userName")}
+              <Typography sx={{ fontSize: "14px", fontFamily: "Public Sans" }}>
+                {localStorage.getItem("userName")}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "9px",
+                  color: "grey",
+                  fontFamily: "Public Sans",
+                }}
+              >
+                {`Data as on- ${dataStatus}`}
+              </Typography>
             </Typography>
-            <Typography
-              sx={{ fontSize: "9px", color: "grey", fontFamily: "Public Sans" }}
+            <Tooltip title="">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar
+                  src="/static/images/avatar/2.jpg"
+                  style={{ backgroundColor: "#284c6c" }}
+                >
+                  {firstLetter}
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
             >
-              {`Data as on- ${dataStatus}`}
-            </Typography>
-          </Typography>
-          <Tooltip title="">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar
-                src="/static/images/avatar/2.jpg"
-                style={{ backgroundColor: "#284c6c" }}
-              >
-                {firstLetter}
-              </Avatar>
-            </IconButton>
-          </Tooltip>
+              {settings.map((setting) => (
+                <MenuItem
+                  key={setting}
+                  onClick={() => handleCloseUserMenu(setting)}
+                >
+                  <Typography sx={{ textAlign: "center" }}>
+                    {setting}
+                  </Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Toolbar>
+        </AppBar>
 
-          <Menu
-            sx={{ mt: "45px" }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
+        {open && (
+          <Drawer
+            variant="permanent"
+            open={open}
+            sx={{
+              "& .MuiDrawer-paper": {
+                backgroundColor: "#11395C",
+              },
             }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
           >
-            {settings.map((setting) => (
-              <MenuItem
-                key={setting}
-                onClick={() => handleCloseUserMenu(setting)}
-              >
-                <Typography sx={{ textAlign: "center" }}>{setting}</Typography>
-              </MenuItem>
-            ))}
-          </Menu>
-        </Toolbar>
-      </AppBar>
+            <Divider />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: isMobile ? "0px" : "10px",
+              }}
+            >
+              <Box
+                component="img"
+                alt="Logo"
+                src={Logo1}
+                width={"auto"}
+                height="50px"
+                style={{ marginLeft: isMobile ? "0px" : "-60px" }}
+              />
+            </Box>
 
-      {open && (
-        <Drawer
-          variant="permanent"
-          open={open}
+            <List>
+              {menuItems.map((item) => (
+                <DrawerItem
+                  key={item.menu_code}
+                  title={item.menu_name}
+                  open={open}
+                  subItems={item.subItems}
+                  handleDrawerOpen={handleDrawerOpen}
+                  isMobile={isMobile}
+                  activeMenu={activeMenu}
+                  handleClick={() => handleMenuClick(item.menu_name)}
+                  handleSubItemClick={handleSubItemClick}
+                />
+              ))}
+            </List>
+          </Drawer>
+        )}
+
+        <Box
+          component="main"
           sx={{
-            "& .MuiDrawer-paper": {
-              backgroundColor: "#11395C",
-            },
+            flexGrow: 1,
+            p: 1,
+            mt: 8,
+            backgroundColor: "#E5E4E2",
+            overflow: "hidden",
+            // width: "100vw", // Full width of the viewport
+            // height: "100vh", // Full height of the viewport
           }}
         >
-          <Divider />
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: isMobile ? "0px" : "10px",
-            }}
-          >
-            <Box
-              component="img"
-              alt="Logo"
-              src={Logo1}
-              width={"auto"}
-              height="50px"
-              style={{ marginLeft: isMobile ? "0px" : "-60px" }}
-            />
-          </Box>
-
-          <List>
-            {menuItems.map((item) => (
-              <DrawerItem
-                key={item.menu_code}
-                title={item.menu_name}
-                open={open}
-                subItems={item.subItems}
-                handleDrawerOpen={handleDrawerOpen}
-                isMobile={isMobile}
-                activeMenu={activeMenu}
-                handleClick={() => handleMenuClick(item.menu_name)}
-                handleSubItemClick={handleSubItemClick}
-              />
-            ))}
-          </List>
-        </Drawer>
-      )}
-
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 1,
-          mt: 8,
-          backgroundColor: "#E5E4E2",
-          overflow: "hidden",
-          // width: "100vw", // Full width of the viewport
-          // height: "100vh", // Full height of the viewport
-        }}
-      >
-        <Box>{renderContent()}</Box>
+          <Box>{renderContent()}</Box>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

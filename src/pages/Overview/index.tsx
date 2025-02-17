@@ -32,6 +32,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const [newClients, setNewClients] = useState(0);
   const [activeClients, setActiveClients] = useState(null);
   const [tradedClientCount, setTradedClientCount] = useState(0);
+  // const [modal_animationZoom, setmodal_animationZoom] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -39,6 +40,14 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const handleValues = (revTotal: string) => {
     console.log("revTotal", revTotal);
   };
+
+  // function tog_animationZoom() {
+  //   setmodal_animationZoom((prev) => !prev);
+  // }
+
+  // useEffect(() => {
+  //   tog_animationZoom();
+  // }, []);
 
   const playerRef = useRef<Player>(null);
 
@@ -131,6 +140,10 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
+          {/* <Nudge
+            modal_animationZoom={modal_animationZoom}
+            tog_animationZoom={tog_animationZoom}
+          /> */}
           <Row>
             <Col>
               <div className="h-100">
@@ -189,7 +202,6 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                     />
                   </Col>
                 </Row>
-                {/* <Nudge /> */}
 
                 <Row>
                   <Col xl={8}>

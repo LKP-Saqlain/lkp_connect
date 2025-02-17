@@ -27,8 +27,7 @@
 
 .modal-content {
 	max-height: 70vh !important;
-	width: 700px !important;
-	background-color: red;
+	width: 800px !important;
   }
   
   .modal-body {
@@ -37,7 +36,7 @@
 	/* gap: 1px; */
 	overflow-y: auto;
 	min-height: 100px;
-	width: 600px !important;
+	width: 795px !important;
 	
   }
   
