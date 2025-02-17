@@ -59,7 +59,7 @@ const ComChecker = ({ activeSubItem }: any) => {
     fetchComplianceData();
   }, [dispatch, flag]);
 
-  const handleApproval = (rid: number, remark: string, flag: string) => {
+  const handleApproval = (rid: number, remark: string, entryFlag: string) => {
     const payload = {
       financialYear: "",
       department: "",
@@ -72,7 +72,7 @@ const ComChecker = ({ activeSubItem }: any) => {
       dateOfCommunication: formattedDate,
       rowId: rid,
       userId: user_id,
-      entryFlag: flag,
+      entryFlag: entryFlag,
       remark: remark,
     };
     dispatch(showLoader("Approving..."));
@@ -80,6 +80,7 @@ const ComChecker = ({ activeSubItem }: any) => {
     apiServices
       .Compliance(payload)
       .then((response) => {
+        // setFlag(!flag);
         if (response?.status === 200) {
           setFlag(!flag);
           ShowToast("success", response?.data.Table[0]?.Message);

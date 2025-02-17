@@ -1,17 +1,18 @@
 import { Button, Modal as ReactstrapModal, ModalBody } from "reactstrap";
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 interface CustomModalProps {
   tog_center: () => void;
   modal_center: boolean;
   setmodal_center: React.Dispatch<React.SetStateAction<boolean>>;
   getUserDetails?: (value: any) => void;
-  row?: any; 
-  handleApproval?: (value: any,remark:string,flag:string) => void;
+  row?: any;
+  handleApproval?: (value: any, remark: string, entryFlag: string) => void;
   Msg?: string;
   activeSubItem?: any;
-  action: "approve" | "reject"; 
+  action: "approve" | "reject";
 }
 
 const CustomModal = ({
@@ -25,34 +26,31 @@ const CustomModal = ({
   handleApproval,
   activeSubItem,
 }: CustomModalProps) => {
- 
-  const [remark, setRemark] = useState("");
+  const formik = useFormik({
+    initialValues: { remark: "" },
+    validationSchema:
+      activeSubItem === "Communication Retrival Checker"
+        ? Yup.object({
+            remark: Yup.string().required("Remark is required").min(3),
+          })
+        : Yup.object(),
+    onSubmit: (values) => {
+      if (getUserDetails && row) {
+        getUserDetails(row);
+      }
+      setmodal_center(false);
 
-  
-  const handleText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRemark(e.target.value);
-    console.log(remark); 
-  };
+      if (action && row) {
+        const entryFlag = action === "approve" ? "A" : "R";
+        handleApproval?.(row, values.remark, entryFlag);
+        formik.resetForm();
+      }
+    },
+  });
 
- 
-  const handleConfirm = () => {
-    
-    if (getUserDetails && row) {
-      getUserDetails(row); 
-    }
-    setmodal_center(false); 
-
-    if (action&&row) {
-      const entryFlag = action === "approve" ? "A" : "R";
-      handleApproval?.(row.id, remark, entryFlag); 
-    }
-    setRemark(""); 
-  };
-
- 
   const handleClose = () => {
-    setmodal_center(false); 
-    setRemark(""); 
+    setmodal_center(false);
+    formik.resetForm();
   };
 
   return (
@@ -71,33 +69,41 @@ const CustomModal = ({
               </h6>
             )}
           <h6 className="mb-3">{Msg}</h6>
+        </div>
+
+        <form onSubmit={formik.handleSubmit}>
           {activeSubItem === "Communication Retrival Checker" && (
             <TextField
               label="Enter Remark *"
               variant="outlined"
               fullWidth
               size="small"
-              value={remark} 
-              onChange={handleText} 
+              value={formik.values.remark}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              name="remark"
+              error={formik.touched.remark && Boolean(formik.errors.remark)}
+              helperText={formik.touched.remark && formik.errors.remark}
             />
           )}
+
           <div className="hstack gap-2 pt-2 justify-content-center">
             <Button
               className="btn"
               style={{ backgroundColor: "#EE4B2B", borderColor: "#EE4B2B" }}
-              onClick={handleClose} 
+              onClick={handleClose}
             >
               Cancel
-            </Button>{" "}
+            </Button>
             <Button
               className="btn"
               style={{ width: "80px", backgroundColor: "#11395C" }}
-              onClick={handleConfirm} 
+              type="submit"
             >
               Yes
             </Button>
           </div>
-        </div>
+        </form>
       </ModalBody>
     </ReactstrapModal>
   );
