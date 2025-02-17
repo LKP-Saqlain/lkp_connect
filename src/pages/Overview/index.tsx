@@ -13,7 +13,7 @@ import ActiveClient from "../../assets/images/Clients.json";
 import DashboardCard from "../../components/common/DashboardCard";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
-// import Nudge from "../../components/common/Nudge";
+import Nudge from "../../components/common/Nudge";
 
 type RevenueKeys = "total" | "broking" | "nonBroking";
 // type TotalClientKey = "total" | "broking" | "nonBroking";
@@ -32,7 +32,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const [newClients, setNewClients] = useState(0);
   const [activeClients, setActiveClients] = useState(null);
   const [tradedClientCount, setTradedClientCount] = useState(0);
-  // const [modal_animationZoom, setmodal_animationZoom] = useState(false);
+  const [modal_animationZoom, setmodal_animationZoom] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -41,13 +41,13 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     console.log("revTotal", revTotal);
   };
 
-  // function tog_animationZoom() {
-  //   setmodal_animationZoom((prev) => !prev);
-  // }
+  function tog_animationZoom() {
+    setmodal_animationZoom((prev) => !prev);
+  }
 
-  // useEffect(() => {
-  //   tog_animationZoom();
-  // }, []);
+  useEffect(() => {
+    tog_animationZoom();
+  }, []);
 
   const playerRef = useRef<Player>(null);
 
@@ -140,10 +140,10 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {/* <Nudge
+          <Nudge
             modal_animationZoom={modal_animationZoom}
             tog_animationZoom={tog_animationZoom}
-          /> */}
+          />
           <Row>
             <Col>
               <div className="h-100">

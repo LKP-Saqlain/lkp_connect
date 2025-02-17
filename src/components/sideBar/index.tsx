@@ -54,9 +54,9 @@ import OTDetails from "../../pages/OT";
 import CommEntry from "../../pages/Compilance/commEntry";
 import ComChecker from "../../pages/Compilance/commChecker";
 import Main from "../../pages/refCard";
-// import Badge from "@mui/material/Badge";
-// import NotificationsIcon from "@mui/icons-material/Notifications";
-// import Nudge from "../common/Nudge";
+import Badge from "@mui/material/Badge";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import Nudge from "../common/Nudge";
 
 const drawerWidth = 240;
 
@@ -144,8 +144,8 @@ const SideBar = () => {
   const [apiStatus, setApiStatus] = useState<boolean>(false);
   const [dataStatus, setDataStatus] = useState("");
 
-  // const [isNudgeOpen, setIsNudgeOpen] = useState(false);
-  // const [modal_animationZoom, setmodal_animationZoom] = useState(false);
+  const [isNudgeOpen, setIsNudgeOpen] = useState(false);
+  const [modal_animationZoom, setmodal_animationZoom] = useState(false);
 
   // const drawerWidth = isMobile ? 180 : 240;
   const settings = ["Logout"];
@@ -464,15 +464,15 @@ const SideBar = () => {
     }
   };
 
-  // const handleNotificationClick = () => {
-  //   setIsNudgeOpen(!isNudgeOpen); // Toggle the visibility of Nudge component
-  //   setmodal_animationZoom((prev) => !prev);
-  // };
+  const handleNotificationClick = () => {
+    setIsNudgeOpen(!isNudgeOpen); // Toggle the visibility of Nudge component
+    setmodal_animationZoom((prev) => !prev);
+  };
 
-  // function tog_animationZoom() {
-  //   setmodal_animationZoom((prev) => !prev);
-  //   setIsNudgeOpen(false);
-  // }
+  function tog_animationZoom() {
+    setmodal_animationZoom((prev) => !prev);
+    setIsNudgeOpen(false);
+  }
 
   // useEffect(() => {
   //   setmodal_animationZoom((prev) => !prev);
@@ -481,12 +481,12 @@ const SideBar = () => {
 
   return (
     <>
-      {/* {isNudgeOpen && (
+      {isNudgeOpen && (
         <Nudge
           modal_animationZoom={modal_animationZoom}
           tog_animationZoom={tog_animationZoom}
         />
-      )} */}
+      )}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar
@@ -551,7 +551,7 @@ const SideBar = () => {
                 </div>
               ) : null}
             </Box>
-            {/* <MenuItem>
+            <MenuItem>
               <IconButton
                 size="large"
                 aria-label="show 6 new notifications"
@@ -562,7 +562,7 @@ const SideBar = () => {
                   <NotificationsIcon sx={{ color: "#11395C" }} />
                 </Badge>
               </IconButton>
-            </MenuItem> */}
+            </MenuItem>
             <Typography
               sx={{
                 color: "black",
