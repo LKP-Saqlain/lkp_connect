@@ -4,11 +4,29 @@ import { Button, Box } from "@mui/material";
 
 const notificationsQns = [
   "Client Not traded since last 10 days",
-  "Upcoming Dormant Client Count",
-  "SPIP Renewal in Last 10 days",
+  "Upcoming Dormant Client",
+  "SPIP Renewal in Next 10 days",
   "New Client Added in last 5 days",
-  "Brok Last week vs Brok Current week",
-  "New SPIP Subscription in last 10 days",
+  "Brokerage Last week vs Current week",
+  "SPIP Subscription in last 10 days",
+];
+
+const boxColors = [
+  "#E2F8ED",
+  "#FFECE7",
+  "#E9EBEC",
+  "#E8EBFF",
+  "#FEE8E9",
+  "#DAF7FE",
+];
+
+const borderColors = [
+  "#cbdfd5",
+  "#e5d4cf",
+  "#d1d3d4",
+  "#d0d3e5",
+  "#e4d0d1",
+  "#c4dee4",
 ];
 
 const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
@@ -35,19 +53,26 @@ const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
         >
           <h5 style={{ color: "#fff" }}>Notifications</h5>
         </ModalHeader>
-        <ModalBody style={{ backgroundColor: "#f0f0f0" }}>
+        <ModalBody
+          className="modal-body-custom"
+          style={{ backgroundColor: "#f0f0f0" }}
+        >
           <Box display="flex" flexWrap="wrap" gap={1}>
             {notificationsQns.map((question, index) => (
               <Box
                 key={index}
-                className="question-box list-group-item-action list-group-item-dark list-group-item"
+                className=".bg-secondary-subtle"
                 sx={{
-                  backgroundColor: "#fff",
+                  backgroundColor: boxColors[index % boxColors.length],
                   borderRadius: 1,
                   padding: 2,
                   flex: "1 1 calc(50% - 14px)", // Two boxes per row
                   minWidth: "250px", // Ensures responsiveness
                   cursor: "pointer",
+                  border: `2px dashed ${
+                    borderColors[index % borderColors.length]
+                  }`,
+                  boxShadow: "0 8px 8px rgba(0, 0, 0, 0.2)",
                 }}
               >
                 <h5 className="fs-15">{question}</h5>
