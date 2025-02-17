@@ -418,7 +418,7 @@ const ModalComponent = ({
                   id="DocumentType-select"
                   name="TypeOfDocuments"
                   value={formik.values.TypeOfDocuments}
-                  label="Types Of Documentss"
+                  label="Type Of Documen"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   sx={{ width: "100%", minHeight: "40px" }}
@@ -454,7 +454,7 @@ const ModalComponent = ({
                   id="communicationType-select"
                   name="communicationType"
                   value={formik.values.communicationType}
-                  label=" Communicationss Typess"
+                  label=" Communication Type"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   sx={{ width: "100%", minHeight: "40px" }}
@@ -522,7 +522,7 @@ const ModalComponent = ({
                   formik.touched.proofOfCommunication &&
                   formik.errors.proofOfCommunication
                 }
-                InputProps={{ sx: { fontSize: "14px" } }} // Adjust font size if needed
+                // InputProps={{ sx: { fontSize: "14px" } }} // Adjust font size if needed
               />
             </Col>
             <Col lg={12}>
@@ -584,11 +584,11 @@ const ModalComponent = ({
                   label="Department"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  sx={{
-                    fontFamily: "Public Sans",
-                    width: "100%",
-                    minHeight: "40px",
-                  }}
+                  // sx={{
+                  //   fontFamily: "Public Sans",
+                  //   width: "100%",
+                  //   minHeight: "40px",
+                  // }}
                 >
                   {department.map((dept) => (
                     <MenuItem key={dept.value} value={dept.value}>
