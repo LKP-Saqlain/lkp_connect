@@ -177,6 +177,50 @@ const DataTable = ({
       return DormantOverViewColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "DP Debit Recovery") {
+      // return [];
+      // Inject handleEmailSend into the column definition
+      return DPDebitRecovery.map((column) => {
+        if (column.field === "Email_link") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const emailID = params.row.Client_Mail_ID;
+              const isEmailSent = emailSentStatus[params.row.BOID]; // Check status for this BOID
+
+              if (!emailID) {
+                return <span style={{ color: "gray" }}></span>; // Placeholder if no email ID
+              }
+              return (
+                <button
+                  onClick={() => {
+                    // Call both functions
+                    // handleEmailSend?.();
+                    handleViewDetails?.(params.row);
+                    setSelectedRow(params.row); // Store the selected row data
+                    tog_center(); // Open the modal
+                  }}
+                  disabled={isEmailSent}
+                  style={{
+                    color: isEmailSent && "red",
+                    textDecoration: isEmailSent ? "none" : "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: isEmailSent ? "default" : "pointer",
+                  }}
+                >
+                  {isEmailSent ? (
+                    "Email Sent!"
+                  ) : (
+                    <EmailIcon style={{ color: "#11395C" }} />
+                  )}
+                </button>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else if (activeSubItem === "Communication Retrival Entry") {
       // This section is where the delete functionality will be added
       return communicationColumns().map((column) => {
@@ -358,50 +402,6 @@ const DataTable = ({
       return QPayoutColumns.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "DP Debit Recovery") {
-      // return [];
-      // Inject handleEmailSend into the column definition
-      return DPDebitRecovery.map((column) => {
-        if (column.field === "Email_link") {
-          return {
-            ...column,
-            renderCell: (params: any) => {
-              const emailID = params.row.Client_Mail_ID;
-              const isEmailSent = emailSentStatus[params.row.BOID]; // Check status for this BOID
-
-              if (!emailID) {
-                return <span style={{ color: "gray" }}></span>; // Placeholder if no email ID
-              }
-              return (
-                <button
-                  onClick={() => {
-                    // Call both functions
-                    // handleEmailSend?.();
-                    handleViewDetails?.(params.row);
-                    setSelectedRow(params.row); // Store the selected row data
-                    tog_center(); // Open the modal
-                  }}
-                  disabled={isEmailSent}
-                  style={{
-                    color: isEmailSent && "red",
-                    textDecoration: isEmailSent ? "none" : "underline",
-                    background: "none",
-                    border: "none",
-                    cursor: isEmailSent ? "default" : "pointer",
-                  }}
-                >
-                  {isEmailSent ? (
-                    "Email Sent!"
-                  ) : (
-                    <EmailIcon style={{ color: "#11395C" }} />
-                  )}
-                </button>
-              );
-            },
-          };
-        }
-        return column;
-      });
     } else if (
       selectedWidget === "Total Clients" ||
       selectedWidget === "Active Clients" ||
