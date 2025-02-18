@@ -31,7 +31,7 @@ const CustomModal = ({
     validationSchema:
       activeSubItem === "Communication Retrival Checker"
         ? Yup.object({
-            remark: Yup.string().required("Remark is required").min(3),
+            remark: Yup.string().trim().required("Remark is required"),
           })
         : Yup.object(),
     onSubmit: (values) => {
