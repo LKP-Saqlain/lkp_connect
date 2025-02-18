@@ -6,10 +6,6 @@ import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { FiEdit } from "react-icons/fi";
 import ModalComponent from "../../../components/common/Modal";
 
-// interface BrokerageSlabProps {
-//   handleClick: (data: any) => void;
-// }
-
 const BrokerageSlab = ({ setClientDetails }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lastTradeData, setLastTradeData] = useState([]);

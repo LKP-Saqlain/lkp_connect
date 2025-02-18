@@ -172,9 +172,14 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
             <DownloadIcon />
           </ReactstrapButton>
         )}
-        {selectedWidget === undefined ||
-          selectedWidget !== "Upcoming Dormant Client" ||
-          (selectedWidget !== "DP Debit Recovery" && (
+        {[
+          "Total Clients",
+          "Active Clients",
+          "Inactive Clients",
+          "Upcoming",
+          "Dormant Client",
+        ].includes(selectedWidget) &&
+          selectedWidget !== "DP Debit Recovery" && (
             <Box sx={{ mr: 2 }}>
               <Typography>{`Record Count - ${new Intl.NumberFormat(
                 "en-IN"
@@ -190,7 +195,8 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
                 )
               )}`}</Typography>
             </Box>
-          ))}
+          )}
+
         {activeSubItem === "DP Debit Recovery" && (
           <Typography>
             {" "}

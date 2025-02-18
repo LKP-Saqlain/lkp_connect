@@ -41,9 +41,9 @@ const Retrival = ({ activeSubItem }: any) => {
 
   const formik = useFormik({
     initialValues: {
-      finYear: "",
-      documentType: "",
-      department: "",
+      finYear: "2024-2025",
+      documentType: "ALL",
+      department: "ALL",
     },
     validationSchema: Yup.object({
       finYear: Yup.string().required("Please select a Financial Year"),
