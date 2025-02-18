@@ -16,9 +16,58 @@ import ModalComponent from "../../../components/common/Modal";
 
 const BrokerageSlab = ({ setClientDetails }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [lastTradeData, setLastTradeData] = useState([]);
+  const [mappedDPScheme, setMappedDPScheme] = useState([]);
 
   useEffect(() => {
     console.log("test124", setClientDetails);
+
+    if (setClientDetails) {
+      const mappedData: any = [
+        {
+          id: 1,
+          label: "Equity",
+          status: setClientDetails["Equity"] || "Inactive",
+        },
+        {
+          id: 2,
+          label: "F&O",
+          status: setClientDetails["F & O"] || "Inactive",
+        },
+        {
+          id: 3,
+          label: "Currency",
+          status: setClientDetails["Currency"] || "Inactive",
+        },
+        {
+          id: 4,
+          label: "Commodity",
+          status: setClientDetails["Commodity"] || "Inactive",
+        },
+        { id: 5, label: "MTF", status: setClientDetails["MTF"] || "Inactive" },
+        {
+          id: 6,
+          label: "SLBM",
+          status: setClientDetails["SLBM"] || "Inactive",
+        },
+      ];
+
+      const mappedDPSchemes: any = [
+        {
+          id: 1,
+          label: "Equity",
+          status: setClientDetails["Equity"] || "Inactive",
+        },
+        {
+          id: 2,
+          label: "F&O",
+          status: setClientDetails["F & O"] || "Inactive",
+        },
+      ];
+
+      setLastTradeData(mappedData);
+      setMappedDPScheme(mappedDPSchemes);
+    }
   }, [setClientDetails]);
 
   const handleBrokeragePlan = () => {
@@ -180,7 +229,7 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
           {/* Right Side: BrokSlabItemstwo in a Single Row */}
           <Col md={9}>
             <Row className="gx-2 gy-2">
-              {LastTradeDates.map((item) => (
+              {lastTradeData.map((item: any) => (
                 <Col md={2} key={item.id}>
                   <Card
                     style={{
@@ -276,7 +325,7 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
           {/* Right Side: BrokSlabItemstwo in a Single Row */}
           <Col md={9}>
             <Row className="gx-2 gy-2">
-              {DPSchemes.map((item) => (
+              {mappedDPScheme.map((item: any) => (
                 <Col md={2} key={item.id}>
                   <Card
                     style={{

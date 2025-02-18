@@ -44,6 +44,7 @@ const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
           flexDirection: "row",
           justifyContent: "center",
         }}
+        contentClassName="custom-modal-content"
       >
         <ModalHeader
           className="modal-title"

@@ -16,7 +16,7 @@
 	}
 }
 
-.modal-content {
+.custom-modal-content {
 	max-height: 70vh !important;
 	width: 800px !important;
   }

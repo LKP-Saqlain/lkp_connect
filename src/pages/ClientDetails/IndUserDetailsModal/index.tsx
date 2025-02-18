@@ -10,7 +10,7 @@ import {
 } from "reactstrap";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { ClientInfoCapsules } from "../../../components/common/Capsules";
-import PerformanceHistoryChart from "../PerformanceHistory";
+// import PerformanceHistoryChart from "../PerformanceHistory";
 import SegmentWiseTable from "../../../components/common/fullTable";
 import BrokerageSlab from "../BrokerageSlab";
 import { useMediaQuery } from "@mui/material";
@@ -336,7 +336,7 @@ const UserInfoModal = ({
             </Row>
           </Col>
         </Row>
-        <PerformanceHistoryChart />
+        {/* <PerformanceHistoryChart /> */}
         <SegmentWiseTable selectedClientCode={selectedClientCode} />
         <BrokerageSlab setClientDetails={clientDetails} />
       </ModalBody>
