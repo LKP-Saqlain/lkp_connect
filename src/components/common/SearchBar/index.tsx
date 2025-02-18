@@ -122,6 +122,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
 
   React.useEffect(() => {
     console.log("tes1121t", selectedWidget, activeSubItem);
+    setSearchValue("")
   }, [selectedWidget, activeSubItem]);
 
   return (
