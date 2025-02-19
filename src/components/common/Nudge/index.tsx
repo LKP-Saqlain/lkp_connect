@@ -1,11 +1,12 @@
 import { Col, Modal, ModalBody, ModalHeader } from "reactstrap";
 import "./modal.css";
 import { Button, Box } from "@mui/material";
+import CountUp from "react-countup";
 
 const notificationsQns = [
-  "Client Not traded since last 10 days",
+  "Client not traded since last 10 days",
   "Upcoming Dormant Client",
-  "SPIP Renewal in Next 10 days",
+  "SPIP Renewal in next 10 days",
   "New Client Added in last 5 days",
   "Brokerage Last week vs Current week",
   "SPIP Subscription in last 10 days",
@@ -28,6 +29,8 @@ const borderColors = [
   "#e4d0d1",
   "#c4dee4",
 ];
+
+const countData = [4245, 1225, 25464, 2148, 45478, 2513];
 
 const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
   return (
@@ -62,7 +65,6 @@ const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
             {notificationsQns.map((question, index) => (
               <Box
                 key={index}
-                className=".bg-secondary-subtle"
                 sx={{
                   backgroundColor: boxColors[index % boxColors.length],
                   borderRadius: 1,
@@ -74,27 +76,95 @@ const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
                     borderColors[index % borderColors.length]
                   }`,
                   boxShadow: "0 8px 8px rgba(0, 0, 0, 0.2)",
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
-                <h5 className="fs-15">{question}</h5>
-                <p
-                  className="text-muted"
-                  style={{
+                {/* Left Side: Question & Button */}
+                <Box
+                  sx={{
                     display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
+                    flexDirection: "column",
                   }}
                 >
-                  <Button
-                    sx={{
-                      textTransform: "capitalize",
-                      fontFamily: "Public Sans",
-                      fontSize: "12px",
-                    }}
-                  >
-                    View Details
-                  </Button>
-                </p>
+                  <h5 className="fs-15">{question}</h5>
+
+                  {question === "Brokerage Last week vs Current week" ? (
+                    // Show count instead of "View Details"
+                    <Box
+                      sx={{
+                        fontSize: "12px",
+                        fontFamily: "Public Sans",
+                        fontWeight: "bold",
+                        color: "#333",
+                        alignSelf: "flex-start", // Align to the left, same as button
+                      }}
+                    >
+                      <CountUp
+                        start={0}
+                        end={1451}
+                        // duration={1}
+                        style={{
+                          fontSize: "24px",
+                          fontWeight: "bold",
+                          color: "#333",
+                        }}
+                      />{" "}
+                      VS{" "}
+                      <CountUp
+                        start={0}
+                        end={2542}
+                        // duration={1}
+                        style={{
+                          fontSize: "24px",
+                          fontWeight: "bold",
+                          color: "#333",
+                        }}
+                      />
+                    </Box>
+                  ) : (
+                    // Show "View Details" button
+                    <Button
+                      sx={{
+                        textTransform: "capitalize",
+                        fontFamily: "Public Sans",
+                        fontSize: "12px",
+                        alignSelf: "flex-start", // Align to the left
+                      }}
+                    >
+                      View Details
+                    </Button>
+                  )}
+                </Box>
+
+                {/* <Box
+                  sx={{
+                    width: "2px",
+                    backgroundColor: "grey",
+
+                    height: "100%", // Adjust height as needed
+                    borderRadius: "10px",
+                    marginX: 2, // Adds spacing between items
+                  }}
+                /> */}
+
+                {/* Right Side: Large CountUp */}
+                {question !== "Brokerage Last week vs Current week" && (
+                  <Box>
+                    <CountUp
+                      start={0}
+                      end={countData[index % countData.length]}
+                      separator=","
+                      style={{
+                        fontSize: "24px",
+                        fontWeight: "bold",
+                        color: "#333",
+                      }} // Bigger and bolder
+                    />
+                  </Box>
+                )}
               </Box>
             ))}
           </Box>

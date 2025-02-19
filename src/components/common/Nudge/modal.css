@@ -17,8 +17,8 @@
 }
 
 .custom-modal-content {
-	max-height: 70vh !important;
-	width: 800px !important;
+	max-height: 75vh !important;
+	width: 875px !important;
   }
   
   .modal-body-custom {
@@ -27,7 +27,7 @@
 	/* gap: 1px; */
 	overflow-y: auto;
 	min-height: 100px;
-	width: 795px !important;
+	width: 870px !important;
 	
   }
   
