@@ -136,7 +136,7 @@ const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(() => {
-    return localStorage.getItem("activeMenu") || "Overview"; // Default to Overview
+    return localStorage.getItem("activeMenu") || ""; // Default to Overview
   });
   const [activeSubItem, setActiveSubItem] = useState(() => {
     return localStorage.getItem("activeSubItem") || "";
@@ -244,8 +244,12 @@ const SideBar = () => {
         console.log("response", res);
         console.log("res", res?.data);
         const processedMenus = buildMenuHierarchy(res?.data);
-        console.log("menuItems-->", processedMenus);
+        console.log("menuItems-->", processedMenus[0].menu_name);
         setMenuItems(processedMenus);
+
+        if (processedMenus[0].menu_name === "Overview") {
+          setActiveMenu("Overview");
+        }
       })
       .catch((Err) => {
         const { message } = Err;
