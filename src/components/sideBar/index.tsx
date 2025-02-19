@@ -287,7 +287,7 @@ const SideBar = () => {
 
       return menuHierarchy;
     };
-  }, []);
+  }, [activeMenu]);
 
   useEffect(() => {
     console.log("MenuMaster", activeMenu, activeSubItem);
