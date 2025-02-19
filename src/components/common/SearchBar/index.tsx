@@ -63,6 +63,7 @@ interface SearchAppBarProps {
   inactiveClient?: any;
   totalLedgerDebitAmt?: any;
   activeSubItem?: any;
+  dormantCount?: any;
 }
 
 const SearchAppBar: React.FC<SearchAppBarProps> = ({
@@ -78,6 +79,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   inactiveClient,
   totalLedgerDebitAmt,
   activeSubItem,
+  dormantCount,
 }) => {
   const [searchValue, setSearchValue] = React.useState(searchTableValue);
   // const [selectedButton, setSelectedButton] = React.useState<string>("ALL");
@@ -122,7 +124,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
 
   React.useEffect(() => {
     console.log("tes1121t", selectedWidget, activeSubItem);
-    setSearchValue("")
+    setSearchValue("");
   }, [selectedWidget, activeSubItem]);
 
   return (
@@ -177,7 +179,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
           "Total Clients",
           "Active Clients",
           "Inactive Clients",
-          "Upcoming",
+          "Upcoming Dormant Client",
           "Dormant Client",
         ].includes(selectedWidget) &&
           selectedWidget !== "DP Debit Recovery" && (
@@ -192,6 +194,8 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
                     ? activeClient
                     : selectedWidget === "Inactive Clients"
                     ? inactiveClient
+                    : selectedWidget === "Upcoming Dormant Client"
+                    ? dormantCount
                     : ""
                 )
               )}`}</Typography>

@@ -76,6 +76,7 @@ interface SelectedWidgetProps {
   activeClient?: any;
   inactiveClient?: any;
   totalLedgerDebitAmt?: any;
+  dormantCount?: any;
 }
 
 const DataTable = ({
@@ -105,6 +106,7 @@ const DataTable = ({
   inactiveClient,
   handleDeleteClick,
   totalLedgerDebitAmt,
+  dormantCount,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -480,6 +482,7 @@ const DataTable = ({
           inactiveClient={inactiveClient}
           totalLedgerDebitAmt={totalLedgerDebitAmt}
           activeSubItem={activeSubItem}
+          dormantCount={dormantCount}
         />
       )}
       <Paper

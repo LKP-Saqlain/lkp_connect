@@ -46,6 +46,7 @@ any) => {
   const [totalCount, setTotalCount] = useState(0);
   const [activeClients, setActiveClients] = useState(0);
   const [inactiveClients, setinActiveClients] = useState(0);
+  const [dormantCount, setDormantCount] = useState(0);
   // const [groupedClients, setGroupedClients] = useState<any[][]>([]);
   const [activeGroupedClients, setActiveGroupedClients] = useState<any[][]>([]);
   const [inactiveGroupedClients, setInactiveGroupedClients] = useState<any[][]>(
@@ -179,6 +180,12 @@ any) => {
           .then((response) => {
             dispatch(hideLoader());
             console.log("getUpcomingDormantReport_response_1", response?.data);
+            console.log(
+              "getDormantTotalClient",
+              response?.data[0].recordsTotal
+            );
+            setDormantCount(response?.data[0].recordsTotal);
+
             if (response?.status === 200) {
               setResponseStatus(true);
               let { recordsTotal } = response?.data[0];
@@ -713,6 +720,7 @@ any) => {
                 totalCount={totalCount}
                 activeClient={activeClients}
                 inactiveClient={inactiveClients}
+                dormantCount={dormantCount}
               />
             </CardBody>
           </Card>
