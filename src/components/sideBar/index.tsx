@@ -135,9 +135,13 @@ const Drawer = styled(MuiDrawer, {
 const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<string>("Overview");
+  const [activeMenu, setActiveMenu] = useState(() => {
+    return localStorage.getItem("activeMenu") || "Overview"; // Default to Overview
+  });
+  const [activeSubItem, setActiveSubItem] = useState(() => {
+    return localStorage.getItem("activeSubItem") || "";
+  });
   const [selectedViewMore, setSelectedViewMore] = useState<string>("");
-  const [activeSubItem, setActiveSubItem] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
@@ -288,6 +292,14 @@ const SideBar = () => {
   useEffect(() => {
     handleDrawerOpen();
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("activeMenu", activeMenu);
+  }, [activeMenu]);
+
+  useEffect(() => {
+    localStorage.setItem("activeSubItem", activeSubItem);
+  }, [activeSubItem]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
