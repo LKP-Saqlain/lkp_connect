@@ -330,6 +330,8 @@ const SideBar = () => {
       localStorage.removeItem("Id");
       localStorage.removeItem("uIdType");
       localStorage.removeItem("userName");
+      localStorage.removeItem("activeMenu");
+      localStorage.removeItem("activeSubItem");
       navigate("/");
     } else {
       console.log("User clicked on:", value);
