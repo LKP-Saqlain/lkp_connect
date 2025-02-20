@@ -108,8 +108,10 @@ export const apiServices = {
       responseType: "blob",
     });
   },
-
   ComplainceFileUpload: async (payload: any) => {
     return await apiService("POST", endpoints.ComplainceFileUpload, payload);
+  },
+  DashboardNudge: async (payload: any) => {
+    return await apiService("POST", endpoints.DashboardNudge, payload);
   },
 };

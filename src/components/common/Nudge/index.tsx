@@ -2,15 +2,9 @@ import { Col, Modal, ModalBody, ModalHeader } from "reactstrap";
 import "./modal.css";
 import { Button, Box } from "@mui/material";
 import CountUp from "react-countup";
-
-const notificationsQns = [
-  "Client not traded since last 10 days",
-  "Upcoming Dormant Client",
-  "SPIP Renewal in next 10 days",
-  "New Client Added in last 5 days",
-  "Brokerage Last week vs Current week",
-  "SPIP Subscription in last 10 days",
-];
+import { useEffect, useState } from "react";
+import NudgeTable from "../NudgeTable";
+import { IoWarningOutline } from "react-icons/io5";
 
 const boxColors = [
   "#E2F8ED",
@@ -30,9 +24,138 @@ const borderColors = [
   "#c4dee4",
 ];
 
-const countData = [4245, 1225, 25464, 2148, 45478, 2513];
+const Nudge = ({
+  modal_animationZoom,
+  tog_animationZoom,
+  dashBoardNudgeData,
+  sideBarNudge,
+}: any) => {
+  const [reportData, setReportData] = useState<
+    { ReportType: string; ClientCount: number; LastWeekBrok?: number }[]
+  >([]);
+  const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(null);
+  // const [filteredData, setFilteredData] = useState<any[]>([]); // used only to store all the data in single array (ARRAY OF ARRAY'S)
+  const [filteredData, setFilteredData] = useState<Record<string, any[]>>({});
 
-const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
+  useEffect(() => {
+    console.log("datass", dashBoardNudgeData);
+
+    const NudgeData = dashBoardNudgeData ? dashBoardNudgeData : sideBarNudge;
+    if (NudgeData) {
+      const extractedData: {
+        ReportType: string;
+        ClientCount: number;
+        LastWeekBrok: number;
+      }[] = [];
+
+      Object.keys(NudgeData).forEach((tableKey) => {
+        NudgeData[tableKey].forEach((entry: any) => {
+          if (
+            entry.ReportType &&
+            (entry.ClientCount !== undefined || entry.CurrentWeekBrok)
+          ) {
+            extractedData.push({
+              ReportType: entry.ReportType,
+              ClientCount: entry.ClientCount ?? entry.CurrentWeekBrok ?? 0,
+              LastWeekBrok:
+                entry.ReportType === "Brokerage Last week vs Current week"
+                  ? entry.LastWeekBrok
+                  : 0,
+            });
+          }
+        });
+      });
+
+      setReportData(extractedData);
+    }
+  }, [dashBoardNudgeData, sideBarNudge]);
+
+  useEffect(() => {
+    if (!dashBoardNudgeData) return;
+
+    const groupedData: Record<string, any[]> = {};
+
+    Object.values(dashBoardNudgeData).forEach((table: any) => {
+      if (Array.isArray(table)) {
+        // Extract ReportType from the first valid item if available
+        const firstItem = table[0];
+        const reportType = firstItem?.ReportType;
+
+        if (reportType === "Brokerage Last week vs Current week") return;
+
+        // Initialize empty array for the report type (even if table is empty)
+        if (reportType && !groupedData[reportType]) {
+          groupedData[reportType] = [];
+        }
+
+        // Check if 0th index has `ClientCount` with a number value
+        const shouldSkipFirst = typeof firstItem?.ClientCount === "number";
+
+        table.forEach((item, index) => {
+          if (shouldSkipFirst && index === 0) return; // Skip 0th index if ClientCount is a number
+
+          if (item.ReportType) {
+            groupedData[item.ReportType].push(item);
+          }
+        });
+      }
+    });
+
+    setFilteredData(groupedData);
+    console.log("Filtered Data:", groupedData);
+  }, [dashBoardNudgeData]);
+
+  useEffect(() => {
+    if (!sideBarNudge) return;
+
+    const groupedData: Record<string, any[]> = {};
+
+    Object.values(sideBarNudge).forEach((table: any) => {
+      if (Array.isArray(table)) {
+        // Extract ReportType from the first valid item if available
+        const firstItem = table[0];
+        const reportType = firstItem?.ReportType;
+
+        if (reportType === "Brokerage Last week vs Current week") return;
+
+        // Initialize empty array for the report type (even if table is empty)
+        if (reportType && !groupedData[reportType]) {
+          groupedData[reportType] = [];
+        }
+
+        // Check if 0th index has `ClientCount` with a number value
+        const shouldSkipFirst = typeof firstItem?.ClientCount === "number";
+
+        table.forEach((item, index) => {
+          if (shouldSkipFirst && index === 0) return; // Skip 0th index if ClientCount is a number
+
+          if (item.ReportType) {
+            groupedData[item.ReportType].push(item);
+          }
+        });
+      }
+    });
+
+    setFilteredData(groupedData);
+    console.log("Filtered Data:", groupedData);
+  }, [sideBarNudge]);
+
+  const openNudgeTable = (reportName: any) => {
+    console.log("reportName", reportName);
+    setSelectedReport(reportName);
+    setIsNudgeTableOpen(true);
+  };
+
+  const closeNudgeTable = () => {
+    setIsNudgeTableOpen(false);
+    // tog_animationZoom(); // Reopen Nudge modal when closing NudgeTable
+  };
+
+  function formatIndianNumber(value: number): string {
+    return `${value.toLocaleString("en-IN")}`;
+  }
+
   return (
     <Col lg={12}>
       <Modal
@@ -55,22 +178,22 @@ const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
           toggle={tog_animationZoom}
           style={{ backgroundColor: "#11395C" }}
         >
-          <h5 style={{ color: "#fff" }}>Notifications</h5>
+          <h5 style={{ color: "#fff" }}>Actionable Insights</h5>
         </ModalHeader>
         <ModalBody
           className="modal-body-custom"
           style={{ backgroundColor: "#f0f0f0" }}
         >
           <Box display="flex" flexWrap="wrap" gap={1}>
-            {notificationsQns.map((question, index) => (
+            {reportData.map((report, index) => (
               <Box
                 key={index}
                 sx={{
                   backgroundColor: boxColors[index % boxColors.length],
                   borderRadius: 1,
                   padding: 2,
-                  flex: "1 1 calc(50% - 14px)", // Two boxes per row
-                  minWidth: "250px", // Ensures responsiveness
+                  flex: "1 1 calc(50% - 14px)", // Two per row
+                  minWidth: "250px",
                   cursor: "pointer",
                   border: `2px dashed ${
                     borderColors[index % borderColors.length]
@@ -82,86 +205,69 @@ const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
                   alignItems: "center",
                 }}
               >
-                {/* Left Side: Question & Button */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
-                >
-                  <h5 className="fs-15">{question}</h5>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <h5 className="fs-15">
+                    {report.ReportType}{" "}
+                    {report.ClientCount === 0 && (
+                      <IoWarningOutline
+                        style={{ fontSize: "24px" }}
+                        color="orange"
+                      />
+                    )}
+                  </h5>
 
-                  {question === "Brokerage Last week vs Current week" ? (
-                    // Show count instead of "View Details"
+                  {report.ReportType ===
+                  "Brokerage Last week vs Current week" ? (
                     <Box
                       sx={{
                         fontSize: "12px",
-                        fontFamily: "Public Sans",
                         fontWeight: "bold",
                         color: "#333",
-                        alignSelf: "flex-start", // Align to the left, same as button
                       }}
                     >
                       <CountUp
                         start={0}
-                        end={1451}
-                        // duration={1}
+                        end={report.LastWeekBrok ?? 0}
+                        formattingFn={formatIndianNumber}
                         style={{
                           fontSize: "24px",
                           fontWeight: "bold",
-                          color: "#333",
                         }}
-                      />{" "}
-                      VS{" "}
+                      />
+                      <span className="fs-15"> {"  vs  "}</span>
                       <CountUp
                         start={0}
-                        end={2542}
-                        // duration={1}
+                        end={report.ClientCount} //this is Current week brokerage
+                        formattingFn={formatIndianNumber}
                         style={{
                           fontSize: "24px",
                           fontWeight: "bold",
-                          color: "#333",
                         }}
                       />
                     </Box>
                   ) : (
-                    // Show "View Details" button
                     <Button
                       sx={{
                         textTransform: "capitalize",
-                        fontFamily: "Public Sans",
                         fontSize: "12px",
-                        alignSelf: "flex-start", // Align to the left
+                        alignSelf: "flex-start",
+                        fontFamily: "Public Sans",
                       }}
+                      onClick={() => openNudgeTable(report.ReportType)}
                     >
                       View Details
                     </Button>
                   )}
                 </Box>
 
-                {/* <Box
-                  sx={{
-                    width: "2px",
-                    backgroundColor: "grey",
-
-                    height: "100%", // Adjust height as needed
-                    borderRadius: "10px",
-                    marginX: 2, // Adds spacing between items
-                  }}
-                /> */}
-
-                {/* Right Side: Large CountUp */}
-                {question !== "Brokerage Last week vs Current week" && (
+                {report.ReportType !==
+                  "Brokerage Last week vs Current week" && (
                   <Box>
                     <CountUp
                       start={0}
-                      end={countData[index % countData.length]}
+                      end={report.ClientCount}
                       separator=","
-                      style={{
-                        fontSize: "24px",
-                        fontWeight: "bold",
-                        color: "#333",
-                      }} // Bigger and bolder
+                      style={{ fontSize: "24px", fontWeight: "bold" }}
                     />
                   </Box>
                 )}
@@ -183,6 +289,12 @@ const Nudge = ({ modal_animationZoom, tog_animationZoom }: any) => {
           </Button>
         </div>
       </Modal>
+      <NudgeTable
+        isOpen={isNudgeTableOpen}
+        onClose={closeNudgeTable}
+        selectedReport={selectedReport}
+        filteredData={filteredData}
+      />
     </Col>
   );
 };
