@@ -188,3 +188,65 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
 ];
+
+export const newClientColumns: GridColDef[] = [
+  {
+    field: "ReportType",
+    headerName: "Report Type",
+    flex: 2,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "BranchCode",
+    headerName: "Branch Code",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ClientCode",
+    headerName: "Client Code",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ClientName",
+    headerName: "Client Name",
+    flex: 2,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ActivationDate",
+    headerName: "Activation Date",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Active",
+    headerName: "Active",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value === "Y" ? "Yes" : "No"),
+  },
+  {
+    field: "LastTradeDate",
+    headerName: "Last Trade Date",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+];
+
+export default newClientColumns;

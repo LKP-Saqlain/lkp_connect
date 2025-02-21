@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Modal, ModalBody, ModalHeader, Card, CardBody } from "reactstrap";
 import { DataGrid } from "@mui/x-data-grid";
 import "../../../components/common/table/style.css";
-import {
+import newClientColumns, {
   clientNotTradedColumns,
   spipRenewalColumns,
   upcomingDormantClientColumns,
@@ -37,6 +37,8 @@ const NudgeTable = ({
         return spipRenewalColumns;
       case "Upcoming Dormant Client":
         return upcomingDormantClientColumns;
+      case "New Client added in last 5 days":
+        return newClientColumns;
       default:
         return []; // If no predefined columns, return an empty array
     }

@@ -209,7 +209,7 @@ const SideBar = () => {
       };
 
       try {
-        dispatch(showLoader("Please wait For Notifications"));
+        dispatch(showLoader("Please wait For Notifications from"));
         const response = await apiServices.DashboardNudge(payload);
         console.log("dashBoardNudgeData", typeof response?.data);
 
