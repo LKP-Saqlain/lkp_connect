@@ -562,7 +562,10 @@ const SideBar = () => {
                 aria-label="open drawer"
                 onClick={handleDrawerOpen}
                 edge="start"
-                sx={[{ marginRight: 5 }, open && { display: "none" }]}
+                sx={[
+                  { marginRight: isMobile ? 0 : 5 },
+                  open && { display: "none" },
+                ]}
               >
                 <MenuIcon sx={{ color: "black" }} />
               </IconButton>
@@ -583,8 +586,8 @@ const SideBar = () => {
             <Box
               sx={{
                 // border: "2px solid black",
-                padding: "10px",
-                marginRight: "2rem",
+                padding: isMobile ? "0" : "10px",
+                marginRight: isMobile ? "0" : "2rem",
               }}
             >
               {/* <SlSizeFullscreen style={{ color: "black", cursor: "pointer" }} />
