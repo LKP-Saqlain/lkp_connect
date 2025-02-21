@@ -14,6 +14,10 @@ import DashboardCard from "../../components/common/DashboardCard";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 import Nudge from "../../components/common/Nudge";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
 
 type RevenueKeys = "total" | "broking" | "nonBroking";
 // type TotalClientKey = "total" | "broking" | "nonBroking";
@@ -33,9 +37,17 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const [activeClients, setActiveClients] = useState(null);
   const [tradedClientCount, setTradedClientCount] = useState(0);
   const [modal_animationZoom, setmodal_animationZoom] = useState(false);
+  const [isNudgeOpen, setIsNudgeOpen] = useState(false);
+  const [dashboardNudgeData, setDashboardNudgeData] = useState<any[][]>([]);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   const handleValues = (revTotal: string) => {
     console.log("revTotal", revTotal);
@@ -135,15 +147,48 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     setActiveClients(clients);
   };
 
+  useEffect(() => {
+    const fetchDashboardNudge = async () => {
+      const payload = {
+        user_id: user_id,
+      };
+
+      try {
+        dispatch(showLoader("Please wait For Notifications"));
+        const response = await apiServices.DashboardNudge(payload);
+        console.log("dashBoardNudgeData", typeof response?.data);
+
+        const nudgeData = response?.data;
+        setDashboardNudgeData(nudgeData);
+
+        dispatch(hideLoader());
+
+        if (response?.status === 200) {
+          // ShowToast("success", response?.data?.Message);
+          setIsNudgeOpen(!isNudgeOpen);
+        } else {
+          console.error("Failed");
+        }
+      } catch (error) {
+        dispatch(hideLoader());
+        console.error("Error sending email:", error);
+      }
+    };
+    fetchDashboardNudge();
+  }, [dispatch]);
+
   document.title = "LKP Securities | User Overview";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          <Nudge
-            modal_animationZoom={modal_animationZoom}
-            tog_animationZoom={tog_animationZoom}
-          />
+          {isNudgeOpen && (
+            <Nudge
+              modal_animationZoom={modal_animationZoom}
+              tog_animationZoom={tog_animationZoom}
+              dashBoardNudgeData={dashboardNudgeData}
+            />
+          )}
           <Row>
             <Col>
               <div className="h-100">

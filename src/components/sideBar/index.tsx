@@ -57,6 +57,8 @@ import Main from "../../pages/refCard";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Nudge from "../common/Nudge";
+import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
 
 const drawerWidth = 240;
 
@@ -151,6 +153,8 @@ const SideBar = () => {
   const [isNudgeOpen, setIsNudgeOpen] = useState(false);
   const [modal_animationZoom, setmodal_animationZoom] = useState(false);
 
+  const [sideBarNudge, setSideBarNudge] = useState<any[][]>([]);
+
   // const drawerWidth = isMobile ? 180 : 240;
   const settings = ["Logout"];
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
@@ -197,6 +201,36 @@ const SideBar = () => {
       setDataStatus("No data available");
     }
   }, [lastBrokingValues]); // Runs when `lastBrokingValues` changes
+
+  useEffect(() => {
+    const fetchDashboardNudge = async () => {
+      const payload = {
+        user_id: user_id,
+      };
+
+      try {
+        dispatch(showLoader("Please wait For Notifications"));
+        const response = await apiServices.DashboardNudge(payload);
+        console.log("dashBoardNudgeData", typeof response?.data);
+
+        const nudgeData = response?.data;
+        setSideBarNudge(nudgeData);
+
+        dispatch(hideLoader());
+
+        if (response?.status === 200) {
+          // ShowToast("success", response?.data?.Message);
+          // setIsNudgeOpen(!isNudgeOpen);
+        } else {
+          console.error("Failed");
+        }
+      } catch (error) {
+        dispatch(hideLoader());
+        console.error("Error sending email:", error);
+      }
+    };
+    fetchDashboardNudge();
+  }, [dispatch]);
 
   console.log("user", user_id);
 
@@ -503,6 +537,7 @@ const SideBar = () => {
         <Nudge
           modal_animationZoom={modal_animationZoom}
           tog_animationZoom={tog_animationZoom}
+          sideBarNudge={sideBarNudge}
         />
       )}
       <Box sx={{ display: "flex" }}>
