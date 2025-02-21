@@ -7,7 +7,7 @@ import {
   spipRenewalColumns,
   upcomingDormantClientColumns,
 } from "../../../helper/tableColumns";
-import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
+import { useTheme,  } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 
 const NudgeTable = ({
