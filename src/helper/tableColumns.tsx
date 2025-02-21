@@ -1,9 +1,647 @@
 import { GridColDef } from "@mui/x-data-grid";
-import Tooltip from "@mui/material/Tooltip";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import React from "react";
+import Tooltip from "@mui/material/Tooltip";
+// import PersonAddIcon from "@mui/icons-material/PersonAdd";
+// import { FaUserPen } from "react-icons/fa6";
 
-// import { useMemo, useState } from "react";
+interface ClientRow {
+  ClientCode: string;
+  ClientName: string;
+  LastTradeDate: string;
+  ClientStatus: string;
+  // Add other fields as necessary
+}
+
+export const getClientActivityStatusColumns = (
+  handleViewDetails: (row: ClientRow) => void
+): GridColDef[] => [
+  {
+    disableColumnMenu: true,
+    field: "ClientCode",
+    headerName: "Client Code",
+    flex: 1,
+  },
+  {
+    disableColumnMenu: true,
+    field: "ClientName",
+    headerName: "Client Name",
+    flex: 2,
+  },
+  {
+    field: "LastTradeDate",
+    headerClassName: "header-wrap-custom",
+    headerName: "Last Trade Date",
+    flex: 1,
+    disableColumnMenu: true,
+    align: "center",
+  },
+  {
+    field: "ClientStatus",
+    headerName: "Status",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "BranchCode",
+    headerName: "BR Code",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ActivationDate",
+    headerName: "Activation Date",
+    headerClassName: "header-wrap-custom",
+    // flex: 1,
+    width: 110,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  // { field: "MobileNo", headerName: "Mobile No", width: 120 },
+  {
+    field: "MobileNo",
+    headerName: "Mobile No",
+    width: 110,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix, handleViewDetails); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "MTFStatus",
+    headerName: "MTF Status",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "POAStatus",
+    headerName: "POA Status",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  // {
+  //   field: "viewDetails",
+  //   headerName: "Action",
+  //   width: 100,
+  //   sortable: false, // Disable sorting if desired
+  //   filterable: false, // Disable filtering if desired
+  //   align: "center",
+  //   renderCell: (params: any) => (
+  //     // <Button
+  //     //   onClick={() => handleViewDetails(params.row)} // Pass the row to the handler
+  //     //   variant="contained"
+  //     //   color="primary"
+  //     //   style={{
+  //     //     padding: "2px 9px",
+  //     //     backgroundColor: "#11395C",
+  //     //     fontSize: "9px",
+  //     //     borderRadius: "10px",
+  //     //     textTransform: "capitalize",
+  //     //     fontFamily: "Public Sans",
+  //     //   }}
+  //     // >
+  //     // <PersonAddIcon
+  //     //   onClick={() => handleViewDetails(params.row)}
+  //     //   style={{ color: "#11395C", cursor: "pointer" }}
+  //     // />
+  //     <FaUserPen
+  //       onClick={() => handleViewDetails(params.row)}
+  //       style={{ color: "#11395C", fontSize: "22px", cursor: "pointer" }}
+  //     />
+  //   ),
+  // },
+];
+export const accNo = [
+  { value: "15770340001410", label: "15770340001410" },
+  { value: "57500001047915", label: "57500001047915" },
+];
+export const PaymentType = [
+  { value: "ALL", label: "ALL" },
+  { value: "NEFT", label: "NEFT" },
+  { value: "RTGS", label: "RTGS" },
+  { value: "IMPS", label: "IMPS" },
+  { value: "OTHER", label: "OTHER" },
+  { value: "UPI", label: "UPI" },
+  { value: "Fund Trans", label: "Fund Trans" },
+];
+
+export const getAccountDetails: GridColDef[] = [
+  {
+    field: "month",
+    headerName: "Month",
+    flex: 1.1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "directChannelDIY",
+    headerName: "Direct Channel (DIY)",
+    flex: 1.9,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "DirectSalesTeam",
+    headerName: "Direct Sales team",
+    flex: 1.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "APReferrals",
+    headerName: "AP Referrals",
+    flex: 1.4,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "EmployeeReferrals",
+    headerName: "Employee Referrals",
+    flex: 1.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "REChannel",
+    headerName: "R&E Channel",
+    flex: 1.5,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "Total",
+    headerName: "Total",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+];
+
+export const getCommChecker: GridColDef[] = [
+  {
+    field: "status",
+    headerName: "Approve | Reject",
+    headerClassName: "header-wrap-custom",
+    width: 160,
+    align: "center",
+    disableColumnMenu: true,
+    sortable: false,
+    headerAlign: "center",
+  },
+  {
+    field: "DateOfCommunication",
+    headerName: "Date",
+    flex: 0.9,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "TypeOfDocuments",
+    headerName: "Type of Document",
+    flex: 1.1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "CommunicationType",
+    headerName: "Communication Type",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "CommunicationProof",
+    headerName: "Communication Description",
+    flex: 1.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "Department",
+    headerName: "Department",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "CommunicationProofPath",
+    headerName: "Document",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+];
+
+export const getClientDormantStatus = (
+  handleViewDetails: (row: ClientRow) => void
+): GridColDef[] => [
+  {
+    field: "ctermcode",
+    headerName: "Client Code",
+    flex: 2,
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 2,
+    disableColumnMenu: true,
+  },
+  {
+    field: "lastTradeDate",
+    headerName: "Last Trade Date",
+    flex: 2,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "dayCount",
+    headerName: "Days to Dormant",
+    flex: 2,
+    align: "right",
+    disableColumnMenu: true,
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile No",
+    flex: 2,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix, handleViewDetails); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+  },
+  // {
+  //   field: "viewDetails",
+  //   headerName: "Action",
+  //   width: 150,
+  //   renderCell: (params: any) => (
+  //     <Button
+  //       onClick={() => handleViewDetails(params.row)}
+  //       // onClick={() => console.log("rowValues", params.row)}
+  //       variant="contained"
+  //       color="primary"
+  //       style={{
+  //         padding: "2px 9px",
+  //         backgroundColor: "#11395C",
+  //         fontSize: "10px",
+  //         borderRadius: "10px",
+  //         textTransform: "capitalize",
+  //         fontFamily: "Public Sans",
+  //       }}
+  //     >
+  //       View Details
+  //     </Button>
+  //   ),
+  // },
+];
+
+
+
+ export const Corecolumns: GridColDef[] = [
+    { field: "clientCode", headerName: "Client Code", minWidth: 80 },
+    { field: "alertSequenceNo", headerName: "Alert Sequence No", minWidth: 80 },
+    { field: "virtualAccount", headerName: "Virtual Account", minWidth: 80 },
+    {
+      field: "lkP_AccountNumber",
+      headerName: "LKP Account Number",
+      minWidth: 180,
+    },
+    { field: "debitCredit", headerName: "Debit/Credit", minWidth: 80 },
+    { field: "amount", headerName: "Amount", minWidth: 100 },
+    { field: "client_Name", headerName: "Client Name", minWidth: 80 },
+    {
+      field: "client_AccountNumber",
+      headerName: "Client Account Number",
+      minWidth: 180,
+    },
+    { field: "client_Bank", headerName: "Client Bank", minWidth: 80 },
+    { field: "client_IFSC", headerName: "Client IFSC", minWidth: 80 },
+    { field: "chequeNo", headerName: "Cheque No", minWidth: 80 },
+    {
+      field: "userReferenceNumber",
+      headerName: "User Reference Number",
+      minWidth: 180,
+    },
+    { field: "payment_Type", headerName: "Payment Type", minWidth: 80 },
+    { field: "valueDate", headerName: "Value Date", minWidth: 80 },
+    {
+      field: "transactionDescription",
+      headerName: "Transaction Description",
+      minWidth: 200,
+    },
+    { field: "transactionDate", headerName: "Transaction Date", minWidth: 80 },
+  ];
+
+ export const slbmColumns: GridColDef[] = [
+    {
+      field: "zone",
+      headerName: "Zone",
+      minWidth: 60,
+      flex: 0.5,
+      disableColumnMenu: true,
+    },
+    {
+      field: "branchCode",
+      headerName: "Branch Code",
+      width: 95,
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+    },
+    {
+      field: "clientCode",
+      headerName: "Client Code",
+      minWidth: 100,
+      flex: 1,
+      disableColumnMenu: true,
+    },
+    {
+      field: "clientName",
+      headerName: "Client Name",
+      minWidth: 200,
+      flex: 2,
+      disableColumnMenu: true,
+    },
+    {
+      field: "scripName",
+      headerName: "Scrip Name",
+      minWidth: 90,
+      flex: 1,
+      disableColumnMenu: true,
+    },
+    {
+      field: "isin",
+      headerName: "ISIN",
+      minWidth: 100,
+      flex: 1,
+      disableColumnMenu: true,
+    },
+    {
+      field: "qtny",
+      headerName: "Qtny",
+      minWidth: 90,
+      flex: 0.7,
+      disableColumnMenu: true,
+    },
+    {
+      field: "rmName",
+      headerName: "RM Name",
+      minWidth: 100,
+      flex: 1,
+      disableColumnMenu: true,
+    },
+    {
+      field: "dealerName",
+      headerName: "Dealer Name",
+      minWidth: 80,
+      flex: 1,
+      disableColumnMenu: true,
+    },
+    {
+      field: "slbmStatus",
+      headerName: "SLBM Status",
+      width: 100,
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+    },
+  ];
+
+export const clientNotTradedColumns: GridColDef[] = [
+  {
+    field: "ClientCode",
+    headerName: "Client Code",
+    flex: 2,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ClientName",
+    headerName: "Client Name",
+    flex: 2,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "BranchCode",
+    headerName: "Branch Code",
+    flex: 1,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ActivationDate",
+    headerName: "Activation Date",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    // valueFormatter: (params: any) =>
+    //   new Date(params.value).toLocaleDateString("en-IN", {
+    //     day: "2-digit",
+    //     month: "short",
+    //     year: "numeric",
+    //   }),
+  },
+  {
+    field: "LastTradeDate",
+    headerName: "Last Trade Date",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    // valueFormatter: (params: any) =>
+    //   new Date(params.value).toLocaleDateString("en-IN", {
+    //     day: "2-digit",
+    //     month: "short",
+    //     year: "numeric",
+    //   }),
+  },
+  {
+    field: "Active",
+    headerName: "Active",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+];
+
+export const spipRenewalColumns: GridColDef[] = [
+  {
+    field: "IACode",
+    headerName: "IA Code",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ClientName",
+    headerName: "Client Name",
+    flex: 2,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Backofficecode",
+    headerName: "Backoffice Code",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "BranchCode",
+    headerName: "Branch Code",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "MobileNo",
+    headerName: "Mobile No",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "EmailId",
+    headerName: "Email",
+    flex: 2,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Active",
+    headerName: "Active",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ActivationDate",
+    headerName: "Activation Date",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "EndDate",
+    headerName: "Renewal due on",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "RMCode",
+    headerName: "RM Code",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+];
+
+export const upcomingDormantClientColumns: GridColDef[] = [
+  {
+    field: "ClientCode",
+    headerName: "Client Code",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ClientName",
+    headerName: "Client Name",
+    flex: 2,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "LastTradeDate",
+    headerName: "Last Trade Date",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "MobileNo",
+    headerName: "Mobile No",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "DayCount",
+    headerName: "Days to Dormant",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+];
 
 export const ClientCashColumns: GridColDef[] = [
   {
@@ -548,7 +1186,6 @@ export const DPDebitRecovery: GridColDef[] = [
     disableColumnMenu: true,
   },
 ];
-
 export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "ctermcode",
@@ -667,7 +1304,6 @@ export const QPayoutColumns: GridColDef[] = [
     },
   },
 ];
-
 export const dormantColumns: GridColDef[] = [
   {
     field: "ctermcode",
@@ -931,7 +1567,6 @@ export const communicationColumns =
       disableColumnMenu: true,
     },
   ];
-
 export const CompliancneReport: GridColDef[] = [
   {
     field: "DateOfCommunication",
@@ -1049,4 +1684,180 @@ export const topBirthdays: GridColDef[] = [
       return <div>{formattedDate}</div>; // Render the formatted date
     },
   },
+];
+
+export const cyptoWidgets = [
+  // {
+  //   id: 1,
+  //   label: "Reasearch Calls",
+  //   color: "primary",
+  // },
+  {
+    id: 2,
+
+    label: "Clients With Ledger Balance",
+  },
+  { id: 3, label: "T6 Selling" },
+  // { id: 4, label: "MTF Open Position" },
+];
+
+export const TradeCapsules = [
+  { id: 1, label: "All" },
+  { id: 2, label: "Equity Cash" },
+  { id: 3, label: "Equity F&O" },
+  { id: 4, label: "Currency F&O" },
+  { id: 5, label: "Commodity F&O" },
+];
+
+export const ClientDetailsCapsule = [
+  { id: 1, label: "Upcoming Dormant Client" },
+  { id: 2, label: "Active Clients", count: 150 },
+  { id: 3, label: "Inactive Clients", count: 200 },
+  { id: 4, label: "Total Clients", count: 100 },
+];
+
+export const DPDebitCapsules = [
+  { id: 2, label: "Active Clients" },
+  { id: 3, label: "Inactive Clients" },
+  { id: 4, label: "Total Clients" },
+];
+
+export const ODCapsules = [
+  { id: 1, label: "Backoffice Report" },
+  { id: 2, label: "Template" },
+];
+
+export const ClientInfoCapsules = [
+  { id: 1, label: "Equity", status: "Active" },
+  { id: 2, label: "F & O", status: "Active" },
+  { id: 3, label: "Currency", status: "Active" },
+  { id: 4, label: "Commodity", status: "Inactive" },
+  { id: 5, label: "MTF", status: "Active" },
+  { id: 6, label: "SLBM", status: "Inactive" },
+];
+
+export const BrokSlabItems = [
+  {
+    id: 1,
+    label: "Equity Delivery",
+    subvalue: "0.5% of Turnover",
+    subvalueKey: "Equity_Delivery",
+  },
+  {
+    id: 2,
+    label: "Equity Intraday",
+    subvalue: "0.5% of Turnover",
+    subvalueKey: "Equity_Intraday",
+  },
+  {
+    id: 3,
+    label: "Equity Futures",
+    subvalue: "0.5% of Turnover",
+    subvalueKey: "Equity_Futures",
+  },
+  {
+    id: 4,
+    label: "Equity Options",
+    subvalue: "₹ 50 per lot",
+    subvalueKey: "Equity_Options",
+  },
+  {
+    id: 5,
+    label: "Currency Futures",
+    subvalue: "0.5% of Turnover",
+    subvalueKey: "Currency_Futures",
+  },
+  {
+    id: 6,
+    label: "Currency Options",
+    subvalue: "₹ 50 per lot",
+    subvalueKey: "Currency_Options",
+  },
+  {
+    id: 7,
+    label: "Commodity Futures",
+    subvalue: "0.5% of Turnover",
+    subvalueKey: "Commodity_Futures",
+  },
+  {
+    id: 8,
+    label: "Commodity Options",
+    subvalue: "₹ 50 per lot",
+    subvalueKey: "Commodity_Options",
+  },
+];
+
+export const BrokSlabItemsPennypal = [
+  { id: 1, label: "Equity Delivery", subvalue: "0.5% of Turnover" },
+  { id: 2, label: "Equity Intraday", subvalue: "0.5% of Turnover" },
+  { id: 3, label: "Equity Futures", subvalue: "0.5% of Turnover" },
+  { id: 4, label: "Equity Options", subvalue: "₹ 50 per lot" },
+];
+
+export const LastTradeDates = [
+  { id: 1, label: "Equity", status: "1-Jan-24" },
+  { id: 2, label: "F&O", status: "1-Jan-24" },
+  { id: 3, label: "Currency", status: "Inactive" },
+  { id: 4, label: "Commodity", status: "Inactive" },
+  { id: 5, label: "MTF", status: "1-Jan-24" },
+  { id: 6, label: "SLBM", status: "Inactive" },
+];
+
+export const DPSchemes = [
+  { id: 1, label: "Equity", status: "1-Jan-24" },
+  { id: 2, label: "F&O", status: "1-Jan-24" },
+];
+
+export const EkycWidgets = [
+  {
+    id: 1,
+    icon: "ri-money-dollar-circle-fill",
+    label: "Total Investedddd",
+    counter: 2390.68,
+    badge: "ri-arrow-up-s-fill",
+    badgeColor: "success",
+    percentage: "6.24",
+    decimal: 2,
+    prefix: "$",
+    separator: ",",
+    color: "primary",
+  },
+  {
+    id: 2,
+    icon: "ri-arrow-up-circle-fill",
+    label: "Total Change",
+    counter: 19523.25,
+    badge: "ri-arrow-up-s-fill",
+    badgeColor: "success",
+    percentage: "3.67",
+    decimal: 2,
+    prefix: "$",
+    separator: ",",
+    color: "secondary",
+  },
+];
+
+export const buttonOptions = [
+  { label: "7 Days", variant: "outlined" },
+  { label: "15 Days", variant: "outlined" },
+  { label: "1 Month", variant: "outlined" },
+  { label: "3 Months", variant: "contained" },
+  { label: "6 Months", variant: "contained" },
+  { label: "12 Months", variant: "contained" },
+];
+
+export const CommunicationMenu = [
+  { value: "Email", label: "Email" },
+  { value: "Physical", label: "Physical" },
+];
+
+export const department = [
+  { value: "IT", label: "IT" },
+  { value: "Account", label: "Account" },
+  { value: "RMS", label: "RMS" },
+];
+
+export const TypeOfDocuments = [
+  { value: "Circular", label: "Circular" },
+  { value: "SEBI", label: "SEBI" },
 ];

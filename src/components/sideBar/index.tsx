@@ -328,7 +328,9 @@ const SideBar = () => {
   }, [activeMenu, activeSubItem]);
 
   useEffect(() => {
-    handleDrawerOpen();
+    if (!isMobile) {
+      handleDrawerOpen();
+    }
   }, []);
 
   useEffect(() => {

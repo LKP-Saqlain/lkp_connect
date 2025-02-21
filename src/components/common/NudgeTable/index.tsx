@@ -7,6 +7,8 @@ import {
   spipRenewalColumns,
   upcomingDormantClientColumns,
 } from "../../../helper/tableColumns";
+import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
+import { useMediaQuery } from "@mui/material";
 
 const NudgeTable = ({
   isOpen,
@@ -19,6 +21,9 @@ const NudgeTable = ({
   selectedReport: any;
   filteredData: Record<string, any[]>;
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   useEffect(() => {
     console.log("filteredData:", filteredData);
   }, [filteredData]);
@@ -47,7 +52,12 @@ const NudgeTable = ({
       size="xl"
       isOpen={isOpen}
       toggle={onClose}
-      style={{ maxWidth: "895px", width: "90%", margin: "40px 0px 0px 245px" }}
+      style={{
+        maxWidth: "895px",
+        width: "90%",
+        marginTop: "40px",
+        marginLeft: !isMobile ? "245px" : "0px",
+      }}
     >
       <ModalHeader
         className="modal-title"

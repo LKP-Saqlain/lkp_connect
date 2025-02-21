@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Row, Card, CardBody, Col } from "reactstrap";
-import { BrokSlabItems } from "../../../components/common/Capsules";
+import { BrokSlabItems } from "../../../helper/tableColumns";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 // import SegmentWiseTable from "../../../components/common/fullTable";
 import { FiEdit } from "react-icons/fi";

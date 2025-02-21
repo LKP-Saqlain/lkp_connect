@@ -19,26 +19,14 @@ import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../redux/store";
-
+import {
+  CommunicationMenu,
+  department,
+  TypeOfDocuments,
+} from "../../../helper/tableColumns";
 interface EditData {
   CommunicationProofPath?: string;
 }
-
-const CommunicationMenu = [
-  { value: "Email", label: "Email" },
-  { value: "Physical", label: "Physical" },
-];
-
-const department = [
-  { value: "IT", label: "IT" },
-  { value: "Account", label: "Account" },
-  { value: "RMS", label: "RMS" },
-];
-
-const TypeOfDocuments = [
-  { value: "Circular", label: "Circular" },
-  { value: "SEBI", label: "SEBI" },
-];
 
 const ModalComponent = ({
   tog_grid,

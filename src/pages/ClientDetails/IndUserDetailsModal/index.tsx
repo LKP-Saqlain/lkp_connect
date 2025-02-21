@@ -9,7 +9,7 @@ import {
   Button,
 } from "reactstrap";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { ClientInfoCapsules } from "../../../components/common/Capsules";
+import { ClientInfoCapsules } from "../../../helper/tableColumns";
 // import PerformanceHistoryChart from "../PerformanceHistory";
 import SegmentWiseTable from "../../../components/common/fullTable";
 import BrokerageSlab from "../BrokerageSlab";
