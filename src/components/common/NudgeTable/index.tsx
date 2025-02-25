@@ -6,9 +6,9 @@ import {
   clientNotTradedColumns,
   spipRenewalColumns,
   upcomingDormantClientColumns,
-  newClientAddFiveDays,
+  newClientAddFiveDays
 } from "../../../helper/tableColumns.tsx";
-import { useTheme } from "@mui/material/styles";
+import { useTheme,  } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 
 const NudgeTable = ({
