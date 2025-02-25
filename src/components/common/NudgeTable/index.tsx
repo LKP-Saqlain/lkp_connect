@@ -6,6 +6,7 @@ import {
   clientNotTradedColumns,
   spipRenewalColumns,
   upcomingDormantClientColumns,
+  newClientAddFiveDays
 } from "../../../helper/tableColumns";
 import { useTheme,  } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
@@ -40,6 +41,8 @@ const NudgeTable = ({
         return clientNotTradedColumns;
       case "SPIP Renewal in next 30 days":
         return spipRenewalColumns;
+      case "New Client added in last 5 days":
+        return newClientAddFiveDays;
       case "Upcoming Dormant Client":
         return upcomingDormantClientColumns;
       default:
