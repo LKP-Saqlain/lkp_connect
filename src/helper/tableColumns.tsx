@@ -517,6 +517,57 @@ export const clientNotTradedColumns: GridColDef[] = [
   },
 ];
 
+export const newClientAddFiveDays: GridColDef[] = [
+  {
+    field: "ClientCode",
+    headerName: "Client Code",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ClientName",
+    headerName: "Client Name",
+    flex: 2,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "BranchCode",
+    headerName: "Branch Code",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ActivationDate",
+    headerName: "Activation Date",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Active",
+    headerName: "Active",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "LastTradeDate",
+    headerName: "Last Trade Date",
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+];
+
 export const spipRenewalColumns: GridColDef[] = [
   {
     field: "IACode",
