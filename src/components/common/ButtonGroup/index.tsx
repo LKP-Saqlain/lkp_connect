@@ -1,14 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
-
-const buttonOptions = [
-  { label: "7 Days", variant: "outlined" },
-  { label: "15 Days", variant: "outlined" },
-  { label: "1 Month", variant: "outlined" },
-  { label: "3 Months", variant: "contained" },
-  { label: "6 Months", variant: "contained" },
-  { label: "12 Months", variant: "contained" },
-];
+import { buttonOptions } from "../../../helper/tableColumns.tsx";
 
 const ButtonGroup = ({
   selectedButton,

@@ -2,11 +2,14 @@ import { useEffect, useMemo } from "react";
 import { Modal, ModalBody, ModalHeader, Card, CardBody } from "reactstrap";
 import { DataGrid } from "@mui/x-data-grid";
 import "../../../components/common/table/style.css";
-import newClientColumns, {
+import {
   clientNotTradedColumns,
   spipRenewalColumns,
   upcomingDormantClientColumns,
-} from "../../../helper/tableColumns";
+  newClientAddFiveDays,
+} from "../../../helper/tableColumns.tsx";
+import { useTheme } from "@mui/material/styles";
+import { useMediaQuery } from "@mui/material";
 
 const NudgeTable = ({
   isOpen,
@@ -19,6 +22,9 @@ const NudgeTable = ({
   selectedReport: any;
   filteredData: Record<string, any[]>;
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   useEffect(() => {
     console.log("filteredData:", filteredData);
   }, [filteredData]);
@@ -35,10 +41,10 @@ const NudgeTable = ({
         return clientNotTradedColumns;
       case "SPIP Renewal in next 30 days":
         return spipRenewalColumns;
+      case "New Client added in last 5 days":
+        return newClientAddFiveDays;
       case "Upcoming Dormant Client":
         return upcomingDormantClientColumns;
-      case "New Client added in last 5 days":
-        return newClientColumns;
       default:
         return []; // If no predefined columns, return an empty array
     }
@@ -49,7 +55,12 @@ const NudgeTable = ({
       size="xl"
       isOpen={isOpen}
       toggle={onClose}
-      style={{ maxWidth: "895px", width: "90%", margin: "40px 0px 0px 245px" }}
+      style={{
+        maxWidth: "895px",
+        width: "90%",
+        marginTop: "40px",
+        marginLeft: !isMobile ? "245px" : "0px",
+      }}
     >
       <ModalHeader
         className="modal-title"

@@ -2,7 +2,7 @@ import { Card, CardBody, Row, Col } from "reactstrap";
 import {
   BrokSlabItems,
   BrokSlabItemsPennypal,
-} from "../../../components/common/Capsules";
+} from "../../../helper/tableColumns.tsx";
 
 // Define the type for props
 interface BrokerageSectionProps {

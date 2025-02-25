@@ -6,7 +6,7 @@ import {
   ClientDetailsCapsule,
   ODCapsules,
   DPDebitCapsules,
-} from "../../../components/common/Capsules";
+} from "../../../helper/tableColumns.tsx";
 // import { useMediaQuery } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
 import "../style.css";

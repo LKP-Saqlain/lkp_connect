@@ -17,13 +17,13 @@ import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
 import DataTable from "../../../components/common/table";
-import { GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { endpoints } from "../../../services/endpoints";
 import ShowToast from "../../../utils/toastUtils";
 // import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../style.css";
+import { slbmColumns } from "../../../helper/tableColumns.tsx";
 
 // interface Option {
 //   label: string;
@@ -280,78 +280,7 @@ const SlbmHoling = () => {
       });
   };
 
-  const slbmColumns: GridColDef[] = [
-    {
-      field: "zone",
-      headerName: "Zone",
-      minWidth: 60,
-      flex: 0.5,
-      disableColumnMenu: true,
-    },
-    {
-      field: "branchCode",
-      headerName: "Branch Code",
-      width: 95,
-      headerClassName: "header-wrap-custom",
-      disableColumnMenu: true,
-    },
-    {
-      field: "clientCode",
-      headerName: "Client Code",
-      minWidth: 100,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "clientName",
-      headerName: "Client Name",
-      minWidth: 200,
-      flex: 2,
-      disableColumnMenu: true,
-    },
-    {
-      field: "scripName",
-      headerName: "Scrip Name",
-      minWidth: 90,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "isin",
-      headerName: "ISIN",
-      minWidth: 100,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "qtny",
-      headerName: "Qtny",
-      minWidth: 90,
-      flex: 0.7,
-      disableColumnMenu: true,
-    },
-    {
-      field: "rmName",
-      headerName: "RM Name",
-      minWidth: 100,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "dealerName",
-      headerName: "Dealer Name",
-      minWidth: 80,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "slbmStatus",
-      headerName: "SLBM Status",
-      width: 100,
-      headerClassName: "header-wrap-custom",
-      disableColumnMenu: true,
-    },
-  ];
+  // ];
 
   const handleDownloadExcel = async () => {
     if (!formik.values.selectedZone || !formik.values.selectedBranchCode) {

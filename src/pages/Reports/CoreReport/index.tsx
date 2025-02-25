@@ -19,28 +19,17 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import DataTable from "../../../components/common/table";
-import { GridColDef } from "@mui/x-data-grid";
 import "./style.css";
 import { FormData } from "../../../types";
 import axios from "axios";
 import ShowToast from "../../../utils/toastUtils";
-
+import {
+  Corecolumns,
+  PaymentType,
+  accNo,
+} from "../../../helper/tableColumns.tsx";
 import Select from "react-select";
 import { endpoints } from "../../../services/endpoints";
-
-const accNo = [
-  { value: "15770340001410", label: "15770340001410" },
-  { value: "57500001047915", label: "57500001047915" },
-];
-const PaymentType = [
-  { value: "ALL", label: "ALL" },
-  { value: "NEFT", label: "NEFT" },
-  { value: "RTGS", label: "RTGS" },
-  { value: "IMPS", label: "IMPS" },
-  { value: "OTHER", label: "OTHER" },
-  { value: "UPI", label: "UPI" },
-  { value: "Fund Trans", label: "Fund Trans" },
-];
 
 const CoreReport = () => {
   const [lkpAccDropDownValue, setLkpAccDropDownValue] = useState<any>(null);
@@ -191,40 +180,40 @@ const CoreReport = () => {
       });
   };
 
-  const Corecolumns: GridColDef[] = [
-    { field: "clientCode", headerName: "Client Code", minWidth: 80 },
-    { field: "alertSequenceNo", headerName: "Alert Sequence No", minWidth: 80 },
-    { field: "virtualAccount", headerName: "Virtual Account", minWidth: 80 },
-    {
-      field: "lkP_AccountNumber",
-      headerName: "LKP Account Number",
-      minWidth: 180,
-    },
-    { field: "debitCredit", headerName: "Debit/Credit", minWidth: 80 },
-    { field: "amount", headerName: "Amount", minWidth: 100 },
-    { field: "client_Name", headerName: "Client Name", minWidth: 80 },
-    {
-      field: "client_AccountNumber",
-      headerName: "Client Account Number",
-      minWidth: 180,
-    },
-    { field: "client_Bank", headerName: "Client Bank", minWidth: 80 },
-    { field: "client_IFSC", headerName: "Client IFSC", minWidth: 80 },
-    { field: "chequeNo", headerName: "Cheque No", minWidth: 80 },
-    {
-      field: "userReferenceNumber",
-      headerName: "User Reference Number",
-      minWidth: 180,
-    },
-    { field: "payment_Type", headerName: "Payment Type", minWidth: 80 },
-    { field: "valueDate", headerName: "Value Date", minWidth: 80 },
-    {
-      field: "transactionDescription",
-      headerName: "Transaction Description",
-      minWidth: 200,
-    },
-    { field: "transactionDate", headerName: "Transaction Date", minWidth: 80 },
-  ];
+  // const Corecolumns: GridColDef[] = [
+  //   { field: "clientCode", headerName: "Client Code", minWidth: 80 },
+  //   { field: "alertSequenceNo", headerName: "Alert Sequence No", minWidth: 80 },
+  //   { field: "virtualAccount", headerName: "Virtual Account", minWidth: 80 },
+  //   {
+  //     field: "lkP_AccountNumber",
+  //     headerName: "LKP Account Number",
+  //     minWidth: 180,
+  //   },
+  //   { field: "debitCredit", headerName: "Debit/Credit", minWidth: 80 },
+  //   { field: "amount", headerName: "Amount", minWidth: 100 },
+  //   { field: "client_Name", headerName: "Client Name", minWidth: 80 },
+  //   {
+  //     field: "client_AccountNumber",
+  //     headerName: "Client Account Number",
+  //     minWidth: 180,
+  //   },
+  //   { field: "client_Bank", headerName: "Client Bank", minWidth: 80 },
+  //   { field: "client_IFSC", headerName: "Client IFSC", minWidth: 80 },
+  //   { field: "chequeNo", headerName: "Cheque No", minWidth: 80 },
+  //   {
+  //     field: "userReferenceNumber",
+  //     headerName: "User Reference Number",
+  //     minWidth: 180,
+  //   },
+  //   { field: "payment_Type", headerName: "Payment Type", minWidth: 80 },
+  //   { field: "valueDate", headerName: "Value Date", minWidth: 80 },
+  //   {
+  //     field: "transactionDescription",
+  //     headerName: "Transaction Description",
+  //     minWidth: 200,
+  //   },
+  //   { field: "transactionDate", headerName: "Transaction Date", minWidth: 80 },
+  // ];
 
   document.title = "LKP Securities | Core Alert Report";
 

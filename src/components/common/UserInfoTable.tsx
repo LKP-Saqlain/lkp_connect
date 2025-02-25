@@ -13,13 +13,11 @@ import {
   QPayoutColumns,
   communicationColumns,
   CompliancneReport,
-} from "../../pages/TradeDashboard/TradeColumns";
-import {
   getClientActivityStatusColumns,
   getClientDormantStatus,
   getAccountDetails,
   getCommChecker,
-} from "../../pages/ClientDetails/ClientTableColumns";
+} from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
 import "../../pages/ClientDetails/style.css";

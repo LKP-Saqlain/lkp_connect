@@ -1,5 +1,5 @@
 import { Card, CardBody, Row, Col } from "reactstrap";
-import { ClientInfoCapsules } from "../../../components/common/Capsules";
+import { ClientInfoCapsules } from "../../../helper/tableColumns.tsx";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import PerformanceHistoryChart from "../PerformanceHistory";
 import SegmentWiseTable from "../../../components/common/fullTable";

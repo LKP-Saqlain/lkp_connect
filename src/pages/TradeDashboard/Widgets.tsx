@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardBody, Col } from "reactstrap";
-import { cyptoWidgets } from "../../components/common/Capsules";
+import { cyptoWidgets } from "../../helper/tableColumns.tsx";
 
 interface SelectedWidgetProps {
   selectedWidget: string;
