@@ -521,7 +521,7 @@ export const newClientAddFiveDays: GridColDef[] = [
   {
     field: "ClientCode",
     headerName: "Client Code",
-    flex: 1.5,
+    flex: 1,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -537,7 +537,7 @@ export const newClientAddFiveDays: GridColDef[] = [
   {
     field: "BranchCode",
     headerName: "Branch Code",
-    flex: 1.5,
+    flex: .9,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -545,7 +545,7 @@ export const newClientAddFiveDays: GridColDef[] = [
   {
     field: "ActivationDate",
     headerName: "Activation Date",
-    flex: 1.5,
+    flex: 1.2,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -553,7 +553,7 @@ export const newClientAddFiveDays: GridColDef[] = [
   {
     field: "Active",
     headerName: "Active",
-    flex: 1.5,
+    flex: .5,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
