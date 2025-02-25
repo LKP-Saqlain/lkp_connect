@@ -344,115 +344,113 @@ export const getClientDormantStatus = (
   // },
 ];
 
+export const Corecolumns: GridColDef[] = [
+  { field: "clientCode", headerName: "Client Code", minWidth: 80 },
+  { field: "alertSequenceNo", headerName: "Alert Sequence No", minWidth: 80 },
+  { field: "virtualAccount", headerName: "Virtual Account", minWidth: 80 },
+  {
+    field: "lkP_AccountNumber",
+    headerName: "LKP Account Number",
+    minWidth: 180,
+  },
+  { field: "debitCredit", headerName: "Debit/Credit", minWidth: 80 },
+  { field: "amount", headerName: "Amount", minWidth: 100 },
+  { field: "client_Name", headerName: "Client Name", minWidth: 80 },
+  {
+    field: "client_AccountNumber",
+    headerName: "Client Account Number",
+    minWidth: 180,
+  },
+  { field: "client_Bank", headerName: "Client Bank", minWidth: 80 },
+  { field: "client_IFSC", headerName: "Client IFSC", minWidth: 80 },
+  { field: "chequeNo", headerName: "Cheque No", minWidth: 80 },
+  {
+    field: "userReferenceNumber",
+    headerName: "User Reference Number",
+    minWidth: 180,
+  },
+  { field: "payment_Type", headerName: "Payment Type", minWidth: 80 },
+  { field: "valueDate", headerName: "Value Date", minWidth: 80 },
+  {
+    field: "transactionDescription",
+    headerName: "Transaction Description",
+    minWidth: 200,
+  },
+  { field: "transactionDate", headerName: "Transaction Date", minWidth: 80 },
+];
 
-
- export const Corecolumns: GridColDef[] = [
-    { field: "clientCode", headerName: "Client Code", minWidth: 80 },
-    { field: "alertSequenceNo", headerName: "Alert Sequence No", minWidth: 80 },
-    { field: "virtualAccount", headerName: "Virtual Account", minWidth: 80 },
-    {
-      field: "lkP_AccountNumber",
-      headerName: "LKP Account Number",
-      minWidth: 180,
-    },
-    { field: "debitCredit", headerName: "Debit/Credit", minWidth: 80 },
-    { field: "amount", headerName: "Amount", minWidth: 100 },
-    { field: "client_Name", headerName: "Client Name", minWidth: 80 },
-    {
-      field: "client_AccountNumber",
-      headerName: "Client Account Number",
-      minWidth: 180,
-    },
-    { field: "client_Bank", headerName: "Client Bank", minWidth: 80 },
-    { field: "client_IFSC", headerName: "Client IFSC", minWidth: 80 },
-    { field: "chequeNo", headerName: "Cheque No", minWidth: 80 },
-    {
-      field: "userReferenceNumber",
-      headerName: "User Reference Number",
-      minWidth: 180,
-    },
-    { field: "payment_Type", headerName: "Payment Type", minWidth: 80 },
-    { field: "valueDate", headerName: "Value Date", minWidth: 80 },
-    {
-      field: "transactionDescription",
-      headerName: "Transaction Description",
-      minWidth: 200,
-    },
-    { field: "transactionDate", headerName: "Transaction Date", minWidth: 80 },
-  ];
-
- export const slbmColumns: GridColDef[] = [
-    {
-      field: "zone",
-      headerName: "Zone",
-      minWidth: 60,
-      flex: 0.5,
-      disableColumnMenu: true,
-    },
-    {
-      field: "branchCode",
-      headerName: "Branch Code",
-      width: 95,
-      headerClassName: "header-wrap-custom",
-      disableColumnMenu: true,
-    },
-    {
-      field: "clientCode",
-      headerName: "Client Code",
-      minWidth: 100,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "clientName",
-      headerName: "Client Name",
-      minWidth: 200,
-      flex: 2,
-      disableColumnMenu: true,
-    },
-    {
-      field: "scripName",
-      headerName: "Scrip Name",
-      minWidth: 90,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "isin",
-      headerName: "ISIN",
-      minWidth: 100,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "qtny",
-      headerName: "Qtny",
-      minWidth: 90,
-      flex: 0.7,
-      disableColumnMenu: true,
-    },
-    {
-      field: "rmName",
-      headerName: "RM Name",
-      minWidth: 100,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "dealerName",
-      headerName: "Dealer Name",
-      minWidth: 80,
-      flex: 1,
-      disableColumnMenu: true,
-    },
-    {
-      field: "slbmStatus",
-      headerName: "SLBM Status",
-      width: 100,
-      headerClassName: "header-wrap-custom",
-      disableColumnMenu: true,
-    },
-  ];
+export const slbmColumns: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    minWidth: 60,
+    flex: 0.5,
+    disableColumnMenu: true,
+  },
+  {
+    field: "branchCode",
+    headerName: "Branch Code",
+    width: 95,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    minWidth: 100,
+    flex: 1,
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 200,
+    flex: 2,
+    disableColumnMenu: true,
+  },
+  {
+    field: "scripName",
+    headerName: "Scrip Name",
+    minWidth: 90,
+    flex: 1,
+    disableColumnMenu: true,
+  },
+  {
+    field: "isin",
+    headerName: "ISIN",
+    minWidth: 100,
+    flex: 1,
+    disableColumnMenu: true,
+  },
+  {
+    field: "qtny",
+    headerName: "Qtny",
+    minWidth: 90,
+    flex: 0.7,
+    disableColumnMenu: true,
+  },
+  {
+    field: "rmName",
+    headerName: "RM Name",
+    minWidth: 100,
+    flex: 1,
+    disableColumnMenu: true,
+  },
+  {
+    field: "dealerName",
+    headerName: "Dealer Name",
+    minWidth: 80,
+    flex: 1,
+    disableColumnMenu: true,
+  },
+  {
+    field: "slbmStatus",
+    headerName: "SLBM Status",
+    width: 100,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+];
 
 export const clientNotTradedColumns: GridColDef[] = [
   {
@@ -537,7 +535,7 @@ export const newClientAddFiveDays: GridColDef[] = [
   {
     field: "BranchCode",
     headerName: "Branch Code",
-    flex: .9,
+    flex: 0.9,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -553,7 +551,7 @@ export const newClientAddFiveDays: GridColDef[] = [
   {
     field: "Active",
     headerName: "Active",
-    flex: .5,
+    flex: 0.5,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -572,7 +570,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "IACode",
     headerName: "IA Code",
-    flex: 1.5,
+    flex: 1.2,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -580,27 +578,21 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "ClientName",
     headerName: "Client Name",
-    flex: 2,
+    flex: 2.5,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
   },
   {
     field: "Backofficecode",
-    headerName: "Backoffice Code",
+    headerName: "Back Office Code",
     flex: 1.5,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
-  {
-    field: "BranchCode",
-    headerName: "Branch Code",
-    flex: 1.5,
-    headerAlign: "center",
-    align: "left",
-    disableColumnMenu: true,
-  },
+
   {
     field: "MobileNo",
     headerName: "Mobile No",
@@ -608,15 +600,27 @@ export const spipRenewalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
   },
-  {
-    field: "EmailId",
-    headerName: "Email",
-    flex: 2,
-    headerAlign: "center",
-    align: "left",
-    disableColumnMenu: true,
-  },
+
   {
     field: "Active",
     headerName: "Active",
@@ -632,6 +636,7 @@ export const spipRenewalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "EndDate",
@@ -640,11 +645,12 @@ export const spipRenewalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "RMCode",
     headerName: "RM Code",
-    flex: 1.5,
+    flex: 1.2,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
