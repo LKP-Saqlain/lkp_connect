@@ -152,6 +152,7 @@ const SideBar = () => {
 
   const [isNudgeOpen, setIsNudgeOpen] = useState(false);
   const [modal_animationZoom, setmodal_animationZoom] = useState(false);
+  const [nudgeCount, setNudgeCount] = useState(0);
 
   const [sideBarNudge, setSideBarNudge] = useState<any[][]>([]);
 
@@ -211,8 +212,20 @@ const SideBar = () => {
       try {
         dispatch(showLoader("Please wait For Notifications"));
         const response = await apiServices.DashboardNudge(payload);
-        console.log("dashBoardNudgeData", typeof response?.data);
+        console.log("dashBoardNudgeData", response?.data);
 
+        const reportTypes = new Set<string>();
+
+        Object.values(response?.data).forEach((table: any) => {
+          table.forEach((entry: any) => {
+            if (entry.ReportType) {
+              reportTypes.add(entry.ReportType);
+            }
+          });
+        });
+        console.log("reportTypeSize", reportTypes.size);
+
+        setNudgeCount(reportTypes.size);
         const nudgeData = response?.data;
         setSideBarNudge(nudgeData);
 
@@ -616,7 +629,7 @@ const SideBar = () => {
                 color="inherit"
                 onClick={handleNotificationClick}
               >
-                <Badge badgeContent={6} color="error">
+                <Badge badgeContent={nudgeCount} color="error">
                   <NotificationsIcon sx={{ color: "#11395C" }} />
                 </Badge>
               </IconButton>

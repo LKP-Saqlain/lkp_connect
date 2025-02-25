@@ -53,7 +53,9 @@ const Nudge = ({
         NudgeData[tableKey].forEach((entry: any) => {
           if (
             entry.ReportType &&
-            (entry.ClientCount !== undefined || entry.CurrentWeekBrok)
+            (entry.ClientCount !== undefined ||
+              entry.CurrentWeekBrok !== undefined ||
+              entry.ReportType === "Brokerage Last week vs Current week")
           ) {
             extractedData.push({
               ReportType: entry.ReportType,
