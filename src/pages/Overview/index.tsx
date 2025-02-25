@@ -148,28 +148,33 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   };
 
   useEffect(() => {
-    const payload = { user_id };
+    const fetchDashboardNudge = async () => {
+      const payload = {
+        user_id: user_id,
+      };
 
-    apiServices
-      .DashboardNudge(payload)
-      .then((response) => {
-        dispatch(showLoader("Please wait For Notifications from overview"));
+      try {
+        dispatch(showLoader("Please wait For Notifications"));
+        const response = await apiServices.DashboardNudge(payload);
         console.log("dashBoardNudgeData", typeof response?.data);
-        setDashboardNudgeData(response?.data);
+
+        const nudgeData = response?.data;
+        setDashboardNudgeData(nudgeData);
+
+        dispatch(hideLoader());
 
         if (response?.status === 200) {
-          setIsNudgeOpen((prev) => !prev);
+          // ShowToast("success", response?.data?.Message);
+          setIsNudgeOpen(!isNudgeOpen);
         } else {
           console.error("Failed");
         }
-      })
-      .catch((error) => {
-        console.error("Error fetching dashboard nudge:", error);
+      } catch (error) {
         dispatch(hideLoader());
-      })
-      .finally(() => {
-        dispatch(hideLoader()); // Ensures loader always hides
-      });
+        console.error("Error sending email:", error);
+      }
+    };
+    fetchDashboardNudge();
   }, [dispatch]);
 
   document.title = "LKP Securities | User Overview";

@@ -138,7 +138,7 @@ const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(() => {
-    return localStorage.getItem("activeMenu") || ""; // Default to Overview
+    return localStorage.getItem("activeMenu") || "Overview"; // Default to Overview
   });
   const [activeSubItem, setActiveSubItem] = useState(() => {
     return localStorage.getItem("activeSubItem") || "";
