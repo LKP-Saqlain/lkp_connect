@@ -116,7 +116,7 @@ const Revenue = ({
 
             // Extract data for broking and indirect values
             const brokingValues = fetchRevenueData.map(
-              (item: any) => item.Ach_brok_dir
+              (item: any) => item.Ach_brok_dir + item.Ach_brokslbm_dir
             );
             const indirectValues = fetchRevenueData.map(
               (item: any) => item.Ach_brok_indir + item.Ach_brok_ind_less2yrs
@@ -141,7 +141,8 @@ const Revenue = ({
             const broking =
               filteredRevenueData[0]?.Ach_brok_dir +
                 filteredRevenueData[0]?.Ach_brok_ind_less2yrs +
-                filteredRevenueData[0]?.Ach_brok_indir || 0;
+                filteredRevenueData[0]?.Ach_brok_indir +
+                filteredRevenueData[0]?.Ach_brokslbm_dir || 0;
             const nonBroking = filteredRevenueData[0]?.Tot_TPD_rev || 0;
             const multiRevenueMultiply =
               filteredRevenueData[0]?.Multi_net_rev_ach || 0;

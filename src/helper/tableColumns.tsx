@@ -1011,14 +1011,76 @@ export const T6OverViewColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "T5",
-    headerName: "T5",
+    field: "G5",
+    headerName: ">T5",
     flex: 1,
+    minWidth: 95,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "T5",
+    headerName: "T5",
+    flex: 1,
+    minWidth: 80,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "T4",
+    headerName: "T4",
+    flex: 0.9,
+    minWidth: 80,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "T3",
+    headerName: "T3",
+    flex: 0.9,
+    minWidth: 80,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
 ];
 
