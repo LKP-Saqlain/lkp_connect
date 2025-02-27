@@ -1,10 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense,useEffect,useState } from "react";
 import PrivateRoute from "./components/PrivateRoutes";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer } from "react-toastify";
 import Loader from "./components/common/Loader";
 import "./assets/scss/themes.scss";
+import CustomModal from "./components/common/DPModal";
+import { useSelector } from "react-redux";
+import { RootState } from "./redux/store";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(
@@ -15,27 +18,57 @@ const ForgotPassword = lazy(
 );
 const SideBar = lazy(() => import("./components/sideBar"));
 
-const App = () => (
-  <Router>
-    <ToastContainer />
-    <Loader />
-    <Suspense fallback={<Loader />}>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route
-          path="/authorization"
-          element={<PrivateRoute authElement={<AuthenticateUser />} />}
-        />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute customLogin={false} dashElement={<SideBar />} />
-          }
-        />
-      </Routes>
-    </Suspense>
-  </Router>
-);
+const App = () => {
+  const [modal_center, setModalCenter] = useState(false);
+  const tog_center = () => setModalCenter(!modal_center);
+  const { data } = useSelector((state: RootState) => state.UserLogin);
+  const tokenExpiryTime = data?.data?.tokenExpiryTime;
+
+  const checkTokenExpiry = (expiryTime: string) => {
+    const expiryDate = new Date(expiryTime);
+    const currentDate = new Date();
+    return currentDate >= expiryDate;
+  };
+
+  useEffect(() => {
+    if (tokenExpiryTime) {
+      if (checkTokenExpiry(tokenExpiryTime)) {
+        setModalCenter(true);
+        console.log("checkTokenExpiry", checkTokenExpiry(tokenExpiryTime));
+      }
+    }
+  }, [tokenExpiryTime]);
+
+
+  return (
+    <Router>
+      <ToastContainer />
+      <Loader />
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route
+            path="/authorization"
+            element={<PrivateRoute authElement={<AuthenticateUser />} />}
+          />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute customLogin={false} dashElement={<SideBar />} />
+            }
+          />
+        </Routes>
+      </Suspense>
+      <CustomModal
+        tog_center={tog_center}
+        modal_center={modal_center}
+        setmodal_center={setModalCenter}
+        Msg="Your session is expired !"
+        expiredtime={checkTokenExpiry(tokenExpiryTime)}
+      />
+    </Router>
+  );
+};
 
 export default App;
