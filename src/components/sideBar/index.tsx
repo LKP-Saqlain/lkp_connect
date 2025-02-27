@@ -59,6 +59,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import Nudge from "../common/Nudge";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
+import MarketingMaterial from "../../pages/refCard/Marketing Materials";
 
 const drawerWidth = 240;
 
@@ -507,7 +508,7 @@ const SideBar = () => {
           //   </>
           // );
           case "Referal Product Wise MIS Report":
-            return "";
+            return  <MarketingMaterial/>;
           default:
             return null;
         }

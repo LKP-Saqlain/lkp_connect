@@ -204,6 +204,29 @@ export const getAccountDetails: GridColDef[] = [
   },
 ];
 
+export const cardDetails = [
+  {
+    id: 1,
+    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN14vLyQvBxXJf60w_-n1dPFhqV-W6bjWwbw&s",
+    title: "LKP Brochure",
+    pdfUrl: " "
+  },
+  {
+    id: 2,
+    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6ibwvGamxlftRJQz6fFT3h7HH-aKKwxWmAQ&s",
+    title: "SPIP Brochure",
+    pdfUrl: "../../../public/JavaScript-Core.pdf"
+  },
+  {
+    id: 3,
+    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN14vLyQvBxXJf60w_-n1dPFhqV-W6bjWwbw&s",
+    title: "Festival Creatives",
+    pdfUrl: ""
+  },
+ 
+  
+] 
+
 export const getCommChecker: GridColDef[] = [
   {
     field: "status",
