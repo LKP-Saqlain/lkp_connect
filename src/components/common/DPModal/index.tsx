@@ -2,6 +2,7 @@ import { Button, Modal as ReactstrapModal, ModalBody } from "reactstrap";
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 interface CustomModalProps {
   tog_center: () => void;
@@ -12,7 +13,8 @@ interface CustomModalProps {
   handleApproval?: (value: any, remark: string, entryFlag: string) => void;
   Msg?: string;
   activeSubItem?: any;
-  action: "approve" | "reject";
+  action?: "approve" | "reject";
+  expiredtime?: boolean;
 }
 
 const CustomModal = ({
@@ -25,7 +27,9 @@ const CustomModal = ({
   action,
   handleApproval,
   activeSubItem,
+  expiredtime,
 }: CustomModalProps) => {
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: { remark: "" },
     validationSchema:
@@ -53,22 +57,39 @@ const CustomModal = ({
     formik.resetForm();
   };
 
+
+  const handleSessionClear = () => {
+    setmodal_center(false);
+    localStorage.removeItem("tkn");
+    localStorage.removeItem("Id");
+    localStorage.removeItem("uIdType");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("activeMenu");
+    localStorage.removeItem("activeSubItem");
+    navigate("/");
+  };
+
   return (
-    <ReactstrapModal isOpen={modal_center} toggle={tog_center} centered>
+    <ReactstrapModal isOpen={modal_center} toggle={tog_center} centered  
+    backdrop={expiredtime ? "static" : undefined}  // Disable clicking outside for expired token modal
+    keyboard={expiredtime ? false : undefined}>
       <ModalBody className="text-center p-3">
         {activeSubItem !== "Communication Retrival Checker" && (
           <i className="ri-alert-line display-5 text-warning"></i>
         )}
 
         <div className="mt-4" style={{ fontFamily: "Public Sans" }}>
-          {activeSubItem !== "Communication Retrival Entry" &&
-            activeSubItem !== "Communication Retrival Checker" && (
+          {activeSubItem === "DP Debit Recovery" ? (
+            <>
               <h6 className="mb-4">
                 An email will be sent informing the client about his DP Debit
                 dues along with a link for payment.
               </h6>
-            )}
-          <h6 className="mb-3">{Msg}</h6>
+              <h6 className="mb-3">{Msg}</h6>
+            </>
+          ) : (
+            <h6 className="mb-3">{Msg}</h6>
+          )}
         </div>
 
         <form onSubmit={formik.handleSubmit}>
@@ -88,20 +109,36 @@ const CustomModal = ({
           )}
 
           <div className="hstack gap-2 pt-2 justify-content-center">
-            <Button
-              className="btn"
-              style={{ backgroundColor: "#EE4B2B", borderColor: "#EE4B2B" }}
-              onClick={handleClose}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="btn"
-              style={{ width: "80px", backgroundColor: "#11395C" }}
-              type="submit"
-            >
-              Yes
-            </Button>
+            {expiredtime ? (
+              <Button
+                className="btn"
+                style={{
+                  width: "80px",
+                  backgroundColor: "#11395C",
+                  borderColor: "#11395C",
+                }}
+                onClick={handleSessionClear}
+              >
+                OK
+              </Button>
+            ) : (
+              <>
+                <Button
+                  className="btn"
+                  style={{ backgroundColor: "#EE4B2B", borderColor: "#EE4B2B" }}
+                  onClick={handleClose}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="btn"
+                  style={{ width: "80px", backgroundColor: "#11395C" }}
+                  type="submit"
+                >
+                  Yes
+                </Button>
+              </>
+            )}
           </div>
         </form>
       </ModalBody>
