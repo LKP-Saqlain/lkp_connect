@@ -149,6 +149,7 @@ const Revenue = ({
             const newClientsAdded = filteredRevenueData[0]?.New_Clients || 0;
 
             const tradedClient = filteredRevenueData[0]?.TradedClientCount || 0;
+            console.log("valueTest", total, broking, nonBroking);
 
             setTradedClientCount(tradedClient);
             handleRevenueData(

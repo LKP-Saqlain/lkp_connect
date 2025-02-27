@@ -20,6 +20,9 @@ export const apiServices = {
   forgetPassword: async (payload: any) => {
     return await apiService("POST", endpoints.forgetPassword, payload);
   },
+  UnblockUser: async (payload: any) => {
+    return await apiService("POST", endpoints.UnblockUser, payload);
+  },
   getDropDown: async (payload: any, customHeader?: any) => {
     return await apiService(
       "POST",
@@ -74,7 +77,13 @@ export const apiServices = {
     return await apiService("POST", endpoints.GetClientStatusCnt, payload);
   },
   DealerPerformance: async (payload: any) => {
-    return await apiService("POST", endpoints.DealerPerformance, payload);
+    return await apiService(
+      "POST",
+      endpoints.DealerPerformance,
+      payload,
+      {},
+      155000
+    );
   },
   ClientDetails: async (payload: any) => {
     return await apiService("POST", endpoints.ClientDetails, payload);

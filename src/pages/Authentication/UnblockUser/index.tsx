@@ -4,7 +4,7 @@ import {
   Typography,
   TextField,
   InputAdornment,
-  IconButton,
+  //   IconButton,
   Button,
   useMediaQuery,
   FormControl,
@@ -20,7 +20,7 @@ import LeftArm from "../../../assets/images/leftArm.png";
 import Vector from "../../../assets/vector.png";
 import { useTheme } from "@mui/material/styles";
 import { FaRegUserCircle } from "react-icons/fa";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+// import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { RiLockPasswordFill } from "react-icons/ri";
 import "dayjs/locale/en-gb";
 import { useDispatch } from "react-redux";
@@ -32,16 +32,17 @@ import { useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../../redux/store";
 import {
   SendOtp,
-  ForgotUserPassword,
+  //   ForgotUserPassword,
 } from "../../../redux/thunk/ForgotPassword";
+import { UnblockUsers } from "../../../redux/thunk/unblockUser/unblockUser";
 import Logo from "../../../assets/logo.png";
-import "./style.css";
+// import "./style.css";
 
-const ForgotPassword = () => {
-  const [showPassword, setShowPassword] = useState(false);
+const UnblockUser = () => {
+  //   const [showPassword, setShowPassword] = useState(false);
   const [showOtpField, setShowOtpField] = useState(false);
-  const [showOtp, setShowOtp] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  //   const [showOtp, setShowOtp] = useState(false);
+  //   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -64,8 +65,6 @@ const ForgotPassword = () => {
     otp: Yup.string()
       .required("OTP is required")
       .min(4, "OTP must be at least 4 characters"),
-    password: Yup.string().required("Password is required"),
-    confirmPassword: Yup.string().required("Confirm Password is required"),
   });
 
   // Initialize Formik
@@ -73,27 +72,25 @@ const ForgotPassword = () => {
     initialValues: {
       userId: "",
       otp: "",
-      password: "",
-      confirmPassword: "",
       forgotButtonGroup: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log("Form Data:", values);
       // Handle login logic here
-      handleResetPassword();
+      handleUnblockUser();
     },
   });
-  const handleToggleOTPVisibility = () => {
-    setShowOtp((prev) => !prev);
-  };
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
+  //   const handleToggleOTPVisibility = () => {
+  //     setShowOtp((prev) => !prev);
+  //   };
+  //   const handleTogglePasswordVisibility = () => {
+  //     setShowPassword((prev) => !prev);
+  //   };
 
-  const handleToggleShowPasswordVisibility = () => {
-    setShowConfirmPassword((prev) => !prev);
-  };
+  //   const handleToggleShowPasswordVisibility = () => {
+  //     setShowConfirmPassword((prev) => !prev);
+  //   };
 
   const customHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -108,14 +105,6 @@ const ForgotPassword = () => {
       if (regEx.number.test(value)) {
         formik.setFieldValue(name, value.replace(/\s/g, ""));
       }
-    } else if (name === "password") {
-      // if (regEx.alphaNumeric.test(value)) {
-      formik.setFieldValue(name, value.replace(/\s/g, ""));
-      // }
-    } else if (name === "confirmPassword") {
-      // if (regEx.alphaNumeric.test(value)) {
-      formik.setFieldValue(name, value.replace(/\s/g, ""));
-      // }
     } else {
       formik.handleChange(e);
     }
@@ -158,16 +147,15 @@ const ForgotPassword = () => {
     }
   };
 
-  const handleResetPassword = async () => {
+  const handleUnblockUser = async () => {
     let payload = {
       user_type: formik.values.forgotButtonGroup,
       user_id: formik.values.userId,
-      user_password: formik.values.password,
-      confirm_password: formik.values.confirmPassword,
       otp: formik.values.otp,
     };
+    debugger;
     dispatch(showLoader(""));
-    dispatch(ForgotUserPassword(payload))
+    dispatch(UnblockUsers(payload))
       .unwrap()
       .then((response) => {
         console.log("Response-->", response);
@@ -257,17 +245,15 @@ const ForgotPassword = () => {
           <Typography
             variant="h4"
             gutterBottom
-            sx={{ fontWeight: 600, color: "#11395C" }}
+            sx={{
+              fontWeight: 600,
+              color: "#11395C",
+              fontFamily: "Public Sans",
+            }}
           >
-            Forgot Password
+            Unblock User ?
           </Typography>
-          <Typography
-            gutterBottom
-            sx={{ fontWeight: 600, color: "#11395C", mb: 4 }}
-          >
-            {" "}
-            Don't worry! We will reset your Password in few seconds
-          </Typography>
+
           <FormControl
             sx={{
               marginBottom: "6px",
@@ -349,11 +335,11 @@ const ForgotPassword = () => {
                 sx={{
                   whiteSpace: "nowrap",
                   backgroundColor: "#11395C",
+                  fontFamily: "Public Sans",
                   mb:
                     formik.touched.userId && Boolean(formik.errors.userId)
                       ? 3
                       : null,
-                  fontFamily: "Public Sans",
                 }}
                 onClick={handleSentOtp}
               >
@@ -395,105 +381,23 @@ const ForgotPassword = () => {
                         <RiLockPasswordFill />
                       </InputAdornment>
                     ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={handleToggleOTPVisibility}
-                          edge="end"
-                          aria-label="toggle password visibility"
-                        >
-                          {showOtp ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
+                    // endAdornment: (
+                    //   <InputAdornment position="end">
+                    //     <IconButton
+                    //       //   onClick={handleToggleOTPVisibility}
+                    //       edge="end"
+                    //       aria-label="toggle password visibility"
+                    //     >
+                    //       {showOtp ? <Visibility /> : <VisibilityOff />}
+                    //     </IconButton>
+                    //   </InputAdornment>
+                    // ),
                   }}
                   onChange={customHandleChange}
                   onBlur={formik.handleBlur}
                   value={formik.values.otp}
                   error={formik.touched.otp && Boolean(formik.errors.otp)}
                   helperText={formik.touched.otp && formik.errors.otp}
-                  sx={{ marginBottom: 2, width: isMobile ? "100%" : "400px" }}
-                />
-                <TextField
-                  label="Password"
-                  placeholder="Please enter Password"
-                  variant="outlined"
-                  type={showPassword ? "text" : "password"}
-                  size="small"
-                  name="password"
-                  inputProps={{
-                    maxLength: 20,
-                  }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <RiLockPasswordFill />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={handleTogglePasswordVisibility}
-                          edge="end"
-                          aria-label="toggle password visibility"
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  onChange={customHandleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.password}
-                  error={
-                    formik.touched.password && Boolean(formik.errors.password)
-                  }
-                  helperText={formik.touched.password && formik.errors.password}
-                  sx={{ marginBottom: 2, width: isMobile ? "100%" : "400px" }}
-                />
-                <TextField
-                  label="Confirm Password"
-                  placeholder="Please confirm Password"
-                  variant="outlined"
-                  type={showConfirmPassword ? "text" : "password"}
-                  size="small"
-                  name="confirmPassword"
-                  inputProps={{
-                    maxLength: 20,
-                  }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <RiLockPasswordFill />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={handleToggleShowPasswordVisibility}
-                          edge="end"
-                          aria-label="toggle password visibility"
-                        >
-                          {showConfirmPassword ? (
-                            <Visibility />
-                          ) : (
-                            <VisibilityOff />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  onChange={customHandleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values.confirmPassword}
-                  error={
-                    formik.touched.confirmPassword &&
-                    Boolean(formik.errors.confirmPassword)
-                  }
-                  helperText={
-                    formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword
-                  }
                   sx={{ marginBottom: 2, width: isMobile ? "100%" : "400px" }}
                 />
 
@@ -504,6 +408,7 @@ const ForgotPassword = () => {
                   sx={{
                     width: isMobile ? "100%" : "400px",
                     backgroundColor: "#11395C",
+                    fontFamily: "Public Sans",
                   }}
                 >
                   Submit
@@ -532,4 +437,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default UnblockUser;

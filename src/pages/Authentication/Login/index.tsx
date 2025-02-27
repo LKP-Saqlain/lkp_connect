@@ -177,6 +177,11 @@ const LoginPage = () => {
     navigate("/forgot-password");
   };
 
+  // const handleUnblockUser = () => {
+  //   console.log("event");
+  //   navigate("/unblock-user");
+  // };
+
   useEffect(() => {
     console.log("formikValues->", formik.values);
   }, [formik.values]);
@@ -394,6 +399,18 @@ const LoginPage = () => {
                 Forgot Password / Unblock User ?
               </Typography>
             </Grid2>
+            {/* <Grid2>
+              <Typography
+                sx={{
+                  color: "#11395C",
+                  cursor: "pointer",
+                  fontFamily: "Public Sans",
+                }}
+                onClick={handleUnblockUser}
+              >
+                Unblock User ?
+              </Typography>
+            </Grid2> */}
           </Grid2>
         </Box>
       </Box>

@@ -13,6 +13,7 @@ const AuthenticateUser = lazy(
 const ForgotPassword = lazy(
   () => import("./pages/Authentication/ForgotPassword")
 );
+// const UnblockUser = lazy(() => import("./pages/Authentication/UnblockUser"));
 const SideBar = lazy(() => import("./components/sideBar"));
 
 const App = () => (
@@ -27,6 +28,7 @@ const App = () => (
           element={<PrivateRoute authElement={<AuthenticateUser />} />}
         />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        {/* <Route path="/unblock-user" element={<UnblockUser />} /> */}
         <Route
           path="/dashboard"
           element={

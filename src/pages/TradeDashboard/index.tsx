@@ -39,7 +39,9 @@ interface DashboardCrypto {
 }
 
 const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
-  const [selectedItem, setSelectedItem] = useState("Clients With Ledger Balance");
+  const [selectedItem, setSelectedItem] = useState(
+    "Clients With Ledger Balance"
+  );
   const [t6Data, setT6Data] = useState<T6Selling[]>([]);
   const [tradeCWCBData, setTradeCWCBData] = useState<CWCB[]>([]);
   const dispatch = useDispatch<AppDispatch>();
@@ -56,7 +58,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
 
   useEffect(() => {
     if (selectedTrading === "T6") {
-      setSelectedItem("T6 Selling");
+      setSelectedItem("Client Ageing Report");
     }
   }, [selectedTrading]);
 
@@ -108,7 +110,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
 
   useEffect(() => {
     const fetchClientCash = async () => {
-      if (selectedItem === "T6 Selling") {
+      if (selectedItem === "Client Ageing Report") {
         setTradeCWCBData([]);
         const Id = localStorage.getItem("Id");
         const payload = {
@@ -137,7 +139,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
 
   const handleExcel = async () => {
     // alert("I am Clicked");
-    // if (selectedItem === "T6 Selling") {
+    // if (selectedItem === "Client Ageing Report") {
     const Id = localStorage.getItem("Id");
     const payload = {
       user_id: Id,
@@ -155,7 +157,11 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
         const worksheet = XLSX.utils.json_to_sheet(data);
         // Create a workbook and append the worksheet
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "T6 Selling Data");
+        XLSX.utils.book_append_sheet(
+          workbook,
+          worksheet,
+          "Client Ageing Report Data"
+        );
         // Convert the workbook to a binary file
         const excelBuffer = XLSX.write(workbook, {
           bookType: "xlsx",

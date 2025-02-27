@@ -213,7 +213,7 @@ const Nudge = ({
                     {report.ClientCount === 0 && (
                       <IoWarningOutline
                         style={{ fontSize: "24px" }}
-                        color="orange"
+                        color="#D32F2F"
                       />
                     )}
                   </h5>

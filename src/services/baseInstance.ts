@@ -31,6 +31,7 @@ const publicEndpoints = [
   endpoints.sendOtp,
   endpoints.TwoFactorAuthentication,
   endpoints.forgetPassword,
+  endpoints.UnblockUser,
 ];
 
 // Add a request interceptor

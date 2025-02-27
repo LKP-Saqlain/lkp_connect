@@ -1816,7 +1816,7 @@ export const cyptoWidgets = [
 
     label: "Clients With Ledger Balance",
   },
-  { id: 3, label: "T6 Selling" },
+  { id: 3, label: "Client Ageing Report" },
   // { id: 4, label: "MTF Open Position" },
 ];
 

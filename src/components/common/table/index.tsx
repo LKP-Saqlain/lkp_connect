@@ -100,7 +100,8 @@ const DataTable: React.FC<DormantClientProps> = ({
         }}
       >
         <DataGrid
-        disableRowSelectionOnClick
+          disableRowSelectionOnClick
+          localeText={{ noRowsLabel: "No Records!" }}
           rows={tableData}
           columns={dynamicHeader}
           hideFooterPagination

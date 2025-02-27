@@ -6,9 +6,9 @@ import {
   clientNotTradedColumns,
   spipRenewalColumns,
   upcomingDormantClientColumns,
-  newClientAddFiveDays
+  newClientAddFiveDays,
 } from "../../../helper/tableColumns.tsx";
-import { useTheme,  } from "@mui/material/styles";
+import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 
 const NudgeTable = ({
@@ -87,7 +87,7 @@ const NudgeTable = ({
               columns={columns}
               pageSizeOptions={[0, 5]}
               rowHeight={30}
-              localeText={{ noRowsLabel: "No Data!" }}
+              localeText={{ noRowsLabel: "No Records!" }}
               sx={{
                 border: 0,
                 fontFamily: '"Public Sans", sans-serif',

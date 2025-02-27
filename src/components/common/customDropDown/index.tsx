@@ -183,7 +183,7 @@ const DropDown = ({ handleValues, tradeData }: table) => {
   //       const worksheet = XLSX.utils.json_to_sheet(data);
   //       // Create a workbook and append the worksheet
   //       const workbook = XLSX.utils.book_new();
-  //       XLSX.utils.book_append_sheet(workbook, worksheet, "T6 Selling Data");
+  //       XLSX.utils.book_append_sheet(workbook, worksheet, "Client Ageing Report Data");
   //       // Convert the workbook to a binary file
   //       const excelBuffer = XLSX.write(workbook, {
   //         bookType: "xlsx",

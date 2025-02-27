@@ -159,7 +159,7 @@ const DataTable = ({
         // sortable: false,
         // filterable: false,
       }));
-    } else if (selectedWidget === "T6 Selling") {
+    } else if (selectedWidget === "Client Ageing Report") {
       return T6Columns.map((column) => ({
         ...column,
         // sortable: false,
@@ -445,7 +445,7 @@ const DataTable = ({
       {/* {(selectedWidget === "Total Clients" ||
         selectedWidget === "Active Clients" ||
         selectedWidget === "Inactive Clients" ||
-        selectedWidget === "T6 Selling") && (
+        selectedWidget === "Client Ageing Report") && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="outlined"
@@ -512,6 +512,7 @@ const DataTable = ({
               ? T6Data
               : T6Data
           }
+          localeText={{ noRowsLabel: "No Records!" }}
           columns={columns}
           rowHeight={30}
           hideFooter={customHide ? true : false}
