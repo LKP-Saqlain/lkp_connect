@@ -159,7 +159,7 @@ const DataTable = ({
         // sortable: false,
         // filterable: false,
       }));
-    } else if (selectedWidget === "Client Ageing Report") {
+    } else if (selectedWidget === "Clients Ageing Report") {
       return T6Columns.map((column) => ({
         ...column,
         // sortable: false,
@@ -445,7 +445,7 @@ const DataTable = ({
       {/* {(selectedWidget === "Total Clients" ||
         selectedWidget === "Active Clients" ||
         selectedWidget === "Inactive Clients" ||
-        selectedWidget === "Client Ageing Report") && (
+        selectedWidget === "Clients Ageing Report") && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="outlined"

@@ -58,7 +58,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
 
   useEffect(() => {
     if (selectedTrading === "T6") {
-      setSelectedItem("Client Ageing Report");
+      setSelectedItem("Clients Ageing Report");
     }
   }, [selectedTrading]);
 
@@ -110,7 +110,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
 
   useEffect(() => {
     const fetchClientCash = async () => {
-      if (selectedItem === "Client Ageing Report") {
+      if (selectedItem === "Clients Ageing Report") {
         setTradeCWCBData([]);
         const Id = localStorage.getItem("Id");
         const payload = {
@@ -139,7 +139,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
 
   const handleExcel = async () => {
     // alert("I am Clicked");
-    // if (selectedItem === "Client Ageing Report") {
+    // if (selectedItem === "Clients Ageing Report") {
     const Id = localStorage.getItem("Id");
     const payload = {
       user_id: Id,
@@ -160,7 +160,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
         XLSX.utils.book_append_sheet(
           workbook,
           worksheet,
-          "Client Ageing Report Data"
+          "Clients Ageing Report Data"
         );
         // Convert the workbook to a binary file
         const excelBuffer = XLSX.write(workbook, {

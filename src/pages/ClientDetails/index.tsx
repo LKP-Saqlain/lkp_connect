@@ -93,7 +93,7 @@ any) => {
           const payload = {
             loginName: Id,
             branchCode: "ALL",
-            zone: "H.O.",
+            zone: "ALL",
             clientStatus: "ALL",
             start: 0,
             pageSize: 0,
@@ -244,7 +244,7 @@ any) => {
         const payload = {
           loginName: Id,
           branchCode: "ALL",
-          zone: "H.O.",
+          zone: "ALL",
           clientStatus: "ALL",
           start: 0,
           pageSize: 0,
@@ -315,7 +315,7 @@ any) => {
     const payload = {
       loginName: Id,
       branchCode: "ALL",
-      zone: "H.O.",
+      zone: "ALL",
       clientStatus: "ALL",
       start: 0,
       pageSize: 0,
@@ -363,7 +363,7 @@ any) => {
         XLSX.utils.book_append_sheet(
           workbook,
           worksheet,
-          "Client Ageing Report Data"
+          "Clients Ageing Report Data"
         );
         // Convert the workbook to a binary file
         const excelBuffer = XLSX.write(workbook, {
@@ -452,7 +452,7 @@ any) => {
   //       const payload = {
   //         loginName: Id,
   //         branchCode: "ALL",
-  //         zone: "H.O.",
+  //         zone: "ALL",
   //         clientStatus: "ALL",
   //         start: 0,
   //         pageSize: 0,

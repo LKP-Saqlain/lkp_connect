@@ -161,7 +161,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
               alignItems: "center",
             }}
           >
-            <h4 className="card-title mb-0">Top 5 T6 Clients</h4>{" "}
+            <h4 className="card-title mb-0">Top 5 Clients Ageing Report</h4>{" "}
             <Button
               style={{
                 height: "25px",
