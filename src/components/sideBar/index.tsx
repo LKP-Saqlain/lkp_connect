@@ -60,6 +60,7 @@ import Nudge from "../common/Nudge";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import MarketingMaterial from "../../pages/refCard/Marketing Materials";
+import RegisDetails from "../../pages/refCard/Registration Details";
 
 const drawerWidth = 240;
 
@@ -470,6 +471,8 @@ const SideBar = () => {
         }
       case "Compliance":
         switch (activeSubItem) {
+          case "KRA PAN STATUS":
+            return <RegisDetails />;
           case "Communication Retrival Report":
             return <Retrival activeSubItem={activeSubItem} />;
           case "Communication Retrival Entry":
