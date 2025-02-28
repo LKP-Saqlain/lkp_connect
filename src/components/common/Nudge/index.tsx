@@ -212,12 +212,14 @@ const Nudge = ({
                     {report.ReportType}{" "}
                     {report.ClientCount === 0 && (
                       <IoWarningOutline
-                        style={{ fontSize: "24px" }}
-                        color="#D32F2F"
+                        style={{
+                          fontSize: "24px",
+                          animation: "blink 1s infinite",
+                          color: "#D32F2F",
+                        }}
                       />
                     )}
                   </h5>
-
                   {report.ReportType ===
                   "Brokerage Last week vs Current week" ? (
                     <Box
