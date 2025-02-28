@@ -709,7 +709,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
   {
     field: "MobileNo",
     headerName: "Mobile No",
-    flex: 1.5,
+    flex: 1,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -736,6 +736,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
   {
     field: "DayCount",
     headerName: "Days to Dormant",
+    headerClassName: "header-wrap-custom",
     flex: 1,
     headerAlign: "center",
     align: "left",
