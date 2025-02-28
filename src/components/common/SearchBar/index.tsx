@@ -184,9 +184,9 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
         ].includes(selectedWidget) &&
           selectedWidget !== "DP Debit Recovery" && (
             <Box sx={{ mr: 2 }}>
-              <Typography>{`Record Count - ${new Intl.NumberFormat(
-                "en-IN"
-              ).format(
+              <Typography
+                style={{ fontFamily: "Public Sans" }}
+              >{`Record Count - ${new Intl.NumberFormat("en-IN").format(
                 Math.round(
                   selectedWidget === "Total Clients"
                     ? totalCount
@@ -203,7 +203,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
           )}
 
         {activeSubItem === "DP Debit Recovery" && (
-          <Typography>
+          <Typography style={{ fontFamily: "Public Sans" }}>
             {" "}
             {`Total Due Amount - ₹${new Intl.NumberFormat("en-IN", {
               minimumFractionDigits: 2,

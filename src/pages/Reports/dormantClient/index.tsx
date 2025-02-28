@@ -410,7 +410,6 @@ const DormantClient = ({ activeSubItem }: any) => {
 
   const handleExcelDownload = () => {
     // const Id = localStorage.getItem("Id");
-    debugger;
     if (accessType !== "") {
       if (!formik.values.selectedZone || !formik.values.selectedBranchCode) {
         formik.setTouched({

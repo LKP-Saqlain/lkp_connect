@@ -5,7 +5,7 @@ const apiService = async (
   endpoint: string,
   payload?: any,
   customHeaders: any = {},
-  timeout: number = 60000
+  timeout: number = 120000
 ) => {
   const config = {
     headers: { ...customHeaders },
