@@ -88,7 +88,7 @@ const CommEntry = ({ activeSubItem }: any) => {
           remark: "",
         };
 
-        dispatch(showLoader("Please wait"));
+        dispatch(showLoader(""));
         try {
           const response = await apiServices.ComplainceReport(payload);
           dispatch(hideLoader());
@@ -145,7 +145,7 @@ const CommEntry = ({ activeSubItem }: any) => {
       remark: "",
     };
 
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader(""));
     try {
       const response = await apiServices.ComplainceReport(payload);
       dispatch(hideLoader());
@@ -189,7 +189,7 @@ const CommEntry = ({ activeSubItem }: any) => {
           entryFlag: "",
           remark: "",
         };
-        dispatch(showLoader("Please wait"));
+        dispatch(showLoader(""));
         apiServices
           .ComplainceReport(payload)
           .then((response) => {
@@ -228,7 +228,7 @@ const CommEntry = ({ activeSubItem }: any) => {
         remark: "",
       };
 
-      dispatch(showLoader("Please wait"));
+      dispatch(showLoader(""));
       try {
         const response = await apiServices.ComplainceReport(payload);
         dispatch(hideLoader());

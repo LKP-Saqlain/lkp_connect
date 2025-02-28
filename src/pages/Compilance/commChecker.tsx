@@ -41,7 +41,7 @@ const ComChecker = ({ activeSubItem }: any) => {
         entryFlag: "",
         remark: "",
       };
-      dispatch(showLoader("Loading data..."));
+      dispatch(showLoader("Please wait"));
 
       apiServices
         .Compliance(payload)

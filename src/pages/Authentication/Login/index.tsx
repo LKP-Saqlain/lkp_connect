@@ -109,7 +109,7 @@ const LoginPage = () => {
       user_password: values.password,
     };
 
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader(""));
 
     dispatch(UserLogin(payload))
       .unwrap()

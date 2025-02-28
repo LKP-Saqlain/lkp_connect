@@ -207,25 +207,26 @@ export const getAccountDetails: GridColDef[] = [
 export const cardDetails = [
   {
     id: 1,
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN14vLyQvBxXJf60w_-n1dPFhqV-W6bjWwbw&s",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN14vLyQvBxXJf60w_-n1dPFhqV-W6bjWwbw&s",
     title: "LKP Brochure",
-    pdfUrl: " "
+    pdfUrl: " ",
   },
   {
     id: 2,
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6ibwvGamxlftRJQz6fFT3h7HH-aKKwxWmAQ&s",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6ibwvGamxlftRJQz6fFT3h7HH-aKKwxWmAQ&s",
     title: "SPIP Brochure",
-    pdfUrl: "../../../public/JavaScript-Core.pdf"
+    pdfUrl: "../../../public/JavaScript-Core.pdf",
   },
   {
     id: 3,
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN14vLyQvBxXJf60w_-n1dPFhqV-W6bjWwbw&s",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN14vLyQvBxXJf60w_-n1dPFhqV-W6bjWwbw&s",
     title: "Festival Creatives",
-    pdfUrl: ""
+    pdfUrl: "",
   },
- 
-  
-] 
+];
 
 export const getCommChecker: GridColDef[] = [
   {
@@ -497,7 +498,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     headerName: "Branch Code",
     flex: 1,
     headerAlign: "center",
-    align: "left",
+    align: "center",
     disableColumnMenu: true,
   },
   {
@@ -712,13 +713,32 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "DayCount",
     headerName: "Days to Dormant",
     flex: 1,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     disableColumnMenu: true,
   },
 ];
@@ -881,8 +901,13 @@ export const T6Columns: GridColDef[] = [
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "StockValue",

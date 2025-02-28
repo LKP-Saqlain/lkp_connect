@@ -236,7 +236,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
           size: 0, // No marker
         },
         label: {
-          text: new Intl.NumberFormat("en-IN").format(total), // Show total
+          text: new Intl.NumberFormat("en-IN").format(Math.floor(total)), // Show total also remove the . 2 digit decimals
           style: {
             fontSize: "12px",
             fontWeight: "bold",
@@ -317,7 +317,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       intersect: false,
       y: {
         formatter: (value: number) => {
-          return new Intl.NumberFormat("en-IN").format(value); // Format value in Indian style
+          return new Intl.NumberFormat("en-IN").format(Math.floor(value)); // Format value in Indian style
         },
       },
     },

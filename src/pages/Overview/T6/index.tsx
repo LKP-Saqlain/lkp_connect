@@ -29,33 +29,33 @@ const T6Table = ({ handleTradingOpen }: any) => {
     upcomingOverviewDormantTableData,
     setUpcomingOverviewDormantTableData,
   ] = useState<[]>([]);
-  const [top5Birthdays, setTop5Birthdays] = useState<[]>([]);
+  // const [top5Birthdays, setTop5Birthdays] = useState<[]>([]);
   const dispatch = useDispatch();
 
   // const isMobile = useMediaQuery("(max-width:768px)");
 
-  useEffect(() => {
-    console.log(top5Birthdays);
-    const Id = localStorage.getItem("Id");
-    let payload = {
-      user_id: Id,
-    };
-    apiServices
-      .GetBirthdayList(payload)
-      .then((response) => {
-        console.log("GetBirthdayCountresponse", response?.status);
-        if (response?.status === 200) {
-          const data = response?.data || [];
+  // useEffect(() => {
+  //   console.log(top5Birthdays);
+  //   const Id = localStorage.getItem("Id");
+  //   let payload = {
+  //     user_id: Id,
+  //   };
+  //   apiServices
+  //     .GetBirthdayList(payload)
+  //     .then((response) => {
+  //       console.log("GetBirthdayCountresponse", response?.status);
+  //       if (response?.status === 200) {
+  //         const data = response?.data || [];
 
-          const filterRecords = data.slice(0, 5);
-          console.log("filterData", filterRecords);
-          setTop5Birthdays(filterRecords);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+  //         const filterRecords = data.slice(0, 5);
+  //         console.log("filterData", filterRecords);
+  //         setTop5Birthdays(filterRecords);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, []);
 
   useEffect(() => {
     const Id = localStorage.getItem("Id");

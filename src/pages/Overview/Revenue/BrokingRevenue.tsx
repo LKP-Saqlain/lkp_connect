@@ -50,7 +50,7 @@ const Revenue = ({
         user_id: user_id,
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait"));
       dispatch(DealerPerformance(payload))
         .unwrap()
         .then((response) => {
@@ -176,7 +176,7 @@ const Revenue = ({
           );
         })
         .finally(() => {
-          dispatch(hideLoader());
+          // dispatch(hideLoader()); // Hide loader
         });
     };
 

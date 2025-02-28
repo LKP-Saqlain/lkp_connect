@@ -39,6 +39,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const [modal_animationZoom, setmodal_animationZoom] = useState(false);
   const [isNudgeOpen, setIsNudgeOpen] = useState(false);
   const [dashboardNudgeData, setDashboardNudgeData] = useState<any[][]>([]);
+  // const [hasApiStarted, setHasApiStarted] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -49,6 +50,8 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     (state: RootState) => state.UserLogin?.data?.data
   );
 
+  // const { activeRequests } = useSelector((state: RootState) => state.loader);
+
   const handleValues = (revTotal: string) => {
     console.log("revTotal", revTotal);
   };
@@ -57,11 +60,53 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     setmodal_animationZoom((prev) => !prev);
   }
 
+  // useEffect(() => {
+  //   console.log("activeApiRequestCount", activeRequests);
+  //   debugger;
+  //   if (activeRequests > 0) {
+  //     setHasApiStarted(true);
+  //   }
+
+  //   if (hasApiStarted && activeRequests === 0) {
+  //     setIsNudgeOpen(!isNudgeOpen);
+  //   }
+  // }, [activeRequests]);
+
   useEffect(() => {
     tog_animationZoom();
   }, []);
 
   const playerRef = useRef<Player>(null);
+
+  useEffect(() => {
+    const fetchDashboardNudge = async () => {
+      const payload = {
+        user_id: user_id,
+      };
+
+      try {
+        dispatch(showLoader(""));
+        const response = await apiServices.DashboardNudge(payload);
+        console.log("dashBoardNudgeData", typeof response?.data);
+
+        const nudgeData = response?.data;
+        setDashboardNudgeData(nudgeData);
+
+        dispatch(hideLoader());
+
+        if (response?.status === 200) {
+          // ShowToast("success", response?.data?.Message);
+          setIsNudgeOpen(!isNudgeOpen);
+        } else {
+          console.error("Failed");
+        }
+      } catch (error) {
+        dispatch(hideLoader());
+        console.error("Error sending email:", error);
+      }
+    };
+    fetchDashboardNudge();
+  }, [dispatch]);
 
   useEffect(() => {
     playerRef.current?.playFromBeginning();
@@ -146,36 +191,6 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     console.log("activeClients", clients);
     setActiveClients(clients);
   };
-
-  useEffect(() => {
-    const fetchDashboardNudge = async () => {
-      const payload = {
-        user_id: user_id,
-      };
-
-      try {
-        dispatch(showLoader("Please wait For Notifications"));
-        const response = await apiServices.DashboardNudge(payload);
-        console.log("dashBoardNudgeData", typeof response?.data);
-
-        const nudgeData = response?.data;
-        setDashboardNudgeData(nudgeData);
-
-        dispatch(hideLoader());
-
-        if (response?.status === 200) {
-          // ShowToast("success", response?.data?.Message);
-          setIsNudgeOpen(!isNudgeOpen);
-        } else {
-          console.error("Failed");
-        }
-      } catch (error) {
-        dispatch(hideLoader());
-        console.error("Error sending email:", error);
-      }
-    };
-    fetchDashboardNudge();
-  }, [dispatch]);
 
   document.title = "LKP Securities | User Overview";
   return (

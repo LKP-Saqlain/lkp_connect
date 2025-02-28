@@ -63,7 +63,7 @@ const MenuMaster = () => {
     };
     try {
       let token = localStorage.getItem("tkn");
-      dispatch(showLoader("Please wait, We are Processing your Request"));
+      dispatch(showLoader(""));
       const response = await axios.post(
         `https://middlewareapi.lkp.net.in${endpoints.GetPNL}`,
         payload,

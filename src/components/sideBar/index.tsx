@@ -211,7 +211,7 @@ const SideBar = () => {
       };
 
       try {
-        dispatch(showLoader("Please wait For Notifications from"));
+        dispatch(showLoader(""));
         const response = await apiServices.DashboardNudge(payload);
         console.log("dashBoardNudgeData", response?.data);
 
@@ -508,7 +508,7 @@ const SideBar = () => {
           //   </>
           // );
           case "Referal Product Wise MIS Report":
-            return  <MarketingMaterial/>;
+            return <MarketingMaterial />;
           default:
             return null;
         }

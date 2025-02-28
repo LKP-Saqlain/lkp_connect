@@ -49,7 +49,7 @@ const StoreVisits = ({ getActiveClients }: any) => {
           );
         })
         .finally(() => {
-          dispatch(hideLoader());
+          // dispatch(hideLoader());
         });
       // try {
       //   dispatch(showLoader(""));
