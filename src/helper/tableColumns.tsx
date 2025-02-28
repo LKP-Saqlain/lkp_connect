@@ -207,25 +207,26 @@ export const getAccountDetails: GridColDef[] = [
 export const cardDetails = [
   {
     id: 1,
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN14vLyQvBxXJf60w_-n1dPFhqV-W6bjWwbw&s",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN14vLyQvBxXJf60w_-n1dPFhqV-W6bjWwbw&s",
     title: "LKP Brochure",
-    pdfUrl: " "
+    pdfUrl: " ",
   },
   {
     id: 2,
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6ibwvGamxlftRJQz6fFT3h7HH-aKKwxWmAQ&s",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6ibwvGamxlftRJQz6fFT3h7HH-aKKwxWmAQ&s",
     title: "SPIP Brochure",
-    pdfUrl: "../../../public/JavaScript-Core.pdf"
+    pdfUrl: "../../../public/JavaScript-Core.pdf",
   },
   {
     id: 3,
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN14vLyQvBxXJf60w_-n1dPFhqV-W6bjWwbw&s",
+    imageUrl:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN14vLyQvBxXJf60w_-n1dPFhqV-W6bjWwbw&s",
     title: "Festival Creatives",
-    pdfUrl: ""
+    pdfUrl: "",
   },
- 
-  
-] 
+];
 
 export const getCommChecker: GridColDef[] = [
   {
@@ -2002,4 +2003,75 @@ export const department = [
 export const TypeOfDocuments = [
   { value: "Circular", label: "Circular" },
   { value: "SEBI", label: "SEBI" },
+];
+
+export const InfoCapsules = [
+  {
+    main: "NSE",
+    segments: [
+      { id: 1, label: "Equity", status: "Active" },
+      { id: 2, label: "F & O", status: "Active" },
+      { id: 3, label: "Currency", status: "Active" },
+      { id: 4, label: "Commodity", status: "Inactive" },
+    ],
+  },
+  {
+    main: "BSE",
+    segments: [
+      { id: 1, label: "Equity", status: "Active" },
+      { id: 2, label: "F & O", status: "Active" },
+      { id: 3, label: "Currency", status: "Active" },
+    ],
+  },
+  {
+    main: "MCX",
+    segments: [{ id: 4, label: "Commodity", status: "Inactive" }],
+  },
+];
+export const information = [
+  {
+    id: 1,
+    heading: "Equity Delivery",
+    info: "(Subject to Minimum Retention of 0.5% of turnover)",
+  },
+  {
+    id: 2,
+    heading: "Equity Intraday",
+    info: "(Subject to Minimum Retention of 0.5% of turnover)",
+  },
+  {
+    id: 3,
+    heading: "Equity Futures",
+    info: "(Subject to Minimum Retention of 0.5% of turnover)",
+  },
+  {
+    id: 4,
+    heading: "Equity Options",
+    info: "(Subject to Minimum Retention of 0.5% of turnover)",
+  },
+  {
+    id: 5,
+    heading: "Currency Futures",
+    info: "(Subject to Minimum Retention of 0.5% of turnover)",
+  },
+  {
+    id: 6,
+    heading: "Currency Options",
+    info: "(Subject to Minimum Retention of 0.5% of turnover)",
+  },
+  {
+    id: 7,
+    heading: "Commodity Futures",
+    info: "(Subject to Minimum Retention of 0.5% of turnover)",
+  },
+  {
+    id: 8,
+    heading: "Commodity Options",
+    info: "(Subject to Minimum Retention of 0.5% of turnover)",
+  },
+  {
+    id: 9,
+    heading: "SLBM",
+    info: "(Subject to Minimum Retention of 0.5% of turnover)",
+  },
 ];
