@@ -30,6 +30,13 @@ const CustomModal = ({
   expiredtime,
 }: CustomModalProps) => {
   const navigate = useNavigate();
+
+  const handleSessionClear = () => {
+    localStorage.clear();
+    setmodal_center(false);
+    navigate("/");
+  };
+
   const formik = useFormik({
     initialValues: { remark: "" },
     validationSchema:
@@ -57,22 +64,14 @@ const CustomModal = ({
     formik.resetForm();
   };
 
-
-  const handleSessionClear = () => {
-    setmodal_center(false);
-    localStorage.removeItem("tkn");
-    localStorage.removeItem("Id");
-    localStorage.removeItem("uIdType");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("activeMenu");
-    localStorage.removeItem("activeSubItem");
-    navigate("/");
-  };
-
   return (
-    <ReactstrapModal isOpen={modal_center} toggle={tog_center} centered  
-    backdrop={expiredtime ? "static" : undefined}  // Disable clicking outside for expired token modal
-    keyboard={expiredtime ? false : undefined}>
+    <ReactstrapModal
+      isOpen={modal_center}
+      toggle={tog_center}
+      centered
+      backdrop={expiredtime ? "static" : undefined} // Disable clicking outside for expired token modal
+      keyboard={expiredtime ? false : undefined}
+    >
       <ModalBody className="text-center p-3">
         {activeSubItem !== "Communication Retrival Checker" && (
           <i className="ri-alert-line display-5 text-warning"></i>

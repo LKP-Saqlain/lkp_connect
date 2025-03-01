@@ -21,24 +21,27 @@ const SideBar = lazy(() => import("./components/sideBar"));
 
 const App = () => {
   const [modal_center, setModalCenter] = useState(false);
-  const tog_center = () => setModalCenter(!modal_center);
+  const [isTokenExpired, setIsTokenExpired] = useState(false);
+  // const tog_center = () => setModalCenter(!modal_center);
+
   const { data } = useSelector((state: RootState) => state.UserLogin);
   const tokenExpiryTime = data?.data?.tokenExpiryTime;
 
   const checkTokenExpiry = (expiryTime: string) => {
-    const expiryDate = new Date(expiryTime);
-    const currentDate = new Date();
-    return currentDate >= expiryDate;
+    debugger;
+    if (!expiryTime) return false;
+    return new Date() <= new Date(expiryTime);
   };
 
   useEffect(() => {
     if (tokenExpiryTime) {
-      if (checkTokenExpiry(tokenExpiryTime)) {
+      const expired = checkTokenExpiry(tokenExpiryTime);
+      setIsTokenExpired(expired);
+      if (expired) {
         setModalCenter(true);
-        console.log("checkTokenExpiry", checkTokenExpiry(tokenExpiryTime));
       }
     }
-  }, [tokenExpiryTime]);
+  }, [data]);
 
   return (
     <Router>
@@ -60,13 +63,15 @@ const App = () => {
           />
         </Routes>
       </Suspense>
-      <CustomModal
-        tog_center={tog_center}
-        modal_center={modal_center}
-        setmodal_center={setModalCenter}
-        Msg="Your session is expired !"
-        expiredtime={checkTokenExpiry(tokenExpiryTime)}
-      />
+      {isTokenExpired && (
+        <CustomModal
+          tog_center={() => setModalCenter(false)}
+          modal_center={modal_center}
+          setmodal_center={setModalCenter}
+          Msg="Your session has expired!"
+          expiredtime={true}
+        />
+      )}
     </Router>
   );
 };
