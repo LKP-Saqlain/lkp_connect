@@ -19,28 +19,28 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
         {
           id: 1,
           label: "Equity",
-          status: setClientDetails["Equity"] || "Inactive",
+          status: setClientDetails["EquityTradeDate"] || "",
         },
         {
           id: 2,
           label: "F&O",
-          status: setClientDetails["F & O"] || "Inactive",
+          status: setClientDetails["F_OTradeDate"] || "",
         },
         {
           id: 3,
           label: "Currency",
-          status: setClientDetails["Currency"] || "Inactive",
+          status: setClientDetails["CurrencyTradeDate"] || "",
         },
         {
           id: 4,
           label: "Commodity",
-          status: setClientDetails["Commodity"] || "Inactive",
+          status: setClientDetails["Commodity_TradeDate"] || "",
         },
-        { id: 5, label: "MTF", status: setClientDetails["MTF"] || "Inactive" },
+        { id: 5, label: "MTF", status: setClientDetails[""] || "" },
         {
           id: 6,
           label: "SLBM",
-          status: setClientDetails["SLBM"] || "Inactive",
+          status: setClientDetails["SLBM_TradeDate"] || "",
         },
       ];
 
@@ -59,6 +59,7 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
 
       setLastTradeData(mappedData);
       setMappedDPScheme(mappedDPSchemes);
+      console.log("mappedDPSchemes", mappedDPScheme);
     }
   }, [setClientDetails]);
 
@@ -260,18 +261,6 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
                           margin: 0,
                         }}
                       >
-                        <FiberManualRecordIcon
-                          fontSize="small"
-                          sx={{
-                            color:
-                              item.status === undefined
-                                ? ""
-                                : item.status === "Inactive"
-                                ? "#FF0606"
-                                : "#01D28E",
-                            display: item.status === undefined ? "none" : "",
-                          }}
-                        />
                         {item.status}
                       </p>
                     </CardBody>
@@ -282,10 +271,8 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
           </Col>
         </Row>
       </div>
-      <div>
-        {/* First Section: Last Trade Date and Last Trade Date Items */}
+      {/* <div>
         <Row className="gx-3 gy-2 align-items-start">
-          {/* Left Side: Last Trade Date */}
           <Col md={3}>
             <Card
               style={{
@@ -314,7 +301,6 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
             </Card>
           </Col>
 
-          {/* Right Side: BrokSlabItemstwo in a Single Row */}
           <Col md={9}>
             <Row className="gx-2 gy-2">
               {mappedDPScheme.map((item: any) => (
@@ -377,7 +363,7 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
             </Row>
           </Col>
         </Row>
-      </div>
+      </div> */}
       {/* <SegmentWiseTable customClass={true} /> */}
     </>
   );

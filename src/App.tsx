@@ -30,7 +30,7 @@ const App = () => {
   const checkTokenExpiry = (expiryTime: string) => {
     debugger;
     if (!expiryTime) return false;
-    return new Date() <= new Date(expiryTime);
+    return new Date() >= new Date(expiryTime);
   };
 
   useEffect(() => {
