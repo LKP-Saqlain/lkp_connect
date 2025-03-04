@@ -640,7 +640,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "IACode",
     headerName: "IA Code",
-    flex: 1.2,
+    width: 90,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -648,7 +648,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "ClientName",
     headerName: "Client Name",
-    flex: 2.5,
+    width: 250,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -656,7 +656,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "Backofficecode",
     headerName: "Back Office Code",
-    flex: 1.5,
+    width: 90,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -666,7 +666,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "MobileNo",
     headerName: "Mobile No",
-    flex: 1.5,
+    width: 100,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -694,7 +694,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "Active",
     headerName: "Active",
-    flex: 1,
+    width: 90,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -702,7 +702,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "ActivationDate",
     headerName: "Activation Date",
-    flex: 1.5,
+    width: 120,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -711,7 +711,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "EndDate",
     headerName: "Renewal due on",
-    flex: 1.5,
+    width: 120,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -720,7 +720,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "RMCode",
     headerName: "RM Code",
-    flex: 1.2,
+    width: 100,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
