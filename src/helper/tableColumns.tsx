@@ -152,6 +152,51 @@ export const PaymentType = [
   { value: "Fund Trans", label: "Fund Trans" },
 ];
 
+export const getRegulatorAnnouncement: GridColDef[] = [
+  {
+    field: "date",
+    headerName: "Date",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "department",
+    headerName: "Department",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "subject",
+    headerName: "Subject",
+    flex: 3.1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    renderCell: (params) => (
+      <div style={{ padding: "0px 3px" }}>{params.value}</div>
+    ),
+  },
+  {
+    field: "lkpComments",
+    headerName: "LKP Comments",
+    flex: 1.1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    // alignItems:"center"
+  },
+  {
+    field: "circular",
+    headerName: "Circular",
+    flex: 1.1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+];
+
 export const getAccountDetails: GridColDef[] = [
   {
     field: "month",

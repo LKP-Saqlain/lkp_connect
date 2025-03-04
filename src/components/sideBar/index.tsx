@@ -61,6 +61,7 @@ import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import MarketingMaterial from "../../pages/refCard/Marketing Materials";
 import RegisDetails from "../../pages/refCard/Registration Details";
+import RegulatorAnnouncement from "../../pages/refCard/regulatory announcement";
 
 const drawerWidth = 240;
 
@@ -472,6 +473,8 @@ const SideBar = () => {
         }
       case "Compliance":
         switch (activeSubItem) {
+          case "UCCCode MATCH":
+            return <RegulatorAnnouncement activeSubItem={activeSubItem} />;
           case "KRA PAN STATUS":
             return <RegisDetails />;
           case "Communication Retrival Report":
