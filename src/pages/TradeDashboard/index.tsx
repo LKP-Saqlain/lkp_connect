@@ -73,7 +73,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
         let Id = localStorage.getItem("Id");
         const payload = {
           user_id: Id,
-          zone: "H.O.",
+          zone: "ALL",
           branchCode: "ALL",
         };
         dispatch(showLoader(""));

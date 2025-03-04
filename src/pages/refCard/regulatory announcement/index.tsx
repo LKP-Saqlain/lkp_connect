@@ -6,7 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs"; // Import Day.js for date handling
 import { RegulatorAnnouncements } from "../../../helper/commmon";
-import './index.css'
+import "./index.css";
 
 const RegulatorAnnouncement = ({ activeSubItem }: any) => {
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
@@ -17,7 +17,7 @@ const RegulatorAnnouncement = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     if (selectedDate) {
-      console.log("Selected Date:", selectedDate.format("YYYY-MM"));
+      console.log("Selected Date:", selectedDate.format("MM-YYYY"));
     }
   }, [selectedDate]);
 
@@ -44,6 +44,7 @@ const RegulatorAnnouncement = ({ activeSubItem }: any) => {
               value={selectedDate}
               onChange={(newValue) => setSelectedDate(newValue)}
               sx={{ width: 210 }}
+              maxDate={dayjs()}
             />
           </LocalizationProvider>
         </CardHeader>
