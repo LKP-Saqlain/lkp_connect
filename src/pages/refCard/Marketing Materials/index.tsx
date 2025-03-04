@@ -13,7 +13,7 @@ const MarketingMaterial = () => {
   return (
     <Card>
       <CardHeader>
-        <h4 className="card-title mb-0">Business Dashboard</h4>
+        <h4 className="card-title mb-0">Marketing Materials</h4>
       </CardHeader>
       <CardBody>
         <div
@@ -34,22 +34,20 @@ const MarketingMaterial = () => {
                 marginBottom: isMobile ? "12px" : "0px",
                 // backgroundColor:"##11395C",
                 boxShadow: isMobile
-                  ? "0 6px 12px rgba(0, 0, 0, 0.3)"  // Darker shadow for mobile
+                  ? "0 6px 12px rgba(0, 0, 0, 0.3)" // Darker shadow for mobile
                   : "0 12px 24px rgba(0, 0, 0, 0.4)", // Darker shadow for desktop
               }}
-              
-              
             >
               <CardMedia
                 component="img"
                 image={card.imageUrl}
                 alt={card.title}
-                sx={{ height: 200, objectFit: "cover" }} 
+                sx={{ height: 200, objectFit: "cover" }}
               />
               <CardContent>
                 <Typography
                   style={{
-                    fontSize: isMobile ? 12 : 14, 
+                    fontSize: isMobile ? 12 : 14,
                     color: "#11395C",
                     fontWeight: "bold",
                     textAlign: "center",
@@ -64,7 +62,7 @@ const MarketingMaterial = () => {
                 style={{
                   backgroundColor: "#11395C",
                   fontWeight: "bold",
-                  textTransform: "none", 
+                  textTransform: "none",
                 }}
                 href={card.pdfUrl}
                 target="_blank"
