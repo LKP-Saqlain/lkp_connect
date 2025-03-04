@@ -388,6 +388,7 @@ const SideBar = () => {
       localStorage.removeItem("userName");
       localStorage.removeItem("activeMenu");
       localStorage.removeItem("activeSubItem");
+      sessionStorage.removeItem("dashboardNudgeFetched");
       navigate("/");
     } else {
       console.log("User clicked on:", value);

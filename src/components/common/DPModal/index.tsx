@@ -30,6 +30,14 @@ const CustomModal = ({
   expiredtime,
 }: CustomModalProps) => {
   const navigate = useNavigate();
+
+  const handleSessionClear = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    setmodal_center(false);
+    navigate("/");
+  };
+
   const formik = useFormik({
     initialValues: { remark: "" },
     validationSchema:
@@ -57,16 +65,16 @@ const CustomModal = ({
     formik.resetForm();
   };
 
-  const handleSessionClear = () => {
-    setmodal_center(false);
-    localStorage.removeItem("tkn");
-    localStorage.removeItem("Id");
-    localStorage.removeItem("uIdType");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("activeMenu");
-    localStorage.removeItem("activeSubItem");
-    navigate("/");
-  };
+  // const handleSessionClear = () => {
+  //   setmodal_center(false);
+  //   localStorage.removeItem("tkn");
+  //   localStorage.removeItem("Id");
+  //   localStorage.removeItem("uIdType");
+  //   localStorage.removeItem("userName");
+  //   localStorage.removeItem("activeMenu");
+  //   localStorage.removeItem("activeSubItem");
+  //   navigate("/");
+  // };
 
   return (
     <ReactstrapModal
