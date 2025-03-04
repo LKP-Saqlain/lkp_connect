@@ -205,7 +205,7 @@ const DataTable = ({
                   }}
                   disabled={isEmailSent}
                   style={{
-                    color: isEmailSent && "red",
+                    color: isEmailSent && "#11395C",
                     textDecoration: isEmailSent ? "none" : "underline",
                     background: "none",
                     border: "none",

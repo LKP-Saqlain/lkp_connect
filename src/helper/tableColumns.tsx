@@ -568,12 +568,45 @@ export const clientNotTradedColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
-    // valueFormatter: (params: any) =>
-    //   new Date(params.value).toLocaleDateString("en-IN", {
-    //     day: "2-digit",
-    //     month: "short",
-    //     year: "numeric",
-    //   }),
+    valueGetter: (params: any) => {
+      const rawDate = params;
+      if (!rawDate) return null; // Handle missing data
+
+      const parsedDate = new Date(
+        rawDate.replace(
+          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+          (match: any, day: any, month: any, year: any) => {
+            const monthMap: any = {
+              Jan: "01",
+              Feb: "02",
+              Mar: "03",
+              Apr: "04",
+              May: "05",
+              Jun: "06",
+              Jul: "07",
+              Aug: "08",
+              Sep: "09",
+              Oct: "10",
+              Nov: "11",
+              Dec: "12",
+            };
+            console.log("Test_as", day, month, year, match); //match will give the whole date as a alternative solution
+
+            return `20${year}-${monthMap[month]}-${day}`;
+          }
+        )
+      );
+
+      return parsedDate;
+    },
+    sortComparator: (v1, v2) => {
+      if (!v1 || !v2) return 0; // Handle missing values
+      return v1 - v2; // Sort in ascending order
+    },
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
   },
   {
     field: "Active",
@@ -633,6 +666,45 @@ export const newClientAddFiveDays: GridColDef[] = [
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
+    valueGetter: (params: any) => {
+      const rawDate = params;
+      if (!rawDate) return null; // Handle missing data
+
+      const parsedDate = new Date(
+        rawDate.replace(
+          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+          (match: any, day: any, month: any, year: any) => {
+            const monthMap: any = {
+              Jan: "01",
+              Feb: "02",
+              Mar: "03",
+              Apr: "04",
+              May: "05",
+              Jun: "06",
+              Jul: "07",
+              Aug: "08",
+              Sep: "09",
+              Oct: "10",
+              Nov: "11",
+              Dec: "12",
+            };
+            console.log("Test_as", day, month, year, match); //match will give the whole date as a alternative solution
+
+            return `20${year}-${monthMap[month]}-${day}`;
+          }
+        )
+      );
+
+      return parsedDate;
+    },
+    sortComparator: (v1, v2) => {
+      if (!v1 || !v2) return 0; // Handle missing values
+      return v1 - v2; // Sort in ascending order
+    },
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
   },
 ];
 
@@ -1224,7 +1296,7 @@ export const DPDebitRecovery: GridColDef[] = [
     field: "Email_link",
     headerName: "Send Email",
     headerClassName: "header-wrap-custom",
-    width: 57,
+    width: 75,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
