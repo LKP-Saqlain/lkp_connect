@@ -45,6 +45,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const dispatch = useDispatch<AppDispatch>();
+  const playerRef = useRef<Player>(null);
 
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -60,25 +61,15 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     setmodal_animationZoom((prev) => !prev);
   }
 
-  // useEffect(() => {
-  //   console.log("activeApiRequestCount", activeRequests);
-  //   debugger;
-  //   if (activeRequests > 0) {
-  //     setHasApiStarted(true);
-  //   }
-
-  //   if (hasApiStarted && activeRequests === 0) {
-  //     setIsNudgeOpen(!isNudgeOpen);
-  //   }
-  // }, [activeRequests]);
-
   useEffect(() => {
     tog_animationZoom();
   }, []);
 
-  const playerRef = useRef<Player>(null);
-
   useEffect(() => {
+    const hasFetched = sessionStorage.getItem("dashboardNudgeFetched");
+    if (hasFetched) return; // If fetched before, do nothing
+    sessionStorage.setItem("dashboardNudgeFetched", "true"); // Mark as fetched
+
     const fetchDashboardNudge = async () => {
       const payload = {
         user_id: user_id,
