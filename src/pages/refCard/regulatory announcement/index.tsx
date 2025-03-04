@@ -17,7 +17,7 @@ const RegulatorAnnouncement = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     if (selectedDate) {
-      console.log("Selected Date:", selectedDate.format("YYYY-MM"));
+      console.log("Selected Date:", selectedDate.format("MM-YYYY"));
     }
   }, [selectedDate]);
 
@@ -44,6 +44,7 @@ const RegulatorAnnouncement = ({ activeSubItem }: any) => {
               value={selectedDate}
               onChange={(newValue) => setSelectedDate(newValue)}
               sx={{ width: 210 }}
+              maxDate={dayjs()}
             />
           </LocalizationProvider>
         </CardHeader>
