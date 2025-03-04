@@ -6,6 +6,37 @@ export const ButtonsLabel = [
     { id: "5", label: "Last 7 Days" },
     { id: "6", label: "Till Date" },
 ]
+export const RegulatorAnnouncements = [
+  {
+    dummyId: 1,
+    date: "2023-01-10",
+    department: "KYC",
+    subject: "Lorem ipsum dolor sit amet consectetur. Tempor egeit amet consectetur. Tempor egeit amet consectetur. Tempor egeit amet consectetur. Tempor eget porttitor aliquet lacus. Id malesuada blandit cursus sollicitudin amet neque egestas malesuada montes. Netus ipsum ultrices in sed vel blandit euismod commodo. Aliquet eget purus varius nisi nibh.",
+    lkpComments: "View",
+    circular: "https://example.com/download/circular1.pdf",
+    modalText :"Lorem ipsum dolor sit amet consectetur. Tempor egeit amet consectetur. Tempor egeit amet consectetur. Tempor egeit amet consectetur. Tempor eget porttitor aliquet lacus. Id malesuada blandit cursus sollicitudin amet neque egestas malesuada montes. Netus ipsum ultrices in sed vel blandit euismod commodo. Aliquet eget purus varius "
+  },
+  {
+    dummyId: 2,
+    date: "2023-01-10",
+    department: "RMS",
+    subject: "Lorem ipsum dolor sit amet consectetur. Tempor eget porttitor aliquet lacus. Id malesuada blandit cu purus varius nisi nibh.",
+    lkpComments: "View",
+    circular: "https://example.com/download/circular2.pdf",
+    modalText :"it amet consectetur. Tempor egeit amet consectetur. Tempor egeit amet consectetur. Tempor eget porttitor aliquet lacus. Id malesuada blandit cursus sollicitudin amet neque egestas malesuada montes. Netus ipsum ultrices in sed vel blandit euismod commodo. Aliquet eget purus varius "
+
+  },
+  {
+    dummyId: 3,
+    date: "2023-01-10",
+    department: "Compliance",
+    subject: "Lorem ipsum dolor sit amet consectetur. Tempor eget porttitor aliquet lacus. Id malesuada blandit cursus sollicitudin amet neque egestas malesuada montes. Netus ipsum ultrices in sed vel blandit euismod commodo. Aliquet eget purus varius nisi nibh.",
+    lkpComments: "View",
+    circular: "https://example.com/download/circular3.pdf",
+    modalText :"Lnsectetur. Tempor egeit amet consectetur. Tempor egeit amet consectetur. Tempor eget porttitor aliquet lacus. Id malesuada blandit cursus sollicitudin amet neque egestas malesuada montes. Netus ipsum ultrices in sed vel blandit euismod commodo. Aliquet eget purus varius "
+
+  }
+];
 
 
 export const CheckerData = [

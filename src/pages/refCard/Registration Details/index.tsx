@@ -11,7 +11,7 @@ const RegisDetails = () => {
     <>
       {/* Business Dashboard Card */}
       <Card>
-        <CardHeader>
+        <CardHeader style={{ backgroundColor: "#6C757D", color: "white" }}>
           <h4 className="card-title mb-0">Registration Details</h4>
         </CardHeader>
         <CardBody>
@@ -73,8 +73,8 @@ const RegisDetails = () => {
 
       {/* Segment Status Card */}
       <Card>
-        <CardHeader>
-          <h5>Segment Status</h5>
+        <CardHeader style={{ backgroundColor: "#6C757D", color: "white" }}>
+          <h4 className="card-title mb-0">Segment Status</h4>
         </CardHeader>
         <CardBody>
           {InfoCapsules.map((exchange) => (
@@ -87,6 +87,7 @@ const RegisDetails = () => {
                 alignItems: "stretch",
                 marginBottom: "20px",
                 flexDirection: isMobile ? "column" : "row",
+                fontFamily: "Public Sans",
               }}
             >
               {/* Exchange Name (e.g., NSE, BSE) */}
@@ -159,8 +160,8 @@ const RegisDetails = () => {
       </Card>
 
       <Card>
-        <CardHeader>
-          <h5>No. of Terminal: 2</h5>
+        <CardHeader style={{ backgroundColor: "#6C757D", color: "white" }}>
+          <h4 className="card-title mb-0">No. of Terminal: 2</h4>
         </CardHeader>
         <CardBody>
           <div
@@ -230,17 +231,17 @@ const RegisDetails = () => {
       </Card>
 
       <Card>
-        <CardHeader>
-          <h5>Revenue Share of AP - 70%</h5>
+        <CardHeader style={{ backgroundColor: "#6C757D", color: "white" }}>
+          <h4 className="card-title mb-0">Revenue Share of AP - 70%</h4>
         </CardHeader>
         <CardBody>
           <div
             style={{
               display: isMobile ? "" : "grid",
-
               gridTemplateColumns: "repeat(3, 1fr)",
               gap: "10px",
               padding: isMobile ? "0" : "10px",
+              fontFamily: "Public Sans",
             }}
           >
             {information.map((item) => (

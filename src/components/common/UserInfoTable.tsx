@@ -17,6 +17,7 @@ import {
   getClientDormantStatus,
   getAccountDetails,
   getCommChecker,
+  getRegulatorAnnouncement,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -75,9 +76,11 @@ interface SelectedWidgetProps {
   inactiveClient?: any;
   totalLedgerDebitAmt?: any;
   dormantCount?: any;
+  getRowHeight?: any;
 }
 
 const DataTable = ({
+  getRowHeight,
   selectedWidget,
   T6Data,
   getUserDetails,
@@ -319,6 +322,56 @@ const DataTable = ({
       return getAccountDetails.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "UCCCode MATCH") {
+      return getRegulatorAnnouncement.map((column) => {
+        if (column.field === "circular") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => console.log(params.row.circular)}
+                  style={{
+                    color: "white",
+                    // textDecoration: "underline",
+                    background: "#11395c",
+                    border: "none",
+                    cursor: "pointer",
+                    borderRadius: "10px",
+                    width: "90px",
+                  }}
+                >
+                  Download
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "lkpComments") {
+          return {
+            ...column,
+            renderCell: () => {
+              return (
+                <button
+                  onClick={() => setmodal_center(!modal_center)}
+                  style={{
+                    color: "white",
+                    // textDecoration: "underline",
+                    background: "#11395c",
+                    border: "none",
+                    cursor: "pointer",
+                    borderRadius: "10px",
+                    width: "90px",
+                  }}
+                >
+                  View
+                </button>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else if (activeSubItem === "Communication Retrival Checker") {
       return getCommChecker.map((column) => {
         if (column.field === "status") {
@@ -435,6 +488,8 @@ const DataTable = ({
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Checker"
             ? `Are you sure want to ${action} this entry`
+            : activeSubItem === "UCCCode MATCH"
+            ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
             : "Are you sure you want to send the email?"
         }
         activeSubItem={activeSubItem}
@@ -537,6 +592,7 @@ const DataTable = ({
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"
           }
+          getRowHeight={getRowHeight}
           sx={{
             border: 0,
             fontFamily: '"Public Sans", sans-serif',

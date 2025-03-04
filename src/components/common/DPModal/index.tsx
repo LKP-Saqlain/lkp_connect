@@ -57,7 +57,6 @@ const CustomModal = ({
     formik.resetForm();
   };
 
-
   const handleSessionClear = () => {
     setmodal_center(false);
     localStorage.removeItem("tkn");
@@ -70,13 +69,18 @@ const CustomModal = ({
   };
 
   return (
-    <ReactstrapModal isOpen={modal_center} toggle={tog_center} centered  
-    backdrop={expiredtime ? "static" : undefined}  // Disable clicking outside for expired token modal
-    keyboard={expiredtime ? false : undefined}>
+    <ReactstrapModal
+      isOpen={modal_center}
+      toggle={tog_center}
+      centered
+      backdrop={expiredtime ? "static" : undefined} // Disable clicking outside for expired token modal
+      keyboard={expiredtime ? false : undefined}
+    >
       <ModalBody className="text-center p-3">
-        {activeSubItem !== "Communication Retrival Checker" && (
-          <i className="ri-alert-line display-5 text-warning"></i>
-        )}
+        {activeSubItem !== "Communication Retrival Checker" &&
+          activeSubItem !== "UCCCode MATCH" && (
+            <i className="ri-alert-line display-5 text-warning"></i>
+          )}
 
         <div className="mt-4" style={{ fontFamily: "Public Sans" }}>
           {activeSubItem === "DP Debit Recovery" ? (
@@ -109,7 +113,7 @@ const CustomModal = ({
           )}
 
           <div className="hstack gap-2 pt-2 justify-content-center">
-            {expiredtime ? (
+            {expiredtime || activeSubItem === "UCCCode MATCH" ? (
               <Button
                 className="btn"
                 style={{
@@ -117,7 +121,11 @@ const CustomModal = ({
                   backgroundColor: "#11395C",
                   borderColor: "#11395C",
                 }}
-                onClick={handleSessionClear}
+                onClick={
+                  expiredtime
+                    ? handleSessionClear
+                    : () => console.log("clicked Regulator Announcements")
+                }
               >
                 OK
               </Button>
