@@ -1,18 +1,11 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
-import { lazy, Suspense, useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import PrivateRoute from "./components/PrivateRoutes";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer } from "react-toastify";
 import Loader from "./components/common/Loader";
 import "./assets/scss/themes.scss";
-import CustomModal from "./components/common/DPModal";
-import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
+import SessionExpiryHandler from "./pages/Authentication/sessionExpiryHandler";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(
@@ -25,33 +18,6 @@ const ForgotPassword = lazy(
 const SideBar = lazy(() => import("./components/sideBar"));
 
 const App = () => {
-  const [modal_center, setModalCenter] = useState(false);
-  const [isTokenExpired, setIsTokenExpired] = useState(false);
-
-  const { data } = useSelector((state: RootState) => state.UserLogin);
-  const tokenExpiryTime = data?.data?.tokenExpiryTime;
-
-  const location = useLocation();
-
-  const checkTokenExpiry = (expiryTime: string) => {
-    if (!expiryTime) return false;
-    return new Date() >= new Date(expiryTime);
-  };
-
-  useEffect(() => {
-    if (tokenExpiryTime) {
-      const expired = checkTokenExpiry(tokenExpiryTime);
-
-      // Show modal only if the user is on the dashboard
-      if (expired && location.pathname === "/dashboard") {
-        setIsTokenExpired(true);
-        setModalCenter(true);
-      } else {
-        setIsTokenExpired(false);
-      }
-    }
-  }, [data, location.pathname]);
-
   return (
     <Router>
       <ToastContainer />
@@ -72,15 +38,7 @@ const App = () => {
           />
         </Routes>
       </Suspense>
-      {isTokenExpired && (
-        <CustomModal
-          tog_center={() => setModalCenter(false)}
-          modal_center={modal_center}
-          setmodal_center={setModalCenter}
-          Msg="Your session has expired!"
-          expiredtime={true}
-        />
-      )}
+      <SessionExpiryHandler />
     </Router>
   );
 };
