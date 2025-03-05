@@ -110,11 +110,11 @@
 }
 
 .even-row {
-  background-color: #f9f9f9; /* Light grey for even rows */
+  background-color: #f8f8f8;
 }
 
 .odd-row {
-  background-color: #ffffff; /* White for odd rows */
+  background-color: #f1f1f1; 
 }
   
   

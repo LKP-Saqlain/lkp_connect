@@ -20,8 +20,6 @@ const SessionExpiryHandler = () => {
   useEffect(() => {
     if (tokenExpiryTime) {
       const expired = checkTokenExpiry(tokenExpiryTime);
-
-      // Show modal only when the user is on the /dashboard route
       if (expired && location.pathname === "/dashboard") {
         setIsTokenExpired(true);
         setModalCenter(true);
@@ -29,7 +27,7 @@ const SessionExpiryHandler = () => {
         setIsTokenExpired(false);
       }
     }
-  }, [data, location.pathname]); // React when token or route changes
+  }, [data, location.pathname]);
 
   return (
     isTokenExpired && (
