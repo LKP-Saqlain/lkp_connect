@@ -62,6 +62,7 @@ import { apiServices } from "../../services";
 import MarketingMaterial from "../../pages/refCard/Marketing Materials";
 import RegisDetails from "../../pages/refCard/Registration Details";
 import RegulatorAnnouncement from "../../pages/refCard/regulatory announcement";
+// import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 
 const drawerWidth = 240;
 
@@ -171,6 +172,8 @@ const SideBar = () => {
   const lastBrokingValues = useSelector(
     (state: RootState) => state.userOverView?.data?.data?.data
   );
+
+  // useClearStorageOnTabClose();   //use to remove local and session storage when tab is changed
 
   useEffect(() => {
     if (selectedViewMore) {

@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { lazy, Suspense, useEffect, useState } from "react";
 import PrivateRoute from "./components/PrivateRoutes";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -22,10 +27,11 @@ const SideBar = lazy(() => import("./components/sideBar"));
 const App = () => {
   const [modal_center, setModalCenter] = useState(false);
   const [isTokenExpired, setIsTokenExpired] = useState(false);
-  // const tog_center = () => setModalCenter(!modal_center);
 
   const { data } = useSelector((state: RootState) => state.UserLogin);
   const tokenExpiryTime = data?.data?.tokenExpiryTime;
+
+  const location = useLocation();
 
   const checkTokenExpiry = (expiryTime: string) => {
     if (!expiryTime) return false;
@@ -35,12 +41,16 @@ const App = () => {
   useEffect(() => {
     if (tokenExpiryTime) {
       const expired = checkTokenExpiry(tokenExpiryTime);
-      setIsTokenExpired(expired);
-      if (expired) {
+
+      // Show modal only if the user is on the dashboard
+      if (expired && location.pathname === "/dashboard") {
+        setIsTokenExpired(true);
         setModalCenter(true);
+      } else {
+        setIsTokenExpired(false);
       }
     }
-  }, [data]);
+  }, [data, location.pathname]);
 
   return (
     <Router>
