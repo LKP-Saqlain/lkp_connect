@@ -9,32 +9,49 @@ import {
 } from "reactstrap";
 import UserCapsules from "../ClientDetails/UserCapsules";
 import { useState } from "react";
-import { regEx } from "../../helper/method";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 const OTDetails = () => {
   const [selectedCapsule, setSelectedCapsule] = useState("Backoffice Report");
-  const [value, setValue] = useState("");
+  const [clientCode, setClientCode] = useState("");
+  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
 
   const handleClick = (value: string) => {
     console.log("You clicked the Chip.", value);
     setSelectedCapsule(value);
   };
 
-  const handleChange = (event: any) => {
-    console.log("eventChange", event?.target.value);
-    const { value } = event?.target;
-    if (regEx.alphaNumeric.test(value)) {
-      setValue(value.toUpperCase().replace(/\s/g, ""));
-    }
-  };
+  // const handleChange = (event: any) => {
+  //   console.log("eventChange", event?.target.value);
+  //   const { value } = event?.target;
+  //   if (regEx.alphaNumeric.test(value)) {
+  //     setClientCode(value.toUpperCase().replace(/\s/g, ""));
+  //   }
+  // };
 
-  const handleAppyClick = () => {
-    if (value === "") {
+  const handleApplyClick = () => {
+    if (clientCode === "") {
       alert("Please enter Client Code");
-    } else {
-      alert(`Your Client Code is ${value}`);
+      return;
     }
-    setValue("");
+
+    const formattedDate = selectedDate
+      ? selectedDate.format("MM-YYYY")
+      : "No Date Selected";
+
+    console.log("Selected Capsule:", selectedCapsule);
+    console.log("Client Code:", clientCode);
+    console.log("Selected Month & Year:", formattedDate);
+
+    alert(
+      `Your Client Code is ${clientCode} && Your Selected Month & Year: ${formattedDate}`
+    );
+
+    setClientCode("");
+    setSelectedDate(null);
   };
 
   return (
@@ -58,55 +75,66 @@ const OTDetails = () => {
               />
               <Card>
                 <CardBody>
-                  <Col
-                    xs="6"
-                    md="6"
-                    className="align-items-center mb-4"
-                    style={{
-                      border: "1px solid #D3D3D3",
-                      borderRadius: "8px",
-                      margin: "5px",
-                      paddingLeft: "10px",
-                    }}
-                  >
-                    <Col className="d-flex align-items-center">
+                  <InputGroup className="mb-3" style={{ flex: 1 }}>
+                    {/* Client Code Input */}
+                    <Col
+                      xs="6"
+                      className="d-flex align-items-center"
+                      style={{
+                        border: "1px solid #D3D3D3",
+                        borderRadius: "8px",
+                        width: "350px",
+                        margin: "0 20px 0 0",
+                      }}
+                    >
                       <span
                         style={{
-                          minWidth: "90px",
+                          minWidth: "150px",
                           color: "#11395C",
                           fontWeight: "bold",
-                          marginRight: "10px",
+                          padding: "0 10px",
                         }}
                       >
                         Client Code
                       </span>
-                      <InputGroup style={{ flex: 1 }}>
-                        <Input
-                          value={value}
-                          style={{
-                            backgroundColor: "#e9ecef",
-                            border: "none",
-                            borderRadius: "0px 0px 0px 0px",
-                          }}
-                          onChange={handleChange}
-                          maxLength={14}
-                          placeholder="Enter Client Code"
-                        />
-                        <Button
-                          style={{
-                            backgroundColor: "#11395C",
-                            color: "#fff",
-                            fontWeight: "normal",
-                            borderRadius: "0 8px 8px 0",
-                            fontFamily: "Poppins",
-                          }}
-                          onClick={handleAppyClick}
-                        >
-                          Apply
-                        </Button>
-                      </InputGroup>
+
+                      <Input
+                        value={clientCode}
+                        style={{
+                          backgroundColor: "#e9ecef",
+                          border: "none",
+                          height: "100%",
+                        }}
+                        onChange={(e) => setClientCode(e.target.value)}
+                        maxLength={14}
+                        placeholder="Enter Client Code"
+                      />
                     </Col>
-                  </Col>
+
+                    {/* Month & Year Picker */}
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="Month & Year"
+                        views={["month", "year"]}
+                        value={selectedDate}
+                        onChange={(newValue) => setSelectedDate(newValue)}
+                        sx={{ width: 210, margin: "0 20px" }}
+                      />
+                    </LocalizationProvider>
+
+                    {/* Apply Button */}
+                    <Button
+                      style={{
+                        backgroundColor: "#11395C",
+                        color: "#fff",
+                        borderRadius: "8px",
+                        fontFamily: "Poppins",
+                      }}
+                      onClick={handleApplyClick} // <-- Added onClick event
+                    >
+                      Apply
+                    </Button>
+                  </InputGroup>
 
                   {/* Client Details */}
                   <Row className="mb-4">
