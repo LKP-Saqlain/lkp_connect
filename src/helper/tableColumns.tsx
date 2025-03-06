@@ -1512,6 +1512,41 @@ export const DPDebitRecovery: GridColDef[] = [
     disableColumnMenu: true,
   },
 ];
+
+export const terminalcol: GridColDef[] = [
+  {
+    field: "Terminal Id",
+    headerName: "Terminal Id",
+    flex: 3,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Terminal User",
+    headerName: "Terminal User",
+    flex: 3,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "NISM Certificate No",
+    headerName: "NISM Certificate No",
+    flex: 3,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: " NISM Certificate Valid till",
+    headerName: " NISM Certificate Valid till",
+    flex: 3,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+];
 export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "ctermcode",

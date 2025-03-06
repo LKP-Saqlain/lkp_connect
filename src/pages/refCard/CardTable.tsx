@@ -37,36 +37,35 @@ const CardTable = ({ activeSubItem, tableData, customTableFlag }: any) => {
 
   useEffect(() => {
     // setData([]);
-    
-    
+
     switch (selectedButton) {
       case "Daily":
         const filteredDaily = tableData.filter(
-          (data:any) => data?.datatype === "Daily"
+          (data: any) => data?.datatype === "Daily"
         );
         setData(filteredDaily);
         break;
       case "Weekly":
         const filteredWeekly = tableData.filter(
-          (data:any) => data?.datatype === "weekly"
+          (data: any) => data?.datatype === "weekly"
         );
         setData(filteredWeekly);
         break;
       case "Monthly":
         const filteredMonthly = tableData.filter(
-          (data:any) => data?.datatype === "monthly"
+          (data: any) => data?.datatype === "monthly"
         );
         setData(filteredMonthly);
         break;
       case "Yearly":
         const filteredYearly = tableData.filter(
-          (data:any) => data?.datatype === "yearly"
+          (data: any) => data?.datatype === "yearly"
         );
         setData(filteredYearly);
         break;
       case "last7days":
         const filteredLastDays = tableData.filter(
-          (data:any) => data?.datatype === "last7days"
+          (data: any) => data?.datatype === "last7days"
         );
         setData(filteredLastDays);
         break;
@@ -102,21 +101,20 @@ const CardTable = ({ activeSubItem, tableData, customTableFlag }: any) => {
       >
         <h4 className="card-title mb-0">
           {customTableFlag === "table-1"
-             ? "Account opening"
-             : customTableFlag === "table-2"
-             ? "Account opening"
-             : customTableFlag === "table-3"
-             ? "Active logged in users"
-             : customTableFlag === "table-4"
-             ? "Active traded users"
-             : customTableFlag === "table-5"
-             ? "Number of Executed orders"
-             : customTableFlag === "table-6"
-             ? "Brokerage Revenue"
-             : customTableFlag === "table-7"?
-             "Net brokerage revenue"
-             :""
-             }
+            ? "Account opening"
+            : customTableFlag === "table-2"
+            ? "Account opening"
+            : customTableFlag === "table-3"
+            ? "Active logged in users"
+            : customTableFlag === "table-4"
+            ? "Active traded users"
+            : customTableFlag === "table-5"
+            ? "Number of Executed orders"
+            : customTableFlag === "table-6"
+            ? "Brokerage Revenue"
+            : customTableFlag === "table-7"
+            ? "Net brokerage revenue"
+            : ""}
         </h4>
         <div
           className="gap-1"
@@ -157,7 +155,7 @@ const CardTable = ({ activeSubItem, tableData, customTableFlag }: any) => {
         <DataTable
           activeSubItem={activeSubItem}
           //   T6Data={tableData}
-          T6Data={selectedButton? data: tableData }
+          T6Data={selectedButton ? data : tableData}
         />
       </CardBody>
     </Card>

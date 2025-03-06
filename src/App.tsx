@@ -6,6 +6,8 @@ import { ToastContainer } from "react-toastify";
 import Loader from "./components/common/Loader";
 import "./assets/scss/themes.scss";
 import SessionExpiryHandler from "./pages/Authentication/sessionExpiryHandler";
+import "./Global.css";
+// import "./App.css";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(

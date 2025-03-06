@@ -18,6 +18,7 @@ import {
   getAccountDetails,
   getCommChecker,
   getRegulatorAnnouncement,
+  terminalcol,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -320,6 +321,10 @@ const DataTable = ({
       return getClientDormantStatus(handleViewDetails);
     } else if (activeSubItem === "Referal Entry Status") {
       return getAccountDetails.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "KRA PAN STATUS") {
+      return terminalcol.map((column) => ({
         ...column,
       }));
     } else if (activeSubItem === "UCCCode MATCH") {

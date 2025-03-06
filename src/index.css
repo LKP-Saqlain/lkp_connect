@@ -12,11 +12,8 @@ code {
     monospace;
 } */
 
-
-
 * {
   margin: 0; /* Reset default margin */
   padding: 0; /* Reset default padding */
   font-family: "Public Sans" !important;
 }
-

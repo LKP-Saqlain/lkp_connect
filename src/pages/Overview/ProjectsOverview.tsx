@@ -95,7 +95,7 @@ const ProjectsOverview = () => {
             <CardHeader className="p-0 border-0 bg-light-subtle">
               <Row className="g-0 text-center">
                 <Col xs={12}>
-                  <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-md-row">
+                  <div className="d-flex flex-column flex-md-row">
                     <h4 className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center">
                       Brokerage Details for Last 10 Days
                     </h4>
