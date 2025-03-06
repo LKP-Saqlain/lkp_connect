@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
-
+// import CryptoJS from "crypto-js";
 type RevenueKeys = "total" | "broking" | "nonBroking";
 // type TotalClientKey = "total" | "broking" | "nonBroking";
 
@@ -52,6 +52,54 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   );
 
   // const { activeRequests } = useSelector((state: RootState) => state.loader);
+
+  // const decryptTripleDES = (
+  //   cipherText: string,
+  //   key: string,
+  //   useHashing: boolean
+  // ): string | null => {
+  //   try {
+  //     // Convert Base64 string to bytes
+  //     const encryptedBytes = CryptoJS.enc.Base64.parse(cipherText);
+
+  //     // Generate the key
+  //     let keyBytes;
+  //     if (useHashing) {
+  //       keyBytes = CryptoJS.MD5(CryptoJS.enc.Utf8.parse(key));
+  //     } else {
+  //       keyBytes = CryptoJS.enc.Utf8.parse(key);
+  //     }
+
+  //     // Decrypt using TripleDES with ECB mode and PKCS7 padding
+  //     const decrypted = CryptoJS.TripleDES.decrypt(
+  //       { ciphertext: encryptedBytes } as CryptoJS.lib.CipherParams,
+  //       keyBytes,
+  //       {
+  //         mode: CryptoJS.mode.ECB,
+  //         padding: CryptoJS.pad.Pkcs7,
+  //       }
+  //     );
+
+  //     const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+
+  //     if (!decryptedText) {
+  //       throw new Error("Decryption failed. Invalid key or payload.");
+  //     }
+
+  //     return decryptedText;
+  //   } catch (error) {
+  //     console.error("Decryption error:", error);
+  //     return null;
+  //   }
+  // };
+
+  // Example Usage:
+  // const encryptedPayload =
+  //   "6PzJ32NGCUREH/BPpiCM9z92P2tLocTV3yOS2ZWZWBe8NnwR1PDbldEm3pAPseZUREE5/S1YafO8NnwR1PDble4HZVp9KfLss23C53KaLqG3qK2iv8TUAMXc802h9OzX";
+  // const encryptionKey = "27819f7bdb0da9b21e1e8e54b82298f5";
+
+  // const decryptedData = decryptTripleDES(encryptedPayload, encryptionKey, true);
+  // console.log("Decrypted Data:", decryptedData);
 
   const handleValues = (revTotal: string) => {
     console.log("revTotal", revTotal);
