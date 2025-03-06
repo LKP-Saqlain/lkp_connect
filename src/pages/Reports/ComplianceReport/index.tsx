@@ -138,9 +138,8 @@ const Retrival = ({ activeSubItem }: any) => {
   return (
     <Card>
       <CardHeader className="p-0 border-0 bg-light-subtle">
-        <div className="p-3 border border-dashed border-start-0">
-          <h4 className="card-title mb-0">Communication Retrival Report</h4>
-          {/* <div className="d-flex gap-1">
+        <h4 className="card-title mb-0">Communication Retrival Report</h4>
+        {/* <div className="d-flex gap-1">
                 <Button
                   variant="outlined"
                   size="small"
@@ -178,7 +177,6 @@ const Retrival = ({ activeSubItem }: any) => {
                   Department
                 </Button>
               </div> */}
-        </div>
       </CardHeader>
       <CardBody>
         {" "}

@@ -479,7 +479,7 @@ const SideBar = () => {
           case "UCCCode MATCH":
             return <RegulatorAnnouncement activeSubItem={activeSubItem} />;
           case "KRA PAN STATUS":
-            return <RegisDetails />;
+            return <RegisDetails activeSubItem={activeSubItem} />;
           case "Communication Retrival Report":
             return <Retrival activeSubItem={activeSubItem} />;
           case "Communication Retrival Entry":

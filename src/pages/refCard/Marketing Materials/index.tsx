@@ -27,9 +27,9 @@ const MarketingMaterial = () => {
             <Card
               key={card.id}
               style={{
-                width: isMobile ? "100%" : "240px",
-                margin: "6px",
-                padding: "16px",
+                width: isMobile ? "100%" : "200px",
+                margin: "5px",
+                padding: "10px",
                 borderRadius: "16px",
                 marginBottom: isMobile ? "12px" : "0px",
                 // backgroundColor:"##11395C",
@@ -42,12 +42,12 @@ const MarketingMaterial = () => {
                 component="img"
                 image={card.imageUrl}
                 alt={card.title}
-                sx={{ height: 200, objectFit: "cover" }}
+                sx={{ height: 120, objectFit: "cover" }}
               />
               <CardContent>
                 <Typography
                   style={{
-                    fontSize: isMobile ? 12 : 14,
+                    fontSize: isMobile ? 10 : 12,
                     color: "#11395C",
                     fontWeight: "bold",
                     textAlign: "center",

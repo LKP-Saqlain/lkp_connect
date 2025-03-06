@@ -191,7 +191,7 @@ const Revenue = ({
         <CardHeader className="p-0 border-0 bg-light-subtle">
           <Row className="g-0 text-center">
             <Col xs={12}>
-              <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-sm-row">
+              <div className=" d-flex flex-column flex-sm-row">
                 <h4 className="card-title mb-0 flex-grow-1 text-md-start text-center">
                   Broking Revenue for Last 12 Months
                 </h4>
