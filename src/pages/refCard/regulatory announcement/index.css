@@ -1,8 +1,0 @@
-.css-sq16uu-MuiDataGrid-root
-  .MuiDataGrid-row--dynamicHeight
-  > .MuiDataGrid-cell {
-  white-space: initial;
-  line-height: inherit;
-  display: flex;
-  align-items: center;
-}

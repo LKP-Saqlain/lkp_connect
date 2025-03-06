@@ -78,6 +78,7 @@ interface SelectedWidgetProps {
   totalLedgerDebitAmt?: any;
   dormantCount?: any;
   getRowHeight?: any;
+  customCss?: boolean;
 }
 
 const DataTable = ({
@@ -109,6 +110,7 @@ const DataTable = ({
   handleDeleteClick,
   totalLedgerDebitAmt,
   dormantCount,
+  customCss,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -611,7 +613,8 @@ const DataTable = ({
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
               fontSize: "11px",
-              // textAlign: "center",
+              // alignItems: "center",
+              alignContent: customCss ? "center" : "",
             },
           }}
           slotProps={{
