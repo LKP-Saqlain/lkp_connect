@@ -605,16 +605,18 @@ const DataTable = ({
             fontFamily: '"Public Sans", sans-serif',
             "& .MuiDataGrid-columnHeader": {
               // textAlign: "center",
-              backgroundColor: "#6C757D", // Set the header background color to grey
+              backgroundColor: "#11395C", // Set the header background color to grey
               color: "#fff", // Optionally set the text color to white for better contrast
               fontWeight: 500,
               fontSize: "12px",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
-              fontSize: "11px",
+              fontSize: "12px",
               // alignItems: "center",
               alignContent: customCss ? "center" : "",
+              color: "#000",
+              border: "1px solid #D3D3D3 !important",
             },
           }}
           slotProps={{

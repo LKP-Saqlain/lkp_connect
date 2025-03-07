@@ -123,14 +123,16 @@ const DataTable: React.FC<DormantClientProps> = ({
             border: 0,
             fontFamily: '"Public Sans", sans-serif',
             "& .MuiDataGrid-columnHeader": {
-              backgroundColor: "#6C757D", // Set the header background color to grey
+              backgroundColor: "#11395C", // Set the header background color to grey
               color: "#fff", // Optionally set the text color to white for better contrast
-              fontWeight: 500,
+              fontWeight: 800,
               fontSize: "12px",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
-              fontSize: "11px",
+              fontSize: "13px",
+              color: "#000000",
+              border: "1px solid #D3D3D3 !important",
             },
             "& .MuiDataGrid-footerContainer": {
               display: "none", // Completely hide the footer container

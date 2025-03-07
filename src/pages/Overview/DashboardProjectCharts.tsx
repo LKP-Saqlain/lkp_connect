@@ -44,7 +44,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
       style: {
         fontSize: "12px",
         fontWeight: "bold",
-        colors: ["#71797E"], // Text color
+        colors: ["#000"], // Text color
       },
       background: {
         enabled: false,
@@ -70,6 +70,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
         style: {
           fontSize: "10px",
           fontWeight: 600,
+          color: "#000",
         },
       },
     },
@@ -240,7 +241,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
           style: {
             fontSize: "12px",
             fontWeight: "bold",
-            color: "#71797E", // Text color
+            color: "#000", // Text color
             // below style to remove top label bg box
             background: "transparent", // Remove background box
             borderWidth: 0, // Ensure no border
@@ -373,7 +374,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
         data: TPD_Insurance,
       },
       {
-        name: "Liquiloans",
+        name: "Liquid Loans",
         data: TPD_Liq_Loans,
       },
     ],
@@ -417,7 +418,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
           style: {
             fontSize: "12px",
             fontWeight: "bold",
-            color: "#71797E",
+            color: "#000",
             // below style to remove top label bg box
             background: "transparent", // Remove background box
             borderWidth: 0, // Ensure no border
@@ -458,6 +459,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
         style: {
           fontSize: "12px",
           fontWeight: 600,
+          color: "#000",
         },
       },
     },
