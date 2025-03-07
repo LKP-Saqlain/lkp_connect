@@ -179,11 +179,8 @@ const AnnualPNL = () => {
                             className="btn-font"
                             sx={{
                               width: isMobile ? "100%" : "50%",
-                              backgroundColor: "#11395C",
-                              "&:hover": {
-                                backgroundColor: "#0d2d4a",
-                              },
                             }}
+                            style={{ backgroundColor: "#11395C" }}
                             startIcon={<DownloadIcon />}
                           >
                             Excel

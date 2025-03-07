@@ -21,6 +21,7 @@ export const getClientActivityStatusColumns = (
     disableColumnMenu: true,
     field: "ClientCode",
     headerName: "Client Code",
+    align: "left",
     flex: 1,
   },
   {
@@ -338,6 +339,7 @@ export const getClientDormantStatus = (
   {
     field: "ctermcode",
     headerName: "Client Code",
+    align: "left",
     flex: 2,
     disableColumnMenu: true,
   },
@@ -416,12 +418,23 @@ export const getClientDormantStatus = (
 
 export const Corecolumns: GridColDef[] = [
   { field: "clientCode", headerName: "Client Code", minWidth: 80 },
-  { field: "alertSequenceNo", headerName: "Alert Sequence No", minWidth: 80 },
-  { field: "virtualAccount", headerName: "Virtual Account", minWidth: 80 },
+  {
+    field: "alertSequenceNo",
+    headerName: "Alert Sequence No",
+    minWidth: 80,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "virtualAccount",
+    headerName: "Virtual Account",
+    minWidth: 80,
+    headerClassName: "header-wrap-custom",
+  },
   {
     field: "lkP_AccountNumber",
     headerName: "LKP Account Number",
     minWidth: 180,
+    headerClassName: "header-wrap-custom",
   },
   { field: "debitCredit", headerName: "Debit/Credit", minWidth: 80 },
   { field: "amount", headerName: "Amount", minWidth: 100 },
@@ -446,7 +459,12 @@ export const Corecolumns: GridColDef[] = [
     headerName: "Transaction Description",
     minWidth: 200,
   },
-  { field: "transactionDate", headerName: "Transaction Date", minWidth: 80 },
+  {
+    field: "transactionDate",
+    headerName: "Transaction Date",
+    minWidth: 80,
+    headerClassName: "header-wrap-custom",
+  },
 ];
 
 export const slbmColumns: GridColDef[] = [
@@ -470,6 +488,7 @@ export const slbmColumns: GridColDef[] = [
     minWidth: 100,
     flex: 1,
     disableColumnMenu: true,
+    align: "left",
   },
   {
     field: "clientName",
@@ -1360,15 +1379,15 @@ export const DPDebitRecovery: GridColDef[] = [
     field: "ClientCode",
     headerName: "Client Code",
     headerClassName: "header-wrap-custom",
-    width: 85,
-    align: "center",
+    width: 95,
+    align: "left",
     headerAlign: "center",
     disableColumnMenu: true,
   },
   {
     field: "BOID",
     headerName: "BOID",
-    width: 130,
+    width: 160,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1591,6 +1610,7 @@ export const QPayoutColumns: GridColDef[] = [
     headerName: "Client Code",
     minWidth: 100,
     disableColumnMenu: true,
+    align: "left",
   },
   {
     field: "clientName",
@@ -1671,6 +1691,7 @@ export const dormantColumns: GridColDef[] = [
     headerName: "Client Code",
     flex: 2,
     minWidth: 100,
+    align: "left",
     disableColumnMenu: true,
   },
   {

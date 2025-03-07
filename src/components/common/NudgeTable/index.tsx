@@ -92,14 +92,16 @@ const NudgeTable = ({
                 border: 0,
                 fontFamily: '"Public Sans", sans-serif',
                 "& .MuiDataGrid-columnHeader": {
-                  backgroundColor: "#6C757D",
+                  backgroundColor: "#11395C",
                   color: "#fff",
                   fontWeight: 500,
                   fontSize: "12px",
                 },
                 "& .MuiDataGrid-cell": {
                   fontFamily: '"Public Sans", sans-serif',
-                  fontSize: "11px",
+                  fontSize: "12px",
+                  color: "#000",
+                  border: "1px solid #D3D3D3 !important",
                 },
               }}
               getRowClassName={(params) =>

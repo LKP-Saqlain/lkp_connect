@@ -170,6 +170,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
                 fontSize: "12px",
                 padding: "0",
                 fontFamily: "Public Sans",
+                backgroundColor: "#11395C",
               }}
               className="btn-sm"
               onClick={() => handleTradingOpen("T6")}
@@ -206,6 +207,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
                 fontSize: "12px",
                 padding: "0",
                 fontFamily: "Public Sans",
+                backgroundColor: "#11395C",
               }}
               className="btn-sm"
               onClick={() => handleTradingOpen("Dormant")}

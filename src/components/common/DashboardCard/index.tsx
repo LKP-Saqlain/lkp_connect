@@ -54,7 +54,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
       >
         <CardBody>
           {/* Title */}
-          <h6 className="text-muted fs-14">{title}</h6>
+          <h6 className="fs-14">{title}</h6>
 
           {/* Value and Animation */}
           <div
@@ -76,7 +76,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
               <h5
                 className="mb-0"
                 style={{
-                  color: "#495057",
+                  color: "#1B1B1B",
                   fontSize: "17px",
                   fontWeight: "bold",
                 }}
@@ -92,7 +92,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                   formattingFn={formatIndianNumber}
                 />
                 <small
-                  className="text-muted fs-12"
+                  className="fs-12"
                   style={{
                     fontWeight: "bold",
                     marginRight: "15px",
