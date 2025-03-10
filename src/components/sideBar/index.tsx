@@ -337,6 +337,7 @@ const SideBar = () => {
           }
         }
       });
+      console.log("MenuOrder-->", menuHierarchy);
 
       return menuHierarchy;
     };
