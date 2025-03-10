@@ -340,7 +340,7 @@ export const getClientDormantStatus = (
     field: "ctermcode",
     headerName: "Client Code",
     align: "left",
-    flex: 2,
+    flex: 1.2,
     disableColumnMenu: true,
   },
   {
@@ -352,7 +352,7 @@ export const getClientDormantStatus = (
   {
     field: "lastTradeDate",
     headerName: "Last Trade Date",
-    flex: 2,
+    flex: 1.5,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -360,7 +360,7 @@ export const getClientDormantStatus = (
   {
     field: "dayCount",
     headerName: "Days to Dormant",
-    flex: 2,
+    flex: 1,
     align: "right",
     disableColumnMenu: true,
   },
@@ -1570,7 +1570,7 @@ export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "ctermcode",
     headerName: "Client Code",
-    flex: 3,
+    flex: 1.5,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -1578,7 +1578,7 @@ export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "clientName",
     headerName: "Client Name",
-    flex: 3,
+    flex: 2.5,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -1596,7 +1596,7 @@ export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "lastTradeDate",
     headerName: "Last Trade Date",
-    flex: 1,
+    flex: 1.5,
     // minWidth: 150,
     headerAlign: "center",
     disableColumnMenu: true,

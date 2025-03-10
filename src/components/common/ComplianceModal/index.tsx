@@ -34,14 +34,12 @@ const ModalComponent = ({
   onSubmit,
   editData,
   editUserCheck,
-  editTitle,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
   onSubmit: (data: any, apiStatus?: any) => void;
   editData: any;
   editUserCheck: boolean;
-  editTitle?: boolean;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [fileExtension, setFileExtension] = useState("");
@@ -341,7 +339,7 @@ const ModalComponent = ({
         toggle={toggle}
         style={{ padding: "10px 15px" }}
       >
-        {editTitle ? "Edit Entry" : "Add Entry"}
+        {editUserCheck ? "Edit Entry" : "Add Entry"}
       </ModalHeader>
       <ModalBody
         style={{ maxHeight: "70vh", overflowY: "auto", padding: "10px 15px" }}

@@ -108,6 +108,7 @@ const CommEntry = ({ activeSubItem }: any) => {
 
   function tog_grid() {
     setmodal_grid(!modal_grid);
+    setEditUserCheck(false);
   }
 
   const handleEditClick = (data: any, editCheck: boolean) => {
