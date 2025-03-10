@@ -77,6 +77,8 @@ const Revenue = ({
 
             function getFinancialQuarter(date: Date) {
               const month = date.getMonth(); // 0 = Jan, 1 = Feb, ..., 11 = Dec
+              console.log("checkMonths", month);
+
               if (month >= 0 && month <= 2) return "Q4"; // Jan-Mar
               if (month >= 3 && month <= 5) return "Q1"; // Apr-Jun
               if (month >= 6 && month <= 8) return "Q2"; // Jul-Sep
@@ -86,6 +88,8 @@ const Revenue = ({
 
             const now = new Date();
             const currentQuarter = getFinancialQuarter(now) || "Q1"; // Ensure it's not undefined
+            console.log("currentQtrCheck", currentQuarter);
+
             const quarterMonths = getQuarterMonths(currentQuarter); // This is now safe
             const currentYear = now.getFullYear();
 

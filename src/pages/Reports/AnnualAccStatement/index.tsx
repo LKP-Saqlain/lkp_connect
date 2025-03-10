@@ -33,57 +33,77 @@ const AnnualAccStatement = () => {
     }),
     onSubmit: async (values) => {
       const { clientCode } = values;
-      console.log("submitClick", clientCode);
       const payload = {
-        clientCode: clientCode,
+        clientCode,
         finYear: "",
         userId: user_id,
       };
-      dispatch(showLoader("")); // Show the loader
 
-      apiServices
-        .GetPNLAccountDetailsPdf(payload) // <-- specify responseType as 'blob'
-        .then((response) => {
-          console.log("GetPNLAccountDetailsPdf_response", response?.data);
+      dispatch(showLoader(""));
 
-          // Ensure the response data is a Blob (PDF file)
-          if (response && response.data) {
-            const file = new Blob([response?.data], {
-              type: "application/pdf",
-            });
+      try {
+        const response: any = await apiServices.GetPNLAccountDetailsPdf(
+          payload
+        );
+        const contentType = response.headers["content-type"];
 
-            // Use FileReader to read the PDF data
-            const reader = new FileReader();
-            reader.onload = function (event) {
-              // Log the base64 string representation of the PDF
-              console.log("PDF Data:", event?.target?.result);
-            };
-            reader.readAsDataURL(file);
-
-            // Optionally, trigger the file download as well
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(file);
-            link.download = `${clientCode}_Performance_Report.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          } else {
-            console.error("No PDF data received.");
-          }
-        })
-        .catch((Err) => {
-          console.error(Err, "error-->");
-          const errorMessage =
-            Err.response?.data?.message ||
-            "Sorry for the inconvenience, please try again later.";
-          ShowToast("error", errorMessage);
-        })
-        .finally(() => {
-          // Hide the loader in the finally block
-          dispatch(hideLoader());
-        });
+        if (isJsonResponse(contentType)) {
+          handleJsonResponse(response.data);
+        } else if (isPdfResponse(contentType)) {
+          triggerFileDownload(
+            response.data,
+            `${clientCode}_Performance_Report.pdf`,
+            "application/pdf"
+          );
+        } else {
+          ShowToast("error", "Unexpected response format.");
+        }
+      } catch (error: any) {
+        handleError(error);
+      } finally {
+        dispatch(hideLoader());
+      }
     },
   });
+
+  const isJsonResponse = (contentType: string) =>
+    contentType.includes("application/json");
+
+  const isPdfResponse = (contentType: string) =>
+    contentType.includes("application/pdf");
+
+  const handleJsonResponse = (data: Blob) => {
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      const result = JSON.parse(event.target.result);
+      const message = result?.message || "No data found.";
+      ShowToast("error", message);
+    };
+    reader.readAsText(data);
+  };
+
+  const triggerFileDownload = (
+    data: Blob,
+    fileName: string,
+    fileType: string
+  ) => {
+    const file = new Blob([data], { type: fileType });
+    const url = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleError = (error: any) => {
+    console.error("Error -->", error);
+    const errorMessage =
+      error.response?.data?.message ||
+      "Sorry for the inconvenience, please try again later.";
+    ShowToast("error", errorMessage);
+  };
 
   const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;

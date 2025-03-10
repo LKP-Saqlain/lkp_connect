@@ -18,6 +18,7 @@ import * as Yup from "yup";
 import { endpoints } from "../../../services/endpoints";
 import { regEx } from "../../../helper/method";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import ShowToast from "../../../utils/toastUtils";
 
 const financialYears = [{ value: "2023-2024", label: "2023-2024" }];
 
@@ -37,22 +38,22 @@ const AnnualPNL = () => {
     },
     validationSchema: Yup.object({
       finYear: Yup.string().required("Please select a Financial Year"),
-      clientCode: Yup.string()
-        // .matches(/^[a-zA-Z0-9]*$/, "Only alphanumeric characters allowed")
-        .required("Please enter a Client Code"),
+      clientCode: Yup.string().required("Please enter a Client Code"),
     }),
     onSubmit: async (values) => {
       const { finYear, clientCode } = values;
       console.log("submitClick", finYear, clientCode);
-      // let uId = localStorage.getItem("Id");
+
       const payload = {
         clientCode: clientCode,
         finYear: finYear,
         userId: user_id,
       };
+
       try {
         let token = localStorage.getItem("tkn");
         dispatch(showLoader("Please wait, We are Processing your Request"));
+
         const response = await axios.post(
           `https://middlewareapi.lkp.net.in${endpoints.GetPNL}`,
           payload,
@@ -63,17 +64,37 @@ const AnnualPNL = () => {
             },
           }
         );
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", "file.xlsx");
-        document.body.appendChild(link);
-        link.click();
-        dispatch(hideLoader());
-        formik.resetForm();
+        const contentType = response.headers["content-type"];
+
+        if (contentType.includes("application/json")) {
+          const reader = new FileReader();
+          reader.onload = (event: any) => {
+            const result = JSON.parse(event.target.result);
+            const message = result?.message || "No data found.";
+            ShowToast("error", message);
+          };
+          reader.readAsText(response.data);
+        } else if (
+          contentType.includes(
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          )
+        ) {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "file.xlsx");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } else {
+          ShowToast("error", "Unexpected response format.");
+        }
       } catch (error) {
         console.error("Download error", error);
+        ShowToast("error", "Download failed. Please try again later.");
+      } finally {
         dispatch(hideLoader());
+        // formik.resetForm();
       }
     },
   });
