@@ -16,7 +16,7 @@ import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
 
 const AnnualAccStatement = () => {
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const isMobile = useMediaQuery("(max-width:800px)");
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
@@ -123,7 +123,7 @@ const AnnualAccStatement = () => {
         <div className="container-fluid">
           <Row className="row-font">
             <Col lg={12}>
-              <Card style={{ minHeight: "85vh" }}>
+              <Card style={{ minHeight: "80vh" }}>
                 <CardHeader>
                   <h4 className="card-title mb-0">
                     Account Performance Report
@@ -133,9 +133,7 @@ const AnnualAccStatement = () => {
                   <form onSubmit={formik.handleSubmit}>
                     <Row>
                       <Col
-                        xs={12}
-                        md={6}
-                        lg={4}
+                        md={4}
                         style={{ marginTop: isMobile ? "16px" : "0" }}
                       >
                         <TextField
@@ -164,7 +162,7 @@ const AnnualAccStatement = () => {
                       </Col>
                       <Col
                         xs={12}
-                        lg={4}
+                        md={4}
                         style={{ marginTop: isMobile ? "16px" : "0" }}
                       >
                         <Box textAlign={isMobile ? "center" : "left"}>
@@ -173,7 +171,7 @@ const AnnualAccStatement = () => {
                             variant="contained"
                             className="btn-font"
                             style={{
-                              width: isMobile ? "100%" : "50%",
+                              width: isMobile ? "100%" : "60%",
                               backgroundColor: "#11395C",
                             }}
                             startIcon={<DownloadIcon />}

@@ -340,7 +340,7 @@ export const getClientDormantStatus = (
     field: "ctermcode",
     headerName: "Client Code",
     align: "left",
-    flex: 2,
+    flex: 1.2,
     disableColumnMenu: true,
   },
   {
@@ -352,7 +352,7 @@ export const getClientDormantStatus = (
   {
     field: "lastTradeDate",
     headerName: "Last Trade Date",
-    flex: 2,
+    flex: 1.5,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -360,7 +360,7 @@ export const getClientDormantStatus = (
   {
     field: "dayCount",
     headerName: "Days to Dormant",
-    flex: 2,
+    flex: 1,
     align: "right",
     disableColumnMenu: true,
   },
@@ -545,7 +545,7 @@ export const clientNotTradedColumns: GridColDef[] = [
   {
     field: "ClientCode",
     headerName: "Client Code",
-    flex: 2,
+    flex: 1.3,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -553,7 +553,7 @@ export const clientNotTradedColumns: GridColDef[] = [
   {
     field: "ClientName",
     headerName: "Client Name",
-    flex: 2,
+    flex: 2.2,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -630,7 +630,7 @@ export const clientNotTradedColumns: GridColDef[] = [
   {
     field: "Active",
     headerName: "Active",
-    flex: 1,
+    flex: 0.8,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -757,7 +757,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "MobileNo",
     headerName: "Mobile No",
-    width: 100,
+    width: 120,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -1570,7 +1570,7 @@ export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "ctermcode",
     headerName: "Client Code",
-    flex: 3,
+    flex: 1.5,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -1578,7 +1578,7 @@ export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "clientName",
     headerName: "Client Name",
-    flex: 3,
+    flex: 2.5,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -1596,7 +1596,7 @@ export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "lastTradeDate",
     headerName: "Last Trade Date",
-    flex: 1,
+    flex: 1.5,
     // minWidth: 150,
     headerAlign: "center",
     disableColumnMenu: true,
