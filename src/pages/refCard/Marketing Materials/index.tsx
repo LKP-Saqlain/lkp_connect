@@ -15,7 +15,7 @@ const MarketingMaterial = () => {
       <CardHeader>
         <h4 className="card-title mb-0">Marketing Materials</h4>
       </CardHeader>
-      <CardBody>
+      <CardBody style={{ minHeight: "75vh" }}>
         <div
           style={{
             display: "flex",

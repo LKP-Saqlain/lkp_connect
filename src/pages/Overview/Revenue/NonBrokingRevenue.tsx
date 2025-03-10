@@ -162,7 +162,7 @@ const NonBrokingRevenue = () => {
                       marginRight: "8px",
                     }}
                   ></div>
-                  <p className="mb-0 me-3">Liquiloans</p>
+                  <p className="mb-0 me-3">Liquid Loans</p>
                 </div>
               </div>
             </Col>

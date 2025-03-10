@@ -545,7 +545,7 @@ export const clientNotTradedColumns: GridColDef[] = [
   {
     field: "ClientCode",
     headerName: "Client Code",
-    flex: 2,
+    flex: 1.3,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -553,7 +553,7 @@ export const clientNotTradedColumns: GridColDef[] = [
   {
     field: "ClientName",
     headerName: "Client Name",
-    flex: 2,
+    flex: 2.2,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -630,7 +630,7 @@ export const clientNotTradedColumns: GridColDef[] = [
   {
     field: "Active",
     headerName: "Active",
-    flex: 1,
+    flex: 0.8,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -757,7 +757,7 @@ export const spipRenewalColumns: GridColDef[] = [
   {
     field: "MobileNo",
     headerName: "Mobile No",
-    width: 100,
+    width: 120,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
