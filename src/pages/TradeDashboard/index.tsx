@@ -84,7 +84,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
             // handleValues(response?.data?.data);
             dispatch(hideLoader());
             if (response?.status === 200) {
-              // ShowToast("error", response?.data);
+              ShowToast("error", response?.data);
               // let { recordsTotal } = response?.data[0];
               // setTotalEntries(recordsTotal);
               // setUserData(response.data);
