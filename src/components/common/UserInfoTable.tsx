@@ -243,7 +243,11 @@ const DataTable = ({
               return (
                 <>
                   <Tooltip title="Edit" arrow placement="top">
-                    <IconButton color="primary" onClick={handleEdit}>
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
                       <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
                     </IconButton>
                   </Tooltip>
@@ -260,6 +264,7 @@ const DataTable = ({
                       background: "none",
                       border: "none",
                       cursor: isDeleted ? "default" : "pointer",
+                      marginLeft: "10px",
                     }}
                   >
                     {isDeleted ? (
@@ -267,6 +272,7 @@ const DataTable = ({
                     ) : (
                       <Tooltip title="Delete" arrow placement="top">
                         <IconButton
+                          sx={{ p: 0 }}
                           color="primary"
                           onClick={() => handleDeleteEntry?.(params.row)}
                         >
