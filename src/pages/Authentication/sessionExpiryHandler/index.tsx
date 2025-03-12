@@ -10,10 +10,10 @@ const SessionExpiryHandler = () => {
 
   const location = useLocation();
   const { data } = useSelector((state: RootState) => state.UserLogin);
-  console.log(data);
+  // console.log(data);
 
-  // const tokenExpiryTime = data?.data?.tokenExpiryTime;
-  const tokenExpiryTime = new Date(Date.now() + 60000).toISOString();
+  const tokenExpiryTime = data?.data?.tokenExpiryTime;
+  // const tokenExpiryTime = new Date(Date.now() + 60000).toISOString();
 
   const timerRef = useRef<NodeJS.Timeout | null>(null); // Track timeout
 
