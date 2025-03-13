@@ -1090,8 +1090,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "StockValue",
     headerName: "Stock Value",
-    flex: 1,
-    minWidth: 100,
+    // flex: 1,
+    width: 130,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1106,8 +1106,7 @@ export const T6Columns: GridColDef[] = [
   {
     field: "G5",
     headerName: ">T5",
-    flex: 1,
-    minWidth: 95,
+    width: 110,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1124,8 +1123,7 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T5",
     headerName: "T5",
-    flex: 1,
-    minWidth: 80,
+    width: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1142,8 +1140,7 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T4",
     headerName: "T4",
-    flex: 0.9,
-    minWidth: 80,
+    width: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1160,8 +1157,7 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T3",
     headerName: "T3",
-    flex: 0.9,
-    minWidth: 80,
+    width: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1178,8 +1174,7 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T2",
     headerName: "T2",
-    flex: 0.9,
-    minWidth: 80,
+    width: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1196,8 +1191,7 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T1",
     headerName: "T1",
-    flex: 0.9,
-    minWidth: 110,
+    width: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,

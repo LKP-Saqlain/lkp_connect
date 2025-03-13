@@ -5,6 +5,9 @@ export const apiServices = {
   getAnnualPnlData: async (payload: any) => {
     return await apiService("POST", endpoints.GetPNL, payload);
   },
+  getPnlData: async (payload: any) => {
+    return await apiService("POST", endpoints.GetPNLStatement, payload);
+  },
   GetPNLAccountDetailsPdf: async (payload: any) => {
     return await apiService("POST", endpoints.GetPNLAccountDetailsPdf, payload);
   },
