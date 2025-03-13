@@ -10,6 +10,7 @@ const SessionExpiryHandler = () => {
 
   const location = useLocation();
   const { data } = useSelector((state: RootState) => state.UserLogin);
+  // console.log(data);
 
   const tokenExpiryTime = data?.data?.tokenExpiryTime;
   // const tokenExpiryTime = new Date(Date.now() + 60000).toISOString();
