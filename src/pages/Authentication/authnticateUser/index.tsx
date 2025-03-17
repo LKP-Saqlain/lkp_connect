@@ -313,7 +313,10 @@ const AuthenticateUser = () => {
               helperText={
                 formik.touched.authentication && formik.errors.authentication
               }
-              sx={{ marginBottom: 2, width: isMobile ? "100%" : "400px" }}
+              sx={{
+                marginBottom: 1.2,
+                width: isMobile ? "100%" : "400px",
+              }}
             />
           ) : (
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -325,9 +328,8 @@ const AuthenticateUser = () => {
                     : null
                 }
                 sx={{
-                  marginBottom: 2,
+                  marginBottom: 1.2,
                   width: isMobile ? "100%" : "400px",
-                  height: isMobile ? "40px" : "40px",
                 }}
                 maxDate={dayjs().subtract(18, "year")}
                 minDate={dayjs().subtract(64, "year")}
