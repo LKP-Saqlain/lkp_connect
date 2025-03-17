@@ -187,7 +187,9 @@ const T6Table = ({ handleTradingOpen }: any) => {
             className="main-card-body"
             style={{
               overflow: "hidden",
-              height: `${Math.min(t6Data.length * 50 + 40, 250)}px`,
+              height: `${
+                t6Data.length > 0 ? Math.min(t6Data.length * 50 + 40, 250) : 200 // Minimum height when data is empty
+              }px`,
               padding: "10px",
             }}
           >
@@ -228,10 +230,14 @@ const T6Table = ({ handleTradingOpen }: any) => {
             className="main-card-body"
             style={{
               overflow: "hidden",
-              height: `${Math.min(
-                upcomingOverviewDormantTableData.length * 50 + 40,
-                250
-              )}px`, // 50px per record + padding, max 250px
+              height: `${
+                upcomingOverviewDormantTableData.length > 0
+                  ? Math.min(
+                      upcomingOverviewDormantTableData.length * 50 + 40,
+                      250
+                    )
+                  : 450 // Minimum height when data is empty
+              }px`,
               padding: "10px",
             }}
           >
