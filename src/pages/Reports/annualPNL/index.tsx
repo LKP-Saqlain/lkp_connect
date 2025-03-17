@@ -20,7 +20,10 @@ import { regEx } from "../../../helper/method";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ShowToast from "../../../utils/toastUtils";
 
-const financialYears = [{ value: "2023-2024", label: "2023-2024" }];
+const financialYears = [
+  { value: "2023-2024", label: "2023-2024" },
+  // { value: "2024-2025", label: "2024-2025" },
+];
 
 const AnnualPNL = () => {
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -52,9 +55,15 @@ const AnnualPNL = () => {
 
       const token = localStorage.getItem("tkn");
       dispatch(showLoader("Please wait, We are Processing your Request"));
+      let apiUrl = "";
+      if (finYear === "2023-2024") {
+        apiUrl = `https://middlewareapi.lkp.net.in${endpoints.GetPNL}`; // Old API
+      } else {
+        apiUrl = `https://middlewareapi.lkp.net.in${endpoints.GetPNLStatement}`; // New API
+      }
 
       axios
-        .post(`https://middlewareapi.lkp.net.in${endpoints.GetPNL}`, payload, {
+        .post(apiUrl, payload, {
           responseType: "blob",
           headers: {
             Authorization: `Bearer ${token}`,
