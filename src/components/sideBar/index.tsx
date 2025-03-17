@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
-import { useMediaQuery } from "@mui/material";
-import Box from "@mui/material/Box";
+import { useMediaQuery, Box } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -33,9 +32,9 @@ import CoreReport from "../../pages/Reports/CoreReport";
 // import { apiServices } from "../../services";
 import { MenuItems } from "../../types";
 // import MenuMaster from "../../pages/Masters/MenuMaster";
-import AccessMapping from "../../pages/Masters/AccessMapping";
-import RMSAllocation from "../../pages/RMS/Allocation";
-import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
+// import AccessMapping from "../../pages/Masters/AccessMapping";
+// import RMSAllocation from "../../pages/RMS/Allocation";
+// import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
 import { persistor } from "../../redux/store";
 import { RootState, AppDispatch } from "../../redux/store";
 import ShowToast from "../../utils/toastUtils";
@@ -62,6 +61,7 @@ import { apiServices } from "../../services";
 import MarketingMaterial from "../../pages/refCard/Marketing Materials";
 import RegisDetails from "../../pages/refCard/Registration Details";
 import RegulatorAnnouncement from "../../pages/refCard/regulatory announcement";
+import CustomModal from "../common/DPModal";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 
 const drawerWidth = 240;
@@ -159,9 +159,11 @@ const SideBar = () => {
   const [nudgeCount, setNudgeCount] = useState(0);
 
   const [sideBarNudge, setSideBarNudge] = useState<any[][]>([]);
+  const [modal_center, setmodal_center] = useState<boolean>(false);
 
   // const drawerWidth = isMobile ? 180 : 240;
-  const settings = ["Logout"];
+  // const settings = ["Change User", "Logout"];
+  const [userAccess, setUserAccess] = useState<string[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -169,11 +171,31 @@ const SideBar = () => {
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+
+  const { name } = useSelector(
+    (state: RootState) => state.AuthUser?.data?.data
+  );
+  console.log("reduxStateUserName", name);
+
   const lastBrokingValues = useSelector(
     (state: RootState) => state.userOverView?.data?.data?.data
   );
 
   // useClearStorageOnTabClose();   //use to remove local and session storage when tab is changed
+
+  useEffect(() => {
+    // const userId = localStorage.getItem("Id");
+
+    const updatedSettings = [
+      // ...(userId === import.meta.env.VITE_ADMIN_CRED_1 ||
+      // userId === import.meta.env.VITE_ADMIN_CRED_2
+      //   ? ["Change User"]
+      //   : []),
+      "Logout",
+    ];
+
+    setUserAccess(updatedSettings);
+  }, []); // Empty dependency to run only on mount
 
   useEffect(() => {
     if (selectedViewMore) {
@@ -279,6 +301,8 @@ const SideBar = () => {
   useEffect(() => {
     if (activeMenu === "Client Details") {
       setApiStatus(true);
+      console.log(apiStatus);
+      
     } else {
       setApiStatus(false);
     }
@@ -297,7 +321,7 @@ const SideBar = () => {
         console.log("response", res);
         console.log("res", res?.data);
         const processedMenus = buildMenuHierarchy(res?.data);
-        console.log("menuItems-->", processedMenus[0].menu_name);
+        console.log("menuItems-->", processedMenus);
         setMenuItems(processedMenus);
 
         if (processedMenus[0].menu_name === "Overview") {
@@ -394,6 +418,8 @@ const SideBar = () => {
       localStorage.removeItem("activeSubItem");
       sessionStorage.removeItem("dashboardNudgeFetched");
       navigate("/");
+    } else if (value === "Change User") {
+      setmodal_center(true); // Open the CustomModal
     } else {
       console.log("User clicked on:", value);
     }
@@ -412,7 +438,6 @@ const SideBar = () => {
   };
 
   const handleTradingOpen = (value: any) => {
-    // alert("clicked from Trading page");
     console.log("ClickedValue", value);
     if (value === "T6") {
       setActiveMenu("Trading");
@@ -428,120 +453,264 @@ const SideBar = () => {
     handleDrawerClose();
     // handleMenuClick("");
   };
-  const renderContent = () => {
-    console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
-    // const hasOverview = menuItems.some((item) => item.menu_name === "Overview");
-    // if (!activeMenu && hasOverview) {
-    //   setActiveMenu("Overview");
-    //   return <OverviewComponent />;
-    // }
-    switch (activeMenu) {
-      case "Overview":
-        return <OverviewComponent handleTradingOpen={handleTradingOpen} />;
-      case "Zone Overview":
-        return <RegOverview />;
-      case "Stock Study":
-        return <StockStudy />;
-      case "Trading":
-        return <TradeDashboard selectedTrading={selectedViewMore} />;
-      case "Revenue Details":
-      case "Masters":
-        switch (activeSubItem) {
-          case "Menu Master":
-            return <Typography>Menu Master Content</Typography>;
-          case "User Access Mapping":
-            return <AccessMapping />;
-          default:
-            return null;
-        }
-      case "Reports":
-        switch (activeSubItem) {
-          case "Tax PNL Statement":
-            return <AnnualPNL />;
-          case "Dormant Client Report":
-            return <DormantClient activeSubItem={activeSubItem} />;
-          case "Last Trade Data":
-            return <LastTrade />;
-          case "Quarterly Payout Recovery":
-            return <QuarterlyPayout activeSubItem={activeSubItem} />;
-          case "SLBM ClientHolding":
-            return <SLBM />;
-          case "Core Alerts Report":
-            return <CoreReport />;
-          case "Account Performance Report":
-            return <AccStatement />;
-          case "DP Debit Recovery":
-            return <DPRecovery activeSubItem={activeSubItem} />;
-          default:
-            return null;
-        }
-      case "Compliance":
-        switch (activeSubItem) {
-          case "UCCCode MATCH":
-            return <RegulatorAnnouncement activeSubItem={activeSubItem} />;
-          case "KRA PAN STATUS":
-            return <RegisDetails activeSubItem={activeSubItem} />;
-          case "Communication Retrival Report":
-            return <Retrival activeSubItem={activeSubItem} />;
-          case "Communication Retrival Entry":
-            return <CommEntry activeSubItem={activeSubItem} />;
-          case "Communication Retrival Checker":
-            return <ComChecker activeSubItem={activeSubItem} />;
-          default:
-            return null;
-        }
 
-      case "RMS":
-        switch (activeSubItem) {
-          case "RMS Allocation":
-            return <RMSAllocation />;
-          case "Upload SLBM Holding":
-            return <SLBMHoldings />;
-          default:
-            return null;
-        }
-      case "Referal Lead":
-        switch (activeSubItem) {
-          case "Referal Entry":
-            return <EkycLinks />;
-          case "Referal Entry Status":
-            return <Main activeSubItem={activeSubItem} />;
-          case "Referal Lead Updation":
-            return <OTDetails />;
-          //  (
-          //   <>
-          //     <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-          //       Welcome to LKP Dashboard
-          //     </Typography>
-          //     <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-          //       Please select anyone from left
-          //     </Typography>
-          //   </>
-          // );
-          case "Referal Product Wise MIS Report":
-            return <MarketingMaterial />;
-          default:
-            return null;
-        }
-      case "Client Details":
-        return (
-          <ClientDetails
-            handleDrawerClose={handleDrawerClose}
-            handleDrawerOpen={handleDrawerOpen}
-            apiStatus={apiStatus}
-            selectedTrading={selectedViewMore}
-            activeMenu={activeMenu}
-          />
-        );
-      case "Kyc Dashboard":
-        switch (activeSubItem) {
-          case "Kyc Summary":
-            return "";
-          default:
-            return null;
-        }
-    }
+  const ComplianceSubComponents: any = {
+    "UCCCode MATCH": (props: any) => <RegulatorAnnouncement {...props} />,
+    "KRA PAN STATUS": (props: any) => <RegisDetails {...props} />,
+    "Communication Retrival Entry": (props: any) => <CommEntry {...props} />,
+    "Communication Retrival Checker": (props: any) => <ComChecker {...props} />,
+    "Communication Retrival Report": (props: any) => <Retrival {...props} />,
   };
+
+  const reportsSubComponents: any = {
+    "Tax PNL Statement": AnnualPNL,
+    "Dormant Client Report": (props: any) => <DormantClient {...props} />,
+    "Last Trade Data": LastTrade,
+    "Quarterly Payout Recovery": (props: any) => <QuarterlyPayout {...props} />,
+    "SLBM ClientHolding": SLBM,
+    "Core Alerts Report": CoreReport,
+    "Account Performance Report": AccStatement,
+    "DP Debit Recovery": (props: any) => <DPRecovery {...props} />,
+  };
+
+  const refferalLeadComponents: any = {
+    "Referal Entry": EkycLinks,
+    "Referal Entry Status": (props: any) => <Main {...props} />,
+    "Referal Lead Updation": (props: any) => <OTDetails {...props} />,
+    "Referal Product Wise MIS Report": (props: any) => (
+      <MarketingMaterial {...props} />
+    ),
+  };
+
+  const componentMap: any = {
+    Overview: OverviewComponent,
+    Trading: TradeDashboard,
+    "Client Details": ClientDetails,
+    "Zone Overview": RegOverview,
+    "Stock Study": StockStudy,
+    Reports: ({ activeSubItem }: any) => {
+      const SubComponent = reportsSubComponents[activeSubItem];
+      return SubComponent ? (
+        <SubComponent activeSubItem={activeSubItem} />
+      ) : (
+        // <div>No SubComponent for: {activeSubItem}</div>
+        <div></div>
+      );
+    },
+    Compliance: ({ activeSubItem }: any) => {
+      const SubComponent = ComplianceSubComponents[activeSubItem];
+      return SubComponent ? (
+        <SubComponent activeSubItem={activeSubItem} />
+      ) : (
+        <div>No SubComponent for: {activeSubItem}</div>
+        // <div></div>
+      );
+    },
+    "Referal Lead": ({ activeSubItem }: any) => {
+      const SubComponent = refferalLeadComponents[activeSubItem];
+      return SubComponent ? (
+        <SubComponent activeSubItem={activeSubItem} />
+      ) : (
+        <div>No SubComponent for: {activeSubItem}</div>
+        // <div></div>
+      );
+    },
+  };
+
+  const renderComponent = (
+    menuItem: any,
+    handleTradingOpen: (value: any) => void
+  ) => {
+    console.log("Test12--->", typeof menuItem.menu_name);
+
+    const Component = componentMap[menuItem.menu_name];
+
+    if (!Component) {
+      return <div>Component missing for: {menuItem.menu_name}</div>;
+    }
+
+    // Pass Props here for dynamic
+    const props =
+      menuItem.menu_name === "Overview"
+        ? { handleTradingOpen: () => handleTradingOpen("T6") }
+        : menuItem.menu_name === "Reports"
+        ? { activeSubItem }
+        : menuItem.menu_name === "Compliance"
+        ? { activeSubItem }
+        : menuItem.menu_name === "Referal Lead"
+        ? { activeSubItem }
+        : {};
+
+    return <Component {...props} />;
+  };
+
+  const renderSubItems = (
+    subItems: any,
+    activeMenu: string,
+    handleTradingOpen: (value: any) => void
+  ) => {
+    return subItems
+      .sort((a: any, b: any) => a.menu_order - b.menu_order)
+      .map((subItem: any) => (
+        <Box key={subItem.menu_code} sx={{ ml: 2 }}>
+          {/* <Button onClick={() => handleMenuClick(subItem.menu_name)}>
+            {subItem.menu_name}
+          </Button> */}
+
+          {/* Render component if it's active */}
+          {activeMenu === subItem.menu_name &&
+            renderComponent(subItem, handleTradingOpen)}
+        </Box>
+      ));
+  };
+
+  const renderMenu = (
+    menuData: any,
+    activeMenu: string,
+    handleTradingOpen: (value: any) => void
+  ) => {
+    console.log("renderMenuData1", menuData);
+
+    return (
+      menuData
+        // .filter((item: any) => !item.isParent)
+        .sort((a: any, b: any) => a.menu_order - b.menu_order)
+        .map((menuItem: any) => (
+          <>
+            {console.log("renderMenuData2", menuItem)}
+            <Box key={menuItem.menu_code} sx={{ mb: 2 }}>
+              {/* Render component if it's active */}
+              {activeMenu === menuItem.menu_name &&
+                renderComponent(menuItem, handleTradingOpen)}
+
+              {/* Render sub-items if present */}
+              {menuItem.subItems &&
+                menuItem.subItems.length > 0 &&
+                renderSubItems(
+                  menuItem.subItems,
+                  activeMenu,
+                  handleTradingOpen
+                )}
+            </Box>
+          </>
+        ))
+    );
+  };
+
+  // const renderContent = () => {
+  //   console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
+  //   // const hasOverview = menuItems.some((item) => item.menu_name === "Overview");
+  //   // if (!activeMenu && hasOverview) {
+  //   //   setActiveMenu("Overview");
+  //   //   return <OverviewComponent />;
+  //   // }
+  //   switch (activeMenu) {
+  //     case "Overview": --------DONE
+  //       return <OverviewComponent handleTradingOpen={handleTradingOpen} />;
+  //     case "Zone Overview":--------DONE
+  //       return <RegOverview />;
+  //     case "Stock Study":--------DONE
+  //       return <StockStudy />;
+  //     case "Trading":--------DONE
+  //       return <TradeDashboard selectedTrading={selectedViewMore} />;
+  //     case "Revenue Details":
+  //     case "Masters":
+  //       switch (activeSubItem) {
+  //         case "Menu Master":
+  //           return <Typography>Menu Master Content</Typography>;
+  //         case "User Access Mapping":
+  //           return <AccessMapping />;
+  //         default:
+  //           return null;
+  //       }
+  //     case "Reports":
+  //       switch (activeSubItem) {
+  //         case "Tax PNL Statement":
+  //           return <AnnualPNL />;
+  //         case "Dormant Client Report":
+  //           return <DormantClient activeSubItem={activeSubItem} />;
+  //         case "Last Trade Data":
+  //           return <LastTrade />;
+  //         case "Quarterly Payout Recovery":
+  //           return <QuarterlyPayout activeSubItem={activeSubItem} />;
+  //         case "SLBM ClientHolding":
+  //           return <SLBM />;
+  //         case "Core Alerts Report":
+  //           return <CoreReport />;
+  //         case "Account Performance Report":
+  //           return <AccStatement />;
+  //         case "DP Debit Recovery":
+  //           return <DPRecovery activeSubItem={activeSubItem} />;
+  //         default:
+  //           return null;
+  //       }
+  //     case "Compliance":
+  //       switch (activeSubItem) {
+  //         case "UCCCode MATCH":
+  //           return <RegulatorAnnouncement activeSubItem={activeSubItem} />;
+  //         case "KRA PAN STATUS":
+  //           return <RegisDetails activeSubItem={activeSubItem} />;
+  //         case "Communication Retrival Report":
+  //           return <Retrival activeSubItem={activeSubItem} />;
+  //         case "Communication Retrival Entry":
+  //           return <CommEntry activeSubItem={activeSubItem} />;
+  //         case "Communication Retrival Checker":
+  //           return <ComChecker activeSubItem={activeSubItem} />;
+  //         default:
+  //           return null;
+  //       }
+
+  //     case "RMS":
+  //       switch (activeSubItem) {
+  //         case "RMS Allocation":
+  //           return <RMSAllocation />;
+  //         case "Upload SLBM Holding":
+  //           return <SLBMHoldings />;
+  //         default:
+  //           return null;
+  //       }
+  //     case "Referal Lead":
+  //       switch (activeSubItem) {
+  //         case "Referal Entry":
+  //           return <EkycLinks />;
+  //         case "Referal Entry Status":
+  //           return <Main activeSubItem={activeSubItem} />;
+  //         case "Referal Lead Updation":
+  //           return <OTDetails />;
+  //         //  (
+  //         //   <>
+  //         //     <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
+  //         //       Welcome to LKP Dashboard
+  //         //     </Typography>
+  //         //     <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
+  //         //       Please select anyone from left
+  //         //     </Typography>
+  //         //   </>
+  //         // );
+  //         case "Referal Product Wise MIS Report":
+  //           return <MarketingMaterial />;
+  //         default:
+  //           return null;
+  //       }
+  //     case "Client Details":
+  //       return (
+  //         <ClientDetails
+  //           handleDrawerClose={handleDrawerClose}
+  //           handleDrawerOpen={handleDrawerOpen}
+  //           apiStatus={apiStatus}
+  //           selectedTrading={selectedViewMore}
+  //           activeMenu={activeMenu}
+  //         />
+  //       );
+  //     case "Kyc Dashboard":
+  //       switch (activeSubItem) {
+  //         case "Kyc Summary":
+  //           return "";
+  //         default:
+  //           return null;
+  //       }
+  //   }
+  // };
 
   const handleNotificationClick = () => {
     setIsNudgeOpen(!isNudgeOpen); // Toggle the visibility of Nudge component
@@ -553,6 +722,48 @@ const SideBar = () => {
     setIsNudgeOpen(false);
   }
 
+  // const handleUserClick = () => {
+  //   let payload = {
+  //     user_id: `EMP-${userChangeValue}`,
+  //     user_type: "Employee",
+  //     auth_type: "PAN",
+  //     auth_value: "IHNPS0213M",
+  //   };
+  //   dispatch(showLoader(""));
+  //   dispatch(AuthUser(payload))
+  //     .unwrap()
+  //     .then((response) => {
+  //       console.log("2FAresponse", response);
+  //       if (response?.status === 200) {
+  //         const { token, name } = response?.data;
+
+  //         setTimeout(() => {
+  //           console.log("2FA_Response", response?.data);
+  //           localStorage.setItem("authenticated", "true");
+  //           localStorage.setItem("tkn", token);
+  //           localStorage.setItem("userName", name);
+  //           dispatch(updateUserId(`EMP-${userChangeValue}`));
+  //           setUserChangeValue("");
+  //           window.location.reload();
+  //         }, 250);
+  //         // navigate("/dashboard");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       const { message } = error;
+  //       console.log("Error->", message);
+  //       dispatch(hideLoader());
+  //       // formik.setFieldError("password", message);
+  //       ShowToast(
+  //         "error",
+  //         message || "Sorry for the inconvenience, please try after some time."
+  //       );
+  //     })
+  //     .finally(() => {
+  //       dispatch(hideLoader());
+  //     });
+  // };
+
   // useEffect(() => {
   //   setmodal_animationZoom((prev) => !prev);
   //   tog_animationZoom();
@@ -560,6 +771,15 @@ const SideBar = () => {
 
   return (
     <>
+      <CustomModal
+        tog_center={() => setmodal_center(!modal_center)}
+        modal_center={modal_center}
+        setmodal_center={setmodal_center}
+        Msg={"Change User"}
+        activeSubItem={activeSubItem}
+        isAdmin={true}
+      />
+
       {isNudgeOpen && (
         <Nudge
           modal_animationZoom={modal_animationZoom}
@@ -610,6 +830,7 @@ const SideBar = () => {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
+
             <Box
               sx={{
                 // border: "2px solid black",
@@ -666,7 +887,8 @@ const SideBar = () => {
               Welcome
             </Typography> */}
               <Typography sx={{ fontSize: "14px", fontFamily: "Public Sans" }}>
-                {localStorage.getItem("userName")}
+                {/* {localStorage.getItem("userName")} */}
+                {name}
               </Typography>
               <Typography
                 sx={{
@@ -705,7 +927,7 @@ const SideBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {userAccess.map((setting) => (
                 <MenuItem
                   key={setting}
                   onClick={() => handleCloseUserMenu(setting)}
@@ -777,7 +999,7 @@ const SideBar = () => {
             // height: "100vh", // Full height of the viewport
           }}
         >
-          <Box>{renderContent()}</Box>
+          <Box>{renderMenu(menuItems, activeMenu, handleTradingOpen)}</Box>
         </Box>
       </Box>
     </>

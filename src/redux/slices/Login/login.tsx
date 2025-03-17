@@ -17,7 +17,12 @@ const LoginPageSlice = createSlice({
   name: "Login",
   initialState,
   reducers: {
-    // Optional: If you need some synchronous actions
+    updateUserId: (state, action) => {
+      if (state.data && typeof state.data === "object") {
+        console.log("state.data", state.data, "action.payload", action.payload);
+        state.data.data.user_id = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -35,4 +40,5 @@ const LoginPageSlice = createSlice({
       });
   },
 });
+export const { updateUserId } = LoginPageSlice.actions;
 export default LoginPageSlice.reducer;
