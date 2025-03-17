@@ -1,8 +1,25 @@
-import { Button, Modal as ReactstrapModal, ModalBody } from "reactstrap";
+import {
+  Button,
+  Modal as ReactstrapModal,
+  ModalBody,
+  Col,
+  Row,
+} from "reactstrap";
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { regEx } from "../../../helper/method";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { AuthUser } from "../../../redux/thunk/AuthUser";
+import { updateUserId } from "../../../redux/slices/Login/login";
+import ShowToast from "../../../utils/toastUtils";
+import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+// import { isAdminAccess } from "../../../helper/commmon";
 
 interface CustomModalProps {
   tog_center: () => void;
@@ -15,6 +32,7 @@ interface CustomModalProps {
   activeSubItem?: any;
   action?: "approve" | "reject";
   expiredtime?: boolean;
+  isAdmin?: boolean;
 }
 
 const CustomModal = ({
@@ -28,8 +46,17 @@ const CustomModal = ({
   handleApproval,
   activeSubItem,
   expiredtime,
+  isAdmin,
 }: CustomModalProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { name } = useSelector(
+    (state: RootState) => state.AuthUser?.data?.data
+  );
+  console.log("reduxStateUserName", name);
 
   const handleSessionClear = () => {
     localStorage.clear();
@@ -39,13 +66,26 @@ const CustomModal = ({
   };
 
   const formik = useFormik({
-    initialValues: { remark: "" },
-    validationSchema:
-      activeSubItem === "Communication Retrival Checker"
-        ? Yup.object({
-            remark: Yup.string().trim().required("Remark is required"),
-          })
-        : Yup.object(),
+    initialValues: { remark: "", userChangeValue: "", userPanValue: "" },
+    validationSchema: Yup.object({
+      // Remark validation for "Communication Retrival Checker"
+      ...(activeSubItem === "Communication Retrival Checker" && {
+        remark: Yup.string().trim().required("Remark is required"),
+      }),
+
+      // Admin validation for userChangeValue
+      ...(isAdmin && {
+        userChangeValue: Yup.string()
+          .trim()
+          .matches(/^[0-9]{4}$/, "Client code must be exactly 4 digits")
+          .required("Client code is required"),
+
+        userPanValue: Yup.string()
+          .trim()
+          .matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Invalid PAN number format")
+          .required("PAN number is required"),
+      }),
+    }),
     onSubmit: (values) => {
       if (getUserDetails && row) {
         getUserDetails(row);
@@ -65,16 +105,74 @@ const CustomModal = ({
     formik.resetForm();
   };
 
-  // const handleSessionClear = () => {
-  //   setmodal_center(false);
-  //   localStorage.removeItem("tkn");
-  //   localStorage.removeItem("Id");
-  //   localStorage.removeItem("uIdType");
-  //   localStorage.removeItem("userName");
-  //   localStorage.removeItem("activeMenu");
-  //   localStorage.removeItem("activeSubItem");
-  //   navigate("/");
-  // };
+  const handleCustomChange = (event: any) => {
+    const { name, value } = event.target;
+    console.log("eventCheck", name, value);
+
+    if (name === "userChangeValue") {
+      if (regEx.number.test(value)) {
+        formik.setFieldValue(name, value.replace(/\s/g, ""));
+      }
+    } else if (name === "userPanValue") {
+      const sanitizedValue = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      formik.setFieldValue(name, sanitizedValue);
+    } else {
+      formik.handleChange(event);
+    }
+  };
+
+  const handleUserClick = async () => {
+    const errors = await formik.validateForm();
+
+    if (Object.keys(errors).length > 0) {
+      formik.setTouched({
+        userChangeValue: true,
+        userPanValue: true,
+      });
+      return;
+    }
+
+    let payload = {
+      user_id: `EMP-${formik.values.userChangeValue}`,
+      user_type: "Employee",
+      auth_type: "PAN",
+      auth_value: formik.values.userPanValue,
+    };
+    dispatch(showLoader(""));
+    dispatch(AuthUser(payload))
+      .unwrap()
+      .then((response) => {
+        console.log("2FAresponse", response);
+        if (response?.status === 200) {
+          const { token } = response?.data;
+
+          setTimeout(() => {
+            console.log("2FA_Response", response?.data);
+            localStorage.setItem("authenticated", "true");
+            localStorage.setItem("tkn", token);
+            // localStorage.setItem("userName", name);
+            dispatch(updateUserId(`EMP-${formik.values.userChangeValue}`));
+            setmodal_center(false);
+            formik.resetForm();
+            window.location.reload();
+          }, 250);
+          // navigate("/dashboard");
+        }
+      })
+      .catch((error) => {
+        const { message } = error;
+        console.log("Error->", message);
+        dispatch(hideLoader());
+        // formik.setFieldError("password", message);
+        ShowToast(
+          "error",
+          message || "Sorry for the inconvenience, please try after some time."
+        );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
 
   return (
     <ReactstrapModal
@@ -86,12 +184,14 @@ const CustomModal = ({
     >
       <ModalBody className="text-center p-3">
         {activeSubItem !== "Communication Retrival Checker" &&
-          activeSubItem !== "UCCCode MATCH" && (
-            <i className="ri-alert-line display-5 text-warning"></i>
-          )}
+          activeSubItem !== "UCCCode MATCH" &&
+          !isAdmin && <i className="ri-alert-line display-5 text-warning"></i>}
+        {isAdmin && (
+          <ChangeCircleIcon sx={{ color: "#11395C", fontSize: "3.5rem" }} />
+        )}
 
         <div className="mt-4" style={{ fontFamily: "Public Sans" }}>
-          {activeSubItem === "DP Debit Recovery" ? (
+          {activeSubItem === "DP Debit Recovery" && !isAdmin ? (
             <>
               <h6 className="mb-4">
                 An email will be sent informing the client about his DP Debit
@@ -119,43 +219,140 @@ const CustomModal = ({
               helperText={formik.touched.remark && formik.errors.remark}
             />
           )}
-
-          <div className="hstack gap-2 pt-2 justify-content-center">
-            {expiredtime || activeSubItem === "UCCCode MATCH" ? (
-              <Button
-                className="btn"
+          {isAdmin && (
+            <Row
+              className=""
+              style={{
+                gap: isMobile ? "1rem" : "0",
+                fontFamily: "Public Sans",
+              }}
+            >
+              <Col xs={12}>
+                <TextField
+                  size="small"
+                  label="Enter Client Code"
+                  variant="outlined"
+                  name="userChangeValue"
+                  value={formik.values.userChangeValue}
+                  onChange={handleCustomChange}
+                  onBlur={formik.handleBlur}
+                  InputProps={{ startAdornment: "EMP- " }}
+                  fullWidth
+                  inputProps={{ maxLength: 4 }}
+                  sx={{ width: isMobile ? "100%" : "50%" }}
+                  error={
+                    formik.touched.userChangeValue &&
+                    Boolean(formik.errors.userChangeValue)
+                  }
+                  helperText={
+                    formik.touched.userChangeValue &&
+                    formik.errors.userChangeValue
+                  }
+                />
+              </Col>
+              <Col xs={12}>
+                <TextField
+                  size="small"
+                  label="Enter PAN Number"
+                  variant="outlined"
+                  name="userPanValue"
+                  value={formik.values.userPanValue}
+                  onChange={handleCustomChange}
+                  onBlur={formik.handleBlur}
+                  fullWidth
+                  inputProps={{ maxLength: 10 }}
+                  sx={{ width: isMobile ? "100%" : "50%" }}
+                  error={
+                    formik.touched.userPanValue &&
+                    Boolean(formik.errors.userPanValue)
+                  }
+                  helperText={
+                    formik.touched.userPanValue && formik.errors.userPanValue
+                  }
+                />
+              </Col>
+              <Row
                 style={{
-                  width: "80px",
-                  backgroundColor: "#11395C",
-                  borderColor: "#11395C",
+                  // gap: isMobile ? "0.5rem" : "0",
+                  justifyContent: "center",
                 }}
-                onClick={
-                  expiredtime
-                    ? handleSessionClear
-                    : () => console.log("clicked Regulator Announcements")
-                }
               >
-                OK
-              </Button>
-            ) : (
-              <>
+                <Col
+                  xs={6}
+                  style={{ display: "flex", justifyContent: "flex-start" }}
+                >
+                  <Button
+                    className="btn"
+                    style={{
+                      width: isMobile ? "100%" : "150px",
+                      backgroundColor: "#11395C",
+                      borderColor: "#11395C",
+                    }}
+                    onClick={handleClose}
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+                <Col
+                  xs={6}
+                  style={{ display: "flex", justifyContent: "flex-end" }}
+                >
+                  <Button
+                    variant="contained"
+                    style={{
+                      width: isMobile ? "100%" : "150px",
+                      backgroundColor: "#EE4B2B",
+                      borderColor: "#EE4B2B",
+                    }}
+                    onClick={handleUserClick}
+                  >
+                    Change
+                  </Button>
+                </Col>
+              </Row>
+            </Row>
+          )}
+          {!isAdmin && (
+            <div className="hstack gap-2 pt-2 justify-content-center">
+              {expiredtime || activeSubItem === "UCCCode MATCH" ? (
                 <Button
                   className="btn"
-                  style={{ backgroundColor: "#EE4B2B", borderColor: "#EE4B2B" }}
-                  onClick={handleClose}
+                  style={{
+                    width: "80px",
+                    backgroundColor: "#11395C",
+                    borderColor: "#11395C",
+                  }}
+                  onClick={
+                    expiredtime
+                      ? handleSessionClear
+                      : () => console.log("clicked Regulator Announcements")
+                  }
                 >
-                  Cancel
+                  OK
                 </Button>
-                <Button
-                  className="btn"
-                  style={{ width: "80px", backgroundColor: "#11395C" }}
-                  type="submit"
-                >
-                  Yes
-                </Button>
-              </>
-            )}
-          </div>
+              ) : (
+                <>
+                  <Button
+                    className="btn"
+                    style={{
+                      backgroundColor: "#EE4B2B",
+                      borderColor: "#EE4B2B",
+                    }}
+                    onClick={handleClose}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="btn"
+                    style={{ width: "80px", backgroundColor: "#11395C" }}
+                    type="submit"
+                  >
+                    Yes
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
         </form>
       </ModalBody>
     </ReactstrapModal>

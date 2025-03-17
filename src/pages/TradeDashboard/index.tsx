@@ -49,6 +49,10 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   const { accessType } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
   );
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
   console.log(accessType);
 
   const handleItemClick = (data: any) => {
@@ -112,9 +116,9 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
     const fetchClientCash = async () => {
       if (selectedItem === "Clients Ageing Report") {
         setTradeCWCBData([]);
-        const Id = localStorage.getItem("Id");
+        // const Id = localStorage.getItem("Id");
         const payload = {
-          user_id: Id,
+          user_id: user_id,
         };
         try {
           dispatch(showLoader(""));
@@ -140,9 +144,9 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   const handleExcel = async () => {
     // alert("I am Clicked");
     // if (selectedItem === "Clients Ageing Report") {
-    const Id = localStorage.getItem("Id");
+    // const Id = localStorage.getItem("Id");
     const payload = {
-      user_id: Id,
+      user_id: user_id,
     };
     try {
       dispatch(showLoader(""));

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardHeader } from "reactstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import Widgets from "./Widgets";
 // import TradeCapsule from "./TradeCapsules";
 import TradeInfo from "../../../components/common/UserInfoTable";
@@ -9,6 +9,7 @@ import { apiServices } from "../../../services";
 // import { useMediaQuery } from "@mui/material";
 import "../style.css";
 import ShowToast from "../../../utils/toastUtils";
+import { AppDispatch, RootState } from "../../../redux/store";
 
 interface T6Selling {
   ClientCode: string;
@@ -30,7 +31,11 @@ const T6Table = ({ handleTradingOpen }: any) => {
     setUpcomingOverviewDormantTableData,
   ] = useState<[]>([]);
   // const [top5Birthdays, setTop5Birthdays] = useState<[]>([]);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   // const isMobile = useMediaQuery("(max-width:768px)");
 
@@ -104,9 +109,9 @@ const T6Table = ({ handleTradingOpen }: any) => {
 
   useEffect(() => {
     const fetchClientCash = async () => {
-      const Id = localStorage.getItem("Id");
+      // const Id = localStorage.getItem("Id");
       const payload = {
-        user_id: Id,
+        user_id: user_id,
       };
       try {
         dispatch(showLoader(""));
@@ -180,7 +185,11 @@ const T6Table = ({ handleTradingOpen }: any) => {
           </CardHeader>
           <CardBody
             className="main-card-body"
-            style={{ overflow: "hidden", height: "250px", padding: "10px" }}
+            style={{
+              overflow: "hidden",
+              height: `${Math.min(t6Data.length * 50 + 40, 250)}px`,
+              padding: "10px",
+            }}
           >
             <TradeInfo
               T6Data={t6Data}
@@ -217,7 +226,14 @@ const T6Table = ({ handleTradingOpen }: any) => {
           </CardHeader>
           <CardBody
             className="main-card-body"
-            style={{ overflow: "hidden", height: "250px", padding: "10px" }}
+            style={{
+              overflow: "hidden",
+              height: `${Math.min(
+                upcomingOverviewDormantTableData.length * 50 + 40,
+                250
+              )}px`, // 50px per record + padding, max 250px
+              padding: "10px",
+            }}
           >
             <TradeInfo
               T6Data={upcomingOverviewDormantTableData}
