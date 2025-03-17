@@ -130,7 +130,7 @@ const AnnualPNL = () => {
             <Col lg={12}>
               <Card>
                 <CardHeader>
-                  <h4 className="card-title mb-0">Tax PNL Statement</h4>
+                  <h4 className="card-title mb-0">Tax P&L Statement</h4>
                 </CardHeader>
                 <CardBody>
                   <form onSubmit={formik.handleSubmit}>
@@ -213,9 +213,10 @@ const AnnualPNL = () => {
                               width: isMobile ? "100%" : "50%",
                             }}
                             style={{ backgroundColor: "#11395C" }}
-                            startIcon={<DownloadIcon />}
+                            // startIcon={<DownloadIcon />}
                           >
                             Excel
+                            <DownloadIcon fontSize="small" />
                           </Button>
                         </Box>
                       </Col>

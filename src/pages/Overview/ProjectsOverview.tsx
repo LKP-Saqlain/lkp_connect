@@ -99,7 +99,7 @@ const ProjectsOverview = () => {
                     <h4 className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center">
                       Brokerage Details for Last 10 Days
                     </h4>
-                    <div
+                    {/* <div
                       className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end"
                       style={{ fontFamily: "Public Sans, sans-serif" }}
                     >
@@ -113,7 +113,7 @@ const ProjectsOverview = () => {
                       ></div>
                       <p className="mb-2 mb-md-0 me-4">Gross Brokerage</p>
 
-                      {/* <div
+                      <div
                         style={{
                           backgroundColor: "#f57c00",
                           width: "16px",
@@ -121,8 +121,8 @@ const ProjectsOverview = () => {
                           marginRight: "8px",
                         }}
                       ></div>
-                      <p className="mb-0">AP Share</p> */}
-                    </div>
+                      <p className="mb-0">AP Share</p>
+                    </div> */}
                   </div>
                 </Col>
               </Row>

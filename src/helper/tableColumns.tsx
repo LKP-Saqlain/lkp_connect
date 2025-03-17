@@ -48,7 +48,8 @@ export const getClientActivityStatusColumns = (
   },
   {
     field: "BranchCode",
-    headerName: "BR Code",
+    headerName: "Branch Code",
+    headerClassName: "header-wrap-custom",
     flex: 0.8,
     align: "center",
     headerAlign: "center",
@@ -94,8 +95,9 @@ export const getClientActivityStatusColumns = (
   },
   {
     field: "MTFStatus",
-    headerName: "MTF Status",
-    flex: 1,
+    headerName: "MTF Active/Inactive",
+    // headerClassName: "header-wrap-custom",
+    flex: 1.7,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1742,7 +1744,8 @@ export const dormantColumns: GridColDef[] = [
   },
   {
     field: "branchcode",
-    headerName: "BR Code",
+    headerName: "Branch Code",
+    headerClassName: "header-wrap-custom",
     minWidth: 70,
     align: "right",
     headerAlign: "center",
