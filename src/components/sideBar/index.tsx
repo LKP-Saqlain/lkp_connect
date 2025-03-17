@@ -302,7 +302,6 @@ const SideBar = () => {
     if (activeMenu === "Client Details") {
       setApiStatus(true);
       console.log(apiStatus);
-      
     } else {
       setApiStatus(false);
     }
@@ -576,23 +575,17 @@ const SideBar = () => {
         // .filter((item: any) => !item.isParent)
         .sort((a: any, b: any) => a.menu_order - b.menu_order)
         .map((menuItem: any) => (
-          <>
-            {console.log("renderMenuData2", menuItem)}
-            <Box key={menuItem.menu_code} sx={{ mb: 2 }}>
-              {/* Render component if it's active */}
-              {activeMenu === menuItem.menu_name &&
-                renderComponent(menuItem, handleTradingOpen)}
+          // {console.log("renderMenuData2", menuItem)}
+          <Box key={menuItem.menu_code} sx={{ mb: 2 }}>
+            {/* Render component if it's active */}
+            {activeMenu === menuItem.menu_name &&
+              renderComponent(menuItem, handleTradingOpen)}
 
-              {/* Render sub-items if present */}
-              {menuItem.subItems &&
-                menuItem.subItems.length > 0 &&
-                renderSubItems(
-                  menuItem.subItems,
-                  activeMenu,
-                  handleTradingOpen
-                )}
-            </Box>
-          </>
+            {/* Render sub-items if present */}
+            {menuItem.subItems &&
+              menuItem.subItems.length > 0 &&
+              renderSubItems(menuItem.subItems, activeMenu, handleTradingOpen)}
+          </Box>
         ))
     );
   };

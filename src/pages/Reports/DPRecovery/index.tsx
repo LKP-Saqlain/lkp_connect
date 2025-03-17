@@ -31,7 +31,11 @@ const DPRecovery = ({ activeSubItem }: any) => {
   );
   const [filteredInActiveGroupClients, setFilteredInActiveGroupClients] =
     useState<any[][]>([]);
-  const [ledgerSum, setLedgerSum] = useState(0);
+  const [ledgerSum, setLedgerSum] = useState({
+    total: 0,
+    active: 0,
+    inactive: 0,
+  });
 
   const [selectedCapsule, setSelectedCapsule] = useState("Active Clients");
   // const [searchValue, setSearchValue] = useState("");
@@ -86,12 +90,33 @@ const DPRecovery = ({ activeSubItem }: any) => {
 
         console.log("responseData:", responseData, Array.isArray(responseData));
 
+        // Calculate total Ledger Debit Amount for Active, Inactive, and Total
         const totalLedgerDebitAmt = responseData.reduce(
           (sum, client) => sum + (client.Ledger_DebitAmt || 0),
           0
         );
-        console.log("Total Ledger Debit Amount:", totalLedgerDebitAmt);
-        setLedgerSum(totalLedgerDebitAmt);
+        const totalLedgerDebitAmtActive = responseData
+          .filter((client) => client.BOStatus === "Active")
+          .reduce((sum, client) => sum + (client.Ledger_DebitAmt || 0), 0);
+        const totalLedgerDebitAmtInactive = responseData
+          .filter((client) => client.BOStatus === "Inactive")
+          .reduce((sum, client) => sum + (client.Ledger_DebitAmt || 0), 0);
+
+        console.log("Total Ledger Debit Amount (All):", totalLedgerDebitAmt);
+        console.log(
+          "Total Ledger Debit Amount (Active):",
+          totalLedgerDebitAmtActive
+        );
+        console.log(
+          "Total Ledger Debit Amount (Inactive):",
+          totalLedgerDebitAmtInactive
+        );
+
+        setLedgerSum({
+          total: totalLedgerDebitAmt, // Total sum of all clients
+          active: totalLedgerDebitAmtActive, // Active clients' sum
+          inactive: totalLedgerDebitAmtInactive, // Inactive clients' sum
+        });
 
         responseData.forEach((client: any) => {
           if (client.BOStatus === "Active") {

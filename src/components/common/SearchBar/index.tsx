@@ -203,13 +203,35 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
           )}
 
         {activeSubItem === "DP Debit Recovery" && (
-          <Typography style={{ fontFamily: "Public Sans" }}>
-            {" "}
-            {`Total Due Amount - ₹${new Intl.NumberFormat("en-IN", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            }).format(totalLedgerDebitAmt)}`}
-          </Typography>
+          <>
+            {/* Conditional rendering based on selectedWidget */}
+            {selectedWidget === "Total Clients" && (
+              <Typography style={{ fontFamily: "Public Sans" }}>
+                {`Total Due Amount - ₹${new Intl.NumberFormat("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(totalLedgerDebitAmt.total)}`}
+              </Typography>
+            )}
+
+            {selectedWidget === "Inactive Clients" && (
+              <Typography style={{ fontFamily: "Public Sans" }}>
+                {`Total Due Amount - ₹${new Intl.NumberFormat("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(totalLedgerDebitAmt.inactive)}`}
+              </Typography>
+            )}
+
+            {selectedWidget === "Active Clients" && (
+              <Typography style={{ fontFamily: "Public Sans" }}>
+                {`Total Due Amount - ₹${new Intl.NumberFormat("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(totalLedgerDebitAmt.active)}`}
+              </Typography>
+            )}
+          </>
         )}
 
         {/* Filter Buttons */}
