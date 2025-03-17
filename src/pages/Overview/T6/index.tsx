@@ -185,7 +185,11 @@ const T6Table = ({ handleTradingOpen }: any) => {
           </CardHeader>
           <CardBody
             className="main-card-body"
-            style={{ overflow: "hidden", height: "250px", padding: "10px" }}
+            style={{
+              overflow: "hidden",
+              height: `${Math.min(t6Data.length * 50 + 40, 250)}px`,
+              padding: "10px",
+            }}
           >
             <TradeInfo
               T6Data={t6Data}
@@ -222,7 +226,14 @@ const T6Table = ({ handleTradingOpen }: any) => {
           </CardHeader>
           <CardBody
             className="main-card-body"
-            style={{ overflow: "hidden", height: "250px", padding: "10px" }}
+            style={{
+              overflow: "hidden",
+              height: `${Math.min(
+                upcomingOverviewDormantTableData.length * 50 + 40,
+                250
+              )}px`, // 50px per record + padding, max 250px
+              padding: "10px",
+            }}
           >
             <TradeInfo
               T6Data={upcomingOverviewDormantTableData}

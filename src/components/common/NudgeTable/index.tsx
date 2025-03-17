@@ -50,6 +50,15 @@ const NudgeTable = ({
     }
   }, [selectedReport]);
 
+  const rowHeight = 40;
+  const headerHeight = 56;
+  const padding = 40;
+  const minHeight = 200;
+  const calculatedHeight = Math.min(
+    Math.max(reportData.length * rowHeight + headerHeight + padding, minHeight),
+    400
+  );
+
   return (
     <Modal
       size="xl"
@@ -75,7 +84,7 @@ const NudgeTable = ({
             className="main-card-body"
             style={{
               overflow: "hidden",
-              height: "70vh",
+              height: `${calculatedHeight}px`,
               width: "100%",
               overflowX: "auto",
               fontFamily: "Public Sans, sans-serif",
