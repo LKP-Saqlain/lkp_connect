@@ -33,6 +33,7 @@ import { AppDispatch } from "../../../redux/store";
 import { AuthUser } from "../../../redux/thunk/AuthUser";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Logo from "../../../assets/logo.png";
+import "./style.css";
 
 const AuthenticateUser = () => {
   const [showPassword, setShowPassword] = useState(false);

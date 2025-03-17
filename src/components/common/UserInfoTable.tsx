@@ -485,6 +485,35 @@ const DataTable = ({
   const handleSearchChange = (query: string) => {
     handleSearchBasedOnInput?.(query);
   };
+  let rowName =
+    selectedWidget === "Clients With Ledger Balance"
+      ? tradeCWCBData
+      : selectedWidget === "Total Clients"
+      ? T6Data
+      : selectedWidget === "Active Clients"
+      ? activeGroupedClients
+      : selectedWidget === "Inactive Clients"
+      ? inactiveGroupedClients
+      : selectedWidget === "Active Clients" &&
+        activeSubItem === "DP Debit Recovery"
+      ? activeGroupedClients
+      : selectedWidget === "Inactive Clients" &&
+        activeSubItem === "DP Debit Recovery"
+      ? inactiveGroupedClients
+      : selectedWidget === "Upcoming Dormant Client"
+      ? T6Data
+      : T6Data;
+  const rowHeight = 40;
+  const headerHeight = 56;
+  const padding = 40;
+  const minHeight = activeSubItem === "UCCCode MATCH" ? 800 : 200;
+  const calculatedHeight = Math.min(
+    Math.max(
+      rowName && rowName.length * rowHeight + headerHeight + padding,
+      minHeight
+    ),
+    400
+  );
 
   return (
     <>
@@ -553,7 +582,8 @@ const DataTable = ({
       )}
       <Paper
         sx={{
-          height: "75vh",
+          // height: "75vh",
+          height: `${calculatedHeight}px`,
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",
