@@ -464,7 +464,7 @@ const SideBar = () => {
   };
 
   const reportsSubComponents: any = {
-    "Tax PNL Statement": AnnualPNL,
+    "Tax P&L Statement": AnnualPNL,
     "Dormant Client Report": (props: any) => <DormantClient {...props} />,
     "Last Trade Data": LastTrade,
     "Quarterly Payout Recovery": (props: any) => <QuarterlyPayout {...props} />,
@@ -484,7 +484,7 @@ const SideBar = () => {
   };
 
   const componentMap: any = {
-    Overview: OverviewComponent,
+    "My Performance": OverviewComponent,
     Trading: TradeDashboard,
     "Client Details": ClientDetails,
     "Zone Overview": RegOverview,

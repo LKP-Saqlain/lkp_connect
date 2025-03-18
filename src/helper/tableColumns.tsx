@@ -1850,7 +1850,7 @@ export const dormantColumns: GridColDef[] = [
     field: "clientName",
     headerName: "Client Name",
     flex: 2,
-    minWidth: 185,
+    minWidth: 230,
     disableColumnMenu: true,
   },
   {
@@ -1910,39 +1910,11 @@ export const dormantColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "rmname",
-    headerName: "RM Name",
-    minWidth: 140,
-    disableColumnMenu: true,
-  },
-  {
-    field: "rmstatus",
-    headerName: "RM Status",
-    width: 100,
-    headerClassName: "header-wrap-custom",
-    align: "center",
-    disableColumnMenu: true,
-  },
-  {
-    field: "dealerName",
-    headerName: "Dealer Name",
-    minWidth: 180,
-    disableColumnMenu: true,
-  },
-  {
-    field: "dealerSTATUS",
-    headerName: "Dealer Status",
-    width: 100,
-    headerClassName: "header-wrap-custom",
-    align: "center",
-    disableColumnMenu: true,
-  },
-  {
     field: "branchcode",
     headerName: "Branch Code",
     headerClassName: "header-wrap-custom",
     minWidth: 70,
-    align: "right",
+    align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
   },
@@ -1950,7 +1922,7 @@ export const dormantColumns: GridColDef[] = [
     field: "zone",
     headerName: "Zone",
     minWidth: 60,
-    align: "right",
+    align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
   },
@@ -1975,7 +1947,7 @@ export const dormantColumns: GridColDef[] = [
   {
     field: "mobileNo",
     headerName: "Mobile No",
-    minWidth: 90,
+    minWidth: 110,
     disableColumnMenu: true,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
@@ -2073,6 +2045,34 @@ export const dormantColumns: GridColDef[] = [
     disableColumnMenu: true,
     valueFormatter: (params: number) =>
       new Intl.NumberFormat("en-IN").format(params),
+  },
+  {
+    field: "rmname",
+    headerName: "RM Name",
+    minWidth: 140,
+    disableColumnMenu: true,
+  },
+  {
+    field: "rmstatus",
+    headerName: "RM Status",
+    width: 100,
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "dealerName",
+    headerName: "Dealer Name",
+    minWidth: 180,
+    disableColumnMenu: true,
+  },
+  {
+    field: "dealerSTATUS",
+    headerName: "Dealer Status",
+    width: 100,
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    disableColumnMenu: true,
   },
 ];
 export const communicationColumns =

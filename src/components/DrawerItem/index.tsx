@@ -26,6 +26,7 @@ import { MenuItems } from "../../types/index";
 import StoreIcon from "@mui/icons-material/Store";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import DvrIcon from "@mui/icons-material/Dvr";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -56,6 +57,12 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
       case "Zone Overview":
         return (
           <StoreIcon
+            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
+          />
+        );
+      case "My Performance":
+        return (
+          <SupervisedUserCircleIcon
             sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
           />
         );
