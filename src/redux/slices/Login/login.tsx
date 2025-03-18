@@ -23,6 +23,12 @@ const LoginPageSlice = createSlice({
         state.data.data.user_id = action.payload;
       }
     },
+    verifyPassword: (state, action) => {
+      if (state.data) {
+        console.log("verifyPassword", action.payload);
+        state.data.data.verifyPassword = action.payload;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -40,5 +46,5 @@ const LoginPageSlice = createSlice({
       });
   },
 });
-export const { updateUserId } = LoginPageSlice.actions;
+export const { updateUserId, verifyPassword } = LoginPageSlice.actions;
 export default LoginPageSlice.reducer;

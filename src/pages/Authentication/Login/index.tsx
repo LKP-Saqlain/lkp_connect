@@ -33,6 +33,7 @@ import ShowToast from "../../../utils/toastUtils";
 import { AppDispatch } from "../../../redux/store";
 import { UserLogin } from "../../../redux/thunk/Login/login";
 import Logo from "../../../assets/logo.png";
+import { verifyPassword } from "../../../redux/slices/Login/login";
 
 const LoginPage = () => {
   const [submitted, setSubmiited] = useState(false);
@@ -110,12 +111,13 @@ const LoginPage = () => {
     };
 
     dispatch(showLoader(""));
-
+    // debugger;
     dispatch(UserLogin(payload))
       .unwrap()
-      .then((response) => {
-        console.log("reduxResponse", response?.data);
-        if (response?.status === 200) {
+      .then((response: any) => {
+        // console.log("reduxResponse", response);
+        if (response.status === 200) {
+          dispatch(verifyPassword(values.password));
           const { user_id, user_type } = response?.data;
           dispatch(hideLoader());
           localStorage.setItem("Id", user_id);

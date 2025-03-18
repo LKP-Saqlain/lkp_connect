@@ -16,7 +16,7 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 // import { apiServices } from "../../../services";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { isValidPANNo, regEx } from "../../../helper/method";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -29,7 +29,7 @@ import LeftArm from "../../../assets/images/leftArm.png";
 import Vector from "../../../assets/vector.png";
 import ShowToast from "../../../utils/toastUtils";
 import { useEffect, useState } from "react";
-import { AppDispatch } from "../../../redux/store";
+import { AppDispatch, RootState } from "../../../redux/store";
 import { AuthUser } from "../../../redux/thunk/AuthUser";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Logo from "../../../assets/logo.png";
@@ -42,6 +42,10 @@ const AuthenticateUser = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+
+  const { verifyPassword } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   const authenticationValidationSchema = Yup.object({
     authentication: Yup.string().when("authenticationButtonGroup", {
@@ -118,7 +122,12 @@ const AuthenticateUser = () => {
           localStorage.setItem("authenticated", "true");
           localStorage.setItem("tkn", token);
           localStorage.setItem("userName", name);
-          navigate("/dashboard");
+          console.log("testverifyPassword", verifyPassword);
+          if (verifyPassword === import.meta.env.VITE_DEFAULT_PASSWORD) {
+            navigate("/forgot-password");
+          } else {
+            navigate("/dashboard");
+          }
         }
       })
       .catch((error) => {
