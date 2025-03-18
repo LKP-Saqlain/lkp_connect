@@ -22,7 +22,7 @@ import ShowToast from "../../../utils/toastUtils";
 
 const financialYears = [
   { value: "2023-2024", label: "2023-2024" },
-  // { value: "2024-2025", label: "2024-2025" },
+  { value: "2024-2025", label: "2024-2025" },
 ];
 
 const AnnualPNL = () => {
