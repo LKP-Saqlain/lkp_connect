@@ -36,7 +36,7 @@ import {
 } from "../../../redux/thunk/ForgotPassword";
 import { UnblockUsers } from "../../../redux/thunk/unblockUser/unblockUser";
 import Logo from "../../../assets/logo.png";
-// import "./style.css";
+import "../style.css";
 
 const UnblockUser = () => {
   //   const [showPassword, setShowPassword] = useState(false);

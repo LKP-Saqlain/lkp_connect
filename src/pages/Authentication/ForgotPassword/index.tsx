@@ -35,7 +35,7 @@ import {
   ForgotUserPassword,
 } from "../../../redux/thunk/ForgotPassword";
 import Logo from "../../../assets/logo.png";
-import "./style.css";
+import "../style.css";
 
 const ForgotPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -262,7 +262,6 @@ const ForgotPassword = () => {
             sx={{
               fontWeight: 600,
               color: "#11395C",
-              fontFamily: "Public Sans",
             }}
           >
             Forgot Password
@@ -273,7 +272,6 @@ const ForgotPassword = () => {
               fontWeight: 600,
               color: "#11395C",
               mb: 4,
-              fontFamily: "Public Sans",
             }}
           >
             {" "}
@@ -364,7 +362,6 @@ const ForgotPassword = () => {
                     formik.touched.userId && Boolean(formik.errors.userId)
                       ? 3
                       : null,
-                  fontFamily: "Public Sans",
                 }}
                 onClick={handleSentOtp}
               >
@@ -377,7 +374,7 @@ const ForgotPassword = () => {
                   sx={{
                     color: "#11395C",
                     cursor: "pointer",
-                    fontFamily: "Public Sans",
+
                     // marginRight: "6rem",
                   }}
                   onClick={handlePageClick}
@@ -514,7 +511,7 @@ const ForgotPassword = () => {
                       sx={{
                         color: "#11395C",
                         cursor: "pointer",
-                        fontFamily: "Public Sans",
+
                         marginTop: "1rem",
                       }}
                       onClick={handlePageClick}

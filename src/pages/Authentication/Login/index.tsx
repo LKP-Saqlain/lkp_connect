@@ -13,7 +13,7 @@ import {
   FormControl,
   RadioGroup,
 } from "@mui/material";
-import "./style.css";
+import "../style.css";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 // import Banner from "../../../assets/banner.png";
