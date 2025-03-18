@@ -33,7 +33,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { AuthUser } from "../../../redux/thunk/AuthUser";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Logo from "../../../assets/logo.png";
-import "./style.css";
+import "../style.css";
 
 const AuthenticateUser = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -243,7 +243,6 @@ const AuthenticateUser = () => {
             sx={{
               fontWeight: 700,
               color: "#095192",
-              fontFamily: "Poppins",
             }}
           >
             Two Factor Authentication

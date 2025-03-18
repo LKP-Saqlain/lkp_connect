@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store"; // Adjust path as needed
 import CustomModal from "../../../components/common/DPModal"; // Adjust path as needed
+import "../style.css";
 
 const SessionExpiryHandler = () => {
   const [modal_center, setModalCenter] = useState(false);
