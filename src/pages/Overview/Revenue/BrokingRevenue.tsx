@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
+import { Card, CardBody, CardHeader } from "reactstrap";
 import { RevenueCharts } from "../DashboardProjectCharts";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 // import { apiServices } from "../../services";
