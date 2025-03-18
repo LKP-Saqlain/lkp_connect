@@ -368,6 +368,8 @@ const SideBar = () => {
 
   useEffect(() => {
     console.log("MenuMaster", activeMenu, activeSubItem);
+    console.log("MenuMaster", isNudgeOpen);
+    setIsNudgeOpen(false);
   }, [activeMenu, activeSubItem]);
 
   useEffect(() => {
@@ -706,8 +708,9 @@ const SideBar = () => {
   // };
 
   const handleNotificationClick = () => {
-    setIsNudgeOpen(!isNudgeOpen); // Toggle the visibility of Nudge component
+    setIsNudgeOpen(true); // Toggle the visibility of Nudge component
     setmodal_animationZoom((prev) => !prev);
+    console.log("MenuMaster--->", isNudgeOpen);
   };
 
   function tog_animationZoom() {
