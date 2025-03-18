@@ -92,14 +92,12 @@ const ProjectsOverview = () => {
       <Row>
         <Col xl={12}>
           <Card>
-            <CardHeader className="p-0 border-0 bg-light-subtle">
-              <Row className="g-0 text-center">
-                <Col xs={12}>
-                  <div className="d-flex flex-column flex-md-row">
-                    <h4 className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center">
-                      Brokerage Details for Last 10 Days
-                    </h4>
-                    {/* <div
+            <CardHeader className="align-items-center d-flex">
+              <h4 className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center">
+                Brokerage Details for Last 10 Days
+              </h4>
+            </CardHeader>
+            {/* <div
                       className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end"
                       style={{ fontFamily: "Public Sans, sans-serif" }}
                     >
@@ -123,10 +121,7 @@ const ProjectsOverview = () => {
                       ></div>
                       <p className="mb-0">AP Share</p>
                     </div> */}
-                  </div>
-                </Col>
-              </Row>
-            </CardHeader>
+
             <CardBody className="p-0 pb-2">
               <div>
                 <div dir="ltr" className="apex-charts">
