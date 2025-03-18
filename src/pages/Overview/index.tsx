@@ -13,11 +13,11 @@ import ActiveClient from "../../assets/images/Clients.json";
 import DashboardCard from "../../components/common/DashboardCard";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
-import Nudge from "../../components/common/Nudge";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
-import { apiServices } from "../../services";
+// import Nudge from "../../components/common/Nudge";
+// import { useDispatch, useSelector } from "react-redux";
+// import { AppDispatch, RootState } from "../../redux/store";
+// import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+// import { apiServices } from "../../services";
 // import CryptoJS from "crypto-js";
 type RevenueKeys = "total" | "broking" | "nonBroking";
 // type TotalClientKey = "total" | "broking" | "nonBroking";
@@ -36,20 +36,20 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const [newClients, setNewClients] = useState(0);
   const [activeClients, setActiveClients] = useState(null);
   const [tradedClientCount, setTradedClientCount] = useState(0);
-  const [modal_animationZoom, setmodal_animationZoom] = useState(false);
-  const [isNudgeOpen, setIsNudgeOpen] = useState(false);
-  const [dashboardNudgeData, setDashboardNudgeData] = useState<any[][]>([]);
+  // const [modal_animationZoom, setmodal_animationZoom] = useState(false);
+  // const [isNudgeOpen, setIsNudgeOpen] = useState(false);
+  // const [dashboardNudgeData, setDashboardNudgeData] = useState<any[][]>([]);
   // const [hasApiStarted, setHasApiStarted] = useState(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
   const playerRef = useRef<Player>(null);
 
-  const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
-  );
+  // const { user_id } = useSelector(
+  //   (state: RootState) => state.UserLogin?.data?.data
+  // );
 
   // const { activeRequests } = useSelector((state: RootState) => state.loader);
 
@@ -105,47 +105,47 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     console.log("revTotal", revTotal);
   };
 
-  function tog_animationZoom() {
-    setmodal_animationZoom((prev) => !prev);
-  }
+  // function tog_animationZoom() {
+  //   setmodal_animationZoom((prev) => !prev);
+  // }
 
-  useEffect(() => {
-    tog_animationZoom();
-  }, []);
+  // useEffect(() => {
+  //   tog_animationZoom();
+  // }, []);
 
-  useEffect(() => {
-    const hasFetched = sessionStorage.getItem("dashboardNudgeFetched");
-    if (hasFetched) return; // If fetched before, do nothing
-    sessionStorage.setItem("dashboardNudgeFetched", "true"); // Mark as fetched
+  // useEffect(() => {
+  //   const hasFetched = sessionStorage.getItem("dashboardNudgeFetched");
+  //   if (hasFetched) return; // If fetched before, do nothing
+  //   sessionStorage.setItem("dashboardNudgeFetched", "true"); // Mark as fetched
 
-    const fetchDashboardNudge = async () => {
-      const payload = {
-        user_id: user_id,
-      };
+  //   const fetchDashboardNudge = async () => {
+  //     const payload = {
+  //       user_id: user_id,
+  //     };
 
-      try {
-        dispatch(showLoader(""));
-        const response = await apiServices.DashboardNudge(payload);
-        console.log("dashBoardNudgeData", typeof response?.data);
+  //     try {
+  //       dispatch(showLoader(""));
+  //       const response = await apiServices.DashboardNudge(payload);
+  //       console.log("dashBoardNudgeData", typeof response?.data);
 
-        const nudgeData = response?.data;
-        setDashboardNudgeData(nudgeData);
+  //       const nudgeData = response?.data;
+  //       setDashboardNudgeData(nudgeData);
 
-        dispatch(hideLoader());
+  //       dispatch(hideLoader());
 
-        if (response?.status === 200) {
-          // ShowToast("success", response?.data?.Message);
-          setIsNudgeOpen(!isNudgeOpen);
-        } else {
-          console.error("Failed");
-        }
-      } catch (error) {
-        dispatch(hideLoader());
-        console.error("Error sending email:", error);
-      }
-    };
-    fetchDashboardNudge();
-  }, [dispatch]);
+  //       if (response?.status === 200) {
+  //         // ShowToast("success", response?.data?.Message);
+  //         setIsNudgeOpen(!isNudgeOpen);
+  //       } else {
+  //         console.error("Failed");
+  //       }
+  //     } catch (error) {
+  //       dispatch(hideLoader());
+  //       console.error("Error sending email:", error);
+  //     }
+  //   };
+  //   fetchDashboardNudge();
+  // }, [dispatch]);
 
   useEffect(() => {
     playerRef.current?.playFromBeginning();
@@ -236,13 +236,13 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
-          {isNudgeOpen && (
+          {/* {isNudgeOpen && (
             <Nudge
               modal_animationZoom={modal_animationZoom}
               tog_animationZoom={tog_animationZoom}
               dashBoardNudgeData={dashboardNudgeData}
             />
-          )}
+          )} */}
           <Row>
             <Col>
               <div className="h-100">

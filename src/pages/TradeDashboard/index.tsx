@@ -10,6 +10,7 @@ import { apiServices } from "../../services";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import ShowToast from "../../utils/toastUtils";
+import Nudge from "../../components/common/Nudge";
 
 interface T6Selling {
   ClientCode: string;
@@ -44,6 +45,10 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   );
   const [t6Data, setT6Data] = useState<T6Selling[]>([]);
   const [tradeCWCBData, setTradeCWCBData] = useState<CWCB[]>([]);
+  const [isNudgeOpen, setIsNudgeOpen] = useState(false);
+  const [dashboardNudgeData, setDashboardNudgeData] = useState<any[][]>([]);
+  const [modal_animationZoom, setmodal_animationZoom] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
 
   const { accessType } = useSelector(
@@ -61,6 +66,40 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   };
 
   useEffect(() => {
+    const hasFetched = sessionStorage.getItem("dashboardNudgeFetched");
+    if (hasFetched) return; // If fetched before, do nothing
+    sessionStorage.setItem("dashboardNudgeFetched", "true"); // Mark as fetched
+
+    const fetchDashboardNudge = async () => {
+      const payload = {
+        user_id: user_id,
+      };
+      // debugger;
+      try {
+        dispatch(showLoader(""));
+        const response = await apiServices.DashboardNudge(payload);
+        console.log("dashBoardNudgeData", typeof response?.data);
+
+        const nudgeData = response?.data;
+        setDashboardNudgeData(nudgeData);
+
+        dispatch(hideLoader());
+
+        if (response?.status === 200) {
+          // ShowToast("success", response?.data?.Message);
+          setIsNudgeOpen(!isNudgeOpen);
+        } else {
+          console.error("Failed");
+        }
+      } catch (error) {
+        dispatch(hideLoader());
+        console.error("Error sending email:", error);
+      }
+    };
+    fetchDashboardNudge();
+  }, [dispatch]);
+
+  useEffect(() => {
     if (selectedTrading === "T6") {
       setSelectedItem("Clients Ageing Report");
     }
@@ -74,9 +113,8 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
         // tradeData([]);
         // setSelectedZone(null);
         // setSelectedBranchCode(null);
-        let Id = localStorage.getItem("Id");
         const payload = {
-          user_id: Id,
+          user_id: user_id,
           zone: "ALL",
           branchCode: "ALL",
         };
@@ -116,7 +154,6 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
     const fetchClientCash = async () => {
       if (selectedItem === "Clients Ageing Report") {
         setTradeCWCBData([]);
-        // const Id = localStorage.getItem("Id");
         const payload = {
           user_id: user_id,
         };
@@ -142,9 +179,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   }, [selectedItem, dispatch]);
 
   const handleExcel = async () => {
-    // alert("I am Clicked");
     // if (selectedItem === "Clients Ageing Report") {
-    // const Id = localStorage.getItem("Id");
     const payload = {
       user_id: user_id,
     };
@@ -184,11 +219,26 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
     }
   };
 
+  function tog_animationZoom() {
+    setmodal_animationZoom((prev) => !prev);
+  }
+
+  useEffect(() => {
+    tog_animationZoom();
+  }, []);
+
   document.title = document.title = "LKP Securities | Trading";
   return (
     <React.Fragment>
       <div className="page-content">
         <Container fluid>
+          {isNudgeOpen && (
+            <Nudge
+              modal_animationZoom={modal_animationZoom}
+              tog_animationZoom={tog_animationZoom}
+              dashBoardNudgeData={dashboardNudgeData}
+            />
+          )}
           {/* <Row> */}
           {/* <Col className="col-xxl-9 order-xxl-0 order-first m-2"> */}
           <Row>

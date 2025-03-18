@@ -142,7 +142,7 @@ const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(() => {
-    return localStorage.getItem("activeMenu") || "Overview"; // Default to Overview
+    return localStorage.getItem("activeMenu") || "Trading"; // Default to Overview
   });
   const [activeSubItem, setActiveSubItem] = useState(() => {
     return localStorage.getItem("activeSubItem") || "";
@@ -324,7 +324,7 @@ const SideBar = () => {
         setMenuItems(processedMenus);
 
         if (processedMenus[0].menu_name === "Overview") {
-          setActiveMenu("Overview");
+          setActiveMenu("Trading");
         }
       })
       .catch((Err) => {
