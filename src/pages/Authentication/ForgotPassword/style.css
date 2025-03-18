@@ -22,3 +22,13 @@
     font-weight: 600;
     margin-bottom: 32px;
 }
+
+
+.css-19opgx6-MuiFormControlLabel-root .MuiFormControlLabel-label {
+    font-family: "Public Sans" !important;
+}
+
+.css-2s8ubb-MuiFormHelperText-root.Mui-error {
+    color: #d32f2f;
+    font-family: 'Public Sans';
+}

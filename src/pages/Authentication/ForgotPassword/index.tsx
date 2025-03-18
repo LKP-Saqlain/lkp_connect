@@ -40,7 +40,7 @@ import "./style.css";
 const ForgotPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showOtpField, setShowOtpField] = useState(false);
-  const [showOtp, setShowOtp] = useState(false);
+  // const [showOtp, setShowOtp] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -59,7 +59,7 @@ const ForgotPassword = () => {
   // Form validation schema using Yup
   const validationSchema = Yup.object({
     userId: Yup.string()
-      .required("userId is required")
+      .required("UserId is required")
       .min(4, "user ID must be at least 4 characters"),
     otp: Yup.string()
       .required("OTP is required")
@@ -84,9 +84,9 @@ const ForgotPassword = () => {
       handleResetPassword();
     },
   });
-  const handleToggleOTPVisibility = () => {
-    setShowOtp((prev) => !prev);
-  };
+  // const handleToggleOTPVisibility = () => {
+  //   setShowOtp((prev) => !prev);
+  // };
   const handleTogglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
@@ -122,6 +122,8 @@ const ForgotPassword = () => {
   };
 
   const handleSentOtp = async () => {
+    formik.setTouched({ userId: true }, true);
+    await formik.validateField("userId");
     if (formik.values.userId.length < 4) {
       return;
     } else {
@@ -257,13 +259,22 @@ const ForgotPassword = () => {
           <Typography
             variant="h4"
             gutterBottom
-            sx={{ fontWeight: 600, color: "#11395C" }}
+            sx={{
+              fontWeight: 600,
+              color: "#11395C",
+              fontFamily: "Public Sans",
+            }}
           >
             Forgot Password
           </Typography>
           <Typography
             gutterBottom
-            sx={{ fontWeight: 600, color: "#11395C", mb: 4 }}
+            sx={{
+              fontWeight: 600,
+              color: "#11395C",
+              mb: 4,
+              fontFamily: "Public Sans",
+            }}
           >
             {" "}
             Don't worry! We will reset your Password in few seconds
@@ -393,17 +404,6 @@ const ForgotPassword = () => {
                     startAdornment: (
                       <InputAdornment position="start">
                         <RiLockPasswordFill />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={handleToggleOTPVisibility}
-                          edge="end"
-                          aria-label="toggle password visibility"
-                        >
-                          {showOtp ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
                       </InputAdornment>
                     ),
                   }}

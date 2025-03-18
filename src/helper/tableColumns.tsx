@@ -866,7 +866,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log("Test_as", day, month, year, match); //match will give the whole date as a alternative solution
+            console.log("Test_as", day, month, year, match);
 
             return `20${year}-${monthMap[month]}-${day}`;
           }
