@@ -192,38 +192,35 @@ const Revenue = ({
   return (
     <React.Fragment>
       <Card>
-        <CardHeader className="p-0 border-0 bg-light-subtle">
-          <Row className="g-0 text-center">
-            <Col xs={12}>
-              <div className=" d-flex flex-column flex-sm-row">
-                <h4 className="card-title mb-0 flex-grow-1 text-md-start text-center">
-                  Broking Revenue for Last 12 Months
-                </h4>
-                <div
-                  className="d-flex align-items-center flex-wrap mt-2 mt-sm-0"
-                  style={{ fontFamily: "Public Sans, sans-serif" }}
-                >
-                  <div
-                    className="legend-color"
-                    style={{
-                      backgroundColor: "#52c41a",
-                      width: "16px",
-                      height: "16px",
-                      marginRight: "8px",
-                    }}
-                  ></div>
-                  <p className="mb-0 me-3">Direct-Broking</p>
-                  <div
-                    className="legend-color"
-                    style={{
-                      backgroundColor: "#faad14",
-                      width: "16px",
-                      height: "16px",
-                      marginRight: "8px",
-                    }}
-                  ></div>
-                  <p className="mb-0 me-3">Indirect-Broking</p>
-                  {/* <div
+        <CardHeader className="align-items-center d-flex">
+          <h4 className="card-title mb-0 flex-grow-1 text-md-start text-center">
+            Broking Revenue for Last 12 Months
+          </h4>
+          <div
+            className="d-flex align-items-center flex-wrap mt-2 mt-sm-0"
+            style={{ fontFamily: "Public Sans, sans-serif" }}
+          >
+            <div
+              className="legend-color"
+              style={{
+                backgroundColor: "#52c41a",
+                width: "16px",
+                height: "16px",
+                marginRight: "8px",
+              }}
+            ></div>
+            <p className="mb-0 me-3">Direct-Broking</p>
+            <div
+              className="legend-color"
+              style={{
+                backgroundColor: "#faad14",
+                width: "16px",
+                height: "16px",
+                marginRight: "8px",
+              }}
+            ></div>
+            <p className="mb-0 me-3">Indirect-Broking</p>
+            {/* <div
                     className="legend-color"
                     style={{
                       backgroundColor: "#008FFB",
@@ -233,10 +230,7 @@ const Revenue = ({
                     }}
                   ></div>
                   <p className="mb-0">Non-broking</p> */}
-                </div>
-              </div>
-            </Col>
-          </Row>
+          </div>
         </CardHeader>
 
         <CardBody className="p-0 pb-2">
