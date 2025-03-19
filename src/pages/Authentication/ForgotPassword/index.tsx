@@ -79,6 +79,13 @@ const ForgotPassword = () => {
     confirmPassword: Yup.string().required("Confirm Password is required"),
   });
 
+  // useEffect(() => {
+  //   if (verifyPassword === import.meta.env.VITE_DEFAULT_PASSWORD) {
+  //     setPasswordReason(true);
+  //     console.log("Default Password", passwordReason);
+  //   }
+  // }, []);
+
   // Initialize Formik
   const formik = useFormik({
     initialValues: {
