@@ -18,15 +18,17 @@ const LoginPageSlice = createSlice({
   initialState,
   reducers: {
     updateUserId: (state, action) => {
-      if (state.data && typeof state.data === "object") {
-        console.log("state.data", state.data, "action.payload", action.payload);
-        state.data.data.user_id = action.payload;
+      if (state.data) {
+        console.log("action.payload", typeof action.payload);
+        // state.data.data.user_id = action.payload ? action.payload : "";
       }
     },
     verifyPassword: (state, action) => {
       if (state.data) {
-        console.log("verifyPassword", action.payload);
-        state.data.data.verifyPassword = action.payload;
+        console.log("verifyPassword", typeof action.payload, action.payload);
+
+        const test = action.payload ? action.payload : "";
+        state.data.data.verifyPassword = test;
       }
     },
   },

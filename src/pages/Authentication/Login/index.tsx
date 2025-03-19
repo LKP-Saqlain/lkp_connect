@@ -95,7 +95,7 @@ const LoginPage = () => {
   });
 
   const handleClick = () => {
-    dispatch(verifyPassword(""));
+    // dispatch(verifyPassword(""));
     navigate("/forgot-password");
   };
 

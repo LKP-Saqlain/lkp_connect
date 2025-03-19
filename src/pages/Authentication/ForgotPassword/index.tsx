@@ -23,13 +23,19 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { RiLockPasswordFill } from "react-icons/ri";
 import "dayjs/locale/en-gb";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  useDispatch,
+  // useSelector
+} from "react-redux";
 import { regEx } from "../../../helper/method";
 // import { apiServices } from "../../../services/index";
 import ShowToast from "../../../utils/toastUtils";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { useNavigate } from "react-router-dom";
-import { RootState, AppDispatch } from "../../../redux/store";
+import {
+  // RootState,
+  AppDispatch,
+} from "../../../redux/store";
 import {
   SendOtp,
   ForgotUserPassword,
@@ -42,14 +48,14 @@ const ForgotPassword = () => {
   const [showOtpField, setShowOtpField] = useState(false);
   // const [showOtp, setShowOtp] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordReason, setPasswordReason] = useState(false);
+  // const [passwordReason, setPasswordReason] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const { verifyPassword } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
-  );
+  // const { verifyPassword } = useSelector(
+  //   (state: RootState) => state.UserLogin?.data?.data
+  // );
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -205,16 +211,16 @@ const ForgotPassword = () => {
 
   const handlePageClick = () => {
     console.log("eventhandlePageClick");
-    setPasswordReason(false);
+    // setPasswordReason(false);
     navigate("/");
   };
 
-  useEffect(() => {
-    if (verifyPassword === import.meta.env.VITE_DEFAULT_PASSWORD) {
-      setPasswordReason(true);
-      console.log("Default Password", passwordReason);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (verifyPassword === import.meta.env.VITE_DEFAULT_PASSWORD) {
+  //     setPasswordReason(true);
+  //     console.log("Default Password", passwordReason);
+  //   }
+  // }, []);
 
   return (
     <>
@@ -277,7 +283,8 @@ const ForgotPassword = () => {
               color: "#11395C",
             }}
           >
-            {passwordReason ? "Change Password" : "Forgot Password"}
+            Forgot Password
+            {/* {passwordReason ? "Change Password" : "Forgot Password"} */}
           </Typography>
           <Typography
             gutterBottom
