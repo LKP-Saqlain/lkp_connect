@@ -341,7 +341,7 @@ const SideBar = () => {
         console.log("menuItems-->", processedMenus);
         setMenuItems(processedMenus);
 
-        if (processedMenus[0].menu_name === "Overview") {
+        if (processedMenus[0].menu_name === "Trading") {
           setActiveMenu("Trading");
         }
       })
@@ -550,7 +550,7 @@ const SideBar = () => {
 
     // Pass Props here for dynamic
     const props =
-      menuItem.menu_name === "Overview"
+      menuItem.menu_name === "My Performance"
         ? { handleTradingOpen: () => handleTradingOpen("T6") }
         : menuItem.menu_name === "Reports"
         ? { activeSubItem }
