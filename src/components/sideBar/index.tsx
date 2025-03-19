@@ -184,6 +184,24 @@ const SideBar = () => {
   // useClearStorageOnTabClose();   //use to remove local and session storage when tab is changed
 
   useEffect(() => {
+    const checkReactAlive = () => {
+      if (document.readyState === "complete") {
+        alert("LKP Site is UP");
+      } else {
+        alert("LKP site might be down!");
+      }
+    };
+
+    const interval = setInterval(checkReactAlive, 5000);
+
+    window.onerror = () => {
+      alert("LKP SITE IS CRASED!");
+    };
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     // const userId = localStorage.getItem("Id");
 
     const updatedSettings = [
