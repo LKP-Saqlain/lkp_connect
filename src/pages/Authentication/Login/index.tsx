@@ -94,6 +94,11 @@ const LoginPage = () => {
     onSubmit: handleValidateUser,
   });
 
+  const handleClick = () => {
+    dispatch(verifyPassword(""));
+    navigate("/forgot-password");
+  };
+
   const handleTogglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
   return (
@@ -220,7 +225,7 @@ const LoginPage = () => {
         </form>
         <Typography
           sx={{ color: "#11395C", cursor: "pointer", mt: 2 }}
-          onClick={() => navigate("/forgot-password")}
+          onClick={handleClick}
         >
           Forgot Password / Unblock User?
         </Typography>

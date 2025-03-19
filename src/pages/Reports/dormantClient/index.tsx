@@ -424,12 +424,9 @@ const DormantClient = ({ activeSubItem }: any) => {
       pageSize: 35000,
       searchKey: "",
       loginName: user_id,
-      zone: formik.values.selectedZone?.value
-        ? formik.values.selectedZone?.value
-        : "",
-      branchCode: formik.values.selectedBranchCode?.value
-        ? formik.values.selectedBranchCode?.value
-        : "",
+      zone: accessType === "" ? "ALL" : formik.values.selectedZone?.value,
+      branchCode:
+        accessType === "" ? "ALL" : formik.values.selectedBranchCode?.value,
       clientStatus:
         formik.values.selectedClientStatus?.value === "ACTIVE"
           ? "Y"
@@ -440,7 +437,7 @@ const DormantClient = ({ activeSubItem }: any) => {
 
     let token = localStorage.getItem("tkn");
     dispatch(showLoader("Please wait, We are Processing your Request"));
-
+    console.log("payload-->excel", payload);
     axios
       .post(
         `https://middlewareapi.lkp.net.in${endpoints.getDormantExcel}`,
