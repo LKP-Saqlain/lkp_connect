@@ -183,6 +183,24 @@ const SideBar = () => {
 
   // useClearStorageOnTabClose();   //use to remove local and session storage when tab is changed
 
+  // useEffect(() => {
+  //   const checkReactAlive = () => {
+  //     if (document.readyState === "complete") {
+  //       alert("LKP Site is UP");
+  //     } else {
+  //       alert("LKP site might be down!");
+  //     }
+  //   };
+
+  //   const interval = setInterval(checkReactAlive, 5000);
+
+  //   window.onerror = () => {
+  //     alert("LKP SITE IS CRASED!");
+  //   };
+
+  //   return () => clearInterval(interval);
+  // }, []);
+
   useEffect(() => {
     // const userId = localStorage.getItem("Id");
 
@@ -323,7 +341,7 @@ const SideBar = () => {
         console.log("menuItems-->", processedMenus);
         setMenuItems(processedMenus);
 
-        if (processedMenus[0].menu_name === "Overview") {
+        if (processedMenus[0].menu_name === "Trading") {
           setActiveMenu("Trading");
         }
       })
@@ -532,7 +550,7 @@ const SideBar = () => {
 
     // Pass Props here for dynamic
     const props =
-      menuItem.menu_name === "Overview"
+      menuItem.menu_name === "My Performance"
         ? { handleTradingOpen: () => handleTradingOpen("T6") }
         : menuItem.menu_name === "Reports"
         ? { activeSubItem }
