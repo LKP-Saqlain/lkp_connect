@@ -36,4 +36,5 @@ export const endpoints = {
   ComplainceFileDownload: "/api/Compliance/ComplainceFileDownload",
   ComplainceFileUpload: "/api/Compliance/ComplainceFileUpload",
   DashboardNudge: "/api/Dashboard/DashboardNudge",
+  ChangePassword: "api/Login/ChangePassword",
 };

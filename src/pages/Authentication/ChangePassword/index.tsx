@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-// import Banner from "../../../assets/banner.png";
 import LeftArm from "../../../assets/images/leftArm.png";
 import Vector from "../../../assets/vector.png";
 import { useTheme } from "@mui/material/styles";
@@ -21,39 +20,34 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { RiLockPasswordFill } from "react-icons/ri";
 import "dayjs/locale/en-gb";
 import {
-  // useDispatch,
+  useDispatch,
   useSelector,
   // useSelector
 } from "react-redux";
-// import { regEx } from "../../../helper/method";
-// import { apiServices } from "../../../services/index";
-// import ShowToast from "../../../utils/toastUtils";
-// import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
+import ShowToast from "../../../utils/toastUtils";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { useNavigate } from "react-router-dom";
 import {
   // RootState,
-  // AppDispatch,
+  AppDispatch,
   RootState,
 } from "../../../redux/store";
 import Logo from "../../../assets/logo.png";
 import "../style.css";
+import { apiServices } from "../../../services";
 
 const ChangePassword = () => {
-  // const [showPassword, setShowPassword] = useState(false);
   const [showPassword, setShowPassword] = useState({
     oldPassword: false,
     newPassword: false,
     confirmPassword: false,
   });
 
-  // const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
-  );
-  const { user_type } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+  const { user_id, user_type } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data || {}
   );
 
   const theme = useTheme();
@@ -119,35 +113,32 @@ const ChangePassword = () => {
   const handleResetPassword = async () => {
     let payload = {
       old_password: formik.values.oldPassword,
-      user_password: formik.values.newPassword,
+      new_password: formik.values.newPassword,
       confirm_password: formik.values.confirmPassword,
       user_type: user_type,
-      user_id: user_id,
+      user_id,
     };
-    // dispatch(showLoader(""));
-    // dispatch(ForgotUserPassword(payload))
-    //   .unwrap()
-    //   .then((response) => {
-    //     console.log("Response-->", response);
-    //     if (response?.status === 200) {
-    //       dispatch(hideLoader());
-    //       ShowToast("success", response?.data?.message);
-    //       setShowOtpField(true);
-    //       navigate("/");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     const { message } = error;
-    //     console.log("Error->", message);
-    //     dispatch(hideLoader());
-    //     ShowToast(
-    //       "error",
-    //       message || "Sorry for the inconvenience, please try after some time."
-    //     );
-    //   })
-    //   .finally(() => {
-    //     dispatch(hideLoader());
-    //   });
+    dispatch(showLoader("Please wait"));
+    apiServices
+      .ChangePassword(payload)
+      .then((response) => {
+        console.log("ResponseChangePassword", response);
+        if (response?.status === 200) {
+          ShowToast("success", response?.data?.message);
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.log("error-->", error);
+        const apiError = error?.response?.data.message;
+
+        ShowToast("error", apiError);
+      })
+      .finally(() => {
+        {
+          dispatch(hideLoader());
+        }
+      });
     console.log(payload, "pay----");
   };
 
