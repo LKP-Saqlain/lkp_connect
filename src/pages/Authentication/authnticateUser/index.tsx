@@ -124,7 +124,7 @@ const AuthenticateUser = () => {
           localStorage.setItem("userName", name);
           console.log("testverifyPassword", verifyPassword);
           if (verifyPassword === import.meta.env.VITE_DEFAULT_PASSWORD) {
-            navigate("/forgot-password");
+            navigate("/change-password");
           } else {
             navigate("/dashboard");
           }

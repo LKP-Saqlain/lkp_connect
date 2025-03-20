@@ -7,6 +7,7 @@ import Loader from "./components/common/Loader";
 import "./assets/scss/themes.scss";
 import SessionExpiryHandler from "./pages/Authentication/sessionExpiryHandler";
 import "./Global.css";
+import ChangePassword from "./pages/Authentication/ChangePassword";
 // import "./App.css";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
@@ -32,6 +33,7 @@ const App = () => {
             element={<PrivateRoute authElement={<AuthenticateUser />} />}
           />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/change-password" element={<ChangePassword />} />
           <Route
             path="/dashboard"
             element={

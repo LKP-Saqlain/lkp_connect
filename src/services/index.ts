@@ -23,6 +23,10 @@ export const apiServices = {
   forgetPassword: async (payload: any) => {
     return await apiService("POST", endpoints.forgetPassword, payload);
   },
+  ChangePassword: async (payload: any) => {
+    return await apiService("POST", endpoints.ChangePassword, payload);
+  },
+
   UnblockUser: async (payload: any) => {
     return await apiService("POST", endpoints.UnblockUser, payload);
   },
