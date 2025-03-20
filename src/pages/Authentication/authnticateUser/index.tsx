@@ -119,7 +119,9 @@ const AuthenticateUser = () => {
         if (response?.status === 200) {
           const { token, name } = response?.data;
           console.log("2FA_Response", response?.data);
-          localStorage.setItem("authenticated", "true");
+          if (verifyPassword !== import.meta.env.VITE_DEFAULT_PASSWORD) {
+            localStorage.setItem("authenticated", "true");
+          }
           localStorage.setItem("tkn", token);
           localStorage.setItem("userName", name);
           console.log("testverifyPassword", verifyPassword);
