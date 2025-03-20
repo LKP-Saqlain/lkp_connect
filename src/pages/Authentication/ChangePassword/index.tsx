@@ -19,11 +19,7 @@ import { useTheme } from "@mui/material/styles";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { RiLockPasswordFill } from "react-icons/ri";
 import "dayjs/locale/en-gb";
-import {
-  useDispatch,
-  useSelector,
-  // useSelector
-} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ShowToast from "../../../utils/toastUtils";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { useNavigate } from "react-router-dom";
