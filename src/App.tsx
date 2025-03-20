@@ -35,7 +35,9 @@ const App = () => {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
             path="/change-password"
-            element={<PrivateRoute authElement={<ChangePassword />} />}
+            element={
+              <PrivateRoute changePasswordElement={<ChangePassword />} />
+            }
           />
           <Route
             path="/dashboard"
