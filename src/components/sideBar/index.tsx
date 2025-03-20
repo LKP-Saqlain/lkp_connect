@@ -545,7 +545,7 @@ const SideBar = () => {
     const Component = componentMap[menuItem.menu_name];
 
     if (!Component) {
-      return <div>Component missing for: {menuItem.menu_name}</div>;
+      return <div>There is no Data (Component) for: {menuItem.menu_name}</div>;
     }
 
     // Pass Props here for dynamic
