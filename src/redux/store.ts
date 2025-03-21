@@ -40,7 +40,7 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false, // Disables serializable check
     }),
-  devTools: import.meta.env.VITE_NODE_ENV === "production",
+  devTools: import.meta.env.VITE_NODE_ENV === "development",
 });
 
 export const persistor = persistStore(store); // Create the persistor
