@@ -40,7 +40,7 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false, // Disables serializable check
     }),
-  devTools: import.meta.env.VITE_NODE_ENV === "development",
+  devTools: import.meta.env.VITE_NODE_ENV === "production",
 });
 
 export const persistor = persistStore(store); // Create the persistor
@@ -49,6 +49,9 @@ if (import.meta.env.VITE_NODE_ENV === "production") {
   console.log = () => {};
 }
 
+if ((window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+  (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = () => {};
+}
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
