@@ -17,6 +17,7 @@ interface Option {
 interface table {
   handleValues: (data: any) => void;
   tradeData: any;
+  setCustomLedgerData: any;
 }
 
 // interface CliWithCashBalance {
@@ -25,7 +26,7 @@ interface table {
 //   LastTradeDate: string;
 //   Cash: string;
 // }
-const DropDown = ({ handleValues, tradeData }: table) => {
+const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
   const [selectedZone, setSelectedZone] = useState<Option | null>(null);
   const [selectedBranchCode, setSelectedBranchCode] = useState<Option | null>(
     null
@@ -128,37 +129,46 @@ const DropDown = ({ handleValues, tradeData }: table) => {
   }, [selectedZone, dispatch]); // This effect runs when `selectedZone` changes
 
   const handleSubmit = async () => {
+    console.log(
+      "dropdown options",
+      selectedBranchCode?.value,
+      selectedZone?.value
+    );
     tradeData([]);
     // setSelectedZone(null);
     // setSelectedBranchCode(null);
     let Id = localStorage.getItem("Id");
     const payload = {
       user_id: Id,
-      zone: accessType === "" ? "H.O." : selectedZone?.value,
+      zone: accessType === "" ? "ALL" : selectedZone?.value,
       branchCode: accessType === "" ? "ALL" : selectedBranchCode?.value,
     };
     dispatch(showLoader(""));
     apiServices
       .ClientCash(payload)
       .then((response) => {
-        console.log("ClientCashresponse", response);
+        console.log(
+          "dropdown options ClientCashresponse",
+          response?.data?.data,
+          response
+        );
         handleValues(response?.data?.data);
         dispatch(hideLoader());
         if (response?.status === 200) {
-          ShowToast("error", response?.data);
-          let { recordsTotal } = response?.data[0];
-          setTotalEntries(recordsTotal);
-          setUserData(response.data);
+          console.log("userData");
+          setUserData(response?.data?.data);
+          console.log("userData", response);
+          const dataTypeCheck = response?.data;
+          if (typeof dataTypeCheck === "object") {
+            setCustomLedgerData(response?.data?.data);
+          } else {
+            ShowToast("error", response?.data);
+            setCustomLedgerData([]);
+          }
         }
       })
-      .catch((error) => {
-        console.log("Error->", error);
-        // const zoneError = error.response?.data?.errors?.Zone["0"];
-        // const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
-        dispatch(hideLoader());
-        ShowToast("error", error.response?.data?.message);
-        // ShowToast("error", zoneError);
-        // ShowToast("error", branchCodeError);
+      .catch(() => {
+        setCustomLedgerData([]);
       })
       .finally(() => {
         dispatch(hideLoader());
@@ -266,36 +276,6 @@ const DropDown = ({ handleValues, tradeData }: table) => {
                         Submit
                       </Button>
                     </Col>
-                    {/* <Col className="d-flex flex-column-reverse">
-                    <div className="mb-3" />
-                    <Button
-                      style={{
-                        backgroundColor: "#11395C",
-                        border: "none",
-                      }}
-                      onClick={handleExcelDownload}
-                    >
-                      Download Excel
-                    </Button>
-                  </Col> */}
-                    {/* <Col className="d-flex align-items-end">
-                    <Button
-                      className="me-2"
-                      style={{ backgroundColor: "#11395C" }}
-                      onClick={handleSubmit}
-                    >
-                      Submit
-                    </Button>
-                    <Button
-                      style={{
-                        backgroundColor: "#4CAF50",
-                        border: "none",
-                      }}
-                      onClick={handleDownload}
-                    >
-                      Download Excel
-                    </Button>
-                  </Col> */}
                   </Row>
                 </div>
               </Col>

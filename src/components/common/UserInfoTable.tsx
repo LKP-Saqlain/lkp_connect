@@ -117,6 +117,7 @@ const DataTable = ({
   const [modal_center, setmodal_center] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<any>(null); // Store selected row data
   const [action, setAction] = useState<"approve" | "reject">("approve");
+  const [customLedgerData, setCustomLedgerData] = useState([]);
 
   useEffect(() => {
     console.log("subItem and selectedWidgets", activeSubItem, selectedWidget);
@@ -485,9 +486,10 @@ const DataTable = ({
   const handleSearchChange = (query: string) => {
     handleSearchBasedOnInput?.(query);
   };
+  const commonLedgerData = customLedgerData ? customLedgerData : tradeCWCBData;
   let rowName =
     selectedWidget === "Clients With Ledger Balance"
-      ? tradeCWCBData
+      ? commonLedgerData
       : selectedWidget === "Total Clients"
       ? T6Data
       : selectedWidget === "Active Clients"
@@ -514,6 +516,9 @@ const DataTable = ({
     ),
     400
   );
+  useEffect(() => {
+    console.log("childData", customLedgerData, selectedWidget);
+  }, [customLedgerData, selectedWidget]);
 
   return (
     <>
@@ -537,7 +542,11 @@ const DataTable = ({
         activeSubItem={activeSubItem}
       />
       {selectedWidget === "Clients With Ledger Balance" && (
-        <DropDown tradeData={setTradeData} handleValues={handleValues} />
+        <DropDown
+          tradeData={setTradeData}
+          handleValues={handleValues}
+          setCustomLedgerData={setCustomLedgerData}
+        />
       )}
       {/* {(selectedWidget === "Total Clients" ||
         selectedWidget === "Active Clients" ||
@@ -593,7 +602,7 @@ const DataTable = ({
           disableRowSelectionOnClick
           rows={
             selectedWidget === "Clients With Ledger Balance"
-              ? tradeCWCBData
+              ? commonLedgerData
               : selectedWidget === "Total Clients"
               ? T6Data
               : selectedWidget === "Active Clients"

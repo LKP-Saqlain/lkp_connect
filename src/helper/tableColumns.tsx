@@ -59,7 +59,6 @@ export const getClientActivityStatusColumns = (
               Nov: "11",
               Dec: "12",
             };
-            console.log("Test_as", day, month, year, match); //match will give the whole date as a alternative solution
 
             return `20${year}-${monthMap[month]}-${day}`;
           }
@@ -419,7 +418,6 @@ export const getClientDormantStatus = (
               Nov: "11",
               Dec: "12",
             };
-            console.log("Test_as", day, month, year, match); //match will give the whole date as a alternative solution
 
             return `20${year}-${monthMap[month]}-${day}`;
           }
@@ -689,7 +687,6 @@ export const clientNotTradedColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log("Test_as", day, month, year, match); //match will give the whole date as a alternative solution
 
             return `20${year}-${monthMap[month]}-${day}`;
           }
@@ -787,7 +784,6 @@ export const newClientAddFiveDays: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log("Test_as", day, month, year, match); //match will give the whole date as a alternative solution
 
             return `20${year}-${monthMap[month]}-${day}`;
           }
@@ -944,7 +940,6 @@ export const upcomingDormantClientColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log("Test_as", day, month, year, match);
 
             return `20${year}-${monthMap[month]}-${day}`;
           }
@@ -1048,7 +1043,6 @@ export const ClientCashColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log("Test_as", day, month, year, match); //match will give the whole date as a alternative solution
 
             return `20${year}-${monthMap[month]}-${day}`;
           }
@@ -1736,7 +1730,6 @@ export const DormantOverViewColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log("Test_as", day, month, year, match); //match will give the whole date as a alternative solution
 
             return `20${year}-${monthMap[month]}-${day}`;
           }
@@ -1883,8 +1876,6 @@ export const dormantColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log("Test_as", day, month, year, match); //match will give the whole date as a alternative solution
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
