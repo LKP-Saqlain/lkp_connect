@@ -58,7 +58,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
-  console.log(accessType);
+  console.log("accessType----", accessType);
 
   const handleItemClick = (data: any) => {
     console.log("value->", data);
@@ -106,7 +106,11 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   }, [selectedTrading]);
 
   useEffect(() => {
-    if (selectedItem === "" || selectedItem === "Clients With Ledger Balance") {
+    console.log("Tesr1213", accessType);
+  }, []);
+
+  useEffect(() => {
+    if (accessType === "") {
       setT6Data([]);
       dispatch(showLoader("Please wait"));
       const fetchCWCBReport = async () => {
@@ -148,7 +152,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
       };
       fetchCWCBReport();
     }
-  }, [dispatch, selectedItem]);
+  }, [dispatch, accessType, selectedItem]);
 
   useEffect(() => {
     const fetchClientCash = async () => {
