@@ -27,23 +27,23 @@ const FundOverview = ({ records }: any) => {
             >
               {/* <StatItem label="Market Cap" value="12,21515 CR" /> */}
               <StatItem
-                label={records[0]?.title || "Market Caps"}
+                label={(records && records[0]?.title) || "Market Caps"}
                 value={`${
-                  records[0]?.value
+                  records && records[0]?.value
                     ? new Intl.NumberFormat("en-IN").format(records[0]?.value)
                     : "0"
-                } ${records[0]?.unit || ""}`}
-                dynamicColor={records[0]?.color}
+                } ${(records && records[0]?.unit) || ""}`}
+                dynamicColor={records && records[0]?.color}
               />
               {/* <StatItem label="Company P/E" value="31" /> */}
               <StatItem
-                label={records[1]?.title || "Company P/E"}
+                label={(records && records[1]?.title) || "Company P/E"}
                 value={`${
-                  records[1]?.value
+                  records && records[1]?.value
                     ? new Intl.NumberFormat("en-IN").format(records[1]?.value)
                     : "0"
-                } ${records[1]?.unit || ""}`}
-                dynamicColor={records[1]?.color}
+                } ${(records && records[1]?.unit) || ""}`}
+                dynamicColor={records && records[1]?.color}
               />
               <StatItem label="Op Revenue TTE static" value="0.00 CR" />
               <StatItem label="ROE static" value="21.61%" />
@@ -64,22 +64,22 @@ const FundOverview = ({ records }: any) => {
               <StatItem label="Current Price static" value="-" />
               <StatItem label="Company P/BV static" value="7.5" />
               <StatItem
-                label={records[6]?.title || "Net Profit TTM"}
+                label={(records && records[6]?.title) || "Net Profit TTM"}
                 value={`${
-                  records[6]?.value
+                  records && records[6]?.value
                     ? new Intl.NumberFormat("en-IN").format(records[6]?.value)
                     : "0"
-                } ${records[6]?.unit || ""}`}
-                dynamicColor={records[6]?.color}
+                } ${(records && records[6]?.unit) || ""}`}
+                dynamicColor={records && records[6]?.color}
               />
               <StatItem
-                label={records[7]?.title || "Net Profit TTM"}
+                label={(records && records[7]?.title) || "Net Profit TTM"}
                 value={`${
-                  records[7]?.value
+                  records && records[7]?.value
                     ? new Intl.NumberFormat("en-IN").format(records[7]?.value)
                     : "0"
-                } ${records[7]?.unit || ""}`}
-                dynamicColor={records[7]?.color}
+                } ${(records && records[7]?.unit) || ""}`}
+                dynamicColor={records && records[7]?.color}
               />
             </div>
           </Col>
@@ -99,9 +99,11 @@ const FundOverview = ({ records }: any) => {
               <StatItem label="Company PEG static" value="1.1" />
               <StatItem label="Dividend Yield static" value="0.4" />
               <StatItem
-                label={records[8]?.title || "ROE"}
-                value={`${records[8]?.value || "-"} ${records[8]?.unit || ""}`}
-                dynamicColor={records[8]?.color}
+                label={(records && records[8]?.title) || "ROE"}
+                value={`${(records && records[8]?.value) || "-"} ${
+                  (records && records[8]?.unit) || ""
+                }`}
+                dynamicColor={records && records[8]?.color}
               />
             </div>
           </Col>
