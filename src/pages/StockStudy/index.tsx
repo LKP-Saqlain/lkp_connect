@@ -151,6 +151,26 @@ const StockStudy = () => {
   }, []);
 
   useEffect(() => {
+    if (activeMenu === "Share Holding") {
+      const fetchFundamentalShareHolding = async () => {
+        dispatch(showLoader("Please wait we are processing your request"));
+        apiServices
+          .getFundamentalShareholding({})
+          .then((response) => {
+            dispatch(hideLoader());
+            console.log("getFundamentalShareholdingResponse", response?.data);
+            setFundamentalRecords(response?.data?.fundamentalData);
+          })
+          .catch((error) => {
+            dispatch(hideLoader());
+            console.log("error", error);
+          });
+      };
+      fetchFundamentalShareHolding();
+    }
+  }, [activeMenu]);
+
+  useEffect(() => {
     console.log("Active Menu:", activeMenu);
   }, [activeMenu]);
 

@@ -113,6 +113,13 @@ export const apiServices = {
   Fundamental: async (payload: any) => {
     return await apiService("POST", endpoints.getFundamentalRecord, payload);
   },
+  getFundamentalShareholding: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.getFundamentalShareholding,
+      payload
+    );
+  },
   ComplainceReport: async (payload: any) => {
     return await apiService("POST", endpoints.ComplainceReport, payload);
   },

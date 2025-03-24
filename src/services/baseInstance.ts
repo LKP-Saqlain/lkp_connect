@@ -56,7 +56,10 @@ baseInstance.interceptors.request.use(
     //   config.headers.Authorization = `Bearer ${token}`;
     // }
 
-    if (config.url?.includes("/Fundamental/fundamental/INE467B01029")) {
+    if (
+      config.url?.includes("/Fundamental/fundamental/INE467B01029") ||
+      config.url?.includes("/Fundamental/Shareholding/INE467B01029")
+    ) {
       config.baseURL = FUNDAMENTAL_URL;
       config.headers.Authorization = PrivateLoginauthHeader; // Use private credentials
     } else {
