@@ -59,7 +59,7 @@ export const getClientActivityStatusColumns = (
               Nov: "11",
               Dec: "12",
             };
-
+            console.log(match);
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -418,7 +418,7 @@ export const getClientDormantStatus = (
               Nov: "11",
               Dec: "12",
             };
-
+            console.log(match);
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -687,7 +687,7 @@ export const clientNotTradedColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
+            console.log(match);
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -784,7 +784,7 @@ export const newClientAddFiveDays: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
+            console.log(match);
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -940,7 +940,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
+            console.log(match);
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1043,7 +1043,7 @@ export const ClientCashColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
+            console.log(match);
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1730,7 +1730,7 @@ export const DormantOverViewColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
+            console.log(match);
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1876,6 +1876,7 @@ export const dormantColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
+            console.log(match);
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
