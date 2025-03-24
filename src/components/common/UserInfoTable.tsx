@@ -486,7 +486,12 @@ const DataTable = ({
   const handleSearchChange = (query: string) => {
     handleSearchBasedOnInput?.(query);
   };
-  const commonLedgerData = customLedgerData ? customLedgerData : tradeCWCBData;
+  const commonLedgerData =
+    Array.isArray(customLedgerData) && customLedgerData.length > 0
+      ? customLedgerData
+      : Array.isArray(tradeCWCBData) && tradeCWCBData.length > 0
+      ? tradeCWCBData
+      : [];
   let rowName =
     selectedWidget === "Clients With Ledger Balance"
       ? commonLedgerData

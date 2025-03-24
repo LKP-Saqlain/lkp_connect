@@ -58,7 +58,7 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
-  console.log(accessType);
+  console.log("accessType----", accessType);
 
   const handleItemClick = (data: any) => {
     console.log("value->", data);
@@ -105,50 +105,54 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
     }
   }, [selectedTrading]);
 
-  // useEffect(() => {
-  //   if (selectedItem === "" || selectedItem === "Clients With Ledger Balance") {
-  //     setT6Data([]);
-  //     dispatch(showLoader("Please wait"));
-  //     const fetchCWCBReport = async () => {
-  //       // tradeData([]);
-  //       // setSelectedZone(null);
-  //       // setSelectedBranchCode(null);
-  //       const payload = {
-  //         user_id: user_id,
-  //         zone: "ALL",
-  //         branchCode: "ALL",
-  //       };
-  //       dispatch(showLoader(""));
-  //       apiServices
-  //         .ClientCash(payload)
-  //         .then((response) => {
-  //           console.log("ClientCashresponse", response?.data?.data);
-  //           // handleValues(response?.data?.data);
-  //           dispatch(hideLoader());
-  //           if (response?.status === 200) {
-  //             ShowToast("error", response?.data);
-  //             // let { recordsTotal } = response?.data[0];
-  //             // setTotalEntries(recordsTotal);
-  //             // setUserData(response.data);
-  //             setTradeCWCBData(response?.data?.data);
-  //           }
-  //         })
-  //         .catch((error) => {
-  //           console.log("Error->", error);
-  //           // const zoneError = error.response?.data?.errors?.Zone["0"];
-  //           // const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
-  //           dispatch(hideLoader());
-  //           ShowToast("error", error.response?.data?.message);
-  //           // ShowToast("error", zoneError);
-  //           // ShowToast("error", branchCodeError);
-  //         })
-  //         .finally(() => {
-  //           dispatch(hideLoader());
-  //         });
-  //     };
-  //     fetchCWCBReport();
-  //   }
-  // }, [dispatch, selectedItem]);
+  useEffect(() => {
+    console.log("Tesr1213", accessType);
+  }, []);
+
+  useEffect(() => {
+    if (accessType === "") {
+      setT6Data([]);
+      dispatch(showLoader("Please wait"));
+      const fetchCWCBReport = async () => {
+        // tradeData([]);
+        // setSelectedZone(null);
+        // setSelectedBranchCode(null);
+        const payload = {
+          user_id: user_id,
+          zone: "ALL",
+          branchCode: "ALL",
+        };
+        dispatch(showLoader(""));
+        apiServices
+          .ClientCash(payload)
+          .then((response) => {
+            console.log("ClientCashresponse", response?.data?.data);
+            // handleValues(response?.data?.data);
+            dispatch(hideLoader());
+            if (response?.status === 200) {
+              ShowToast("error", response?.data);
+              // let { recordsTotal } = response?.data[0];
+              // setTotalEntries(recordsTotal);
+              // setUserData(response.data);
+              setTradeCWCBData(response?.data?.data);
+            }
+          })
+          .catch((error) => {
+            console.log("Error->", error);
+            // const zoneError = error.response?.data?.errors?.Zone["0"];
+            // const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
+            dispatch(hideLoader());
+            ShowToast("error", error.response?.data?.message);
+            // ShowToast("error", zoneError);
+            // ShowToast("error", branchCodeError);
+          })
+          .finally(() => {
+            dispatch(hideLoader());
+          });
+      };
+      fetchCWCBReport();
+    }
+  }, [dispatch, accessType, selectedItem]);
 
   useEffect(() => {
     const fetchClientCash = async () => {

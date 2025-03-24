@@ -49,6 +49,9 @@ if (import.meta.env.VITE_NODE_ENV === "production") {
   console.log = () => {};
 }
 
+if ((window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+  (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__.inject = () => {};
+}
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
