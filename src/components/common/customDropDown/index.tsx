@@ -34,7 +34,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [totalEntries, setTotalEntries] = useState(null);
+  // const [totalEntries, setTotalEntries] = useState(null);
 
   // const data = useSelector((state: RootState) => state.dormantReport.data);
   const dispatch = useDispatch<AppDispatch>();
@@ -45,7 +45,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
   console.log("accessType", typeof accessType);
 
   useEffect(() => {
-    console.log(userData, totalEntries);
+    console.log(userData);
   }, []);
 
   useEffect(() => {
