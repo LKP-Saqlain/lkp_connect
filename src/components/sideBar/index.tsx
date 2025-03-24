@@ -62,6 +62,7 @@ import MarketingMaterial from "../../pages/refCard/Marketing Materials";
 import RegisDetails from "../../pages/refCard/Registration Details";
 import RegulatorAnnouncement from "../../pages/refCard/regulatory announcement";
 import CustomModal from "../common/DPModal";
+import { userOverview } from "../../redux/thunk/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 
 const drawerWidth = 240;
@@ -181,6 +182,39 @@ const SideBar = () => {
     (state: RootState) => state.userOverView?.data?.data?.data
   );
 
+  useEffect(() => {
+    const fetchBrokerage = async () => {
+      // const Id = localStorage.getItem("Id");
+      const payload = {
+        user_id: user_id,
+      };
+      dispatch(showLoader("Please wait"));
+      dispatch(userOverview(payload))
+        .unwrap()
+        .then((response) => {
+          console.log("Response", response);
+          if (response?.status === 200) {
+            dispatch(hideLoader());
+          }
+        })
+        .catch((Err) => {
+          const { message } = Err;
+          console.log("Error->", message);
+          dispatch(hideLoader());
+          // formik.setFieldError("password", message);
+          ShowToast(
+            "error",
+            message ||
+              "Sorry for the inconvenience, please try after some time."
+          );
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+    };
+
+    fetchBrokerage();
+  }, [dispatch]);
   // useClearStorageOnTabClose();   //use to remove local and session storage when tab is changed
 
   // useEffect(() => {
