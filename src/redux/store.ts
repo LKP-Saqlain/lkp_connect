@@ -45,7 +45,7 @@ const store = configureStore({
 
 export const persistor = persistStore(store); // Create the persistor
 
-if (import.meta.env.VITE_NODE_ENV === "development") {
+if (import.meta.env.VITE_NODE_ENV === "production") {
   console.log = () => {};
 }
 

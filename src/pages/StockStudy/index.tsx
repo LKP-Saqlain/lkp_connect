@@ -7,6 +7,7 @@ import { regEx } from "../../helper/method";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { useDispatch } from "react-redux";
+import CorporateAction from "./CorporateAction";
 
 interface MenuItem {
   title: string;
@@ -42,7 +43,7 @@ const menuData: MenuItem[] = [
   {
     title: "Corporate Action",
     submenus: ["Dividend", "Bonus", "Split", "Right", "Board Meeting"],
-    component: <div>Corporate Action details go here.</div>,
+    // component: <div>Corporate Action details go here.</div>,
   },
 ];
 
@@ -113,6 +114,10 @@ const ContentArea = ({ activeMenu, activeSubmenu, records }: any) => {
   } else {
     activeComponent =
       menuData.find((menu) => menu.title === activeMenu)?.component || null;
+  }
+  if (activeMenu === "Corporate Action") {
+    console.log("activeSubmenu-->", activeSubmenu);
+    activeComponent = <CorporateAction activeSubmenu={activeSubmenu} />;
   }
 
   useEffect(() => {

@@ -113,6 +113,22 @@ export const apiServices = {
   Fundamental: async (payload: any) => {
     return await apiService("POST", endpoints.getFundamentalRecord, payload);
   },
+  getFundamentalDividend: async (payload: any) => {
+    return await apiService("POST", endpoints.getFundamentalDividend, payload);
+  },
+  getFundamentalBonus: async (payload: any) => {
+    return await apiService("POST", endpoints.getFundamentalBonus, payload);
+  },
+  getFundamentalBoardMeeting: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.getFundamentalBoardMeeting,
+      payload
+    );
+  },
+  getFundamentalSplit: async (payload: any) => {
+    return await apiService("POST", endpoints.getFundamentalSplit, payload);
+  },
   getFundamentalShareholding: async (payload: any) => {
     return await apiService(
       "POST",
