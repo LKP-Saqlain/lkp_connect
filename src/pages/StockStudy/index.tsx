@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 interface MenuItem {
   title: string;
   submenus: string[];
-  component?: JSX.Element;
+  component?: any;
 }
 
 const menuData: MenuItem[] = [
@@ -29,7 +29,7 @@ const menuData: MenuItem[] = [
   {
     title: "Share Holding",
     submenus: [],
-    component: <ShareHolding />,
+    component: (activeMenu: any) => <ShareHolding activeMenu={activeMenu} />,
   },
   {
     title: "News",
@@ -46,7 +46,7 @@ const menuData: MenuItem[] = [
   },
 ];
 
-// const componentsMap: Record<string, JSX.Element> = {
+// const componentsMap: Record<any, JSX.Element> = {
 //   "Cash Flow": <CashFlow />,
 //   "Quarterly P&L": <CashFlow />,
 //   "Annual P&L": <CashFlow />,
@@ -110,14 +110,12 @@ const ContentArea = ({ activeMenu, activeSubmenu, records }: any) => {
     ["Cash Flow", "Quarterly P&L", "Annual P&L"].includes(activeSubmenu)
   ) {
     activeComponent = <CashFlow />;
+  } else if (activeMenu === "Share Holding") {
+    activeComponent = <ShareHolding activeMenu={activeMenu} />;
   } else {
-    activeComponent =
-      menuData.find((menu) => menu.title === activeMenu)?.component || null;
+    const menuItem = menuData.find((menu) => menu.title === activeMenu);
+    activeComponent = menuItem?.component || null;
   }
-
-  useEffect(() => {
-    console.log("records", records);
-  }, [records]);
 
   return <div className="content-area">{activeComponent}</div>;
 };
@@ -130,35 +128,17 @@ const StockStudy = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    const fetchFundamentalRecords = async () => {
-      dispatch(showLoader("Please wait we are processing your request"));
-      apiServices
-        .Fundamental({})
-        .then((response) => {
-          dispatch(hideLoader());
-          console.log(
-            "fetchFundamentalRecordsResponse",
-            response?.data?.fundamentalData
-          );
-          setFundamentalRecords(response?.data?.fundamentalData);
-        })
-        .catch((error) => {
-          dispatch(hideLoader());
-          console.log("error", error);
-        });
-    };
-    fetchFundamentalRecords();
-  }, []);
-
-  useEffect(() => {
-    if (activeMenu === "Share Holding") {
-      const fetchFundamentalShareHolding = async () => {
+    if (activeMenu === "Fundamental") {
+      const fetchFundamentalRecords = async () => {
         dispatch(showLoader("Please wait we are processing your request"));
         apiServices
-          .getFundamentalShareholding({})
+          .Fundamental({})
           .then((response) => {
             dispatch(hideLoader());
-            console.log("getFundamentalShareholdingResponse", response?.data);
+            console.log(
+              "fetchFundamentalRecordsResponse",
+              response?.data?.fundamentalData
+            );
             setFundamentalRecords(response?.data?.fundamentalData);
           })
           .catch((error) => {
@@ -166,7 +146,7 @@ const StockStudy = () => {
             console.log("error", error);
           });
       };
-      fetchFundamentalShareHolding();
+      fetchFundamentalRecords();
     }
   }, [activeMenu]);
 

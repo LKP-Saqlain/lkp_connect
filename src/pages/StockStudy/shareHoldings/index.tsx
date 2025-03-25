@@ -1,8 +1,43 @@
 import { Container, Col, Row } from "reactstrap";
 import HoldingSummary from "../../../components/common/holdingSummary";
 import HoldingsInfo from "../holdingsInfo";
+import { useEffect, useState } from "react";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { apiServices } from "../../../services";
+import DynamicTable from "../../../components/common/dynamicStockStudyTable";
 
-const ShareHolding = () => {
+const ShareHolding = ({ activeMenu }: { activeMenu: any }) => {
+  const [fundamentalShareHolding, setFundamentalShareHolding] = useState<[]>(
+    []
+  );
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    console.log("ShareHolding activeMenu:", activeMenu);
+  }, [activeMenu]);
+
+  useEffect(() => {
+    if (activeMenu && activeMenu === "Share Holding") {
+      const fetchFundamentalShareHolding = async () => {
+        dispatch(showLoader("Please wait we are processing your request"));
+        apiServices
+          .getFundamentalShareholding({})
+          .then((response) => {
+            dispatch(hideLoader());
+            console.log("getFundamentalShareholdingResponse", response?.data);
+            setFundamentalShareHolding(response?.data);
+          })
+          .catch((error) => {
+            dispatch(hideLoader());
+            console.log("error", error);
+          });
+      };
+      fetchFundamentalShareHolding();
+    }
+  }, [activeMenu]);
+
   return (
     <>
       <div className="page-content">
@@ -11,9 +46,16 @@ const ShareHolding = () => {
             <Col>
               <div>
                 <Row>
-                  <HoldingSummary />
-                  <HoldingsInfo />
+                  <HoldingSummary
+                    fundamentalShareHolding={fundamentalShareHolding}
+                  />
+                  <HoldingsInfo
+                    fundamentalShareHolding={fundamentalShareHolding}
+                  />
                 </Row>
+                <DynamicTable
+                  fundamentalShareHolding={fundamentalShareHolding}
+                />
               </div>
             </Col>
           </Row>

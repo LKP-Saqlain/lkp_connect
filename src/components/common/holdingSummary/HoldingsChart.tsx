@@ -1,13 +1,29 @@
+import { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
-const StoreVisitsCharts = () => {
-  // var chartDonutBasicColors = getChartColorsArray(dataColors);
+const StoreVisitsCharts = ({ fundamentalShareHolding }: any) => {
+  const [chartData, setChartData] = useState<{
+    labels: string[];
+    series: number[];
+  }>({
+    labels: [],
+    series: [],
+  });
 
+  useEffect(() => {
+    if (fundamentalShareHolding?.summaryData) {
+      const summaryData = fundamentalShareHolding.summaryData;
+
+      const labels = summaryData.slice(1).map((item: any) => item[0]);
+      const series = summaryData.slice(1).map((item: any) => item[1]);
+      setChartData({ labels, series });
+    }
+  }, [fundamentalShareHolding]);
   const chartColors = ["#01D28E", "#FF7C0D", "#11395C", "#FE4747", "#6DBBFF"];
 
-  const series = [44, 55, 41, 17, 15];
+  // const series = [44, 55, 41, 17, 15];
   var options: any = {
-    labels: ["Direct", "Social", "Email", "Other", "Referrals"],
+    labels: chartData.labels,
     chart: {
       height: 333,
       type: "donut",
@@ -38,7 +54,7 @@ const StoreVisitsCharts = () => {
         <ReactApexChart
           dir="ltr"
           options={options}
-          series={series}
+          series={chartData.series}
           type="donut"
           height="333"
           className="apex-charts"

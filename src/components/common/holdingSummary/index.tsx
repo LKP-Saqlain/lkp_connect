@@ -2,13 +2,20 @@ import React from "react";
 import { Card, Col } from "reactstrap";
 import HoldingSummary from "./HoldingsChart";
 
-const ClientHoldings = () => {
+const ClientHoldings = ({ fundamentalShareHolding }: any) => {
   return (
     <React.Fragment>
-      <Col xl={4} style={{ marginTop: "2rem", borderRadius: "23px" }}>
+      <Col
+        xl={4}
+        style={{
+          marginTop: "2rem",
+          borderRadius: "23px",
+        }}
+      >
         <Card
           style={{
             borderRadius: "20px",
+            height: "95%", // Allow it to expand dynamically
             boxShadow:
               "0px 4px 8px rgba(0, 0, 0, 0.1), 0px 8px 16px rgba(0, 0, 0, 0.2)",
           }}
@@ -27,7 +34,9 @@ const ClientHoldings = () => {
               SHAREHOLDING SUMMARY
             </h4>
             <div dir="ltr">
-              <HoldingSummary />
+              <HoldingSummary
+                fundamentalShareHolding={fundamentalShareHolding}
+              />
             </div>
           </div>
         </Card>
