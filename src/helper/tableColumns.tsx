@@ -995,6 +995,124 @@ export const upcomingDormantClientColumns: GridColDef[] = [
   },
 ];
 
+export const spipSubscriptionColumns: GridColDef[] = [
+  {
+    field: "IACode",
+    headerName: "IA Code",
+    // flex: 1.5,
+    width: 90,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ClientName",
+    headerName: "Client Name",
+    width: 200,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Backofficecode",
+    headerName: "Backoffice Code",
+    // flex: 1.5,
+    width: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueGetter: (params: any) => params || "-", // Show '-' if empty
+  },
+  {
+    field: "BranchCode",
+    headerName: "Branch Code",
+    // flex: 1,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "MobileNo",
+    headerName: "Mobile No",
+    // flex: 1.5,
+    width: 110,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    renderCell: (params) => {
+      const mobile = params.value || ""; // Extract the mobile number
+
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_match: any, prefix: any, middle: any, suffix: any) =>
+          `${prefix}${"X".repeat(middle.length)}${suffix}`
+      );
+
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "EmailId",
+    headerName: "Email ID",
+    // flex: 2,
+    width: 200,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Active",
+    headerName: "Active",
+    // flex: 1,
+    width: 60,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ActivationDate",
+    headerName: "Activation Date",
+    // flex: 1.5,
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    width: 90,
+    disableColumnMenu: true,
+    valueGetter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params, "DD-MMM-YY").toDate();
+    },
+    valueFormatter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
+    },
+  },
+  {
+    field: "RMCode",
+    headerName: "RM Code",
+    // flex: 1,
+    width: 80,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Amount",
+    headerName: "Amount",
+    // flex: 1.5,
+    width: 80,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => `₹${params}`, // Format as currency
+  },
+];
+
 export const ClientCashColumns: GridColDef[] = [
   {
     field: "ClientCode",
