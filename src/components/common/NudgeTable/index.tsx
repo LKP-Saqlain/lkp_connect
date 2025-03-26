@@ -7,6 +7,7 @@ import {
   spipRenewalColumns,
   upcomingDormantClientColumns,
   newClientAddFiveDays,
+  spipSubscriptionColumns,
 } from "../../../helper/tableColumns.tsx";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
@@ -45,6 +46,8 @@ const NudgeTable = ({
         return newClientAddFiveDays;
       case "Upcoming Dormant Client":
         return upcomingDormantClientColumns;
+      case "SPIP Subscription in last 10 days":
+        return spipSubscriptionColumns;
       default:
         return []; // If no predefined columns, return an empty array
     }
