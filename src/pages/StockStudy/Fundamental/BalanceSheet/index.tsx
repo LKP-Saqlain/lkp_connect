@@ -22,8 +22,11 @@ const BalanceSheet = ({ activeMenu, activeSubmenu }: any) => {
           .getFundamentalBalanceSheet({})
           .then((response) => {
             dispatch(hideLoader());
-            console.log("getFundamentalBalanceSheetResponse", response?.data);
-            setAnnualBalanceSheetData(response?.data);
+            console.log(
+              "getFundamentalBalanceSheetResponse",
+              response?.data?.annualDataDump
+            );
+            setAnnualBalanceSheetData(response?.data?.annualDataDump);
           })
           .catch((error) => {
             dispatch(hideLoader());
