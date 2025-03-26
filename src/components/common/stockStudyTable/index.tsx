@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -91,9 +91,13 @@ const StockBtnOptions = [
   { label: "Consolidated", variant: "outlined" },
 ];
 
-const CashFlowTable = () => {
+const CashFlowTable = ({ annualDataDump }: any) => {
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [selectedButton, setSelectedButton] = useState<string>("Standalone");
+
+  useEffect(() => {
+    console.log("annualDumpData", annualDataDump?.annualDataDump);
+  }, [annualDataDump]);
 
   const handleToggleRow = (title: string) => {
     if (expandedRows.includes(title)) {

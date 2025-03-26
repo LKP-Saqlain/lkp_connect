@@ -136,6 +136,13 @@ export const apiServices = {
       payload
     );
   },
+  getFundamentalBalanceSheet: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.getFundamentalBalanceSheet,
+      payload
+    );
+  },
   ComplainceReport: async (payload: any) => {
     return await apiService("POST", endpoints.ComplainceReport, payload);
   },
