@@ -5,15 +5,15 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import CorporateTable from "../../../../components/common/CorporateTable";
 
-const Dividends = () => {
+const BoardMeeting = () => {
   const [data, setData] = useState<[]>([]);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const getFundamentalDividend = async () => {
+    const getFundamentalBoardMeeting = async () => {
       dispatch(showLoader("Please wait we are processing your request"));
       try {
-        const response = await apiServices.getFundamentalDividend({});
+        const response = await apiServices.getFundamentalBoardMeeting({});
         dispatch(hideLoader());
         console.log("getFundamentalDividendResponse", response?.data);
         setData(response?.data);
@@ -22,16 +22,18 @@ const Dividends = () => {
         console.log("error", error);
       }
     };
-    getFundamentalDividend(); // This triggers the data fetch when the component mounts
+
+    getFundamentalBoardMeeting(); // This triggers the data fetch when the component mounts
   }, []);
 
   return (
     <>
       <div className="page-content" style={{ paddingTop: "1rem" }}>
-        <CorporateTable CorporateData={data} name={"Dividend"} />
+        {/* Pass data to DynamicTable as fundamentalShareHolding */}
+        <CorporateTable CorporateData={data} name={"BoardMeeting"} />
       </div>
     </>
   );
 };
 
-export default Dividends;
+export default BoardMeeting;

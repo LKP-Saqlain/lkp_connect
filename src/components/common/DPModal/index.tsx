@@ -325,7 +325,10 @@ const CustomModal = ({
                   onClick={
                     expiredtime
                       ? handleSessionClear
-                      : () => console.log("clicked Regulator Announcements")
+                      : () => {
+                          setmodal_center(false);
+                          console.log("clicked Regulator Announcements");
+                        }
                   }
                 >
                   OK
