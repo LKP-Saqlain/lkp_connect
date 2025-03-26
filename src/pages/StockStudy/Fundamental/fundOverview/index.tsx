@@ -1,5 +1,5 @@
 import { Card, CardBody, Col, Row } from "reactstrap";
-import StatItem from "../StatItem";
+import StatItem from "../../../../components/common/StatItem";
 import { useEffect } from "react";
 
 const FundOverview = ({ records }: any) => {

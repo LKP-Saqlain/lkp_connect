@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import "./style.css";
 import CashFlow from "../../components/common/stockStudyTable";
-import FundamentalOverview from "../../components/common/stockOverview";
+import FundamentalOverview from "./Fundamental/fundOverview";
 import ShareHolding from "./shareHoldings";
 import { regEx } from "../../helper/method";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { useDispatch } from "react-redux";
+import BalanceSheet from "./Fundamental/BalanceSheet";
 
 interface MenuItem {
   title: string;
@@ -46,12 +47,24 @@ const menuData: MenuItem[] = [
   },
 ];
 
-// const componentsMap: Record<any, JSX.Element> = {
-//   "Cash Flow": <CashFlow />,
-//   "Quarterly P&L": <CashFlow />,
-//   "Annual P&L": <CashFlow />,
-//   Overview: <FundamentalOverview />,
-// };
+const componentMap: Record<
+  string,
+  ({ records, activeMenu, activeSubmenu }: any) => JSX.Element
+> = {
+  Overview: ({ activeMenu, activeSubmenu, records }) => (
+    <FundamentalOverview
+      activeMenu={activeMenu}
+      activeSubmenu={activeSubmenu}
+      records={records}
+    />
+  ),
+  "Quarterly P&L": () => <CashFlow />,
+  "Annual P&L": () => <CashFlow />,
+  "Cash Flow": () => <CashFlow />,
+  "Balance Sheet": ({ activeMenu, activeSubmenu }) => (
+    <BalanceSheet activeMenu={activeMenu} activeSubmenu={activeSubmenu} />
+  ),
+};
 
 const SearchBar = ({ handleChange, inputValue }: any) => (
   <div className="search-bar">
@@ -104,8 +117,16 @@ const Submenu = ({ items, activeSubmenu, setActiveSubmenu }: any) => (
 const ContentArea = ({ activeMenu, activeSubmenu, records }: any) => {
   let activeComponent = null;
 
-  if (activeSubmenu === "Overview") {
-    activeComponent = <FundamentalOverview records={records} />;
+  if (
+    activeMenu === "Fundamental" &&
+    activeSubmenu &&
+    componentMap[activeSubmenu]
+  ) {
+    activeComponent = componentMap[activeSubmenu]({
+      records,
+      activeMenu,
+      activeSubmenu,
+    });
   } else if (
     ["Cash Flow", "Quarterly P&L", "Annual P&L"].includes(activeSubmenu)
   ) {
