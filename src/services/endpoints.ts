@@ -32,6 +32,7 @@ export const endpoints = {
   DPEmail: "/api/Client/DPEmail",
   getFundamentalRecord: "/Fundamental/fundamental/INE467B01029",
   getFundamentalShareholding: "/Fundamental/Shareholding/INE467B01029",
+  getFundamentalcashflow: "/Fundamental/cashflow/INE467B01029",
   getFundamentalDividend: "/Fundamental/Dividend/INE467B01029",
   getFundamentalBonus: "/Fundamental/Bonus/INE467B01029",
   getFundamentalSplit: "/Fundamental/Split/INE467B01029",
