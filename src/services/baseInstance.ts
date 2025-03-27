@@ -63,10 +63,9 @@ baseInstance.interceptors.request.use(
       config.url?.includes(endpoints.getFundamentalBonus) ||
       config.url?.includes(endpoints.getFundamentalSplit) ||
       config.url?.includes(endpoints.getFundamentalBoardMeeting) ||
-      config.url?.includes("/Fundamental/fundamental/INE467B01029") ||
-      config.url?.includes("/Fundamental/Shareholding/INE467B01029") ||
       config.url?.includes(endpoints.getFundamentalBalanceSheet) ||
-      config.url?.includes(endpoints.getFundamentalcashflow)
+      config.url?.includes(endpoints.getFundamentalcashflow) ||
+      config.url?.includes(endpoints.getFundamentalAnnualPNL)
     ) {
       config.baseURL = FUNDAMENTAL_URL;
       config.headers.Authorization = PrivateLoginauthHeader; // Use private credentials

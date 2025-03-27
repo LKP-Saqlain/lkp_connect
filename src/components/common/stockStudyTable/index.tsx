@@ -34,21 +34,58 @@ const StockBtnOptions = [
   { label: "Consolidated", variant: "outlined" },
 ];
 
-// const rowHeaders = [
-//   "Total ShareHolders Funds",
-//   "Minority Interest Liability",
-//   "Total Non Current Liabilities",
-//   "Total Capital Liabilities",
-//   "Fixed Assets",
-//   "Total Non Current Assets",
-//   "Total Current Assets",
-//   "Total Assets",
-//   "Contingent Liabilities plus Commitments",
-//   "Bonus Equity Share Capital",
-//   "Non Current Investments Unquoted BookValue",
-// ];
+const rowHeaders = [
+  {
+    title: "Total ShareHolders Funds",
+    shortKey: "TotalShareHoldersFunds_A",
+  },
+  {
+    title: "Minority Interest Liability",
+    shortKey: "LiabilityMinorityInterest_A",
+  },
+  {
+    title: "Total Non Current Liabilities",
+    shortKey: "TotalNonCurrentLiabilities_A",
+  },
+  {
+    title: "Total Capital Liabilities",
+    shortKey: "CL_A",
+  },
+  {
+    title: "Fixed Assets",
+    shortKey: "FixedAssets_A",
+  },
+  {
+    title: "Total Non Current Assets",
+    shortKey: "TotalNonCurrentAssets_A",
+  },
+  {
+    title: "Total Current Assets",
+    shortKey: "CA_A",
+  },
+  {
+    title: "Total Assets",
+    shortKey: "TA_A",
+  },
+  {
+    title: "Contingent Liabilities plus Commitments",
+    shortKey: "ContingentLiabilities_A",
+  },
+  {
+    title: "Bonus Equity Share Capital",
+    shortKey: "",
+  },
+  {
+    title: "Non Current Investments Unquoted BookValue",
+    shortKey: "",
+  },
+  {
+    title: "Current Investments Unquoted BookValue",
+    shortKey: "",
+  },
+];
 
-const CashFlowTable = ({ annualDataDump }: any) => {
+const CashFlowTable = ({ annualDataDump, isCustomRender }: any) => {
   const [selectedButton, setSelectedButton] = useState<string>("Standalone");
   const [financialData, setFinancialData] = useState<any>({});
   const [years, setYears] = useState<string[]>([]);
@@ -65,9 +102,11 @@ const CashFlowTable = ({ annualDataDump }: any) => {
         const extractedYears = Object.keys(selectedData); // Extract years dynamically
         setYears(extractedYears);
 
-        const extractedKeys = Object.keys(selectedData[extractedYears[0]]); // Extract financial keys
+        const firstYearData = selectedData?.[extractedYears[0]] || {};
+        const extractedKeys = Object.keys(firstYearData);
         setFinancialKeys(extractedKeys);
         setFinancialData(selectedData); // Store all data
+        console.log("financialKeys", financialKeys);
       }
     }
   }, [selectedButton, annualDataDump]);
@@ -105,31 +144,24 @@ const CashFlowTable = ({ annualDataDump }: any) => {
 
         {/* Table Body */}
         <TableBody>
-          {financialKeys.map((key) => (
-            <TableRow key={key}>
-              <TableCell>{key.replace(/_A$/, "")}</TableCell>
-              {years.map((year) => (
-                <TableCell key={year}>
-                  {financialData[year]?.[key] ?? "-"}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
+          {isCustomRender &&
+            rowHeaders.map(({ title, shortKey }) => (
+              <TableRow key={title}>
+                <TableCell>{title}</TableCell>
+                {years.map((year) => (
+                  <TableCell key={year}>
+                    {shortKey
+                      ? financialData[year]?.[shortKey]
+                        ? new Intl.NumberFormat("en-IN").format(
+                            financialData[year][shortKey]
+                          )
+                        : "-"
+                      : "-"}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
         </TableBody>
-        {/* <TableBody>
-          {rowHeaders.map((rowHeader) => (
-            <TableRow key={rowHeader}>
-              <TableCell>{rowHeader}</TableCell>
-              {years.map((year) => (
-                <TableCell key={year}>
-                  {financialKeys.includes(rowHeader)
-                    ? financialData[year]?.[rowHeader] ?? "-"
-                    : "-"}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody> */}
       </Table>
     </TableContainer>
   );

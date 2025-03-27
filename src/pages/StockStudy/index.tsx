@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import CorporateAction from "./CorporateAction";
 import BalanceSheet from "./Fundamental/BalanceSheet";
 import Cashflow from "./Fundamental/CashFlow";
+import AnnualPNL from "./Fundamental/annualP&L";
 
 interface MenuItem {
   title: string;
@@ -61,7 +62,9 @@ const componentMap: Record<
     />
   ),
   "Quarterly P&L": () => <CashFlow />,
-  "Annual P&L": () => <CashFlow />,
+  "Annual P&L": ({ activeMenu, activeSubmenu }) => (
+    <AnnualPNL activeMenu={activeMenu} activeSubmenu={activeSubmenu} />
+  ),
   "Cash Flow": ({ activeMenu }) => <Cashflow activeMenu={activeMenu} />,
   "Balance Sheet": ({ activeMenu, activeSubmenu }) => (
     <BalanceSheet activeMenu={activeMenu} activeSubmenu={activeSubmenu} />

@@ -40,7 +40,10 @@ const BalanceSheet = ({ activeMenu, activeSubmenu }: any) => {
   return (
     <>
       {annualBalanceSheetData && (
-        <DynamicTable annualDataDump={annualBalanceSheetData} />
+        <DynamicTable
+          annualDataDump={annualBalanceSheetData}
+          isCustomRender={true}
+        />
       )}
     </>
   );

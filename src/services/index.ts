@@ -146,6 +146,9 @@ export const apiServices = {
       payload
     );
   },
+  getFundamentalAnnualPNL: async (payload: any) => {
+    return await apiService("POST", endpoints.getFundamentalAnnualPNL, payload);
+  },
   ComplainceReport: async (payload: any) => {
     return await apiService("POST", endpoints.ComplainceReport, payload);
   },
