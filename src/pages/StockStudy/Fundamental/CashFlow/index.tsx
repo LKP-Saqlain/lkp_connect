@@ -18,7 +18,6 @@ const CashFlow = ({ activeMenu }: any) => {
       try {
         const response = await apiServices.getFundamentalcashflow({});
         setCashFlow(response?.data?.annualDataDump);
-        console.log(cashFlow, "Fetched merum CashFlow Data:");
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -38,7 +37,7 @@ const CashFlow = ({ activeMenu }: any) => {
   return (
     <>
       {cashFlow ? (
-        <DynamicTable annualDataDump={cashFlow} />
+        <DynamicTable annualDataDump={cashFlow} isCashFlowHeader={true} />
       ) : (
         <div>No data available</div> // Optional: display a message when no data is fetched
       )}

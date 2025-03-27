@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -7,8 +7,14 @@ import {
   TableHead,
   TableRow,
   Paper,
+  IconButton,
 } from "@mui/material";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import ButtonGroup from "../../common/ButtonGroup";
+import {
+  CashFlowHeader,
+  BalanceSheetHeader,
+} from "../../../helper/tableColumns";
 import "./style.css";
 
 const selectedStyle = {
@@ -34,61 +40,15 @@ const StockBtnOptions = [
   { label: "Consolidated", variant: "outlined" },
 ];
 
-const rowHeaders = [
-  {
-    title: "Total ShareHolders Funds",
-    shortKey: "TotalShareHoldersFunds_A",
-  },
-  {
-    title: "Minority Interest Liability",
-    shortKey: "LiabilityMinorityInterest_A",
-  },
-  {
-    title: "Total Non Current Liabilities",
-    shortKey: "TotalNonCurrentLiabilities_A",
-  },
-  {
-    title: "Total Capital Liabilities",
-    shortKey: "CL_A",
-  },
-  {
-    title: "Fixed Assets",
-    shortKey: "FixedAssets_A",
-  },
-  {
-    title: "Total Non Current Assets",
-    shortKey: "TotalNonCurrentAssets_A",
-  },
-  {
-    title: "Total Current Assets",
-    shortKey: "CA_A",
-  },
-  {
-    title: "Total Assets",
-    shortKey: "TA_A",
-  },
-  {
-    title: "Contingent Liabilities plus Commitments",
-    shortKey: "ContingentLiabilities_A",
-  },
-  {
-    title: "Bonus Equity Share Capital",
-    shortKey: "",
-  },
-  {
-    title: "Non Current Investments Unquoted BookValue",
-    shortKey: "",
-  },
-  {
-    title: "Current Investments Unquoted BookValue",
-    shortKey: "",
-  },
-];
-
-const CashFlowTable = ({ annualDataDump, isCustomRender }: any) => {
+const CashFlowTable = ({
+  annualDataDump,
+  isCashFlowHeader,
+  isBalanceSheetHeader,
+}: any) => {
   const [selectedButton, setSelectedButton] = useState<string>("Standalone");
   const [financialData, setFinancialData] = useState<any>({});
   const [years, setYears] = useState<string[]>([]);
+  const [expandedRows, setExpandedRows] = useState<string[]>([]);
   const [financialKeys, setFinancialKeys] = useState<string[]>([]);
 
   useEffect(() => {
@@ -99,17 +59,37 @@ const CashFlowTable = ({ annualDataDump, isCustomRender }: any) => {
           : annualDataDump.consolidated;
 
       if (selectedData) {
-        const extractedYears = Object.keys(selectedData); // Extract years dynamically
+        const extractedYears = Object.keys(selectedData);
         setYears(extractedYears);
 
         const firstYearData = selectedData?.[extractedYears[0]] || {};
         const extractedKeys = Object.keys(firstYearData);
         setFinancialKeys(extractedKeys);
         setFinancialData(selectedData); // Store all data
+        setFinancialData(selectedData);
         console.log("financialKeys", financialKeys);
       }
     }
   }, [selectedButton, annualDataDump]);
+
+  const handleToggleRow = (title: string) => {
+    setExpandedRows((prevExpanded) =>
+      prevExpanded.includes(title)
+        ? prevExpanded.filter((row) => row !== title)
+        : [...prevExpanded, title]
+    );
+  };
+
+  const customHeaders = isCashFlowHeader
+    ? CashFlowHeader
+    : isBalanceSheetHeader
+    ? BalanceSheetHeader
+    : [];
+
+  // Order parents based on `order` field
+  const sortedParents = customHeaders
+    .filter((item: any) => !item.isSubpoint)
+    .sort((a: any, b: any) => (a.order ?? 100) - (b.order ?? 100));
 
   return (
     <TableContainer
@@ -117,8 +97,8 @@ const CashFlowTable = ({ annualDataDump, isCustomRender }: any) => {
       style={{
         borderRadius: "23px",
         marginTop: "2rem",
-        maxHeight: "70vh", // Restrict table height
-        overflowY: "auto", // Enable scrolling
+        maxHeight: "70vh",
+        overflowY: "auto",
       }}
     >
       <div style={{ marginLeft: "1rem", marginTop: "1rem" }}>
@@ -132,7 +112,6 @@ const CashFlowTable = ({ annualDataDump, isCustomRender }: any) => {
         />
       </div>
       <Table>
-        {/* Table Header */}
         <TableHead>
           <TableRow>
             <TableCell>Particulars (in Crs.)</TableCell>
@@ -142,10 +121,9 @@ const CashFlowTable = ({ annualDataDump, isCustomRender }: any) => {
           </TableRow>
         </TableHead>
 
-        {/* Table Body */}
         <TableBody>
-          {isCustomRender &&
-            rowHeaders.map(({ title, shortKey }) => (
+          {isBalanceSheetHeader &&
+            BalanceSheetHeader.map(({ title, shortKey }) => (
               <TableRow key={title}>
                 <TableCell>{title}</TableCell>
                 {years.map((year) => (
@@ -161,6 +139,63 @@ const CashFlowTable = ({ annualDataDump, isCustomRender }: any) => {
                 ))}
               </TableRow>
             ))}
+          {isCashFlowHeader &&
+            sortedParents.map((parent: any) => {
+              const hasSubpoints = customHeaders.some(
+                (item: any) => item.parent === parent.title
+              );
+              const isExpanded = expandedRows.includes(parent.title);
+
+              return (
+                <React.Fragment key={parent.shortKey}>
+                  {/* Parent Row */}
+                  <TableRow>
+                    <TableCell
+                      style={{ fontWeight: "bold", paddingLeft: "1rem" }}
+                    >
+                      {parent.title}
+                      {hasSubpoints && (
+                        <IconButton
+                          size="small"
+                          onClick={() => handleToggleRow(parent.title)}
+                        >
+                          {isExpanded ? (
+                            <KeyboardArrowUp />
+                          ) : (
+                            <KeyboardArrowDown />
+                          )}
+                        </IconButton>
+                      )}
+                    </TableCell>
+                    {years.map((year) => (
+                      <TableCell key={year}>
+                        {financialData[year]?.[parent.shortKey] ?? "-"}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+
+                  {/* Subpoints (if expanded) */}
+                  {isExpanded &&
+                    customHeaders
+                      .filter((sub: any) => sub.parent === parent.title)
+                      .map((subRow: any) => (
+                        <TableRow
+                          key={subRow.shortKey}
+                          style={{ backgroundColor: "#f9f9f9" }}
+                        >
+                          <TableCell style={{ paddingLeft: "3rem" }}>
+                            {subRow.title}
+                          </TableCell>
+                          {years.map((year) => (
+                            <TableCell key={year}>
+                              {financialData[year]?.[subRow.shortKey] ?? "-"}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                </React.Fragment>
+              );
+            })}
         </TableBody>
       </Table>
     </TableContainer>

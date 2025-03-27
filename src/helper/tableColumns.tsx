@@ -2616,3 +2616,111 @@ export const information = [
     info: "(Subject to Minimum Retention of 0.5% of turnover)",
   },
 ];
+
+export const CashFlowHeader = [
+  {
+    title: "Cash from Operating Activity",
+    isSubpoint: false,
+    order: 0,
+    shortKey: "CFO_A",
+  },
+  {
+    title: "Profit Before Tax",
+    isSubpoint: true,
+    parent: "Cash from Operating Activity",
+    shortKey: "PBT_A",
+  },
+  {
+    title: "Interest",
+    isSubpoint: true,
+    parent: "Cash from Operating Activity",
+    shortKey: "INT_A",
+  },
+  {
+    title: "Tax",
+    isSubpoint: true,
+    parent: "Cash from Operating Activity",
+    shortKey: "TAX_A",
+  },
+  {
+    title: "Cash from Investing Activity",
+    isSubpoint: false,
+    order: 1,
+    shortKey: "CFI_A",
+  },
+  {
+    title: "Cash from Financing Activity",
+    isSubpoint: false,
+    order: 2,
+    shortKey: "CFA_A",
+  },
+  {
+    title: "Net Cash Flow",
+    isSubpoint: false,
+    order: 3,
+    shortKey: "NCF_A",
+  },
+  {
+    title: "Cash Plus Cash Equivalent: Begin Of Year",
+    isSubpoint: true,
+    parent: "Net Cash Flow",
+    shortKey: "CashAndCashEquivalentBeginOfYear_A",
+  },
+  {
+    title: "Cash Plus Cash Equivalent: End Of Year",
+    isSubpoint: true,
+    parent: "Net Cash Flow",
+    shortKey: "CashAndCashEquivalentEndOfYear_A",
+  },
+];
+
+export const BalanceSheetHeader = [
+  {
+    title: "Total ShareHolders Funds",
+    shortKey: "TotalShareHoldersFunds_A",
+  },
+  {
+    title: "Minority Interest Liability",
+    shortKey: "LiabilityMinorityInterest_A",
+  },
+  {
+    title: "Total Non Current Liabilities",
+    shortKey: "TotalNonCurrentLiabilities_A",
+  },
+  {
+    title: "Total Capital Liabilities",
+    shortKey: "CL_A",
+  },
+  {
+    title: "Fixed Assets",
+    shortKey: "FixedAssets_A",
+  },
+  {
+    title: "Total Non Current Assets",
+    shortKey: "TotalNonCurrentAssets_A",
+  },
+  {
+    title: "Total Current Assets",
+    shortKey: "CA_A",
+  },
+  {
+    title: "Total Assets",
+    shortKey: "TA_A",
+  },
+  {
+    title: "Contingent Liabilities plus Commitments",
+    shortKey: "ContingentLiabilities_A",
+  },
+  {
+    title: "Bonus Equity Share Capital",
+    shortKey: "",
+  },
+  {
+    title: "Non Current Investments Unquoted BookValue",
+    shortKey: "",
+  },
+  {
+    title: "Current Investments Unquoted BookValue",
+    shortKey: "",
+  },
+];
