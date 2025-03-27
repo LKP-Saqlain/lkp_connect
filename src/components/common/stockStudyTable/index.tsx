@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -7,8 +7,11 @@ import {
   TableHead,
   TableRow,
   Paper,
+  IconButton,
 } from "@mui/material";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import ButtonGroup from "../../common/ButtonGroup";
+import { CashFlowHeader } from "../../../helper/tableColumns";
 import "./style.css";
 
 const selectedStyle = {
@@ -34,25 +37,11 @@ const StockBtnOptions = [
   { label: "Consolidated", variant: "outlined" },
 ];
 
-// const rowHeaders = [
-//   "Total ShareHolders Funds",
-//   "Minority Interest Liability",
-//   "Total Non Current Liabilities",
-//   "Total Capital Liabilities",
-//   "Fixed Assets",
-//   "Total Non Current Assets",
-//   "Total Current Assets",
-//   "Total Assets",
-//   "Contingent Liabilities plus Commitments",
-//   "Bonus Equity Share Capital",
-//   "Non Current Investments Unquoted BookValue",
-// ];
-
-const CashFlowTable = ({ annualDataDump }: any) => {
+const CashFlowTable = ({ annualDataDump, isCustomRender }: any) => {
   const [selectedButton, setSelectedButton] = useState<string>("Standalone");
   const [financialData, setFinancialData] = useState<any>({});
   const [years, setYears] = useState<string[]>([]);
-  const [financialKeys, setFinancialKeys] = useState<string[]>([]);
+  const [expandedRows, setExpandedRows] = useState<string[]>([]);
 
   useEffect(() => {
     if (annualDataDump?.standalone && annualDataDump?.consolidated) {
@@ -62,15 +51,27 @@ const CashFlowTable = ({ annualDataDump }: any) => {
           : annualDataDump.consolidated;
 
       if (selectedData) {
-        const extractedYears = Object.keys(selectedData); // Extract years dynamically
+        const extractedYears = Object.keys(selectedData);
         setYears(extractedYears);
-
-        const extractedKeys = Object.keys(selectedData[extractedYears[0]]); // Extract financial keys
-        setFinancialKeys(extractedKeys);
-        setFinancialData(selectedData); // Store all data
+        setFinancialData(selectedData);
       }
     }
   }, [selectedButton, annualDataDump]);
+
+  const handleToggleRow = (title: string) => {
+    setExpandedRows((prevExpanded) =>
+      prevExpanded.includes(title)
+        ? prevExpanded.filter((row) => row !== title)
+        : [...prevExpanded, title]
+    );
+  };
+
+  const customHeaders = isCustomRender && isCustomRender && CashFlowHeader;
+
+  // Order parents based on `order` field
+  const sortedParents = customHeaders
+    .filter((item: any) => !item.isSubpoint)
+    .sort((a: any, b: any) => (a.order ?? 100) - (b.order ?? 100));
 
   return (
     <TableContainer
@@ -78,8 +79,8 @@ const CashFlowTable = ({ annualDataDump }: any) => {
       style={{
         borderRadius: "23px",
         marginTop: "2rem",
-        maxHeight: "70vh", // Restrict table height
-        overflowY: "auto", // Enable scrolling
+        maxHeight: "70vh",
+        overflowY: "auto",
       }}
     >
       <div style={{ marginLeft: "1rem", marginTop: "1rem" }}>
@@ -93,7 +94,6 @@ const CashFlowTable = ({ annualDataDump }: any) => {
         />
       </div>
       <Table>
-        {/* Table Header */}
         <TableHead>
           <TableRow>
             <TableCell>Particulars (in Crs.)</TableCell>
@@ -103,33 +103,64 @@ const CashFlowTable = ({ annualDataDump }: any) => {
           </TableRow>
         </TableHead>
 
-        {/* Table Body */}
         <TableBody>
-          {financialKeys.map((key) => (
-            <TableRow key={key}>
-              <TableCell>{key.replace(/_A$/, "")}</TableCell>
-              {years.map((year) => (
-                <TableCell key={year}>
-                  {financialData[year]?.[key] ?? "-"}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
+          {sortedParents.map((parent: any) => {
+            const hasSubpoints = customHeaders.some(
+              (item: any) => item.parent === parent.title
+            );
+            const isExpanded = expandedRows.includes(parent.title);
+
+            return (
+              <React.Fragment key={parent.shortKey}>
+                {/* Parent Row */}
+                <TableRow>
+                  <TableCell
+                    style={{ fontWeight: "bold", paddingLeft: "1rem" }}
+                  >
+                    {parent.title}
+                    {hasSubpoints && (
+                      <IconButton
+                        size="small"
+                        onClick={() => handleToggleRow(parent.title)}
+                      >
+                        {isExpanded ? (
+                          <KeyboardArrowUp />
+                        ) : (
+                          <KeyboardArrowDown />
+                        )}
+                      </IconButton>
+                    )}
+                  </TableCell>
+                  {years.map((year) => (
+                    <TableCell key={year}>
+                      {financialData[year]?.[parent.shortKey] ?? "-"}
+                    </TableCell>
+                  ))}
+                </TableRow>
+
+                {/* Subpoints (if expanded) */}
+                {isExpanded &&
+                  customHeaders
+                    .filter((sub: any) => sub.parent === parent.title)
+                    .map((subRow: any) => (
+                      <TableRow
+                        key={subRow.shortKey}
+                        style={{ backgroundColor: "#f9f9f9" }}
+                      >
+                        <TableCell style={{ paddingLeft: "3rem" }}>
+                          {subRow.title}
+                        </TableCell>
+                        {years.map((year) => (
+                          <TableCell key={year}>
+                            {financialData[year]?.[subRow.shortKey] ?? "-"}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+              </React.Fragment>
+            );
+          })}
         </TableBody>
-        {/* <TableBody>
-          {rowHeaders.map((rowHeader) => (
-            <TableRow key={rowHeader}>
-              <TableCell>{rowHeader}</TableCell>
-              {years.map((year) => (
-                <TableCell key={year}>
-                  {financialKeys.includes(rowHeader)
-                    ? financialData[year]?.[rowHeader] ?? "-"
-                    : "-"}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody> */}
       </Table>
     </TableContainer>
   );
