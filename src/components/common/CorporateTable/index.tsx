@@ -20,6 +20,15 @@ const CorporateTable = ({ CorporateData, name }: any) => {
     console.log(header, "yeda", data, name);
   }, [CorporateData, name]);
 
+  const columnCount = header.length + 1;
+  const columnWidth = `${100 / columnCount}%`;
+
+  const cellStyle = {
+    padding: "4px 8px",
+    height: "30px",
+    fontSize: "14px",
+  };
+
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: "50vh" }}>
@@ -28,7 +37,7 @@ const CorporateTable = ({ CorporateData, name }: any) => {
             <TableRow>
               <TableCell
                 align="center"
-                style={{ fontWeight: "bold", width: "100px" }}
+                style={{ ...cellStyle, fontWeight: "bold", width: columnWidth }}
               >
                 Sr. No
               </TableCell>
@@ -37,7 +46,11 @@ const CorporateTable = ({ CorporateData, name }: any) => {
                   <TableCell
                     align="left"
                     key={index}
-                    style={{ fontWeight: "bold" }}
+                    style={{
+                      ...cellStyle,
+                      fontWeight: "bold",
+                      width: columnWidth,
+                    }}
                   >
                     {headerItem.name}
                   </TableCell>
@@ -48,11 +61,18 @@ const CorporateTable = ({ CorporateData, name }: any) => {
             {data && data.length > 0 ? (
               data.map((row, rowIndex) => (
                 <TableRow key={rowIndex}>
-                  {/* Add Sr. No column for each row */}
-                  <TableCell align="center">{rowIndex + 1}</TableCell>
-                  {/* Render the actual data cells */}
+                  <TableCell
+                    align="center"
+                    sx={{ ...cellStyle, width: columnWidth }}
+                  >
+                    {rowIndex + 1}
+                  </TableCell>
                   {row.map((cell: any, cellIndex: any) => (
-                    <TableCell align="left" key={cellIndex}>
+                    <TableCell
+                      align="left"
+                      key={cellIndex}
+                      sx={{ ...cellStyle, width: columnWidth }}
+                    >
                       {cell}
                     </TableCell>
                   ))}
@@ -60,7 +80,7 @@ const CorporateTable = ({ CorporateData, name }: any) => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={header.length + 1} align="center">
+                <TableCell colSpan={columnCount} align="center">
                   No data available !
                 </TableCell>
               </TableRow>
