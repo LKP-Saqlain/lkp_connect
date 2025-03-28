@@ -11,6 +11,7 @@ import CorporateAction from "./CorporateAction";
 import BalanceSheet from "./Fundamental/BalanceSheet";
 import Cashflow from "./Fundamental/CashFlow";
 import AnnualPNL from "./Fundamental/annualP&L";
+import Quarterly from "./Fundamental/QuaterlyP&L";
 
 interface MenuItem {
   title: string;
@@ -61,7 +62,7 @@ const componentMap: Record<
       records={records}
     />
   ),
-  "Quarterly P&L": () => <CashFlow />,
+  "Quarterly P&L": ({ activeMenu }) => <Quarterly activeMenu={activeMenu} />,
   "Annual P&L": ({ activeMenu, activeSubmenu }) => (
     <AnnualPNL activeMenu={activeMenu} activeSubmenu={activeSubmenu} />
   ),

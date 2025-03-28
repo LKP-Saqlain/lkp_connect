@@ -149,6 +149,13 @@ export const apiServices = {
   getFundamentalAnnualPNL: async (payload: any) => {
     return await apiService("POST", endpoints.getFundamentalAnnualPNL, payload);
   },
+  getFundamentalQuaterlyPNL: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.getFundamentalQuaterlyPNL,
+      payload
+    );
+  },
   ComplainceReport: async (payload: any) => {
     return await apiService("POST", endpoints.ComplainceReport, payload);
   },

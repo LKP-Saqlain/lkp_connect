@@ -39,6 +39,7 @@ export const endpoints = {
   getFundamentalBoardMeeting: "/Fundamental/Boardmeeting/INE467B01029",
   getFundamentalBalanceSheet: "/Fundamental/balancesheet/INE009A01021",
   getFundamentalAnnualPNL: "/Fundamental/Annually/INE009A01021",
+  getFundamentalQuaterlyPNL: "/Fundamental/Quaterly/INE009A01021",
   ComplainceReport: "/api/Compliance/ComplianceData",
   ComplianceData: "/api/Compliance/ComplianceData",
   ComplainceFileDownload: "/api/Compliance/ComplainceFileDownload",

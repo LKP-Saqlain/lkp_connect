@@ -14,6 +14,8 @@ import ButtonGroup from "../../common/ButtonGroup";
 import {
   CashFlowHeader,
   BalanceSheetHeader,
+  FundamentalQuarterlyPNLHeader,
+  FundamentalAnnualPNLHeader,
 } from "../../../helper/tableColumns";
 import "./style.css";
 
@@ -42,14 +44,13 @@ const StockBtnOptions = [
 
 const CashFlowTable = ({
   annualDataDump,
-  isCashFlowHeader,
   isBalanceSheetHeader,
+  customHeaderType,
 }: any) => {
   const [selectedButton, setSelectedButton] = useState<string>("Standalone");
   const [financialData, setFinancialData] = useState<any>({});
   const [years, setYears] = useState<string[]>([]);
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
-  const [financialKeys, setFinancialKeys] = useState<string[]>([]);
 
   useEffect(() => {
     if (annualDataDump?.standalone && annualDataDump?.consolidated) {
@@ -61,13 +62,7 @@ const CashFlowTable = ({
       if (selectedData) {
         const extractedYears = Object.keys(selectedData);
         setYears(extractedYears);
-
-        const firstYearData = selectedData?.[extractedYears[0]] || {};
-        const extractedKeys = Object.keys(firstYearData);
-        setFinancialKeys(extractedKeys);
-        setFinancialData(selectedData); // Store all data
         setFinancialData(selectedData);
-        console.log("financialKeys", financialKeys);
       }
     }
   }, [selectedButton, annualDataDump]);
@@ -80,16 +75,30 @@ const CashFlowTable = ({
     );
   };
 
-  const customHeaders = isCashFlowHeader
-    ? CashFlowHeader
-    : isBalanceSheetHeader
-    ? BalanceSheetHeader
-    : [];
+  const headerMapping: { [key: string]: any } = {
+    quarterlyPNL: FundamentalQuarterlyPNLHeader,
+    annuallyPNL: FundamentalAnnualPNLHeader,
+    cashFlow: CashFlowHeader,
+    balanceSheet: BalanceSheetHeader,
+  };
+  const customHeaders = headerMapping[customHeaderType] || [];
 
-  // Order parents based on `order` field
-  const sortedParents = customHeaders
-    .filter((item: any) => !item.isSubpoint)
-    .sort((a: any, b: any) => (a.order ?? 100) - (b.order ?? 100));
+  // const customHeaders =
+  //   isQuarterlyHeader && !isCashFlowHeader
+  //     ? FundamentalQuarterlyPNLHeader
+  //     : isAnnuallyHeader && !isCashFlowHeader
+  //     ? FundamentalAnnualPNLHeader
+  //     : isCashFlowHeader
+  //     ? CashFlowHeader
+  //     : isBalanceSheetHeader
+  //     ? BalanceSheetHeader
+  //     : [];
+
+  const sortedParents = Array.isArray(customHeaders)
+    ? customHeaders
+        .filter((item: any) => !item.isSubpoint)
+        .sort((a: any, b: any) => (a.order ?? 100) - (b.order ?? 100))
+    : [];
 
   return (
     <TableContainer
@@ -116,18 +125,21 @@ const CashFlowTable = ({
           <TableRow>
             <TableCell>Particulars (in Crs.)</TableCell>
             {years.map((year) => (
-              <TableCell key={year}>{year}</TableCell>
+              <TableCell key={year} align="right">
+                {year}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>
 
         <TableBody>
+          {/* Balance Sheet Data */}
           {isBalanceSheetHeader &&
             BalanceSheetHeader.map(({ title, shortKey }) => (
               <TableRow key={title}>
                 <TableCell>{title}</TableCell>
                 {years.map((year) => (
-                  <TableCell key={year}>
+                  <TableCell key={year} align="right">
                     {shortKey
                       ? financialData[year]?.[shortKey]
                         ? new Intl.NumberFormat("en-IN").format(
@@ -139,10 +151,12 @@ const CashFlowTable = ({
                 ))}
               </TableRow>
             ))}
-          {isCashFlowHeader &&
+
+          {/* Cash Flow / Quarterly PNL Data */}
+          {customHeaders &&
             sortedParents.map((parent: any) => {
               const hasSubpoints = customHeaders.some(
-                (item: any) => item.parent === parent.title
+                (item: any) => item.parent && item.parent === parent.title
               );
               const isExpanded = expandedRows.includes(parent.title);
 
@@ -168,8 +182,14 @@ const CashFlowTable = ({
                       )}
                     </TableCell>
                     {years.map((year) => (
-                      <TableCell key={year}>
-                        {financialData[year]?.[parent.shortKey] ?? "-"}
+                      <TableCell key={year} align="right">
+                        {parent.shortKey
+                          ? financialData[year]?.[parent.shortKey]
+                            ? new Intl.NumberFormat("en-IN").format(
+                                financialData[year][parent.shortKey]
+                              )
+                            : "-"
+                          : "-"}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -187,8 +207,14 @@ const CashFlowTable = ({
                             {subRow.title}
                           </TableCell>
                           {years.map((year) => (
-                            <TableCell key={year}>
-                              {financialData[year]?.[subRow.shortKey] ?? "-"}
+                            <TableCell key={year} align="right">
+                              {subRow.shortKey
+                                ? financialData[year]?.[subRow.shortKey]
+                                  ? new Intl.NumberFormat("en-IN").format(
+                                      financialData[year][subRow.shortKey]
+                                    )
+                                  : "-"
+                                : "-"}
                             </TableCell>
                           ))}
                         </TableRow>
