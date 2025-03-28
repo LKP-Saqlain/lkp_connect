@@ -38,57 +38,50 @@ const publicEndpoints = [
 baseInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("tkn");
-    // Check if the request URL matches one of the public endpoints
+
+    // Helper function to check if the request is for a fundamental API
+    const isFundamentalAPI = [
+      endpoints.getFundamentalRecord,
+      endpoints.getFundamentalShareholding,
+      endpoints.getFundamentalDividend,
+      endpoints.getFundamentalBonus,
+      endpoints.getFundamentalSplit,
+      endpoints.getFundamentalBoardMeeting,
+      endpoints.getFundamentalBalanceSheet,
+      endpoints.getFundamentalcashflow,
+      endpoints.getFundamentalAnnualPNL,
+    ].some((endpoint) => config.url?.includes(endpoint));
+
+    // Helper function to check if the request is for a PDF download
+    const isPdfRequest = [
+      endpoints.GetPNLAccountDetailsPdf,
+      endpoints.ComplainceFileDownload,
+    ].some((endpoint) => config.url?.includes(endpoint));
+
+    // Check if it's a public endpoint
     const isPublicEndpoint = publicEndpoints.some((endpoint) =>
       config.url?.includes(endpoint)
     );
 
-    // if (config.url?.includes("/Fundamental/fundamental/INE009A01021")) {
-    //   config.baseURL = FUNDAMENTAL_URL;
-    // } else {
-    //   config.baseURL = BASE_URL;
-    // }
-
-    // // Use `LoginauthHeader` for public endpoints or `Bearer` token for others
-    // if (isPublicEndpoint || !token) {
-    //   config.headers.Authorization = LoginauthHeader;
-    // } else {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
-
-    if (
-      config.url?.includes(endpoints.getFundamentalRecord) ||
-      config.url?.includes(endpoints.getFundamentalShareholding) ||
-      config.url?.includes(endpoints.getFundamentalDividend) ||
-      config.url?.includes(endpoints.getFundamentalBonus) ||
-      config.url?.includes(endpoints.getFundamentalSplit) ||
-      config.url?.includes(endpoints.getFundamentalBoardMeeting) ||
-      config.url?.includes(endpoints.getFundamentalBalanceSheet) ||
-      config.url?.includes(endpoints.getFundamentalcashflow) ||
-      config.url?.includes(endpoints.getFundamentalAnnualPNL)
-    ) {
+    // Set base URL & Authorization based on request type
+    if (isFundamentalAPI) {
       config.baseURL = FUNDAMENTAL_URL;
-      config.headers.Authorization = PrivateLoginauthHeader; // Use private credentials
+      config.headers.Authorization = PrivateLoginauthHeader;
     } else {
       config.baseURL = BASE_URL;
       config.headers.Authorization =
         isPublicEndpoint || !token ? LoginauthHeader : `Bearer ${token}`;
     }
 
-    if (
-      config.url?.includes(endpoints.GetPNLAccountDetailsPdf) ||
-      config.url?.includes(endpoints.ComplainceFileDownload)
-    ) {
-      config.responseType = "blob"; // Set responseType to blob for PDF
+    // Configure response type & headers for PDF downloads
+    if (isPdfRequest) {
+      config.responseType = "blob";
       config.headers["Accept"] = "application/pdf";
     }
 
     return config;
   },
-  (error) => {
-    // Handle request error
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error) // Handle request error
 );
 
 // Add a response interceptor

@@ -12,37 +12,29 @@ import {
 const DynamicTable = ({ fundamentalShareHolding }: any) => {
   const [tableData, setTableData] = useState<any[]>([]);
   const [quarters, setQuarters] = useState<string[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
     if (!fundamentalShareHolding?.chartData) return;
 
     const data = fundamentalShareHolding.chartData;
+    console.log("ShareHoldingChartData", data);
 
-    //getting extracted headers from api
-    const categoryKeys = Object.keys(data);
-    console.log("categoryKeys", categoryKeys);
-    setCategories(categoryKeys);
-
-    // Extract quarters here
-    const firstCategory = categoryKeys[0];
+    // Extract quarters from the first category
+    const firstCategory = Object.keys(data)[0];
     const extractedQuarters = data[firstCategory]
       .slice(1)
-      .map((row: any) => row[0]);
+      .map((row: any) => row[0]); // First column of each row (Quarter)
+
     console.log("quarters", extractedQuarters);
-
     setQuarters(extractedQuarters);
-    console.log(quarters);
 
-    // Prepare table data by mapping quarters to their respective holdings
-    const formattedData = extractedQuarters.map((quarter: any, index: any) => {
-      let rowData: any = { quarter };
-      categoryKeys.forEach((category) => {
-        const value = data[category][index + 1]?.[1];
-        rowData[category] = value === 0 ? "0" : value ? `${value}` : "N/A";
-      });
-      return rowData;
-    });
+    // Prepare table data: Each category becomes a row
+    const formattedData = Object.entries(data).map(
+      ([category, values]: any) => {
+        const holdings = values.slice(1).map((row: any) => row[1]);
+        return { category, holdings };
+      }
+    );
 
     setTableData(formattedData);
   }, [fundamentalShareHolding]);
@@ -61,10 +53,10 @@ const DynamicTable = ({ fundamentalShareHolding }: any) => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell style={{ fontWeight: "bold" }}>Quarter</TableCell>
-            {categories.map((category, index) => (
+            <TableCell style={{ fontWeight: "bold" }}>Summary</TableCell>
+            {quarters.map((quarter, index) => (
               <TableCell key={index} style={{ fontWeight: "bold" }}>
-                {category}
+                {quarter}
               </TableCell>
             ))}
           </TableRow>
@@ -72,9 +64,11 @@ const DynamicTable = ({ fundamentalShareHolding }: any) => {
         <TableBody>
           {tableData.map((row, rowIndex) => (
             <TableRow key={rowIndex}>
-              <TableCell>{row.quarter}</TableCell>
-              {categories.map((category, index) => (
-                <TableCell key={index}>{row[category]}%</TableCell>
+              <TableCell style={{ fontWeight: "bold" }}>
+                {row.category}
+              </TableCell>
+              {row.holdings.map((holding: any, index: any) => (
+                <TableCell key={index}>{holding}%</TableCell>
               ))}
             </TableRow>
           ))}
