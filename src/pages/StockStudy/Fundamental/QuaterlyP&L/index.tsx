@@ -4,45 +4,47 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import DynamicTable from "../../../../components/common/stockStudyTable";
 
-const CashFlow = ({ activeMenu }: any) => {
-  const [cashFlow, setCashFlow] = useState<any>();
+const Quarterly = ({ activeMenu }: any) => {
+  const [quarterly, setQuarterly] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false); // To handle loading state
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchFundamentalRecords = async () => {
-      setLoading(true); // Start loading
+      setLoading(true);
       dispatch(showLoader("Please wait, we are processing your request"));
-
       try {
-        const response = await apiServices.getFundamentalcashflow({});
-        setCashFlow(response?.data?.annualDataDump);
+        const response = await apiServices.getFundamentalQuaterlyPNL({});
+        setQuarterly(response?.data.quarterlyDataDump);
+        console.log(quarterly, "merum", response?.data.quarterlyDataDump);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
         dispatch(hideLoader());
-        setLoading(false); // End loading
+        setLoading(false);
       }
     };
-
     fetchFundamentalRecords();
   }, [activeMenu, dispatch]);
 
   // Handle loading state and conditional rendering
   if (loading) {
-    return <div>Loading...</div>; // You can replace with a spinner or custom loader component
+    return <div>Loading...</div>;
   }
 
   return (
     <>
-      {cashFlow ? (
-        <DynamicTable annualDataDump={cashFlow} customHeaderType="cashFlow" />
+      {quarterly ? (
+        <DynamicTable
+          annualDataDump={quarterly}
+          customHeaderType="quarterlyPNL"
+        />
       ) : (
-        <div>No data available</div> // Optional: display a message when no data is fetched
+        <div>No data available</div>
       )}
     </>
   );
 };
 
-export default CashFlow;
+export default Quarterly;

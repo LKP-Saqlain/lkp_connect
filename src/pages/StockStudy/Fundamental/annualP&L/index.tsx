@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
+import DynamicTable from "../../../../components/common/stockStudyTable";
 
 const AnnualPNL = ({ activeMenu, activeSubmenu }: any) => {
+  const [annually, setAnnually] = useState<any>();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,7 +21,8 @@ const AnnualPNL = ({ activeMenu, activeSubmenu }: any) => {
           .then((response) => {
             dispatch(hideLoader());
             console.log("ResponseGetFundamentalAnnualPNL", response);
-            // setAnnualBalanceSheetData(response?.data?.annualDataDump);
+            setAnnually(response?.data?.annualDataDump);
+            console.log(response?.data?.annualDataDump, "setAnnually");
           })
           .catch((error) => {
             dispatch(hideLoader());
@@ -30,7 +33,18 @@ const AnnualPNL = ({ activeMenu, activeSubmenu }: any) => {
     }
   }, [activeSubmenu, dispatch]);
 
-  return <div>AnnualPNL Componentssss</div>;
+  return (
+    <>
+      {annually ? (
+        <DynamicTable
+          annualDataDump={annually}
+          customHeaderType="annuallyPNL"
+        />
+      ) : (
+        <div>No data available</div>
+      )}
+    </>
+  );
 };
 
 export default AnnualPNL;

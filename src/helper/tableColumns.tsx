@@ -2724,3 +2724,160 @@ export const BalanceSheetHeader = [
     shortKey: "",
   },
 ];
+
+export const FundamentalQuarterlyPNLHeader = [
+  {
+    title: "Total Revenue",
+    isSubpoint: false,
+    order: 0,
+    shortKey: "TOTAL_SR_Q",
+  },
+  {
+    title: "Operating Revenue",
+    isSubpoint: true,
+    parent: "Total Revenue",
+    shortKey: "OperatingIncome_Q",
+  },
+  {
+    title: "Other Income",
+    isSubpoint: true,
+    parent: "Total Revenue",
+    shortKey: "OI_Q",
+  },
+  {
+    title: "Operating Expenses",
+    isSubpoint: false,
+    order: 1,
+    shortKey: "OEXPNS_Q",
+  },
+  {
+    title: "Operating Profit",
+    isSubpoint: false,
+    order: 2,
+    shortKey: "OP_Q",
+  },
+  {
+    title: "Operating Profit Margin %",
+    isSubpoint: false,
+    order: 3,
+    shortKey: "NETPCT_Q",
+  },
+  {
+    title: "Depreciation",
+    isSubpoint: false,
+    order: 4,
+    shortKey: "DEP_Q",
+  },
+  {
+    title: "Interest",
+    isSubpoint: false,
+    order: 5,
+    shortKey: "INT_Q",
+  },
+  {
+    title: "Profit Before Tax",
+    isSubpoint: false,
+    order: 6,
+    shortKey: "PBT_Q",
+  },
+  {
+    title: "Tax",
+    isSubpoint: false,
+    order: 7,
+    shortKey: "TAX_Q",
+  },
+  {
+    title: "Net Profit",
+    isSubpoint: false,
+    order: 8,
+    shortKey: "NP_Q",
+  },
+  {
+    title: "Basic EPS",
+    isSubpoint: false,
+    order: 9,
+    shortKey: "EPS_Q",
+  },
+  {
+    title: "Net Profit TTM",
+    isSubpoint: false,
+    order: 10,
+    shortKey: "NP_Q_GROWTH",
+  },
+  {
+    title: "Basic EPS TTM",
+    isSubpoint: false,
+    order: 11,
+    shortKey: "OP4Q_Q",
+  },
+];
+
+export const FundamentalAnnualPNLHeader = [
+  {
+    title: "Total Revenue",
+    shortKey: "RevenueFromOperationsNet_A",
+    isSubpoint: false,
+  },
+  {
+    title: "Operating Revenues",
+    shortKey: "TotalOperatingRevenues_A",
+    isSubpoint: true,
+    parent: "Total Revenue",
+  },
+  {
+    title: "Other Income",
+    shortKey: "OI_A",
+    isSubpoint: true,
+    parent: "Total Revenue",
+  },
+
+  { title: "Operating Expenses", shortKey: "OEXPNS_A", isSubpoint: false },
+  { title: "Operating Profit", shortKey: "EBIDT_A", isSubpoint: false },
+  {
+    title: "Operating Profit Margin %",
+    shortKey: "OPMPCT_A",
+    isSubpoint: false,
+  },
+
+  { title: "Total Expenses", shortKey: "TotalExpenses_A", isSubpoint: false },
+  {
+    title: "Other Expenses",
+    shortKey: "OtherExpenses_A",
+    isSubpoint: true,
+    parent: "Total Expenses",
+  },
+  {
+    title: "Employee Expenses",
+    shortKey: "EmployeeBenefitExpenses_A",
+    isSubpoint: true,
+    parent: "Total Expenses",
+  },
+  {
+    title: "Cost Of Power Purchased",
+    shortKey: "CostOfPowerPurchased_A",
+    isSubpoint: true,
+    parent: "Total Expenses",
+  },
+  {
+    title: "Cost Of Fuel",
+    shortKey: "CostOfFuel_A",
+    isSubpoint: true,
+    parent: "Total Expenses",
+  },
+
+  { title: "EBIDT", shortKey: "EBIDT_A", isSubpoint: false },
+  { title: "EBIDT margin %", shortKey: "EBIDTPCT_A", isSubpoint: false },
+  { title: "Interest", shortKey: "INT_A", isSubpoint: false },
+  { title: "Depreciation", shortKey: "DEP_A", isSubpoint: false },
+  { title: "Profit Before Tax", shortKey: "PBT_A", isSubpoint: false },
+  { title: "Tax", shortKey: "TAX_A", isSubpoint: false },
+
+  {
+    title: "PAT Before ExtraOrdinary Items",
+    shortKey: "PAT_A",
+    isSubpoint: false,
+  },
+  { title: "Net Profit", shortKey: "NP_A", isSubpoint: false },
+  { title: "Net Profit Margin %", shortKey: "NETPCT_A", isSubpoint: false },
+  { title: "Basic EPS", shortKey: "BasicEPS_A", isSubpoint: false },
+];
