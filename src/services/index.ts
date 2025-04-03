@@ -119,6 +119,9 @@ export const apiServices = {
   getFundamentalBonus: async (payload: any) => {
     return await apiService("POST", endpoints.getFundamentalBonus, payload);
   },
+  getFundamentalRatios: async (payload: any) => {
+    return await apiService("POST", endpoints.getFundamentalRatios, payload);
+  },
   getFundamentalcashflow: async (payload: any) => {
     return await apiService("POST", endpoints.getFundamentalcashflow, payload);
   },
