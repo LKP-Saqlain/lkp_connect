@@ -12,6 +12,8 @@ import BalanceSheet from "./Fundamental/BalanceSheet";
 import Cashflow from "./Fundamental/CashFlow";
 import AnnualPNL from "./Fundamental/annualP&L";
 import Quarterly from "./Fundamental/QuaterlyP&L";
+import Ratios from "./Fundamental/Ratios";
+import News from "./News";
 
 interface MenuItem {
   title: string;
@@ -67,6 +69,7 @@ const componentMap: Record<
     <AnnualPNL activeMenu={activeMenu} activeSubmenu={activeSubmenu} />
   ),
   "Cash Flow": ({ activeMenu }) => <Cashflow activeMenu={activeMenu} />,
+  Ratios: ({ activeMenu }) => <Ratios activeMenu={activeMenu} />,
   "Balance Sheet": ({ activeMenu, activeSubmenu }) => (
     <BalanceSheet activeMenu={activeMenu} activeSubmenu={activeSubmenu} />
   ),
@@ -139,6 +142,8 @@ const ContentArea = ({ activeMenu, activeSubmenu, records }: any) => {
     activeComponent = <CashFlow />;
   } else if (activeMenu === "Share Holding") {
     activeComponent = <ShareHolding activeMenu={activeMenu} />;
+  } else if (activeMenu === "News") {
+    activeComponent = <News activeMenu={activeMenu} />;
   } else {
     const menuItem = menuData.find((menu) => menu.title === activeMenu);
     activeComponent = menuItem?.component || null;

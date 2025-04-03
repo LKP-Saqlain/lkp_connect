@@ -16,6 +16,7 @@ import {
   BalanceSheetHeader,
   FundamentalQuarterlyPNLHeader,
   FundamentalAnnualPNLHeader,
+  FundamentalRatiosHeader,
 } from "../../../helper/tableColumns";
 import "./style.css";
 
@@ -42,11 +43,7 @@ const StockBtnOptions = [
   { label: "Consolidated", variant: "outlined" },
 ];
 
-const CashFlowTable = ({
-  annualDataDump,
-  isBalanceSheetHeader,
-  customHeaderType,
-}: any) => {
+const CashFlowTable = ({ annualDataDump, customHeaderType }: any) => {
   const [selectedButton, setSelectedButton] = useState<string>("Standalone");
   const [financialData, setFinancialData] = useState<any>({});
   const [years, setYears] = useState<string[]>([]);
@@ -80,8 +77,10 @@ const CashFlowTable = ({
     annuallyPNL: FundamentalAnnualPNLHeader,
     cashFlow: CashFlowHeader,
     balanceSheet: BalanceSheetHeader,
+    ratioHeader: FundamentalRatiosHeader,
   };
   const customHeaders = headerMapping[customHeaderType] || [];
+  console.log("customHeaders", customHeaders);
 
   // const customHeaders =
   //   isQuarterlyHeader && !isCashFlowHeader
@@ -134,7 +133,7 @@ const CashFlowTable = ({
 
         <TableBody>
           {/* Balance Sheet Data */}
-          {isBalanceSheetHeader &&
+          {/* {isBalanceSheetHeader &&
             BalanceSheetHeader.map(({ title, shortKey }) => (
               <TableRow key={title}>
                 <TableCell>{title}</TableCell>
@@ -150,7 +149,7 @@ const CashFlowTable = ({
                   </TableCell>
                 ))}
               </TableRow>
-            ))}
+            ))} */}
 
           {/* Cash Flow / Quarterly PNL Data */}
           {customHeaders &&

@@ -11,7 +11,6 @@ interface ClientRow {
   ClientName: string;
   LastTradeDate: string;
   ClientStatus: string;
-  // Add other fields as necessary
 }
 
 export const getClientActivityStatusColumns = (
@@ -2717,11 +2716,11 @@ export const BalanceSheetHeader = [
   },
   {
     title: "Non Current Investments Unquoted BookValue",
-    shortKey: "",
+    shortKey: "NonCurrentInvestments_A",
   },
   {
     title: "Current Investments Unquoted BookValue",
-    shortKey: "",
+    shortKey: "CurrentInvestments_A",
   },
 ];
 
@@ -2880,4 +2879,27 @@ export const FundamentalAnnualPNLHeader = [
   { title: "Net Profit", shortKey: "NP_A", isSubpoint: false },
   { title: "Net Profit Margin %", shortKey: "NETPCT_A", isSubpoint: false },
   { title: "Basic EPS", shortKey: "BasicEPS_A", isSubpoint: false },
+];
+
+export const FundamentalRatiosHeader = [
+  {
+    title: "Book Value Per Share",
+    shortKey: "BVSH_A",
+  },
+  {
+    title: "RoA %",
+    shortKey: "ROA_A",
+  },
+  {
+    title: "ROE %",
+    shortKey: "ROE_A",
+  },
+  {
+    title: "ROCE %",
+    shortKey: "ROCE_A",
+  },
+  {
+    title: "Total Debt to Total Equity",
+    shortKey: "DEBT_CE_A",
+  },
 ];

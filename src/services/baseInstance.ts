@@ -51,6 +51,7 @@ baseInstance.interceptors.request.use(
       endpoints.getFundamentalcashflow,
       endpoints.getFundamentalAnnualPNL,
       endpoints.getFundamentalQuaterlyPNL,
+      endpoints.getFundamentalRatios,
     ].some((endpoint) => config.url?.includes(endpoint));
 
     // Helper function to check if the request is for a PDF download
