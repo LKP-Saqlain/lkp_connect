@@ -63,6 +63,7 @@ import RegisDetails from "../../pages/refCard/Registration Details";
 import RegulatorAnnouncement from "../../pages/refCard/regulatory announcement";
 import CustomModal from "../common/DPModal";
 import { userOverview } from "../../redux/thunk/Overview";
+import MasterMenuMarketing from "../../pages/Masters/MenuMaster";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 
 const drawerWidth = 240;
@@ -264,6 +265,7 @@ const SideBar = () => {
       activeMenu !== "Referal Lead" &&
       activeMenu !== "Compliance" &&
       activeMenu !== "Kyc Dashboard" &&
+      activeMenu !== "Masters" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -534,6 +536,9 @@ const SideBar = () => {
       <MarketingMaterial {...props} />
     ),
   };
+  const masterSubComponents: any = {
+    "Menu Master": (props: any) => <MasterMenuMarketing {...props} />,
+  };
 
   const componentMap: any = {
     "My Performance": OverviewComponent,
@@ -552,6 +557,16 @@ const SideBar = () => {
     },
     Compliance: ({ activeSubItem }: any) => {
       const SubComponent = ComplianceSubComponents[activeSubItem];
+
+      return SubComponent ? (
+        <SubComponent activeSubItem={activeSubItem} />
+      ) : (
+        <div>No SubComponent for: {activeSubItem}</div>
+        // <div></div>
+      );
+    },
+    Masters: ({ activeSubItem }: any) => {
+      const SubComponent = masterSubComponents[activeSubItem];
       return SubComponent ? (
         <SubComponent activeSubItem={activeSubItem} />
       ) : (
@@ -591,6 +606,8 @@ const SideBar = () => {
         : menuItem.menu_name === "Compliance"
         ? { activeSubItem }
         : menuItem.menu_name === "Referal Lead"
+        ? { activeSubItem }
+        : menuItem.menu_name === "Masters"
         ? { activeSubItem }
         : {};
 
