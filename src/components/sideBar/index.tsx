@@ -265,7 +265,7 @@ const SideBar = () => {
       activeMenu !== "Referal Lead" &&
       activeMenu !== "Compliance" &&
       activeMenu !== "Kyc Dashboard" &&
-      activeMenu !== "Menu Master" &&
+      activeMenu !== "Masters" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
