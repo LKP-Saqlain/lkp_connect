@@ -21,8 +21,11 @@ const RegisDetails = ({ activeSubItem }: any) => {
     const GetAPDashboard = async () => {
       try {
         const response = await apiServices.GetAPDashboard(payload);
-        console.log("response?.data", response?.data?.Table1);
-        setApData(response?.data?.Table2);
+        const filteredData = response?.data?.Table2.filter(
+          (data: any) => data.CertiRegNo !== "0"
+        );
+        console.log("filteredData", filteredData);
+        setApData(filteredData);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       }

@@ -1758,7 +1758,7 @@ export const DPDebitRecovery: GridColDef[] = [
 
 export const terminalcol: GridColDef[] = [
   {
-    field: "Sr No",
+    field: "SrNo",
     headerName: "Sr no.",
     flex: 0.6,
     headerAlign: "center",
@@ -1769,7 +1769,7 @@ export const terminalcol: GridColDef[] = [
   {
     field: "Exchange",
     headerName: "Exchange",
-    flex: 1,
+    flex: 0.8,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -1783,7 +1783,7 @@ export const terminalcol: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "TerminalUser",
+    field: "LoginId",
     headerName: "Terminal User",
     flex: 3,
     headerAlign: "center",
@@ -1791,7 +1791,7 @@ export const terminalcol: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "NISMCertNo",
+    field: "CertiRegNo",
     headerName: "Certificate No",
     flex: 3,
     headerAlign: "center",
@@ -1799,7 +1799,7 @@ export const terminalcol: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "NISMCertValidTill",
+    field: "CertiValidityDate",
     headerName: " Validity Date",
     flex: 1.2,
     headerAlign: "center",
