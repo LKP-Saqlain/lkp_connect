@@ -153,6 +153,7 @@ const LastTrade = () => {
                               styles={{
                                 control: (base: any) => ({
                                   ...base,
+                                  cursor: "pointer",
                                   borderColor:
                                     formik.touched.clientStatus &&
                                     formik.errors.clientStatus

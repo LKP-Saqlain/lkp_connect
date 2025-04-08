@@ -4,10 +4,33 @@ import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
 import { InfoCapsules, information } from "../../../helper/tableColumns.tsx";
 import DataTable from "../../../components/common/UserInfoTable";
+import { apiServices } from "../../../services/index.ts";
+import { useEffect, useState } from "react";
 
 const RegisDetails = ({ activeSubItem }: any) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [apData, setApData] = useState<any>(null);
+
+  useEffect(() => {
+    const payload = {
+      branchCode: "0413",
+      // branchCode: "0248",
+    };
+
+    const GetAPDashboard = async () => {
+      try {
+        const response = await apiServices.GetAPDashboard(payload);
+        console.log("response?.data", response?.data?.Table1);
+        setApData(response?.data?.Table2);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
+
+    GetAPDashboard();
+  }, [activeSubItem]);
+
   return (
     <>
       {/* Business Dashboard Card */}
@@ -170,12 +193,13 @@ const RegisDetails = ({ activeSubItem }: any) => {
         </CardBody>
       </Card>
 
+      {/* Terminal Table Card */}
       <Card>
         <CardHeader>
           <h4 className="card-title mb-0">No. of Terminal: 2</h4>
         </CardHeader>
         <CardBody>
-          <DataTable activeSubItem={activeSubItem} />
+          <DataTable activeSubItem={activeSubItem} T6Data={apData} />
           {/* <div
             style={{
               display: isMobile ? "" : "flex",
@@ -249,10 +273,10 @@ const RegisDetails = ({ activeSubItem }: any) => {
         <CardBody>
           <div
             style={{
-              display: isMobile ? "" : "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: "10px",
-              padding: isMobile ? "0" : "10px",
+              display: isMobile ? "block" : "grid", // "block" for mobile, "grid" for larger screens
+              gridTemplateColumns: isMobile ? "1fr" : "repeat(3, 1fr)", // 1 column for mobile, 3 for larger screens
+              gap: isMobile ? "16px" : "10px", // Adjust gap for mobile
+              padding: isMobile ? "0" : "10px", // Less padding for mobile
               fontFamily: "Public Sans",
             }}
           >
@@ -262,14 +286,15 @@ const RegisDetails = ({ activeSubItem }: any) => {
                 style={{
                   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.4)",
                   borderRadius: "23px",
-                  height: "60px",
+                  height: "auto", // Allow height to be dynamic based on content
                   padding: "10px",
                   border: "1px solid gray",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  marginBottom: isMobile ? "24px" : "0",
+                  marginBottom: isMobile ? "24px" : "0", // Add bottom margin for mobile
+                  fontSize: isMobile ? "14px" : "16px", // Adjust font size for mobile
                 }}
               >
                 {item.heading} - 70%
@@ -280,13 +305,6 @@ const RegisDetails = ({ activeSubItem }: any) => {
                     gap: "5px",
                   }}
                 >
-                  <span
-                    style={{
-                      width: "10px",
-                      height: "10px",
-                      borderRadius: "50%",
-                    }}
-                  ></span>
                   <span
                     style={{
                       fontSize: "12px",

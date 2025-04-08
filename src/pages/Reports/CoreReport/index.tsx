@@ -332,7 +332,7 @@ const CoreReport = () => {
                           />
                         </LocalizationProvider>
                       </Col>
-                      <Col xl={4}>
+                      <Col xl={4} style={{ cursor: "pointer" }}>
                         <div className="mb-3">
                           <Label
                             htmlFor="choices-single-no-sorting"
@@ -350,7 +350,7 @@ const CoreReport = () => {
                           />
                         </div>
                       </Col>
-                      <Col xl={4}>
+                      <Col xl={4} style={{ cursor: "pointer" }}>
                         <div className="mb-3">
                           <Label
                             htmlFor="choices-single-no-sorting"

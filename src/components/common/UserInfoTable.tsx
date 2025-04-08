@@ -637,15 +637,15 @@ const DataTable = ({
               ? row.RowId
               : row.id
               ? row.id
-              : row.RowId
-              ? row.RowId
+              : row.TerminalId
+              ? row.TerminalId
               : row.dummyId
               ? row.dummyId
               : row.BOID
-              ? `${row.BOName}-${row.TotalDebit}-${Math.random()}` // this is just for when data comes repetative
-              : // ? row.BOID
-                row.Name
-          } // Use the correct identifier for rows
+              ? `${row.BOName}-${row.TotalDebit}-${Math.random()}`
+              : row.Name
+          }
+          // Use the correct identifier for rows
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"
           }

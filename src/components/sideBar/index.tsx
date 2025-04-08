@@ -64,6 +64,7 @@ import RegulatorAnnouncement from "../../pages/refCard/regulatory announcement";
 import CustomModal from "../common/DPModal";
 import { userOverview } from "../../redux/thunk/Overview";
 import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
+import AccessMapping from "../../pages/Masters/AccessMapping";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 
 const drawerWidth = 240;
@@ -538,6 +539,7 @@ const SideBar = () => {
   };
   const masterSubComponents: any = {
     "Menu Master": (props: any) => <MasterMenuMarketing {...props} />,
+    "User Access Mapping": (props: any) => <AccessMapping {...props} />,
   };
 
   const componentMap: any = {

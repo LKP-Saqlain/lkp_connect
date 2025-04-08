@@ -176,4 +176,7 @@ export const apiServices = {
   DashboardNudge: async (payload: any) => {
     return await apiService("POST", endpoints.DashboardNudge, payload);
   },
+  GetAPDashboard: async (payload: any) => {
+    return await apiService("POST", endpoints.GetAPDashboard, payload);
+  },
 };
