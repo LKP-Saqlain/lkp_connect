@@ -3,8 +3,8 @@ import { Card, CardBody } from "reactstrap";
 import Lottie from "react-lottie-player";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
-import { useMediaQuery } from "@mui/material";
+// import { useTheme } from "@mui/material/styles";
+// import { useMediaQuery } from "@mui/material";
 import "./style.css";
 
 interface Badge {
@@ -43,14 +43,19 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   activeClients,
   activeClientsEmpty,
 }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <>
       <Card
         className="card-animate position-relative shadow-card custom-card"
-        style={{ maxWidth: isMobile ? "400px" : "300px", overflow: "hidden" }}
+        style={{
+          width: "100%",
+          maxWidth: "500px",
+          overflow: "hidden",
+          marginBottom: "20px",
+        }}
       >
         <CardBody>
           {/* Title */}

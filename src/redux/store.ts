@@ -12,6 +12,7 @@ import ClientSummaryReducer from "./slices/ClientSummary";
 import DealerPerformance from "./slices/DealerPerformance";
 import ClientUserDetails from "./slices/ClientUserDetails";
 import ClientSegmentBrokerage from "./slices/ClientSegmentBrokerage";
+import APBrokerageOverview from "./slices/AP/lastWeekBrokerage";
 
 // Configure the persist settings
 const persistConfig = {
@@ -35,6 +36,7 @@ const store = configureStore({
     RevenueSummary: DealerPerformance,
     ClientUserDashboardDetails: ClientUserDetails,
     ClientSegmentBrokerageDetails: ClientSegmentBrokerage,
+    APBrokerage: APBrokerageOverview,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

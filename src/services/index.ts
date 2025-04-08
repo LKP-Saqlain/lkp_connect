@@ -80,6 +80,9 @@ export const apiServices = {
   Last7dayBrokerage: async (payload: any) => {
     return await apiService("POST", endpoints.Last7dayBrokerage, payload);
   },
+  GetAPRevenue: async (payload: any) => {
+    return await apiService("POST", endpoints.GetAPRevenue, payload);
+  },
   GetClientStatusCnt: async (payload: any) => {
     return await apiService("POST", endpoints.GetClientStatusCnt, payload);
   },

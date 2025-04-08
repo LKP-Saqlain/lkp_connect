@@ -65,6 +65,7 @@ import CustomModal from "../common/DPModal";
 import { userOverview } from "../../redux/thunk/Overview";
 import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
 import AccessMapping from "../../pages/Masters/AccessMapping";
+import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 
 const drawerWidth = 240;
@@ -171,14 +172,14 @@ const SideBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { user_id } = useSelector(
+  const { user_id, user_type } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
 
   const { name } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
   );
-  console.log("reduxStateUserName", name);
+  console.log("reduxStateUserName", name, user_type);
 
   const lastBrokingValues = useSelector(
     (state: RootState) => state.userOverView?.data?.data?.data
@@ -543,7 +544,7 @@ const SideBar = () => {
   };
 
   const componentMap: any = {
-    "My Performance": OverviewComponent,
+    "My Performance": user_type === "Employee" ? OverviewComponent : APOverview,
     Trading: TradeDashboard,
     "Client Details": ClientDetails,
     "Zone Overview": RegOverview,
