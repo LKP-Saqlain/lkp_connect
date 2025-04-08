@@ -12,6 +12,7 @@ import ClientSummaryReducer from "./slices/ClientSummary";
 import DealerPerformance from "./slices/DealerPerformance";
 import ClientUserDetails from "./slices/ClientUserDetails";
 import ClientSegmentBrokerage from "./slices/ClientSegmentBrokerage";
+import APBrokerageOverview from "./slices/AP/lastWeekBrokerage";
 
 // Configure the persist settings
 const persistConfig = {
@@ -35,6 +36,7 @@ const store = configureStore({
     RevenueSummary: DealerPerformance,
     ClientUserDashboardDetails: ClientUserDetails,
     ClientSegmentBrokerageDetails: ClientSegmentBrokerage,
+    APBrokerage: APBrokerageOverview,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
@@ -45,7 +47,7 @@ const store = configureStore({
 
 export const persistor = persistStore(store); // Create the persistor
 
-if (import.meta.env.VITE_NODE_ENV === "development") {
+if (import.meta.env.VITE_NODE_ENV === "production") {
   console.log = () => {};
 }
 

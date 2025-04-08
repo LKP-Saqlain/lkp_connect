@@ -1,0 +1,75 @@
+span.apexcharts-legend-text {
+  font-size: 15px !important;
+  color: #000 !important;
+  font-weight: 500 !important;
+}
+.apexcharts-xaxis-label {
+  fill: black !important;
+}
+
+.shadow-card:hover {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1), 0px 8px 16px rgba(0, 0, 0, 0.2) !important;
+  transition: box-shadow 0.3s ease !important;
+}
+
+.bg-warning-custom {
+  color: red !important;
+}
+
+.movable-note {
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #6c757d;
+  white-space: nowrap;
+  overflow: hidden;
+  position: relative;
+  height: 20px;
+}
+
+.movable-note span {
+  display: inline-block;
+  position: absolute;
+  animation: move-right-to-left 10s linear infinite;
+}
+
+/* @keyframes move-right-to-left {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  } */
+
+.card-title {
+  margin-bottom: 0;
+}
+
+.main-card {
+  margin-bottom: 20px; /* Adds spacing between cards */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Shadow for better visuals */
+}
+
+.main-card-body {
+  padding: 10px; /* Consistent padding across all cards */
+  height: auto; /* Allow card height to adapt to content */
+}
+
+.custom-card {
+  margin-bottom: 0rem !important;
+  box-shadow: rgba(100, 98, 92, 0.06) 0 0 15px 4px;
+}
+
+.dashboard-card-col {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.dashboard-card {
+  flex-grow: 1;
+  min-width: 300px;
+  max-width: 100%;
+  margin-bottom: 20px; /* Added margin-bottom */
+}
+

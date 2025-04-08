@@ -20,6 +20,7 @@ export const endpoints = {
   ClientCash: "/api/Client/ClientCash",
   T6Selling: "/api/ShortAllocation/T6Selling",
   Last7dayBrokerage: "/api/Client/Last7DaysBrok",
+  GetAPRevenue: "/api/AP/GetAPRevenue",
   GetClientStatusCnt: "/api/Client/GetClientStatusCnt",
   DealerPerformance: "/api/MIS/DEALERPERFORMANCE",
   forgetPassword: "/api/Login/ForgetPassword",
