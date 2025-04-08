@@ -63,8 +63,8 @@ import RegisDetails from "../../pages/refCard/Registration Details";
 import RegulatorAnnouncement from "../../pages/refCard/regulatory announcement";
 import CustomModal from "../common/DPModal";
 import { userOverview } from "../../redux/thunk/Overview";
-import MasterMenuMarketing from "../../pages/Masters/MenuMaster";
-import RegAnnMaster from "../../pages/Masters/RegulatoryAnnouncement";
+import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
+import AccessMapping from "../../pages/Masters/AccessMapping";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 
@@ -540,7 +540,7 @@ const SideBar = () => {
   };
   const masterSubComponents: any = {
     "Menu Master": (props: any) => <MasterMenuMarketing {...props} />,
-    "User Access Mapping": (props: any) => <RegAnnMaster {...props} />,
+    "User Access Mapping": (props: any) => <AccessMapping {...props} />,
   };
 
   const componentMap: any = {

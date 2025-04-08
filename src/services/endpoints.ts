@@ -48,4 +48,5 @@ export const endpoints = {
   ComplainceFileUpload: "/api/Compliance/ComplainceFileUpload",
   DashboardNudge: "/api/Dashboard/DashboardNudge",
   ChangePassword: "api/Login/ChangePassword",
+  GetAPDashboard: "api/AP/GetAPDashboard",
 };

@@ -423,6 +423,7 @@ const SlbmHoling = () => {
                                 styles={{
                                   control: (base: any) => ({
                                     ...base,
+                                    cursor: "pointer",
                                     borderColor:
                                       formik.touched.selectedZone &&
                                       formik.errors.selectedZone
@@ -474,6 +475,7 @@ const SlbmHoling = () => {
                                 styles={{
                                   control: (base: any) => ({
                                     ...base,
+                                    cursor: "pointer",
                                     borderColor:
                                       formik.touched.selectedBranchCode &&
                                       formik.errors.selectedBranchCode

@@ -724,6 +724,7 @@ const DormantClient = ({ activeSubItem }: any) => {
                                 styles={{
                                   control: (base: any) => ({
                                     ...base,
+                                    cursor: "pointer",
                                     borderColor:
                                       formik.touched.selectedZone &&
                                       formik.errors.selectedZone
@@ -772,6 +773,7 @@ const DormantClient = ({ activeSubItem }: any) => {
                                 styles={{
                                   control: (base: any) => ({
                                     ...base,
+                                    cursor: "pointer",
                                     borderColor:
                                       formik.touched.selectedBranchCode &&
                                       formik.errors.selectedBranchCode
@@ -820,6 +822,7 @@ const DormantClient = ({ activeSubItem }: any) => {
                                 styles={{
                                   control: (base: any) => ({
                                     ...base,
+                                    cursor: "pointer",
                                     borderColor:
                                       formik.touched.selectedClientStatus &&
                                       formik.errors.selectedClientStatus
