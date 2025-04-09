@@ -19,6 +19,7 @@ import {
   getCommChecker,
   getRegulatorAnnouncement,
   terminalcol,
+  RegisDetails,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -336,6 +337,10 @@ const DataTable = ({
       return terminalcol.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Registration Table") {
+      return RegisDetails.map((column) => ({
+        ...column,
+      }));
     } else if (activeSubItem === "UCCCode MATCH") {
       return getRegulatorAnnouncement.map((column) => {
         if (column.field === "circular") {
@@ -637,8 +642,6 @@ const DataTable = ({
               ? row.RowId
               : row.id
               ? row.id
-              : row.TerminalId
-              ? row.TerminalId
               : row.dummyId
               ? row.dummyId
               : row.BOID

@@ -1758,26 +1758,9 @@ export const DPDebitRecovery: GridColDef[] = [
 
 export const terminalcol: GridColDef[] = [
   {
-    field: "SrNo",
-    headerName: "Sr no.",
-    flex: 0.6,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
-    headerClassName: "header-wrap-custom",
-  },
-  {
-    field: "Exchange",
-    headerName: "Exchange",
-    flex: 0.8,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
-  },
-  {
     field: "TerminalId",
     headerName: "Terminal Id",
-    flex: 1.5,
+    flex: 0.9,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -1785,15 +1768,24 @@ export const terminalcol: GridColDef[] = [
   {
     field: "LoginId",
     headerName: "Terminal User",
-    flex: 3,
+    flex: 0.6,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "CertiRegNo",
+    headerName: "Certificate No",
+    flex: 2.3,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
   },
   {
-    field: "CertiRegNo",
-    headerName: "Certificate No",
-    flex: 3,
+    field: "MarketSegment",
+    headerName: "Exchange",
+    flex: 1.2,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -1801,12 +1793,58 @@ export const terminalcol: GridColDef[] = [
   {
     field: "CertiValidityDate",
     headerName: " Validity Date",
-    flex: 1.2,
+    flex: 0.7,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ServerName",
+    headerName: "Server Name",
+    flex: 0.9,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
   },
 ];
+
+export const RegisDetails: GridColDef[] = [
+  {
+    field: "AP Name",
+    headerName: "AP Name",
+    width: 200,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "AP Registration Number",
+    headerName: "AP Registration Number",
+    width: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "Date of Registration",
+    headerName: "Date of Registration",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "Registration Office",
+    headerName: "Registration Office",
+    width: 800,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+];
+
 export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "ctermcode",
@@ -2565,71 +2603,12 @@ export const TypeOfDocuments = [
 export const InfoCapsules = [
   {
     main: "NSE",
-    segments: [
-      { id: 1, label: "Equity", status: "Active" },
-      { id: 2, label: "F & O", status: "Active" },
-      { id: 3, label: "Currency", status: "Active" },
-      { id: 4, label: "Commodity", status: "Inactive" },
-    ],
   },
   {
     main: "BSE",
-    segments: [
-      { id: 1, label: "Equity", status: "Active" },
-      { id: 2, label: "F & O", status: "Active" },
-      { id: 3, label: "Currency", status: "Active" },
-    ],
   },
   {
     main: "MCX",
-    segments: [{ id: 4, label: "Commodity", status: "Inactive" }],
-  },
-];
-export const information = [
-  {
-    id: 1,
-    heading: "Equity Delivery",
-    info: "(Subject to Minimum Retention of 0.5% of turnover)",
-  },
-  {
-    id: 2,
-    heading: "Equity Intraday",
-    info: "(Subject to Minimum Retention of 0.5% of turnover)",
-  },
-  {
-    id: 3,
-    heading: "Equity Futures",
-    info: "(Subject to Minimum Retention of 0.5% of turnover)",
-  },
-  {
-    id: 4,
-    heading: "Equity Options",
-    info: "(Subject to Minimum Retention of 0.5% of turnover)",
-  },
-  {
-    id: 5,
-    heading: "Currency Futures",
-    info: "(Subject to Minimum Retention of 0.5% of turnover)",
-  },
-  {
-    id: 6,
-    heading: "Currency Options",
-    info: "(Subject to Minimum Retention of 0.5% of turnover)",
-  },
-  {
-    id: 7,
-    heading: "Commodity Futures",
-    info: "(Subject to Minimum Retention of 0.5% of turnover)",
-  },
-  {
-    id: 8,
-    heading: "Commodity Options",
-    info: "(Subject to Minimum Retention of 0.5% of turnover)",
-  },
-  {
-    id: 9,
-    heading: "SLBM",
-    info: "(Subject to Minimum Retention of 0.5% of turnover)",
   },
 ];
 
