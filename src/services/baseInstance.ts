@@ -14,14 +14,14 @@ const baseInstance = axios.create({
   },
 });
 
-const username = "admin";
-const password = "admin";
+const username = import.meta.env.VITE_BASIC_AUTH_USERNAME;
+const password = import.meta.env.VITE_BASIC_AUTH_PASSOWORD;
 const credentials = `${username}:${password}`;
 const encodedCredentials = btoa(credentials); // Base64 encode
 const LoginauthHeader = `Basic ${encodedCredentials}`;
 
-const privateUsername = "WP19T48LKP";
-const privatePassword = "Int@ll@ct#1948";
+const privateUsername = import.meta.env.VITE_FUNDAMENTAL_USERNAME;
+const privatePassword = import.meta.env.VITE_FUNDAMENTAL_PASSWORD;
 const privateCredentials = `${privateUsername}:${privatePassword}`;
 const encodedprivateCredentials = btoa(privateCredentials); // Base64 encode
 const PrivateLoginauthHeader = `Basic ${encodedprivateCredentials}`;

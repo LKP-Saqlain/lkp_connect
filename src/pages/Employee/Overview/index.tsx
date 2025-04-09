@@ -7,7 +7,7 @@ import UserCount from "./VisitorsCount";
 import RevenueDetails from "./Revenue";
 import T6Table from "./T6";
 import { Player } from "@lordicon/react";
-import CoinIcon from "../../../assets/images/coins.json";
+// import CoinIcon from "../../../assets/images/coins.json";
 import RevenueImg from "../../../assets/images/revenue_new.json";
 import ActiveClient from "../../../assets/images/Clients.json";
 import DashboardCard from "../../../components/common/DashboardCard";
@@ -266,9 +266,9 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
             </Col>
             <Col xxl={4} lg={4} md={6} sm={12}>
               <DashboardCard
-                title="Revenue Multiple*"
+                title="New Clients*"
                 value={multiRevenueMultiply}
-                animationData={CoinIcon}
+                animationData={ActiveClient}
                 decimals={2}
                 suffix="x"
                 activeClientsEmpty={true}
