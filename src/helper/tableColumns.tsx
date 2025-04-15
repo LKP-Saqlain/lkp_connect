@@ -555,7 +555,7 @@ export const slbmColumns: GridColDef[] = [
   {
     field: "branchCode",
     headerName: "Branch Code",
-    width: 95,
+    width: 75,
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
   },
@@ -576,15 +576,15 @@ export const slbmColumns: GridColDef[] = [
   },
   {
     field: "scripName",
-    headerName: "Scrip Name",
-    minWidth: 90,
+    headerName: "Script Name",
+    minWidth: 120,
     flex: 1,
     disableColumnMenu: true,
   },
   {
     field: "isin",
     headerName: "ISIN",
-    minWidth: 100,
+    minWidth: 90,
     flex: 1,
     disableColumnMenu: true,
   },
@@ -735,7 +735,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     headerName: "Branch Code",
     flex: 0.9,
     headerAlign: "center",
-    align: "left",
+    align: "center",
     disableColumnMenu: true,
   },
   {
@@ -824,7 +824,7 @@ export const spipRenewalColumns: GridColDef[] = [
     headerName: "Back Office Code",
     width: 90,
     headerAlign: "center",
-    align: "left",
+    align: "right",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
   },
@@ -888,7 +888,7 @@ export const spipRenewalColumns: GridColDef[] = [
     headerName: "RM Code",
     width: 100,
     headerAlign: "center",
-    align: "left",
+    align: "center",
     disableColumnMenu: true,
   },
 ];
@@ -989,7 +989,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     flex: 1,
     headerAlign: "center",
-    align: "left",
+    align: "right",
     disableColumnMenu: true,
   },
 ];
@@ -1027,7 +1027,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     headerName: "Branch Code",
     // flex: 1,
     headerAlign: "center",
-    align: "left",
+    align: "center",
     disableColumnMenu: true,
   },
   {
@@ -1097,7 +1097,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     // flex: 1,
     width: 80,
     headerAlign: "center",
-    align: "left",
+    align: "center",
     disableColumnMenu: true,
   },
   {
@@ -2318,21 +2318,23 @@ export const CompliancneReport: GridColDef[] = [
   {
     field: "TypeOfDocuments",
     headerName: "Type of Document",
-    minWidth: 140,
+    minWidth: 110,
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
   },
   {
     field: "CommunicationType",
     headerName: "Communication Type",
-    minWidth: 150,
+    minWidth: 120,
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
   },
   {
     field: "CommunicationDesc",
     headerName: "Communication Description",
-    minWidth: 300,
+    minWidth: 400,
     headerAlign: "center",
     disableColumnMenu: true,
     // renderCell: (params: any) => {
@@ -2347,7 +2349,7 @@ export const CompliancneReport: GridColDef[] = [
   {
     field: "CommunicationProofPath",
     headerName: "Document",
-    minWidth: 150,
+    minWidth: 120,
     disableColumnMenu: true,
     align: "center",
     headerAlign: "center",
