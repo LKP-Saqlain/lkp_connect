@@ -75,7 +75,7 @@ const componentMap: Record<
   ),
 };
 
-const SearchBar = ({ handleChange, inputValue }: any) => (
+const SearchBar = ({ handleChange, inputValue, handleSearchClick }: any) => (
   <div className="search-bar">
     <input
       type="text"
@@ -83,9 +83,12 @@ const SearchBar = ({ handleChange, inputValue }: any) => (
       className="search-input"
       value={inputValue}
       onChange={handleChange}
-      defaultValue="Reliance Industries Limited"
+      defaultValue=""
+      maxLength={15}
     />
-    <button className="search-button">Search</button>
+    <button className="search-button" onClick={handleSearchClick}>
+      Search
+    </button>
   </div>
 );
 
@@ -165,23 +168,7 @@ const StockStudy = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (activeMenu === "Fundamental") {
-      const fetchFundamentalRecords = async () => {
-        dispatch(showLoader("Please wait we are processing your request"));
-        apiServices
-          .Fundamental({})
-          .then((response) => {
-            dispatch(hideLoader());
-            console.log(
-              "fetchFundamentalRecordsResponse",
-              response?.data?.fundamentalData
-            );
-            setFundamentalRecords(response?.data?.fundamentalData);
-          })
-          .catch((error) => {
-            dispatch(hideLoader());
-            console.log("error", error);
-          });
-      };
+      const fetchFundamentalRecords = async () => {};
       fetchFundamentalRecords();
     }
   }, [activeMenu]);
@@ -202,13 +189,31 @@ const StockStudy = () => {
   }, [activeMenu, currentSubmenus]);
 
   const handleChange = (event: any) => {
-    console.log("event", event.target.value);
+    console.log("handleChangeEvent", event.target.value);
     const { value } = event.target;
 
     if (regEx.alphaNumeric.test(value)) {
       // formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
-      setInputValue(value.replace(/\s/g));
+      setInputValue(value.toUpperCase().replace(/\s/g));
     }
+  };
+
+  const handleSearchClick = () => {
+    dispatch(showLoader("Please wait we are processing your request"));
+    apiServices
+      .Fundamental({})
+      .then((response) => {
+        dispatch(hideLoader());
+        console.log(
+          "fetchFundamentalRecordsResponse",
+          response?.data?.fundamentalData
+        );
+        setFundamentalRecords(response?.data?.fundamentalData);
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        console.log("error", error);
+      });
   };
 
   return (
@@ -219,7 +224,11 @@ const StockStudy = () => {
         minHeight: "85vh",
       }}
     >
-      <SearchBar handleChange={handleChange} inputValue={inputValue} />
+      <SearchBar
+        handleChange={handleChange}
+        inputValue={inputValue}
+        handleSearchClick={handleSearchClick}
+      />
       <Menu
         items={menuData}
         activeMenu={activeMenu}
