@@ -16,15 +16,15 @@ const ProjectsOverviewCharts = ({
 
   useEffect(() => {
     console.log("brokData", brokerageData);
-    // if (brokerageDate) {
-    const categories = brokerageData.map((item: any) => item.Dtrandate);
-    setLatestDates(categories);
-    //   console.log("categories", categories);
-    // } else if (revenueYear) {
-    //   const categories = brokerageData.map((item: any) => item.YearMonth);
-    //   setLatestDates(categories);
-    //   console.log("categories", categories);
-    // }
+    if (brokerageDate) {
+      const categories = brokerageData.map((item: any) => item.Dtrandate);
+      setLatestDates(categories);
+      console.log("categories", categories);
+    } else if (revenueYear) {
+      const categories = brokerageData.map((item: any) => item.YearMonth);
+      setLatestDates(categories);
+      console.log("categories", categories);
+    }
   }, [brokerageData]);
 
   var options: any = {
