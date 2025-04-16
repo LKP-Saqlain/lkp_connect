@@ -29,7 +29,7 @@ const ProjectsOverview = () => {
     const fetchBrokerage = async () => {
       // const Id = localStorage.getItem("Id");
       const payload = {
-        branchCode: "0248",
+        branchCode: user_id,
       };
 
       dispatch(showLoader("Please wait"));
@@ -129,6 +129,7 @@ const ProjectsOverview = () => {
                     series={monthProjectData}
                     // dataColors='["--vz-primary", "--vz-secondary", "--vz-danger"]'
                     brokerageData={brokerageData}
+                    brokerageDate={true}
                   />
                 </div>
               </div>

@@ -35,7 +35,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const [multiRevenueMultiply, setMultiRevenueMultiply] = useState(0);
   const [newClients, setNewClients] = useState(0);
   const [activeClients, setActiveClients] = useState(null);
-  const [tradedClientCount, setTradedClientCount] = useState(0);
+  // const [tradedClientCount, setTradedClientCount] = useState(0);
   // const [modal_animationZoom, setmodal_animationZoom] = useState(false);
   // const [isNudgeOpen, setIsNudgeOpen] = useState(false);
   // const [dashboardNudgeData, setDashboardNudgeData] = useState<any[][]>([]);
@@ -101,9 +101,9 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   // const decryptedData = decryptTripleDES(encryptedPayload, encryptionKey, true);
   // console.log("Decrypted Data:", decryptedData);
 
-  const handleValues = (revTotal: string) => {
-    console.log("revTotal", revTotal);
-  };
+  // const handleValues = (revTotal: string) => {
+  //   console.log("revTotal", revTotal);
+  // };
 
   // function tog_animationZoom() {
   //   setmodal_animationZoom((prev) => !prev);
@@ -287,7 +287,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
             <Col xxl={4} lg={4} md={6} sm={12}>
               <DashboardCard
                 title="Unique Traded Clients*"
-                value={tradedClientCount}
+                // value={tradedClientCount}
                 animationData={ActiveClient}
                 activeClients={activeClients}
                 customClass={true}
@@ -306,12 +306,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
           </Row>
           <Row>
             <Col>
-              <RevenueDetails
-                handleValues={handleValues}
-                handleRevenueRange={handleRevenueRange}
-                handleRevenueData={handleRevenueData}
-                setTradedClientCount={setTradedClientCount}
-              />
+              <RevenueDetails handleRevenueRange={handleRevenueRange} />
             </Col>
           </Row>
           <Row>

@@ -3,17 +3,28 @@ import ReactApexChart from "react-apexcharts";
 import getChartColorsArray from "../../../components/common/ChartsDynamicColor";
 import { Col } from "reactstrap";
 
-const barColors = ["#11395C", "#F57C00"];
-
-const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
+const ProjectsOverviewCharts = ({
+  series,
+  brokerageData,
+  brokerageDate,
+  revenueYear,
+}: any) => {
   const [latestDates, setLatestDates] = useState<any>("");
+  const barColors = brokerageDate
+    ? ["#11395C", "#F57C00"]
+    : ["#1890ff", "#00E396"];
 
   useEffect(() => {
     console.log("brokData", brokerageData);
-
+    // if (brokerageDate) {
     const categories = brokerageData.map((item: any) => item.Dtrandate);
     setLatestDates(categories);
-    console.log("categories", categories);
+    //   console.log("categories", categories);
+    // } else if (revenueYear) {
+    //   const categories = brokerageData.map((item: any) => item.YearMonth);
+    //   setLatestDates(categories);
+    //   console.log("categories", categories);
+    // }
   }, [brokerageData]);
 
   var options: any = {
@@ -42,7 +53,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
     dataLabels: {
       enabled: true,
       style: {
-        fontSize: "12px",
+        fontSize: revenueYear ? "10px" : "12px",
         fontWeight: "bold",
         colors: ["#000"], // Text color
       },

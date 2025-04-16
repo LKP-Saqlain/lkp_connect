@@ -16,7 +16,7 @@ interface Badge {
 
 interface DashboardCardProps {
   title: string;
-  value: number;
+  value?: number;
   animationData: any;
   prefix?: string;
   suffix?: string;
@@ -89,7 +89,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 {prefix}
                 <CountUp
                   start={0}
-                  end={value}
+                  end={value ?? 0}
                   separator=","
                   decimals={decimals}
                   prefix=""

@@ -1,20 +1,10 @@
 import Revenue from "./BrokingRevenue";
-import NonBrokingRevenue from "./NonBrokingRevenue";
-const RevenueDetails = ({
-  handleValues,
-  handleRevenueRange,
-  handleRevenueData,
-  setTradedClientCount,
-}: any) => {
+// import NonBrokingRevenue from "./NonBrokingRevenue";
+const RevenueDetails = ({}: any) => {
   return (
     <>
-      <Revenue
-        handleValues={handleValues}
-        handleRevenueRange={handleRevenueRange}
-        handleRevenueData={handleRevenueData}
-        setTradedClientCount={setTradedClientCount}
-      />
-      <NonBrokingRevenue />
+      <Revenue />
+      {/* <NonBrokingRevenue /> */}
     </>
   );
 };
