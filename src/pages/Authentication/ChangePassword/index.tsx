@@ -201,6 +201,17 @@ const ChangePassword = () => {
           }}
         >
           <Typography
+            variant="h3"
+            gutterBottom
+            sx={{
+              fontWeight: 700,
+              color: "#095192",
+              fontFamily: "Poppins",
+            }}
+          >
+            LKP Connect
+          </Typography>
+          <Typography
             variant="h4"
             gutterBottom
             sx={{

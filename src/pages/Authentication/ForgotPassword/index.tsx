@@ -234,30 +234,48 @@ const ForgotPassword = () => {
           src={LeftArm}
           alt="LeftArm"
           sx={{
-            width: isMobile ? "100%" : "50%",
+            width: isMobile ? "100%" : "47.9%",
             borderRadius: "4px",
             marginBottom: isMobile ? 2 : 0,
             // border: "1px solid black",
+            marginRight: "35px",
             backgroundImage: `url(${Vector})`,
             backgroundRepeat: "no-repeat",
             backgroundPosition: "right",
             // backgroundSize: "740px 900px",
             height: "100vh",
+            // border: "4px solid red",
           }}
         />
         {/* Right side - Text fields */}
+
         <Box
           sx={{
             width: isMobile ? "100%" : "50%",
-            padding: 2,
+            // padding: 2,
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            // mt: 12,
+            mb: 4,
+            // border: "1px solid blue",
           }}
         >
           <Typography
-            variant="h4"
+            variant="h3"
+            gutterBottom
+            sx={{
+              fontWeight: 700,
+              color: "#095192",
+              fontFamily: "Poppins",
+              marginBottom: "2.2rem",
+            }}
+          >
+            LKP Connect
+          </Typography>
+          <Typography
+            variant="h6"
             gutterBottom
             sx={{
               fontWeight: 600,
@@ -326,7 +344,7 @@ const ForgotPassword = () => {
               sx={{
                 display: "flex",
                 alignItems: "center",
-                width: isMobile ? "100%" : "400px",
+                width: isMobile ? "100%" : "300px",
                 marginBottom: 2,
               }}
             >

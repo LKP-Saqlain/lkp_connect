@@ -248,7 +248,7 @@ const LoginPage = () => {
           }}
         >
           <Typography
-            variant="h4"
+            variant="h3"
             gutterBottom
             sx={{
               fontWeight: 700,
@@ -256,7 +256,7 @@ const LoginPage = () => {
               fontFamily: "Poppins",
             }}
           >
-            LKP Connect{" "}
+            LKP Connect
           </Typography>
           <FormControl
             sx={{
