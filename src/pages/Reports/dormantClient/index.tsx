@@ -916,7 +916,7 @@ const DormantClient = ({ activeSubItem }: any) => {
                     <h4 className="card-title mb-0">Dormant Client Report</h4>
                   </CardHeader>
                 )}
-                <CardBody>
+                <CardBody style={{ zIndex: 0 }}>
                   {/* <DataTable
                     dynamicHeader={dormantColumns}
                     tableData={userData}

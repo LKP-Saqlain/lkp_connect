@@ -96,6 +96,31 @@ const ProjectsOverview = () => {
               <h4 className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center">
                 Brokerage Details for Last 10 Days
               </h4>
+              <div
+                className="d-flex align-items-center flex-wrap mt-2 mt-sm-0"
+                style={{ fontFamily: "Public Sans, sans-serif" }}
+              >
+                <div
+                  className="legend-color"
+                  style={{
+                    backgroundColor: "#11395C",
+                    width: "16px",
+                    height: "16px",
+                    marginRight: "10px",
+                  }}
+                ></div>
+                <p className="mb-0 me-3">Gross brokerage</p>
+                <div
+                  className="legend-color"
+                  style={{
+                    backgroundColor: "#faad14",
+                    width: "16px",
+                    height: "16px",
+                    marginRight: "8px",
+                  }}
+                ></div>
+                <p className="mb-0 me-3">AP Share</p>
+              </div>
             </CardHeader>
             {/* <div
                       className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end"
