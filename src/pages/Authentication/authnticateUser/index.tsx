@@ -239,12 +239,26 @@ const AuthenticateUser = () => {
             mb: 4,
           }}
         >
+          {" "}
+          <Typography
+            variant="h3"
+            gutterBottom
+            sx={{
+              fontWeight: 700,
+              color: "#095192",
+              fontFamily: "Poppins",
+              marginBottom: "2.9rem",
+            }}
+          >
+            LKP Connect
+          </Typography>
           <Typography
             variant="h6"
             gutterBottom
             sx={{
               fontWeight: 700,
               color: "#095192",
+              marginBottom: "2.3rem",
             }}
           >
             Two Factor Authentication
@@ -285,7 +299,6 @@ const AuthenticateUser = () => {
               />
             </RadioGroup>
           </FormControl>
-
           {formik.values.authenticationButtonGroup === "Pan" ? (
             <TextField
               type={showPassword ? "text" : "password"}
@@ -362,7 +375,6 @@ const AuthenticateUser = () => {
               />
             </LocalizationProvider>
           )}
-
           <Button
             variant="contained"
             color="primary"

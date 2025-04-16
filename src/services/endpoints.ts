@@ -49,4 +49,5 @@ export const endpoints = {
   DashboardNudge: "/api/Dashboard/DashboardNudge",
   ChangePassword: "api/Login/ChangePassword",
   GetAPDashboard: "api/AP/GetAPDashboard",
+  ScripSearch: "api/AP/ScripSearch",
 };

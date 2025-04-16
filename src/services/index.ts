@@ -182,4 +182,7 @@ export const apiServices = {
   GetAPDashboard: async (payload: any) => {
     return await apiService("POST", endpoints.GetAPDashboard, payload);
   },
+  ScripSearch: async () => {
+    return await apiService("GET", endpoints.ScripSearch);
+  },
 };

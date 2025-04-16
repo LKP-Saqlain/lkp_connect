@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Card, CardHeader, Col } from "reactstrap";
 import { StoreVisitsCharts } from "../../../components/common/Visitors";
 import { RootState, AppDispatch } from "../../../redux/store";
-import { ClientSummary } from "../../../redux/thunk/ClientSummary";
+// import { ClientSummary } from "../../../redux/thunk/ClientSummary";
+import { APBrokerage } from "../../../redux/thunk/AP/lastWeekBrokerage";
 import ShowToast from "../../../utils/toastUtils";
 
 const StoreVisits = ({ getActiveClients }: any) => {
@@ -22,16 +23,16 @@ const StoreVisits = ({ getActiveClients }: any) => {
     const fetchActiveInactiveCli = async () => {
       // const Id = localStorage.getItem("Id");
       const payload = {
-        user_id: user_id,
+        branchCode: user_id,
       };
       dispatch(showLoader(""));
-      dispatch(ClientSummary(payload))
+      dispatch(APBrokerage(payload))
         .unwrap()
         .then((response) => {
-          console.log("ClientSummaryResponse", response?.data?.data[0].Active);
-          const activeClient = response?.data?.data[0].Active;
+          console.log("APSummaryResponse", response?.data?.Table1[0]);
+          const activeClient = response?.data?.Table1[0]?.ActiveClients;
           getActiveClients(activeClient);
-          setChartData(response?.data?.data[0]);
+          setChartData(response?.data?.Table1[0]);
           // setBrokerageData(response?.data?.data);
           if (response?.status === 200) {
             dispatch(hideLoader());
