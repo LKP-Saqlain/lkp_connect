@@ -4,7 +4,7 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import DynamicTable from "../../../../components/common/stockStudyTable";
 
-const AnnualPNL = ({ activeMenu, activeSubmenu }: any) => {
+const AnnualPNL = ({ activeMenu, activeSubmenu, selectedIsin }: any) => {
   const [annually, setAnnually] = useState<any>();
   const dispatch = useDispatch();
 
@@ -17,7 +17,7 @@ const AnnualPNL = ({ activeMenu, activeSubmenu }: any) => {
       const fetchFundamentalRecords = async () => {
         dispatch(showLoader("Please wait we are processing your request"));
         apiServices
-          .getFundamentalAnnualPNL({})
+          .getFundamentalAnnualPNL(selectedIsin)
           .then((response) => {
             dispatch(hideLoader());
             console.log("ResponseGetFundamentalAnnualPNL", response);
@@ -31,7 +31,7 @@ const AnnualPNL = ({ activeMenu, activeSubmenu }: any) => {
       };
       fetchFundamentalRecords();
     }
-  }, [activeSubmenu, dispatch]);
+  }, [activeSubmenu, dispatch, selectedIsin]);
 
   return (
     <>

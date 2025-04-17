@@ -4,8 +4,10 @@ import { AppDispatch } from "../../../../redux/store";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import CorporateTable from "../../../../components/common/CorporateTable";
-
-const BoardMeeting = () => {
+interface SelectedIsinProps {
+  selectedIsin: string;
+}
+const BoardMeeting = ({ selectedIsin }: SelectedIsinProps) => {
   const [data, setData] = useState<[]>([]);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -13,7 +15,9 @@ const BoardMeeting = () => {
     const getFundamentalBoardMeeting = async () => {
       dispatch(showLoader("Please wait we are processing your request"));
       try {
-        const response = await apiServices.getFundamentalBoardMeeting({});
+        const response = await apiServices.getFundamentalBoardMeeting(
+          selectedIsin
+        );
         dispatch(hideLoader());
         console.log("getFundamentalDividendResponse", response?.data);
         setData(response?.data);
@@ -24,7 +28,7 @@ const BoardMeeting = () => {
     };
 
     getFundamentalBoardMeeting(); // This triggers the data fetch when the component mounts
-  }, []);
+  }, [selectedIsin]);
 
   return (
     <>

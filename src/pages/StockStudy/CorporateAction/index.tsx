@@ -1,25 +1,27 @@
 import Dividends from "./Dividends";
 import Bonus from "./Bonus";
-import Split from "./Spilt"; // Assuming you have a Split component
-// import Right from "./Right"; // Assuming you have a Right component
-import BoardMeeting from "./BoardMeeting"; // Assuming you have a BoardMeeting component
+import Split from "./Spilt";
+import BoardMeeting from "./BoardMeeting";
+// import Right from "./Right"; // Uncomment when implemented
 
-const CorporateAction = ({ activeSubmenu }: { activeSubmenu: string }) => {
+const CorporateAction = ({ activeSubmenu, selectedIsin }: any) => {
+  console.log("main corporate file", selectedIsin);
+
   switch (activeSubmenu) {
     case "Dividend":
-      return <Dividends />;
+      return <Dividends selectedIsin={selectedIsin} />;
 
     case "Bonus":
-      return <Bonus />;
+      return <Bonus selectedIsin={selectedIsin} />;
 
     case "Split":
-      return <Split />;
-
-    // case "Right":
-    //   return <Right />;
+      return <Split selectedIsin={selectedIsin} />;
 
     case "Board Meeting":
-      return <BoardMeeting />;
+      return <BoardMeeting selectedIsin={selectedIsin} />;
+
+    // case "Right":
+    //   return <Right selectedIsin={selectedIsin} />;
 
     default:
       return (

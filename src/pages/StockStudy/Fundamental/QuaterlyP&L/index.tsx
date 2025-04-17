@@ -4,7 +4,7 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import DynamicTable from "../../../../components/common/stockStudyTable";
 
-const Quarterly = ({ activeMenu }: any) => {
+const Quarterly = ({ activeMenu, selectedIsin }: any) => {
   const [quarterly, setQuarterly] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false); // To handle loading state
 
@@ -15,7 +15,9 @@ const Quarterly = ({ activeMenu }: any) => {
       setLoading(true);
       dispatch(showLoader("Please wait, we are processing your request"));
       try {
-        const response = await apiServices.getFundamentalQuaterlyPNL({});
+        const response = await apiServices.getFundamentalQuaterlyPNL(
+          selectedIsin
+        );
         setQuarterly(response?.data.quarterlyDataDump);
         console.log(quarterly, "merum", response?.data.quarterlyDataDump);
       } catch (error) {

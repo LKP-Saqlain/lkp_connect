@@ -4,8 +4,10 @@ import { AppDispatch } from "../../../../redux/store";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import CorporateTable from "../../../../components/common/CorporateTable";
-
-const Bonus = () => {
+interface SelectedIsinProps {
+  selectedIsin: string;
+}
+const Bonus = ({ selectedIsin }: SelectedIsinProps) => {
   const [data, setData] = useState<[]>([]);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -13,7 +15,7 @@ const Bonus = () => {
     const getFundamentalBonus = async () => {
       dispatch(showLoader("Please wait we are processing your request"));
       try {
-        const response = await apiServices.getFundamentalBonus({});
+        const response = await apiServices.getFundamentalBonus(selectedIsin);
         dispatch(hideLoader());
         console.log("getFundamentalDividendResponse", response?.data);
         setData(response?.data);
@@ -23,7 +25,7 @@ const Bonus = () => {
       }
     };
     getFundamentalBonus(); // This triggers the data fetch when the component mounts
-  }, []);
+  }, [selectedIsin]);
 
   return (
     <>

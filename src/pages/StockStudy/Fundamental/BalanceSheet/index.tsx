@@ -4,7 +4,7 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import DynamicTable from "../../../../components/common/stockStudyTable";
 
-const BalanceSheet = ({ activeMenu, activeSubmenu }: any) => {
+const BalanceSheet = ({ activeMenu, activeSubmenu, selectedIsin }: any) => {
   const [annualBalanceSheetData, setAnnualBalanceSheetData] =
     useState<any>(null);
 
@@ -19,7 +19,7 @@ const BalanceSheet = ({ activeMenu, activeSubmenu }: any) => {
       const fetchFundamentalRecords = async () => {
         dispatch(showLoader("Please wait we are processing your request"));
         apiServices
-          .getFundamentalBalanceSheet({})
+          .getFundamentalBalanceSheet(selectedIsin)
           .then((response) => {
             dispatch(hideLoader());
             console.log(
@@ -35,7 +35,7 @@ const BalanceSheet = ({ activeMenu, activeSubmenu }: any) => {
       };
       fetchFundamentalRecords();
     }
-  }, [activeMenu]);
+  }, [activeMenu, selectedIsin]);
 
   return (
     <>

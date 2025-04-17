@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Autocomplete, TextField, Button, Box } from "@mui/material";
 import "./style.css";
 import CashFlow from "../../components/common/stockStudyTable";
 import FundamentalOverview from "./Fundamental/fundOverview";
@@ -38,18 +39,11 @@ const menuData: MenuItem[] = [
     submenus: [],
     component: (activeMenu: any) => <ShareHolding activeMenu={activeMenu} />,
   },
-  {
-    title: "News",
-    submenus: [],
-  },
-  {
-    title: "Bulk / Block Deal",
-    submenus: [],
-  },
+  { title: "News", submenus: [] },
+  { title: "Bulk / Block Deal", submenus: [] },
   {
     title: "Corporate Action",
     submenus: ["Dividend", "Bonus", "Split", "Right", "Board Meeting"],
-    // component: <div>Corporate Action details go here.</div>,
   },
 ];
 
@@ -64,33 +58,213 @@ const componentMap: Record<
       records={records}
     />
   ),
-  "Quarterly P&L": ({ activeMenu }) => <Quarterly activeMenu={activeMenu} />,
-  "Annual P&L": ({ activeMenu, activeSubmenu }) => (
-    <AnnualPNL activeMenu={activeMenu} activeSubmenu={activeSubmenu} />
+  "Quarterly P&L": ({ activeMenu, selectedIsin }) => (
+    <Quarterly activeMenu={activeMenu} selectedIsin={selectedIsin} />
   ),
-  "Cash Flow": ({ activeMenu }) => <Cashflow activeMenu={activeMenu} />,
+  "Annual P&L": ({ activeMenu, activeSubmenu, selectedIsin }) => (
+    <AnnualPNL
+      activeMenu={activeMenu}
+      activeSubmenu={activeSubmenu}
+      selectedIsin={selectedIsin}
+    />
+  ),
+  "Cash Flow": ({ activeMenu, selectedIsin }) => (
+    <Cashflow activeMenu={activeMenu} selectedIsin={selectedIsin} />
+  ),
   Ratios: ({ activeMenu }) => <Ratios activeMenu={activeMenu} />,
-  "Balance Sheet": ({ activeMenu, activeSubmenu }) => (
-    <BalanceSheet activeMenu={activeMenu} activeSubmenu={activeSubmenu} />
+  "Balance Sheet": ({ activeMenu, activeSubmenu, selectedIsin }) => (
+    <BalanceSheet
+      activeMenu={activeMenu}
+      activeSubmenu={activeSubmenu}
+      selectedIsin={selectedIsin}
+    />
   ),
 };
 
-const SearchBar = ({ handleChange, inputValue, handleSearchClick }: any) => (
-  <div className="search-bar">
-    <input
-      type="text"
-      placeholder="Search..."
-      className="search-input"
-      value={inputValue}
-      onChange={handleChange}
-      defaultValue=""
-      maxLength={15}
-    />
-    <button className="search-button" onClick={handleSearchClick}>
-      Search
-    </button>
-  </div>
-);
+const ContentArea = ({
+  activeMenu,
+  activeSubmenu,
+  records,
+  selectedIsin,
+}: any) => {
+  let activeComponent = null;
+
+  if (
+    activeMenu === "Fundamental" &&
+    activeSubmenu &&
+    componentMap[activeSubmenu]
+  ) {
+    activeComponent = componentMap[activeSubmenu]({
+      records,
+      activeMenu,
+      activeSubmenu,
+      selectedIsin, // Pass to component
+    });
+  } else if (
+    ["Cash Flow", "Quarterly P&L", "Annual P&L"].includes(activeSubmenu)
+  ) {
+    activeComponent = <CashFlow />;
+  } else if (activeMenu === "Share Holding") {
+    activeComponent = (
+      <ShareHolding activeMenu={activeMenu} selectedIsin={selectedIsin} />
+    );
+  } else if (activeMenu === "News") {
+    activeComponent = (
+      <News activeMenu={activeMenu} selectedIsin={selectedIsin} />
+    );
+  } else {
+    const menuItem = menuData.find((menu) => menu.title === activeMenu);
+    activeComponent = menuItem?.component
+      ? menuItem.component({ activeMenu, selectedIsin }) // Make sure component accepts this
+      : null;
+  }
+
+  if (activeMenu === "Corporate Action") {
+    activeComponent = (
+      <CorporateAction
+        activeSubmenu={activeSubmenu}
+        selectedIsin={selectedIsin}
+      />
+    );
+  }
+
+  return <div className="content-area">{activeComponent}</div>;
+};
+
+const StockStudy = () => {
+  const [activeMenu, setActiveMenu] = useState<string>("Fundamental");
+  const [activeSubmenu, setActiveSubmenu] = useState<string>("Overview");
+  const [inputValue, setInputValue] = useState<string>("");
+  const [fundamentalRecords, setFundamentalRecords] = useState<any[]>([]);
+  const [selectedIsin, setSelectedIsin] = useState<string | null>(null);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(showLoader("Please wait we are processing your request"));
+    apiServices
+      .ScripSearch()
+      .then((response) => {
+        dispatch(hideLoader());
+        setFundamentalRecords(response?.data?.Table || []);
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        console.log("error", error);
+      });
+  }, []);
+
+  const currentSubmenus =
+    menuData.find((menuItem) => menuItem.title === activeMenu)?.submenus || [];
+
+  useEffect(() => {
+    if (currentSubmenus.length > 0) {
+      setActiveSubmenu(currentSubmenus[0]);
+    } else {
+      setActiveSubmenu("");
+    }
+    console.log("ISIN sky", selectedIsin);
+  }, [activeMenu, currentSubmenus, selectedIsin]);
+
+  const handleSearchClick = () => {
+    const matched = fundamentalRecords.find(
+      (item) =>
+        item.ScripName?.toLowerCase() === inputValue.toLowerCase() ||
+        item.BSECode?.toLowerCase() === inputValue.toLowerCase() ||
+        item.NSECode?.toLowerCase() === inputValue.toLowerCase()
+    );
+
+    if (matched) {
+      setSelectedIsin(matched.ISINCode);
+      console.log("Matched ISIN:", matched.ISINCode);
+    } else {
+      setSelectedIsin(null);
+      console.log("No matching scrip found");
+    }
+  };
+
+  return (
+    <div
+      className="menu-box"
+      style={{ fontFamily: "Public Sans", minHeight: "85vh" }}
+    >
+      <Box className="search-bar" sx={{ display: "flex", gap: 1, mb: 2 }}>
+        <Autocomplete
+          freeSolo
+          options={fundamentalRecords}
+          getOptionLabel={(option) =>
+            typeof option === "string" ? option : option.ScripName || ""
+          }
+          filterOptions={(options, state) =>
+            options.filter((option) => {
+              const input = state.inputValue.toLowerCase();
+              return (
+                option.ScripName?.toLowerCase().includes(input) ||
+                option.BSECode?.toLowerCase().includes(input) ||
+                option.NSECode?.toLowerCase().includes(input) ||
+                option.ISINCode?.toLowerCase().includes(input)
+              );
+            })
+          }
+          value={
+            fundamentalRecords.find((item) => item.ISINCode === selectedIsin) ||
+            null
+          }
+          inputValue={inputValue}
+          onInputChange={(event, newInputValue) => {
+            if (regEx.query.test(newInputValue) || newInputValue === "") {
+              setInputValue(newInputValue.toUpperCase());
+              console.log("Selected ISIN:", event);
+            }
+          }}
+          onChange={(event, newValue) => {
+            if (newValue && typeof newValue !== "string") {
+              setInputValue(newValue.ScripName || "");
+              setSelectedIsin(newValue.ISINCode);
+              console.log("Selected ISIN:", newValue.ISINCode, event);
+            } else {
+              setSelectedIsin(null);
+            }
+          }}
+          renderOption={(props, option) => (
+            <li {...props} key={option.ISINCode}>
+              <Box>{option.ScripName}</Box>
+            </li>
+          )}
+          renderInput={(params) => (
+            <TextField {...params} label="Search Scrip" size="small" />
+          )}
+          sx={{ flex: 1 }}
+        />
+
+        <Button
+          variant="contained"
+          onClick={handleSearchClick}
+          sx={{ minWidth: 100 }}
+          style={{ backgroundColor: "#11395C" }}
+        >
+          Search
+        </Button>
+      </Box>
+
+      <Menu
+        items={menuData}
+        activeMenu={activeMenu}
+        setActiveMenu={setActiveMenu}
+      />
+      <Submenu
+        items={currentSubmenus}
+        activeSubmenu={activeSubmenu}
+        setActiveSubmenu={setActiveSubmenu}
+      />
+      <ContentArea
+        records={fundamentalRecords}
+        activeMenu={activeMenu}
+        activeSubmenu={activeSubmenu}
+        selectedIsin={selectedIsin}
+      />
+    </div>
+  );
+};
 
 const Menu = ({ items, activeMenu, setActiveMenu }: any) => (
   <div className="menu">
@@ -125,127 +299,5 @@ const Submenu = ({ items, activeSubmenu, setActiveSubmenu }: any) => (
     )}
   </div>
 );
-
-const ContentArea = ({ activeMenu, activeSubmenu, records }: any) => {
-  let activeComponent = null;
-
-  if (
-    activeMenu === "Fundamental" &&
-    activeSubmenu &&
-    componentMap[activeSubmenu]
-  ) {
-    activeComponent = componentMap[activeSubmenu]({
-      records,
-      activeMenu,
-      activeSubmenu,
-    });
-  } else if (
-    ["Cash Flow", "Quarterly P&L", "Annual P&L"].includes(activeSubmenu)
-  ) {
-    activeComponent = <CashFlow />;
-  } else if (activeMenu === "Share Holding") {
-    activeComponent = <ShareHolding activeMenu={activeMenu} />;
-  } else if (activeMenu === "News") {
-    activeComponent = <News activeMenu={activeMenu} />;
-  } else {
-    const menuItem = menuData.find((menu) => menu.title === activeMenu);
-    activeComponent = menuItem?.component || null;
-  }
-  if (activeMenu === "Corporate Action") {
-    console.log("activeSubmenu-->", activeSubmenu);
-    activeComponent = <CorporateAction activeSubmenu={activeSubmenu} />;
-  }
-
-  return <div className="content-area">{activeComponent}</div>;
-};
-
-const StockStudy = () => {
-  const [activeMenu, setActiveMenu] = useState<string>("Fundamental");
-  const [activeSubmenu, setActiveSubmenu] = useState<string>("Overview");
-  const [inputValue, setInputValue] = useState<string>("");
-  const [fundamentalRecords, setFundamentalRecords] = useState<[]>([]);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (activeMenu === "Fundamental") {
-      const fetchFundamentalRecords = async () => {};
-      fetchFundamentalRecords();
-    }
-  }, [activeMenu]);
-
-  useEffect(() => {
-    console.log("Active Menu:", activeMenu);
-  }, [activeMenu]);
-
-  const currentSubmenus =
-    menuData.find((menuItem) => menuItem.title === activeMenu)?.submenus || [];
-
-  useEffect(() => {
-    if (currentSubmenus.length > 0) {
-      setActiveSubmenu(currentSubmenus[0]);
-    } else {
-      setActiveSubmenu("");
-    }
-  }, [activeMenu, currentSubmenus]);
-
-  const handleChange = (event: any) => {
-    console.log("handleChangeEvent", event.target.value);
-    const { value } = event.target;
-
-    if (regEx.alphaNumeric.test(value)) {
-      // formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
-      setInputValue(value.toUpperCase().replace(/\s/g));
-    }
-  };
-
-  const handleSearchClick = () => {
-    dispatch(showLoader("Please wait we are processing your request"));
-    apiServices
-      .Fundamental({})
-      .then((response) => {
-        dispatch(hideLoader());
-        console.log(
-          "fetchFundamentalRecordsResponse",
-          response?.data?.fundamentalData
-        );
-        setFundamentalRecords(response?.data?.fundamentalData);
-      })
-      .catch((error) => {
-        dispatch(hideLoader());
-        console.log("error", error);
-      });
-  };
-
-  return (
-    <div
-      className="menu-box"
-      style={{
-        fontFamily: "Public Sans",
-        minHeight: "85vh",
-      }}
-    >
-      <SearchBar
-        handleChange={handleChange}
-        inputValue={inputValue}
-        handleSearchClick={handleSearchClick}
-      />
-      <Menu
-        items={menuData}
-        activeMenu={activeMenu}
-        setActiveMenu={setActiveMenu}
-      />
-      <Submenu
-        items={currentSubmenus}
-        activeSubmenu={activeSubmenu}
-        setActiveSubmenu={setActiveSubmenu}
-      />
-      <ContentArea
-        records={fundamentalRecords}
-        activeMenu={activeMenu}
-        activeSubmenu={activeSubmenu}
-      />
-    </div>
-  );
-};
 
 export default StockStudy;

@@ -5,7 +5,10 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import CorporateTable from "../../../../components/common/CorporateTable";
 
-const Spilt = () => {
+interface SelectedIsinProps {
+  selectedIsin: string;
+}
+const Spilt = ({ selectedIsin }: SelectedIsinProps) => {
   const [data, setData] = useState<[]>([]);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -13,7 +16,7 @@ const Spilt = () => {
     const getFundamentalSplit = async () => {
       dispatch(showLoader("Please wait we are processing your request"));
       try {
-        const response = await apiServices.getFundamentalSplit({});
+        const response = await apiServices.getFundamentalSplit(selectedIsin);
         dispatch(hideLoader());
         console.log("getFundamentalDividendResponse", response?.data);
         setData(response?.data);
@@ -23,13 +26,13 @@ const Spilt = () => {
       }
     };
     getFundamentalSplit(); // This triggers the data fetch when the component mounts
-  }, []);
+  }, [selectedIsin]);
 
   return (
     <>
       <div className="page-content" style={{ paddingTop: "1rem" }}>
         {/* Pass data to DynamicTable as fundamentalShareHolding */}
-        <CorporateTable CorporateData={data} name={"Spilt"} />
+        <CorporateTable CorporateData={data} name={"Split"} />
       </div>
     </>
   );
