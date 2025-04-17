@@ -174,7 +174,7 @@ const StockStudy = () => {
   }, [activeMenu]);
 
   useEffect(() => {
-    console.log("Active Menu:", activeMenu);
+    console.log("Active Menu:-->", activeMenu);
   }, [activeMenu]);
 
   const currentSubmenus =
