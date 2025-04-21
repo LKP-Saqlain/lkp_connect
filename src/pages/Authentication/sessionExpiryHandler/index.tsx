@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store"; // Adjust path as needed
@@ -11,67 +11,44 @@ const SessionExpiryHandler = () => {
 
   const location = useLocation();
   const { data } = useSelector((state: RootState) => state.UserLogin);
-  // console.log(data);
 
   const tokenExpiryTime = data?.data?.tokenExpiryTime;
-  // const tokenExpiryTime = new Date(Date.now() + 60000).toISOString();
-
-  const timerRef = useRef<NodeJS.Timeout | null>(null); // Track timeout
+  // const tokenExpiryTime = new Date(Date.now() - 1 * 60 * 1000).toISOString(); //for testing
+  // const istTime = new Date(tokenExpiryTime).toLocaleString("en-IN", {
+  //   timeZone: "Asia/Kolkata",
+  //   hour12: true,
+  //   year: "numeric",
+  //   month: "long",
+  //   day: "numeric",
+  //   hour: "2-digit",
+  //   minute: "2-digit",
+  //   second: "2-digit",
+  // });
+  // console.log("IST Time:", istTime);
 
   useEffect(() => {
-    if (!tokenExpiryTime) return;
+    if (tokenExpiryTime) {
+      const expiryDate = new Date(tokenExpiryTime);
+      const now = new Date();
+      console.log("CurrentTime", now, "ExpiryTime", expiryDate);
 
-    const expiryTimestamp = new Date(tokenExpiryTime).getTime();
-    const currentTimestamp = Date.now();
-    const timeUntilExpiry = expiryTimestamp - currentTimestamp;
-
-    // // Function to format the time left into a readable format
-    // const formatTimeLeft = (time: number): string => {
-    //   const seconds = Math.floor((time / 1000) % 60);
-    //   const minutes = Math.floor((time / 1000 / 60) % 60);
-    //   const hours = Math.floor(time / 1000 / 60 / 60);
-    //   return `${hours}h ${minutes}m ${seconds}s`;
-    // };
-
-    // Clear existing timer (prevents multiple timeouts)
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-
-    if (timeUntilExpiry > 0) {
-      // Update the time left every second
-      // const intervalId = setInterval(() => {
-      //   const timeLeft = expiryTimestamp - Date.now();
-      //   console.log("Time left:", formatTimeLeft(timeLeft)); // Log countdown to the console
-
-      //   if (timeLeft <= 0) {
-      //     clearInterval(intervalId);
-      //     if (location.pathname === "/dashboard") {
-      //       setIsTokenExpired(true);
-      //       setModalCenter(true);
-      //     }
-      //   }
-      // }, 1000);
-
-      timerRef.current = setTimeout(() => {
-        if (location.pathname === "/dashboard") {
-          setIsTokenExpired(true);
-          setModalCenter(true);
-        }
-        // clearInterval(intervalId); // Clean up the interval when token expires
-      }, timeUntilExpiry);
-    } else {
-      if (location.pathname === "/dashboard") {
+      if (now > expiryDate) {
         setIsTokenExpired(true);
         setModalCenter(true);
+        return;
       }
-    }
 
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-      // clearInterval(timerRef.current as NodeJS.Timeout); // Clean up interval
-    };
-  }, [tokenExpiryTime, location.pathname]);
+      const timeUntilExpiry = expiryDate.getTime() - now.getTime();
+      console.log("timeUntilExpiry", timeUntilExpiry);
+
+      const timer = setTimeout(() => {
+        setIsTokenExpired(true);
+        setModalCenter(true);
+      }, timeUntilExpiry);
+
+      return () => clearTimeout(timer);
+    }
+  }, [tokenExpiryTime]);
 
   return (
     isTokenExpired &&
