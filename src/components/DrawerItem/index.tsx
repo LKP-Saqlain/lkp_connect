@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   ListItem,
   ListItemButton,
@@ -54,148 +54,45 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   const [activeSubItem, setActiveSubItem] = useState<string | null>(null);
   const isMenuOpen = activeMenu === title;
 
+  const iconMap: Record<string, JSX.Element> = {
+    "Zone Overview": <StoreIcon />,
+    "My Performance": <SupervisedUserCircleIcon />,
+    Compliance: <ReceiptLongIcon />,
+    DashBoard: <DvrIcon />,
+    "Stock Study": <BallotIcon />,
+    Overview: <HomeIcon />,
+    Trading: <PollIcon />,
+    Masters: <GridViewIcon />,
+    "Revenue Details": <LibraryBooksIcon />,
+    RMS: <SwitchAccountIcon />,
+    "Client Details": <SwitchAccountIcon />,
+    "e-KYC Link": <DomainVerificationIcon />,
+    "Live Contest": <PollIcon />,
+    "Marketing Materials": <AddBusinessIcon />,
+    "Referal Lead": <CampaignIcon />,
+    "Kyc Dashboard": <StackedBarChartIcon />,
+    "Registration Details": <HowToRegIcon />,
+    "Stack Study": <StackedBarChartIcon />,
+    Reports: <PostAddIcon />,
+    "Regulatory Announcement": <AutoStoriesIcon />,
+    EKYC: <LinkIcon />,
+    "Other Details": <DetailsIcon />,
+  };
+
   const getIcon = (title: string) => {
-    console.log("title", title);
-    switch (title) {
-      case "Zone Overview":
-        return (
-          <StoreIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "My Performance":
-        return (
-          <SupervisedUserCircleIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Compliance":
-        return (
-          <ReceiptLongIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "DashBoard":
-        return (
-          <DvrIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Stock Study":
-        return (
-          <BallotIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Overview":
-        return (
-          <HomeIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Trading":
-        return (
-          <PollIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Masters":
-        return (
-          <GridViewIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Revenue Details":
-        return (
-          <LibraryBooksIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "RMS":
-        return (
-          <SwitchAccountIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Client Details":
-        return (
-          <SwitchAccountIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "e-KYC Link":
-        return (
-          <DomainVerificationIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Live Contest":
-        return (
-          <PollIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Marketing Materials":
-        return (
-          <AddBusinessIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Referal Lead":
-        return (
-          <CampaignIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Kyc Dashboard":
-        return (
-          <StackedBarChartIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Registration Details":
-        return (
-          <HowToRegIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Stack Study":
-        return (
-          <StackedBarChartIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Reports":
-        return (
-          <PostAddIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Regulatory Announcement":
-        return (
-          <AutoStoriesIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "EKYC":
-        return (
-          <LinkIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      case "Other Details":
-        return (
-          <DetailsIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-      default:
-        return (
-          <ChevronRightIcon
-            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
-          />
-        );
-    }
+    const icon = iconMap[title] || <ChevronRightIcon />;
+    return (
+      <span
+        style={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
+      >
+        {React.cloneElement(icon, {
+          sx: {
+            color: isMenuOpen ? "black" : "#F9F6EE",
+            fontSize: "20px",
+          },
+        })}
+      </span>
+    );
   };
 
   const handleSubItemSelection = (menuName: string) => {
