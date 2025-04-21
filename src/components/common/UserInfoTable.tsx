@@ -335,7 +335,7 @@ const DataTable = ({
       return getAccountDetails.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "KRA PAN STATUS") {
+    } else if (activeSubItem === "Terminal") {
       return terminalcol.map((column) => ({
         ...column,
       }));

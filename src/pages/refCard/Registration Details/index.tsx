@@ -5,6 +5,8 @@ import { InfoCapsules } from "../../../helper/tableColumns.tsx";
 import DataTable from "../../../components/common/UserInfoTable";
 import { apiServices } from "../../../services/index.ts";
 import { useEffect, useState } from "react";
+import { RootState } from "../../../redux/store.ts";
+import { useSelector } from "react-redux";
 
 const RegisDetails = ({ activeSubItem }: any) => {
   const theme = useTheme();
@@ -13,12 +15,18 @@ const RegisDetails = ({ activeSubItem }: any) => {
   const [apRegisData, setApRegisData] = useState<any>(null);
   const [apSegData, setApSegData] = useState<any>(null);
   const [apCapData, setApCapData] = useState<any>(null);
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+
+  const rawCode = user_id;
+
+  const apcode = rawCode.replace(/^AP\w-/, "AP");
 
   useEffect(() => {
     const payload = {
-      // branchCode: `AP${apcode}`,
-
-      branchCode: "AP0415",
+      branchCode: apcode,
+      // branchCode: "AP7161",
     };
 
     const GetAPDashboard = async () => {
@@ -152,10 +160,10 @@ const RegisDetails = ({ activeSubItem }: any) => {
       {/* Terminal Table Card */}
       <Card>
         <CardHeader>
-          <h4 className="card-title mb-0">No. of Terminal: 2</h4>
+          <h4 className="card-title mb-0">No. of Terminal</h4>
         </CardHeader>
         <CardBody>
-          <DataTable activeSubItem={activeSubItem} T6Data={apTerminalData} />
+          <DataTable activeSubItem={"Terminal"} T6Data={apTerminalData} />
         </CardBody>
       </Card>
 
