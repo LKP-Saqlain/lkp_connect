@@ -25,6 +25,7 @@ const App = () => {
     <Router>
       <ToastContainer />
       <Loader />
+      <SessionExpiryHandler />
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
@@ -45,7 +46,6 @@ const App = () => {
           />
         </Routes>
       </Suspense>
-      <SessionExpiryHandler />
     </Router>
   );
 };

@@ -5,9 +5,12 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
+import { useEffect } from "react";
 
 const News = ({ activeMenu, selectedIsin }: any) => {
-  console.log(activeMenu, selectedIsin, "selectedIsin");
+  useEffect(() => {
+    console.log(activeMenu, selectedIsin);
+  }, [activeMenu, selectedIsin]);
 
   return (
     <div>

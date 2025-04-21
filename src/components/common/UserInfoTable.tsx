@@ -80,6 +80,7 @@ interface SelectedWidgetProps {
   dormantCount?: any;
   getRowHeight?: any;
   customCss?: boolean;
+  activeMenu?: any;
 }
 
 const DataTable = ({
@@ -112,6 +113,7 @@ const DataTable = ({
   totalLedgerDebitAmt,
   dormantCount,
   customCss,
+  activeMenu,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -341,7 +343,7 @@ const DataTable = ({
       return RegisDetails.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "UCCCode MATCH") {
+    } else if (activeMenu === "Regulatory Announcement") {
       return getRegulatorAnnouncement.map((column) => {
         if (column.field === "circular") {
           return {

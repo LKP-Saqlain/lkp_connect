@@ -512,7 +512,7 @@ const SideBar = () => {
   };
 
   const ComplianceSubComponents: any = {
-    "UCCCode MATCH": (props: any) => <RegulatorAnnouncement {...props} />,
+    "UCCCode MATCH": <></>,
     "KRA PAN STATUS": (props: any) => <RegisDetails {...props} />,
     "Communication Retrival Entry": (props: any) => <CommEntry {...props} />,
     "Communication Retrival Checker": (props: any) => <ComChecker {...props} />,
@@ -586,13 +586,16 @@ const SideBar = () => {
         // <div></div>
       );
     },
+    "Regulatory Announcement": (props: any) => (
+      <RegulatorAnnouncement {...props} />
+    ),
   };
 
   const renderComponent = (
     menuItem: any,
     handleTradingOpen: (value: any) => void
   ) => {
-    console.log("Test12--->", typeof menuItem.menu_name);
+    console.log("Test12--->", menuItem.menu_name);
 
     const Component = componentMap[menuItem.menu_name];
 
@@ -612,6 +615,8 @@ const SideBar = () => {
         ? { activeSubItem }
         : menuItem.menu_name === "Masters"
         ? { activeSubItem }
+        : menuItem.menu_name === "Regulatory Announcement"
+        ? { activeMenu }
         : {};
 
     return <Component {...props} />;
@@ -663,121 +668,6 @@ const SideBar = () => {
         ))
     );
   };
-
-  // const renderContent = () => {
-  //   console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
-  //   // const hasOverview = menuItems.some((item) => item.menu_name === "Overview");
-  //   // if (!activeMenu && hasOverview) {
-  //   //   setActiveMenu("Overview");
-  //   //   return <OverviewComponent />;
-  //   // }
-  //   switch (activeMenu) {
-  //     case "Overview": --------DONE
-  //       return <OverviewComponent handleTradingOpen={handleTradingOpen} />;
-  //     case "Zone Overview":--------DONE
-  //       return <RegOverview />;
-  //     case "Stock Study":--------DONE
-  //       return <StockStudy />;
-  //     case "Trading":--------DONE
-  //       return <TradeDashboard selectedTrading={selectedViewMore} />;
-  //     case "Revenue Details":
-  //     case "Masters":
-  //       switch (activeSubItem) {
-  //         case "Menu Master":
-  //           return <Typography>Menu Master Content</Typography>;
-  //         case "User Access Mapping":
-  //           return <AccessMapping />;
-  //         default:
-  //           return null;
-  //       }
-  //     case "Reports":
-  //       switch (activeSubItem) {
-  //         case "Tax PNL Statement":
-  //           return <AnnualPNL />;
-  //         case "Dormant Client Report":
-  //           return <DormantClient activeSubItem={activeSubItem} />;
-  //         case "Last Trade Data":
-  //           return <LastTrade />;
-  //         case "Quarterly Payout Recovery":
-  //           return <QuarterlyPayout activeSubItem={activeSubItem} />;
-  //         case "SLBM ClientHolding":
-  //           return <SLBM />;
-  //         case "Core Alerts Report":
-  //           return <CoreReport />;
-  //         case "Account Performance Report":
-  //           return <AccStatement />;
-  //         case "DP Debit Recovery":
-  //           return <DPRecovery activeSubItem={activeSubItem} />;
-  //         default:
-  //           return null;
-  //       }
-  //     case "Compliance":
-  //       switch (activeSubItem) {
-  //         case "UCCCode MATCH":
-  //           return <RegulatorAnnouncement activeSubItem={activeSubItem} />;
-  //         case "KRA PAN STATUS":
-  //           return <RegisDetails activeSubItem={activeSubItem} />;
-  //         case "Communication Retrival Report":
-  //           return <Retrival activeSubItem={activeSubItem} />;
-  //         case "Communication Retrival Entry":
-  //           return <CommEntry activeSubItem={activeSubItem} />;
-  //         case "Communication Retrival Checker":
-  //           return <ComChecker activeSubItem={activeSubItem} />;
-  //         default:
-  //           return null;
-  //       }
-
-  //     case "RMS":
-  //       switch (activeSubItem) {
-  //         case "RMS Allocation":
-  //           return <RMSAllocation />;
-  //         case "Upload SLBM Holding":
-  //           return <SLBMHoldings />;
-  //         default:
-  //           return null;
-  //       }
-  //     case "Referal Lead":
-  //       switch (activeSubItem) {
-  //         case "Referal Entry":
-  //           return <EkycLinks />;
-  //         case "Referal Entry Status":
-  //           return <Main activeSubItem={activeSubItem} />;
-  //         case "Referal Lead Updation":
-  //           return <OTDetails />;
-  //         //  (
-  //         //   <>
-  //         //     <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-  //         //       Welcome to LKP Dashboard
-  //         //     </Typography>
-  //         //     <Typography sx={{ fontFamily: "Public Sans, sans-serif" }}>
-  //         //       Please select anyone from left
-  //         //     </Typography>
-  //         //   </>
-  //         // );
-  //         case "Referal Product Wise MIS Report":
-  //           return <MarketingMaterial />;
-  //         default:
-  //           return null;
-  //       }
-  //     case "Client Details":
-  //       return (
-  //         <ClientDetails
-  //           handleDrawerClose={handleDrawerClose}
-  //           handleDrawerOpen={handleDrawerOpen}
-  //           apiStatus={apiStatus}
-  //           selectedTrading={selectedViewMore}
-  //           activeMenu={activeMenu}
-  //         />
-  //       );
-  //     case "Kyc Dashboard":
-  //       switch (activeSubItem) {
-  //         case "Kyc Summary":
-  //           return "";
-  //         default:
-  //           return null;
-  //       }
-  //   }
-  // };
 
   const handleNotificationClick = () => {
     setIsNudgeOpen(true); // Toggle the visibility of Nudge component
