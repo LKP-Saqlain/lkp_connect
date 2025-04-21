@@ -7,12 +7,12 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs"; // Import Day.js for date handling
 import { RegulatorAnnouncements } from "../../../helper/commmon";
 
-const RegulatorAnnouncement = ({ activeSubItem }: any) => {
+const RegulatoryAnnouncement = ({ activeMenu }: any) => {
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
 
   useEffect(() => {
-    console.log("MaintestData", RegulatorAnnouncements);
-  }, []);
+    console.log("MaintestData", activeMenu);
+  }, [activeMenu]);
 
   useEffect(() => {
     if (selectedDate) {
@@ -49,7 +49,7 @@ const RegulatorAnnouncement = ({ activeSubItem }: any) => {
         </CardHeader>
         <CardBody>
           <DataTable
-            activeSubItem={activeSubItem}
+            activeMenu={activeMenu}
             T6Data={RegulatorAnnouncements}
             getRowHeight={getRowHeight}
             customCss={true}
@@ -60,4 +60,4 @@ const RegulatorAnnouncement = ({ activeSubItem }: any) => {
   );
 };
 
-export default RegulatorAnnouncement;
+export default RegulatoryAnnouncement;
