@@ -113,20 +113,24 @@ export const apiServices = {
   DPEmail: async (payload: any) => {
     return await apiService("POST", endpoints.DPEmail, payload);
   },
-  Fundamental: async (payload: any) => {
-    return await apiService("POST", endpoints.getFundamentalRecord, payload);
+  getFundamentalOverview: async (isin: string) => {
+    return await apiService(
+      "POST",
+      `${endpoints.getFundamentalOverview}/${isin}`,
+      {}
+    );
   },
   getFundamentalDividend: async (isin: string) => {
     return await apiService(
       "POST",
-      `${endpoints.getFundamentalDividend}${isin}`,
+      `${endpoints.getFundamentalDividend}/${isin}`,
       {}
     );
   },
   getFundamentalBonus: async (isin: string) => {
     return await apiService(
       "POST",
-      `${endpoints.getFundamentalBonus}${isin}`,
+      `${endpoints.getFundamentalBonus}/${isin}`,
       {}
     );
   },
@@ -136,21 +140,21 @@ export const apiServices = {
   getFundamentalcashflow: async (isin: string) => {
     return await apiService(
       "POST",
-      `${endpoints.getFundamentalcashflow}${isin}`,
+      `${endpoints.getFundamentalcashflow}/${isin}`,
       {}
     );
   },
   getFundamentalBoardMeeting: async (isin: string) => {
     return await apiService(
       "POST",
-      `${endpoints.getFundamentalBoardMeeting}${isin}`,
+      `${endpoints.getFundamentalBoardMeeting}/${isin}`,
       {}
     );
   },
   getFundamentalSplit: async (isin: string) => {
     return await apiService(
       "POST",
-      `${endpoints.getFundamentalSplit}${isin}`,
+      `${endpoints.getFundamentalSplit}/${isin}`,
       {}
     );
   },
@@ -158,7 +162,7 @@ export const apiServices = {
   getFundamentalShareholding: async (isin: string) => {
     return await apiService(
       "POST",
-      `${endpoints.getFundamentalShareholding}${isin}`, // This dynamically appends ISIN
+      `${endpoints.getFundamentalShareholding}/${isin}`, // This dynamically appends ISIN
       {}
     );
   },
@@ -166,21 +170,21 @@ export const apiServices = {
   getFundamentalBalanceSheet: async (isin: string) => {
     return await apiService(
       "POST",
-      `${endpoints.getFundamentalBalanceSheet}${isin}`,
+      `${endpoints.getFundamentalBalanceSheet}/${isin}`,
       {}
     );
   },
   getFundamentalAnnualPNL: async (isin: string) => {
     return await apiService(
       "POST",
-      `${endpoints.getFundamentalAnnualPNL}${isin}`,
+      `${endpoints.getFundamentalAnnualPNL}/${isin}`,
       {}
     );
   },
   getFundamentalQuaterlyPNL: async (isin: string) => {
     return await apiService(
       "POST",
-      `${endpoints.getFundamentalQuaterlyPNL}${isin}`,
+      `${endpoints.getFundamentalQuaterlyPNL}/${isin}`,
       {}
     );
   },

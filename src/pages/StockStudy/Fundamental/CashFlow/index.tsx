@@ -11,6 +11,9 @@ const CashFlow = ({ activeMenu, selectedIsin }: any) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!selectedIsin) {
+      setCashFlow(null);
+    }
     const fetchFundamentalRecords = async () => {
       setLoading(true); // Start loading
       dispatch(showLoader("Please wait, we are processing your request"));

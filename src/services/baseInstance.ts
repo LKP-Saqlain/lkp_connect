@@ -41,7 +41,7 @@ baseInstance.interceptors.request.use(
 
     // Helper function to check if the request is for a fundamental API
     const isFundamentalAPI = [
-      endpoints.getFundamentalRecord,
+      endpoints.getFundamentalOverview,
       endpoints.getFundamentalShareholding,
       endpoints.getFundamentalDividend,
       endpoints.getFundamentalBonus,

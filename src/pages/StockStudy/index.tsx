@@ -51,11 +51,11 @@ const componentMap: Record<
   string,
   ({ records, activeMenu, activeSubmenu }: any) => JSX.Element
 > = {
-  Overview: ({ activeMenu, activeSubmenu, records }) => (
+  Overview: ({ activeMenu, selectedIsin }) => (
     <FundamentalOverview
       activeMenu={activeMenu}
-      activeSubmenu={activeSubmenu}
-      records={records}
+      selectedIsin={selectedIsin}
+      // records={records}
     />
   ),
   "Quarterly P&L": ({ activeMenu, selectedIsin }) => (
@@ -136,6 +136,7 @@ const StockStudy = () => {
   const [activeSubmenu, setActiveSubmenu] = useState<string>("Overview");
   const [inputValue, setInputValue] = useState<string>("");
   const [fundamentalRecords, setFundamentalRecords] = useState<any[]>([]);
+  const [pendingSelected, setPendingSelected] = useState<any>(null);
   const [selectedIsin, setSelectedIsin] = useState<string | null>(null);
   const dispatch = useDispatch();
 
@@ -162,23 +163,27 @@ const StockStudy = () => {
     } else {
       setActiveSubmenu("");
     }
-    console.log("ISIN sky", selectedIsin);
-  }, [activeMenu, currentSubmenus, selectedIsin]);
+  }, [activeMenu, currentSubmenus]);
 
   const handleSearchClick = () => {
-    const matched = fundamentalRecords.find(
-      (item) =>
-        item.ScripName?.toLowerCase() === inputValue.toLowerCase() ||
-        item.BSECode?.toLowerCase() === inputValue.toLowerCase() ||
-        item.NSECode?.toLowerCase() === inputValue.toLowerCase()
-    );
-
-    if (matched) {
-      setSelectedIsin(matched.ISINCode);
-      console.log("Matched ISIN:", matched.ISINCode);
+    if (pendingSelected) {
+      setSelectedIsin(pendingSelected.ISINCode);
+      console.log("Matched ISIN:", pendingSelected.ISINCode);
     } else {
-      setSelectedIsin(null);
-      console.log("No matching scrip found");
+      const matched = fundamentalRecords.find(
+        (item) =>
+          item.ScripName?.toLowerCase() === inputValue.toLowerCase() ||
+          item.BSECode?.toLowerCase() === inputValue.toLowerCase() ||
+          item.NSECode?.toLowerCase() === inputValue.toLowerCase()
+      );
+
+      if (matched) {
+        setSelectedIsin(matched.ISINCode);
+        console.log("Matched ISIN:", matched.ISINCode);
+      } else {
+        setSelectedIsin(null);
+        console.log("No matching scrip found");
+      }
     }
   };
 
@@ -205,24 +210,31 @@ const StockStudy = () => {
               );
             })
           }
-          value={
-            fundamentalRecords.find((item) => item.ISINCode === selectedIsin) ||
-            null
-          }
+          value={null} // prevent autocomplete from auto-selecting
           inputValue={inputValue}
           onInputChange={(event, newInputValue) => {
             if (regEx.query.test(newInputValue) || newInputValue === "") {
               setInputValue(newInputValue.toUpperCase());
-              console.log("Selected ISIN:", event);
+
+              if (newInputValue === "") {
+                // Clear selection if input is cleared
+                setPendingSelected(null);
+                setSelectedIsin(null); // ✅ Clear the selected ISIN
+                console.log("Cleared ISIN due to empty input");
+              }
+              console.log(event);
             }
           }}
           onChange={(event, newValue) => {
             if (newValue && typeof newValue !== "string") {
+              setPendingSelected(newValue); // queue up
               setInputValue(newValue.ScripName || "");
-              setSelectedIsin(newValue.ISINCode);
-              console.log("Selected ISIN:", newValue.ISINCode, event);
+              console.log("Selected ISIN event:", event);
             } else {
-              setSelectedIsin(null);
+              setPendingSelected(null);
+              setSelectedIsin(null); // ✅ Clear on manual clear
+              setInputValue(""); // reset the input field
+              console.log("Cleared ISIN due to deselection");
             }
           }}
           renderOption={(props, option) => (

@@ -17,7 +17,7 @@ const CorporateTable = ({ CorporateData, name }: any) => {
   useEffect(() => {
     setHeader(CorporateData.tableHeaders || []);
     setData(CorporateData[name] || []);
-    console.log(header, "yeda", data, name);
+    console.log(header, "tableheadername", data, name);
   }, [CorporateData, name]);
 
   const columnCount = header.length + 1;

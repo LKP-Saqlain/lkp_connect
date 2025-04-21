@@ -7,10 +7,10 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { useEffect } from "react";
 
-const News = ({ activeMenu }: any) => {
+const News = ({ activeMenu, selectedIsin }: any) => {
   useEffect(() => {
-    console.log(activeMenu);
-  }, [activeMenu]);
+    console.log(activeMenu, selectedIsin);
+  }, [activeMenu, selectedIsin]);
 
   return (
     <div>

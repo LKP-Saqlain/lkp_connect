@@ -1,18 +1,66 @@
 import { Card, CardBody, Col, Row } from "reactstrap";
 import StatItem from "../../../../components/common/StatItem";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../../services";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../redux/store";
 
-const FundOverview = ({ records }: any) => {
+const FundOverview = ({ activeMenu, selectedIsin }: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [overviewData, setOverviewData] = useState<any[]>([]);
+
+  const formatValue = (val: number) => {
+    const cleaned = Number(val);
+    const formatted = new Intl.NumberFormat("en-IN").format(
+      cleaned === 0 ? 0 : cleaned
+    );
+    return formatted;
+  };
+
+  const getStatValue = (key: string) => {
+    const stat = overviewData?.find((item: any) => item.unique_name === key);
+    return {
+      value:
+        stat?.value !== undefined
+          ? `${formatValue(stat.value)} ${stat.unit || ""}`
+          : "-",
+      // dynamicColor: stat?.color || undefined,
+    };
+  };
+
   useEffect(() => {
-    console.log("fundOverviewData", records);
-  }, [records]);
+    if (!selectedIsin) {
+      setOverviewData([]);
+      return;
+    }
+    console.log(selectedIsin, "selectedIsin overview");
+    const fetchFundamentalOverview = async () => {
+      dispatch(showLoader("Please wait we are processing your request"));
+      try {
+        const response = await apiServices.getFundamentalOverview(selectedIsin);
+        dispatch(hideLoader());
+        console.log(
+          "getFundamentalOverviewResponse",
+          response?.data?.fundamentalData
+        );
+        setOverviewData(response?.data?.fundamentalData || []);
+      } catch (error) {
+        dispatch(hideLoader());
+        console.log("error", error);
+      }
+    };
+
+    if (selectedIsin) {
+      fetchFundamentalOverview();
+    }
+  }, [activeMenu, selectedIsin]);
 
   return (
     <Card style={{ borderRadius: "23px", marginTop: "2rem" }}>
-      {/* <CardHeader>OverView</CardHeader> */}
       <CardBody>
         <Row className="details-card gx-3 gy-3">
-          {/* Client Name */}
+          {/* Column 1 */}
           <Col xs="12" md={4} className="text-center">
             <div
               style={{
@@ -20,35 +68,17 @@ const FundOverview = ({ records }: any) => {
                 fontSize: "18px",
                 fontFamily: "Public Sans",
                 padding: "8px",
-                // borderRight: "1px solid #ddd", // Box border
-                // borderRadius: "8px", // Rounded corners for the box
-                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)", // Light shadow for better visibility
+                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
               }}
             >
-              {/* <StatItem label="Market Cap" value="12,21515 CR" /> */}
-              <StatItem
-                label={(records && records[0]?.title) || "Market Caps"}
-                value={`${
-                  records && records[0]?.value
-                    ? new Intl.NumberFormat("en-IN").format(records[0]?.value)
-                    : "0"
-                } ${(records && records[0]?.unit) || ""}`}
-                dynamicColor={records && records[0]?.color}
-              />
-              {/* <StatItem label="Company P/E" value="31" /> */}
-              <StatItem
-                label={(records && records[1]?.title) || "Company P/E"}
-                value={`${
-                  records && records[1]?.value
-                    ? new Intl.NumberFormat("en-IN").format(records[1]?.value)
-                    : "0"
-                } ${(records && records[1]?.unit) || ""}`}
-                dynamicColor={records && records[1]?.color}
-              />
-              <StatItem label="Op Revenue TTE static" value="0.00 CR" />
-              <StatItem label="ROE static" value="21.61%" />
+              <StatItem label="Market Caps" {...getStatValue("MCAP_Q")} />
+              <StatItem label="Company P/E" {...getStatValue("PE_TTM")} />
+              <StatItem label="Op Revenue TTM" {...getStatValue("SR_TTM")} />
+              <StatItem label="ROE" {...getStatValue("ROE_A")} />
             </div>
           </Col>
+
+          {/* Column 2 */}
           <Col xs="12" md={4} className="text-center">
             <div
               style={{
@@ -56,33 +86,20 @@ const FundOverview = ({ records }: any) => {
                 fontSize: "18px",
                 fontFamily: "Public Sans",
                 padding: "8px",
-                // borderRight: "1px solid #ddd", // Box border
-                // borderRadius: "8px", // Rounded corners for the box
-                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)", // Light shadow for better visibility
+                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <StatItem label="Current Price static" value="-" />
-              <StatItem label="Company P/BV static" value="7.5" />
+              <StatItem label="Current Price" value="--" />
+              <StatItem label="Company P/BV" {...getStatValue("PBV_A")} />
+              <StatItem label="Net Profit TTM" {...getStatValue("NP_TTM")} />
               <StatItem
-                label={(records && records[6]?.title) || "Net Profit TTM"}
-                value={`${
-                  records && records[6]?.value
-                    ? new Intl.NumberFormat("en-IN").format(records[6]?.value)
-                    : "0"
-                } ${(records && records[6]?.unit) || ""}`}
-                dynamicColor={records && records[6]?.color}
-              />
-              <StatItem
-                label={(records && records[7]?.title) || "Net Profit TTM"}
-                value={`${
-                  records && records[7]?.value
-                    ? new Intl.NumberFormat("en-IN").format(records[7]?.value)
-                    : "0"
-                } ${(records && records[7]?.unit) || ""}`}
-                dynamicColor={records && records[7]?.color}
+                label="Cash From Operating Activity"
+                {...getStatValue("CFO_A")}
               />
             </div>
           </Col>
+
+          {/* Column 3 */}
           <Col xs="12" md={4} className="text-center">
             <div
               style={{
@@ -90,20 +107,14 @@ const FundOverview = ({ records }: any) => {
                 fontSize: "18px",
                 fontFamily: "Public Sans",
                 padding: "8px",
-                // borderRight: "1px solid #ddd", // Box border
-                // borderRadius: "8px", // Rounded corners for the box
-                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)", // Light shadow for better visibility
+                boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <StatItem label="52 Wk Hi / Lo static" value="8,192 / 5,465.5" />
-              <StatItem label="Company PEG static" value="1.1" />
-              <StatItem label="Dividend Yield static" value="0.4" />
+              <StatItem label="52 Wk Hi / Lo" value="--" />
+              <StatItem label="Company PEG" {...getStatValue("PEG_TTM")} />
               <StatItem
-                label={(records && records[8]?.title) || "ROE"}
-                value={`${(records && records[8]?.value) || "-"} ${
-                  (records && records[8]?.unit) || ""
-                }`}
-                dynamicColor={records && records[8]?.color}
+                label="Dividend Yield"
+                {...getStatValue("DIVIDEND_YIELD_1_YR")}
               />
             </div>
           </Col>
