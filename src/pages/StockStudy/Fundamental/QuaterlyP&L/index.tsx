@@ -11,6 +11,11 @@ const Quarterly = ({ activeMenu, selectedIsin }: any) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log(selectedIsin, "selectedIsin Quarterly");
+    if (!selectedIsin) {
+      setQuarterly(null);
+    }
+
     const fetchFundamentalRecords = async () => {
       setLoading(true);
       dispatch(showLoader("Please wait, we are processing your request"));
@@ -19,16 +24,17 @@ const Quarterly = ({ activeMenu, selectedIsin }: any) => {
           selectedIsin
         );
         setQuarterly(response?.data.quarterlyDataDump);
-        console.log(quarterly, "merum", response?.data.quarterlyDataDump);
+        console.log("quarterly", response?.data.quarterlyDataDump);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setQuarterly(null); // Optional fallback
       } finally {
         dispatch(hideLoader());
         setLoading(false);
       }
     };
     fetchFundamentalRecords();
-  }, [activeMenu, dispatch]);
+  }, [activeMenu, dispatch, selectedIsin]);
 
   // Handle loading state and conditional rendering
   if (loading) {

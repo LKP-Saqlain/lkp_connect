@@ -6,8 +6,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 
-const News = ({ activeMenu }: any) => {
-  console.log(activeMenu);
+const News = ({ activeMenu, selectedIsin }: any) => {
+  console.log(activeMenu, selectedIsin, "selectedIsin");
 
   return (
     <div>

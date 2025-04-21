@@ -15,6 +15,9 @@ const BalanceSheet = ({ activeMenu, activeSubmenu, selectedIsin }: any) => {
   }, [activeMenu, activeSubmenu]);
 
   useEffect(() => {
+    if (!selectedIsin) {
+      setAnnualBalanceSheetData(null);
+    }
     if (activeMenu === "Fundamental") {
       const fetchFundamentalRecords = async () => {
         dispatch(showLoader("Please wait we are processing your request"));

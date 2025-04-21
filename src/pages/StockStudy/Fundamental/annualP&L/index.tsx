@@ -13,6 +13,9 @@ const AnnualPNL = ({ activeMenu, activeSubmenu, selectedIsin }: any) => {
   }, [activeMenu, activeSubmenu]);
 
   useEffect(() => {
+    if (!selectedIsin) {
+      setAnnually(null);
+    }
     if (activeSubmenu === "Annual P&L") {
       const fetchFundamentalRecords = async () => {
         dispatch(showLoader("Please wait we are processing your request"));
