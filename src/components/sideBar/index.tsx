@@ -512,8 +512,6 @@ const SideBar = () => {
   };
 
   const ComplianceSubComponents: any = {
-    "UCCCode MATCH": <></>,
-    "KRA PAN STATUS": (props: any) => <RegisDetails {...props} />,
     "Communication Retrival Entry": (props: any) => <CommEntry {...props} />,
     "Communication Retrival Checker": (props: any) => <ComChecker {...props} />,
     "Communication Retrival Report": (props: any) => <Retrival {...props} />,
@@ -531,12 +529,7 @@ const SideBar = () => {
   };
 
   const refferalLeadComponents: any = {
-    "Referal Entry": EkycLinks,
     "Referal Entry Status": (props: any) => <Main {...props} />,
-    "Referal Lead Updation": (props: any) => <OTDetails {...props} />,
-    "Referal Product Wise MIS Report": (props: any) => (
-      <MarketingMaterial {...props} />
-    ),
   };
   const masterSubComponents: any = {
     "Menu Master": (props: any) => <MasterMenuMarketing {...props} />,
@@ -589,6 +582,10 @@ const SideBar = () => {
     "Regulatory Announcement": (props: any) => (
       <RegulatorAnnouncement {...props} />
     ),
+    EKYC: (props: any) => <EkycLinks {...props} />,
+    "Other Details": OTDetails,
+    "Registration Details": (props: any) => <RegisDetails {...props} />,
+    "Marketing Materials": MarketingMaterial,
   };
 
   const renderComponent = (
@@ -617,6 +614,8 @@ const SideBar = () => {
         ? { activeSubItem }
         : menuItem.menu_name === "Regulatory Announcement"
         ? { activeMenu }
+        : menuItem.menu_name === "Registration Details"
+        ? { activeSubItem }
         : {};
 
     return <Component {...props} />;
