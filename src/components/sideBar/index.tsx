@@ -792,7 +792,7 @@ const SideBar = () => {
               sx={{
                 // border: "2px solid black",
                 padding: isMobile ? "0" : "10px",
-                marginRight: isMobile ? "0" : "2rem",
+                // marginRight: isMobile ? "0" : "2rem",
               }}
             >
               {/* <SlSizeFullscreen style={{ color: "black", cursor: "pointer" }} />
