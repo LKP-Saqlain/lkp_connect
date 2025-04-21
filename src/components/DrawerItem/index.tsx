@@ -27,6 +27,9 @@ import StoreIcon from "@mui/icons-material/Store";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import DvrIcon from "@mui/icons-material/Dvr";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import LinkIcon from "@mui/icons-material/Link";
+import DetailsIcon from "@mui/icons-material/Details";
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -165,6 +168,24 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
       case "Reports":
         return (
           <PostAddIcon
+            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
+          />
+        );
+      case "Regulatory Announcement":
+        return (
+          <AutoStoriesIcon
+            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
+          />
+        );
+      case "EKYC":
+        return (
+          <LinkIcon
+            sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
+          />
+        );
+      case "Other Details":
+        return (
+          <DetailsIcon
             sx={{ color: isMenuOpen ? "black" : "#F9F6EE", fontSize: "20px" }}
           />
         );
