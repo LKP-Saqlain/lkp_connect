@@ -520,7 +520,7 @@ const DataTable = ({
   const rowHeight = 40;
   const headerHeight = 56;
   const padding = 40;
-  const minHeight = activeSubItem === "UCCCode MATCH" ? 800 : 200;
+  const minHeight = activeMenu === "Regulatory Announcement" ? 800 : 200;
   const calculatedHeight = Math.min(
     Math.max(
       rowName && rowName.length * rowHeight + headerHeight + padding,
