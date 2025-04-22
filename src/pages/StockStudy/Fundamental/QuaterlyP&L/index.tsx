@@ -15,25 +15,26 @@ const Quarterly = ({ activeMenu, selectedIsin }: any) => {
     if (!selectedIsin) {
       setQuarterly(null);
     }
-
-    const fetchFundamentalRecords = async () => {
-      setLoading(true);
-      dispatch(showLoader("Please wait, we are processing your request"));
-      try {
-        const response = await apiServices.getFundamentalQuaterlyPNL(
-          selectedIsin
-        );
-        setQuarterly(response?.data.quarterlyDataDump);
-        console.log("quarterly", response?.data.quarterlyDataDump);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setQuarterly(null); // Optional fallback
-      } finally {
-        dispatch(hideLoader());
-        setLoading(false);
-      }
-    };
-    fetchFundamentalRecords();
+    if (selectedIsin) {
+      const fetchFundamentalRecords = async () => {
+        setLoading(true);
+        dispatch(showLoader("Please wait, we are processing your request"));
+        try {
+          const response = await apiServices.getFundamentalQuaterlyPNL(
+            selectedIsin
+          );
+          setQuarterly(response?.data.quarterlyDataDump);
+          console.log("quarterly", response?.data.quarterlyDataDump);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setQuarterly(null); // Optional fallback
+        } finally {
+          dispatch(hideLoader());
+          setLoading(false);
+        }
+      };
+      fetchFundamentalRecords();
+    }
   }, [activeMenu, dispatch, selectedIsin]);
 
   // Handle loading state and conditional rendering

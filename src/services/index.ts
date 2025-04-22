@@ -134,8 +134,12 @@ export const apiServices = {
       {}
     );
   },
-  getFundamentalRatios: async (payload: any) => {
-    return await apiService("POST", endpoints.getFundamentalRatios, payload);
+  getFundamentalRatios: async (isin: string) => {
+    return await apiService(
+      "POST",
+      `${endpoints.getFundamentalRatios}/${isin}`,
+      {}
+    );
   },
   getFundamentalcashflow: async (isin: string) => {
     return await apiService(

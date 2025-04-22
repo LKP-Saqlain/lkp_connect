@@ -18,7 +18,7 @@ const BalanceSheet = ({ activeMenu, activeSubmenu, selectedIsin }: any) => {
     if (!selectedIsin) {
       setAnnualBalanceSheetData(null);
     }
-    if (activeMenu === "Fundamental") {
+    if (selectedIsin) {
       const fetchFundamentalRecords = async () => {
         dispatch(showLoader("Please wait we are processing your request"));
         apiServices

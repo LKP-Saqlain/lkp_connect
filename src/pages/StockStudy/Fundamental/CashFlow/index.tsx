@@ -14,22 +14,26 @@ const CashFlow = ({ activeMenu, selectedIsin }: any) => {
     if (!selectedIsin) {
       setCashFlow(null);
     }
-    const fetchFundamentalRecords = async () => {
-      setLoading(true); // Start loading
-      dispatch(showLoader("Please wait, we are processing your request"));
+    if (selectedIsin) {
+      const fetchFundamentalRecords = async () => {
+        setLoading(true); // Start loading
+        dispatch(showLoader("Please wait, we are processing your request"));
 
-      try {
-        const response = await apiServices.getFundamentalcashflow(selectedIsin);
-        setCashFlow(response?.data?.annualDataDump);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        dispatch(hideLoader());
-        setLoading(false); // End loading
-      }
-    };
+        try {
+          const response = await apiServices.getFundamentalcashflow(
+            selectedIsin
+          );
+          setCashFlow(response?.data?.annualDataDump);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          dispatch(hideLoader());
+          setLoading(false); // End loading
+        }
+      };
 
-    fetchFundamentalRecords();
+      fetchFundamentalRecords();
+    }
   }, [activeMenu, dispatch, selectedIsin]);
 
   // Handle loading state and conditional rendering

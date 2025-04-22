@@ -4,31 +4,36 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import DynamicTable from "../../../../components/common/stockStudyTable"; // Adjust path if needed
 
-const Ratios = ({ activeMenu }: any) => {
+const Ratios = ({ activeMenu, selectedIsin }: any) => {
   const [ratiosData, setRatiosData] = useState<any>();
   const [loading, setLoading] = useState<boolean>(false); // To handle loading state
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchFundamentalRatios = async () => {
-      setLoading(true); // Start loading
-      dispatch(showLoader("Please wait, we are processing your request"));
+    if (!selectedIsin) {
+      setRatiosData(null);
+    }
+    if (selectedIsin) {
+      const fetchFundamentalRatios = async () => {
+        setLoading(true); // Start loading
+        dispatch(showLoader("Please wait, we are processing your request"));
 
-      try {
-        const response = await apiServices.getFundamentalRatios({});
-        console.log("Fetched ratios data:", response?.data?.annualDataDump);
-        setRatiosData(response?.data?.annualDataDump); // Save data in state
-      } catch (error) {
-        console.error("Error fetching ratios data:", error);
-      } finally {
-        dispatch(hideLoader());
-        setLoading(false); // End loading
-      }
-    };
+        try {
+          const response = await apiServices.getFundamentalRatios(selectedIsin);
+          console.log("Fetched ratios data:", response?.data?.annualDataDump);
+          setRatiosData(response?.data?.annualDataDump); // Save data in state
+        } catch (error) {
+          console.error("Error fetching ratios data:", error);
+        } finally {
+          dispatch(hideLoader());
+          setLoading(false); // End loading
+        }
+      };
 
-    fetchFundamentalRatios();
-  }, [activeMenu, dispatch]);
+      fetchFundamentalRatios();
+    }
+  }, [activeMenu, dispatch, selectedIsin]);
 
   // Handle loading state and conditional rendering
   if (loading) {

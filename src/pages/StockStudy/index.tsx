@@ -71,7 +71,9 @@ const componentMap: Record<
   "Cash Flow": ({ activeMenu, selectedIsin }) => (
     <Cashflow activeMenu={activeMenu} selectedIsin={selectedIsin} />
   ),
-  Ratios: ({ activeMenu }) => <Ratios activeMenu={activeMenu} />,
+  Ratios: ({ activeMenu, selectedIsin }) => (
+    <Ratios activeMenu={activeMenu} selectedIsin={selectedIsin} />
+  ),
   "Balance Sheet": ({ activeMenu, activeSubmenu, selectedIsin }) => (
     <BalanceSheet
       activeMenu={activeMenu}

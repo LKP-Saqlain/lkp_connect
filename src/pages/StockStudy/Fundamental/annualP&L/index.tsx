@@ -16,7 +16,7 @@ const AnnualPNL = ({ activeMenu, activeSubmenu, selectedIsin }: any) => {
     if (!selectedIsin) {
       setAnnually(null);
     }
-    if (activeSubmenu === "Annual P&L") {
+    if (selectedIsin) {
       const fetchFundamentalRecords = async () => {
         dispatch(showLoader("Please wait we are processing your request"));
         apiServices

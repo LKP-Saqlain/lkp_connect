@@ -34,25 +34,28 @@ const FundOverview = ({ activeMenu, selectedIsin }: any) => {
       setOverviewData([]);
       return;
     }
-    console.log(selectedIsin, "selectedIsin overview");
-    const fetchFundamentalOverview = async () => {
-      dispatch(showLoader("Please wait we are processing your request"));
-      try {
-        const response = await apiServices.getFundamentalOverview(selectedIsin);
-        dispatch(hideLoader());
-        console.log(
-          "getFundamentalOverviewResponse",
-          response?.data?.fundamentalData
-        );
-        setOverviewData(response?.data?.fundamentalData || []);
-      } catch (error) {
-        dispatch(hideLoader());
-        console.log("error", error);
-      }
-    };
-
     if (selectedIsin) {
-      fetchFundamentalOverview();
+      const fetchFundamentalOverview = async () => {
+        dispatch(showLoader("Please wait we are processing your request"));
+        try {
+          const response = await apiServices.getFundamentalOverview(
+            selectedIsin
+          );
+          dispatch(hideLoader());
+          console.log(
+            "getFundamentalOverviewResponse",
+            response?.data?.fundamentalData
+          );
+          setOverviewData(response?.data?.fundamentalData || []);
+        } catch (error) {
+          dispatch(hideLoader());
+          console.log("error", error);
+        }
+      };
+
+      if (selectedIsin) {
+        fetchFundamentalOverview();
+      }
     }
   }, [activeMenu, selectedIsin]);
 
