@@ -1941,21 +1941,23 @@ export const QPayoutColumns: GridColDef[] = [
     field: "branchcode",
     headerName: "Branch Code",
     minWidth: 100,
-    flex: 1,
+    flex: 0.8,
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "zone",
     headerName: "Zone",
-    minWidth: 100,
+    flex: 0.6,
     disableColumnMenu: true,
   },
   {
     field: "payout_Amt",
     headerName: "Payout Amt",
-    minWidth: 100,
+    minWidth: 110,
     align: "right",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
     valueFormatter: (params: any) => {
       const value = parseFloat(params); // Convert the value to a number
@@ -1968,7 +1970,8 @@ export const QPayoutColumns: GridColDef[] = [
   {
     field: "receipt_Amt",
     headerName: "Receipt Amt",
-    minWidth: 100,
+    minWidth: 120,
+    headerClassName: "header-wrap-custom",
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
@@ -1986,9 +1989,10 @@ export const QPayoutColumns: GridColDef[] = [
   {
     field: "extra_Payin",
     headerName: "Extra Payin",
-    minWidth: 100,
+    minWidth: 120,
     align: "right",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     // valueFormatter: (params: number) =>
     //   new Intl.NumberFormat("en-IN").format(params),

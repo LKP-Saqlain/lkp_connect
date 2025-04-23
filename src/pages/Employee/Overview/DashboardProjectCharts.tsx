@@ -51,9 +51,9 @@ const ProjectsOverviewCharts = ({
       },
     },
     dataLabels: {
-      enabled: true,
+      enabled: false,
       style: {
-        fontSize: revenueYear ? "10px" : "12px",
+        fontSize: revenueYear ? "10px" : "10px",
         fontWeight: "bold",
         colors: ["#000"], // Text color
       },

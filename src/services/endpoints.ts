@@ -42,6 +42,7 @@ export const endpoints = {
   getFundamentalAnnualPNL: "/Fundamental/Annually",
   getFundamentalQuaterlyPNL: "/Fundamental/Quaterly",
   getFundamentalRatios: "/Fundamental/Ratios",
+  getFundamentalNewsfeed: "/Fundamental/newsfeed",
   ComplainceReport: "/api/Compliance/ComplianceData",
   ComplianceData: "/api/Compliance/ComplianceData",
   ComplainceFileDownload: "/api/Compliance/ComplainceFileDownload",

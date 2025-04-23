@@ -20,23 +20,25 @@ const ShareHolding = ({ activeMenu, selectedIsin }: any) => {
   }, [activeMenu]);
 
   useEffect(() => {
-    const fetchFundamentalShareHolding = async () => {
-      dispatch(showLoader("Please wait we are processing your request"));
+    if (selectedIsin) {
+      const fetchFundamentalShareHolding = async () => {
+        dispatch(showLoader("Please wait we are processing your request"));
 
-      try {
-        const response = await apiServices.getFundamentalShareholding(
-          selectedIsin
-        );
-        dispatch(hideLoader());
-        console.log("getFundamentalShareholdingResponse", response?.data);
-        setFundamentalShareHolding(response?.data);
-      } catch (error) {
-        dispatch(hideLoader());
-        console.log("error", error);
-      }
-    };
-    console.log("Dividendshar", selectedIsin);
-    fetchFundamentalShareHolding();
+        try {
+          const response = await apiServices.getFundamentalShareholding(
+            selectedIsin
+          );
+          dispatch(hideLoader());
+          console.log("getFundamentalShareholdingResponse", response?.data);
+          setFundamentalShareHolding(response?.data);
+        } catch (error) {
+          dispatch(hideLoader());
+          console.log("error", error);
+        }
+      };
+      console.log("Dividendshar", selectedIsin);
+      fetchFundamentalShareHolding();
+    }
   }, [activeMenu, selectedIsin]);
 
   return (

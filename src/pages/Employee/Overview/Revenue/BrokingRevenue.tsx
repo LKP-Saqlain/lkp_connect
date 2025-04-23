@@ -11,10 +11,10 @@ import { RootState, AppDispatch } from "../../../../redux/store";
 // import { DealerPerformance } from "../../../../redux/thunk/DealerPerformance";
 import ShowToast from "../../../../utils/toastUtils";
 import { APBrokerage } from "../../../../redux/thunk/AP/lastWeekBrokerage";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+// import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const Revenue = ({}: any) => {
-  const [selectedYear, setSelectedYear] = useState("2024-2025");
+  // const [selectedYear, setSelectedYear] = useState("2024-2025");
   const [brokerageData, setBrokerageData] = useState<[]>([]);
   const [monthProjectData, setMonthProjectData] = useState([
     {
@@ -31,11 +31,11 @@ const Revenue = ({}: any) => {
   console.log("user", user_id);
   const dispatch = useDispatch<AppDispatch>();
 
-  const financialYears = [
-    { value: "2023-2024", label: "2023-2024" },
-    { value: "2024-2025", label: "2024-2025" },
-    // { value: "2024-2025", label: "2024-2025" },
-  ];
+  // const financialYears = [
+  //   { value: "2023-2024", label: "2023-2024" },
+  //   { value: "2024-2025", label: "2024-2025" },
+  //   // { value: "2024-2025", label: "2024-2025" },
+  // ];
 
   useEffect(() => {
     const fetchBrokerage = async () => {
@@ -99,16 +99,16 @@ const Revenue = ({}: any) => {
     fetchBrokerage();
   }, [dispatch]);
 
-  const handleChange = (event: any) => {
-    setSelectedYear(event.target.value as string);
-  };
+  // const handleChange = (event: any) => {
+  //   setSelectedYear(event.target.value as string);
+  // };
 
   return (
     <React.Fragment>
       <Card>
         <CardHeader className="align-items-center d-flex">
           <h4 className="card-title mb-0 flex-grow-1 text-md-start text-center">
-            Revenue Summary
+            Brokerage Revenue Summary
           </h4>
           <div
             className="d-flex align-items-center flex-wrap mt-2 mt-sm-0 justify-content-between"
@@ -136,10 +136,10 @@ const Revenue = ({}: any) => {
                 }}
               ></div>
               <p className="mb-0 me-3">AP Share</p> */}
-              Broking Data
+              {/* Broking Data */}
             </div>
 
-            <div style={{ minWidth: 160, maxHeight: 36 }}>
+            {/* <div style={{ minWidth: 160, maxHeight: 36 }}>
               <FormControl fullWidth size="small" sx={{ maxHeight: 36 }}>
                 <InputLabel
                   id="financial-year-select-label"
@@ -163,7 +163,7 @@ const Revenue = ({}: any) => {
                   ))}
                 </Select>
               </FormControl>
-            </div>
+            </div> */}
           </div>
         </CardHeader>
 

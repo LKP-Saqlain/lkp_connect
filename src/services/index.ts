@@ -141,6 +141,13 @@ export const apiServices = {
       {}
     );
   },
+  getFundamentalNewsfeed: async (isin: string) => {
+    return await apiService(
+      "POST",
+      `${endpoints.getFundamentalNewsfeed}/${isin}`,
+      {}
+    );
+  },
   getFundamentalcashflow: async (isin: string) => {
     return await apiService(
       "POST",

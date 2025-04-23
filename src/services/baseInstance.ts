@@ -51,6 +51,7 @@ baseInstance.interceptors.request.use(
       endpoints.getFundamentalcashflow,
       endpoints.getFundamentalAnnualPNL,
       endpoints.getFundamentalQuaterlyPNL,
+      endpoints.getFundamentalNewsfeed,
       endpoints.getFundamentalRatios,
     ].some((endpoint) => config.url?.includes(endpoint));
 

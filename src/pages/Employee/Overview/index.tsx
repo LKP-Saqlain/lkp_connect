@@ -13,6 +13,11 @@ import ActiveClient from "../../../assets/images/Clients.json";
 import DashboardCard from "../../../components/common/DashboardCard";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { APBrokerage } from "../../../redux/thunk/AP/lastWeekBrokerage";
+import ShowToast from "../../../utils/toastUtils";
 // import Nudge from "../../components/common/Nudge";
 // import { useDispatch, useSelector } from "react-redux";
 // import { AppDispatch, RootState } from "../../redux/store";
@@ -20,6 +25,7 @@ import { useMediaQuery } from "@mui/material";
 // import { apiServices } from "../../services";
 // import CryptoJS from "crypto-js";
 type RevenueKeys = "total" | "broking" | "nonBroking";
+type BrokerageBad = "total" | "APbrokerage" | "GrossBrokerage";
 // type TotalClientKey = "total" | "broking" | "nonBroking";
 
 const DashboardProject = ({ handleTradingOpen }: any) => {
@@ -30,17 +36,29 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     broking: 0,
     nonBroking: 0,
   });
+  const [firstCard, setFirstCard] = useState({
+    total: 0,
+    APbrokerage: 0,
+    GrossBrokerage: 0,
+  });
   const [activeBadge, setActiveBadge] = useState<RevenueKeys>("total");
-
+  const dispatch = useDispatch<AppDispatch>();
   const [multiRevenueMultiply, setMultiRevenueMultiply] = useState(0);
   const [newClients, setNewClients] = useState(0);
   const [activeClients, setActiveClients] = useState(null);
+  const [tradedClients, setTradedClients] = useState(0);
+  const [newClien, setNewClien] = useState(0);
+  const [activeBrokerageBadge, setActiveBrokerageBadge] =
+    useState<BrokerageBad>("total");
+
   // const [tradedClientCount, setTradedClientCount] = useState(0);
   // const [modal_animationZoom, setmodal_animationZoom] = useState(false);
   // const [isNudgeOpen, setIsNudgeOpen] = useState(false);
   // const [dashboardNudgeData, setDashboardNudgeData] = useState<any[][]>([]);
   // const [hasApiStarted, setHasApiStarted] = useState(false);
-
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -146,7 +164,58 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   //   };
   //   fetchDashboardNudge();
   // }, [dispatch]);
+  useEffect(() => {
+    const fetchActiveInactiveCli = async () => {
+      // const Id = localStorage.getItem("Id");
+      const payload = {
+        branchCode: user_id,
+      };
+      dispatch(showLoader(""));
+      dispatch(APBrokerage(payload))
+        .unwrap()
+        .then((response) => {
+          const month = response?.data?.Table3[0]?.FinancialQuarter;
+          const APbrokerage = response?.data?.Table3[0]?.APbrokerage;
+          const GrossBrokerage = response?.data?.Table3[0]?.GrossBrokerage;
+          const clients = response?.data?.Table4[0]?.NewClientCOUNTS;
+          const uniqueTradedClients =
+            response?.data?.Table5[0]?.TradedClientCOUNTS;
+          console.log(
+            response?.data,
+            "cardright",
+            month,
+            uniqueTradedClients,
+            clients,
+            activeClients
+          );
+          setFirstCard({
+            APbrokerage,
+            GrossBrokerage,
+            total: APbrokerage + GrossBrokerage,
+          });
+          setNewClien(clients);
+          setTradedClients(uniqueTradedClients);
+          setStartMonth(month);
+          console.log("ffff", firstCard);
 
+          if (response?.status === 200) {
+            dispatch(hideLoader());
+          }
+        })
+        .catch((Err) => {
+          const { message } = Err;
+          console.log("Error->", message);
+          dispatch(hideLoader());
+          ShowToast(
+            "error",
+            message ||
+              "Sorry for the inconvenience, please try after some time."
+          );
+        })
+        .finally(() => {});
+    };
+    fetchActiveInactiveCli();
+  }, [dispatch]);
   useEffect(() => {
     playerRef.current?.playFromBeginning();
   }, []);
@@ -156,6 +225,32 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     setStartMonth(startMonth);
     setEndMonth(endMonth);
   };
+  const handleBrokerageBadgeClick = (type: BrokerageBad) => {
+    console.log("Badge clicked:", type, badges);
+    setActiveBrokerageBadge(type); // ✅ Update the active badge
+  };
+
+  const brokerageBadges = [
+    {
+      type: "warning",
+      label: "Total",
+      isActive: activeBrokerageBadge === "total",
+      onClick: () => handleBrokerageBadgeClick("total"),
+    },
+    {
+      type: "info",
+      label: "AP Brokerage",
+      isActive: activeBrokerageBadge === "APbrokerage",
+      onClick: () => handleBrokerageBadgeClick("APbrokerage"),
+    },
+    {
+      type: "primary",
+      label: "Gross Brokerage",
+      isActive: activeBrokerageBadge === "GrossBrokerage",
+      onClick: () => handleBrokerageBadgeClick("GrossBrokerage"),
+    },
+  ];
+
   const handleBadgeClick = (type: any) => {
     setActiveBadge(type);
     if (type === "total") {
@@ -182,13 +277,13 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     },
     {
       type: "info",
-      label: "Broking",
+      label: "GrossBrokerage",
       isActive: activeBadge === "broking",
       onClick: () => handleBadgeClick("broking"),
     },
     {
       type: "primary",
-      label: "Non-Broking",
+      label: "APbrokerage",
       isActive: activeBadge === "nonBroking",
       onClick: () => handleBadgeClick("nonBroking"),
     },
@@ -255,22 +350,22 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
             >
               <DashboardCard
                 title="Brokerage*"
-                value={revenueValues[activeBadge]}
+                value={firstCard[activeBrokerageBadge]} // ✅ Use the active key
                 animationData={RevenueImg}
-                badges={badges}
+                badges={brokerageBadges} // ✅ Pass the correct badges
                 formatIndianNumber={formatIndianNumber}
                 suffix=".00"
-                note={!isMobile && `* Period - ${startMonth} to ${endMonth}`}
+                note={!isMobile && `* Period - ${startMonth} `}
                 customClass={true}
               />
             </Col>
             <Col xxl={4} lg={4} md={6} sm={12}>
               <DashboardCard
                 title="New Clients*"
-                value={multiRevenueMultiply}
+                value={newClien}
                 animationData={ActiveClient}
-                decimals={2}
-                suffix="x"
+                // decimals={2}
+                // suffix="x"
                 activeClientsEmpty={true}
                 customClass={true}
               />
@@ -288,8 +383,11 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
               <DashboardCard
                 title="Unique Traded Clients*"
                 // value={tradedClientCount}
+                value={tradedClients}
                 animationData={ActiveClient}
-                activeClients={activeClients}
+                // decimals={2}
+                // suffix="x"
+                activeClientsEmpty={true}
                 customClass={true}
                 note={isMobile && `* Period - ${startMonth} to ${endMonth}`}
               />
