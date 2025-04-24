@@ -24,32 +24,31 @@ import ShowToast from "../../../utils/toastUtils";
 // import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 // import { apiServices } from "../../services";
 // import CryptoJS from "crypto-js";
-type RevenueKeys = "total" | "broking" | "nonBroking";
-type BrokerageBad = "total" | "APbrokerage" | "GrossBrokerage";
-// type TotalClientKey = "total" | "broking" | "nonBroking";
+
+type BrokerageBadge = "total" | "APbrokerage" | "GrossBrokerage";
 
 const DashboardProject = ({ handleTradingOpen }: any) => {
   const [startMonth, setStartMonth] = useState("");
   const [endMonth, setEndMonth] = useState("");
-  const [revenueValues, setRevenueValues] = useState({
-    total: 0,
-    broking: 0,
-    nonBroking: 0,
-  });
+  // const [revenueValues, setRevenueValues] = useState({
+  //   total: 0,
+  //   broking: 0,
+  //   nonBroking: 0,
+  // });
   const [firstCard, setFirstCard] = useState({
     total: 0,
     APbrokerage: 0,
     GrossBrokerage: 0,
   });
-  const [activeBadge, setActiveBadge] = useState<RevenueKeys>("total");
+
   const dispatch = useDispatch<AppDispatch>();
-  const [multiRevenueMultiply, setMultiRevenueMultiply] = useState(0);
-  const [newClients, setNewClients] = useState(0);
+
+  // const [newClients, setNewClients] = useState(0);
   const [activeClients, setActiveClients] = useState(null);
   const [tradedClients, setTradedClients] = useState(0);
   const [newClien, setNewClien] = useState(0);
   const [activeBrokerageBadge, setActiveBrokerageBadge] =
-    useState<BrokerageBad>("total");
+    useState<BrokerageBadge>("total");
 
   // const [tradedClientCount, setTradedClientCount] = useState(0);
   // const [modal_animationZoom, setmodal_animationZoom] = useState(false);
@@ -182,7 +181,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
             response?.data?.Table5[0]?.TradedClientCOUNTS;
           console.log(
             response?.data,
-            "cardright",
+            "AP three CARD",
             month,
             uniqueTradedClients,
             clients,
@@ -225,8 +224,8 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     setStartMonth(startMonth);
     setEndMonth(endMonth);
   };
-  const handleBrokerageBadgeClick = (type: BrokerageBad) => {
-    console.log("Badge clicked:", type, badges);
+  const handleBrokerageBadgeClick = (type: BrokerageBadge) => {
+    // console.log("Badge clicked:", type, badges);
     setActiveBrokerageBadge(type); // ✅ Update the active badge
   };
 
@@ -250,73 +249,6 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
       onClick: () => handleBrokerageBadgeClick("GrossBrokerage"),
     },
   ];
-
-  const handleBadgeClick = (type: any) => {
-    setActiveBadge(type);
-    if (type === "total") {
-      handleRevenueData(
-        revenueValues.total,
-        revenueValues.broking,
-        revenueValues.nonBroking,
-        multiRevenueMultiply // Pass the multiRevenueMultiply value for the total badge
-      );
-    } else {
-      handleRevenueData(
-        revenueValues.total,
-        revenueValues.broking,
-        revenueValues.nonBroking
-      );
-    }
-  };
-  const badges = [
-    {
-      type: "warning",
-      label: "Total",
-      isActive: activeBadge === "total",
-      onClick: () => handleBadgeClick("total"),
-    },
-    {
-      type: "info",
-      label: "GrossBrokerage",
-      isActive: activeBadge === "broking",
-      onClick: () => handleBadgeClick("broking"),
-    },
-    {
-      type: "primary",
-      label: "APbrokerage",
-      isActive: activeBadge === "nonBroking",
-      onClick: () => handleBadgeClick("nonBroking"),
-    },
-  ];
-
-  const handleRevenueData = (
-    total: any,
-    broking: any,
-    nonBroking: any,
-    multiRevenueMultiply?: any,
-    newClientsAdded?: any
-  ) => {
-    console.log(
-      "valuesss->",
-      total,
-      broking,
-      nonBroking,
-      multiRevenueMultiply,
-      newClientsAdded
-    );
-    setRevenueValues({
-      total: total,
-      broking: broking,
-      nonBroking: nonBroking,
-    });
-    if (multiRevenueMultiply !== undefined) {
-      setMultiRevenueMultiply(multiRevenueMultiply);
-    }
-    if (newClientsAdded !== undefined) {
-      setNewClients(newClientsAdded);
-      console.log(newClients);
-    }
-  };
 
   function formatIndianNumber(value: number): string {
     return `₹${value.toLocaleString("en-IN")}`;
@@ -389,7 +321,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                 // suffix="x"
                 activeClientsEmpty={true}
                 customClass={true}
-                note={isMobile && `* Period - ${startMonth} to ${endMonth}`}
+                note={isMobile && `* Period - ${startMonth} ${endMonth}`}
               />
             </Col>
           </Row>
