@@ -184,6 +184,9 @@ const SideBar = () => {
   const lastBrokingValues = useSelector(
     (state: RootState) => state.userOverView?.data?.data?.data
   );
+  const apBrokingValue = useSelector(
+    (state: RootState) => state.APBrokerage?.data?.data?.Table
+  );
 
   useEffect(() => {
     const fetchBrokerage = async () => {
@@ -282,8 +285,12 @@ const SideBar = () => {
       const brokingValue =
         lastBrokingValues[lastBrokingValues.length - 1]?.Dtrandate;
       setDataStatus(brokingValue || "No date available"); // Set default value if empty
+      console.log("daaasda", brokingValue);
     } else {
-      setDataStatus("No data available");
+      // setDataStatus("No data available");
+      const apDataShow = apBrokingValue[apBrokingValue.length - 1]?.Dtrandate;
+      console.log("testasdasd", apDataShow);
+      setDataStatus(apDataShow || "No date available");
     }
   }, [lastBrokingValues]); // Runs when `lastBrokingValues` changes
 

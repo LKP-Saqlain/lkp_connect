@@ -282,9 +282,9 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
             >
               <DashboardCard
                 title="Brokerage*"
-                value={firstCard[activeBrokerageBadge]} // ✅ Use the active key
+                value={firstCard[activeBrokerageBadge]}
                 animationData={RevenueImg}
-                badges={brokerageBadges} // ✅ Pass the correct badges
+                badges={brokerageBadges}
                 formatIndianNumber={formatIndianNumber}
                 suffix=".00"
                 note={!isMobile && `* Period - ${startMonth} `}
