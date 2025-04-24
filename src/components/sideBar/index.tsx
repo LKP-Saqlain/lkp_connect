@@ -67,6 +67,7 @@ import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
 import AccessMapping from "../../pages/Masters/AccessMapping";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
+import { subDays, format } from "date-fns";
 
 const drawerWidth = 240;
 
@@ -189,6 +190,8 @@ const SideBar = () => {
     (state: RootState) => state.APBrokerage?.data?.data?.Table
   );
 
+  console.log("testasdasd", apBrokingValue);
+
   useEffect(() => {
     const fetchBrokerage = async () => {
       // const Id = localStorage.getItem("Id");
@@ -293,6 +296,15 @@ const SideBar = () => {
         apBrokingValue && apBrokingValue[apBrokingValue.length - 1]?.Dtrandate;
       console.log("testasdasd", apDataShow);
       setDataStatus(apDataShow || "No date available");
+      if (apDataShow) {
+        setDataStatus(apDataShow);
+        console.log("testasdasd", apDataShow);
+      } else {
+        // Set yesterday's date if both data sources are empty
+        const yesterday = format(subDays(new Date(), 1), "dd-MM-yyyy");
+        setDataStatus(yesterday);
+        console.log("Setting yesterday's date:", yesterday);
+      }
     }
   }, [lastBrokingValues]); // Runs when `lastBrokingValues` changes
 
