@@ -1810,8 +1810,8 @@ export const terminalcol: GridColDef[] = [
 
 export const RegisDetails: GridColDef[] = [
   {
-    field: "AP Name",
-    headerName: "AP Name",
+    field: "Segment",
+    headerName: "Segment",
     width: 200,
     headerAlign: "center",
     align: "center",
@@ -1838,7 +1838,7 @@ export const RegisDetails: GridColDef[] = [
   {
     field: "Registration Office",
     headerName: "Registration Office",
-    width: 800,
+    flex: 1,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
