@@ -152,6 +152,9 @@ const SideBar = () => {
   const [activeSubItem, setActiveSubItem] = useState(() => {
     return localStorage.getItem("activeSubItem") || "";
   });
+  const [selectedPerformanceSection, setSelectedPerformanceSection] =
+    useState("");
+
   const [selectedViewMore, setSelectedViewMore] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -558,7 +561,7 @@ const SideBar = () => {
 
   const componentMap: any = {
     "My Performance": user_type === "Employee" ? OverviewComponent : APOverview,
-    Trading: TradeDashboard,
+    Trading: (props: any) => <TradeDashboard {...props} />,
     "Client Details": ClientDetails,
     "Zone Overview": RegOverview,
     "Stock Study": StockStudy,
@@ -623,7 +626,13 @@ const SideBar = () => {
     // Pass Props here for dynamic
     const props =
       menuItem.menu_name === "My Performance"
-        ? { handleTradingOpen: () => handleTradingOpen("T6") }
+        ? {
+            handleTradingOpen: (val: string) => {
+              setSelectedPerformanceSection(val); // local state update
+              handleTradingOpen(val); // trigger parent logic
+            },
+            selectedPerformanceSection,
+          }
         : menuItem.menu_name === "Reports"
         ? { activeSubItem }
         : menuItem.menu_name === "Compliance"
@@ -636,6 +645,8 @@ const SideBar = () => {
         ? { activeMenu }
         : menuItem.menu_name === "Registration Details"
         ? { activeSubItem }
+        : menuItem.menu_name === "Trading"
+        ? { selectedViewMore }
         : {};
 
     return <Component {...props} />;

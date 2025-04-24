@@ -37,9 +37,13 @@ interface CWCB {
 }
 interface DashboardCrypto {
   selectedTrading?: any;
+  selectedViewMore?: any;
 }
 
-const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
+const DashboardCrypto = ({
+  selectedTrading,
+  selectedViewMore,
+}: DashboardCrypto) => {
   const [selectedItem, setSelectedItem] = useState(
     "Clients With Ledger Balance"
   );
@@ -50,6 +54,13 @@ const DashboardCrypto = ({ selectedTrading }: DashboardCrypto) => {
   const [modal_animationZoom, setmodal_animationZoom] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    console.log("testProps->", selectedViewMore);
+    if (selectedViewMore === "T6") {
+      setSelectedItem("Clients Ageing Report");
+    }
+  }, [selectedViewMore]);
 
   const { accessType } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
