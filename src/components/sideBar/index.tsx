@@ -67,6 +67,7 @@ import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
 import AccessMapping from "../../pages/Masters/AccessMapping";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
+import { subDays, format } from "date-fns";
 
 const drawerWidth = 240;
 
@@ -151,6 +152,9 @@ const SideBar = () => {
   const [activeSubItem, setActiveSubItem] = useState(() => {
     return localStorage.getItem("activeSubItem") || "";
   });
+  const [selectedPerformanceSection, setSelectedPerformanceSection] =
+    useState("");
+
   const [selectedViewMore, setSelectedViewMore] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -184,6 +188,12 @@ const SideBar = () => {
   const lastBrokingValues = useSelector(
     (state: RootState) => state.userOverView?.data?.data?.data
   );
+
+  const apBrokingValue = useSelector(
+    (state: RootState) => state.APBrokerage?.data?.data?.Table
+  );
+
+  console.log("testasdasd", apBrokingValue);
 
   useEffect(() => {
     const fetchBrokerage = async () => {
@@ -282,10 +292,23 @@ const SideBar = () => {
       const brokingValue =
         lastBrokingValues[lastBrokingValues.length - 1]?.Dtrandate;
       setDataStatus(brokingValue || "No date available"); // Set default value if empty
+      console.log("daaasda", brokingValue);
     } else {
-      setDataStatus("No data available");
+      // setDataStatus("No data available");
+      const apDataShow =
+        apBrokingValue && apBrokingValue[apBrokingValue.length - 1]?.Dtrandate;
+      console.log("testasdasd", apDataShow);
+      setDataStatus(apDataShow || "No date available");
+      if (apDataShow) {
+        setDataStatus(apDataShow);
+        console.log("testasdasd", apDataShow);
+      } else {
+        const yesterday = format(subDays(new Date(), 1), "dd-MM-yyyy");
+        setDataStatus(yesterday);
+        console.log("Setting yesterday's date:", yesterday);
+      }
     }
-  }, [lastBrokingValues]); // Runs when `lastBrokingValues` changes
+  }, [lastBrokingValues]);
 
   useEffect(() => {
     const fetchDashboardNudge = async () => {
@@ -538,7 +561,7 @@ const SideBar = () => {
 
   const componentMap: any = {
     "My Performance": user_type === "Employee" ? OverviewComponent : APOverview,
-    Trading: TradeDashboard,
+    Trading: (props: any) => <TradeDashboard {...props} />,
     "Client Details": ClientDetails,
     "Zone Overview": RegOverview,
     "Stock Study": StockStudy,
@@ -603,7 +626,13 @@ const SideBar = () => {
     // Pass Props here for dynamic
     const props =
       menuItem.menu_name === "My Performance"
-        ? { handleTradingOpen: () => handleTradingOpen("T6") }
+        ? {
+            handleTradingOpen: (val: string) => {
+              setSelectedPerformanceSection(val); // local state update
+              handleTradingOpen(val); // trigger parent logic
+            },
+            selectedPerformanceSection,
+          }
         : menuItem.menu_name === "Reports"
         ? { activeSubItem }
         : menuItem.menu_name === "Compliance"
@@ -616,6 +645,8 @@ const SideBar = () => {
         ? { activeMenu }
         : menuItem.menu_name === "Registration Details"
         ? { activeSubItem }
+        : menuItem.menu_name === "Trading"
+        ? { selectedViewMore }
         : {};
 
     return <Component {...props} />;
