@@ -262,14 +262,14 @@ const SideBar = () => {
     setUserAccess(updatedSettings);
   }, []); // Empty dependency to run only on mount
 
-  useEffect(() => {
-    if (selectedViewMore) {
-      const timeoutId = setTimeout(() => {
-        setSelectedViewMore("");
-      }, 3000);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [selectedViewMore]);
+  // useEffect(() => {
+  //   if (selectedViewMore) {
+  //     const timeoutId = setTimeout(() => {
+  //       setSelectedViewMore("");
+  //     }, 3000);
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [selectedViewMore]);
 
   useEffect(() => {
     if (
