@@ -228,14 +228,14 @@ any) => {
     getUpcomingDormants();
   }, [selectedCapsule]);
 
-  useEffect(() => {
-    if (searchValue.length === 0) {
-      setTotalCount(0);
-      setActiveClients(0);
-      setinActiveClients(0);
-      // handleSearchUser();
-    }
-  }, [searchValue]);
+  // useEffect(() => {
+  //   if (searchValue.length === 0) {
+  //     setTotalCount(0);
+  //     setActiveClients(0);
+  //     setinActiveClients(0);
+  //     // handleSearchUser();
+  //   }
+  // }, [searchValue]);
 
   useEffect(() => {
     const fetchClientCash = async () => {

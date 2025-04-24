@@ -238,13 +238,13 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     },
     {
       type: "info",
-      label: "AP Brokerage",
+      label: "AP Share",
       isActive: activeBrokerageBadge === "APbrokerage",
       onClick: () => handleBrokerageBadgeClick("APbrokerage"),
     },
     {
       type: "primary",
-      label: "Gross Brokerage",
+      label: "Net to LKP",
       isActive: activeBrokerageBadge === "GrossBrokerage",
       onClick: () => handleBrokerageBadgeClick("GrossBrokerage"),
     },

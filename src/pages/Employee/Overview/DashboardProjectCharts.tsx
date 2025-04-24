@@ -29,6 +29,9 @@ const ProjectsOverviewCharts = ({
 
   var options: any = {
     chart: {
+      zoom: {
+        enabled: false,
+      },
       height: 370,
       type: "bar",
       toolbar: {
@@ -130,7 +133,7 @@ const ProjectsOverviewCharts = ({
     },
     colors: barColors,
     tooltip: {
-      shared: false,
+      shared: true,
       y: [
         {
           formatter: function (y: any) {
