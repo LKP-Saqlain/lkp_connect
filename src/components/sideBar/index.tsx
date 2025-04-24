@@ -300,13 +300,12 @@ const SideBar = () => {
         setDataStatus(apDataShow);
         console.log("testasdasd", apDataShow);
       } else {
-        // Set yesterday's date if both data sources are empty
         const yesterday = format(subDays(new Date(), 1), "dd-MM-yyyy");
         setDataStatus(yesterday);
         console.log("Setting yesterday's date:", yesterday);
       }
     }
-  }, [lastBrokingValues]); // Runs when `lastBrokingValues` changes
+  }, [lastBrokingValues]);
 
   useEffect(() => {
     const fetchDashboardNudge = async () => {
