@@ -216,6 +216,9 @@ export const apiServices = {
   DashboardNudge: async (payload: any) => {
     return await apiService("POST", endpoints.DashboardNudge, payload);
   },
+  ViewMarketingMaterials: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewMarketingMaterials, payload);
+  },
   GetAPDashboard: async (payload: any) => {
     return await apiService("POST", endpoints.GetAPDashboard, payload);
   },
