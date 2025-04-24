@@ -184,6 +184,7 @@ const SideBar = () => {
   const lastBrokingValues = useSelector(
     (state: RootState) => state.userOverView?.data?.data?.data
   );
+
   const apBrokingValue = useSelector(
     (state: RootState) => state.APBrokerage?.data?.data?.Table
   );
@@ -288,7 +289,8 @@ const SideBar = () => {
       console.log("daaasda", brokingValue);
     } else {
       // setDataStatus("No data available");
-      const apDataShow = apBrokingValue[apBrokingValue.length - 1]?.Dtrandate;
+      const apDataShow =
+        apBrokingValue && apBrokingValue[apBrokingValue.length - 1]?.Dtrandate;
       console.log("testasdasd", apDataShow);
       setDataStatus(apDataShow || "No date available");
     }
