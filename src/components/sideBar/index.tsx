@@ -147,7 +147,7 @@ const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(() => {
-    return localStorage.getItem("activeMenu") || "Trading"; // Default to Overview
+    return localStorage.getItem("activeMenu") || ""; //here before changing Trading was here //  Default to Overview
   });
   const [activeSubItem, setActiveSubItem] = useState(() => {
     return localStorage.getItem("activeSubItem") || "";
@@ -402,7 +402,15 @@ const SideBar = () => {
         console.log("menuItems-->", processedMenus);
         setMenuItems(processedMenus);
 
-        if (processedMenus[0].menu_name === "Trading") {
+        if (
+          user_type === "Partner" &&
+          processedMenus[0].menu_name === "My Performance"
+        ) {
+          setActiveMenu("My Performance");
+        } else if (
+          user_type === "Employee" &&
+          processedMenus[0].menu_name === "Trading"
+        ) {
           setActiveMenu("Trading");
         }
       })
@@ -757,6 +765,14 @@ const SideBar = () => {
   //   tog_animationZoom();
   // }, [isNudgeOpen]); // Empty dependency array ensures it only runs once when the component mounts
 
+  const toCamelCase = (name: string) => {
+    return name
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   return (
     <>
       <CustomModal
@@ -876,7 +892,7 @@ const SideBar = () => {
             </Typography> */}
               <Typography sx={{ fontSize: "14px", fontFamily: "Public Sans" }}>
                 {/* {localStorage.getItem("userName")} */}
-                {name}
+                {toCamelCase(name)}
               </Typography>
               <Typography
                 sx={{

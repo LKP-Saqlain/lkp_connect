@@ -80,14 +80,14 @@ const DataTable: React.FC<DormantClientProps> = ({
   };
 
   const customPage = customPageSize ? 100 : pageSize;
-  const rowHeight = 40;
-  const headerHeight = 56;
-  const padding = 40;
-  const minHeight = 200;
-  const calculatedHeight = Math.min(
-    Math.max(tableData.length * rowHeight + headerHeight + padding, minHeight),
-    400
-  );
+  // const rowHeight = 40;
+  // const headerHeight = 56;
+  // const padding = 40;
+  // const minHeight = 200;
+  // const calculatedHeight = Math.min(
+  //   Math.max(tableData.length * rowHeight + headerHeight + padding, minHeight),
+  //   400
+  // );
 
   return (
     <>
@@ -101,8 +101,8 @@ const DataTable: React.FC<DormantClientProps> = ({
       )}
       <Paper
         sx={{
-          // height: "75vh",
-          height: `${calculatedHeight}px`,
+          height: "72vh",
+          // height: `${calculatedHeight}px`,
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",

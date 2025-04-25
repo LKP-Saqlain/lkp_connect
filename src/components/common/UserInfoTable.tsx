@@ -32,6 +32,8 @@ import Tooltip from "@mui/material/Tooltip";
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import { RootState } from "../../redux/store.ts";
+import { useSelector } from "react-redux";
 
 interface Trade {
   id: string;
@@ -121,6 +123,19 @@ const DataTable = ({
   const [selectedRow, setSelectedRow] = useState<any>(null); // Store selected row data
   const [action, setAction] = useState<"approve" | "reject">("approve");
   const [customLedgerData, setCustomLedgerData] = useState([]);
+  // const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+
+  const { user_type } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data || {}
+  );
+
+  console.log("userType", user_type);
+
+  // useEffect(() => {
+  //   const handleResize = () => setScreenHeight(window.innerHeight);
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
 
   useEffect(() => {
     console.log("subItem and selectedWidgets", activeSubItem, selectedWidget);
@@ -469,9 +484,7 @@ const DataTable = ({
         return column;
       });
     } else if (activeSubItem === "Dormant Client Report") {
-      return dormantColumns.map((column) => ({
-        ...column,
-      }));
+      return dormantColumns(user_type);
     } else if (activeSubItem === "Quarterly Payout Recovery") {
       return QPayoutColumns.map((column) => ({
         ...column,
@@ -517,17 +530,22 @@ const DataTable = ({
       : selectedWidget === "Upcoming Dormant Client"
       ? T6Data
       : T6Data;
-  const rowHeight = 40;
-  const headerHeight = 56;
-  const padding = 40;
-  const minHeight = activeMenu === "Regulatory Announcement" ? 800 : 200;
-  const calculatedHeight = Math.min(
-    Math.max(
-      rowName && rowName.length * rowHeight + headerHeight + padding,
-      minHeight
-    ),
-    400
-  );
+  console.log(rowName);
+
+  // const rowHeight = 200;
+  // const headerHeight = 80;
+  // const padding = 60;
+  // const minHeight = activeMenu === "Regulatory Announcement" ? 800 : 200;
+  // papper height
+  // const OFFSET = 120;
+  // const fullAvailableHeight = screenHeight - OFFSET;
+  // const calculatedHeight = Math.min(
+  //   Math.max(
+  //     rowName && rowName.length * rowHeight + headerHeight + padding,
+  //     minHeight
+  //   ),
+  //   fullAvailableHeight
+  // );
   useEffect(() => {
     console.log("childData", customLedgerData, selectedWidget);
   }, [customLedgerData, selectedWidget]);
@@ -603,8 +621,8 @@ const DataTable = ({
       )}
       <Paper
         sx={{
-          // height: "75vh",
-          height: `${calculatedHeight}px`,
+          height: "72vh",
+          // height: `${calculatedHeight}px`,
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",

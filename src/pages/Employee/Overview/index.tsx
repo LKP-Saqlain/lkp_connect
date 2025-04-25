@@ -28,8 +28,8 @@ import ShowToast from "../../../utils/toastUtils";
 type BrokerageBadge = "total" | "APbrokerage" | "GrossBrokerage";
 
 const DashboardProject = ({ handleTradingOpen }: any) => {
-  const [startMonth, setStartMonth] = useState("");
-  const [endMonth, setEndMonth] = useState("");
+  // const [startMonth, setStartMonth] = useState("");
+  // const [endMonth, setEndMonth] = useState("");
   // const [revenueValues, setRevenueValues] = useState({
   //   total: 0,
   //   broking: 0,
@@ -194,7 +194,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
           });
           setNewClien(clients);
           setTradedClients(uniqueTradedClients);
-          setStartMonth(month);
+          // setStartMonth(month);
           console.log("ffff", firstCard);
 
           if (response?.status === 200) {
@@ -221,8 +221,8 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
 
   const handleRevenueRange = (startMonth: any, endMonth: any) => {
     console.log("startMonth", startMonth, "endMonth", endMonth);
-    setStartMonth(startMonth);
-    setEndMonth(endMonth);
+    // setStartMonth(startMonth);
+    // setEndMonth(endMonth);
   };
   const handleBrokerageBadgeClick = (type: BrokerageBadge) => {
     // console.log("Badge clicked:", type, badges);
@@ -287,7 +287,8 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                 badges={brokerageBadges}
                 formatIndianNumber={formatIndianNumber}
                 suffix=".00"
-                note={!isMobile && `* Period - ${startMonth} `}
+                // note={!isMobile && `* Period - ${startMonth} `}
+                note={!isMobile && `* Period - Financial Year 2025-2026 `}
                 customClass={true}
               />
             </Col>
@@ -321,7 +322,8 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                 // suffix="x"
                 activeClientsEmpty={true}
                 customClass={true}
-                note={isMobile && `* Period - ${startMonth} ${endMonth}`}
+                // note={isMobile && `* Period - ${startMonth} ${endMonth}`}
+                note={isMobile && `* Period - Financial Year 2025-2026 `}
               />
             </Col>
           </Row>

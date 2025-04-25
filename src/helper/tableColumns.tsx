@@ -1631,30 +1631,58 @@ export const T6OverViewColumns: GridColDef[] = [
   {
     field: "ClientCode",
     headerName: "Client Code",
-    flex: 2,
-    headerAlign: "center",
+    // flex: 1,
+    minWidth: 105,
+    headerAlign: "left",
     align: "left",
+    // sortable: false,
     disableColumnMenu: true,
-    // renderCell: (params) => (
-    //   <div style={{ textAlign: "left", lineHeight: "1.2" }}>
-    //     <div>{params.row.ClientName}</div>
-    //     <div>{params.row.ClientCode}</div>
-    //   </div>
-    // ),
   },
   {
     field: "ClientName",
     headerName: "Client Name",
-    flex: 2,
+    // flex: 2,
+    minWidth: 220,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
   },
   {
+    field: "ClosingBal",
+    headerName: "Closing Balance",
+    flex: 1.2,
+    minWidth: 120,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "StockValue",
+    headerName: "Stock Value",
+    // flex: 1,
+    width: 100,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
     field: "G5",
     headerName: ">T5",
-    flex: 1,
-    minWidth: 95,
+    width: 80,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1671,8 +1699,7 @@ export const T6OverViewColumns: GridColDef[] = [
   {
     field: "T5",
     headerName: "T5",
-    flex: 1,
-    minWidth: 80,
+    width: 80,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1689,8 +1716,7 @@ export const T6OverViewColumns: GridColDef[] = [
   {
     field: "T4",
     headerName: "T4",
-    flex: 0.9,
-    minWidth: 80,
+    width: 80,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1707,8 +1733,41 @@ export const T6OverViewColumns: GridColDef[] = [
   {
     field: "T3",
     headerName: "T3",
-    flex: 0.9,
-    minWidth: 80,
+    width: 80,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "T2",
+    headerName: "T2",
+    width: 80,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    // valueFormatter: (params: number) =>
+    //   new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "T1",
+    headerName: "T1",
+    width: 80,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -2051,6 +2110,13 @@ export const DormantOverViewColumns: GridColDef[] = [
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
+    renderCell: (params: any) => {
+      return (
+        <Tooltip title={params.row?.mobileNo} arrow placement="top">
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "dayCount",
@@ -2196,281 +2262,1009 @@ export const QPayoutColumns: GridColDef[] = [
     },
   },
 ];
-export const dormantColumns: GridColDef[] = [
-  {
-    field: "ctermcode",
-    headerName: "Client Code",
-    flex: 2,
-    minWidth: 100,
-    align: "left",
-    disableColumnMenu: true,
-  },
-  {
-    field: "clientName",
-    headerName: "Client Name",
-    flex: 2,
-    minWidth: 230,
-    disableColumnMenu: true,
-  },
-  {
-    field: "lastTradeDate",
-    headerName: "Last Trade Date",
-    headerClassName: "header-wrap-custom",
-    flex: 2,
-    minWidth: 90,
-    align: "center",
-    disableColumnMenu: true,
-    valueGetter: (params: any) => {
-      const rawDate = params;
-      if (!rawDate) return null; // Handle missing data
 
-      const parsedDate = new Date(
-        rawDate.replace(
-          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
-            const monthMap: any = {
-              Jan: "01",
-              Feb: "02",
-              Mar: "03",
-              Apr: "04",
-              May: "05",
-              Jun: "06",
-              Jul: "07",
-              Aug: "08",
-              Sep: "09",
-              Oct: "10",
-              Nov: "11",
-              Dec: "12",
-            };
-            console.log(match);
-            return `20${year}-${monthMap[month]}-${day}`;
+export const dormantColumns = (user_type: string): GridColDef[] => {
+  const EmployeeColumns: GridColDef[] = [
+    {
+      field: "ctermcode",
+      headerName: "Client Code",
+      flex: 0.5,
+      minWidth: 65,
+      align: "left",
+      disableColumnMenu: true,
+    },
+    {
+      field: "clientName",
+      headerName: "Client Name",
+      // flex: 0.5,
+      minWidth: 170,
+      disableColumnMenu: true,
+    },
+    {
+      field: "lastTradeDate",
+      headerName: "Last Trade Date",
+      headerClassName: "header-wrap-custom",
+      // flex: 2,
+      minWidth: 80,
+      align: "center",
+      headerAlign: "center",
+      disableColumnMenu: true,
+      valueGetter: (params: any) => {
+        const rawDate = params;
+        if (!rawDate) return null; // Handle missing data
+
+        const parsedDate = new Date(
+          rawDate.replace(
+            /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+            (match: any, day: any, month: any, year: any) => {
+              const monthMap: any = {
+                Jan: "01",
+                Feb: "02",
+                Mar: "03",
+                Apr: "04",
+                May: "05",
+                Jun: "06",
+                Jul: "07",
+                Aug: "08",
+                Sep: "09",
+                Oct: "10",
+                Nov: "11",
+                Dec: "12",
+              };
+              console.log(match);
+              return `20${year}-${monthMap[month]}-${day}`;
+            }
+          )
+        );
+
+        return parsedDate;
+      },
+      sortComparator: (v1: any, v2: any) => {
+        if (!v1 || !v2) return 0; // Handle missing values
+        return v1 - v2; // Sort in ascending order
+      },
+      valueFormatter: (params: any) => {
+        if (!params) return "";
+        return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+      },
+    },
+    {
+      field: "active",
+      headerName: "Active",
+      width: 70,
+      align: "center",
+      headerAlign: "center",
+      disableColumnMenu: true,
+    },
+    {
+      field: "branchcode",
+      headerName: "Branch Code",
+      headerClassName: "header-wrap-custom",
+      minWidth: 70,
+      align: "center",
+      headerAlign: "center",
+      disableColumnMenu: true,
+    },
+    {
+      field: "zone",
+      headerName: "Zone",
+      minWidth: 60,
+      align: "center",
+      headerAlign: "center",
+      disableColumnMenu: true,
+    },
+    {
+      field: "branchtype",
+      headerName: "Branch Type",
+      width: 100,
+      headerClassName: "header-wrap-custom",
+      align: "center",
+      headerAlign: "center",
+      disableColumnMenu: true,
+    },
+    {
+      field: "activationDate",
+      headerName: "Activation Date",
+      width: 115,
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+      align: "center",
+      headerAlign: "center",
+      valueGetter: (params: any) => {
+        const rawDate = params;
+        if (!rawDate) return null; // Handle missing data
+
+        const parsedDate = new Date(
+          rawDate.replace(
+            /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+            (match: any, day: any, month: any, year: any) => {
+              const monthMap: any = {
+                Jan: "01",
+                Feb: "02",
+                Mar: "03",
+                Apr: "04",
+                May: "05",
+                Jun: "06",
+                Jul: "07",
+                Aug: "08",
+                Sep: "09",
+                Oct: "10",
+                Nov: "11",
+                Dec: "12",
+              };
+              console.log(match);
+              return `20${year}-${monthMap[month]}-${day}`;
+            }
+          )
+        );
+
+        return parsedDate;
+      },
+      sortComparator: (v1: any, v2: any) => {
+        if (!v1 || !v2) return 0; // Handle missing values
+        return v1 - v2; // Sort in ascending order
+      },
+      valueFormatter: (params: any) => {
+        if (!params) return "";
+        return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+      },
+    },
+    {
+      field: "mobileNo",
+      headerName: "Mobile No",
+      minWidth: 110,
+      disableColumnMenu: true,
+      renderCell: (params: any) => {
+        const mobile = params.value || ""; // Extract the mobile number
+
+        // Mask all digits except the first 2 and the last 2
+        const maskedMobile = mobile.replace(
+          /^(\d{2})(\d+)(\d{2})$/,
+          (_: any, prefix: any, middle: any, suffix: any) => {
+            console.log(prefix, suffix); // Added only for testing purpose
+            return `${prefix}${"X".repeat(middle.length)}${suffix}`;
           }
-        )
-      );
+        );
 
-      return parsedDate;
+        // Return tooltip with the masked mobile number
+        return (
+          <Tooltip title={mobile} arrow placement="top">
+            <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+          </Tooltip>
+        );
+      },
     },
-    sortComparator: (v1, v2) => {
-      if (!v1 || !v2) return 0; // Handle missing values
-      return v1 - v2; // Sort in ascending order
-    },
-    valueFormatter: (params: any) => {
-      if (!params) return "";
-      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
-    },
-  },
-  {
-    field: "active",
-    headerName: "Active",
-    width: 70,
-    align: "center",
-    headerAlign: "center",
-    disableColumnMenu: true,
-  },
-  {
-    field: "branchcode",
-    headerName: "Branch Code",
-    headerClassName: "header-wrap-custom",
-    minWidth: 70,
-    align: "center",
-    headerAlign: "center",
-    disableColumnMenu: true,
-  },
-  {
-    field: "zone",
-    headerName: "Zone",
-    minWidth: 60,
-    align: "center",
-    headerAlign: "center",
-    disableColumnMenu: true,
-  },
-  {
-    field: "branchtype",
-    headerName: "Branch Type",
-    width: 100,
-    headerClassName: "header-wrap-custom",
-    align: "center",
-    headerAlign: "center",
-    disableColumnMenu: true,
-  },
-  {
-    field: "activationDate",
-    headerName: "Activation Date",
-    width: 115,
-    headerClassName: "header-wrap-custom",
-    disableColumnMenu: true,
-    align: "center",
-    headerAlign: "center",
-    valueGetter: (params: any) => {
-      const rawDate = params;
-      if (!rawDate) return null; // Handle missing data
 
-      const parsedDate = new Date(
-        rawDate.replace(
-          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
-            const monthMap: any = {
-              Jan: "01",
-              Feb: "02",
-              Mar: "03",
-              Apr: "04",
-              May: "05",
-              Jun: "06",
-              Jul: "07",
-              Aug: "08",
-              Sep: "09",
-              Oct: "10",
-              Nov: "11",
-              Dec: "12",
-            };
-            console.log(match);
-            return `20${year}-${monthMap[month]}-${day}`;
+    {
+      field: "brokerageGeneratedinFY1920",
+      headerName: "Brok FY1920",
+      width: 100,
+      align: "right",
+      headerAlign: "center",
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+    },
+    {
+      field: "brokerageGeneratedinFY2021",
+      headerName: "Brok FY2021",
+      width: 80,
+      align: "right",
+      headerAlign: "center",
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
+    },
+    {
+      field: "brokerageGeneratedinFY2122",
+      headerName: "Brok FY2122",
+      width: 80,
+      align: "right",
+      headerAlign: "center",
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
+    },
+    {
+      field: "brokerageGeneratedinFY2223",
+      headerName: "Brok FY2223",
+      width: 80,
+      align: "right",
+      headerAlign: "center",
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
+    },
+    {
+      field: "brokerageGeneratedinFY2324",
+      headerName: "Brok FY2324",
+      width: 80,
+      align: "right",
+      headerAlign: "center",
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
+    },
+    {
+      field: "rmname",
+      headerName: "RM Name",
+      minWidth: 140,
+      disableColumnMenu: true,
+    },
+    {
+      field: "rmstatus",
+      headerName: "RM Status",
+      width: 100,
+      headerClassName: "header-wrap-custom",
+      align: "center",
+      disableColumnMenu: true,
+    },
+    {
+      field: "dealerName",
+      headerName: "Dealer Name",
+      minWidth: 180,
+      disableColumnMenu: true,
+    },
+    {
+      field: "dealerSTATUS",
+      headerName: "Dealer Status",
+      width: 100,
+      headerClassName: "header-wrap-custom",
+      align: "center",
+      disableColumnMenu: true,
+    },
+  ];
+
+  const PartnerColumns: GridColDef[] = [
+    {
+      field: "ctermcode",
+      headerName: "Client Code",
+      flex: 0.5,
+      minWidth: 65,
+      align: "left",
+      disableColumnMenu: true,
+    },
+    {
+      field: "clientName",
+      headerName: "Client Name",
+      // flex: 0.5,
+      minWidth: 170,
+      disableColumnMenu: true,
+    },
+    {
+      field: "lastTradeDate",
+      headerName: "Last Trade Date",
+      headerClassName: "header-wrap-custom",
+      // flex: 2,
+      minWidth: 80,
+      align: "center",
+      headerAlign: "center",
+      disableColumnMenu: true,
+      valueGetter: (params: any) => {
+        const rawDate = params;
+        if (!rawDate) return null; // Handle missing data
+
+        const parsedDate = new Date(
+          rawDate.replace(
+            /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+            (match: any, day: any, month: any, year: any) => {
+              const monthMap: any = {
+                Jan: "01",
+                Feb: "02",
+                Mar: "03",
+                Apr: "04",
+                May: "05",
+                Jun: "06",
+                Jul: "07",
+                Aug: "08",
+                Sep: "09",
+                Oct: "10",
+                Nov: "11",
+                Dec: "12",
+              };
+              console.log(match);
+              return `20${year}-${monthMap[month]}-${day}`;
+            }
+          )
+        );
+
+        return parsedDate;
+      },
+      sortComparator: (v1: any, v2: any) => {
+        if (!v1 || !v2) return 0; // Handle missing values
+        return v1 - v2; // Sort in ascending order
+      },
+      valueFormatter: (params: any) => {
+        if (!params) return "";
+        return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+      },
+    },
+
+    {
+      field: "activationDate",
+      headerName: "Activation Date",
+      width: 115,
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+      align: "center",
+      headerAlign: "center",
+      valueGetter: (params: any) => {
+        const rawDate = params;
+        if (!rawDate) return null; // Handle missing data
+
+        const parsedDate = new Date(
+          rawDate.replace(
+            /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+            (match: any, day: any, month: any, year: any) => {
+              const monthMap: any = {
+                Jan: "01",
+                Feb: "02",
+                Mar: "03",
+                Apr: "04",
+                May: "05",
+                Jun: "06",
+                Jul: "07",
+                Aug: "08",
+                Sep: "09",
+                Oct: "10",
+                Nov: "11",
+                Dec: "12",
+              };
+              console.log(match);
+              return `20${year}-${monthMap[month]}-${day}`;
+            }
+          )
+        );
+
+        return parsedDate;
+      },
+      sortComparator: (v1: any, v2: any) => {
+        if (!v1 || !v2) return 0; // Handle missing values
+        return v1 - v2; // Sort in ascending order
+      },
+      valueFormatter: (params: any) => {
+        if (!params) return "";
+        return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+      },
+    },
+    {
+      field: "mobileNo",
+      headerName: "Mobile No",
+      minWidth: 110,
+      disableColumnMenu: true,
+      renderCell: (params: any) => {
+        const mobile = params.value || ""; // Extract the mobile number
+
+        // Mask all digits except the first 2 and the last 2
+        const maskedMobile = mobile.replace(
+          /^(\d{2})(\d+)(\d{2})$/,
+          (_: any, prefix: any, middle: any, suffix: any) => {
+            console.log(prefix, suffix); // Added only for testing purpose
+            return `${prefix}${"X".repeat(middle.length)}${suffix}`;
           }
-        )
-      );
+        );
 
-      return parsedDate;
+        // Return tooltip with the masked mobile number
+        return (
+          <Tooltip title={mobile} arrow placement="top">
+            <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+          </Tooltip>
+        );
+      },
     },
-    sortComparator: (v1, v2) => {
-      if (!v1 || !v2) return 0; // Handle missing values
-      return v1 - v2; // Sort in ascending order
-    },
-    valueFormatter: (params: any) => {
-      if (!params) return "";
-      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
-    },
-  },
-  {
-    field: "mobileNo",
-    headerName: "Mobile No",
-    minWidth: 110,
-    disableColumnMenu: true,
-    renderCell: (params: any) => {
-      const mobile = params.value || ""; // Extract the mobile number
 
-      // Mask all digits except the first 2 and the last 2
-      const maskedMobile = mobile.replace(
-        /^(\d{2})(\d+)(\d{2})$/,
-        (_: any, prefix: any, middle: any, suffix: any) => {
-          console.log(prefix, suffix); // Added only for testing purpose
-          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
-      );
-
-      // Return tooltip with the masked mobile number
-      return (
-        <Tooltip title={mobile} arrow placement="top">
-          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
-        </Tooltip>
-      );
+    {
+      field: "brokerageGeneratedinFY1920",
+      headerName: "Brok FY1920",
+      width: 100,
+      align: "right",
+      headerAlign: "center",
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
     },
-  },
-  {
-    field: "email",
-    headerName: "Email",
-    minWidth: 210,
-    disableColumnMenu: true,
-    renderCell: (params: any) => {
-      const email = params.value || ""; // Extract the email ID
-
-      // Mask the email if it exists
-      const maskedEmail = email.replace(
-        /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
-        (_: any, firstChar: any, middleChars: any, domain: any) => {
-          return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
-        }
-      );
-
-      // Return tooltip with the original email and masked email for display
-      return (
-        <Tooltip title={email} arrow placement="top">
-          <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
-        </Tooltip>
-      );
+    {
+      field: "brokerageGeneratedinFY2021",
+      headerName: "Brok FY2021",
+      width: 80,
+      align: "right",
+      headerAlign: "center",
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
     },
-  },
-  // {
-  //   field: "brokerageGeneratedinFY1920",
-  //   headerName: "Brok FY1920",
-  //   width: 100,
-  //   align: "right",
-  //   headerAlign: "center",
-  //   headerClassName: "header-wrap-custom",
-  //   disableColumnMenu: true,
-  // },
-  {
-    field: "brokerageGeneratedinFY2021",
-    headerName: "Brok FY2021",
-    width: 100,
-    align: "right",
-    headerAlign: "center",
-    headerClassName: "header-wrap-custom",
-    disableColumnMenu: true,
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-  },
-  {
-    field: "brokerageGeneratedinFY2122",
-    headerName: "Brok FY2122",
-    width: 100,
-    align: "right",
-    headerAlign: "center",
-    headerClassName: "header-wrap-custom",
-    disableColumnMenu: true,
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-  },
-  {
-    field: "brokerageGeneratedinFY2223",
-    headerName: "Brok FY2223",
-    width: 100,
-    align: "right",
-    headerAlign: "center",
-    headerClassName: "header-wrap-custom",
-    disableColumnMenu: true,
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-  },
-  {
-    field: "brokerageGeneratedinFY2324",
-    headerName: "Brok FY2324",
-    width: 100,
-    align: "right",
-    headerAlign: "center",
-    headerClassName: "header-wrap-custom",
-    disableColumnMenu: true,
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
-  },
-  {
-    field: "rmname",
-    headerName: "RM Name",
-    minWidth: 140,
-    disableColumnMenu: true,
-  },
-  {
-    field: "rmstatus",
-    headerName: "RM Status",
-    width: 100,
-    headerClassName: "header-wrap-custom",
-    align: "center",
-    disableColumnMenu: true,
-  },
-  {
-    field: "dealerName",
-    headerName: "Dealer Name",
-    minWidth: 180,
-    disableColumnMenu: true,
-  },
-  {
-    field: "dealerSTATUS",
-    headerName: "Dealer Status",
-    width: 100,
-    headerClassName: "header-wrap-custom",
-    align: "center",
-    disableColumnMenu: true,
-  },
-];
+    {
+      field: "brokerageGeneratedinFY2122",
+      headerName: "Brok FY2122",
+      width: 80,
+      align: "right",
+      headerAlign: "center",
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
+    },
+    {
+      field: "brokerageGeneratedinFY2223",
+      headerName: "Brok FY2223",
+      width: 80,
+      align: "right",
+      headerAlign: "center",
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
+    },
+    {
+      field: "brokerageGeneratedinFY2324",
+      headerName: "Brok FY2324",
+      width: 80,
+      align: "right",
+      headerAlign: "center",
+      headerClassName: "header-wrap-custom",
+      disableColumnMenu: true,
+      valueFormatter: (params: number) =>
+        new Intl.NumberFormat("en-IN").format(params),
+    },
+  ];
+
+  return user_type === "Employee" ? EmployeeColumns : PartnerColumns;
+};
+
+//     {
+//       field: "ctermcode",
+//       headerName: "Client Code",
+//       flex: 0.5,
+//       minWidth: 65,
+//       align: "left",
+//       disableColumnMenu: true,
+//     },
+//     {
+//       field: "clientName",
+//       headerName: "Client Name",
+//       // flex: 0.5,
+//       minWidth: 170,
+//       disableColumnMenu: true,
+//     },
+//     {
+//       field: "lastTradeDate",
+//       headerName: "Last Trade Date",
+//       headerClassName: "header-wrap-custom",
+//       // flex: 2,
+//       minWidth: 80,
+//       align: "center",
+//       headerAlign: "center",
+//       disableColumnMenu: true,
+//       valueGetter: (params: any) => {
+//         const rawDate = params;
+//         if (!rawDate) return null; // Handle missing data
+
+//         const parsedDate = new Date(
+//           rawDate.replace(
+//             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+//             (match: any, day: any, month: any, year: any) => {
+//               const monthMap: any = {
+//                 Jan: "01",
+//                 Feb: "02",
+//                 Mar: "03",
+//                 Apr: "04",
+//                 May: "05",
+//                 Jun: "06",
+//                 Jul: "07",
+//                 Aug: "08",
+//                 Sep: "09",
+//                 Oct: "10",
+//                 Nov: "11",
+//                 Dec: "12",
+//               };
+//               console.log(match);
+//               return `20${year}-${monthMap[month]}-${day}`;
+//             }
+//           )
+//         );
+
+//         return parsedDate;
+//       },
+//       sortComparator: (v1: any, v2: any) => {
+//         if (!v1 || !v2) return 0; // Handle missing values
+//         return v1 - v2; // Sort in ascending order
+//       },
+//       valueFormatter: (params: any) => {
+//         if (!params) return "";
+//         return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+//       },
+//     },
+//     {
+//       field: "active",
+//       headerName: "Active",
+//       width: 70,
+//       align: "center",
+//       headerAlign: "center",
+//       disableColumnMenu: true,
+//     },
+//     {
+//       field: "branchcode",
+//       headerName: "Branch Code",
+//       headerClassName: "header-wrap-custom",
+//       minWidth: 70,
+//       align: "center",
+//       headerAlign: "center",
+//       disableColumnMenu: true,
+//     },
+//     {
+//       field: "zone",
+//       headerName: "Zone",
+//       minWidth: 60,
+//       align: "center",
+//       headerAlign: "center",
+//       disableColumnMenu: true,
+//     },
+//     {
+//       field: "branchtype",
+//       headerName: "Branch Type",
+//       width: 100,
+//       headerClassName: "header-wrap-custom",
+//       align: "center",
+//       headerAlign: "center",
+//       disableColumnMenu: true,
+//     },
+//     {
+//       field: "activationDate",
+//       headerName: "Activation Date",
+//       width: 115,
+//       headerClassName: "header-wrap-custom",
+//       disableColumnMenu: true,
+//       align: "center",
+//       headerAlign: "center",
+//       valueGetter: (params: any) => {
+//         const rawDate = params;
+//         if (!rawDate) return null; // Handle missing data
+
+//         const parsedDate = new Date(
+//           rawDate.replace(
+//             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+//             (match: any, day: any, month: any, year: any) => {
+//               const monthMap: any = {
+//                 Jan: "01",
+//                 Feb: "02",
+//                 Mar: "03",
+//                 Apr: "04",
+//                 May: "05",
+//                 Jun: "06",
+//                 Jul: "07",
+//                 Aug: "08",
+//                 Sep: "09",
+//                 Oct: "10",
+//                 Nov: "11",
+//                 Dec: "12",
+//               };
+//               console.log(match);
+//               return `20${year}-${monthMap[month]}-${day}`;
+//             }
+//           )
+//         );
+
+//         return parsedDate;
+//       },
+//       sortComparator: (v1: any, v2: any) => {
+//         if (!v1 || !v2) return 0; // Handle missing values
+//         return v1 - v2; // Sort in ascending order
+//       },
+//       valueFormatter: (params: any) => {
+//         if (!params) return "";
+//         return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+//       },
+//     },
+//     {
+//       field: "mobileNo",
+//       headerName: "Mobile No",
+//       minWidth: 110,
+//       disableColumnMenu: true,
+//       renderCell: (params: any) => {
+//         const mobile = params.value || ""; // Extract the mobile number
+
+//         // Mask all digits except the first 2 and the last 2
+//         const maskedMobile = mobile.replace(
+//           /^(\d{2})(\d+)(\d{2})$/,
+//           (_: any, prefix: any, middle: any, suffix: any) => {
+//             console.log(prefix, suffix); // Added only for testing purpose
+//             return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+//           }
+//         );
+
+//         // Return tooltip with the masked mobile number
+//         return (
+//           <Tooltip title={mobile} arrow placement="top">
+//             <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+//           </Tooltip>
+//         );
+//       },
+//     },
+//     {
+//       field: "email",
+//       headerName: "Email",
+//       minWidth: 210,
+//       disableColumnMenu: true,
+//       renderCell: (params: any) => {
+//         const email = params.value || ""; // Extract the email ID
+
+//         // Mask the email if it exists
+//         const maskedEmail = email.replace(
+//           /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
+//           (_: any, firstChar: any, middleChars: any, domain: any) => {
+//             return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
+//           }
+//         );
+
+//         // Return tooltip with the original email and masked email for display
+//         return (
+//           <Tooltip title={email} arrow placement="top">
+//             <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
+//           </Tooltip>
+//         );
+//       },
+//     },
+//     {
+//       field: "brokerageGeneratedinFY1920",
+//       headerName: "Brok FY1920",
+//       width: 100,
+//       align: "right",
+//       headerAlign: "center",
+//       headerClassName: "header-wrap-custom",
+//       disableColumnMenu: true,
+//     },
+//     {
+//       field: "brokerageGeneratedinFY2021",
+//       headerName: "Brok FY2021",
+//       width: 80,
+//       align: "right",
+//       headerAlign: "center",
+//       headerClassName: "header-wrap-custom",
+//       disableColumnMenu: true,
+//       valueFormatter: (params: number) =>
+//         new Intl.NumberFormat("en-IN").format(params),
+//     },
+//     {
+//       field: "brokerageGeneratedinFY2122",
+//       headerName: "Brok FY2122",
+//       width: 80,
+//       align: "right",
+//       headerAlign: "center",
+//       headerClassName: "header-wrap-custom",
+//       disableColumnMenu: true,
+//       valueFormatter: (params: number) =>
+//         new Intl.NumberFormat("en-IN").format(params),
+//     },
+//     {
+//       field: "brokerageGeneratedinFY2223",
+//       headerName: "Brok FY2223",
+//       width: 80,
+//       align: "right",
+//       headerAlign: "center",
+//       headerClassName: "header-wrap-custom",
+//       disableColumnMenu: true,
+//       valueFormatter: (params: number) =>
+//         new Intl.NumberFormat("en-IN").format(params),
+//     },
+//     {
+//       field: "brokerageGeneratedinFY2324",
+//       headerName: "Brok FY2324",
+//       width: 80,
+//       align: "right",
+//       headerAlign: "center",
+//       headerClassName: "header-wrap-custom",
+//       disableColumnMenu: true,
+//       valueFormatter: (params: number) =>
+//         new Intl.NumberFormat("en-IN").format(params),
+//     },
+//     {
+//       field: "rmname",
+//       headerName: "RM Name",
+//       minWidth: 140,
+//       disableColumnMenu: true,
+//     },
+//     {
+//       field: "rmstatus",
+//       headerName: "RM Status",
+//       width: 100,
+//       headerClassName: "header-wrap-custom",
+//       align: "center",
+//       disableColumnMenu: true,
+//     },
+//     {
+//       field: "dealerName",
+//       headerName: "Dealer Name",
+//       minWidth: 180,
+//       disableColumnMenu: true,
+//     },
+//     {
+//       field: "dealerSTATUS",
+//       headerName: "Dealer Status",
+//       width: 100,
+//       headerClassName: "header-wrap-custom",
+//       align: "center",
+//       disableColumnMenu: true,
+//     },
+//   ];
+// };
+// export const dormantColumns: GridColDef[] = [
+//   {
+//     field: "ctermcode",
+//     headerName: "Client Code",
+//     // flex: 2,
+//     minWidth: 65,
+//     align: "left",
+//     disableColumnMenu: true,
+//   },
+//   {
+//     field: "clientName",
+//     headerName: "Client Name",
+//     // flex: 2,
+//     minWidth: 0,
+//     disableColumnMenu: true,
+//   },
+//   {
+//     field: "lastTradeDate",
+//     headerName: "Last Trade Date",
+//     headerClassName: "header-wrap-custom",
+//     flex: 2,
+//     minWidth: 90,
+//     align: "center",
+//     disableColumnMenu: true,
+//     valueGetter: (params: any) => {
+//       const rawDate = params;
+//       if (!rawDate) return null; // Handle missing data
+
+//       const parsedDate = new Date(
+//         rawDate.replace(
+//           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+//           (match: any, day: any, month: any, year: any) => {
+//             const monthMap: any = {
+//               Jan: "01",
+//               Feb: "02",
+//               Mar: "03",
+//               Apr: "04",
+//               May: "05",
+//               Jun: "06",
+//               Jul: "07",
+//               Aug: "08",
+//               Sep: "09",
+//               Oct: "10",
+//               Nov: "11",
+//               Dec: "12",
+//             };
+//             console.log(match);
+//             return `20${year}-${monthMap[month]}-${day}`;
+//           }
+//         )
+//       );
+
+//       return parsedDate;
+//     },
+//     sortComparator: (v1, v2) => {
+//       if (!v1 || !v2) return 0; // Handle missing values
+//       return v1 - v2; // Sort in ascending order
+//     },
+//     valueFormatter: (params: any) => {
+//       if (!params) return "";
+//       return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+//     },
+//   },
+//   // {
+//   //   field: "active",
+//   //   headerName: "Active",
+//   //   width: 70,
+//   //   align: "center",
+//   //   headerAlign: "center",
+//   //   disableColumnMenu: true,
+//   // },
+//   // {
+//   //   field: "branchcode",
+//   //   headerName: "Branch Code",
+//   //   headerClassName: "header-wrap-custom",
+//   //   minWidth: 70,
+//   //   align: "center",
+//   //   headerAlign: "center",
+//   //   disableColumnMenu: true,
+//   // },
+//   {
+//     field: "zone",
+//     headerName: "Zone",
+//     minWidth: 60,
+//     align: "center",
+//     headerAlign: "center",
+//     disableColumnMenu: true,
+//   },
+//   // {
+//   //   field: "branchtype",
+//   //   headerName: "Branch Type",
+//   //   width: 100,
+//   //   headerClassName: "header-wrap-custom",
+//   //   align: "center",
+//   //   headerAlign: "center",
+//   //   disableColumnMenu: true,
+//   // },
+//   {
+//     field: "activationDate",
+//     headerName: "Activation Date",
+//     width: 115,
+//     headerClassName: "header-wrap-custom",
+//     disableColumnMenu: true,
+//     align: "center",
+//     headerAlign: "center",
+//     valueGetter: (params: any) => {
+//       const rawDate = params;
+//       if (!rawDate) return null; // Handle missing data
+
+//       const parsedDate = new Date(
+//         rawDate.replace(
+//           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+//           (match: any, day: any, month: any, year: any) => {
+//             const monthMap: any = {
+//               Jan: "01",
+//               Feb: "02",
+//               Mar: "03",
+//               Apr: "04",
+//               May: "05",
+//               Jun: "06",
+//               Jul: "07",
+//               Aug: "08",
+//               Sep: "09",
+//               Oct: "10",
+//               Nov: "11",
+//               Dec: "12",
+//             };
+//             console.log(match);
+//             return `20${year}-${monthMap[month]}-${day}`;
+//           }
+//         )
+//       );
+
+//       return parsedDate;
+//     },
+//     sortComparator: (v1, v2) => {
+//       if (!v1 || !v2) return 0; // Handle missing values
+//       return v1 - v2; // Sort in ascending order
+//     },
+//     valueFormatter: (params: any) => {
+//       if (!params) return "";
+//       return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+//     },
+//   },
+//   {
+//     field: "mobileNo",
+//     headerName: "Mobile No",
+//     minWidth: 110,
+//     disableColumnMenu: true,
+//     renderCell: (params: any) => {
+//       const mobile = params.value || ""; // Extract the mobile number
+
+//       // Mask all digits except the first 2 and the last 2
+//       const maskedMobile = mobile.replace(
+//         /^(\d{2})(\d+)(\d{2})$/,
+//         (_: any, prefix: any, middle: any, suffix: any) => {
+//           console.log(prefix, suffix); // Added only for testing purpose
+//           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+//         }
+//       );
+
+//       // Return tooltip with the masked mobile number
+//       return (
+//         <Tooltip title={mobile} arrow placement="top">
+//           <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+//         </Tooltip>
+//       );
+//     },
+//   },
+//   // {
+//   //   field: "email",
+//   //   headerName: "Email",
+//   //   minWidth: 210,
+//   //   disableColumnMenu: true,
+//   //   renderCell: (params: any) => {
+//   //     const email = params.value || ""; // Extract the email ID
+
+//   //     // Mask the email if it exists
+//   //     const maskedEmail = email.replace(
+//   //       /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
+//   //       (_: any, firstChar: any, middleChars: any, domain: any) => {
+//   //         return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
+//   //       }
+//   //     );
+
+//   //     // Return tooltip with the original email and masked email for display
+//   //     return (
+//   //       <Tooltip title={email} arrow placement="top">
+//   //         <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
+//   //       </Tooltip>
+//   //     );
+//   //   },
+//   // },
+//   // {
+//   //   field: "brokerageGeneratedinFY1920",
+//   //   headerName: "Brok FY1920",
+//   //   width: 100,
+//   //   align: "right",
+//   //   headerAlign: "center",
+//   //   headerClassName: "header-wrap-custom",
+//   //   disableColumnMenu: true,
+//   // },
+//   {
+//     field: "brokerageGeneratedinFY2021",
+//     headerName: "Brok FY2021",
+//     width: 80,
+//     align: "right",
+//     headerAlign: "center",
+//     headerClassName: "header-wrap-custom",
+//     disableColumnMenu: true,
+//     valueFormatter: (params: number) =>
+//       new Intl.NumberFormat("en-IN").format(params),
+//   },
+//   {
+//     field: "brokerageGeneratedinFY2122",
+//     headerName: "Brok FY2122",
+//     width: 80,
+//     align: "right",
+//     headerAlign: "center",
+//     headerClassName: "header-wrap-custom",
+//     disableColumnMenu: true,
+//     valueFormatter: (params: number) =>
+//       new Intl.NumberFormat("en-IN").format(params),
+//   },
+//   {
+//     field: "brokerageGeneratedinFY2223",
+//     headerName: "Brok FY2223",
+//     width: 80,
+//     align: "right",
+//     headerAlign: "center",
+//     headerClassName: "header-wrap-custom",
+//     disableColumnMenu: true,
+//     valueFormatter: (params: number) =>
+//       new Intl.NumberFormat("en-IN").format(params),
+//   },
+//   {
+//     field: "brokerageGeneratedinFY2324",
+//     headerName: "Brok FY2324",
+//     width: 80,
+//     align: "right",
+//     headerAlign: "center",
+//     headerClassName: "header-wrap-custom",
+//     disableColumnMenu: true,
+//     valueFormatter: (params: number) =>
+//       new Intl.NumberFormat("en-IN").format(params),
+//   },
+//   // {
+//   //   field: "rmname",
+//   //   headerName: "RM Name",
+//   //   minWidth: 140,
+//   //   disableColumnMenu: true,
+//   // },
+//   // {
+//   //   field: "rmstatus",
+//   //   headerName: "RM Status",
+//   //   width: 100,
+//   //   headerClassName: "header-wrap-custom",
+//   //   align: "center",
+//   //   disableColumnMenu: true,
+//   // },
+//   // {
+//   //   field: "dealerName",
+//   //   headerName: "Dealer Name",
+//   //   minWidth: 180,
+//   //   disableColumnMenu: true,
+//   // },
+//   // {
+//   //   field: "dealerSTATUS",
+//   //   headerName: "Dealer Status",
+//   //   width: 100,
+//   //   headerClassName: "header-wrap-custom",
+//   //   align: "center",
+//   //   disableColumnMenu: true,
+//   // },
+// ];
 export const communicationColumns =
   (): // handleEditClick?: (row: any, editCheck: boolean) => void
   GridColDef[] => [
