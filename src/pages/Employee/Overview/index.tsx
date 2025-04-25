@@ -232,7 +232,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const brokerageBadges = [
     {
       type: "warning",
-      label: "Total",
+      label: "Gross Brokerage",
       isActive: activeBrokerageBadge === "total",
       onClick: () => handleBrokerageBadgeClick("total"),
     },
@@ -244,7 +244,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
     },
     {
       type: "primary",
-      label: "Net to LKP",
+      label: "LKP Share",
       isActive: activeBrokerageBadge === "GrossBrokerage",
       onClick: () => handleBrokerageBadgeClick("GrossBrokerage"),
     },

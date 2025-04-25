@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row } from "reactstrap";
+import { Card, CardBody, Container, Row } from "reactstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
@@ -52,6 +52,10 @@ const DashboardCrypto = ({
   const [isNudgeOpen, setIsNudgeOpen] = useState(false);
   const [dashboardNudgeData, setDashboardNudgeData] = useState<any[][]>([]);
   const [modal_animationZoom, setmodal_animationZoom] = useState(false);
+  const [responseStatus, setResponseStatus] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredData, setFilteredData] = useState<any[]>([]);
+  const [filteredtradeCWCBData, setFilteredtradeCWCBData] = useState<any[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -141,6 +145,7 @@ const DashboardCrypto = ({
             // handleValues(response?.data?.data);
             dispatch(hideLoader());
             if (response?.status === 200) {
+              setResponseStatus(true);
               ShowToast("error", response?.data);
               // let { recordsTotal } = response?.data[0];
               // setTotalEntries(recordsTotal);
@@ -177,6 +182,7 @@ const DashboardCrypto = ({
           const response = await apiServices.T6Selling(payload);
           console.log("ClientCashresponse", response?.data?.data?.Table);
           if (response?.status === 200) {
+            setResponseStatus(true);
             dispatch(hideLoader());
             setT6Data(response?.data?.data?.Table);
             // let { recordsTotal } = response?.data[0]; // Extract the necessary data
@@ -233,6 +239,40 @@ const DashboardCrypto = ({
       // }
     }
   };
+  const handleSearchBasedOnInput = (value: string) => {
+    console.log(
+      "handleSearchBasedOnInputValue  upper",
+      selectedItem,
+      tradeCWCBData,
+      value.toUpperCase()
+    );
+    // debugger;
+    setSearchValue(value);
+    let filteredAllClients: any[] = [];
+    let filteredtradeCWCBData: any[] = [];
+
+    if (selectedItem === "Clients Ageing Report") {
+      filteredAllClients = t6Data.filter((item: any) =>
+        item.ClientName.toLowerCase().includes(value.toLowerCase())
+      );
+    } else if (selectedItem === "Clients With Ledger Balance") {
+      filteredtradeCWCBData = tradeCWCBData.filter((item: any) =>
+        item.ClientName.toLowerCase().includes(value.toLowerCase())
+      );
+      console.log(
+        "ledger agee",
+        filteredtradeCWCBData,
+        tradeCWCBData,
+        searchValue,
+        value
+      );
+    }
+
+    setFilteredData(filteredAllClients);
+    setFilteredtradeCWCBData(filteredtradeCWCBData);
+
+    console.log("handleSearchBasedOnInputValue---->", filteredData);
+  };
 
   function tog_animationZoom() {
     setmodal_animationZoom((prev) => !prev);
@@ -255,7 +295,7 @@ const DashboardCrypto = ({
             />
           )}
           {/* <Row> */}
-          {/* <Col className="col-xxl-9 order-xxl-0 order-first m-2"> */}
+          {/* <Col className="col-xxl-9 order-xxl-0 order-first m-2"> */}{" "}
           <Row>
             <Widgets
               selectedWidget={selectedItem}
@@ -264,12 +304,22 @@ const DashboardCrypto = ({
             {selectedItem === "Reasearch Calls" && <TradeCapsule />}
             {/* {selectedItem === "Clients With Ledger Balance" && <DropDown />} */}
           </Row>
-          <TradeInfo
-            T6Data={t6Data}
-            tradeCWCBData={tradeCWCBData}
-            selectedWidget={selectedItem}
-            handleExcel={handleExcel}
-          />
+          <Card>
+            <CardBody>
+              <TradeInfo
+                T6Data={filteredData.length > 0 ? filteredData : t6Data}
+                tradeCWCBData={
+                  filteredtradeCWCBData.length > 0
+                    ? filteredtradeCWCBData
+                    : tradeCWCBData
+                }
+                selectedWidget={selectedItem}
+                handleExcel={handleExcel}
+                showSearch={responseStatus}
+                handleSearchBasedOnInput={handleSearchBasedOnInput}
+              />
+            </CardBody>
+          </Card>
           {/* </Col> */}
           {/* </Row> */}
         </Container>

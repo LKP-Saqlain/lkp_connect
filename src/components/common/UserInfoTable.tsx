@@ -121,6 +121,9 @@ const DataTable = ({
   const [selectedRow, setSelectedRow] = useState<any>(null); // Store selected row data
   const [action, setAction] = useState<"approve" | "reject">("approve");
   const [customLedgerData, setCustomLedgerData] = useState([]);
+  const [filteredLedgerDataDropDown, setFilteredLedgerDataDropDown] = useState<
+    any[]
+  >([]);
 
   useEffect(() => {
     console.log("subItem and selectedWidgets", activeSubItem, selectedWidget);
@@ -492,7 +495,16 @@ const DataTable = ({
 
   const handleSearchChange = (query: string) => {
     handleSearchBasedOnInput?.(query);
+
+    if (selectedWidget === "Clients With Ledger Balance") {
+      const filtered = commonLedgerData.filter((item: any) =>
+        item.ClientName?.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredLedgerDataDropDown(filtered);
+      console.log(query, "query", selectedWidget, filtered);
+    }
   };
+
   const commonLedgerData =
     Array.isArray(customLedgerData) && customLedgerData.length > 0
       ? customLedgerData
@@ -614,7 +626,9 @@ const DataTable = ({
           disableRowSelectionOnClick
           rows={
             selectedWidget === "Clients With Ledger Balance"
-              ? commonLedgerData
+              ? filteredLedgerDataDropDown.length > 0
+                ? filteredLedgerDataDropDown
+                : commonLedgerData
               : selectedWidget === "Total Clients"
               ? T6Data
               : selectedWidget === "Active Clients"
