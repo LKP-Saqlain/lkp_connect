@@ -15,7 +15,7 @@ interface Option {
 }
 
 interface table {
-  handleValues: (data: any) => void;
+  handleValues: (data: any, responseStatus?: any) => void;
   tradeData: any;
   setCustomLedgerData: any;
 }
@@ -34,6 +34,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [userData, setUserData] = useState([]);
+  const [responseStatus, setResponseStatus] = useState(false);
   // const [totalEntries, setTotalEntries] = useState(null);
 
   // const data = useSelector((state: RootState) => state.dormantReport.data);
@@ -152,10 +153,24 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
           response?.data?.data,
           response
         );
-        handleValues(response?.data?.data);
+        // handleValues(response?.data?.data);
         dispatch(hideLoader());
+
+        if (response?.status === 200 && typeof response?.data === "object") {
+          setResponseStatus(true);
+          setUserData(response?.data?.data);
+          setCustomLedgerData(response?.data?.data);
+          handleValues(response?.data?.data, true);
+        } else {
+          setResponseStatus(false); // hide search field if no valid data
+          setCustomLedgerData([]);
+          ShowToast("error", response?.data);
+          handleValues([], false);
+        }
+
         if (response?.status === 200) {
-          console.log("userData");
+          setResponseStatus(true);
+          console.log("userData", !responseStatus);
           setUserData(response?.data?.data);
           console.log("userData", response);
           const dataTypeCheck = response?.data;

@@ -4,11 +4,32 @@ import Typography from "@mui/material/Typography";
 import { cardDetails } from "../../../helper/tableColumns.tsx";
 import { useTheme, useMediaQuery } from "@mui/material";
 import { Button, Card, CardBody, CardHeader } from "reactstrap";
+import { useEffect } from "react";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice.ts";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store.ts";
+import { apiServices } from "../../../services/index.ts";
 
 const MarketingMaterial = () => {
   const theme = useTheme();
-
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    console.log("marketing check");
+    const fetchMarketingMaterial = async () => {
+      dispatch(showLoader("please wait"));
+      try {
+        const response = await apiServices.ViewMarketingMaterials({});
+        console.log("Fetched marketing materials:", response?.data?.Table);
+      } catch (error) {
+        console.error("Error fetching marketing materials:", error);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+    fetchMarketingMaterial();
+  }, []);
 
   return (
     <Card>

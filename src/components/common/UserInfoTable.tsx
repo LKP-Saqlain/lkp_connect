@@ -124,6 +124,11 @@ const DataTable = ({
   const [action, setAction] = useState<"approve" | "reject">("approve");
   const [customLedgerData, setCustomLedgerData] = useState([]);
   // const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+  const [filteredLedgerDataDropDown, setFilteredLedgerDataDropDown] = useState<
+    any[]
+  >([]);
+
+  const [showSearchCustom, setShowSearchCustom] = useState(showSearch);
 
   const { user_type } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data || {}
@@ -149,12 +154,13 @@ const DataTable = ({
     }
   }, [selectedWidget]);
 
-  const handleValues = (data: Trade[]) => {
+  const handleValues = (data: Trade[], responseStatus: any) => {
     const totalCount = data && data.flat().length;
-    console.log("Received dropdown data:", data, totalCount);
+    console.log("Received dropdown data:", data, totalCount, responseStatus);
     const slicedData = data && data.slice(0, totalCount);
     setTradeData(slicedData);
     setTotalRows(totalCount);
+    setShowSearchCustom(responseStatus);
   };
 
   const tog_center = () => {
@@ -505,7 +511,16 @@ const DataTable = ({
 
   const handleSearchChange = (query: string) => {
     handleSearchBasedOnInput?.(query);
+
+    if (selectedWidget === "Clients With Ledger Balance") {
+      const filtered = commonLedgerData.filter((item: any) =>
+        item.ClientName?.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredLedgerDataDropDown(filtered);
+      console.log(query, "query", selectedWidget, filtered);
+    }
   };
+
   const commonLedgerData =
     Array.isArray(customLedgerData) && customLedgerData.length > 0
       ? customLedgerData
@@ -602,7 +617,7 @@ const DataTable = ({
           </Button>
         </Box>
       )} */}
-      {showSearch && (
+      {(showSearch || showSearchCustom) && (
         <SearchAppBar
           onSearchChange={handleSearchChange}
           handleSearchUser={handleSearchUser}
@@ -632,7 +647,9 @@ const DataTable = ({
           disableRowSelectionOnClick
           rows={
             selectedWidget === "Clients With Ledger Balance"
-              ? commonLedgerData
+              ? filteredLedgerDataDropDown.length > 0
+                ? filteredLedgerDataDropDown
+                : commonLedgerData
               : selectedWidget === "Total Clients"
               ? T6Data
               : selectedWidget === "Active Clients"

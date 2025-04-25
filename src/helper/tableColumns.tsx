@@ -133,7 +133,7 @@ export const getClientActivityStatusColumns = (
   {
     field: "MTFStatus",
     headerName: "MTF Active/Inactive",
-    // headerClassName: "header-wrap-custom",
+    headerClassName: "header-wrap-custom",
     flex: 1.7,
     align: "center",
     headerAlign: "center",
@@ -146,6 +146,7 @@ export const getClientActivityStatusColumns = (
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   // {
   //   field: "viewDetails",
@@ -472,17 +473,11 @@ export const getClientDormantStatus = (
       return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
     },
   },
-  {
-    field: "dayCount",
-    headerName: "Days to Dormant",
-    flex: 1,
-    align: "right",
-    disableColumnMenu: true,
-  },
+
   {
     field: "mobileNo",
     headerName: "Mobile No",
-    flex: 2,
+    flex: 1.2,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -505,6 +500,14 @@ export const getClientDormantStatus = (
         </Tooltip>
       );
     },
+  },
+  {
+    field: "dayCount",
+    headerName: "Days to Dormant",
+    flex: 1.2,
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   // {
   //   field: "viewDetails",
@@ -639,6 +642,7 @@ export const slbmColumns: GridColDef[] = [
     minWidth: 100,
     flex: 1,
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "dealerName",
@@ -646,6 +650,7 @@ export const slbmColumns: GridColDef[] = [
     minWidth: 80,
     flex: 1,
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "slbmStatus",
@@ -1327,6 +1332,7 @@ export const ClientCashColumns: GridColDef[] = [
     minWidth: 115,
     // sortable: false,
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
     align: "center",
     valueGetter: (params: any) => {
       const rawDate = params;
@@ -1374,6 +1380,7 @@ export const ClientCashColumns: GridColDef[] = [
     minWidth: 120,
     align: "right",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     // valueFormatter: (params: number) =>
     //   new Intl.NumberFormat("en-IN").format(params),
 
@@ -1497,6 +1504,7 @@ export const T6Columns: GridColDef[] = [
     flex: 1.2,
     minWidth: 120,
     align: "right",
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
     disableColumnMenu: true,
     valueFormatter: (params: any) => {
@@ -2188,29 +2196,92 @@ export const QPayoutColumns: GridColDef[] = [
   {
     field: "clientName",
     headerName: "Client Name",
-    minWidth: 100,
+    minWidth: 230,
     flex: 2,
     disableColumnMenu: true,
   },
-  { field: "rm", headerName: "RM", minWidth: 140, disableColumnMenu: true },
   {
-    field: "branchcode",
-    headerName: "Branch Code",
-    minWidth: 100,
-    flex: 0.8,
+    field: "lastTradeDate",
+    headerName: "Last Trade Date",
+    minWidth: 10,
+    align: "center",
+    headerAlign: "center",
+    flex: 1.2,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => {
+      const rawDate = params;
+      if (!rawDate) return null; // Handle missing data
+
+      const parsedDate = new Date(
+        rawDate.replace(
+          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+          (match: any, day: any, month: any, year: any) => {
+            const monthMap: any = {
+              Jan: "01",
+              Feb: "02",
+              Mar: "03",
+              Apr: "04",
+              May: "05",
+              Jun: "06",
+              Jul: "07",
+              Aug: "08",
+              Sep: "09",
+              Oct: "10",
+              Nov: "11",
+              Dec: "12",
+            };
+            console.log(match);
+            return `20${year}-${monthMap[month]}-${day}`;
+          }
+        )
+      );
+
+      return parsedDate;
+    },
+    sortComparator: (v1, v2) => {
+      if (!v1 || !v2) return 0; // Handle missing values
+      return v1 - v2; // Sort in ascending order
+    },
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
   },
+
   {
-    field: "zone",
-    headerName: "Zone",
-    flex: 0.6,
+    field: "mobileno",
+    headerName: "Mobile no.",
+    minWidth: 90,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "center",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "payout_Amt",
     headerName: "Payout Amt",
-    minWidth: 110,
+    minWidth: 150,
     align: "right",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
