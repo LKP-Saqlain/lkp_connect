@@ -125,6 +125,8 @@ const DataTable = ({
     any[]
   >([]);
 
+  const [showSearchCustom, setShowSearchCustom] = useState(showSearch);
+
   useEffect(() => {
     console.log("subItem and selectedWidgets", activeSubItem, selectedWidget);
   }, [activeSubItem, selectedWidget]);
@@ -137,12 +139,13 @@ const DataTable = ({
     }
   }, [selectedWidget]);
 
-  const handleValues = (data: Trade[]) => {
+  const handleValues = (data: Trade[], responseStatus: any) => {
     const totalCount = data && data.flat().length;
-    console.log("Received dropdown data:", data, totalCount);
+    console.log("Received dropdown data:", data, totalCount, responseStatus);
     const slicedData = data && data.slice(0, totalCount);
     setTradeData(slicedData);
     setTotalRows(totalCount);
+    setShowSearchCustom(responseStatus);
   };
 
   const tog_center = () => {
@@ -596,7 +599,7 @@ const DataTable = ({
           </Button>
         </Box>
       )} */}
-      {showSearch && (
+      {(showSearch || showSearchCustom) && (
         <SearchAppBar
           onSearchChange={handleSearchChange}
           handleSearchUser={handleSearchUser}
