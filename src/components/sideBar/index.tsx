@@ -402,23 +402,23 @@ const SideBar = () => {
         console.log("menuItems-->", processedMenus);
         setMenuItems(processedMenus);
 
-        if (
-          user_type === "Partner" &&
-          processedMenus[0].menu_name === "My Performance"
-        ) {
-          setActiveMenu("My Performance");
-        } else if (
-          user_type === "Employee" &&
-          processedMenus[0].menu_name === "Trading"
-        ) {
-          setActiveMenu("Trading");
-        }
-
-        // if (user_type === "Partner") {   //workable code after BE changes done
+        // if (
+        //   user_type === "Partner" &&
+        //   processedMenus[0].menu_name === "My Performance"
+        // ) {
         //   setActiveMenu("My Performance");
-        // } else if (user_type === "Employee") {
+        // } else if (
+        //   user_type === "Employee" &&
+        //   processedMenus[0].menu_name === "Trading"
+        // ) {
         //   setActiveMenu("Trading");
         // }
+
+        if (user_type === "Partner") {
+          setActiveMenu("My Performance");
+        } else if (user_type === "Employee") {
+          setActiveMenu("Trading");
+        }
       })
       .catch((Err) => {
         const { message } = Err;
