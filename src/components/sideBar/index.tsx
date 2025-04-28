@@ -413,6 +413,12 @@ const SideBar = () => {
         ) {
           setActiveMenu("Trading");
         }
+
+        // if (user_type === "Partner") {   //workable code after BE changes done
+        //   setActiveMenu("My Performance");
+        // } else if (user_type === "Employee") {
+        //   setActiveMenu("Trading");
+        // }
       })
       .catch((Err) => {
         const { message } = Err;
