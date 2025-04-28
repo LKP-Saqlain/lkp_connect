@@ -18,6 +18,9 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
 
   var options: any = {
     chart: {
+      zoom: {
+        enabled: false,
+      },
       height: 370,
       type: "bar",
       toolbar: {

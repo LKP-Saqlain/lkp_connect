@@ -160,7 +160,7 @@ const MarketingMaterial = () => {
 
     const payload = {
       fileName: fileNameWithoutExt,
-      filePath: "D:\\PROJECT\\", // Adjust based on your server config
+      filePath: "D:\\PROJECT\\",
       fileType: `.${fileExt}`,
       contentType: "",
     };
