@@ -175,7 +175,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
       {/* Note */}
       {note && (
         <div className="movable-note">
-          <span style={{ fontFamily: "Public Sans" }}>{note}</span>
+          {/* <span style={{ fontFamily: "Public Sans" }}>{note}</span> */}
         </div>
       )}
     </>

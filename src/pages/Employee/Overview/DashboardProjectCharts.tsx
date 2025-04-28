@@ -133,33 +133,62 @@ const ProjectsOverviewCharts = ({
     },
     colors: barColors,
     tooltip: {
-      shared: true,
-      y: [
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return new Intl.NumberFormat("en-IN").format(Math.round(y)); // Remove decimals
-            }
-            return y;
-          },
-        },
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return new Intl.NumberFormat("en-IN").format(Math.round(y)); // Remove decimals
-            }
-            return y;
-          },
-        },
-        {
-          formatter: function (y: any) {
-            if (typeof y !== "undefined") {
-              return new Intl.NumberFormat("en-IN").format(Math.round(y)); // Remove decimals
-            }
-            return y;
-          },
-        },
-      ],
+      shared: false,
+      intersect: true,
+      // y: [
+      //   {
+      //     formatter: function (y: any) {
+      //       if (typeof y !== "undefined") {
+      //         return new Intl.NumberFormat("en-IN", {
+      //           maximumFractionDigits: 0,
+      //         }).format(y);
+      //       }
+      //       return y;
+      //     },
+      //   },
+      //   {
+      //     formatter: function (y: any) {
+      //       if (typeof y !== "undefined") {
+      //         return new Intl.NumberFormat("en-IN", {
+      //           maximumFractionDigits: 0,
+      //         }).format(y);
+      //       }
+      //       return y;
+      //     },
+      //   },
+      // ],
+      custom: function ({ dataPointIndex, w }: any) {
+        const date = w.globals.labels[dataPointIndex];
+        const grossBrokerage = w.globals.initialSeries[0].data[dataPointIndex];
+        const apShare = w.globals.initialSeries[1].data[dataPointIndex];
+
+        const grossFormatted = new Intl.NumberFormat("en-IN", {
+          maximumFractionDigits: 0,
+        }).format(grossBrokerage);
+
+        const apFormatted = new Intl.NumberFormat("en-IN", {
+          maximumFractionDigits: 0,
+        }).format(apShare);
+
+        const grossColor = w.config.colors[0];
+        const apColor = w.config.colors[1];
+
+        return `
+          <div style="padding:10px; font-size:12px">
+            <div style="margin-bottom:6px;"><strong>${date}</strong></div>
+            
+            <div style="display: flex; align-items: center; margin-bottom:6px;">
+              <span style="width:8px; height:8px; background-color:${grossColor}; border-radius:50%; display:inline-block; margin-right:6px;"></span>
+              <strong>GrossBrokerage:</strong>&nbsp;${grossFormatted}
+            </div>
+            
+            <div style="display: flex; align-items: center;">
+              <span style="width:8px; height:8px; background-color:${apColor}; border-radius:50%; display:inline-block; margin-right:6px;"></span>
+              <strong>AP Share:</strong>&nbsp;${apFormatted}
+            </div>
+          </div>
+        `;
+      },
     },
   };
 
@@ -170,7 +199,7 @@ const ProjectsOverviewCharts = ({
           dir="ltr"
           options={options}
           series={series}
-          type="line"
+          type="bar"
           height="374"
           className="apex-charts"
         />
