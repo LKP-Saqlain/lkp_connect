@@ -58,7 +58,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import Nudge from "../common/Nudge";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
-import MarketingMaterial from "../../pages/refCard/Marketing Materials";
+import MarketingMaterial from "../../pages/Marketing Materials";
 import RegisDetails from "../../pages/refCard/Registration Details";
 import RegulatorAnnouncement from "../../pages/refCard/regulatory announcement";
 import CustomModal from "../common/DPModal";

@@ -23,153 +23,98 @@ const MasterMenuMarketing = () => {
     },
     validationSchema: Yup.object({
       fileUpload: Yup.mixed().required("Please upload a marketing file."),
-      description: Yup.string().required(
-        "Please provide a description for your marketing file."
-      ),
-      image: Yup.mixed().required("Please upload an image for the marketing."),
+      description: Yup.string().required("Please provide a description."),
+      image: Yup.mixed().required("Please upload an image."),
     }),
     onSubmit: (values) => {
-      console.log("Form Values:", values);
+      if (!uploadedFile || !uploadedImage) {
+        ShowToast("error", "Please upload both document and image files.");
+        return;
+      }
 
-      // Handle file and image uploads sequentially
-      handleFileUploadAsync(uploadedFile, "marketingFile")
-        .then(() => handleFileUploadAsync(uploadedImage, "marketingImage"))
-        .then(() => {
-          // Reset form after successful submission
-          console.log("before", uploadedFile);
-          formik.resetForm();
-          setUploadedFile(null);
-          setUploadedImage(null); // Reset image state too
-          console.log("after", uploadedFile);
+      const readFileAsBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            const base64 = (reader.result as string).split(",")[1];
+            resolve(base64);
+          };
+          reader.onerror = reject;
+        });
+      };
+
+      Promise.all([
+        readFileAsBase64(uploadedFile),
+        readFileAsBase64(uploadedImage),
+      ])
+        .then(([docBase64, imgBase64]) => {
+          const payload = {
+            options: "INSERT",
+            rowId: 0,
+            uploadDocumentsBase64: docBase64,
+            documentFileName: uploadedFile.name,
+            uploadImagesBase64: imgBase64,
+            imageFileName: uploadedImage.name,
+            description: values.description,
+          };
+
+          return apiServices.getInUpMarketMaterial(payload);
+        })
+        .then((response) => {
+          if (response?.status === 200) {
+            ShowToast("success", "Marketing materials uploaded successfully!");
+            formik.resetForm();
+            setUploadedFile(null);
+            setUploadedImage(null);
+          } else {
+            throw new Error("Upload failed.");
+          }
         })
         .catch((error) => {
-          console.error("Error uploading files:", error);
+          console.error("Error submitting materials:", error);
           ShowToast("error", "There was an error submitting the materials.");
         });
     },
   });
 
-  // Handle file change (for the marketing material)
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
+    const file = e.target.files?.[0] || null;
     if (file) {
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
-
       if (!allowedFileFormats.includes(fileExt)) {
-        // Show error message using formik
         formik.setFieldError(
           "fileUpload",
-          "Invalid file format! Allowed formats: pdf, ppt, pptx."
+          "Invalid format! Only pdf, ppt, pptx allowed."
         );
-        setUploadedFile(null); // Reset uploaded file
+        setUploadedFile(null);
         return;
       }
 
       setUploadedFile(file);
       formik.setFieldValue("fileUpload", file.name);
-      formik.setFieldError("fileUpload", ""); // Reset the error if file format is valid
+      formik.setFieldError("fileUpload", "");
     }
   };
 
-  // Handle image change (for the marketing image)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
+    const file = e.target.files?.[0] || null;
     if (file) {
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
-
       if (!allowedImageFormats.includes(fileExt)) {
-        // Show error message using formik
         formik.setFieldError(
           "image",
-          "Invalid image format! Allowed formats: jpg, jpeg, png."
+          "Invalid format! Only jpg, jpeg, png allowed."
         );
-        setUploadedImage(null); // Reset uploaded image
+        setUploadedImage(null);
         return;
       }
 
       setUploadedImage(file);
       formik.setFieldValue("image", file.name);
-      formik.setFieldError("image", ""); // Reset the error if image format is valid
+      formik.setFieldError("image", "");
     }
   };
-
-  // Generate file name with date and description
-  const generateFileName = (fileExt: string, description: string) => {
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, "0");
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const year = now.getFullYear();
-    const hours = now.getHours();
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12; // Convert 24-hour to 12-hour format
-
-    const formattedDate = `${day}_${month}_${year}_${formattedHours}_${minutes}_${seconds}${period}`;
-    return `${formattedDate}_${description}_${fileExt}`;
-  };
-
-  // Handle file upload API call
-  const handleFileUploadAsync = (
-    file: File | null,
-    fileType: string
-  ): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      if (!file) {
-        return reject(new Error("No file provided"));
-      }
-
-      const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
-      const allowedFormats =
-        fileType === "marketingImage"
-          ? allowedImageFormats
-          : allowedFileFormats;
-
-      if (!allowedFormats.includes(fileExt)) {
-        return reject(new Error(`Invalid ${fileType} format!`));
-      }
-
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-
-      reader.onload = () => {
-        const base64String = reader.result as string;
-        const base64Only = base64String.split(",")[1] || base64String;
-
-        // Format the file name using the generateFileName function
-        const fileName = generateFileName(fileExt, formik.values.description);
-
-        const payload = {
-          fileName: fileName,
-          filePath: "D:\\FileUpload\\Compliance", // Example path
-          fileType: `.${fileExt}`,
-          contentType: base64Only,
-        };
-
-        // Simulate API call (Replace with actual API service call)
-        apiServices
-          .ComplainceFileUpload(payload)
-          .then((response) => {
-            if (response?.status === 200) {
-              ShowToast("success", `File successfully uploaded: ${fileName}`);
-              resolve(fileExt);
-            } else {
-              reject(new Error("File upload failed"));
-            }
-          })
-          .catch((error) => {
-            console.error("Error uploading file:", error);
-            reject(error);
-          });
-      };
-
-      reader.onerror = (error) => {
-        console.error("Error reading file:", error);
-        reject(error);
-      };
-    });
-  };
-
   return (
     <div className="page-content">
       <div className="container-fluid">

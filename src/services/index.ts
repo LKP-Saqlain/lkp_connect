@@ -219,6 +219,9 @@ export const apiServices = {
   ViewMarketingMaterials: async (payload: any) => {
     return await apiService("POST", endpoints.ViewMarketingMaterials, payload);
   },
+  getInUpMarketMaterial: async (payload: any) => {
+    return await apiService("POST", endpoints.getInUpMarketMaterial, payload);
+  },
   GetAPDashboard: async (payload: any) => {
     return await apiService("POST", endpoints.GetAPDashboard, payload);
   },
