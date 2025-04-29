@@ -349,7 +349,7 @@ const DataTable = ({
       selectedWidget === "Inactive Clients"
       // apiStatus
     ) {
-      return getClientActivityStatusColumns(handleViewDetails);
+      return getClientActivityStatusColumns(handleViewDetails, user_type);
     } else if (selectedWidget === "Upcoming Dormant Client") {
       return getClientDormantStatus(handleViewDetails);
     } else if (activeSubItem === "Referal Entry Status") {
@@ -501,7 +501,7 @@ const DataTable = ({
       selectedWidget === "Inactive Clients"
       // apiStatus
     ) {
-      return getClientActivityStatusColumns(handleViewDetails);
+      return getClientActivityStatusColumns(handleViewDetails, user_type);
     } else {
       return [];
     }
