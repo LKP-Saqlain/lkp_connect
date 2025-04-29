@@ -337,15 +337,17 @@ export const getCommChecker: GridColDef[] = [
     field: "status",
     headerName: "Approve | Reject",
     headerClassName: "header-wrap-custom",
-    width: 160,
+    minWidth: 150,
+    flex: 1,
     align: "center",
+    headerAlign: "center",
     disableColumnMenu: true,
     sortable: false,
-    headerAlign: "center",
   },
   {
     field: "DateOfCommunication",
     headerName: "Date",
+    minWidth: 110,
     flex: 0.9,
     disableColumnMenu: true,
     headerAlign: "center",
@@ -392,13 +394,15 @@ export const getCommChecker: GridColDef[] = [
   {
     field: "TypeOfDocuments",
     headerName: "Type of Document",
-    flex: 1.1,
+    minWidth: 180,
+    flex: 1.2,
     disableColumnMenu: true,
     headerAlign: "center",
   },
   {
     field: "CommunicationType",
     headerName: "Communication Type",
+    minWidth: 160,
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
@@ -407,6 +411,7 @@ export const getCommChecker: GridColDef[] = [
   {
     field: "CommunicationProof",
     headerName: "Communication Description",
+    minWidth: 240,
     flex: 1.8,
     disableColumnMenu: true,
     headerAlign: "center",
@@ -414,6 +419,7 @@ export const getCommChecker: GridColDef[] = [
   {
     field: "Department",
     headerName: "Department",
+    minWidth: 150,
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
@@ -421,6 +427,7 @@ export const getCommChecker: GridColDef[] = [
   {
     field: "CommunicationProofPath",
     headerName: "Document",
+    minWidth: 150,
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
@@ -2119,7 +2126,8 @@ export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "ctermcode",
     headerName: "Client Code",
-    flex: 1.5,
+    flex: 1.2,
+    minWidth: 120,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -2128,6 +2136,7 @@ export const DormantOverViewColumns: GridColDef[] = [
     field: "clientName",
     headerName: "Client Name",
     flex: 2.5,
+    minWidth: 200,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -2142,8 +2151,8 @@ export const DormantOverViewColumns: GridColDef[] = [
   {
     field: "dayCount",
     headerName: "Days to Dormant",
-    flex: 1, // Smaller relative to "Client"
-    // minWidth: 80, // Minimum width to avoid being too narrow
+    flex: 1,
+    minWidth: 110,
     align: "right",
     headerAlign: "center",
     headerClassName: "header-wrap",
@@ -2153,10 +2162,10 @@ export const DormantOverViewColumns: GridColDef[] = [
     field: "lastTradeDate",
     headerName: "Last Trade Date",
     flex: 1.5,
-    // minWidth: 150,
+    minWidth: 130,
     headerAlign: "center",
+    align: "center",
     disableColumnMenu: true,
-    align: "center", // Optional: Align data as needed
     valueGetter: (params: any) => {
       const rawDate = params;
       if (!rawDate) return null; // Handle missing data
