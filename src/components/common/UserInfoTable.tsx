@@ -20,6 +20,9 @@ import {
   getRegulatorAnnouncement,
   terminalcol,
   RegisDetails,
+  RegionalHead,
+  BrokerageModificationStatus,
+  BrokerageKyc,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -356,6 +359,18 @@ const DataTable = ({
       return getAccountDetails.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Referal Entry") {
+      return RegionalHead.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Referal Lead Updation") {
+      return BrokerageModificationStatus.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Referal Product Wise MIS Report") {
+      return BrokerageKyc.map((column) => ({
+        ...column,
+      }));
     } else if (activeSubItem === "Terminal") {
       return terminalcol.map((column) => ({
         ...column,
@@ -376,7 +391,7 @@ const DataTable = ({
                   style={{
                     color: "white",
                     // textDecoration: "underline",
-                    background: "#11395c",
+                    background: "#11395C",
                     border: "none",
                     cursor: "pointer",
                     borderRadius: "10px",
@@ -399,7 +414,7 @@ const DataTable = ({
                   style={{
                     color: "white",
                     // textDecoration: "underline",
-                    background: "#11395c",
+                    background: "#11395C",
                     border: "none",
                     cursor: "pointer",
                     borderRadius: "10px",
@@ -580,7 +595,7 @@ const DataTable = ({
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Checker"
             ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "UCCCode MATCH"
+            : activeMenu === "Regulatory Announcement"
             ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
             : "Are you sure you want to send the email?"
         }

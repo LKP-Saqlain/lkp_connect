@@ -59,8 +59,8 @@ import Nudge from "../common/Nudge";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import MarketingMaterial from "../../pages/Marketing Materials";
-import RegisDetails from "../../pages/refCard/Registration Details";
-import RegulatorAnnouncement from "../../pages/refCard/regulatory announcement";
+import RegisDetails from "../../pages/Registration Details";
+import RegulatorAnnouncement from "../../pages/regulatory announcement";
 import CustomModal from "../common/DPModal";
 import { userOverview } from "../../redux/thunk/Overview";
 import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
@@ -68,6 +68,9 @@ import AccessMapping from "../../pages/Masters/AccessMapping";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 import { subDays, format } from "date-fns";
+import RegionalHead from "../../pages/refCard/RegionalHead/index";
+import BrokerageModificationStatus from "../../pages/refCard/BrokerageModStatus";
+import KycBrokerage from "../../pages/refCard/KycBrokerage";
 
 const drawerWidth = 240;
 
@@ -567,6 +570,13 @@ const SideBar = () => {
 
   const refferalLeadComponents: any = {
     "Referal Entry Status": (props: any) => <Main {...props} />,
+    "Referal Entry": (props: any) => <RegionalHead {...props} />,
+    "Referal Lead Updation": (props: any) => (
+      <BrokerageModificationStatus {...props} />
+    ),
+    "Referal Product Wise MIS Report": (props: any) => (
+      <KycBrokerage {...props} />
+    ),
   };
   const masterSubComponents: any = {
     "Menu Master": (props: any) => <MasterMenuMarketing {...props} />,

@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import DataTable from "../../../components/common/UserInfoTable";
+import DataTable from "../../components/common/UserInfoTable";
 import { Card, CardBody, CardHeader } from "reactstrap";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs"; // Import Day.js for date handling
-import { RegulatorAnnouncements } from "../../../helper/commmon";
+import { RegulatorAnnouncements } from "../../helper/commmon";
 
 const RegulatoryAnnouncement = ({ activeMenu }: any) => {
   const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
