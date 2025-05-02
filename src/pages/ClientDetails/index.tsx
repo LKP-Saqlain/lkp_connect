@@ -16,7 +16,7 @@ import { RootState, AppDispatch } from "../../redux/store";
 interface ClientRow {
   BranchCode?: string;
   BranchType?: string;
-  ClientCode?: string;
+  ctermcode?: string;
   ClientName?: string;
   PANNO?: string;
   ActivationDate?: string;
@@ -72,12 +72,7 @@ any) => {
   }, [selectedCapsule]);
 
   useEffect(() => {
-    console.log(
-      "test12345",
-      totalEntries,
-      filter,
-      selectedUserInfo?.ClientCode
-    );
+    console.log("test12345", totalEntries, filter, selectedUserInfo?.ctermcode);
   }, [selectedUserInfo]);
   useEffect(() => {
     if (selectedTrading === "Dormant") {
@@ -735,7 +730,7 @@ any) => {
           isOpen={isModalOpen}
           onClose={getUserDetails}
           handleModalClose={handleModalClose}
-          selectedClientCode={selectedUserInfo && selectedUserInfo?.ClientCode}
+          selectedClientCode={selectedUserInfo && selectedUserInfo?.ctermcode}
         />
       )}
     </>

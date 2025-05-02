@@ -78,11 +78,11 @@ const SlbmHoling = () => {
     },
   });
 
-  useEffect(() => {
-    if (accessType === "") {
-      handleSubmit();
-    }
-  }, [accessType, searchValue]);
+  // useEffect(() => {
+  //   if (accessType === "") {
+  //     handleSubmit();
+  //   }
+  // }, [accessType, searchValue]);
 
   useEffect(() => {
     const str = user_id;
@@ -98,7 +98,7 @@ const SlbmHoling = () => {
     let payload = {
       user_id: extractUserId,
       option: "zone",
-      userType: userType === "Employee" ? "EMP" : userType,
+      userType: userType === "Employee" ? "EMP" : "APN",
       zone: "ALL",
     };
 
@@ -163,7 +163,7 @@ const SlbmHoling = () => {
       const payload = {
         user_id: extractUserId,
         option: "BranchByZone",
-        userType: userType === "Employee" ? "EMP" : userType,
+        userType: userType === "Employee" ? "EMP" : "APN",
         zone: formik.values.selectedZone.value,
       };
 
@@ -178,10 +178,7 @@ const SlbmHoling = () => {
               label: item.itemVal, // Display value in dropdown
               value: item.itemVal, // Actual value of the dropdown item
             }));
-            branchDropdown = [
-              { label: "ALL", value: "ALL" },
-              ...branchDropdown,
-            ];
+            branchDropdown = [...branchDropdown];
 
             setBranchCodeOptions(branchDropdown); // Set the updated branch dropdown
           }
@@ -391,221 +388,220 @@ const SlbmHoling = () => {
         <div className="container-fluid">
           <Row className="row-font">
             <Col lg={12}>
-              {accessType !== "" && (
-                <Card>
-                  <CardHeader>
-                    <h4 className="card-title mb-0">
-                      SLBM Client Holding Report
-                    </h4>
-                  </CardHeader>
-                  <CardBody>
-                    <form onSubmit={formik.handleSubmit}>
-                      <div>
-                        <Row>
-                          <Col xl={3}>
-                            <div className="mb-3" style={{ maxWidth: "300px" }}>
-                              <Label
-                                htmlFor="zone-select"
-                                className="form-label text-muted label-font"
-                              >
-                                ZONE
-                              </Label>
-                              <Select
-                                value={formik.values.selectedZone}
-                                onChange={(option: any) =>
-                                  formik.setFieldValue("selectedZone", option)
-                                }
-                                onBlur={formik.handleBlur}
-                                options={noSortingGroup}
-                                isClearable
-                                className="placeholder-font"
-                                id="zone-select"
-                                styles={{
-                                  control: (base: any) => ({
-                                    ...base,
-                                    cursor: "pointer",
+              <Card>
+                <CardHeader>
+                  <h4 className="card-title mb-0">
+                    SLBM Client Holding Report
+                  </h4>
+                </CardHeader>
+                <CardBody>
+                  <form onSubmit={formik.handleSubmit}>
+                    <div>
+                      <Row>
+                        <Col xl={3}>
+                          <div className="mb-3" style={{ maxWidth: "300px" }}>
+                            <Label
+                              htmlFor="zone-select"
+                              className="form-label text-muted label-font"
+                            >
+                              ZONE
+                            </Label>
+                            <Select
+                              value={formik.values.selectedZone}
+                              onChange={(option: any) =>
+                                formik.setFieldValue("selectedZone", option)
+                              }
+                              onBlur={formik.handleBlur}
+                              options={noSortingGroup}
+                              isClearable
+                              className="placeholder-font"
+                              id="zone-select"
+                              styles={{
+                                control: (base: any) => ({
+                                  ...base,
+                                  cursor: "pointer",
+                                  borderColor:
+                                    formik.touched.selectedZone &&
+                                    formik.errors.selectedZone
+                                      ? "#DC4535"
+                                      : base.borderColor,
+                                  "&:hover": {
                                     borderColor:
                                       formik.touched.selectedZone &&
                                       formik.errors.selectedZone
                                         ? "#DC4535"
                                         : base.borderColor,
-                                    "&:hover": {
-                                      borderColor:
-                                        formik.touched.selectedZone &&
-                                        formik.errors.selectedZone
-                                          ? "#DC4535"
-                                          : base.borderColor,
-                                    },
-                                  }),
-                                }}
-                              />
-                              {formik.touched.selectedZone &&
-                                formik.errors.selectedZone && (
-                                  <div
-                                    className="text-danger"
-                                    style={{ fontSize: "12px" }}
-                                  >
-                                    {formik.errors.selectedZone}
-                                  </div>
-                                )}
-                            </div>
-                          </Col>
+                                  },
+                                }),
+                              }}
+                            />
+                            {formik.touched.selectedZone &&
+                              formik.errors.selectedZone && (
+                                <div
+                                  className="text-danger"
+                                  style={{ fontSize: "12px" }}
+                                >
+                                  {formik.errors.selectedZone}
+                                </div>
+                              )}
+                          </div>
+                        </Col>
 
-                          <Col xl={3}>
-                            <div className="mb-3" style={{ maxWidth: "300px" }}>
-                              <Label
-                                htmlFor="branch-code-select"
-                                className="form-label text-muted label-font"
-                              >
-                                BRANCH CODE
-                              </Label>
-                              <Select
-                                value={formik.values.selectedBranchCode}
-                                onChange={(option) =>
-                                  formik.setFieldValue(
-                                    "selectedBranchCode",
-                                    option
-                                  )
-                                }
-                                onBlur={formik.handleBlur}
-                                options={branchCodeOptions}
-                                isClearable
-                                className="placeholder-font"
-                                id="branch-code-select"
-                                styles={{
-                                  control: (base: any) => ({
-                                    ...base,
-                                    cursor: "pointer",
+                        <Col xl={3}>
+                          <div className="mb-3" style={{ maxWidth: "300px" }}>
+                            <Label
+                              htmlFor="branch-code-select"
+                              className="form-label text-muted label-font"
+                            >
+                              BRANCH CODE
+                            </Label>
+                            <Select
+                              value={formik.values.selectedBranchCode}
+                              onChange={(option) =>
+                                formik.setFieldValue(
+                                  "selectedBranchCode",
+                                  option
+                                )
+                              }
+                              onBlur={formik.handleBlur}
+                              options={branchCodeOptions}
+                              isClearable
+                              className="placeholder-font"
+                              id="branch-code-select"
+                              styles={{
+                                control: (base: any) => ({
+                                  ...base,
+                                  cursor: "pointer",
+                                  borderColor:
+                                    formik.touched.selectedBranchCode &&
+                                    formik.errors.selectedBranchCode
+                                      ? "#DC4535"
+                                      : base.borderColor,
+                                  "&:hover": {
                                     borderColor:
                                       formik.touched.selectedBranchCode &&
                                       formik.errors.selectedBranchCode
                                         ? "#DC4535"
                                         : base.borderColor,
-                                    "&:hover": {
-                                      borderColor:
-                                        formik.touched.selectedBranchCode &&
-                                        formik.errors.selectedBranchCode
-                                          ? "#DC4535"
-                                          : base.borderColor,
-                                    },
-                                  }),
-                                }}
-                              />
-                              {formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode && (
-                                  <div
-                                    className="text-danger"
-                                    style={{ fontSize: "12px" }}
-                                  >
-                                    {formik.errors.selectedBranchCode}
-                                  </div>
-                                )}
-                            </div>
-                          </Col>
+                                  },
+                                }),
+                              }}
+                            />
+                            {formik.touched.selectedBranchCode &&
+                              formik.errors.selectedBranchCode && (
+                                <div
+                                  className="text-danger"
+                                  style={{ fontSize: "12px" }}
+                                >
+                                  {formik.errors.selectedBranchCode}
+                                </div>
+                              )}
+                          </div>
+                        </Col>
 
-                          <Col xl={3}>
-                            <div className="mb-3">
-                              <Label
-                                htmlFor="choices-text-remove-button"
-                                className="form-label text-muted label-font"
-                              >
-                                SYMBOL / ISIN
-                              </Label>
-                              <Input
-                                name="isInValue"
-                                type="text"
-                                className={`core-report-form-control ${
-                                  formik.touched.isInValue &&
-                                  formik.errors.isInValue
-                                    ? "is-invalid"
-                                    : ""
-                                }`} // Add 'is-invalid' class if there's an error
-                                value={formik.values.isInValue}
-                                placeholder="Please enter SYMBOL/ISIN"
-                                onChange={handleOnChange}
-                                onBlur={formik.handleBlur}
-                                id="choices-text-remove-button"
-                                invalid={
-                                  formik.touched.isInValue &&
-                                  Boolean(formik.errors.isInValue)
-                                }
-                                data-choices
-                                data-choices-limit="3"
-                                styles={{
-                                  control: (base: any) => ({
-                                    ...base,
+                        <Col xl={3}>
+                          <div className="mb-3">
+                            <Label
+                              htmlFor="choices-text-remove-button"
+                              className="form-label text-muted label-font"
+                            >
+                              SYMBOL / ISIN
+                            </Label>
+                            <Input
+                              name="isInValue"
+                              type="text"
+                              className={`core-report-form-control ${
+                                formik.touched.isInValue &&
+                                formik.errors.isInValue
+                                  ? "is-invalid"
+                                  : ""
+                              }`} // Add 'is-invalid' class if there's an error
+                              value={formik.values.isInValue}
+                              placeholder="Please enter SYMBOL/ISIN"
+                              onChange={handleOnChange}
+                              onBlur={formik.handleBlur}
+                              id="choices-text-remove-button"
+                              invalid={
+                                formik.touched.isInValue &&
+                                Boolean(formik.errors.isInValue)
+                              }
+                              data-choices
+                              data-choices-limit="3"
+                              styles={{
+                                control: (base: any) => ({
+                                  ...base,
+                                  borderColor:
+                                    formik.touched.isInValue &&
+                                    formik.errors.isInValue
+                                      ? "#DC4535"
+                                      : base.borderColor,
+                                  "&:hover": {
                                     borderColor:
                                       formik.touched.isInValue &&
                                       formik.errors.isInValue
                                         ? "#DC4535"
                                         : base.borderColor,
-                                    "&:hover": {
-                                      borderColor:
-                                        formik.touched.isInValue &&
-                                        formik.errors.isInValue
-                                          ? "#DC4535"
-                                          : base.borderColor,
-                                    },
-                                  }),
-                                }}
-                              />
-                              {formik.touched.isInValue &&
-                                formik.errors.isInValue && (
-                                  <div
-                                    className="text-danger"
-                                    style={{ fontSize: "12px" }}
-                                  >
-                                    {formik.errors.isInValue}
-                                  </div>
-                                )}
-                            </div>
-                          </Col>
-
-                          <Col
-                            className="d-flex flex-column-reverse"
-                            style={{
-                              top:
-                                (formik.touched.selectedZone &&
-                                  formik.errors.selectedZone) ||
-                                (formik.touched.selectedBranchCode &&
-                                  formik.errors.selectedBranchCode) ||
-                                (formik.touched.isInValue &&
-                                  formik.errors.isInValue)
-                                  ? "-18px"
-                                  : "",
-                            }}
-                          >
-                            <div className="mb-3" />
-                            <Button
-                              style={{
-                                backgroundColor: "#11395C",
-                                fontSize: "12px",
-                                height: "40px",
-                                minWidth: "200px",
+                                  },
+                                }),
                               }}
-                              // onClick={handleSubmit}
-                              type="submit"
-                            >
-                              Submit
-                            </Button>
-                          </Col>
+                            />
+                            {formik.touched.isInValue &&
+                              formik.errors.isInValue && (
+                                <div
+                                  className="text-danger"
+                                  style={{ fontSize: "12px" }}
+                                >
+                                  {formik.errors.isInValue}
+                                </div>
+                              )}
+                          </div>
+                        </Col>
 
-                          <Col
-                            className="d-flex flex-column-reverse"
+                        <Col
+                          className="d-flex flex-column-reverse"
+                          style={{
+                            top:
+                              (formik.touched.selectedZone &&
+                                formik.errors.selectedZone) ||
+                              (formik.touched.selectedBranchCode &&
+                                formik.errors.selectedBranchCode) ||
+                              (formik.touched.isInValue &&
+                                formik.errors.isInValue)
+                                ? "-18px"
+                                : "",
+                          }}
+                        >
+                          <div className="mb-3" />
+                          <Button
                             style={{
-                              top:
-                                (formik.touched.selectedZone &&
-                                  formik.errors.selectedZone) ||
-                                (formik.touched.selectedBranchCode &&
-                                  formik.errors.selectedBranchCode) ||
-                                (formik.touched.isInValue &&
-                                  formik.errors.isInValue)
-                                  ? "-18px"
-                                  : "",
+                              backgroundColor: "#11395C",
+                              fontSize: "12px",
+                              height: "40px",
+                              minWidth: "200px",
                             }}
+                            // onClick={handleSubmit}
+                            type="submit"
                           >
-                            <div className="mb-3" />
-                            {/* <Button
+                            Submit
+                          </Button>
+                        </Col>
+
+                        <Col
+                          className="d-flex flex-column-reverse"
+                          style={{
+                            top:
+                              (formik.touched.selectedZone &&
+                                formik.errors.selectedZone) ||
+                              (formik.touched.selectedBranchCode &&
+                                formik.errors.selectedBranchCode) ||
+                              (formik.touched.isInValue &&
+                                formik.errors.isInValue)
+                                ? "-18px"
+                                : "",
+                          }}
+                        >
+                          <div className="mb-3" />
+                          {/* <Button
                             style={{
                               backgroundColor: "#11395C",
                               fontSize: "12px",
@@ -617,13 +613,13 @@ const SlbmHoling = () => {
                             Excel
                             <DownloadIcon fontSize="small" />
                           </Button> */}
-                          </Col>
-                        </Row>
-                      </div>
-                    </form>
-                  </CardBody>
-                </Card>
-              )}
+                        </Col>
+                      </Row>
+                    </div>
+                  </form>
+                </CardBody>
+              </Card>
+
               <Card>
                 <CardBody>
                   <DataTable

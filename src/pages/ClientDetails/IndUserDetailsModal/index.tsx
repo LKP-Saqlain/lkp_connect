@@ -94,7 +94,7 @@ const UserInfoModal = ({
       toggle={onClose}
       className="modal-fullscreen"
       id="fullscreeexampleModal"
-      style={{ marginTop: "50px", paddingRight: "10px" }}
+      style={{ marginTop: "35px", paddingRight: "10px" }}
     >
       <ModalHeader
         className="modal-title"
@@ -109,13 +109,16 @@ const UserInfoModal = ({
         <Button
           onClick={tog_fullscreen1}
           style={{
-            padding: "0.5rem 1rem",
-            height: "40px",
+            padding: "0 1rem",
+            height: "30px",
+            lineHeight: "26px",
             marginBottom: "10px",
             fontSize: "12px",
             backgroundColor: "#11395C",
-            position: "absolute", // Position it absolutely at the top-right corner
-            right: "10px", // Adjust as needed
+            position: "absolute",
+            right: "15px",
+            textAlign: "center",
+            verticalAlign: "middle",
           }}
         >
           Back
