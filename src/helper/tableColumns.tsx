@@ -646,7 +646,7 @@ export const slbmColumns: GridColDef[] = [
   {
     field: "scripName",
     headerName: "Script Name",
-    minWidth: 140,
+    minWidth: 200,
     flex: 1.2,
     disableColumnMenu: true,
   },
@@ -663,6 +663,7 @@ export const slbmColumns: GridColDef[] = [
     minWidth: 90,
     flex: 0.7,
     disableColumnMenu: true,
+    align: "left",
   },
   {
     field: "rmName",

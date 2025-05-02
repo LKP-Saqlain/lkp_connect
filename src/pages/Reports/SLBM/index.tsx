@@ -16,29 +16,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
-import DataTable from "../../../components/common/table";
-import axios from "axios";
-import { endpoints } from "../../../services/endpoints";
+// import DataTable from "../../../components/common/table";
+// import axios from "axios";
+// import { endpoints } from "../../../services/endpoints";
 import ShowToast from "../../../utils/toastUtils";
-// import * as Yup from "yup";
+import * as Yup from "yup";
 import { useFormik } from "formik";
 import "../style.css";
-import { slbmColumns } from "../../../helper/tableColumns.tsx";
+// import { slbmColumns } from "../../../helper/tableColumns.tsx";
+import UserInfoTable from "../../../components/common/UserInfoTable";
 
 // interface Option {
 //   label: string;
 //   value: string;
 // }
 
-const SlbmHoling = () => {
+const SlbmHoling = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [totalEntries, setTotalEntries] = useState(null);
+  // const [totalEntries, setTotalEntries] = useState(null);
   const [responseStatus, setResponseStatus] = useState(false);
-  const [searchValue, setSearchValue] = React.useState("");
+  // const [searchValue, setSearchValue] = React.useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
-  const [page, setPage] = useState(1); // Track current page
+  // const [page, setPage] = useState(1); // Track current page
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -49,13 +52,13 @@ const SlbmHoling = () => {
     (state: RootState) => state.AuthUser?.data?.data
   );
 
-  // const validationSchema = Yup.object({
-  //   selectedZone: Yup.object().nullable().required("Zone is required"),
-  //   selectedBranchCode: Yup.object()
-  //     .nullable()
-  //     .required("Branch code is required"),
-  //   // isInValue: Yup.string().required("SYMBOL / ISIN is required"),
-  // });
+  const validationSchema = Yup.object({
+    selectedZone: Yup.object().nullable().required("Zone is required"),
+    selectedBranchCode: Yup.object()
+      .nullable()
+      .required("Branch code is required"),
+    // isInValue: Yup.string().required("SYMBOL / ISIN is required"),
+  });
 
   interface FormValues {
     selectedZone: { label: string; value: string } | null;
@@ -69,7 +72,7 @@ const SlbmHoling = () => {
       selectedBranchCode: null,
       isInValue: "",
     },
-    // validationSchema,
+    validationSchema,
     onSubmit: (values) => {
       // Only called if no validation errors
       console.log("values1-->", values);
@@ -178,7 +181,10 @@ const SlbmHoling = () => {
               label: item.itemVal, // Display value in dropdown
               value: item.itemVal, // Actual value of the dropdown item
             }));
-            branchDropdown = [...branchDropdown];
+            branchDropdown = [
+              { label: "ALL", value: "ALL" },
+              ...branchDropdown,
+            ];
 
             setBranchCodeOptions(branchDropdown); // Set the updated branch dropdown
           }
@@ -207,13 +213,13 @@ const SlbmHoling = () => {
     }
   };
 
-  const handlePageChange = (
-    event: React.ChangeEvent<unknown>,
-    newPage: number
-  ) => {
-    setPage(newPage);
-    handleSubmit(event, newPage); // Fetch data for the new page
-  };
+  // const handlePageChange = (
+  //   event: React.ChangeEvent<unknown>,
+  //   newPage: number
+  // ) => {
+  //   setPage(newPage);
+  //   handleSubmit(event, newPage); // Fetch data for the new page
+  // };
 
   const handleSubmit = async (event?: any, value?: any) => {
     console.log("newPage", event, value);
@@ -241,18 +247,22 @@ const SlbmHoling = () => {
       .SLBMHoldingsReport(payload)
       .then((response) => {
         console.log("response", response?.data);
-        console.log("response", response?.data?.sLBMHoldings[0]);
-        const { recordsTotal } = response?.data?.sLBMHoldings[0];
-        setTotalEntries(recordsTotal);
+        console.log(
+          "SLBMHoldingsReportResponse",
+          response?.data?.sLBMHoldings[0]
+        );
+        // const { recordsTotal } = response?.data?.sLBMHoldings[0];
+        // setTotalEntries(recordsTotal);
         dispatch(hideLoader());
         if (response?.status === 200) {
           setResponseStatus(true);
-          setUserData(response.data?.sLBMHoldings);
+          setUserData(response.data?.sLBMHoldings || []);
+          setFilteredData(response.data?.sLBMHoldings || []);
         }
       })
       .catch((error) => {
         dispatch(hideLoader());
-
+        console.error("errorMsg", error?.response?.data?.message);
         const errors = error?.response?.data?.errors;
 
         if (errors) {
@@ -269,7 +279,7 @@ const SlbmHoling = () => {
           }
         } else {
           // Default error message for unexpected errors
-          ShowToast("error", "An unexpected error occurred. Please try again.");
+          ShowToast("error", error?.response?.data?.message);
         }
       })
       .finally(() => {
@@ -279,106 +289,119 @@ const SlbmHoling = () => {
 
   // ];
 
-  const handleDownloadExcel = async () => {
-    if (!formik.values.selectedZone || !formik.values.selectedBranchCode) {
-      formik.setTouched({
-        selectedZone: true,
-        selectedBranchCode: true,
-      });
-      return; // Stop execution if validation fails
-    }
+  // const handleDownloadExcel = async () => {
+  //   if (!formik.values.selectedZone || !formik.values.selectedBranchCode) {
+  //     formik.setTouched({
+  //       selectedZone: true,
+  //       selectedBranchCode: true,
+  //     });
+  //     return; // Stop execution if validation fails
+  //   }
 
-    // const Id = localStorage.getItem("Id");
-    const payload = {
-      loginName: user_id,
-      start: 0,
-      pageSize: 50,
-      searchKey: "",
-      zone: formik.values.selectedZone?.value,
-      branchCode: formik.values.selectedBranchCode?.value,
-      symbolISIN: formik.values.isInValue,
-    };
-    try {
-      let token = localStorage.getItem("tkn");
-      dispatch(showLoader("Please wait, We are Processing your Request"));
-      const response = await axios.post(
-        `https://middlewareapi.lkp.net.in${endpoints.SLBMHoldingsReportExcel}`,
-        payload,
-        {
-          responseType: "blob",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "file.xlsx"); // Specify the file name
-      document.body.appendChild(link);
-      link.click();
-      dispatch(hideLoader());
-    } catch (error: any) {
-      console.error("Download error", error?.message);
-      dispatch(hideLoader());
-      ShowToast(
-        "error",
-        error?.message ||
-          "Sorry for the inconvenience, please try after some time."
-      );
-    }
-  };
+  //   // const Id = localStorage.getItem("Id");
+  //   const payload = {
+  //     loginName: user_id,
+  //     start: 0,
+  //     pageSize: 50,
+  //     searchKey: "",
+  //     zone: formik.values.selectedZone?.value,
+  //     branchCode: formik.values.selectedBranchCode?.value,
+  //     symbolISIN: formik.values.isInValue,
+  //   };
+  //   try {
+  //     let token = localStorage.getItem("tkn");
+  //     dispatch(showLoader("Please wait, We are Processing your Request"));
+  //     const response = await axios.post(
+  //       `https://middlewareapi.lkp.net.in${endpoints.SLBMHoldingsReportExcel}`,
+  //       payload,
+  //       {
+  //         responseType: "blob",
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     const url = window.URL.createObjectURL(new Blob([response.data]));
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.setAttribute("download", "file.xlsx"); // Specify the file name
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     dispatch(hideLoader());
+  //   } catch (error: any) {
+  //     console.error("Download error", error?.message);
+  //     dispatch(hideLoader());
+  //     ShowToast(
+  //       "error",
+  //       error?.message ||
+  //         "Sorry for the inconvenience, please try after some time."
+  //     );
+  //   }
+  // };
 
   const handleSearchBasedOnInput = (value: string) => {
     console.log("handleSearchBasedOnInputValue", value);
-    setSearchValue(value);
+    // setSearchValue(value);
+    const query = value;
+    setSearchQuery(query);
+
+    const lowerCaseValue = value.toLowerCase();
+
+    const filtered = userData.filter((item: any) =>
+      Object.keys(item).some((key) =>
+        item[key]?.toString().toLowerCase().includes(lowerCaseValue)
+      )
+    );
+
+    setFilteredData(filtered);
+    console.log("filteredSearch Records", filteredData);
   };
 
-  const handleSearchUser = async () => {
-    setUserData([]);
-    if (searchValue !== "") {
-      const pageSize = 10; // Define pageSize
+  // const handleSearchUser = async () => {
+  //   setUserData([]);
+  //   if (searchValue !== "") {
+  //     const pageSize = 10; // Define pageSize
 
-      // Calculate start based on the new page (0-indexed)
-      // const start = (value - 1) * pageSize;
+  //     // Calculate start based on the new page (0-indexed)
+  //     // const start = (value - 1) * pageSize;
 
-      const payload = {
-        loginName: user_id,
-        start: pageSize, // Calculate start based on the new page
-        pageSize: 10,
-        searchKey: searchValue !== "" ? searchValue : "",
-        zone: formik.values.selectedZone?.value,
-        branchCode: formik.values.selectedBranchCode?.value,
-        symbolISIN: formik.values.isInValue,
-      };
-      dispatch(showLoader(""));
-      await apiServices
-        .SLBMHoldingsReport(payload)
-        .then((response) => {
-          console.log("response", response?.data);
-          console.log("response", response?.data?.sLBMHoldings[0]);
-          const { recordsTotal } = response?.data?.sLBMHoldings[0];
-          setTotalEntries(recordsTotal);
-          dispatch(hideLoader());
-          if (response?.status === 200) {
-            setResponseStatus(true);
-            setUserData(response.data?.sLBMHoldings);
-          }
-        })
-        .catch((error) => {
-          console.log("Error->", error.response);
-          // const zoneError = error.response?.data?.errors?.Zone["0"];
-          // const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
-          dispatch(hideLoader());
-          ShowToast("error", error.response?.data?.message);
-          // ShowToast("error", zoneError);
-          // ShowToast("error", branchCodeError);
-        })
-        .finally(() => {
-          dispatch(hideLoader());
-        });
-    }
-  };
+  //     const payload = {
+  //       loginName: user_id,
+  //       start: pageSize, // Calculate start based on the new page
+  //       pageSize: 10,
+  //       searchKey: searchValue !== "" ? searchValue : "",
+  //       zone: formik.values.selectedZone?.value,
+  //       branchCode: formik.values.selectedBranchCode?.value,
+  //       symbolISIN: formik.values.isInValue,
+  //     };
+  //     dispatch(showLoader(""));
+  //     await apiServices
+  //       .SLBMHoldingsReport(payload)
+  //       .then((response) => {
+  //         console.log("response", response?.data);
+  //         console.log("response", response?.data?.sLBMHoldings[0]);
+  //         const { recordsTotal } = response?.data?.sLBMHoldings[0];
+  //         setTotalEntries(recordsTotal);
+  //         dispatch(hideLoader());
+  //         if (response?.status === 200) {
+  //           setResponseStatus(true);
+  //           setUserData(response.data?.sLBMHoldings);
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.log("Error->", error.response);
+  //         // const zoneError = error.response?.data?.errors?.Zone["0"];
+  //         // const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
+  //         dispatch(hideLoader());
+  //         ShowToast("error", error.response?.data?.message);
+  //         // ShowToast("error", zoneError);
+  //         // ShowToast("error", branchCodeError);
+  //       })
+  //       .finally(() => {
+  //         dispatch(hideLoader());
+  //       });
+  //   }
+  // };
 
   document.title = "LKP Securities | Dormant Client Report";
 
@@ -622,7 +645,7 @@ const SlbmHoling = () => {
 
               <Card>
                 <CardBody>
-                  <DataTable
+                  {/* <DataTable
                     dynamicHeader={slbmColumns}
                     tableData={userData}
                     totalRecords={totalEntries}
@@ -633,6 +656,14 @@ const SlbmHoling = () => {
                     handleSearchUser={handleSearchUser}
                     showSearch={responseStatus}
                     handleExcelDownload={handleDownloadExcel}
+                    searchValue={searchQuery}
+                  /> */}
+                  <UserInfoTable
+                    showSearch={responseStatus}
+                    activeSubItem={activeSubItem}
+                    T6Data={userData ? filteredData : filteredData}
+                    handleSearchBasedOnInput={handleSearchBasedOnInput}
+                    searchValue={searchQuery}
                   />
                 </CardBody>
               </Card>

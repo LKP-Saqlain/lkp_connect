@@ -23,6 +23,7 @@ import {
   RegionalHead,
   BrokerageModificationStatus,
   BrokerageKyc,
+  slbmColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -373,6 +374,10 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "Terminal") {
       return terminalcol.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "SLBM ClientHolding") {
+      return slbmColumns.map((column) => ({
         ...column,
       }));
     } else if (activeSubItem === "Registration Table") {

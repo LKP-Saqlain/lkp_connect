@@ -21,6 +21,7 @@ interface DormantClientProps {
   handleExcelDownload?: () => void;
   customFlag?: any;
   customPageSize?: any;
+  customCss?: boolean;
 }
 
 const DataTable: React.FC<DormantClientProps> = ({
@@ -37,6 +38,7 @@ const DataTable: React.FC<DormantClientProps> = ({
   showExcel,
   customFlag,
   customPageSize,
+  customCss,
 }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
 
@@ -132,19 +134,36 @@ const DataTable: React.FC<DormantClientProps> = ({
             border: 0,
             fontFamily: '"Public Sans", sans-serif',
             "& .MuiDataGrid-columnHeader": {
+              // textAlign: "center",
               backgroundColor: "#11395C", // Set the header background color to grey
               color: "#fff", // Optionally set the text color to white for better contrast
-              fontWeight: 800,
+              fontWeight: 500,
               fontSize: "12px",
             },
             "& .MuiDataGrid-cell": {
               fontFamily: '"Public Sans", sans-serif',
-              fontSize: "13px",
-              color: "#000000",
+              fontSize: "12px",
+              // alignItems: "center",
+              alignContent: customCss ? "center" : "",
+              color: "#000",
               border: "1px solid #D3D3D3 !important",
             },
-            "& .MuiDataGrid-footerContainer": {
-              display: "none", // Completely hide the footer container
+          }}
+          slotProps={{
+            pagination: {
+              sx: {
+                "& .MuiTablePagination-toolbar": {
+                  alignItems: "center",
+                },
+                "& .MuiTablePagination-selectLabel": {
+                  fontSize: "13px",
+                  marginBottom: 0,
+                  fontFamily: "Public Sans",
+                },
+                "& .MuiInputBase-root": {
+                  marginTop: 0,
+                },
+              },
             },
           }}
         />
