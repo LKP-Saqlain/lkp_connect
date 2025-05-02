@@ -1,11 +1,11 @@
 import { Card, CardHeader, CardBody } from "reactstrap";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
-import { InfoCapsules } from "../../../helper/tableColumns.tsx";
-import DataTable from "../../../components/common/UserInfoTable";
-import { apiServices } from "../../../services/index.ts";
+import { InfoCapsules } from "../../helper/tableColumns.tsx";
+import DataTable from "../../components/common/UserInfoTable";
+import { apiServices } from "../../services/index.ts";
 import { useEffect, useState } from "react";
-import { RootState } from "../../../redux/store.ts";
+import { RootState } from "../../redux/store.ts";
 import { useSelector } from "react-redux";
 
 const RegisDetails = ({ activeSubItem }: any) => {

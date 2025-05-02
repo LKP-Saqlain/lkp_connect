@@ -288,7 +288,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                 formatIndianNumber={formatIndianNumber}
                 suffix=".00"
                 // note={!isMobile && `* Period - ${startMonth} `}
-                note={!isMobile && `* Period - Financial Year 2025-2026 `}
+                note={!isMobile && `*Financial Year 2025-2026 `}
                 customClass={true}
               />
             </Col>
@@ -323,7 +323,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                 activeClientsEmpty={true}
                 customClass={true}
                 // note={isMobile && `* Period - ${startMonth} ${endMonth}`}
-                note={isMobile && `* Period - Financial Year 2025-2026 `}
+                note={isMobile && `*Financial Year 2025-2026 `}
               />
             </Col>
           </Row>
