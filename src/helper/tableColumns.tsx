@@ -2225,7 +2225,7 @@ export const QPayoutColumns: GridColDef[] = [
   {
     field: "lastTradeDate",
     headerName: "Last Trade Date",
-    minWidth: 10,
+    minWidth: 100,
     align: "center",
     headerAlign: "center",
     flex: 1.2,
@@ -3588,6 +3588,7 @@ export const RegionalHead: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
+    editable: true,
   },
 ];
 
@@ -3601,7 +3602,9 @@ export const BrokerageModificationStatus: GridColDef[] = [
     headerAlign: "center",
     align: "left",
   },
-  ...RegionalHead,
+  ...RegionalHead.map((col) =>
+    col.field === "remark" ? { ...col, editable: false } : col
+  ),
   {
     field: "status",
     headerName: "Status",
