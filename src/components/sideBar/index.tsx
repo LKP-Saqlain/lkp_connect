@@ -586,7 +586,16 @@ const SideBar = () => {
   const componentMap: any = {
     "My Performance": user_type === "Employee" ? OverviewComponent : APOverview,
     Trading: (props: any) => <TradeDashboard {...props} />,
-    "Client Details": ClientDetails,
+
+    "Client Details": (props: any) => (
+      <ClientDetails
+        handleDrawerClose={props.handleDrawerClose}
+        handleDrawerOpen={props.handleDrawerOpen}
+        apiStatus={props.apiStatus}
+        selectedTrading={props.selectedViewMore}
+        activeMenu={props.activeMenu}
+      />
+    ),
     "Zone Overview": RegOverview,
     "Stock Study": StockStudy,
     Reports: ({ activeSubItem }: any) => {
@@ -671,6 +680,14 @@ const SideBar = () => {
         ? { activeSubItem }
         : menuItem.menu_name === "Trading"
         ? { selectedViewMore }
+        : menuItem.menu_name === "Client Details"
+        ? {
+            handleDrawerClose,
+            handleDrawerOpen,
+            apiStatus,
+            selectedViewMore,
+            activeMenu,
+          }
         : {};
 
     return <Component {...props} />;
