@@ -664,6 +664,8 @@ export const slbmColumns: GridColDef[] = [
     flex: 0.7,
     disableColumnMenu: true,
     align: "left",
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "rmName",
