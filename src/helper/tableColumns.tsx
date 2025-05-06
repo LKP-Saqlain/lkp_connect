@@ -214,7 +214,7 @@ export const PaymentType = [
 
 export const getRegulatorAnnouncement: GridColDef[] = [
   {
-    field: "date",
+    field: "Dates",
     headerName: "Date",
     flex: 1,
     disableColumnMenu: true,
@@ -222,14 +222,14 @@ export const getRegulatorAnnouncement: GridColDef[] = [
     align: "center",
   },
   {
-    field: "department",
+    field: "Department",
     headerName: "Department",
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
   },
   {
-    field: "subject",
+    field: "Subject",
     headerName: "Subject",
     flex: 3.1,
     disableColumnMenu: true,
@@ -239,7 +239,7 @@ export const getRegulatorAnnouncement: GridColDef[] = [
     ),
   },
   {
-    field: "lkpComments",
+    field: "LKPComments",
     headerName: "LKP Comments",
     flex: 1.1,
     disableColumnMenu: true,
@@ -248,7 +248,7 @@ export const getRegulatorAnnouncement: GridColDef[] = [
     // alignItems:"center"
   },
   {
-    field: "circular",
+    field: "CircularFilePath",
     headerName: "Circular",
     flex: 1.1,
     disableColumnMenu: true,
@@ -2231,7 +2231,7 @@ export const QPayoutColumns: GridColDef[] = [
   {
     field: "lastTradeDate",
     headerName: "Last Trade Date",
-    minWidth: 10,
+    minWidth: 100,
     align: "center",
     headerAlign: "center",
     flex: 1.2,
@@ -3594,6 +3594,7 @@ export const RegionalHead: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
+    editable: true,
   },
 ];
 
@@ -3607,7 +3608,9 @@ export const BrokerageModificationStatus: GridColDef[] = [
     headerAlign: "center",
     align: "left",
   },
-  ...RegionalHead,
+  ...RegionalHead.map((col) =>
+    col.field === "remark" ? { ...col, editable: false } : col
+  ),
   {
     field: "status",
     headerName: "Status",

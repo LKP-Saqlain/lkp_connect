@@ -64,7 +64,7 @@ import RegulatorAnnouncement from "../../pages/regulatory announcement";
 import CustomModal from "../common/DPModal";
 import { userOverview } from "../../redux/thunk/Overview";
 import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
-import AccessMapping from "../../pages/Masters/AccessMapping";
+import RegAnnMaster from "../../pages/Masters/RegulatoryAnnouncement";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 // import { subDays, format } from "date-fns";
@@ -582,7 +582,7 @@ const SideBar = () => {
     "Dormant Client Report": (props: any) => <DormantClient {...props} />,
     "Last Trade Data": LastTrade,
     "Quarterly Payout Recovery": (props: any) => <QuarterlyPayout {...props} />,
-    "SLBM ClientHolding": SLBM,
+    "SLBM ClientHolding": (props: any) => <SLBM {...props} />,
     "Core Alerts Report": CoreReport,
     "Account Performance Report": AccStatement,
     "DP Debit Recovery": (props: any) => <DPRecovery {...props} />,
@@ -600,7 +600,7 @@ const SideBar = () => {
   };
   const masterSubComponents: any = {
     "Menu Master": (props: any) => <MasterMenuMarketing {...props} />,
-    "User Access Mapping": (props: any) => <AccessMapping {...props} />,
+    "User Access Mapping": (props: any) => <RegAnnMaster {...props} />,
   };
 
   const componentMap: any = {

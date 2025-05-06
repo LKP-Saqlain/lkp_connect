@@ -134,7 +134,6 @@ const Retrival = ({ activeSubItem }: any) => {
         dispatch(hideLoader());
       });
   };
-  CardHeader;
   return (
     <div className="page-content">
       <Container fluid>

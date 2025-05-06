@@ -21,6 +21,8 @@ interface DormantClientProps {
   handleExcelDownload?: () => void;
   customFlag?: any;
   customPageSize?: any;
+  customRowSelection?: boolean;
+  onSelectionChange?: (rows: any[]) => void;
   customCss?: boolean;
 }
 
@@ -38,6 +40,8 @@ const DataTable: React.FC<DormantClientProps> = ({
   showExcel,
   customFlag,
   customPageSize,
+  customRowSelection,
+  onSelectionChange,
   customCss,
 }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -111,7 +115,17 @@ const DataTable: React.FC<DormantClientProps> = ({
         }}
       >
         <DataGrid
-          disableRowSelectionOnClick
+          {...(customRowSelection
+            ? {
+                checkboxSelection: true,
+                onRowSelectionModelChange: (selectedIds) => {
+                  const selectedData = tableData.filter((row) =>
+                    selectedIds.includes(row.dummyId)
+                  );
+                  onSelectionChange?.(selectedData);
+                },
+              }
+            : { disableRowSelectionOnClick: true })}
           localeText={{ noRowsLabel: "No Records!" }}
           rows={tableData}
           columns={dynamicHeader}
@@ -122,6 +136,8 @@ const DataTable: React.FC<DormantClientProps> = ({
               ? row.clientName
               : row.alertSequenceNo
               ? row.alertSequenceNo
+              : row.dummyId
+              ? row.dummyId
               : row.BOID
               ? row.BOID || `${row.BOName}-${row.TotalDebit}-${Math.random()}`
               : ""

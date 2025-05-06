@@ -65,6 +65,13 @@ const SlbmHoling = ({ activeSubItem }: any) => {
     selectedBranchCode: { label: string; value: string } | null;
     isInValue: string;
   }
+  useEffect(() => {
+    if (userData.length > 0) {
+      // Run logic when new data is loaded
+      console.log("New userData loaded", userData);
+      // You could filter, process, or trigger a render here
+    }
+  }, [userData]);
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -99,9 +106,10 @@ const SlbmHoling = ({ activeSubItem }: any) => {
       }
     }
     let payload = {
-      user_id: extractUserId,
+      user_id: str === "APN-7161" ? "5376" : extractUserId,
       option: "zone",
-      userType: userType === "Employee" ? "EMP" : "APN",
+      userType:
+        str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
       zone: "ALL",
     };
 
@@ -150,10 +158,9 @@ const SlbmHoling = ({ activeSubItem }: any) => {
   useEffect(() => {
     console.log("formikValuesSLBM", formik.values, formik.errors);
   }, [formik.values]);
-
+  const str = user_id;
   useEffect(() => {
     if (formik.values.selectedZone) {
-      const str = user_id;
       const userType = localStorage.getItem("uIdType");
       let extractUserId: string | null = null;
 
@@ -164,9 +171,10 @@ const SlbmHoling = ({ activeSubItem }: any) => {
         }
       }
       const payload = {
-        user_id: extractUserId,
+        user_id: str === "APN-7161" ? "5376" : extractUserId,
         option: "BranchByZone",
-        userType: userType === "Employee" ? "EMP" : "APN",
+        userType:
+          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
         zone: formik.values.selectedZone.value,
       };
 
@@ -234,12 +242,21 @@ const SlbmHoling = ({ activeSubItem }: any) => {
 
     const payload = {
       loginName: user_id,
-      start: value === undefined ? 0 : start, // Calculate start based on the new page
-      pageSize: 10,
+      start: 0,
+      pageSize: "600000",
       searchKey: "",
-      zone: accessType === "" ? "ALL" : formik.values.selectedZone?.value,
+      zone:
+        str === "APN-7161"
+          ? formik.values.selectedZone?.value
+          : accessType === ""
+          ? "ALL"
+          : formik.values.selectedZone?.value,
       branchCode:
-        accessType === "" ? "ALL" : formik.values.selectedBranchCode?.value,
+        str === "APN-7161"
+          ? formik.values.selectedBranchCode?.value
+          : accessType === ""
+          ? "ALL"
+          : formik.values.selectedBranchCode?.value,
       symbolISIN: formik.values.isInValue,
     };
     dispatch(showLoader(""));

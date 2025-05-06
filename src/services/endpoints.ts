@@ -50,6 +50,8 @@ export const endpoints = {
   DashboardNudge: "/api/Dashboard/DashboardNudge",
   ViewMarketingMaterials: "/api/Dashboard/ViewMarketingMaterials",
   getInUpMarketMaterial: "/api/Dashboard/InsertUpdateMakertingMaterials",
+  getInUpRegAnnoucement: "/api/Dashboard/InsertUpdateRegulatoryAnnoucement",
+  viewRegAnnoucement: "/api/Dashboard/viewRegulatoryAnnoucement",
   ChangePassword: "api/Login/ChangePassword",
   GetAPDashboard: "api/AP/GetAPDashboard",
   ScripSearch: "api/AP/ScripSearch",
