@@ -386,13 +386,16 @@ const DataTable = ({
       }));
     } else if (activeMenu === "Regulatory Announcement") {
       return getRegulatorAnnouncement.map((column) => {
-        if (column.field === "circular") {
+        if (column.field === "CircularFilePath") {
           return {
             ...column,
             renderCell: (params: any) => {
               return (
                 <button
-                  onClick={() => console.log(params.row.circular)}
+                  onClick={
+                    () => handleDownload(params.row)
+                    // console.log("count6", params.row.CircularFilePath)
+                  }
                   style={{
                     color: "white",
                     // textDecoration: "underline",
@@ -409,7 +412,7 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "lkpComments") {
+        if (column.field === "LKPComments") {
           return {
             ...column,
             renderCell: () => {
@@ -691,7 +694,9 @@ const DataTable = ({
           rowHeight={30}
           hideFooter={customHide ? true : false}
           getRowId={(row: any) =>
-            row.clientName
+            row.rowID
+              ? row.rowID
+              : row.clientName
               ? row.clientName
               : row.ClientName
               ? row.ClientName
@@ -701,6 +706,8 @@ const DataTable = ({
               ? row.id
               : row.dummyId
               ? row.dummyId
+              : row.RowID
+              ? row.RowID
               : row.BOID
               ? `${row.BOName}-${row.TotalDebit}-${Math.random()}`
               : row.Name

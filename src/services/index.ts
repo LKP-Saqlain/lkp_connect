@@ -222,6 +222,12 @@ export const apiServices = {
   getInUpMarketMaterial: async (payload: any) => {
     return await apiService("POST", endpoints.getInUpMarketMaterial, payload);
   },
+  getInUpRegAnnoucement: async (payload: any) => {
+    return await apiService("POST", endpoints.getInUpRegAnnoucement, payload);
+  },
+  viewRegAnnoucement: async (payload: any) => {
+    return await apiService("POST", endpoints.viewRegAnnoucement, payload);
+  },
   GetAPDashboard: async (payload: any) => {
     return await apiService("POST", endpoints.GetAPDashboard, payload);
   },

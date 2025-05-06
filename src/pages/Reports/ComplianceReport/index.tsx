@@ -134,7 +134,6 @@ const Retrival = ({ activeSubItem }: any) => {
         dispatch(hideLoader());
       });
   };
-  CardHeader;
   return (
     <Card>
       <CardHeader className="p-0 border-0 bg-light-subtle">
