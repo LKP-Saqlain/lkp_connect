@@ -9,7 +9,7 @@ import "./style.css";
 import UserInfo from "./IndUserDetailsModal";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { Card, CardBody } from "reactstrap";
+import { Card, CardBody, Container } from "reactstrap";
 import ShowToast from "../../utils/toastUtils";
 import { RootState, AppDispatch } from "../../redux/store";
 
@@ -683,57 +683,66 @@ any) => {
   };
   document.title = document.title = "LKP Securities | Client Details";
   return (
-    <>
-      {!userDetails ? (
-        <>
-          <UserCapsules
-            selectedCapsule={selectedCapsule}
-            handleClick={handleClick}
-            totalCount={totalCount}
-            activeClient={activeClients}
-            inactiveClient={inactiveClients}
-            capsuleType="ClientDetails"
+    <div className="page-content">
+      <Container fluid>
+        {!userDetails ? (
+          <>
+            <UserCapsules
+              selectedCapsule={selectedCapsule}
+              handleClick={handleClick}
+              totalCount={totalCount}
+              activeClient={activeClients}
+              inactiveClient={inactiveClients}
+              capsuleType="ClientDetails"
+            />
+            <Card
+              style={{
+                borderRadius: "15px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <CardBody>
+                <UserInfoTable
+                  selectedWidget={selectedCapsule}
+                  T6Data={filteredData.length > 0 ? filteredData : tableData}
+                  // upcomingDormantTableData={upcomingDormantTableData}
+                  activeGroupedClients={
+                    filteredData.length > 0
+                      ? filteredData
+                      : activeGroupedClients
+                  }
+                  inactiveGroupedClients={
+                    filteredData.length > 0
+                      ? filteredData
+                      : inactiveGroupedClients
+                  }
+                  getUserDetails={getUserDetails}
+                  apiStatus={apiStatus}
+                  handleExcel={handleExcel}
+                  showSearch={responseStatus}
+                  handleSearchBasedOnInput={handleSearchBasedOnInput}
+                  // handleSearchUser={handleSearchUser}
+                  searchValue={searchValue}
+                  onFilterChange={handleFilterChange}
+                  totalCount={totalCount}
+                  activeClient={activeClients}
+                  inactiveClient={inactiveClients}
+                  dormantCount={dormantCount}
+                />
+              </CardBody>
+            </Card>
+          </>
+        ) : (
+          // <UserInfoDetail />
+          <UserInfo
+            isOpen={isModalOpen}
+            onClose={getUserDetails}
+            handleModalClose={handleModalClose}
+            selectedClientCode={selectedUserInfo && selectedUserInfo?.ctermcode}
           />
-          <Card>
-            <CardBody>
-              <UserInfoTable
-                selectedWidget={selectedCapsule}
-                T6Data={filteredData.length > 0 ? filteredData : tableData}
-                // upcomingDormantTableData={upcomingDormantTableData}
-                activeGroupedClients={
-                  filteredData.length > 0 ? filteredData : activeGroupedClients
-                }
-                inactiveGroupedClients={
-                  filteredData.length > 0
-                    ? filteredData
-                    : inactiveGroupedClients
-                }
-                getUserDetails={getUserDetails}
-                apiStatus={apiStatus}
-                handleExcel={handleExcel}
-                showSearch={responseStatus}
-                handleSearchBasedOnInput={handleSearchBasedOnInput}
-                // handleSearchUser={handleSearchUser}
-                searchValue={searchValue}
-                onFilterChange={handleFilterChange}
-                totalCount={totalCount}
-                activeClient={activeClients}
-                inactiveClient={inactiveClients}
-                dormantCount={dormantCount}
-              />
-            </CardBody>
-          </Card>
-        </>
-      ) : (
-        // <UserInfoDetail />
-        <UserInfo
-          isOpen={isModalOpen}
-          onClose={getUserDetails}
-          handleModalClose={handleModalClose}
-          selectedClientCode={selectedUserInfo && selectedUserInfo?.ctermcode}
-        />
-      )}
-    </>
+        )}
+      </Container>
+    </div>
   );
 };
 export default ClientDetails;

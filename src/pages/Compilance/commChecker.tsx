@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, CardBody, CardHeader } from "reactstrap";
+import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import DataTable from "../../components/common/UserInfoTable";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
@@ -141,19 +141,34 @@ const ComChecker = ({ activeSubItem }: any) => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <h4 className="card-title mb-0">Communication Checker</h4>
-      </CardHeader>
-      <CardBody>
-        <DataTable
-          activeSubItem={activeSubItem}
-          T6Data={data}
-          handleApproval={handleApproval}
-          handleDownload={handleDownload}
-        />
-      </CardBody>
-    </Card>
+    <div className="page-content">
+      <Container fluid>
+        <Card
+          style={{
+            borderRadius: "15px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <CardHeader
+            style={{
+              borderRadius: "15px 15px 0 0",
+              boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+              backgroundColor: "#fff", // optional for contrast
+            }}
+          >
+            <h4 className="card-title mb-0">Communication Checker</h4>
+          </CardHeader>
+          <CardBody>
+            <DataTable
+              activeSubItem={activeSubItem}
+              T6Data={data}
+              handleApproval={handleApproval}
+              handleDownload={handleDownload}
+            />
+          </CardBody>
+        </Card>
+      </Container>
+    </div>
   );
 };
 

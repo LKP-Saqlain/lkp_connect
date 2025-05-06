@@ -223,8 +223,19 @@ const CoreReport = () => {
         <div className="container-fluid">
           <Row className="row-font">
             <Col lg={12}>
-              <Card>
-                <CardHeader>
+              <Card
+                style={{
+                  borderRadius: "15px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                }}
+              >
+                <CardHeader
+                  style={{
+                    borderRadius: "15px 15px 0 0",
+                    boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                    backgroundColor: "#fff", // optional for contrast
+                  }}
+                >
                   <h4 className="card-title mb-0">Core Alert Report</h4>
                 </CardHeader>
                 <CardBody>
@@ -399,7 +410,12 @@ const CoreReport = () => {
                   </div>
                 </CardBody>
               </Card>
-              <Card>
+              <Card
+                style={{
+                  borderRadius: "15px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                }}
+              >
                 <CardBody>
                   <DataTable
                     dynamicHeader={Corecolumns}

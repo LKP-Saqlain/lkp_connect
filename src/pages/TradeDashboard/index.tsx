@@ -304,7 +304,12 @@ const DashboardCrypto = ({
             {selectedItem === "Reasearch Calls" && <TradeCapsule />}
             {/* {selectedItem === "Clients With Ledger Balance" && <DropDown />} */}
           </Row>
-          <Card>
+          <Card
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+            }}
+          >
             <CardBody>
               <TradeInfo
                 T6Data={filteredData.length > 0 ? filteredData : t6Data}

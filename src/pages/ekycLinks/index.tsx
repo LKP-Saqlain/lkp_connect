@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Card } from "reactstrap";
+import { Card, Container } from "reactstrap";
 import PennyPalLogo from "../../assets/images/pennyPal.png";
 import getSetGrowLogo from "../../assets/images/Get_Set_Grow.png";
 import { CopyableLink } from "../../components/common/CopyableLink";
@@ -22,38 +22,52 @@ const EKYCLink = () => {
   };
 
   return (
-    <Card style={{ minHeight: "85vh", padding: "16px" }}>
-      <CopyableLink
-        linkName="getSetGrow"
-        logo={getSetGrowLogo}
-        link="https://ekyc.lkponline.com/admin/lkpsec"
-        buttonText={buttonTexts.getSetGrow}
-        onCopy={() =>
-          handleCopy("getSetGrow", "https://ekyc.lkponline.com/admin/lkpsec")
-        }
-      />
-      <BrokerageSection />
-      <CopyableLink
-        linkName="pennyPal"
-        logo={PennyPalLogo}
-        link="https://ekyc.pennypal.in/admin/lkpsec"
-        buttonText={buttonTexts.pennyPal}
-        onCopy={() =>
-          handleCopy("pennyPal", "https://ekyc.pennypal.in/admin/lkpsec")
-        }
-      />
-      <BrokerageSection customBrokerage={true} />
-      <CopyableLink
-        customClass={true}
-        linkName="ReEkyc"
-        logo={PennyPalLogo}
-        link="https://ekyc.pennypal.in/admin/lkpsec"
-        buttonText={buttonTexts.ReEkyc}
-        onCopy={() =>
-          handleCopy("ReEkyc", "https://ekyc.pennypal.in/admin/lkpsec")
-        }
-      />
-    </Card>
+    <div>
+      <Container fluid>
+        <Card
+          style={{
+            minHeight: "85vh",
+            padding: "16px",
+            borderRadius: "15px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <CopyableLink
+            linkName="getSetGrow"
+            logo={getSetGrowLogo}
+            link="https://ekyc.lkponline.com/admin/lkpsec"
+            buttonText={buttonTexts.getSetGrow}
+            onCopy={() =>
+              handleCopy(
+                "getSetGrow",
+                "https://ekyc.lkponline.com/admin/lkpsec"
+              )
+            }
+          />
+          <BrokerageSection />
+          <CopyableLink
+            linkName="pennyPal"
+            logo={PennyPalLogo}
+            link="https://ekyc.pennypal.in/admin/lkpsec"
+            buttonText={buttonTexts.pennyPal}
+            onCopy={() =>
+              handleCopy("pennyPal", "https://ekyc.pennypal.in/admin/lkpsec")
+            }
+          />
+          <BrokerageSection customBrokerage={true} />
+          <CopyableLink
+            customClass={true}
+            linkName="ReEkyc"
+            logo={PennyPalLogo}
+            link="https://ekyc.pennypal.in/admin/lkpsec"
+            buttonText={buttonTexts.ReEkyc}
+            onCopy={() =>
+              handleCopy("ReEkyc", "https://ekyc.pennypal.in/admin/lkpsec")
+            }
+          />
+        </Card>
+      </Container>
+    </div>
   );
 };
 

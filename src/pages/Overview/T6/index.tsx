@@ -157,13 +157,19 @@ const T6Table = ({ handleTradingOpen }: any) => {
           height: "auto", // Adjust to content height
         }}
       >
-        <Card className="main-card">
+        <Card
+          className="main-card"
+          style={{
+            borderRadius: "15px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          }}
+        >
           <CardHeader
             className="d-flex justify-content-between align-items-center"
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              borderRadius: "15px 15px 0 0", // round only top
+              boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.2)", // top-only shadow
+              backgroundColor: "#fff", // optional
             }}
           >
             <h4 className="card-title mb-0">Top 5 Clients Ageing Report</h4>{" "}
@@ -188,9 +194,9 @@ const T6Table = ({ handleTradingOpen }: any) => {
             style={{
               overflow: "hidden",
               height: `${
-                t6Data.length > 0 ? Math.min(t6Data.length * 50 + 40, 250) : 200 // Minimum height when data is empty
+                t6Data.length > 0 ? Math.min(t6Data.length * 60 + 50, 250) : 200 // Minimum height when data is empty
               }px`,
-              padding: "10px",
+              padding: "15px",
             }}
           >
             <TradeInfo
@@ -200,13 +206,19 @@ const T6Table = ({ handleTradingOpen }: any) => {
             />
           </CardBody>
         </Card>
-        <Card className="main-card">
+        <Card
+          className="main-card"
+          style={{
+            borderRadius: "15px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          }}
+        >
           <CardHeader
             className="d-flex justify-content-between align-items-center"
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              borderRadius: "15px 15px 0 0", // round only top
+              boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.2)", // top-only shadow
+              backgroundColor: "#fff", // optional
             }}
           >
             <h4 className="card-title mb-0">Upcoming Dormant Client</h4>
@@ -238,7 +250,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
                     )
                   : 450 // Minimum height when data is empty
               }px`,
-              padding: "10px",
+              padding: "15px",
             }}
           >
             <TradeInfo

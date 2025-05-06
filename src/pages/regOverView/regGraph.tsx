@@ -161,8 +161,20 @@ const RegOverview = ({ brokerageData, customClass }: any) => {
     <React.Fragment>
       <Row>
         <Col xl={12}>
-          <Card>
-            <CardHeader className="p-0 border-0 bg-light-subtle">
+          <Card
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <CardHeader
+              className="p-0 border-0 bg-light-subtle"
+              style={{
+                borderRadius: "15px 15px 0 0",
+                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff", // optional for contrast
+              }}
+            >
               <Row className="g-0 text-center">
                 <Col xs={12}>
                   <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-md-row">

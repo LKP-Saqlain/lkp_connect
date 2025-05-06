@@ -8,9 +8,14 @@ interface ModalComponentProps {
   isOpen: boolean;
   onClose: () => void;
   message?: string;
+  BrokerageTitle?: any;
 }
 
-const ModalComponent = ({ isOpen, onClose }: ModalComponentProps) => {
+const ModalComponent = ({
+  isOpen,
+  onClose,
+  BrokerageTitle,
+}: ModalComponentProps) => {
   const [selectedValue, setSelectedValue] = useState("");
   const [equityDeliveryValue, setEquityDeliveryValue] = useState(false);
 
@@ -52,7 +57,7 @@ const ModalComponent = ({ isOpen, onClose }: ModalComponentProps) => {
         toggle={onClose}
         style={{ color: "#11395C" }}
       >
-        Brokerage Modification
+        {BrokerageTitle?.label}
       </ModalHeader>
       <ModalBody>
         <Row>

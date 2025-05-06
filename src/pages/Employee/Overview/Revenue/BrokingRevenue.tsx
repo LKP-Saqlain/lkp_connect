@@ -99,7 +99,7 @@ const Revenue = ({}: any) => {
     fetchBrokerage();
   }, [dispatch]);
 
-  // const handleChange = (event: any) => {
+  // const handleChange = (:event any) => {
   //   setSelectedYear(event.target.value as string);
   // };
 

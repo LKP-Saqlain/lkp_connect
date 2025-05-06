@@ -70,8 +70,8 @@ const NudgeTable = ({
       style={{
         maxWidth: "895px",
         width: "90%",
-        marginTop: "40px",
-        marginLeft: !isMobile ? "245px" : "0px",
+        marginTop: "75px",
+        marginLeft: !isMobile ? "275px" : "0px",
       }}
     >
       <ModalHeader

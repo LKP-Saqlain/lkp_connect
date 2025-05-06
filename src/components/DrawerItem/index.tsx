@@ -108,11 +108,19 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           minHeight: 48,
           justifyContent: open ? "initial" : "center",
           px: 2.5,
-          backgroundColor: isMenuOpen ? "#f0f0f0" : "transparent",
+          backgroundColor: isMenuOpen ? "#ffffff" : "transparent",
+          borderRadius: "10px",
+          margin: "5px",
+          boxShadow: isMenuOpen ? "0px 2px 6px rgba(0,0,0,0.1)" : "none",
+          border: isMenuOpen ? "1px solid #ccc" : "none",
+          transition:
+            "background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease",
           "&:hover": {
-            backgroundColor: "#f0f0f0",
+            backgroundColor: "#ffffff",
+            boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
             "& .MuiListItemText-root, & .MuiSvgIcon-root": {
               color: "black",
+              transition: "color 0.2s ease",
             },
           },
         }}
@@ -142,7 +150,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
       </ListItemButton>
 
       {/* Only show sub-items if the menu is open */}
-      {subItems && (
+      {/* {subItems && (
         <Collapse in={isMenuOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {subItems.map((subItem, index) => (
@@ -165,6 +173,73 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
                 <ArrowRightIcon />
                 <ListItemText
                   primary={subItem.menu_name}
+                  primaryTypographyProps={{
+                    fontSize: "12px",
+                    fontFamily: "Public Sans",
+                  }}
+                />
+              </ListItemButton>
+            ))}
+          </List>
+        </Collapse>
+      )} */}
+      {subItems && (
+        <Collapse in={isMenuOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {subItems.map((subItem, index) => (
+              <ListItemButton
+                key={index}
+                onClick={() => handleSubItemSelection(subItem.menu_name)}
+                sx={{
+                  justifyContent: open ? "initial" : "center",
+
+                  pl: 4,
+                  margin: "5px",
+                  backgroundColor:
+                    activeSubItem === subItem.menu_name
+                      ? "#708090"
+                      : "transparent",
+                  borderRadius: "10px",
+                  boxShadow:
+                    activeSubItem === subItem.menu_name
+                      ? "0px 2px 6px rgba(0,0,0,0.1)"
+                      : "none",
+                  transition: "all 0.3s ease-in-out",
+                  "&:hover": {
+                    backgroundColor: "#708090",
+                    borderRadius: "10px",
+                    boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
+                    "& .MuiListItemText-root, & .MuiSvgIcon-root": {
+                      color: "black",
+                    },
+                  },
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 1 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <ArrowRightIcon
+                    sx={{
+                      color:
+                        activeSubItem === subItem.menu_name
+                          ? "black"
+                          : "#F9F6EE",
+                      fontSize: "20px",
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  primary={subItem.menu_name}
+                  sx={{
+                    opacity: open ? 1 : 0,
+                    color:
+                      activeSubItem === subItem.menu_name ? "black" : "#F9F6EE",
+                    transition: "color 0.5s",
+                  }}
                   primaryTypographyProps={{
                     fontSize: "12px",
                     fontFamily: "Public Sans",

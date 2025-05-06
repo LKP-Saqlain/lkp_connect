@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { apiServices } from "../../../services";
-import { Card, CardBody } from "reactstrap";
+import { Card, CardBody, Container } from "reactstrap";
 // import DataTable from "../../../components/common/table";
 // import { GridColDef } from "@mui/x-data-grid";
 // import { Tooltip } from "@mui/material";
@@ -233,49 +233,60 @@ const DPRecovery = ({ activeSubItem }: any) => {
 
   return (
     <>
-      <UserCapsules
-        selectedCapsule={selectedCapsule}
-        handleClick={handleClick}
-        // totalCount={totalCount}
-        // activeClient={activeClients}
-        // inactiveClient={inactiveClients}
-        capsuleType="DPDebit"
-      />
-      <Card>
-        {/* <CardHeader>
+      <div className="page-content">
+        <Container fluid>
+          <UserCapsules
+            selectedCapsule={selectedCapsule}
+            handleClick={handleClick}
+            // totalCount={totalCount}
+            // activeClient={activeClients}
+            // inactiveClient={inactiveClients}
+            capsuleType="DPDebit"
+          />
+          <Card
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            {/* <CardHeader>
           <h4 className="card-title mb-0"> DP Debit Outstanding</h4>
         </CardHeader> */}
-        <CardBody>
-          {/* <DataTable
+            <CardBody>
+              {/* <DataTable
           customFlag={true}
           dynamicHeader={dormantColumns}
           tableData={userData}
         /> */}
 
-          <UserInfoTable
-            showSearch={true}
-            handleSearchBasedOnInput={handleSearchBasedOnInput}
-            searchValue={searchQuery}
-            T6Data={userData ? filteredData : filteredData}
-            getUserDetails={getUserDetails}
-            emailSentStatus={emailSentStatus}
-            activeSubItem={activeSubItem}
-            activeGroupedClients={
-              searchQuery ? filteredActiveGroupClients : activeGroupedClients
-            } // Show filtered when searching
-            inactiveGroupedClients={
-              searchQuery
-                ? filteredInActiveGroupClients
-                : inactiveGroupedClients
-            } // Show filtered when searching
-            selectedWidget={selectedCapsule}
-            activeClient={activeClients}
-            inactiveClient={inactiveClients}
-            totalCount={totalCount}
-            totalLedgerDebitAmt={ledgerSum}
-          />
-        </CardBody>
-      </Card>
+              <UserInfoTable
+                showSearch={true}
+                handleSearchBasedOnInput={handleSearchBasedOnInput}
+                searchValue={searchQuery}
+                T6Data={userData ? filteredData : filteredData}
+                getUserDetails={getUserDetails}
+                emailSentStatus={emailSentStatus}
+                activeSubItem={activeSubItem}
+                activeGroupedClients={
+                  searchQuery
+                    ? filteredActiveGroupClients
+                    : activeGroupedClients
+                } // Show filtered when searching
+                inactiveGroupedClients={
+                  searchQuery
+                    ? filteredInActiveGroupClients
+                    : inactiveGroupedClients
+                } // Show filtered when searching
+                selectedWidget={selectedCapsule}
+                activeClient={activeClients}
+                inactiveClient={inactiveClients}
+                totalCount={totalCount}
+                totalLedgerDebitAmt={ledgerSum}
+              />
+            </CardBody>
+          </Card>
+        </Container>
+      </div>
     </>
   );
 };

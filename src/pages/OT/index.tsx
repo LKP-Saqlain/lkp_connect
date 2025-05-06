@@ -73,7 +73,12 @@ const OTDetails = () => {
                 // inactiveClient={inactiveClients}
                 capsuleType="OD"
               />
-              <Card>
+              <Card
+                style={{
+                  borderRadius: "15px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                }}
+              >
                 <CardBody>
                   <InputGroup className="mb-3" style={{ flex: 1 }}>
                     {/* Client Code Input */}

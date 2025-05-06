@@ -15,6 +15,7 @@ import AnnualPNL from "./Fundamental/annualP&L";
 import Quarterly from "./Fundamental/QuaterlyP&L";
 import Ratios from "./Fundamental/Ratios";
 import News from "./News";
+import { Card, CardBody, Container } from "reactstrap";
 
 interface MenuItem {
   title: string;
@@ -191,91 +192,105 @@ const StockStudy = () => {
 
   return (
     <div
-      className="menu-box"
-      style={{ fontFamily: "Public Sans", minHeight: "85vh" }}
+      className="page-content"
+      style={{
+        fontFamily: "Public Sans",
+        minHeight: "85vh",
+      }}
     >
-      <Box className="search-bar" sx={{ display: "flex", gap: 1, mb: 2 }}>
-        <Autocomplete
-          freeSolo
-          options={fundamentalRecords}
-          getOptionLabel={(option) =>
-            typeof option === "string" ? option : option.ScripName || ""
-          }
-          filterOptions={(options, state) =>
-            options.filter((option) => {
-              const input = state.inputValue.toLowerCase();
-              return (
-                option.ScripName?.toLowerCase().includes(input) ||
-                option.BSECode?.toLowerCase().includes(input) ||
-                option.NSECode?.toLowerCase().includes(input) ||
-                option.ISINCode?.toLowerCase().includes(input)
-              );
-            })
-          }
-          value={null} // prevent autocomplete from auto-selecting
-          inputValue={inputValue}
-          onInputChange={(event, newInputValue) => {
-            if (regEx.query.test(newInputValue) || newInputValue === "") {
-              setInputValue(newInputValue.toUpperCase());
-
-              if (newInputValue === "") {
-                // Clear selection if input is cleared
-                setPendingSelected(null);
-                setSelectedIsin(null); // ✅ Clear the selected ISIN
-                console.log("Cleared ISIN due to empty input");
-              }
-              console.log(event);
-            }
+      <Container fluid>
+        <Card
+          style={{
+            borderRadius: "15px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
           }}
-          onChange={(event, newValue) => {
-            if (newValue && typeof newValue !== "string") {
-              setPendingSelected(newValue); // queue up
-              setInputValue(newValue.ScripName || "");
-              console.log("Selected ISIN event:", event);
-            } else {
-              setPendingSelected(null);
-              setSelectedIsin(null); // ✅ Clear on manual clear
-              setInputValue(""); // reset the input field
-              console.log("Cleared ISIN due to deselection");
-            }
-          }}
-          renderOption={(props, option) => (
-            <li {...props} key={option.ISINCode}>
-              <Box>{option.ScripName}</Box>
-            </li>
-          )}
-          renderInput={(params) => (
-            <TextField {...params} label="Search Scrip" size="small" />
-          )}
-          sx={{ flex: 1 }}
-        />
-
-        <Button
-          variant="contained"
-          onClick={handleSearchClick}
-          sx={{ minWidth: 100 }}
-          style={{ backgroundColor: "#11395C" }}
         >
-          Search
-        </Button>
-      </Box>
+          <CardBody>
+            <Box className="search-bar" sx={{ display: "flex", gap: 1, mb: 2 }}>
+              <Autocomplete
+                freeSolo
+                options={fundamentalRecords}
+                getOptionLabel={(option) =>
+                  typeof option === "string" ? option : option.ScripName || ""
+                }
+                filterOptions={(options, state) =>
+                  options.filter((option) => {
+                    const input = state.inputValue.toLowerCase();
+                    return (
+                      option.ScripName?.toLowerCase().includes(input) ||
+                      option.BSECode?.toLowerCase().includes(input) ||
+                      option.NSECode?.toLowerCase().includes(input) ||
+                      option.ISINCode?.toLowerCase().includes(input)
+                    );
+                  })
+                }
+                value={null} // prevent autocomplete from auto-selecting
+                inputValue={inputValue}
+                onInputChange={(event, newInputValue) => {
+                  if (regEx.query.test(newInputValue) || newInputValue === "") {
+                    setInputValue(newInputValue.toUpperCase());
 
-      <Menu
-        items={menuData}
-        activeMenu={activeMenu}
-        setActiveMenu={setActiveMenu}
-      />
-      <Submenu
-        items={currentSubmenus}
-        activeSubmenu={activeSubmenu}
-        setActiveSubmenu={setActiveSubmenu}
-      />
-      <ContentArea
-        records={fundamentalRecords}
-        activeMenu={activeMenu}
-        activeSubmenu={activeSubmenu}
-        selectedIsin={selectedIsin}
-      />
+                    if (newInputValue === "") {
+                      // Clear selection if input is cleared
+                      setPendingSelected(null);
+                      setSelectedIsin(null); // ✅ Clear the selected ISIN
+                      console.log("Cleared ISIN due to empty input");
+                    }
+                    console.log(event);
+                  }
+                }}
+                onChange={(event, newValue) => {
+                  if (newValue && typeof newValue !== "string") {
+                    setPendingSelected(newValue); // queue up
+                    setInputValue(newValue.ScripName || "");
+                    console.log("Selected ISIN event:", event);
+                  } else {
+                    setPendingSelected(null);
+                    setSelectedIsin(null); // ✅ Clear on manual clear
+                    setInputValue(""); // reset the input field
+                    console.log("Cleared ISIN due to deselection");
+                  }
+                }}
+                renderOption={(props, option) => (
+                  <li {...props} key={option.ISINCode}>
+                    <Box>{option.ScripName}</Box>
+                  </li>
+                )}
+                renderInput={(params) => (
+                  <TextField {...params} label="Search Scrip" size="small" />
+                )}
+                sx={{ flex: 1 }}
+              />
+
+              <Button
+                variant="contained"
+                onClick={handleSearchClick}
+                sx={{ minWidth: 100 }}
+                style={{ backgroundColor: "#11395C" }}
+              >
+                Search
+              </Button>
+            </Box>
+
+            <Menu
+              items={menuData}
+              activeMenu={activeMenu}
+              setActiveMenu={setActiveMenu}
+            />
+            <Submenu
+              items={currentSubmenus}
+              activeSubmenu={activeSubmenu}
+              setActiveSubmenu={setActiveSubmenu}
+            />
+            <ContentArea
+              records={fundamentalRecords}
+              activeMenu={activeMenu}
+              activeSubmenu={activeSubmenu}
+              selectedIsin={selectedIsin}
+            />
+          </CardBody>
+        </Card>
+      </Container>
     </div>
   );
 };

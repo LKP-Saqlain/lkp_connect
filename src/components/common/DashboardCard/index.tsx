@@ -55,6 +55,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           maxWidth: "500px",
           overflow: "hidden",
           marginBottom: "20px",
+          // borderRadius: "15px",
+          // boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
         }}
       >
         <CardBody>

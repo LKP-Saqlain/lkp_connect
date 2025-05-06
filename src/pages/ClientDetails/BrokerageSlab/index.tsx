@@ -10,6 +10,9 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lastTradeData, setLastTradeData] = useState([]);
   const [mappedDPScheme, setMappedDPScheme] = useState([]);
+  const [selectedBrokerageItem, setSelectedBrokerageItem] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     console.log("test124", setClientDetails);
@@ -63,13 +66,19 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
     }
   }, [setClientDetails]);
 
-  const handleBrokeragePlan = () => {
+  const handleBrokeragePlan = (item?: any) => {
+    console.log("eventValue", item);
     setIsModalOpen(!isModalOpen);
+    setSelectedBrokerageItem(item);
   };
 
   return (
     <>
-      <ModalComponent isOpen={isModalOpen} onClose={handleBrokeragePlan} />
+      <ModalComponent
+        isOpen={isModalOpen}
+        onClose={handleBrokeragePlan}
+        BrokerageTitle={selectedBrokerageItem}
+      />
       <Row className="gx-3 gy-2 align-items-start">
         {/* Left Side: Brokerage Slab */}
         <Col md={3}>
@@ -176,7 +185,7 @@ const BrokerageSlab = ({ setClientDetails }: any) => {
                           fontSize: "16px",
                           color: "#777",
                         }}
-                        onClick={handleBrokeragePlan}
+                        onClick={() => handleBrokeragePlan(item)}
                       />
                       {/* <ModalComponent/> */}
                     </CardBody>

@@ -1,3 +1,4 @@
+import { Container } from "reactstrap";
 import RegGraph from "./regGraph";
 
 const RegMain = () => {
@@ -71,14 +72,16 @@ const RegMain = () => {
   ];
   document.title = document.title = "LKP Securities | Zone Overview";
   return (
-    <div>
-      {DataSets.map((dataSet, index) => (
-        <RegGraph
-          key={index}
-          brokerageData={dataSet.series}
-          customClass={dataSet.customClass}
-        />
-      ))}
+    <div className="page-content">
+      <Container fluid>
+        {DataSets.map((dataSet, index) => (
+          <RegGraph
+            key={index}
+            brokerageData={dataSet.series}
+            customClass={dataSet.customClass}
+          />
+        ))}
+      </Container>
     </div>
   );
 };

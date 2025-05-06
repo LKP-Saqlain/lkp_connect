@@ -91,8 +91,20 @@ const ProjectsOverview = () => {
     <React.Fragment>
       <Row>
         <Col xl={12}>
-          <Card>
-            <CardHeader className="align-items-center d-flex">
+          <Card
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <CardHeader
+              className="align-items-center d-flex"
+              style={{
+                borderRadius: "15px 15px 0 0",
+                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff", // optional for contrast
+              }}
+            >
               <h4 className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center">
                 Brokerage Details for Last 10 Days
               </h4>

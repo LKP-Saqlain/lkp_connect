@@ -247,13 +247,15 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
             <Col>
               <div className="h-100">
                 {/* Row for Four Boxes */}
-                <Row>
+                <Row style={{ marginTop: "20px" }}>
                   <Col
                     xxl={3}
                     lg={3}
                     md={6}
                     sm={12}
-                    style={{ marginTop: isMobile ? "10px" : "" }}
+                    style={{
+                      marginTop: isMobile ? "10px" : "",
+                    }}
                   >
                     <DashboardCard
                       title="Revenue*"

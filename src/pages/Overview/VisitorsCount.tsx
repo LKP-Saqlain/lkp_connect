@@ -70,8 +70,21 @@ const StoreVisits = ({ getActiveClients }: any) => {
   return (
     <React.Fragment>
       <Col xl={4}>
-        <Card className="card-height-100">
-          <CardHeader className="align-items-center d-flex">
+        <Card
+          className="card-height-100"
+          style={{
+            borderRadius: "15px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <CardHeader
+            className="align-items-center d-flex"
+            style={{
+              borderRadius: "15px 15px 0 0",
+              boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+              backgroundColor: "#fff", // optional for contrast
+            }}
+          >
             <h4 className="card-title flex-grow-1">Client Summary</h4>
           </CardHeader>
 

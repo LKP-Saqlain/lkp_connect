@@ -71,8 +71,9 @@ import APOverview from "../../pages/Employee/Overview";
 import RegionalHead from "../../pages/refCard/RegionalHead/index";
 import BrokerageModificationStatus from "../../pages/refCard/BrokerageModStatus";
 import KycBrokerage from "../../pages/refCard/KycBrokerage";
+import "./style.css";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 // Utility functions for Drawer
 const openedMixin = (theme: Theme, drawerWidth: any): CSSObject => ({
@@ -106,22 +107,27 @@ const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })<CustomAppBarProps>(({ theme, open }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const width = isMobile ? 180 : drawerWidth;
+  const drawerWidth = isMobile ? 180 : 260;
+  const collapsedDrawerWidth = isMobile ? 60 : 72;
+
+  const leftMargin = open ? drawerWidth : collapsedDrawerWidth;
 
   return {
-    zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: "#FAF9F6",
+    borderRadius: "15px",
+    margin: "15px",
+    boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)",
+    // zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    ...(open && {
-      marginLeft: width,
-      width: `calc(100% - ${width}px)`,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
+    width: isMobile
+      ? "calc(100% - 30px)" // Always full width minus margin on mobile
+      : open
+      ? `calc(100% - ${leftMargin + 30}px)`
+      : `calc(100% - 30px)`,
+    marginLeft: isMobile ? 0 : `${leftMargin}px`,
   };
 });
 
@@ -137,11 +143,19 @@ const Drawer = styled(MuiDrawer, {
     whiteSpace: "nowrap",
     ...(open && {
       ...openedMixin(theme, width),
-      "& .MuiDrawer-paper": openedMixin(theme, width),
+      "& .MuiDrawer-paper": {
+        ...openedMixin(theme, width),
+        height: "100vh",
+        overflowY: "auto", // 👈 Enables vertical scroll
+      },
     }),
     ...(!open && {
       ...closedMixin(theme),
-      "& .MuiDrawer-paper": closedMixin(theme),
+      "& .MuiDrawer-paper": {
+        ...closedMixin(theme),
+        height: "100vh",
+        overflowY: "auto", // 👈 Enables vertical scroll
+      },
     }),
   };
 });
@@ -757,53 +771,6 @@ const SideBar = () => {
     setIsNudgeOpen(false);
   }
 
-  // const handleUserClick = () => {
-  //   let payload = {
-  //     user_id: `EMP-${userChangeValue}`,
-  //     user_type: "Employee",
-  //     auth_type: "PAN",
-  //     auth_value: "IHNPS0213M",
-  //   };
-  //   dispatch(showLoader(""));
-  //   dispatch(AuthUser(payload))
-  //     .unwrap()
-  //     .then((response) => {
-  //       console.log("2FAresponse", response);
-  //       if (response?.status === 200) {
-  //         const { token, name } = response?.data;
-
-  //         setTimeout(() => {
-  //           console.log("2FA_Response", response?.data);
-  //           localStorage.setItem("authenticated", "true");
-  //           localStorage.setItem("tkn", token);
-  //           localStorage.setItem("userName", name);
-  //           dispatch(updateUserId(`EMP-${userChangeValue}`));
-  //           setUserChangeValue("");
-  //           window.location.reload();
-  //         }, 250);
-  //         // navigate("/dashboard");
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       const { message } = error;
-  //       console.log("Error->", message);
-  //       dispatch(hideLoader());
-  //       // formik.setFieldError("password", message);
-  //       ShowToast(
-  //         "error",
-  //         message || "Sorry for the inconvenience, please try after some time."
-  //       );
-  //     })
-  //     .finally(() => {
-  //       dispatch(hideLoader());
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   setmodal_animationZoom((prev) => !prev);
-  //   tog_animationZoom();
-  // }, [isNudgeOpen]); // Empty dependency array ensures it only runs once when the component mounts
-
   const toCamelCase = (name: string) => {
     return name
       .toLowerCase()
@@ -832,11 +799,7 @@ const SideBar = () => {
       )}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar
-          position="fixed"
-          open={open}
-          sx={{ backgroundColor: "#FAF9F6" }}
-        >
+        <AppBar position="fixed" open={open}>
           <Toolbar>
             {open ? (
               <IconButton onClick={handleDrawerClose}>
@@ -876,13 +839,9 @@ const SideBar = () => {
 
             <Box
               sx={{
-                // border: "2px solid black",
                 padding: isMobile ? "0" : "10px",
-                // marginRight: isMobile ? "0" : "2rem",
               }}
             >
-              {/* <SlSizeFullscreen style={{ color: "black", cursor: "pointer" }} />
-            <BsFullscreen style={{ color: "black", cursor: "pointer" }} /> */}
               {!isMobile ? (
                 <div>
                   <IconButton
@@ -918,19 +877,7 @@ const SideBar = () => {
                 fontFamily: "Public Sans",
               }}
             >
-              {/* <Typography
-              sx={{
-                textAlign: "end",
-                fontFamily: "Public Sans",
-                fontSize: "18px",
-                fontWeight: 400,
-              }}
-            >
-              {" "}
-              Welcome
-            </Typography> */}
               <Typography sx={{ fontSize: "14px", fontFamily: "Public Sans" }}>
-                {/* {localStorage.getItem("userName")} */}
                 {toCamelCase(name)}
               </Typography>
               <Typography
@@ -992,6 +939,7 @@ const SideBar = () => {
               "& .MuiDrawer-paper": {
                 backgroundColor: "#11395C",
               },
+              position: "relative",
             }}
           >
             <Divider />
@@ -999,6 +947,7 @@ const SideBar = () => {
               sx={{
                 display: "flex",
                 justifyContent: "center",
+                // zIndex: 1,
                 marginTop: isMobile ? "0px" : "10px",
               }}
             >
@@ -1034,8 +983,8 @@ const SideBar = () => {
           component="main"
           sx={{
             flexGrow: 1,
-            p: 1,
-            mt: 8,
+            p: 0.5,
+            pt: "72px", // Adjust according to actual AppBar height
             backgroundColor: "#E5E4E2",
             overflow: "hidden",
             // width: "100vw", // Full width of the viewport

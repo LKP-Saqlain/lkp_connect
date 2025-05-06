@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import { Box, Button, InputLabel, MenuItem } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -136,10 +136,24 @@ const Retrival = ({ activeSubItem }: any) => {
   };
   CardHeader;
   return (
-    <Card>
-      <CardHeader className="p-0 border-0 bg-light-subtle">
-        <h4 className="card-title mb-0">Communication Retrival Report</h4>
-        {/* <div className="d-flex gap-1">
+    <div className="page-content">
+      <Container fluid>
+        <Card
+          style={{
+            borderRadius: "15px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <CardHeader
+            className="p-0 border-0 bg-light-subtle"
+            style={{
+              borderRadius: "15px 15px 0 0",
+              boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+              backgroundColor: "#fff", // optional for contrast
+            }}
+          >
+            <h4 className="card-title mb-0">Communication Retrival Report</h4>
+            {/* <div className="d-flex gap-1">
                 <Button
                   variant="outlined"
                   size="small"
@@ -177,158 +191,165 @@ const Retrival = ({ activeSubItem }: any) => {
                   Department
                 </Button>
               </div> */}
-      </CardHeader>
-      <CardBody>
-        {" "}
-        <form onSubmit={formik.handleSubmit}>
-          <Row>
-            <Col xs={12} md={3} lg={4}>
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl
-                  fullWidth
-                  error={
-                    formik.touched.finYear && Boolean(formik.errors.finYear)
-                  }
+          </CardHeader>
+          <CardBody>
+            {" "}
+            <form onSubmit={formik.handleSubmit}>
+              <Row>
+                <Col xs={12} md={3} lg={4}>
+                  <Box sx={{ minWidth: 120 }}>
+                    <FormControl
+                      fullWidth
+                      error={
+                        formik.touched.finYear && Boolean(formik.errors.finYear)
+                      }
+                    >
+                      <InputLabel id="financial-year-select-label">
+                        Financial Year
+                      </InputLabel>
+                      <Select
+                        size="small"
+                        labelId="financial-year-select-label"
+                        id="financial-year-select"
+                        name="finYear"
+                        value={formik.values.finYear}
+                        label="Financial Year"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        sx={{ fontFamily: "Public Sans" }}
+                      >
+                        {financialYears.map((year) => (
+                          <MenuItem key={year.value} value={year.value}>
+                            {year.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {formik.touched.finYear && formik.errors.finYear && (
+                        <p className="text-error">{formik.errors.finYear}</p>
+                      )}
+                    </FormControl>
+                  </Box>
+                </Col>
+                <Col
+                  xs={12}
+                  md={3}
+                  lg={4}
+                  style={{ marginTop: isMobile ? "16px" : "0" }}
                 >
-                  <InputLabel id="financial-year-select-label">
-                    Financial Year
-                  </InputLabel>
-                  <Select
-                    size="small"
-                    labelId="financial-year-select-label"
-                    id="financial-year-select"
-                    name="finYear"
-                    value={formik.values.finYear}
-                    label="Financial Year"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    sx={{ fontFamily: "Public Sans" }}
-                  >
-                    {financialYears.map((year) => (
-                      <MenuItem key={year.value} value={year.value}>
-                        {year.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {formik.touched.finYear && formik.errors.finYear && (
-                    <p className="text-error">{formik.errors.finYear}</p>
-                  )}
-                </FormControl>
-              </Box>
-            </Col>
-            <Col
-              xs={12}
-              md={3}
-              lg={4}
-              style={{ marginTop: isMobile ? "16px" : "0" }}
-            >
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl
-                  fullWidth
-                  error={
-                    formik.touched.documentType &&
-                    Boolean(formik.errors.documentType)
-                  }
-                >
-                  <InputLabel id="documentType-select-label">
-                    Types Of Documents
-                  </InputLabel>
-                  <Select
-                    size="small"
-                    labelId="documentType-select-label"
-                    id="documentType-select"
-                    name="documentType"
-                    value={formik.values.documentType}
-                    label="Types Of Documents"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    sx={{ fontFamily: "Public Sans" }}
-                  >
-                    {documentType.map((docType) => (
-                      <MenuItem key={docType.value} value={docType.value}>
-                        {docType.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {formik.touched.documentType &&
-                    formik.errors.documentType && (
-                      <p className="text-error">{formik.errors.documentType}</p>
-                    )}
-                </FormControl>
-              </Box>
-            </Col>
+                  <Box sx={{ minWidth: 120 }}>
+                    <FormControl
+                      fullWidth
+                      error={
+                        formik.touched.documentType &&
+                        Boolean(formik.errors.documentType)
+                      }
+                    >
+                      <InputLabel id="documentType-select-label">
+                        Types Of Documents
+                      </InputLabel>
+                      <Select
+                        size="small"
+                        labelId="documentType-select-label"
+                        id="documentType-select"
+                        name="documentType"
+                        value={formik.values.documentType}
+                        label="Types Of Documents"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        sx={{ fontFamily: "Public Sans" }}
+                      >
+                        {documentType.map((docType) => (
+                          <MenuItem key={docType.value} value={docType.value}>
+                            {docType.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {formik.touched.documentType &&
+                        formik.errors.documentType && (
+                          <p className="text-error">
+                            {formik.errors.documentType}
+                          </p>
+                        )}
+                    </FormControl>
+                  </Box>
+                </Col>
 
-            <Col
-              xs={12}
-              md={3}
-              lg={4}
-              style={{ marginTop: isMobile ? "16px" : "0" }}
-            >
-              <Box sx={{ minWidth: 120 }}>
-                <FormControl
-                  fullWidth
-                  error={
-                    formik.touched.department &&
-                    Boolean(formik.errors.department)
-                  }
+                <Col
+                  xs={12}
+                  md={3}
+                  lg={4}
+                  style={{ marginTop: isMobile ? "16px" : "0" }}
                 >
-                  <InputLabel id="department-select-label">
-                    Department
-                  </InputLabel>
-                  <Select
-                    size="small"
-                    labelId="department-select-label"
-                    id="department-select"
-                    name="department"
-                    value={formik.values.department}
-                    label="Department"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    sx={{ fontFamily: "Public Sans" }}
-                  >
-                    {department.map((dept) => (
-                      <MenuItem key={dept.value} value={dept.value}>
-                        {dept.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {formik.touched.department && formik.errors.department && (
-                    <p className="text-error">{formik.errors.department}</p>
-                  )}
-                </FormControl>
-              </Box>
-            </Col>
-            <Col xs={12} md={4} lg={4}>
-              <Box>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  className="btn-font"
-                  sx={{
-                    width: isMobile ? "100%" : "50%",
-                    backgroundColor: "#11395C",
-                    "&:hover": {
-                      backgroundColor: "#0d2d4a",
-                    },
-                    fontFamily: "Public Sans",
-                    marginTop: "0.8rem",
-                  }}
-                >
-                  View Report
-                </Button>
-              </Box>
-            </Col>
-          </Row>
-        </form>
-      </CardBody>
-      <CardBody>
-        <UserInfoTable
-          activeSubItem={activeSubItem}
-          T6Data={userData}
-          handleDownload={handleDownload}
-        />
-      </CardBody>
-    </Card>
+                  <Box sx={{ minWidth: 120 }}>
+                    <FormControl
+                      fullWidth
+                      error={
+                        formik.touched.department &&
+                        Boolean(formik.errors.department)
+                      }
+                    >
+                      <InputLabel id="department-select-label">
+                        Department
+                      </InputLabel>
+                      <Select
+                        size="small"
+                        labelId="department-select-label"
+                        id="department-select"
+                        name="department"
+                        value={formik.values.department}
+                        label="Department"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        sx={{ fontFamily: "Public Sans" }}
+                      >
+                        {department.map((dept) => (
+                          <MenuItem key={dept.value} value={dept.value}>
+                            {dept.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      {formik.touched.department &&
+                        formik.errors.department && (
+                          <p className="text-error">
+                            {formik.errors.department}
+                          </p>
+                        )}
+                    </FormControl>
+                  </Box>
+                </Col>
+                <Col xs={12} md={4} lg={4}>
+                  <Box>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      className="btn-font"
+                      sx={{
+                        width: isMobile ? "100%" : "50%",
+                        backgroundColor: "#11395C",
+                        "&:hover": {
+                          backgroundColor: "#0d2d4a",
+                        },
+                        fontFamily: "Public Sans",
+                        marginTop: "0.8rem",
+                      }}
+                    >
+                      View Report
+                    </Button>
+                  </Box>
+                </Col>
+              </Row>
+            </form>
+          </CardBody>
+          <CardBody>
+            <UserInfoTable
+              activeSubItem={activeSubItem}
+              T6Data={userData}
+              handleDownload={handleDownload}
+            />
+          </CardBody>
+        </Card>
+      </Container>
+    </div>
   );
 };
 
