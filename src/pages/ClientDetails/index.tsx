@@ -77,6 +77,7 @@ any) => {
   useEffect(() => {
     if (selectedTrading === "Dormant") {
       setSelectedCapsule("Upcoming Dormant Client");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [selectedTrading]);
   useEffect(() => {

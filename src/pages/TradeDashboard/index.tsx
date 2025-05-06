@@ -63,6 +63,7 @@ const DashboardCrypto = ({
     console.log("testProps->", selectedViewMore);
     if (selectedViewMore === "T6") {
       setSelectedItem("Clients Ageing Report");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [selectedViewMore]);
 
@@ -117,6 +118,7 @@ const DashboardCrypto = ({
   useEffect(() => {
     if (selectedTrading === "T6") {
       setSelectedItem("Clients Ageing Report");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [selectedTrading]);
 

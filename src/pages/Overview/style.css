@@ -17,7 +17,7 @@ span.apexcharts-legend-text {
 }
 
 .movable-note {
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   font-size: 12px;
   color: #6c757d;
   white-space: nowrap;

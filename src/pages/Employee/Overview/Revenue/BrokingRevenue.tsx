@@ -105,8 +105,20 @@ const Revenue = ({}: any) => {
 
   return (
     <React.Fragment>
-      <Card>
-        <CardHeader className="align-items-center d-flex">
+      <Card
+        style={{
+          borderRadius: "15px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+        }}
+      >
+        <CardHeader
+          className="align-items-center d-flex"
+          style={{
+            borderRadius: "15px 15px 0 0",
+            boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+            backgroundColor: "#fff", // optional for contrast
+          }}
+        >
           <h4 className="card-title mb-0 flex-grow-1 text-md-start text-center">
             Brokerage Revenue Summary
             <span style={{ fontSize: "0.8rem" }}> (Last 12 Months)</span>

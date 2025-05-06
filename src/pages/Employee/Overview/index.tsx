@@ -271,7 +271,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
               dashBoardNudgeData={dashboardNudgeData}
             />
           )} */}
-          <Row className="g-3">
+          <Row className="g-3" style={{ marginTop: "5px" }}>
             <Col
               xxl={4}
               lg={4}
