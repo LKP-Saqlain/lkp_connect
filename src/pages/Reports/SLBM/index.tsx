@@ -234,11 +234,6 @@ const SlbmHoling = ({ activeSubItem }: any) => {
     // formik.setFieldValue("selectedZone", {});
     // formik.setFieldValue("selectedBranchCode", {});
     // formik.setFieldValue("isInValue", "");
-    // let Id = localStorage.getItem("Id");
-    const pageSize = 10; // Define pageSize
-
-    // Calculate start based on the new page (0-indexed)
-    const start = (value - 1) * pageSize;
 
     const payload = {
       loginName: user_id,
