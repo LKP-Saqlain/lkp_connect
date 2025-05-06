@@ -67,7 +67,7 @@ import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
 import AccessMapping from "../../pages/Masters/AccessMapping";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
-import { subDays, format } from "date-fns";
+// import { subDays, format } from "date-fns";
 import RegionalHead from "../../pages/refCard/RegionalHead/index";
 import BrokerageModificationStatus from "../../pages/refCard/BrokerageModStatus";
 import KycBrokerage from "../../pages/refCard/KycBrokerage";
@@ -188,15 +188,17 @@ const SideBar = () => {
   );
   console.log("reduxStateUserName", name, user_type);
 
-  const lastBrokingValues = useSelector(
+  const EmployeeLastBrokingDate = useSelector(
     (state: RootState) => state.userOverView?.data?.data?.data
   );
 
-  const apBrokingValue = useSelector(
+  console.log("EMpLastDate", EmployeeLastBrokingDate);
+
+  const apBrokingLastDate = useSelector(
     (state: RootState) => state.APBrokerage?.data?.data?.Table
   );
 
-  console.log("testasdasd", apBrokingValue);
+  console.log("testasdasd", apBrokingLastDate);
 
   useEffect(() => {
     const fetchBrokerage = async () => {
@@ -291,27 +293,31 @@ const SideBar = () => {
   }, [activeMenu, activeSubItem]);
 
   useEffect(() => {
-    if (lastBrokingValues && lastBrokingValues.length > 0) {
-      const brokingValue =
-        lastBrokingValues[lastBrokingValues.length - 1]?.Dtrandate;
-      setDataStatus(brokingValue || "No date available"); // Set default value if empty
-      console.log("daaasda", brokingValue);
+    //this is for Employee user last date
+    if (EmployeeLastBrokingDate && EmployeeLastBrokingDate.length > 0) {
+      const EmpLastDate =
+        EmployeeLastBrokingDate[EmployeeLastBrokingDate.length - 1]?.Dtrandate;
+      setDataStatus(EmpLastDate || "No date available"); // Set default value if empty
+      console.log("LASTDATE_Employee-->", EmpLastDate);
     } else {
-      // setDataStatus("No data available");
-      const apDataShow =
-        apBrokingValue && apBrokingValue[apBrokingValue.length - 1]?.Dtrandate;
-      console.log("testasdasd", apDataShow);
-      setDataStatus(apDataShow || "No date available");
-      if (apDataShow) {
-        setDataStatus(apDataShow);
-        console.log("testasdasd", apDataShow);
-      } else {
-        const yesterday = format(subDays(new Date(), 1), "dd-MM-yyyy");
-        setDataStatus(yesterday);
-        console.log("Setting yesterday's date:", yesterday);
-      }
+      // this is for Partner user last date
+      const apLastDate =
+        apBrokingLastDate &&
+        apBrokingLastDate[apBrokingLastDate.length - 1]?.Dtrandate;
+      console.log("LASTDATE-->", apLastDate);
+      setDataStatus(apLastDate || "No date available");
+
+      // if (apLastDate) {
+      //   setDataStatus(apLastDate);
+      //   console.log("testasdasd", apLastDate);
+      // }
+      //  else {
+      //   const yesterday = format(subDays(new Date(), 1), "dd-MM-yyyy");
+      //   setDataStatus(yesterday);
+      //   console.log("Setting yesterday's date:", yesterday);
+      // }
     }
-  }, [lastBrokingValues]);
+  }, [EmployeeLastBrokingDate, apBrokingLastDate]);
 
   useEffect(() => {
     const fetchDashboardNudge = async () => {
