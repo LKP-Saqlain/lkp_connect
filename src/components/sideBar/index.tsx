@@ -100,12 +100,13 @@ const closedMixin = (theme: Theme): CSSObject => ({
 
 interface CustomAppBarProps extends MuiAppBarProps {
   open?: boolean; // Custom open prop
+  isNudgeOpen?: any;
 }
 
 // Custom AppBar
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})<CustomAppBarProps>(({ theme, open }) => {
+})<CustomAppBarProps>(({ theme, open, isNudgeOpen }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const drawerWidth = isMobile ? 180 : 260;
   const collapsedDrawerWidth = isMobile ? 60 : 72;
@@ -117,7 +118,7 @@ const AppBar = styled(MuiAppBar, {
     borderRadius: "15px",
     margin: "15px",
     boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)",
-    // zIndex: theme.zIndex.drawer + 1,
+    zIndex: !isNudgeOpen ? "" : "auto",
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -799,7 +800,7 @@ const SideBar = () => {
       )}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="fixed" open={open}>
+        <AppBar position="fixed" open={open} isNudgeOpen={isNudgeOpen}>
           <Toolbar>
             {open ? (
               <IconButton onClick={handleDrawerClose}>
