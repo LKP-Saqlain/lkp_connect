@@ -53,7 +53,6 @@ export const dummyClientPlanData = [
     segment: "Equity",
     existingPlan: "Plan A",
     proposedPlan: "Plan B",
-    remark: "",
   },
   {
     dummyId: 2,
@@ -66,7 +65,6 @@ export const dummyClientPlanData = [
     segment: "F&O",
     existingPlan: "Plan B",
     proposedPlan: "Plan C",
-    remark: "Requested change",
   },
   {
     dummyId: 4,
@@ -79,7 +77,6 @@ export const dummyClientPlanData = [
     segment: "Equity",
     existingPlan: "Plan A",
     proposedPlan: "Plan A",
-    remark: "",
   },
 ];
 

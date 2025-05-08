@@ -162,7 +162,7 @@ const DataTable: React.FC<DormantClientProps> = ({
               // alignItems: "center",
               alignContent: customCss ? "center" : "",
               color: "#000",
-              border: "1px solid #D3D3D3 !important",
+              border: "1px solid rgb(196, 223, 241) !important",
             },
           }}
           slotProps={{

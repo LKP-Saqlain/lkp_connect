@@ -35,7 +35,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [userData, setUserData] = useState([]);
-  // const [totalEntries, setTotalEntries] = useState(null);
+  const [totalEntries, setTotalEntries] = useState(null);
   const [responseStatus, setResponseStatus] = useState(false);
   // const [searchValue, setSearchValue] = React.useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -263,8 +263,10 @@ const SlbmHoling = ({ activeSubItem }: any) => {
           "SLBMHoldingsReportResponse",
           response?.data?.sLBMHoldings[0]
         );
-        // const { recordsTotal } = response?.data?.sLBMHoldings[0];
-        // setTotalEntries(recordsTotal);
+        response?.data?.sLBMHoldings[0];
+        setTotalEntries(response?.data?.sLBMHoldings[0]?.recordsTotal);
+        console.log(totalEntries, "totalEntries slbm");
+
         dispatch(hideLoader());
         if (response?.status === 200) {
           setResponseStatus(true);

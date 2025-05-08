@@ -182,7 +182,7 @@ const DataTable = ({
   const handleViewDetails = (row: any) => {
     // debugger;
     console.log("View Details clicked for:", row);
-    getUserDetails?.(row);
+    // getUserDetails?.(row);
     setSelectedRow(row);
     // tog_center();
   };
@@ -373,9 +373,50 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "Referal Product Wise MIS Report") {
-      return BrokerageKyc.map((column) => ({
-        ...column,
-      }));
+      return BrokerageKyc.map((column) => {
+        if (column.field === "remark") {
+          return {
+            ...column,
+            renderCell: (params: any) => (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <div
+                  onClick={() => {
+                    HandleApprovalModal("approve");
+                    // setSelectedRow(params.row.dummyId);
+                    console.log(params.row.dummyId, "selectedrow approve");
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: 5,
+                  }}
+                >
+                  <span>Approve</span>
+                  <CheckCircleIcon style={{ color: "green", marginLeft: 4 }} />
+                </div>
+                <div style={{ fontSize: 20, color: "gray" }}>|</div>
+                <div
+                  onClick={() => {
+                    HandleApprovalModal("reject");
+                    setSelectedRow(params.row.dummyId);
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: 5,
+                  }}
+                >
+                  <span>Reject</span>
+                  <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                </div>
+              </div>
+            ),
+          };
+        }
+        return column;
+      });
     } else if (activeSubItem === "Terminal") {
       return terminalcol.map((column) => ({
         ...column,
@@ -642,7 +683,8 @@ const DataTable = ({
         Msg={
           activeSubItem === "Communication Retrival Entry"
             ? "Are you sure want to delete this entry"
-            : activeSubItem === "Communication Retrival Checker"
+            : activeSubItem === "Communication Retrival Checker" ||
+              "Referal Product Wise MIS Report"
             ? `Are you sure want to ${action} this entry`
             : activeMenu === "Regulatory Announcement"
             ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "

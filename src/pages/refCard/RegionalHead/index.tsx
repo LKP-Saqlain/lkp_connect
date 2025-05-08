@@ -3,8 +3,6 @@ import DataTable from "../../../components/common/UserInfoTable";
 import { dummyClientPlanData } from "../../../helper/commmon";
 
 const RegionalHead = ({ activeSubItem }: any) => {
-  console.log("active", activeSubItem);
-
   return (
     <Card>
       <CardHeader>

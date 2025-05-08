@@ -76,7 +76,8 @@ const CustomModal = ({
     initialValues: { remark: "", userChangeValue: "", userPanValue: "" },
     validationSchema: Yup.object({
       // Remark validation for "Communication Retrival Checker"
-      ...(activeSubItem === "Communication Retrival Checker" && {
+      ...((activeSubItem === "Communication Retrival Checker" ||
+        activeSubItem === "Referal Product Wise MIS Report") && {
         remark: Yup.string().trim().required("Remark is required"),
       }),
 
@@ -102,6 +103,8 @@ const CustomModal = ({
       if (action && row) {
         const entryFlag = action === "approve" ? "A" : "R";
         handleApproval?.(row, values.remark, entryFlag);
+        console.log(values.remark, "values.remark");
+
         formik.resetForm();
       }
     },
@@ -203,9 +206,9 @@ const CustomModal = ({
       keyboard={expiredtime ? false : undefined}
     >
       <ModalBody className="text-center p-3">
-        {activeSubItem !== "Communication Retrival Checker" &&
-          activeSubItem !== "UCCCode MATCH" &&
-          !isAdmin && <i className="ri-alert-line display-5 text-warning"></i>}
+        {activeSubItem !== "Communication Retrival Checker" && !isAdmin && (
+          <i className="ri-alert-line display-5 text-warning"></i>
+        )}
         {isAdmin && (
           <ChangeCircleIcon sx={{ color: "#11395C", fontSize: "3.5rem" }} />
         )}
@@ -225,7 +228,8 @@ const CustomModal = ({
         </div>
 
         <form onSubmit={formik.handleSubmit}>
-          {activeSubItem === "Communication Retrival Checker" && (
+          {(activeSubItem === "Communication Retrival Checker" ||
+            activeSubItem === "Referal Product Wise MIS Report") && (
             <TextField
               label="Enter Remark *"
               variant="outlined"
