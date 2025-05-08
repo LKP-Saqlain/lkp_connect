@@ -24,6 +24,8 @@ import {
   BrokerageModificationStatus,
   BrokerageKyc,
   slbmColumns,
+  PreProofUploadColumns,
+  preTradeColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -33,7 +35,7 @@ import CustomModal from "./DPModal";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Tooltip from "@mui/material/Tooltip";
-import { IconButton } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { RootState } from "../../redux/store.ts";
@@ -87,6 +89,7 @@ interface SelectedWidgetProps {
   getRowHeight?: any;
   customCss?: boolean;
   activeMenu?: any;
+  onFileUpload?: (selectedRow: string, file: File, remark: string) => void;
 }
 
 const DataTable = ({
@@ -120,6 +123,7 @@ const DataTable = ({
   dormantCount,
   customCss,
   activeMenu,
+  onFileUpload,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -566,6 +570,43 @@ const DataTable = ({
       // apiStatus
     ) {
       return getClientActivityStatusColumns(handleViewDetails, user_type);
+    } else if (activeSubItem === "RMS Allocation") {
+      return PreProofUploadColumns.map((column) => {
+        if (column.field === "file_upload") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div>
+                  <Button
+                    onClick={() => {
+                      setSelectedRow(params.row);
+                      tog_center();
+                    }}
+                    sx={{
+                      fontSize: "10px",
+                      padding: "2px 10px",
+                      backgroundColor: "#11395C",
+                      borderRadius: "5px",
+                      color: "#fff",
+                      textTransform: "capitalize",
+                      fontFamily: "Public Sans",
+                      "&:hover": { backgroundColor: "#0d2c45" },
+                    }}
+                  >
+                    Upload File
+                  </Button>
+                </div>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "Upload SLBM Holding") {
+      return preTradeColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
@@ -647,9 +688,20 @@ const DataTable = ({
             ? `Are you sure want to ${action} this entry`
             : activeMenu === "Regulatory Announcement"
             ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
+            : activeSubItem === "RMS Allocation"
+            ? ""
             : "Are you sure you want to send the email?"
         }
         activeSubItem={activeSubItem}
+        isUploadMode={activeSubItem === "RMS Allocation" ? true : false}
+        handleFileUpload={(selectedRow, file, remark) => {
+          console.log("Uploading file:", selectedRow, file);
+          if (typeof onFileUpload === "function") {
+            onFileUpload(selectedRow, file, remark);
+          } else {
+            console.warn("onFileUpload is not defined");
+          }
+        }}
       />
       {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown

@@ -71,7 +71,8 @@ import APOverview from "../../pages/Employee/Overview";
 import RegionalHead from "../../pages/refCard/RegionalHead/index";
 import BrokerageModificationStatus from "../../pages/refCard/BrokerageModStatus";
 import KycBrokerage from "../../pages/refCard/KycBrokerage";
-import "./style.css";
+import PreProofUpload from "../../pages/preTrade/preProofUpload";
+import PreTradeReport from "../../pages/preTrade/preTradeReport";
 
 const drawerWidth = 260;
 
@@ -100,12 +101,13 @@ const closedMixin = (theme: Theme): CSSObject => ({
 
 interface CustomAppBarProps extends MuiAppBarProps {
   open?: boolean; // Custom open prop
+  isNudgeOpen?: any;
 }
 
 // Custom AppBar
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})<CustomAppBarProps>(({ theme, open }) => {
+})<CustomAppBarProps>(({ theme, open, isNudgeOpen }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const drawerWidth = isMobile ? 180 : 260;
   const collapsedDrawerWidth = isMobile ? 60 : 72;
@@ -117,7 +119,7 @@ const AppBar = styled(MuiAppBar, {
     borderRadius: "15px",
     margin: "15px",
     boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)",
-    // zIndex: theme.zIndex.drawer + 1,
+    zIndex: !isNudgeOpen ? "" : "auto",
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -215,6 +217,12 @@ const SideBar = () => {
   console.log("testasdasd", apBrokingLastDate);
 
   useEffect(() => {
+    if (activeMenu !== "" || activeSubItem !== "") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [activeMenu, activeSubItem]);
+
+  useEffect(() => {
     const fetchBrokerage = async () => {
       // const Id = localStorage.getItem("Id");
       const payload = {
@@ -297,6 +305,7 @@ const SideBar = () => {
       activeMenu !== "Compliance" &&
       activeMenu !== "Kyc Dashboard" &&
       activeMenu !== "Masters" &&
+      activeMenu !== "RMS" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -603,10 +612,23 @@ const SideBar = () => {
     "User Access Mapping": (props: any) => <RegAnnMaster {...props} />,
   };
 
+  const rmsSubComponents: any = {
+    "RMS Allocation": (props: any) => <PreProofUpload {...props} />,
+    "Upload SLBM Holding": (props: any) => <PreTradeReport {...props} />,
+  };
+
   const componentMap: any = {
     "My Performance": user_type === "Employee" ? OverviewComponent : APOverview,
     Trading: (props: any) => <TradeDashboard {...props} />,
-
+    RMS: ({ activeSubItem }: any) => {
+      const SubComponent = rmsSubComponents[activeSubItem];
+      return SubComponent ? (
+        <SubComponent activeSubItem={activeSubItem} />
+      ) : (
+        // <div>No SubComponent for: {activeSubItem}</div>
+        <div></div>
+      );
+    },
     "Client Details": (props: any) => (
       <ClientDetails
         handleDrawerClose={props.handleDrawerClose}
@@ -708,6 +730,8 @@ const SideBar = () => {
             selectedViewMore,
             activeMenu,
           }
+        : menuItem.menu_name === "RMS"
+        ? { activeSubItem }
         : {};
 
     return <Component {...props} />;
@@ -799,7 +823,7 @@ const SideBar = () => {
       )}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="fixed" open={open}>
+        <AppBar position="fixed" open={open} isNudgeOpen={isNudgeOpen}>
           <Toolbar>
             {open ? (
               <IconButton onClick={handleDrawerClose}>

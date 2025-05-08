@@ -1,17 +1,19 @@
+import { useState } from "react";
 import {
   Button,
   Modal as ReactstrapModal,
   ModalBody,
   Col,
   Row,
+  Input,
 } from "reactstrap";
 import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { regEx } from "../../../helper/method";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { AuthUser } from "../../../redux/thunk/AuthUser";
 import { updateUserId } from "../../../redux/slices/Login/login";
@@ -33,6 +35,8 @@ interface CustomModalProps {
   action?: "approve" | "reject";
   expiredtime?: boolean;
   isAdmin?: boolean;
+  isUploadMode?: boolean;
+  handleFileUpload?: (selectedRow: string, file: File, remark: string) => void;
 }
 
 const CustomModal = ({
@@ -47,16 +51,19 @@ const CustomModal = ({
   activeSubItem,
   expiredtime,
   isAdmin,
+  isUploadMode,
+  handleFileUpload,
 }: CustomModalProps) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { name } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data
-  );
-  console.log("reduxStateUserName", name);
+  // const { name } = useSelector(
+  //   (state: RootState) => state.AuthUser?.data?.data
+  // );
 
   const handleSessionClear = () => {
     localStorage.clear();
@@ -175,6 +182,19 @@ const CustomModal = ({
       .finally(() => {
         dispatch(hideLoader());
       });
+  };
+
+  const handleFileUploadClick = () => {
+    if (selectedFile && handleFileUpload) {
+      console.log("rowCheck-->", row);
+
+      handleFileUpload(row, selectedFile, formik.values.remark);
+      setSelectedFile(null);
+      setmodal_center(false);
+      formik.setFieldValue("remark", "");
+    } else {
+      ShowToast("error", "Please select a file to upload.");
+    }
   };
 
   return (
@@ -316,7 +336,7 @@ const CustomModal = ({
               </Row>
             </Row>
           )}
-          {!isAdmin && (
+          {!isAdmin && !isUploadMode && (
             <div className="hstack gap-2 pt-2 justify-content-center">
               {expiredtime || activeSubItem === "UCCCode MATCH" ? (
                 <Button
@@ -359,6 +379,70 @@ const CustomModal = ({
                 </>
               )}
             </div>
+          )}
+          {isUploadMode && (
+            <Col lg={12} style={{ padding: "16px" }}>
+              <label style={{ fontSize: "12px" }} className="form-label">
+                Upload Proof of Communication
+              </label>
+              <Input
+                name="uploadProof"
+                type="file"
+                accept=".jpg,.jpeg,.png,.pdf"
+                className="form-control mb-3"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    setSelectedFile(e.target.files[0]);
+                  }
+                }}
+                style={{ width: "100%", minHeight: "40px" }}
+              />
+              <TextField
+                label="Enter Remark"
+                variant="outlined"
+                fullWidth
+                size="small"
+                className="mb-3"
+                value={formik.values.remark}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                name="remark"
+                error={formik.touched.remark && Boolean(formik.errors.remark)}
+                helperText={formik.touched.remark && formik.errors.remark}
+              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  gap: "10px",
+                }}
+              >
+                <Button
+                  className="btn"
+                  style={{
+                    backgroundColor: "#EE4B2B",
+                    borderColor: "#EE4B2B",
+                  }}
+                  onClick={() => {
+                    handleClose();
+                    setSelectedFile(null);
+                    setmodal_center(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="btn"
+                  style={{
+                    width: "80px",
+                    backgroundColor: "#11395C",
+                  }}
+                  onClick={handleFileUploadClick}
+                >
+                  Upload
+                </Button>
+              </div>
+            </Col>
           )}
         </form>
       </ModalBody>
