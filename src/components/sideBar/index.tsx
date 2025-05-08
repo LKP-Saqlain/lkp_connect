@@ -217,6 +217,12 @@ const SideBar = () => {
   console.log("testasdasd", apBrokingLastDate);
 
   useEffect(() => {
+    if (activeMenu !== "" || activeSubItem !== "") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [activeMenu, activeSubItem]);
+
+  useEffect(() => {
     const fetchBrokerage = async () => {
       // const Id = localStorage.getItem("Id");
       const payload = {
