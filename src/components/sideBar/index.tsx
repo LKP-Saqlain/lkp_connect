@@ -71,7 +71,8 @@ import APOverview from "../../pages/Employee/Overview";
 import RegionalHead from "../../pages/refCard/RegionalHead/index";
 import BrokerageModificationStatus from "../../pages/refCard/BrokerageModStatus";
 import KycBrokerage from "../../pages/refCard/KycBrokerage";
-import "./style.css";
+import PreProofUpload from "../../pages/preTrade/preProofUpload";
+import PreTradeReport from "../../pages/preTrade/preTradeReport";
 
 const drawerWidth = 260;
 
@@ -298,6 +299,7 @@ const SideBar = () => {
       activeMenu !== "Compliance" &&
       activeMenu !== "Kyc Dashboard" &&
       activeMenu !== "Masters" &&
+      activeMenu !== "RMS" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -604,10 +606,23 @@ const SideBar = () => {
     "User Access Mapping": (props: any) => <RegAnnMaster {...props} />,
   };
 
+  const rmsSubComponents: any = {
+    "RMS Allocation": (props: any) => <PreProofUpload {...props} />,
+    "Upload SLBM Holding": (props: any) => <PreTradeReport {...props} />,
+  };
+
   const componentMap: any = {
     "My Performance": user_type === "Employee" ? OverviewComponent : APOverview,
     Trading: (props: any) => <TradeDashboard {...props} />,
-
+    RMS: ({ activeSubItem }: any) => {
+      const SubComponent = rmsSubComponents[activeSubItem];
+      return SubComponent ? (
+        <SubComponent activeSubItem={activeSubItem} />
+      ) : (
+        // <div>No SubComponent for: {activeSubItem}</div>
+        <div></div>
+      );
+    },
     "Client Details": (props: any) => (
       <ClientDetails
         handleDrawerClose={props.handleDrawerClose}
@@ -709,6 +724,8 @@ const SideBar = () => {
             selectedViewMore,
             activeMenu,
           }
+        : menuItem.menu_name === "RMS"
+        ? { activeSubItem }
         : {};
 
     return <Component {...props} />;
