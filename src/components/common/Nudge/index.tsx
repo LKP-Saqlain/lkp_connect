@@ -184,9 +184,14 @@ const Nudge = ({
         </ModalHeader>
         <ModalBody
           className="modal-body-custom"
-          style={{ backgroundColor: "#f0f0f0" }}
+          style={{
+            backgroundColor: "#f0f0f0",
+            padding: "16px",
+            maxWidth: "95vw",
+            width: "100%",
+          }}
         >
-          <Box display="flex" flexWrap="wrap" gap={1}>
+          <Box display="flex" flexWrap="wrap" justifyContent="center" gap={2}>
             {reportData.map((report, index) => (
               <Box
                 key={index}
@@ -194,8 +199,8 @@ const Nudge = ({
                   backgroundColor: boxColors[index % boxColors.length],
                   borderRadius: 1,
                   padding: 2,
-                  flex: "1 1 calc(50% - 14px)", // Two per row
-                  minWidth: "250px",
+                  flex: "1 1 300px",
+                  maxWidth: "100%",
                   cursor: "pointer",
                   border: `2px dashed ${
                     borderColors[index % borderColors.length]

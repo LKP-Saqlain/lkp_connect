@@ -70,8 +70,8 @@ const NudgeTable = ({
       style={{
         maxWidth: "895px",
         width: "90%",
-        marginTop: "30px",
-        marginLeft: !isMobile ? "275px" : "0px",
+        marginTop: "25px",
+        marginLeft: !isMobile ? "260px" : "0px",
       }}
     >
       <ModalHeader
@@ -79,7 +79,7 @@ const NudgeTable = ({
         id="myExtraLargeModalLabel"
         toggle={onClose}
       >
-        {selectedReport}
+        {"selectedReport"}
       </ModalHeader>
       <ModalBody>
         <Card className="main-card">

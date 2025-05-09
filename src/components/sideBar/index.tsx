@@ -1076,6 +1076,7 @@ const SideBar = () => {
                 backgroundColor: "#11395C",
               },
               position: "relative",
+              zIndex: 9,
             }}
           >
             <Divider />
