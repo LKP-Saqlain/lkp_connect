@@ -230,7 +230,7 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
 
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="page-content page-view">
         <div className="container-fluid">
           <Row className="row-font">
             <Col lg={12}>
@@ -246,6 +246,7 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
                     borderRadius: "15px 15px 0 0",
                     boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
                     backgroundColor: "#fff", // optional for contrast
+                    padding: "0.2rem 0.8rem", // reduced padding
                   }}
                 >
                   <h4 className="card-title mb-0">

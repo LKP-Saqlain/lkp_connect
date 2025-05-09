@@ -684,7 +684,7 @@ any) => {
   };
   document.title = document.title = "LKP Securities | Client Details";
   return (
-    <div className="page-content">
+    <div className="page-content page-view">
       <Container fluid>
         {!userDetails ? (
           <>

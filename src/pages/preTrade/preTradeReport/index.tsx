@@ -282,7 +282,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
 
   return (
     <>
-      <div className="page-content">
+      <div className="page-content page-view">
         <div className="container-fluid">
           <Row className="row-font">
             <Col lg={12}>

@@ -73,6 +73,7 @@ import BrokerageModificationStatus from "../../pages/refCard/BrokerageModStatus"
 import KycBrokerage from "../../pages/refCard/KycBrokerage";
 import PreProofUpload from "../../pages/preTrade/preProofUpload";
 import PreTradeReport from "../../pages/preTrade/preTradeReport";
+import "./style.css";
 
 const drawerWidth = 260;
 
@@ -171,8 +172,8 @@ const SideBar = () => {
   const [activeSubItem, setActiveSubItem] = useState(() => {
     return localStorage.getItem("activeSubItem") || "";
   });
-  const [selectedPerformanceSection, setSelectedPerformanceSection] =
-    useState("");
+  // const [selectedPerformanceSection, setSelectedPerformanceSection] =
+  //   useState("");
 
   const [selectedViewMore, setSelectedViewMore] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
@@ -580,208 +581,319 @@ const SideBar = () => {
     // handleMenuClick("");
   };
 
-  const ComplianceSubComponents: any = {
-    "Communication Retrival Entry": (props: any) => <CommEntry {...props} />,
-    "Communication Retrival Checker": (props: any) => <ComChecker {...props} />,
-    "Communication Retrival Report": (props: any) => <Retrival {...props} />,
-  };
+  // const ComplianceSubComponents: any = {
+  //   "Communication Retrival Entry": (props: any) => <CommEntry {...props} />,
+  //   "Communication Retrival Checker": (props: any) => <ComChecker {...props} />,
+  //   "Communication Retrival Report": (props: any) => <Retrival {...props} />,
+  // };
 
-  const reportsSubComponents: any = {
-    "Tax P&L Statement": AnnualPNL,
-    "Dormant Client Report": (props: any) => <DormantClient {...props} />,
-    "Last Trade Data": LastTrade,
-    "Quarterly Payout Recovery": (props: any) => <QuarterlyPayout {...props} />,
-    "SLBM ClientHolding": (props: any) => <SLBM {...props} />,
-    "Core Alerts Report": CoreReport,
-    "Account Performance Report": AccStatement,
-    "DP Debit Recovery": (props: any) => <DPRecovery {...props} />,
-  };
+  // const reportsSubComponents: any = {
+  //   "Tax P&L Statement": AnnualPNL,
+  //   "Dormant Client Report": (props: any) => <DormantClient {...props} />,
+  //   "Last Trade Data": LastTrade,
+  //   "Quarterly Payout Recovery": (props: any) => <QuarterlyPayout {...props} />,
+  //   "SLBM ClientHolding": (props: any) => <SLBM {...props} />,
+  //   "Core Alerts Report": CoreReport,
+  //   "Account Performance Report": AccStatement,
+  //   "DP Debit Recovery": (props: any) => <DPRecovery {...props} />,
+  // };
 
-  const refferalLeadComponents: any = {
-    "Referal Entry Status": (props: any) => <Main {...props} />,
-    "Referal Entry": (props: any) => <RegionalHead {...props} />,
-    "Referal Lead Updation": (props: any) => (
-      <BrokerageModificationStatus {...props} />
-    ),
-    "Referal Product Wise MIS Report": (props: any) => (
-      <KycBrokerage {...props} />
-    ),
-  };
-  const masterSubComponents: any = {
-    "Menu Master": (props: any) => <MasterMenuMarketing {...props} />,
-    "User Access Mapping": (props: any) => <RegAnnMaster {...props} />,
-  };
+  // const refferalLeadComponents: any = {
+  //   "Referal Entry Status": (props: any) => <Main {...props} />,
+  //   "Referal Entry": (props: any) => <RegionalHead {...props} />,
+  //   "Referal Lead Updation": (props: any) => (
+  //     <BrokerageModificationStatus {...props} />
+  //   ),
+  //   "Referal Product Wise MIS Report": (props: any) => (
+  //     <KycBrokerage {...props} />
+  //   ),
+  // };
+  // const masterSubComponents: any = {
+  //   "Menu Master": (props: any) => <MasterMenuMarketing {...props} />,
+  //   "User Access Mapping": (props: any) => <RegAnnMaster {...props} />,
+  // };
 
-  const rmsSubComponents: any = {
-    "RMS Allocation": (props: any) => <PreProofUpload {...props} />,
-    "Upload SLBM Holding": (props: any) => <PreTradeReport {...props} />,
-  };
+  // const rmsSubComponents: any = {
+  //   "RMS Allocation": (props: any) => <PreProofUpload {...props} />,
+  //   "Upload SLBM Holding": (props: any) => <PreTradeReport {...props} />,
+  // };
 
-  const componentMap: any = {
-    "My Performance": user_type === "Employee" ? OverviewComponent : APOverview,
-    Trading: (props: any) => <TradeDashboard {...props} />,
-    RMS: ({ activeSubItem }: any) => {
-      const SubComponent = rmsSubComponents[activeSubItem];
-      return SubComponent ? (
-        <SubComponent activeSubItem={activeSubItem} />
-      ) : (
-        // <div>No SubComponent for: {activeSubItem}</div>
-        <div></div>
-      );
-    },
-    "Client Details": (props: any) => (
-      <ClientDetails
-        handleDrawerClose={props.handleDrawerClose}
-        handleDrawerOpen={props.handleDrawerOpen}
-        apiStatus={props.apiStatus}
-        selectedTrading={props.selectedViewMore}
-        activeMenu={props.activeMenu}
-      />
-    ),
-    "Zone Overview": RegOverview,
-    "Stock Study": StockStudy,
-    Reports: ({ activeSubItem }: any) => {
-      const SubComponent = reportsSubComponents[activeSubItem];
-      return SubComponent ? (
-        <SubComponent activeSubItem={activeSubItem} />
-      ) : (
-        // <div>No SubComponent for: {activeSubItem}</div>
-        <div></div>
-      );
-    },
-    Compliance: ({ activeSubItem }: any) => {
-      const SubComponent = ComplianceSubComponents[activeSubItem];
+  // const componentMap: any = {
+  //   "My Performance": user_type === "Employee" ? OverviewComponent : APOverview,
+  //   Trading: (props: any) => <TradeDashboard {...props} />,
+  //   RMS: ({ activeSubItem }: any) => {
+  //     const SubComponent = rmsSubComponents[activeSubItem];
+  //     return SubComponent ? (
+  //       <SubComponent activeSubItem={activeSubItem} />
+  //     ) : (
+  //       // <div>No SubComponent for: {activeSubItem}</div>
+  //       <div></div>
+  //     );
+  //   },
+  //   "Client Details": (props: any) => (
+  //     <ClientDetails
+  //       handleDrawerClose={props.handleDrawerClose}
+  //       handleDrawerOpen={props.handleDrawerOpen}
+  //       apiStatus={props.apiStatus}
+  //       selectedTrading={props.selectedViewMore}
+  //       activeMenu={props.activeMenu}
+  //     />
+  //   ),
+  //   "Zone Overview": RegOverview,
+  //   "Stock Study": StockStudy,
+  //   Reports: ({ activeSubItem }: any) => {
+  //     const SubComponent = reportsSubComponents[activeSubItem];
+  //     return SubComponent ? (
+  //       <SubComponent activeSubItem={activeSubItem} />
+  //     ) : (
+  //       // <div>No SubComponent for: {activeSubItem}</div>
+  //       <div></div>
+  //     );
+  //   },
+  //   Compliance: ({ activeSubItem }: any) => {
+  //     const SubComponent = ComplianceSubComponents[activeSubItem];
 
-      return SubComponent ? (
-        <SubComponent activeSubItem={activeSubItem} />
-      ) : (
-        <div>No SubComponent for: {activeSubItem}</div>
-        // <div></div>
-      );
-    },
-    Masters: ({ activeSubItem }: any) => {
-      const SubComponent = masterSubComponents[activeSubItem];
-      return SubComponent ? (
-        <SubComponent activeSubItem={activeSubItem} />
-      ) : (
-        <div>No SubComponent for: {activeSubItem}</div>
-        // <div></div>
-      );
-    },
-    "Referal Lead": ({ activeSubItem }: any) => {
-      const SubComponent = refferalLeadComponents[activeSubItem];
-      return SubComponent ? (
-        <SubComponent activeSubItem={activeSubItem} />
-      ) : (
-        <div>No SubComponent for: {activeSubItem}</div>
-        // <div></div>
-      );
-    },
-    "Regulatory Announcement": (props: any) => (
-      <RegulatorAnnouncement {...props} />
-    ),
-    EKYC: (props: any) => <EkycLinks {...props} />,
-    "Other Details": OTDetails,
-    "Registration Details": (props: any) => <RegisDetails {...props} />,
-    "Marketing Materials": MarketingMaterial,
-  };
+  //     return SubComponent ? (
+  //       <SubComponent activeSubItem={activeSubItem} />
+  //     ) : (
+  //       <div>No SubComponent for: {activeSubItem}</div>
+  //       // <div></div>
+  //     );
+  //   },
+  //   Masters: ({ activeSubItem }: any) => {
+  //     const SubComponent = masterSubComponents[activeSubItem];
+  //     return SubComponent ? (
+  //       <SubComponent activeSubItem={activeSubItem} />
+  //     ) : (
+  //       <div>No SubComponent for: {activeSubItem}</div>
+  //       // <div></div>
+  //     );
+  //   },
+  //   "Referal Lead": ({ activeSubItem }: any) => {
+  //     const SubComponent = refferalLeadComponents[activeSubItem];
+  //     return SubComponent ? (
+  //       <SubComponent activeSubItem={activeSubItem} />
+  //     ) : (
+  //       <div>No SubComponent for: {activeSubItem}</div>
+  //       // <div></div>
+  //     );
+  //   },
+  //   "Regulatory Announcement": (props: any) => (
+  //     <RegulatorAnnouncement {...props} />
+  //   ),
+  //   EKYC: (props: any) => <EkycLinks {...props} />,
+  //   "Other Details": OTDetails,
+  //   "Registration Details": (props: any) => <RegisDetails {...props} />,
+  //   "Marketing Materials": MarketingMaterial,
+  // };
 
-  const renderComponent = (
-    menuItem: any,
-    handleTradingOpen: (value: any) => void
-  ) => {
-    console.log("Test12--->", menuItem.menu_name);
+  // const renderComponent = (
+  //   menuItem: any,
+  //   handleTradingOpen: (value: any) => void
+  // ) => {
+  //   console.log("Test12--->", menuItem.menu_name);
 
-    const Component = componentMap[menuItem.menu_name];
+  //   const Component = componentMap[menuItem.menu_name];
 
-    if (!Component) {
-      return <div>There is no Data (Component) for: {menuItem.menu_name}</div>;
+  //   if (!Component) {
+  //     return <div>There is no Data (Component) for: {menuItem.menu_name}</div>;
+  //   }
+
+  //   // Pass Props here for dynamic
+  //   const props =
+  //     menuItem.menu_name === "My Performance"
+  //       ? {
+  //           handleTradingOpen: (val: string) => {
+  //             setSelectedPerformanceSection(val); // local state update
+  //             handleTradingOpen(val); // trigger parent logic
+  //           },
+  //           selectedPerformanceSection,
+  //         }
+  //       : menuItem.menu_name === "Reports"
+  //       ? { activeSubItem }
+  //       : menuItem.menu_name === "Compliance"
+  //       ? { activeSubItem }
+  //       : menuItem.menu_name === "Referal Lead"
+  //       ? { activeSubItem }
+  //       : menuItem.menu_name === "Masters"
+  //       ? { activeSubItem }
+  //       : menuItem.menu_name === "Regulatory Announcement"
+  //       ? { activeMenu }
+  //       : menuItem.menu_name === "Registration Details"
+  //       ? { activeSubItem }
+  //       : menuItem.menu_name === "Trading"
+  //       ? { selectedViewMore }
+  //       : menuItem.menu_name === "Client Details"
+  //       ? {
+  //           handleDrawerClose,
+  //           handleDrawerOpen,
+  //           apiStatus,
+  //           selectedViewMore,
+  //           activeMenu,
+  //         }
+  //       : menuItem.menu_name === "RMS"
+  //       ? { activeSubItem }
+  //       : {};
+
+  //   return <Component {...props} />;
+  // };
+
+  // const renderSubItems = (
+  //   subItems: any,
+  //   activeMenu: string,
+  //   handleTradingOpen: (value: any) => void
+  // ) => {
+  //   return subItems
+  //     .sort((a: any, b: any) => a.menu_order - b.menu_order)
+  //     .map((subItem: any) => (
+  //       <Box key={subItem.menu_code} sx={{ ml: 2 }}>
+  //         {/* <Button onClick={() => handleMenuClick(subItem.menu_name)}>
+  //           {subItem.menu_name}
+  //         </Button> */}
+
+  //         {/* Render component if it's active */}
+  //         {activeMenu === subItem.menu_name &&
+  //           renderComponent(subItem, handleTradingOpen)}
+  //       </Box>
+  //     ));
+  // };
+
+  // const renderMenu = (
+  //   menuData: any,
+  //   activeMenu: string,
+  //   handleTradingOpen: (value: any) => void
+  // ) => {
+  //   console.log("renderMenuData1", menuData);
+
+  //   return (
+  //     menuData
+  //       // .filter((item: any) => !item.isParent)
+  //       .sort((a: any, b: any) => a.menu_order - b.menu_order)
+  //       .map((menuItem: any) => (
+  //         // {console.log("renderMenuData2", menuItem)}
+  //         <Box key={menuItem.menu_code} sx={{ mb: 2 }}>
+  //           {/* Render component if it's active */}
+  //           {activeMenu === menuItem.menu_name &&
+  //             renderComponent(menuItem, handleTradingOpen)}
+
+  //           {/* Render sub-items if present */}
+  //           {menuItem.subItems &&
+  //             menuItem.subItems.length > 0 &&
+  //             renderSubItems(menuItem.subItems, activeMenu, handleTradingOpen)}
+  //         </Box>
+  //       ))
+  //   );
+  // };
+
+  const renderContent = () => {
+    console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
+    // const hasOverview = menuItems.some((item) => item.menu_name === "Overview");
+    // if (!activeMenu && hasOverview) {
+    //   setActiveMenu("Overview");
+    //   return <OverviewComponent />;
+    // }
+    switch (activeMenu) {
+      case "My Performance":
+        return user_type === "Employee" ? (
+          <OverviewComponent handleTradingOpen={handleTradingOpen} />
+        ) : (
+          <APOverview handleTradingOpen={handleTradingOpen} />
+        );
+      case "Zone Overview":
+        return <RegOverview />;
+      case "Stock Study":
+        return <StockStudy />;
+      case "Trading":
+        return <TradeDashboard selectedTrading={selectedViewMore} />;
+      case "Revenue Details":
+      case "Masters":
+        switch (activeSubItem) {
+          case "Menu Master":
+            return <MasterMenuMarketing />;
+          case "User Access Mapping":
+            return <RegAnnMaster />;
+          default:
+            return null;
+        }
+      case "Reports":
+        switch (activeSubItem) {
+          case "Tax P&L Statement":
+            return <AnnualPNL />;
+          case "Dormant Client Report":
+            return <DormantClient activeSubItem={activeSubItem} />;
+          case "Last Trade Data":
+            return <LastTrade />;
+          case "Quarterly Payout Recovery":
+            return <QuarterlyPayout activeSubItem={activeSubItem} />;
+          case "SLBM ClientHolding":
+            return <SLBM activeSubItem={activeSubItem} />;
+          case "Core Alerts Report":
+            return <CoreReport />;
+          case "Account Performance Report":
+            return <AccStatement />;
+          case "DP Debit Recovery":
+            return <DPRecovery activeSubItem={activeSubItem} />;
+          default:
+            return null;
+        }
+      case "RMS":
+        switch (activeSubItem) {
+          case "RMS Allocation":
+            return <PreProofUpload activeSubItem={activeSubItem} />;
+          case "Upload SLBM Holding":
+            return <PreTradeReport activeSubItem={activeSubItem} />;
+          default:
+            return null;
+        }
+      case "Referal Lead":
+        switch (activeSubItem) {
+          case "Referal Entry":
+            return <RegionalHead activeSubItem={activeSubItem} />;
+          case "Referal Entry Status":
+            return <Main activeSubItem={activeSubItem} />;
+          case "Referal Lead Updation":
+            return (
+              <BrokerageModificationStatus activeSubItem={activeSubItem} />
+            );
+          case "Referal Product Wise MIS Report":
+            return <KycBrokerage activeSubItem={activeSubItem} />;
+          default:
+            return null;
+        }
+      case "Compliance":
+        switch (activeSubItem) {
+          case "Communication Retrival Entry":
+            return <CommEntry activeSubItem={activeSubItem} />;
+          case "Communication Retrival Checker":
+            return <ComChecker activeSubItem={activeSubItem} />;
+          case "Communication Retrival Report":
+            return <Retrival activeSubItem={activeSubItem} />;
+          default:
+            return null;
+        }
+      case "Client Details":
+        return (
+          <ClientDetails
+            handleDrawerClose={handleDrawerClose}
+            handleDrawerOpen={handleDrawerOpen}
+            apiStatus={apiStatus}
+            selectedTrading={selectedViewMore}
+            activeMenu={activeMenu}
+          />
+        );
+      case "Regulatory Announcement":
+        return <RegulatorAnnouncement activeMenu={activeMenu} />;
+      case "Marketing Materials":
+        return <MarketingMaterial />;
+      case "EKYC":
+        return <EkycLinks />;
+      case "Other Details":
+        return <OTDetails />;
+      case "Registration Details":
+        return <RegisDetails activeSubItem={activeSubItem} />;
+      default:
+        return <></>;
     }
-
-    // Pass Props here for dynamic
-    const props =
-      menuItem.menu_name === "My Performance"
-        ? {
-            handleTradingOpen: (val: string) => {
-              setSelectedPerformanceSection(val); // local state update
-              handleTradingOpen(val); // trigger parent logic
-            },
-            selectedPerformanceSection,
-          }
-        : menuItem.menu_name === "Reports"
-        ? { activeSubItem }
-        : menuItem.menu_name === "Compliance"
-        ? { activeSubItem }
-        : menuItem.menu_name === "Referal Lead"
-        ? { activeSubItem }
-        : menuItem.menu_name === "Masters"
-        ? { activeSubItem }
-        : menuItem.menu_name === "Regulatory Announcement"
-        ? { activeMenu }
-        : menuItem.menu_name === "Registration Details"
-        ? { activeSubItem }
-        : menuItem.menu_name === "Trading"
-        ? { selectedViewMore }
-        : menuItem.menu_name === "Client Details"
-        ? {
-            handleDrawerClose,
-            handleDrawerOpen,
-            apiStatus,
-            selectedViewMore,
-            activeMenu,
-          }
-        : menuItem.menu_name === "RMS"
-        ? { activeSubItem }
-        : {};
-
-    return <Component {...props} />;
-  };
-
-  const renderSubItems = (
-    subItems: any,
-    activeMenu: string,
-    handleTradingOpen: (value: any) => void
-  ) => {
-    return subItems
-      .sort((a: any, b: any) => a.menu_order - b.menu_order)
-      .map((subItem: any) => (
-        <Box key={subItem.menu_code} sx={{ ml: 2 }}>
-          {/* <Button onClick={() => handleMenuClick(subItem.menu_name)}>
-            {subItem.menu_name}
-          </Button> */}
-
-          {/* Render component if it's active */}
-          {activeMenu === subItem.menu_name &&
-            renderComponent(subItem, handleTradingOpen)}
-        </Box>
-      ));
-  };
-
-  const renderMenu = (
-    menuData: any,
-    activeMenu: string,
-    handleTradingOpen: (value: any) => void
-  ) => {
-    console.log("renderMenuData1", menuData);
-
-    return (
-      menuData
-        // .filter((item: any) => !item.isParent)
-        .sort((a: any, b: any) => a.menu_order - b.menu_order)
-        .map((menuItem: any) => (
-          // {console.log("renderMenuData2", menuItem)}
-          <Box key={menuItem.menu_code} sx={{ mb: 2 }}>
-            {/* Render component if it's active */}
-            {activeMenu === menuItem.menu_name &&
-              renderComponent(menuItem, handleTradingOpen)}
-
-            {/* Render sub-items if present */}
-            {menuItem.subItems &&
-              menuItem.subItems.length > 0 &&
-              renderSubItems(menuItem.subItems, activeMenu, handleTradingOpen)}
-          </Box>
-        ))
-    );
   };
 
   const handleNotificationClick = () => {
@@ -1015,7 +1127,8 @@ const SideBar = () => {
             // height: "100vh", // Full height of the viewport
           }}
         >
-          <Box>{renderMenu(menuItems, activeMenu, handleTradingOpen)}</Box>
+          {/* <Box>{renderMenu(menuItems, activeMenu, handleTradingOpen)}</Box> */}
+          <Box>{renderContent()}</Box>
         </Box>
       </Box>
     </>

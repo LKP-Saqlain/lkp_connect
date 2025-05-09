@@ -3,7 +3,7 @@ import { useMediaQuery, useTheme } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { Card, CardBody, CardHeader, Button } from "reactstrap";
+import { Card, CardBody, CardHeader, Button, Container } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store.ts";
 import { apiServices } from "../../services/index.ts";
@@ -85,74 +85,90 @@ const MarketingMaterial = () => {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <h4 className="card-title mb-0">Marketing Materials</h4>
-      </CardHeader>
-      <CardBody style={{ minHeight: "75vh" }}>
-        <div
+    <div className="page-content page-view">
+      <Container fluid>
+        <Card
           style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: isMobile ? "center" : "",
+            borderRadius: "15px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
           }}
         >
-          {materials.map((card: any) => (
-            <Card
-              key={card.id}
+          <CardHeader
+            style={{
+              borderRadius: "15px 15px 0 0",
+              boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+              backgroundColor: "#fff",
+              padding: "0.2rem 0.8rem",
+            }}
+          >
+            <h4 className="card-title mb-0">Marketing Materials</h4>
+          </CardHeader>
+          <CardBody style={{ minHeight: "75vh" }}>
+            <div
               style={{
-                width: isMobile ? "100%" : "200px",
-                margin: "5px",
-                padding: "10px",
-                borderRadius: "16px",
-                marginBottom: isMobile ? "12px" : "0px",
-                boxShadow: isMobile
-                  ? "0 6px 12px rgba(0, 0, 0, 0.3)"
-                  : "0 12px 24px rgba(0, 0, 0, 0.4)",
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: isMobile ? "center" : "",
               }}
             >
-              <CardMedia
-                component="img"
-                image={card.imageUrl}
-                alt={card.title}
-                sx={{ height: 120, objectFit: "cover" }}
-              />
-              {/* <CardMedia
+              {materials.map((card: any) => (
+                <Card
+                  key={card.id}
+                  style={{
+                    width: isMobile ? "100%" : "200px",
+                    margin: "5px",
+                    padding: "10px",
+                    borderRadius: "16px",
+                    marginBottom: isMobile ? "12px" : "0px",
+                    boxShadow: isMobile
+                      ? "0 6px 12px rgba(0, 0, 0, 0.3)"
+                      : "0 12px 24px rgba(0, 0, 0, 0.4)",
+                  }}
+                >
+                  <CardMedia
+                    component="img"
+                    image={card.imageUrl}
+                    alt={card.title}
+                    sx={{ height: 120, objectFit: "cover" }}
+                  />
+                  {/* <CardMedia
                 component="img"
                 alt="Marketing Material"
                 image={`data:image/jpeg;base64,${base64test}`} // or image/png if it's a PNG
                 style={{ maxHeight: 300, objectFit: "contain" }}
               /> */}
 
-              <CardContent>
-                <Typography
-                  style={{
-                    fontSize: isMobile ? 10 : 12,
-                    color: "#11395C",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                  }}
-                >
-                  {card.title}
-                </Typography>
-              </CardContent>
-              <Button
-                onClick={() => handleDownload(card)}
-                style={{
-                  backgroundColor: "#11395C",
-                  fontWeight: "bold",
-                  textTransform: "none",
-                  width: "100%",
-                }}
-                disabled={!card.pdfUrl}
-              >
-                {card.pdfUrl ? "Download" : "No PDF Available"}
-              </Button>
-            </Card>
-          ))}
-        </div>
-      </CardBody>
-    </Card>
+                  <CardContent>
+                    <Typography
+                      style={{
+                        fontSize: isMobile ? 10 : 12,
+                        color: "#11395C",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                      }}
+                    >
+                      {card.title}
+                    </Typography>
+                  </CardContent>
+                  <Button
+                    onClick={() => handleDownload(card)}
+                    style={{
+                      backgroundColor: "#11395C",
+                      fontWeight: "bold",
+                      textTransform: "none",
+                      width: "100%",
+                    }}
+                    disabled={!card.pdfUrl}
+                  >
+                    {card.pdfUrl ? "Download" : "No PDF Available"}
+                  </Button>
+                </Card>
+              ))}
+            </div>
+          </CardBody>
+        </Card>
+      </Container>
+    </div>
   );
 };
 

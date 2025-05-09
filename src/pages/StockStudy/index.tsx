@@ -192,7 +192,7 @@ const StockStudy = () => {
 
   return (
     <div
-      className="page-content"
+      className="page-content page-view"
       style={{
         fontFamily: "Public Sans",
         minHeight: "85vh",

@@ -22,7 +22,7 @@ const EKYCLink = () => {
   };
 
   return (
-    <div>
+    <div className="page-content page-view">
       <Container fluid>
         <Card
           style={{

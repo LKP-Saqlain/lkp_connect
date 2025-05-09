@@ -135,7 +135,7 @@ const Retrival = ({ activeSubItem }: any) => {
       });
   };
   return (
-    <div className="page-content">
+    <div className="page-content page-view">
       <Container fluid>
         <Card
           style={{
@@ -148,7 +148,8 @@ const Retrival = ({ activeSubItem }: any) => {
             style={{
               borderRadius: "15px 15px 0 0",
               boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
-              backgroundColor: "#fff", // optional for contrast
+              backgroundColor: "#fff",
+              padding: "0.2rem 0.8rem",
             }}
           >
             <h4 className="card-title mb-0">Communication Retrival Report</h4>
