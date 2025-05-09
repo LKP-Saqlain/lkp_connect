@@ -152,6 +152,7 @@ const DataTable = ({
 
   useEffect(() => {
     console.log("subItem and selectedWidgets", activeSubItem, selectedWidget);
+    setCustomLedgerData([]);
   }, [activeSubItem, selectedWidget]);
 
   useEffect(() => {

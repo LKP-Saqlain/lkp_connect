@@ -44,6 +44,9 @@ const DPRecovery = ({ activeSubItem }: any) => {
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+  useEffect(() => {
+    setSearchQuery("");
+  }, [selectedCapsule]);
 
   // Fetch user data
   useEffect(() => {
@@ -250,8 +253,8 @@ const DPRecovery = ({ activeSubItem }: any) => {
             }}
           >
             {/* <CardHeader>
-          <h4 className="card-title mb-0"> DP Debit Outstanding</h4>
-        </CardHeader> */}
+              <h4 className="card-title mb-0"> DP Debit Outstanding</h4>
+            </CardHeader> */}
             <CardBody>
               {/* <DataTable
           customFlag={true}

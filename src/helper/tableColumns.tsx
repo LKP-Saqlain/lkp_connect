@@ -3063,7 +3063,6 @@ export const cyptoWidgets = [
   // },
   {
     id: 2,
-
     label: "Clients With Ledger Balance",
   },
   { id: 3, label: "Clients Ageing Report" },
