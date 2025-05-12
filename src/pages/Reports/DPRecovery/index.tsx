@@ -236,7 +236,7 @@ const DPRecovery = ({ activeSubItem }: any) => {
 
   return (
     <>
-      <div className="page-content">
+      <div className="page-content page-view">
         <Container fluid>
           <UserCapsules
             selectedCapsule={selectedCapsule}

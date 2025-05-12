@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import DataTable from "../../components/common/UserInfoTable";
-import { Card, CardBody, CardHeader } from "reactstrap";
+import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -49,37 +49,50 @@ const RegulatoryAnnouncement = ({ activeMenu }: any) => {
 
   return (
     <>
-      <Card>
-        <CardHeader
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <h4 className="card-title mb-0">Regulatory Announcement</h4>
+      <div className="page-content page-view">
+        <Container fluid>
+          <Card
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <CardHeader
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                borderRadius: "15px 15px 0 0",
+                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff",
+                padding: "0.2rem 0.8rem",
+              }}
+            >
+              <h4 className="card-title mb-0">Regulatory Announcement</h4>
 
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Month & Year"
-              views={["month", "year"]}
-              value={selectedDate}
-              onChange={(newValue) => setSelectedDate(newValue)}
-              sx={{ width: 210 }}
-              maxDate={dayjs()}
-            />
-          </LocalizationProvider>
-        </CardHeader>
-        <CardBody>
-          <DataTable
-            activeMenu={activeMenu}
-            T6Data={regAnnouncements}
-            handleDownload={handleDownload}
-            getRowHeight={getRowHeight}
-            customCss={true}
-          />
-        </CardBody>
-      </Card>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Month & Year"
+                  views={["month", "year"]}
+                  value={selectedDate}
+                  onChange={(newValue) => setSelectedDate(newValue)}
+                  sx={{ width: 210 }}
+                  maxDate={dayjs()}
+                />
+              </LocalizationProvider>
+            </CardHeader>
+            <CardBody>
+              <DataTable
+                activeMenu={activeMenu}
+                T6Data={regAnnouncements}
+                handleDownload={handleDownload}
+                getRowHeight={getRowHeight}
+                customCss={true}
+              />
+            </CardBody>
+          </Card>
+        </Container>
+      </div>
     </>
   );
 };

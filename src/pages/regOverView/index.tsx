@@ -72,7 +72,7 @@ const RegMain = () => {
   ];
   document.title = document.title = "LKP Securities | Zone Overview";
   return (
-    <div className="page-content">
+    <div className="page-content page-view">
       <Container fluid>
         {DataSets.map((dataSet, index) => (
           <RegGraph

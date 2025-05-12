@@ -123,7 +123,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
   ];
 
   return (
-    <div className="page-content">
+    <div className="page-content page-view">
       <Container fluid>
         <Card
           style={{

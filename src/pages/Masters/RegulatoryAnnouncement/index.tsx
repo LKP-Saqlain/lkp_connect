@@ -10,6 +10,7 @@ import {
   Row,
   Col,
   FormFeedback,
+  Container,
 } from "reactstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -108,10 +109,23 @@ const RegAnnMaster = () => {
   };
 
   return (
-    <div className="page-content">
-      <div className="container-fluid">
-        <Card style={{ minHeight: "80vh" }}>
-          <CardHeader>
+    <div className="page-content page-view">
+      <Container fluid>
+        <Card
+          style={{
+            minHeight: "80vh",
+            borderRadius: "15px",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <CardHeader
+            style={{
+              borderRadius: "15px 15px 0 0",
+              boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+              backgroundColor: "#fff",
+              padding: "0.2rem 0.8rem",
+            }}
+          >
             <h4 className="card-title mb-0">Master Regulatory Announcement</h4>
           </CardHeader>
           <CardBody>
@@ -255,7 +269,7 @@ const RegAnnMaster = () => {
             </form>
           </CardBody>
         </Card>
-      </div>
+      </Container>
     </div>
   );
 };

@@ -56,7 +56,7 @@ const OTDetails = () => {
 
   return (
     <>
-      <div className="page-content" style={{ minHeight: "85vh" }}>
+      <div className="page-content page-view" style={{ minHeight: "85vh" }}>
         <div className="container-fluid">
           <Row className="row-font">
             <Col lg={12}>

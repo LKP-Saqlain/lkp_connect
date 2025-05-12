@@ -287,7 +287,7 @@ const DashboardCrypto = ({
   document.title = document.title = "LKP Securities | Trading";
   return (
     <React.Fragment>
-      <div className="page-content">
+      <div className="page-content page-view">
         <Container fluid>
           {isNudgeOpen && (
             <Nudge
