@@ -604,9 +604,32 @@ const DataTable = ({
         return column;
       });
     } else if (activeSubItem === "Upload SLBM Holding") {
-      return preTradeColumns.map((column) => ({
-        ...column,
-      }));
+      return preTradeColumns.map((column) => {
+        if (column.field === "Uploaded_Document") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row);
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Download
+                </button>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }
@@ -681,7 +704,9 @@ const DataTable = ({
         action={action}
         handleApproval={handleApproval}
         Msg={
-          activeSubItem === "Communication Retrival Entry"
+          activeSubItem === "RMS Allocation"
+            ? ""
+            : activeSubItem === "Communication Retrival Entry"
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Checker" ||
               "Referal Product Wise MIS Report"

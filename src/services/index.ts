@@ -234,4 +234,13 @@ export const apiServices = {
   ScripSearch: async () => {
     return await apiService("GET", endpoints.ScripSearch);
   },
+  UploadTradeFile: async (payload: any) => {
+    return await apiService("POST", endpoints.UploadTradeFile, payload);
+  },
+  GetAllRecords: async (payload: any) => {
+    return await apiService("POST", endpoints.GetAllRecords, payload);
+  },
+  GetPreTradeReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetPreTradeReport, payload);
+  },
 };

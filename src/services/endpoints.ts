@@ -55,4 +55,7 @@ export const endpoints = {
   ChangePassword: "api/Login/ChangePassword",
   GetAPDashboard: "api/AP/GetAPDashboard",
   ScripSearch: "api/AP/ScripSearch",
+  UploadTradeFile: "/api/PreTrade/UploadTradeFile",
+  GetAllRecords: "/api/PreTrade/GetAllRecords",
+  GetPreTradeReport: "/api/PreTrade/GetPreTradeReport",
 };

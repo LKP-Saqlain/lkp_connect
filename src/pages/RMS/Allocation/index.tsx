@@ -12,15 +12,17 @@ import {
   ListGroup,
   ListGroupItem,
 } from "reactstrap";
-import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import axios from "axios";
 import { endpoints } from "../../../services/endpoints";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
 
 const RMSAllocation = () => {
-  const dispatch = useDispatch();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileError, setFileError] = useState<string>("");
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);

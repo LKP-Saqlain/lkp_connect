@@ -29,15 +29,17 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [formattedDateRange, setFormattedDateRange] = useState<string>("");
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
   const [selectedDateRange, setSelectedDateRange] = useState<
     [Date | null, Date | null]
   >([null, null]);
+  const [preTradeReportData, setPreTradeReportData] = useState<[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
-
   const { afterToday } = DateRangePicker;
 
   const validationSchema = Yup.object({
@@ -69,16 +71,14 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
     validationSchema,
     onSubmit: (values) => {
       // Only called if no validation errors
-      console.log("values1-->", values);
-      // handleSubmit(values);
-      // handleDownloadExcel();
       if (formattedDateRange === "") {
         ShowToast("error", "Please select Date Range");
         return;
       }
+      console.log("values1-->", values);
+      handleViewReport();
     },
   });
-
   useEffect(() => {
     const str = user_id;
     const userType = localStorage.getItem("uIdType");
@@ -201,85 +201,106 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
   }, [formik.values.selectedZone, dispatch]); // This effect runs when `selectedZone` changes
 
   const handleDateChange = (value: [Date | null, Date | null]) => {
-    if (value[0] && value[1]) {
-      const formattedStartDate = moment(value[0]).format("DD/MM/YYYY");
-      const formattedEndDate = moment(value[1]).format("DD/MM/YYYY");
+    const [start, end] = value;
+    if (start && end) {
+      const isoStart = moment(start).format("YYYY-MM-DD");
+      const isoEnd = moment(end).format("YYYY-MM-DD");
+
+      setStartDate(isoStart);
+      setEndDate(isoEnd);
+
+      const formattedStartDate = moment(start).format("DD/MM/YYYY");
+      const formattedEndDate = moment(end).format("DD/MM/YYYY");
       const formattedRange = `${formattedStartDate} - ${formattedEndDate}`;
       setFormattedDateRange(formattedRange);
-      console.log("Selected Date Range:", formattedRange);
+
+      console.log("Payload:", {
+        startDate: isoStart,
+        endDate: isoEnd,
+      });
     } else {
+      setStartDate(null);
+      setEndDate(null);
       setFormattedDateRange("");
     }
   };
 
-  const preProofUploadDummyData = [
-    {
-      id: 1,
-      ClientCode: "CL001",
-      tradeDate: "2025-05-01",
-      expiryDate: "2025-06-01",
-      symbol: "NIFTY",
-      series: "EQ",
-      instrumentType: "FUTSTK",
-      strikePrice: "N/A",
-      qty: 150,
-      buySell: "Buy",
-      tradeOrderNumber: "ORD123456",
-    },
-    {
-      id: 2,
-      ClientCode: "CL002",
-      tradeDate: "2025-05-02",
-      expiryDate: "2025-06-01",
-      symbol: "BANKNIFTY",
-      series: "EQ",
-      instrumentType: "OPTSTK",
-      strikePrice: "36000",
-      qty: 75,
-      buySell: "Sell",
-      tradeOrderNumber: "ORD123457",
-    },
-    {
-      id: 3,
-      ClientCode: "CL003",
-      tradeDate: "2025-05-03",
-      expiryDate: "2025-06-01",
-      symbol: "RELIANCE",
-      series: "EQ",
-      instrumentType: "FUTSTK",
-      strikePrice: "N/A",
-      qty: 50,
-      buySell: "Buy",
-      tradeOrderNumber: "ORD123458",
-    },
-    {
-      id: 4,
-      ClientCode: "CL004",
-      tradeDate: "2025-05-04",
-      expiryDate: "2025-06-01",
-      symbol: "INFY",
-      series: "EQ",
-      instrumentType: "OPTSTK",
-      strikePrice: "1450",
-      qty: 100,
-      buySell: "Sell",
-      tradeOrderNumber: "ORD123459",
-    },
-    {
-      id: 5,
-      ClientCode: "CL005",
-      tradeDate: "2025-05-05",
-      expiryDate: "2025-06-01",
-      symbol: "TCS",
-      series: "EQ",
-      instrumentType: "FUTSTK",
-      strikePrice: "N/A",
-      qty: 200,
-      buySell: "Buy",
-      tradeOrderNumber: "ORD123460",
-    },
-  ];
+  const handleViewReport = () => {
+    let payload = {
+      clientCode: "",
+      dealerID: "",
+      dealerName: "",
+      branch: formik.values.selectedBranchCode?.value,
+      zone: formik.values.selectedZone?.value,
+      startDate: startDate,
+      endDate: endDate,
+    };
+    dispatch(showLoader("Please wait"));
+    apiServices
+      .GetPreTradeReport(payload)
+      .then((res) => {
+        console.log("ResponsePreTrade", res);
 
+        if (res?.status === 200) {
+          dispatch(hideLoader());
+          setPreTradeReportData(res?.data?.data);
+          if (res?.data?.data.length === 0) {
+            ShowToast("error", res?.data?.message);
+          } else {
+            ShowToast("success", res?.data?.message);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+        dispatch(hideLoader());
+      });
+  };
+  const handleDownload = async (row: any) => {
+    const fileExtension = row.userRemarks
+      ? `.${row.userRemarks.split(".").pop()}`
+      : "";
+    const payload = {
+      fileName: row.userRemarks,
+      filePath: "D:\\FileUpload\\PreTrade",
+      fileType: fileExtension,
+      contentType: "",
+    };
+
+    dispatch(showLoader("Downloading..."));
+    console.log("row_data", row, payload);
+
+    apiServices
+      .ComplianceDownload(payload)
+      .then((response) => {
+        console.log("response", response);
+
+        if (response?.status === 200 && response?.data) {
+          const url = window.URL.createObjectURL(new Blob([response?.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute(
+            "download",
+            `${payload.fileName}${payload.fileType}`
+          );
+          document.body.appendChild(link);
+          link.click();
+          dispatch(hideLoader());
+        } else {
+          console.log("Error during download", response);
+          ShowToast("info", "Error downloading file");
+        }
+      })
+      .catch((error) => {
+        ShowToast(
+          "info",
+          error.message || "An error occurred while downloading"
+        );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
   return (
     <>
       <div className="page-content page-view">
@@ -418,7 +439,9 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                               id="date-range-picker"
                               size="lg"
                               value={
-                                selectedDateRange[0] && selectedDateRange[1]
+                                selectedDateRange &&
+                                selectedDateRange[0] &&
+                                selectedDateRange[1]
                                   ? [selectedDateRange[0], selectedDateRange[1]]
                                   : undefined
                               }
@@ -477,8 +500,8 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                 <CardBody>
                   <UserInfoTable
                     activeSubItem={activeSubItem}
-                    T6Data={preProofUploadDummyData}
-                    //  onFileUpload={handleFileUpload}
+                    T6Data={preTradeReportData}
+                    handleDownload={handleDownload}
                   />
                 </CardBody>
               </Card>
