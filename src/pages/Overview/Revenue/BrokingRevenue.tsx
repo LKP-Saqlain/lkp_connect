@@ -26,6 +26,12 @@ const Revenue = ({
       data: [],
     },
     // {
+    //   name: "Unlisted Shares",
+    //   group: "Unlisted Shares",
+    //   data: [],
+    // },
+
+    // {
     //   name: "Indirect Broking",
     //   group: "Broking",
     //   data: [],
@@ -132,6 +138,9 @@ const Revenue = ({
                 item.Ach_brokslbm_indir +
                 item.Ach_brokslbm_ind_less2yrs
             );
+            // const unlistedShares = fetchRevenueData.map(
+            //   (item: any) => item.UnlistedShares_rev
+            // );
 
             setBrokingNonBrokingData([
               {
@@ -144,6 +153,11 @@ const Revenue = ({
                 group: "Broking",
                 data: indirectValues,
               },
+              // {
+              //   name: "Unlisted Shares",
+              //   group: "Unlisted Shares",
+              //   data: unlistedShares,
+              // },
             ]);
           }
 
@@ -153,7 +167,10 @@ const Revenue = ({
                 filteredRevenueData[0]?.Ach_brok_ind_less2yrs +
                 filteredRevenueData[0]?.Ach_brok_indir +
                 filteredRevenueData[0]?.Ach_brokslbm_dir || 0;
-            const nonBroking = filteredRevenueData[0]?.Tot_TPD_rev || 0;
+            const nonBroking =
+              filteredRevenueData[0]?.Ach_brokslbm_dir +
+                filteredRevenueData[0]?.Ach_brokslbm_indir +
+                filteredRevenueData[0]?.Ach_brokslbm_ind_less2yrs || 0;
 
             // const total = filteredRevenueData[0]?.Net_Rev_Ach || 0; //existing total getting from api
             const total = broking + nonBroking;
@@ -240,15 +257,15 @@ const Revenue = ({
             ></div>
             <p className="mb-0 me-3">SLBM</p>
             {/* <div
-                    className="legend-color"
-                    style={{
-                      backgroundColor: "#008FFB",
-                      width: "16px",
-                      height: "16px",
-                      marginRight: "8px",
-                    }}
-                  ></div>
-                  <p className="mb-0">Non-broking</p> */}
+              className="legend-color"
+              style={{
+                backgroundColor: "#ec8c95",
+                width: "16px",
+                height: "16px",
+                marginRight: "8px",
+              }}
+            ></div>
+            <p className="mb-0">Unlisted Shares</p> */}
           </div>
         </CardHeader>
 

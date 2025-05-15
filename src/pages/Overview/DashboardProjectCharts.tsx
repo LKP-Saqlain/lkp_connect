@@ -225,6 +225,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
 
   const directBrokingData = series[0]?.data || [];
   const indirectBrokingData = series[1]?.data || [];
+  // const unlistedBrokingData = series[2]?.data || [];
 
   var options: any = {
     series: [
@@ -236,6 +237,10 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
         name: "SLBM",
         data: indirectBrokingData,
       },
+      // {
+      //   name: "Unlisted Shares",
+      //   data: unlistedBrokingData,
+      // },
     ],
     chart: {
       type: "bar",
@@ -318,7 +323,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     fill: {
       opacity: 1,
     },
-    colors: ["#52c41a", "#faad14"],
+    colors: ["#52c41a", "#faad14"], //#ec8c95
     // yaxis: {
     //   title: {
     //     text: "Broking Revenue",
