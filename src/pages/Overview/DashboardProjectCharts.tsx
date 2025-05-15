@@ -171,7 +171,11 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
 const RevenueCharts = ({ series, revenueMonths }: any) => {
   const [mnthYRValues, setMnthYRValues] = useState<string[]>([]);
   const [totals, setTotals] = useState<number[]>([]);
-  const [visibleSeries, setVisibleSeries] = useState<boolean[]>([true, true]);
+  const [visibleSeries, setVisibleSeries] = useState<boolean[]>([
+    true,
+    true,
+    true,
+  ]);
   const [annotations, setAnnotations] = useState<any[]>([]);
 
   useEffect(() => {
@@ -179,7 +183,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     const latestMonths = revenueMonths.map((item: any) => item.MnthYR);
     console.log("latestMonts", latestMonths);
     setMnthYRValues(latestMonths);
-    setVisibleSeries([true, true]);
+    setVisibleSeries([true, true, true]);
     // Calculate totals for each category (stack)
     const calculatedTotals = revenueMonths.map((_: any, index: number) =>
       series.reduce((sum: number, s: any) => sum + (s.data[index] || 0), 0)
@@ -193,13 +197,15 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       let total = 0;
       if (visibleSeries[0]) total += series[0]?.data[index] || 0;
       if (visibleSeries[1]) total += series[1]?.data[index] || 0;
+      if (visibleSeries[2]) total += series[2]?.data[index] || 0;
       return total;
     });
 
     const newAnnotations = values
       .map((val: any, idx: any) => {
         // Skip label if both series are hidden
-        if (!visibleSeries[0] && !visibleSeries[1]) return null;
+        if (!visibleSeries[0] && !visibleSeries[1] && !visibleSeries[2])
+          return null;
         return {
           x: mnthYRValues[idx],
           y: val,
@@ -225,7 +231,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
 
   const directBrokingData = series[0]?.data || [];
   const indirectBrokingData = series[1]?.data || [];
-  // const unlistedBrokingData = series[2]?.data || [];
+  const unlistedBrokingData = series[2]?.data || [];
 
   var options: any = {
     series: [
@@ -237,10 +243,10 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
         name: "SLBM",
         data: indirectBrokingData,
       },
-      // {
-      //   name: "Unlisted Shares",
-      //   data: unlistedBrokingData,
-      // },
+      {
+        name: "Unlisted Shares",
+        data: unlistedBrokingData,
+      },
     ],
     chart: {
       type: "bar",
@@ -323,7 +329,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     fill: {
       opacity: 1,
     },
-    colors: ["#52c41a", "#faad14"], //#ec8c95
+    colors: ["#52c41a", "#faad14", "#ec8c95"],
     // yaxis: {
     //   title: {
     //     text: "Broking Revenue",
@@ -409,7 +415,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
         data: TPD_Insurance,
       },
       {
-        name: "Liquid Loans",
+        name: "Liqui Loans",
         data: TPD_Liq_Loans,
       },
     ],

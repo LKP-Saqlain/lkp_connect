@@ -25,11 +25,11 @@ const Revenue = ({
       group: "Non-Broking",
       data: [],
     },
-    // {
-    //   name: "Unlisted Shares",
-    //   group: "Unlisted Shares",
-    //   data: [],
-    // },
+    {
+      name: "Unlisted Shares",
+      group: "Unlisted Shares",
+      data: [],
+    },
 
     // {
     //   name: "Indirect Broking",
@@ -138,9 +138,9 @@ const Revenue = ({
                 item.Ach_brokslbm_indir +
                 item.Ach_brokslbm_ind_less2yrs
             );
-            // const unlistedShares = fetchRevenueData.map(
-            //   (item: any) => item.UnlistedShares_rev
-            // );
+            const unlistedShares = fetchRevenueData.map(
+              (item: any) => item.UnlistedShares_rev
+            );
 
             setBrokingNonBrokingData([
               {
@@ -153,11 +153,11 @@ const Revenue = ({
                 group: "Broking",
                 data: indirectValues,
               },
-              // {
-              //   name: "Unlisted Shares",
-              //   group: "Unlisted Shares",
-              //   data: unlistedShares,
-              // },
+              {
+                name: "Unlisted Shares",
+                group: "Unlisted Shares",
+                data: unlistedShares,
+              },
             ]);
           }
 
@@ -170,7 +170,8 @@ const Revenue = ({
             const nonBroking =
               filteredRevenueData[0]?.Ach_brokslbm_dir +
                 filteredRevenueData[0]?.Ach_brokslbm_indir +
-                filteredRevenueData[0]?.Ach_brokslbm_ind_less2yrs || 0;
+                filteredRevenueData[0]?.Ach_brokslbm_ind_less2yrs +
+                filteredRevenueData[0]?.UnlistedShares_rev || 0;
 
             // const total = filteredRevenueData[0]?.Net_Rev_Ach || 0; //existing total getting from api
             const total = broking + nonBroking;
@@ -256,7 +257,7 @@ const Revenue = ({
               }}
             ></div>
             <p className="mb-0 me-3">SLBM</p>
-            {/* <div
+            <div
               className="legend-color"
               style={{
                 backgroundColor: "#ec8c95",
@@ -265,7 +266,7 @@ const Revenue = ({
                 marginRight: "8px",
               }}
             ></div>
-            <p className="mb-0">Unlisted Shares</p> */}
+            <p className="mb-0">Unlisted Shares</p>
           </div>
         </CardHeader>
 
