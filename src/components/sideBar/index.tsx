@@ -120,7 +120,8 @@ const AppBar = styled(MuiAppBar, {
     borderRadius: "15px",
     margin: "15px",
     boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)",
-    zIndex: !isNudgeOpen ? "" : "auto",
+    // zIndex: !isNudgeOpen ? "" : "auto", // Exisiting old added new below for FS modal
+    zIndex: !isNudgeOpen ? "1000" : "100",
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,

@@ -28,6 +28,12 @@ export const endpoints = {
   getUpcompingDormantReport: "/api/Common/GetUpcomingDormantReport",
   GetBirthdayList: "/api/Common/GetBirthdayList",
   ClientDashboard: "/api/Client/ClientDashboard",
+  GetBrokerageDetails: "/api/Brokerage/GetBrokerageDetails",
+  GetBrokeragePlans: "/api/Brokerage/GetBrokeragePlans",
+  UpdateClientBrokerageModification:
+    "/api/Brokerage/UpdateClientBrokerageModification",
+  GetBrokerageModificationHistory:
+    "/api/Brokerage/GetBrokerageModificationHistory",
   ClientSegmentBrok: "/api/Client/ClientSegmentBrok",
   DPDebitRecovery: "/api/Client/DPDebitRecovery",
   DPEmail: "/api/Client/DPEmail",

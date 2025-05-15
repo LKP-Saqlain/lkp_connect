@@ -94,7 +94,7 @@ const UserInfoModal = ({
       toggle={onClose}
       className="modal-fullscreen"
       id="fullscreeexampleModal"
-      style={{ marginTop: "50px", paddingRight: "10px" }}
+      // style={{ marginTop: "50px", paddingRight: "10px" }}
     >
       <ModalHeader
         className="modal-title"
@@ -341,7 +341,10 @@ const UserInfoModal = ({
         </Row>
         {/* <PerformanceHistoryChart /> */}
         <SegmentWiseTable selectedClientCode={selectedClientCode} />
-        <BrokerageSlab setClientDetails={clientDetails} />
+        <BrokerageSlab
+          setClientDetails={clientDetails}
+          selectedClientCode={selectedClientCode}
+        />
       </ModalBody>
       {/* <div className="modal-footer">
         <Link

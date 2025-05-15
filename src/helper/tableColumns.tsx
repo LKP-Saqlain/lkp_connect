@@ -3,7 +3,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import React from "react";
 import Tooltip from "@mui/material/Tooltip";
 import dayjs from "dayjs";
-// import { Button } from "@mui/material";
+import { Button } from "@mui/material";
 // import PersonAddIcon from "@mui/icons-material/PersonAdd";
 // import { FaUserPen } from "react-icons/fa6";
 
@@ -534,31 +534,31 @@ export const getClientDormantStatus = (
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
   },
-  // {
-  //   field: "viewDetails",
-  //   headerName: "Action",
-  //   width: 150,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   renderCell: (params: any) => (
-  //     <Button
-  //       onClick={() => handleViewDetails(params.row)}
-  //       // onClick={() => console.log("rowValues", params.row)}
-  //       variant="contained"
-  //       color="primary"
-  //       style={{
-  //         padding: "2px 9px",
-  //         backgroundColor: "#11395C",
-  //         fontSize: "10px",
-  //         borderRadius: "10px",
-  //         textTransform: "capitalize",
-  //         fontFamily: "Public Sans",
-  //       }}
-  //     >
-  //       View Details
-  //     </Button>
-  //   ),
-  // },
+  {
+    field: "viewDetails",
+    headerName: "Action",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params: any) => (
+      <Button
+        onClick={() => handleViewDetails(params.row)}
+        // onClick={() => console.log("rowValues", params.row)}
+        variant="contained"
+        color="primary"
+        style={{
+          padding: "2px 9px",
+          backgroundColor: "#11395C",
+          fontSize: "10px",
+          borderRadius: "10px",
+          textTransform: "capitalize",
+          fontFamily: "Public Sans",
+        }}
+      >
+        View Details
+      </Button>
+    ),
+  },
 ];
 
 export const Corecolumns: GridColDef[] = [

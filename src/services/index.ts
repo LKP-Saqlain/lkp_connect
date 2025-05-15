@@ -104,6 +104,26 @@ export const apiServices = {
   ClientDashboard: async (payload: any) => {
     return await apiService("POST", endpoints.ClientDashboard, payload);
   },
+  GetBrokerageDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokerageDetails, payload);
+  },
+  GetBrokeragePlans: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokeragePlans, payload);
+  },
+  UpdateClientBrokerageModification: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateClientBrokerageModification,
+      payload
+    );
+  },
+  GetBrokerageModificationHistory: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetBrokerageModificationHistory,
+      payload
+    );
+  },
   ClientSegmentBrok: async (payload: any) => {
     return await apiService("POST", endpoints.ClientSegmentBrok, payload);
   },

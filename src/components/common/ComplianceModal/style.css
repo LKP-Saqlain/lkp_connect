@@ -1,58 +1,57 @@
- .modal-content {
-    position: relative;
-    top: 30px !important;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    color: var(--bs-modal-color);
-    pointer-events: auto;
-    background-color: var(--bs-modal-bg);
-    background-clip: padding-box;
-    border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
-    border-radius: var(--bs-modal-border-radius);
-    outline: 0;
-    z-index: 9999 !important;
-} 
+.modal-content {
+  position: relative;
+  /* top: 30px !important; */
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: var(--bs-modal-color);
+  pointer-events: auto;
+  background-color: var(--bs-modal-bg);
+  background-clip: padding-box;
+  border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
+  border-radius: var(--bs-modal-border-radius);
+  outline: 0;
+  z-index: 9999 !important;
+}
 
 .form-control {
-    display: block;
-    width: 100%;
-    padding: .375rem .75rem;
-    font-size: 11px !important;
-    font-weight: 400;
-    line-height: 1.5;
-    color: var(--bs-body-color);
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: var(--bs-body-bg);
-    background-clip: padding-box;
-    border: var(--bs-border-width) solid var(--bs-border-color);
-    border-radius: var(--bs-border-radius);
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 11px !important;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bs-body-color);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: var(--bs-body-bg);
+  background-clip: padding-box;
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .btn-class {
-    background-color: "#11395C" !important;
-    padding: "6px 12px" !important; 
-    font-size: "11px" !important; 
-    height: "35px" !important;
+  background-color: "#11395C" !important;
+  padding: "6px 12px" !important;
+  font-size: "11px" !important;
+  height: "35px" !important;
 }
-  
 
 .input-error {
-    border: 1px solid red !important;
-    background-color: #ffe6e6; /* Light red background */
-  }
-  
-  .text-error {
-    color: #d32f2f;
-    font-size: 12px;
-    margin-top: 5px;
-  }
+  border: 1px solid red !important;
+  background-color: #ffe6e6; /* Light red background */
+}
 
-  .css-er619e-MuiFormHelperText-root.Mui-error { 
-    color: #d32f2f;
-    font-family: 'Public Sans';
-    font-size: 13px;
+.text-error {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.css-er619e-MuiFormHelperText-root.Mui-error {
+  color: #d32f2f;
+  font-family: "Public Sans";
+  font-size: 13px;
 }

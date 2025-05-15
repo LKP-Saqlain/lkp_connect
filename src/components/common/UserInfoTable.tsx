@@ -183,7 +183,7 @@ const DataTable = ({
   const handleViewDetails = (row: any) => {
     // debugger;
     console.log("View Details clicked for:", row);
-    // getUserDetails?.(row);
+    getUserDetails?.(row);
     setSelectedRow(row);
     // tog_center();
   };
