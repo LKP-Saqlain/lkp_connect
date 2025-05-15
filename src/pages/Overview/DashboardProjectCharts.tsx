@@ -171,19 +171,57 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
 const RevenueCharts = ({ series, revenueMonths }: any) => {
   const [mnthYRValues, setMnthYRValues] = useState<string[]>([]);
   const [totals, setTotals] = useState<number[]>([]);
+  const [visibleSeries, setVisibleSeries] = useState<boolean[]>([true, true]);
+  const [annotations, setAnnotations] = useState<any[]>([]);
 
   useEffect(() => {
     console.log("series", revenueMonths, series);
     const latestMonths = revenueMonths.map((item: any) => item.MnthYR);
     console.log("latestMonts", latestMonths);
     setMnthYRValues(latestMonths);
-
+    setVisibleSeries([true, true]);
     // Calculate totals for each category (stack)
     const calculatedTotals = revenueMonths.map((_: any, index: number) =>
       series.reduce((sum: number, s: any) => sum + (s.data[index] || 0), 0)
     );
     setTotals(calculatedTotals);
+    console.log(totals); //to avoid unwanted variable
   }, [revenueMonths, series]);
+
+  useEffect(() => {
+    const values = revenueMonths.map((_: any, index: number) => {
+      let total = 0;
+      if (visibleSeries[0]) total += series[0]?.data[index] || 0;
+      if (visibleSeries[1]) total += series[1]?.data[index] || 0;
+      return total;
+    });
+
+    const newAnnotations = values
+      .map((val: any, idx: any) => {
+        // Skip label if both series are hidden
+        if (!visibleSeries[0] && !visibleSeries[1]) return null;
+        return {
+          x: mnthYRValues[idx],
+          y: val,
+          marker: { size: 0 },
+          label: {
+            text: new Intl.NumberFormat("en-IN").format(Math.floor(val)),
+            style: {
+              fontSize: "12px",
+              fontWeight: "bold",
+              color: "#000",
+              background: "transparent",
+              borderWidth: 0,
+              borderRadius: 0,
+              padding: 0,
+            },
+          },
+        };
+      })
+      .filter(Boolean); // Remove nulls
+
+    setAnnotations(newAnnotations);
+  }, [visibleSeries, revenueMonths, series]);
 
   const directBrokingData = series[0]?.data || [];
   const indirectBrokingData = series[1]?.data || [];
@@ -195,7 +233,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
         data: directBrokingData,
       },
       {
-        name: "Indirect-Broking",
+        name: "SLBM",
         data: indirectBrokingData,
       },
     ],
@@ -205,6 +243,14 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       stacked: true,
       toolbar: {
         show: false, // Hide the toolbar
+      },
+      events: {
+        legendClick: (chartContext: any, seriesIndex: number, config: any) => {
+          const updatedVisibility = [...visibleSeries];
+          updatedVisibility[seriesIndex] = !updatedVisibility[seriesIndex];
+          setVisibleSeries(updatedVisibility);
+          console.log(chartContext, config);
+        },
       },
     },
     stroke: {
@@ -233,26 +279,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
       offsetY: 0, // Adjust the vertical position for individual values
     },
     annotations: {
-      points: totals.map((total, index) => ({
-        x: mnthYRValues[index], // Bar category (month-year)
-        y: total, // Total value
-        marker: {
-          size: 0, // No marker
-        },
-        label: {
-          text: new Intl.NumberFormat("en-IN").format(Math.floor(total)), // Show total also remove the . 2 digit decimals
-          style: {
-            fontSize: "12px",
-            fontWeight: "bold",
-            color: "#000", // Text color
-            // below style to remove top label bg box
-            background: "transparent", // Remove background box
-            borderWidth: 0, // Ensure no border
-            borderRadius: 0, // Remove any rounding
-            padding: 0, // Remove padding
-          },
-        },
-      })),
+      points: annotations,
     },
     grid: {
       show: true,

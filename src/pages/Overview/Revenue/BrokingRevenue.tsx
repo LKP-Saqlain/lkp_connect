@@ -120,10 +120,17 @@ const Revenue = ({
 
             // Extract data for broking and indirect values
             const brokingValues = fetchRevenueData.map(
-              (item: any) => item.Ach_brok_dir + item.Ach_brokslbm_dir
+              (item: any) =>
+                item.Ach_brok_dir +
+                item.Ach_brokslbm_dir +
+                item.Ach_brok_indir +
+                item.Ach_brok_ind_less2yrs
             );
             const indirectValues = fetchRevenueData.map(
-              (item: any) => item.Ach_brok_indir + item.Ach_brok_ind_less2yrs
+              (item: any) =>
+                item.Ach_brokslbm_dir +
+                item.Ach_brokslbm_indir +
+                item.Ach_brokslbm_ind_less2yrs
             );
 
             setBrokingNonBrokingData([
@@ -231,7 +238,7 @@ const Revenue = ({
                 marginRight: "8px",
               }}
             ></div>
-            <p className="mb-0 me-3">Indirect-Broking</p>
+            <p className="mb-0 me-3">SLBM</p>
             {/* <div
                     className="legend-color"
                     style={{
