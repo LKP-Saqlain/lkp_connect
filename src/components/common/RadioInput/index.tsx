@@ -24,7 +24,7 @@ const RadioInput: React.FC<RadioInputProps> = ({
         onChange={onChange}
         className="form-check-input"
         id={id}
-        // style={{backgroundColor:"#11395C"}}
+        style={{ border: "1px solid rgb(0, 0, 0)" }}
       />
       <label
         className="form-check-label"

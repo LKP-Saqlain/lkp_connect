@@ -123,7 +123,7 @@ const ModalComponent = ({
       clientcode: BrokerageTitle?.clientcode || "",
       segment: BrokerageTitle?.type || "",
       moduleNo: latestHistory?.moduleNo || "",
-      existingPlan: `${existingPlan} (Active since ${activeSince})`,
+      existingPlan: `${existingPlan} ( ${activeSince} )`,
       proposedPlan: selectedValue,
     };
 
@@ -292,7 +292,7 @@ const ModalComponent = ({
                     fontFamily: "Poppins",
                   }}
                 >
-                  Existent Plans
+                  Existing Plan
                 </p>
                 <Row>
                   <Col>
@@ -326,7 +326,7 @@ const ModalComponent = ({
                     fontFamily: "Poppins",
                   }}
                 >
-                  Proposed Plans
+                  Proposed Plan
                 </p>
                 <Row>
                   <Col xs={12} md={6}>

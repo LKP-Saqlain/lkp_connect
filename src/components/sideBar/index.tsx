@@ -816,6 +816,19 @@ const SideBar = () => {
           default:
             return null;
         }
+      case "Kyc Dashboard":
+        switch (activeSubItem) {
+          case "RH Approval":
+            return <RegionalHead activeSubItem={activeSubItem} />;
+          case "KYC Approval":
+            return <KycBrokerage activeSubItem={activeSubItem} />;
+          case "Brokerage Modification Status":
+            return (
+              <BrokerageModificationStatus activeSubItem={activeSubItem} />
+            );
+          default:
+            return null;
+        }
       case "Reports":
         switch (activeSubItem) {
           case "Tax P&L Statement":
@@ -848,16 +861,8 @@ const SideBar = () => {
         }
       case "Referal Lead":
         switch (activeSubItem) {
-          case "Referal Entry":
-            return <RegionalHead activeSubItem={activeSubItem} />;
           case "Referal Entry Status":
             return <Main activeSubItem={activeSubItem} />;
-          case "Referal Lead Updation":
-            return (
-              <BrokerageModificationStatus activeSubItem={activeSubItem} />
-            );
-          case "Referal Product Wise MIS Report":
-            return <KycBrokerage activeSubItem={activeSubItem} />;
           default:
             return null;
         }

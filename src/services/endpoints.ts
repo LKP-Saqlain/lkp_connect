@@ -61,4 +61,12 @@ export const endpoints = {
   ChangePassword: "api/Login/ChangePassword",
   GetAPDashboard: "api/AP/GetAPDashboard",
   ScripSearch: "api/AP/ScripSearch",
+  GetBrokerageModificationStatus:
+    "/api/Brokerage/GetBrokerageModificationStatus",
+  GetBrokerageKycStatus: "/api/Brokerage/GetBrokerageKycStatus",
+  UpdateBrokerageKycStatus: "/api/Brokerage/UpdateBrokerageKycStatus",
+  GetBrokerageRHStatus: "/api/Brokerage/GetBrokerageRHStatus",
+  UpdateBrokerageRHStatus: "/api/Brokerage/UpdateBrokerageRHStatus",
+  GetBrokerageModificationValidity:
+    "/api/Brokerage/GetBrokerageModificationValidity",
 };

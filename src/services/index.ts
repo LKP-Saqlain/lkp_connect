@@ -254,4 +254,34 @@ export const apiServices = {
   ScripSearch: async () => {
     return await apiService("GET", endpoints.ScripSearch);
   },
+  GetBrokerageModificationStatus: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetBrokerageModificationStatus,
+      payload
+    );
+  },
+  GetBrokerageKycStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokerageKycStatus, payload);
+  },
+  UpdateBrokerageKycStatus: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateBrokerageKycStatus,
+      payload
+    );
+  },
+  GetBrokerageRHStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokerageRHStatus, payload);
+  },
+  UpdateBrokerageRHStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateBrokerageRHStatus, payload);
+  },
+  GetBrokerageModificationValidity: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetBrokerageModificationValidity,
+      payload
+    );
+  },
 };

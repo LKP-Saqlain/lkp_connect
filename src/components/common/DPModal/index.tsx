@@ -77,7 +77,8 @@ const CustomModal = ({
     validationSchema: Yup.object({
       // Remark validation for "Communication Retrival Checker"
       ...((activeSubItem === "Communication Retrival Checker" ||
-        activeSubItem === "Referal Product Wise MIS Report") && {
+        activeSubItem === "KYC Approval" ||
+        activeSubItem === "RH Approval") && {
         remark: Yup.string().trim().required("Remark is required"),
       }),
 
@@ -102,9 +103,14 @@ const CustomModal = ({
 
       if (action && row) {
         const entryFlag = action === "approve" ? "A" : "R";
-        handleApproval?.(row, values.remark, entryFlag);
-        console.log(values.remark, "values.remark");
-
+        if (activeSubItem === "Communication Retrival Checker") {
+          handleApproval?.(row, values.remark, entryFlag);
+        } else if (activeSubItem === "KYC Approval") {
+          handleApproval?.(row, values.remark, entryFlag);
+        } else if (activeSubItem === "RH Approval") {
+          handleApproval?.(row, values.remark, entryFlag);
+        }
+        console.log(values.remark, "values.remark", row, entryFlag);
         formik.resetForm();
       }
     },
@@ -229,7 +235,8 @@ const CustomModal = ({
 
         <form onSubmit={formik.handleSubmit}>
           {(activeSubItem === "Communication Retrival Checker" ||
-            activeSubItem === "Referal Product Wise MIS Report") && (
+            activeSubItem === "KYC Approval" ||
+            activeSubItem === "RH Approval") && (
             <TextField
               label="Enter Remark *"
               variant="outlined"

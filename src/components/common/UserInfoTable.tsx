@@ -365,16 +365,8 @@ const DataTable = ({
       return getAccountDetails.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Referal Entry") {
-      return RegionalHead.map((column) => ({
-        ...column,
-      }));
-    } else if (activeSubItem === "Referal Lead Updation") {
-      return BrokerageModificationStatus.map((column) => ({
-        ...column,
-      }));
-    } else if (activeSubItem === "Referal Product Wise MIS Report") {
-      return BrokerageKyc.map((column) => {
+    } else if (activeSubItem === "RH Approval") {
+      return RegionalHead.map((column) => {
         if (column.field === "remark") {
           return {
             ...column,
@@ -383,7 +375,7 @@ const DataTable = ({
                 <div
                   onClick={() => {
                     HandleApprovalModal("approve");
-                    // setSelectedRow(params.row.dummyId);
+                    setSelectedRow(params.row.rowId);
                     console.log(params.row.dummyId, "selectedrow approve");
                   }}
                   style={{
@@ -400,7 +392,56 @@ const DataTable = ({
                 <div
                   onClick={() => {
                     HandleApprovalModal("reject");
-                    setSelectedRow(params.row.dummyId);
+                    setSelectedRow(params.row.rowId);
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: 5,
+                  }}
+                >
+                  <span>Reject</span>
+                  <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                </div>
+              </div>
+            ),
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "Brokerage Modification Status") {
+      return BrokerageModificationStatus.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "KYC Approval") {
+      return BrokerageKyc.map((column) => {
+        if (column.field === "remark") {
+          return {
+            ...column,
+            renderCell: (params: any) => (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <div
+                  onClick={() => {
+                    HandleApprovalModal("approve");
+                    setSelectedRow(params.row.rowId);
+                    console.log(params.row.rowId, "selectedrow approve");
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: 5,
+                  }}
+                >
+                  <span>Approve</span>
+                  <CheckCircleIcon style={{ color: "green", marginLeft: 4 }} />
+                </div>
+                <div style={{ fontSize: 20, color: "gray" }}>|</div>
+                <div
+                  onClick={() => {
+                    HandleApprovalModal("reject");
+                    setSelectedRow(params.row.rowId);
                   }}
                   style={{
                     cursor: "pointer",
@@ -651,7 +692,7 @@ const DataTable = ({
       : selectedWidget === "Upcoming Dormant Client"
       ? T6Data
       : T6Data;
-  console.log(rowName);
+  console.log("rowName from userinfo", rowName);
 
   // const rowHeight = 200;
   // const headerHeight = 80;
@@ -685,7 +726,8 @@ const DataTable = ({
           activeSubItem === "Communication Retrival Entry"
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Checker" ||
-              "Referal Product Wise MIS Report"
+              "KYC Approval" ||
+              "RH Approval"
             ? `Are you sure want to ${action} this entry`
             : activeMenu === "Regulatory Announcement"
             ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
@@ -791,6 +833,8 @@ const DataTable = ({
           getRowId={(row: any) =>
             row.rowID
               ? row.rowID
+              : row.rowId
+              ? row.rowId
               : row.clientName
               ? row.clientName
               : row.ClientName

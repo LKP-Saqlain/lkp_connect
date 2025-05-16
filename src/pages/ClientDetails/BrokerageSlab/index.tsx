@@ -8,6 +8,7 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice.ts";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store.ts";
 import { apiServices } from "../../../services/index.ts";
+import ShowToast from "../../../utils/toastUtils.tsx";
 
 const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
   interface BrokerageItem {
@@ -114,6 +115,76 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
     console.log("eventValue", item);
     setIsModalOpen(!isModalOpen);
     setSelectedBrokerageItem(item);
+  };
+  // const handleValidty = (item?: any) => {
+  //   const payload = {
+  //     clientcode: item?.clientcode,
+  //     segment: item?.type,
+  //     moduleNo: item.moduleNo,
+  //   };
+
+  //   dispatch(showLoader("Please wait..."));
+
+  //   apiServices
+  //     .GetBrokerageModificationValidity(payload)
+  //     .then((response) => {
+  //       if (response?.status === 200) {
+  //         console.log("Fetched Validity Details---raw", response?.data);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log("Error", err);
+  //     })
+  //     .finally(() => {
+  //       dispatch(hideLoader());
+  //     });
+  // };
+  const handleValidty = async (item?: any): Promise<boolean> => {
+    const payload = {
+      clientcode: item?.clientcode,
+      segment: item?.type,
+      moduleNo: item.moduleNo,
+    };
+
+    try {
+      dispatch(showLoader("Please wait..."));
+
+      const response = await apiServices.GetBrokerageModificationValidity(
+        payload
+      );
+
+      if (response?.status === 200) {
+        const modificationFlag = response?.data?.data?.modificationFlag;
+        const statusMsg = response?.data?.data?.statusMsg;
+
+        console.log(
+          modificationFlag,
+          "Fetched Validity Details---raw",
+          response?.data
+        );
+
+        // Show message only if modification is not allowed
+        if (modificationFlag !== "Y" && statusMsg) {
+          ShowToast("error", statusMsg);
+        }
+
+        return modificationFlag === "Y";
+      }
+    } catch (err) {
+      console.log("Error", err);
+    } finally {
+      dispatch(hideLoader());
+    }
+
+    return false;
+  };
+
+  const handleEditClick = async (item: any) => {
+    const isValid = await handleValidty(item);
+
+    if (isValid) {
+      handleBrokeragePlan(item); // open modal only if valid
+    }
   };
 
   return (
@@ -227,7 +298,7 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
                             fontSize: "16px",
                             color: "#777",
                           }}
-                          onClick={() => handleBrokeragePlan(item)}
+                          onClick={() => handleEditClick(item)}
                         />
                       </CardBody>
                     </Card>

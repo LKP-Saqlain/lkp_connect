@@ -2,7 +2,7 @@ import CardTable from "./CardTable";
 import { combinedDataBySource } from "../../helper/commmon";
 import { useEffect } from "react";
 
-const Main = ({ activeSubItem }: any) => {
+const BrokerageModificationStatus = ({ activeSubItem }: any) => {
   useEffect(() => {
     combinedDataBySource.map((item) => {
       console.log("MaintestData", item);
@@ -24,4 +24,4 @@ const Main = ({ activeSubItem }: any) => {
   );
 };
 
-export default Main;
+export default BrokerageModificationStatus;

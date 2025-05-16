@@ -67,14 +67,14 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
       let payload = {
         user_id: Id,
         clientCode: selectedClientCode, //24215 for show data in all btns
-        fromDate: formattedFromDate, //"2024/09/01",
+        fromDate: "2020/09/01",
         toDate: formattedToDate, //"2024/12/01",
       };
       dispatch(showLoader("Please wait"));
       dispatch(ClientSegBrok(payload))
         .unwrap()
         .then((res) => {
-          console.log("TypeCheck", typeof res?.data);
+          console.log(formattedFromDate, "TypeCheck", typeof res?.data);
           console.log("ClientSegmentBrokerageResponse", res?.data);
           if (typeof res?.data === "string") {
             ShowToast("error", res?.data);
