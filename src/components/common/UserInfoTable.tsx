@@ -756,12 +756,12 @@ const DataTable = ({
             ? `Are you sure want to ${action} this entry`
             : activeMenu === "Regulatory Announcement"
             ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
-            : activeSubItem === "RMS Allocation"
+            : activeSubItem === "PreTradeProofUpload"
             ? ""
             : "Are you sure you want to send the email?"
         }
         activeSubItem={activeSubItem}
-        isUploadMode={activeSubItem === "RMS Allocation" ? true : false}
+        isUploadMode={activeSubItem === "PreTradeProofUpload" ? true : false}
         handleFileUpload={(selectedRow, file, remark) => {
           console.log("Uploading file:", selectedRow, file);
           if (typeof onFileUpload === "function") {
