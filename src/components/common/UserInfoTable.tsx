@@ -750,9 +750,11 @@ const DataTable = ({
             ? ""
             : activeSubItem === "Communication Retrival Entry"
             ? "Are you sure want to delete this entry"
-            : activeSubItem === "Communication Retrival Checker" ||
-              "KYC Approval" ||
-              "RH Approval"
+            : activeSubItem === "Communication Retrival Checker"
+            ? `Are you sure want to ${action} this entry`
+            : activeSubItem === "KYC Approval"
+            ? `Are you sure want to ${action} this entry`
+            : activeSubItem === "RH Approval"
             ? `Are you sure want to ${action} this entry`
             : activeMenu === "Regulatory Announcement"
             ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
