@@ -22,7 +22,7 @@ const SLBMHoldings = () => {
   const dispatch = useDispatch();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [fileError, setFileError] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
+  // const [message, setMessage] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [inputKey, setInputKey] = useState<number>(0);
 
@@ -89,7 +89,7 @@ const SLBMHoldings = () => {
       if (response.status === 200) {
         dispatch(hideLoader());
         console.log("File upload response-->", response.data);
-        setMessage(response?.data);
+        // setMessage(response?.data);
         setIsModalOpen(true);
         setSelectedFiles([]);
         setFileError("");
@@ -123,7 +123,7 @@ const SLBMHoldings = () => {
                       <Modal
                         isOpen={isModalOpen}
                         onClose={toggleModal}
-                        message={message}
+                        // message={message}
                       />
                       <Col lg={6}>
                         <div>
