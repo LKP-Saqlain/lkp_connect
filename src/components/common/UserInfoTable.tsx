@@ -570,7 +570,7 @@ const DataTable = ({
       // apiStatus
     ) {
       return getClientActivityStatusColumns(handleViewDetails, user_type);
-    } else if (activeSubItem === "RMS Allocation") {
+    } else if (activeSubItem === "PreTradeProofUpload") {
       return PreProofUploadColumns.map((column) => {
         if (column.field === "file_upload") {
           return {
@@ -603,7 +603,7 @@ const DataTable = ({
         }
         return column;
       });
-    } else if (activeSubItem === "Upload SLBM Holding") {
+    } else if (activeSubItem === "Pre Trade Report") {
       return preTradeColumns.map((column) => {
         if (column.field === "Uploaded_Document") {
           return {

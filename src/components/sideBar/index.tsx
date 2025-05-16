@@ -307,6 +307,7 @@ const SideBar = () => {
       activeMenu !== "Kyc Dashboard" &&
       activeMenu !== "Masters" &&
       activeMenu !== "RMS" &&
+      activeMenu !== "IVR" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -839,9 +840,9 @@ const SideBar = () => {
       case "RMS":
         switch (activeSubItem) {
           case "RMS Allocation":
-            return <PreProofUpload activeSubItem={activeSubItem} />;
+            return;
           case "Upload SLBM Holding":
-            return <PreTradeReport activeSubItem={activeSubItem} />;
+            return;
           default:
             return null;
         }
@@ -891,7 +892,22 @@ const SideBar = () => {
         return <OTDetails />;
       case "Registration Details":
         return <RegisDetails activeSubItem={activeSubItem} />;
-      default:
+      case "IVR":
+        switch (activeSubItem) {
+          case "PreTradeProofUpload":
+            return <PreProofUpload activeSubItem={activeSubItem} />;
+          case "Pre Trade Report":
+            return <PreTradeReport activeSubItem={activeSubItem} />;
+          case "IVR Mapping":
+            return;
+          // (
+          //   <BrokerageModificationStatus activeSubItem={activeSubItem} />
+          // );
+          case "Referal Product Wise MIS Report":
+            return <KycBrokerage activeSubItem={activeSubItem} />;
+          default:
+            return null;
+        }
         return <></>;
     }
   };

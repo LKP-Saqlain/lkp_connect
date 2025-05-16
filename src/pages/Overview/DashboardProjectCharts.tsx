@@ -231,21 +231,16 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
 
   const directBrokingData = series[0]?.data || [];
   const indirectBrokingData = series[1]?.data || [];
-  const unlistedBrokingData = series[2]?.data || [];
 
   var options: any = {
     series: [
       {
-        name: "Direct-Broking",
+        name: "Broking",
         data: directBrokingData,
       },
       {
         name: "SLBM",
         data: indirectBrokingData,
-      },
-      {
-        name: "Unlisted Shares",
-        data: unlistedBrokingData,
       },
     ],
     chart: {
@@ -399,6 +394,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
   const TPD_Liq_Loans = series[1]?.data || [];
   const spIp = series[2]?.data || [];
   const TPD_mutualfunds = series[3]?.data || [];
+  const unlistedBrokingData = series[4]?.data || [];
 
   var options: any = {
     series: [
@@ -417,6 +413,10 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
       {
         name: "Liqui Loans",
         data: TPD_Liq_Loans,
+      },
+      {
+        name: "Unlisted Shares",
+        data: unlistedBrokingData,
       },
     ],
     chart: {
@@ -507,7 +507,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
     fill: {
       opacity: 1,
     },
-    colors: ["#1890ff", "#52c41a", "#faad14", "#00E396"],
+    colors: ["#1890ff", "#52c41a", "#faad14", "#00E396", "#ec8c95"],
     yaxis: {
       show: false, // Completely hide the Y-axis
     },

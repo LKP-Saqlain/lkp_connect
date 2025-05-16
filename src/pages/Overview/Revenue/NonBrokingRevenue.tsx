@@ -31,6 +31,11 @@ const NonBrokingRevenue = () => {
       group: "TPD_mutualfunds",
       data: [],
     },
+    {
+      name: "Unlisted Shares",
+      group: "Unlisted Shares",
+      data: [],
+    },
   ]);
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -62,6 +67,9 @@ const NonBrokingRevenue = () => {
             const TPD_mutualfunds = fetchRevenueData.map(
               (item: any) => item.TPD_mutualfunds
             );
+            const unlistedShares = fetchRevenueData.map(
+              (item: any) => item.UnlistedShares_rev
+            );
             // Update the monthProjectData array
             setNonBrokingValues([
               {
@@ -83,6 +91,11 @@ const NonBrokingRevenue = () => {
                 name: "Mutualfunds",
                 group: "mutualfunds",
                 data: TPD_mutualfunds,
+              },
+              {
+                name: "Unlisted Shares",
+                group: "Unlisted Shares",
+                data: unlistedShares,
               },
             ]);
           }
@@ -172,6 +185,16 @@ const NonBrokingRevenue = () => {
               }}
             ></div>
             <p className="mb-0 me-3">Liqui Loans</p>
+            <div
+              className="legend-color"
+              style={{
+                backgroundColor: "#ec8c95",
+                width: "16px",
+                height: "16px",
+                marginRight: "8px",
+              }}
+            ></div>
+            <p className="mb-0">Unlisted Shares</p>
           </div>
         </CardHeader>
 

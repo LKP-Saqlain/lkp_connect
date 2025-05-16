@@ -30,6 +30,7 @@ import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import LinkIcon from "@mui/icons-material/Link";
 import DetailsIcon from "@mui/icons-material/Details";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -77,6 +78,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "Regulatory Announcement": <AutoStoriesIcon />,
     EKYC: <LinkIcon />,
     "Other Details": <DetailsIcon />,
+    IVR: <PublishedWithChangesIcon />,
   };
 
   const getIcon = (title: string) => {

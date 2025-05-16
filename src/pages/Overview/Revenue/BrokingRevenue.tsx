@@ -25,11 +25,6 @@ const Revenue = ({
       group: "Non-Broking",
       data: [],
     },
-    {
-      name: "Unlisted Shares",
-      group: "Unlisted Shares",
-      data: [],
-    },
 
     // {
     //   name: "Indirect Broking",
@@ -128,18 +123,17 @@ const Revenue = ({
             const brokingValues = fetchRevenueData.map(
               (item: any) =>
                 item.Ach_brok_dir +
-                item.Ach_brokslbm_dir +
+                item.Ach_brokslbm_dir + //til here existing Broking flag below 2 inidirect flags added
                 item.Ach_brok_indir +
                 item.Ach_brok_ind_less2yrs
             );
+            console.log("testBroking Values", brokingValues);
+
             const indirectValues = fetchRevenueData.map(
               (item: any) =>
-                item.Ach_brokslbm_dir +
+                item.Ach_brokslbm_dir + //below 3 SLBM new flags added in SLBM
                 item.Ach_brokslbm_indir +
                 item.Ach_brokslbm_ind_less2yrs
-            );
-            const unlistedShares = fetchRevenueData.map(
-              (item: any) => item.UnlistedShares_rev
             );
 
             setBrokingNonBrokingData([
@@ -153,20 +147,16 @@ const Revenue = ({
                 group: "Broking",
                 data: indirectValues,
               },
-              {
-                name: "Unlisted Shares",
-                group: "Unlisted Shares",
-                data: unlistedShares,
-              },
             ]);
           }
 
           if (filteredRevenueData) {
             const broking =
               filteredRevenueData[0]?.Ach_brok_dir +
-                filteredRevenueData[0]?.Ach_brok_ind_less2yrs +
-                filteredRevenueData[0]?.Ach_brok_indir +
-                filteredRevenueData[0]?.Ach_brokslbm_dir || 0;
+              filteredRevenueData[0]?.Ach_brokslbm_dir + //til here existing Broking flag below 2 inidirect flags added
+              filteredRevenueData[0]?.Ach_brok_indir +
+              filteredRevenueData[0]?.Ach_brok_ind_less2yrs;
+
             const nonBroking =
               filteredRevenueData[0]?.Ach_brokslbm_dir +
                 filteredRevenueData[0]?.Ach_brokslbm_indir +
@@ -246,7 +236,7 @@ const Revenue = ({
                 marginRight: "8px",
               }}
             ></div>
-            <p className="mb-0 me-3">Direct-Broking</p>
+            <p className="mb-0 me-3">Broking</p>
             <div
               className="legend-color"
               style={{
@@ -257,16 +247,6 @@ const Revenue = ({
               }}
             ></div>
             <p className="mb-0 me-3">SLBM</p>
-            <div
-              className="legend-color"
-              style={{
-                backgroundColor: "#ec8c95",
-                width: "16px",
-                height: "16px",
-                marginRight: "8px",
-              }}
-            ></div>
-            <p className="mb-0">Unlisted Shares</p>
           </div>
         </CardHeader>
 
