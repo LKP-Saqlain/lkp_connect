@@ -3656,7 +3656,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
   {
     field: "tradeTime",
@@ -3664,7 +3664,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
   {
     field: "expiryDate",
@@ -3672,7 +3672,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
   {
     field: "symbol",
@@ -3680,7 +3680,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
   {
     field: "series",
@@ -3688,7 +3688,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
   {
     field: "instrumentType",
@@ -3697,7 +3697,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
   {
     field: "strikeprice",
@@ -3705,7 +3705,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "right",
   },
   {
     field: "qty",
@@ -3713,7 +3713,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "right",
   },
   {
     field: "buySell",
@@ -3721,7 +3721,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
   {
     field: "tradeOrderNumber",
@@ -3730,7 +3730,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
 ];
 
@@ -3790,7 +3790,7 @@ export const preTradeColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "right",
   },
   {
     field: "qty",
@@ -3798,7 +3798,7 @@ export const preTradeColumns: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "right",
   },
   {
     field: "buySell",
