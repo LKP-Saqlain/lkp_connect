@@ -104,6 +104,26 @@ export const apiServices = {
   ClientDashboard: async (payload: any) => {
     return await apiService("POST", endpoints.ClientDashboard, payload);
   },
+  GetBrokerageDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokerageDetails, payload);
+  },
+  GetBrokeragePlans: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokeragePlans, payload);
+  },
+  UpdateClientBrokerageModification: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateClientBrokerageModification,
+      payload
+    );
+  },
+  GetBrokerageModificationHistory: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetBrokerageModificationHistory,
+      payload
+    );
+  },
   ClientSegmentBrok: async (payload: any) => {
     return await apiService("POST", endpoints.ClientSegmentBrok, payload);
   },
@@ -234,6 +254,7 @@ export const apiServices = {
   ScripSearch: async () => {
     return await apiService("GET", endpoints.ScripSearch);
   },
+
   UploadTradeFile: async (payload: any) => {
     return await apiService("POST", endpoints.UploadTradeFile, payload);
   },
@@ -242,5 +263,35 @@ export const apiServices = {
   },
   GetPreTradeReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetPreTradeReport, payload);
+  },
+  GetBrokerageModificationStatus: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetBrokerageModificationStatus,
+      payload
+    );
+  },
+  GetBrokerageKycStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokerageKycStatus, payload);
+  },
+  UpdateBrokerageKycStatus: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateBrokerageKycStatus,
+      payload
+    );
+  },
+  GetBrokerageRHStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokerageRHStatus, payload);
+  },
+  UpdateBrokerageRHStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateBrokerageRHStatus, payload);
+  },
+  GetBrokerageModificationValidity: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetBrokerageModificationValidity,
+      payload
+    );
   },
 };

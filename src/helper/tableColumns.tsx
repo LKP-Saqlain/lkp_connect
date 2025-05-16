@@ -3,7 +3,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import React from "react";
 import Tooltip from "@mui/material/Tooltip";
 import dayjs from "dayjs";
-// import { Button } from "@mui/material";
+import { Button } from "@mui/material";
 // import PersonAddIcon from "@mui/icons-material/PersonAdd";
 // import { FaUserPen } from "react-icons/fa6";
 
@@ -534,31 +534,31 @@ export const getClientDormantStatus = (
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
   },
-  // {
-  //   field: "viewDetails",
-  //   headerName: "Action",
-  //   width: 150,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   renderCell: (params: any) => (
-  //     <Button
-  //       onClick={() => handleViewDetails(params.row)}
-  //       // onClick={() => console.log("rowValues", params.row)}
-  //       variant="contained"
-  //       color="primary"
-  //       style={{
-  //         padding: "2px 9px",
-  //         backgroundColor: "#11395C",
-  //         fontSize: "10px",
-  //         borderRadius: "10px",
-  //         textTransform: "capitalize",
-  //         fontFamily: "Public Sans",
-  //       }}
-  //     >
-  //       View Details
-  //     </Button>
-  //   ),
-  // },
+  {
+    field: "viewDetails",
+    headerName: "Action",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params: any) => (
+      <Button
+        onClick={() => handleViewDetails(params.row)}
+        // onClick={() => console.log("rowValues", params.row)}
+        variant="contained"
+        color="primary"
+        style={{
+          padding: "2px 9px",
+          backgroundColor: "#11395C",
+          fontSize: "10px",
+          borderRadius: "10px",
+          textTransform: "capitalize",
+          fontFamily: "Public Sans",
+        }}
+      >
+        View Details
+      </Button>
+    ),
+  },
 ];
 
 export const Corecolumns: GridColDef[] = [
@@ -3063,7 +3063,6 @@ export const cyptoWidgets = [
   // },
   {
     id: 2,
-
     label: "Clients With Ledger Balance",
   },
   { id: 3, label: "Clients Ageing Report" },
@@ -3532,34 +3531,34 @@ export const FundamentalRatiosHeader = [
 ];
 export const RegionalHead: GridColDef[] = [
   {
-    field: "branch",
+    field: "branchcode",
     headerName: "Branch",
-    flex: 1.1,
-    minWidth: 120,
+    minWidth: 70,
+    flex: 0.5,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
   {
-    field: "ClientCode",
+    field: "clientcode",
     headerName: "Client Code",
-    flex: 1.1,
+    flex: 0.6,
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
   },
   {
-    field: "ClientName",
+    field: "clientName",
     headerName: "Client Name",
-    flex: 2,
+    flex: 1.5,
     minWidth: 200,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
   },
   {
-    field: "ClientType",
+    field: "clientType",
     headerName: "Client Type",
     flex: 1,
     minWidth: 120,
@@ -3571,19 +3570,19 @@ export const RegionalHead: GridColDef[] = [
     field: "segment",
     headerName: "Segment",
     flex: 1,
-    minWidth: 120,
+    minWidth: 140,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
   },
   {
     field: "existingPlan",
     headerName: "Existing Plan",
-    flex: 1.2,
-    minWidth: 130,
+    flex: 1.5,
+    minWidth: 230,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
   },
   {
     field: "proposedPlan",
@@ -3592,16 +3591,17 @@ export const RegionalHead: GridColDef[] = [
     minWidth: 130,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
   },
   {
     field: "remark",
     headerName: "Remark",
     flex: 1.5,
-    minWidth: 160,
+    minWidth: 165,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
+    sortable: false,
   },
 ];
 
@@ -3609,18 +3609,18 @@ export const BrokerageModificationStatus: GridColDef[] = [
   {
     field: "zone",
     headerName: "Zone",
-    flex: 1.1,
-    minWidth: 120,
+    minWidth: 60,
+    flex: 0.5,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
-  ...RegionalHead,
+  ...RegionalHead.filter((col) => col.field !== "remark"),
   {
     field: "status",
     headerName: "Status",
     flex: 1.1,
-    minWidth: 120,
+    minWidth: 200,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3630,11 +3630,11 @@ export const BrokerageKyc: GridColDef[] = [
   {
     field: "zone",
     headerName: "Zone",
-    flex: 1.1,
-    minWidth: 120,
+    minWidth: 60,
+    flex: 0.5,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
   ...RegionalHead,
 ];

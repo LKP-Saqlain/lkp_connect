@@ -1,8 +1,27 @@
 import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import DataTable from "../../../components/common/UserInfoTable";
-import { dummyClientPlanData } from "../../../helper/commmon";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { useEffect, useState } from "react";
+import { apiServices } from "../../../services";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 const BrokerageModificationStatus = ({ activeSubItem }: any) => {
-  console.log("active", activeSubItem);
+  const [modificationStatus, setModificationStatus] = useState([]);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(showLoader("Please wait..."));
+    apiServices
+      .GetBrokerageModificationStatus({})
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("ModStatus-data", response?.data?.data);
+          setModificationStatus(response?.data?.data);
+        }
+      })
+      .catch((err) => console.log("Error", err))
+      .finally(() => dispatch(hideLoader()));
+  }, []);
 
   return (
     <div className="page-content page-view">
@@ -26,7 +45,7 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
           <CardBody>
             <DataTable
               activeSubItem={activeSubItem}
-              T6Data={dummyClientPlanData}
+              T6Data={modificationStatus}
             />
           </CardBody>
         </Card>

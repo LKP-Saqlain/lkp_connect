@@ -153,7 +153,6 @@ const UnblockUser = () => {
       user_id: formik.values.userId,
       otp: formik.values.otp,
     };
-    debugger;
     dispatch(showLoader(""));
     dispatch(UnblockUsers(payload))
       .unwrap()

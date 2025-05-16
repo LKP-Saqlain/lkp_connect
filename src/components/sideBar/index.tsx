@@ -120,7 +120,8 @@ const AppBar = styled(MuiAppBar, {
     borderRadius: "15px",
     margin: "15px",
     boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)",
-    zIndex: !isNudgeOpen ? "" : "auto",
+    // zIndex: !isNudgeOpen ? "" : "auto", // Exisiting old added new below for FS modal
+    zIndex: !isNudgeOpen ? "1000" : "100",
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -816,6 +817,19 @@ const SideBar = () => {
           default:
             return null;
         }
+      case "Kyc Dashboard":
+        switch (activeSubItem) {
+          case "RH Approval":
+            return <RegionalHead activeSubItem={activeSubItem} />;
+          case "KYC Approval":
+            return <KycBrokerage activeSubItem={activeSubItem} />;
+          case "Brokerage Modification Status":
+            return (
+              <BrokerageModificationStatus activeSubItem={activeSubItem} />
+            );
+          default:
+            return null;
+        }
       case "Reports":
         switch (activeSubItem) {
           case "Tax P&L Statement":
@@ -848,16 +862,8 @@ const SideBar = () => {
         }
       case "Referal Lead":
         switch (activeSubItem) {
-          case "Referal Entry":
-            return <RegionalHead activeSubItem={activeSubItem} />;
           case "Referal Entry Status":
             return <Main activeSubItem={activeSubItem} />;
-          case "Referal Lead Updation":
-            return (
-              <BrokerageModificationStatus activeSubItem={activeSubItem} />
-            );
-          case "Referal Product Wise MIS Report":
-            return <KycBrokerage activeSubItem={activeSubItem} />;
           default:
             return null;
         }

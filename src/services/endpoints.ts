@@ -28,6 +28,12 @@ export const endpoints = {
   getUpcompingDormantReport: "/api/Common/GetUpcomingDormantReport",
   GetBirthdayList: "/api/Common/GetBirthdayList",
   ClientDashboard: "/api/Client/ClientDashboard",
+  GetBrokerageDetails: "/api/Brokerage/GetBrokerageDetails",
+  GetBrokeragePlans: "/api/Brokerage/GetBrokeragePlans",
+  UpdateClientBrokerageModification:
+    "/api/Brokerage/UpdateClientBrokerageModification",
+  GetBrokerageModificationHistory:
+    "/api/Brokerage/GetBrokerageModificationHistory",
   ClientSegmentBrok: "/api/Client/ClientSegmentBrok",
   DPDebitRecovery: "/api/Client/DPDebitRecovery",
   DPEmail: "/api/Client/DPEmail",
@@ -58,4 +64,12 @@ export const endpoints = {
   UploadTradeFile: "/api/PreTrade/UploadTradeFile",
   GetAllRecords: "/api/PreTrade/GetAllRecords",
   GetPreTradeReport: "/api/PreTrade/GetPreTradeReport",
+  GetBrokerageModificationStatus:
+    "/api/Brokerage/GetBrokerageModificationStatus",
+  GetBrokerageKycStatus: "/api/Brokerage/GetBrokerageKycStatus",
+  UpdateBrokerageKycStatus: "/api/Brokerage/UpdateBrokerageKycStatus",
+  GetBrokerageRHStatus: "/api/Brokerage/GetBrokerageRHStatus",
+  UpdateBrokerageRHStatus: "/api/Brokerage/UpdateBrokerageRHStatus",
+  GetBrokerageModificationValidity:
+    "/api/Brokerage/GetBrokerageModificationValidity",
 };
