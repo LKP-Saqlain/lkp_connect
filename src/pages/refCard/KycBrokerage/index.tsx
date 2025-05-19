@@ -63,7 +63,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
               padding: "0.2rem 0.8rem",
             }}
           >
-            <h4 className="card-title mb-0">KYC</h4>
+            <h4 className="card-title mb-0">KYC - Brokerage change approval</h4>
           </CardHeader>
           <CardBody>
             <DataTable

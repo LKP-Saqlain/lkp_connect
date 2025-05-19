@@ -8,7 +8,7 @@ const ShowToast = (type: TypeOptions, message: string) => {
   toast(message, {
     type,
     position: "bottom-right",
-    autoClose: 1000,
+    autoClose: 3500,
     hideProgressBar: false,
     closeOnClick: true,
     rtl: false,

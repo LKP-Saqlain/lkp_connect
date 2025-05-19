@@ -25,18 +25,21 @@ export const getClientActivityStatusColumns = (
       headerName: "Client Code",
       align: "left",
       flex: 1,
+      minWidth: 100, // Reasonable on all screens
     },
     {
       disableColumnMenu: true,
       field: "ClientName",
       headerName: "Client Name",
       flex: 2,
+      minWidth: 160, // Names can be long; ensure space
     },
     {
       field: "LastTradeDate",
       headerClassName: "header-wrap-custom",
       headerName: "Last Trade Date",
       flex: 1.5,
+      minWidth: 120, // Date format requires a bit more space
       disableColumnMenu: true,
       align: "center",
       valueGetter: (params: any) => {
@@ -65,7 +68,6 @@ export const getClientActivityStatusColumns = (
             }
           )
         );
-
         return parsedDate;
       },
       sortComparator: (v1, v2) => {
@@ -81,6 +83,7 @@ export const getClientActivityStatusColumns = (
       field: "ClientStatus",
       headerName: "Status",
       flex: 0.8,
+      minWidth: 80,
       align: "center",
       headerAlign: "center",
       disableColumnMenu: true,
@@ -90,6 +93,7 @@ export const getClientActivityStatusColumns = (
       headerName: "Branch Code",
       headerClassName: "header-wrap-custom",
       flex: 0.8,
+      minWidth: 80,
       align: "center",
       headerAlign: "center",
       disableColumnMenu: true,
@@ -98,7 +102,8 @@ export const getClientActivityStatusColumns = (
       field: "ActivationDate",
       headerName: "Activation Date",
       headerClassName: "header-wrap-custom",
-      width: 110,
+      flex: 1.2,
+      minWidth: 130,
       align: "center",
       headerAlign: "center",
       disableColumnMenu: true,
@@ -128,7 +133,6 @@ export const getClientActivityStatusColumns = (
             }
           )
         );
-
         return parsedDate;
       },
       sortComparator: (v1, v2) => {
@@ -143,7 +147,8 @@ export const getClientActivityStatusColumns = (
     {
       field: "MobileNo",
       headerName: "Mobile No",
-      width: 110,
+      flex: 1,
+      minWidth: 120,
       align: "center",
       headerAlign: "center",
       disableColumnMenu: true,
@@ -173,7 +178,8 @@ export const getClientActivityStatusColumns = (
             field: "MTFStatus",
             headerName: "MTF Status",
             headerClassName: "header-wrap-custom",
-            flex: 1.7,
+            flex: 1,
+            minWidth: 70, // Increased to prevent overlap on smaller devices
             align: "center",
             headerAlign: "center",
             disableColumnMenu: true,
@@ -188,10 +194,37 @@ export const getClientActivityStatusColumns = (
       field: "POAStatus",
       headerName: "POA Status",
       flex: 1,
+      minWidth: 70, // Slightly wider for better label display
       align: "center",
       headerAlign: "center",
       disableColumnMenu: true,
       headerClassName: "header-wrap-custom",
+    },
+    {
+      field: "viewDetails",
+      headerName: "Action",
+      minWidth: 100, // Use minWidth instead of fixed width for better responsiveness
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params: any) => (
+        <Button
+          onClick={() => handleViewDetails(params.row)}
+          variant="contained"
+          color="primary"
+          style={{
+            padding: "2px 9px",
+            backgroundColor: "#11395C",
+            fontSize: "10px",
+            borderRadius: "10px",
+            textTransform: "capitalize",
+            fontFamily: "Public Sans",
+            whiteSpace: "nowrap", // Prevents button text from wrapping on small screens
+          }}
+        >
+          View Details
+        </Button>
+      ),
     },
   ];
 
@@ -443,19 +476,22 @@ export const getClientDormantStatus = (
     field: "ctermcode",
     headerName: "Client Code",
     align: "left",
-    flex: 1.2,
+    flex: 1,
+    minWidth: 120,
     disableColumnMenu: true,
   },
   {
     field: "clientName",
     headerName: "Client Name",
     flex: 2,
+    minWidth: 160,
     disableColumnMenu: true,
   },
   {
     field: "lastTradeDate",
     headerName: "Last Trade Date",
     flex: 1.5,
+    minWidth: 140,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -498,11 +534,11 @@ export const getClientDormantStatus = (
       return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
     },
   },
-
   {
     field: "mobileNo",
     headerName: "Mobile No",
     flex: 1.2,
+    minWidth: 140,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -529,7 +565,8 @@ export const getClientDormantStatus = (
   {
     field: "dayCount",
     headerName: "Days to Dormant",
-    flex: 1.2,
+    flex: 1,
+    minWidth: 120,
     align: "right",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
@@ -537,7 +574,8 @@ export const getClientDormantStatus = (
   {
     field: "viewDetails",
     headerName: "Action",
-    width: 150,
+    width: 130,
+    minWidth: 120,
     headerAlign: "center",
     align: "center",
     renderCell: (params: any) => (
@@ -3543,7 +3581,7 @@ export const RegionalHead: GridColDef[] = [
     field: "clientcode",
     headerName: "Client Code",
     flex: 0.6,
-    minWidth: 120,
+    minWidth: 110,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3552,25 +3590,25 @@ export const RegionalHead: GridColDef[] = [
     field: "clientName",
     headerName: "Client Name",
     flex: 1.5,
-    minWidth: 200,
+    minWidth: 190,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
   },
-  {
-    field: "clientType",
-    headerName: "Client Type",
-    flex: 1,
-    minWidth: 120,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
+  // {
+  //   field: "clientType",
+  //   headerName: "Client Type",
+  //   flex: 1,
+  //   minWidth: 120,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
   {
     field: "segment",
     headerName: "Segment",
     flex: 1,
-    minWidth: 140,
+    minWidth: 110,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3579,7 +3617,7 @@ export const RegionalHead: GridColDef[] = [
     field: "existingPlan",
     headerName: "Existing Plan",
     flex: 1.5,
-    minWidth: 230,
+    minWidth: 200,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3595,7 +3633,7 @@ export const RegionalHead: GridColDef[] = [
   },
   {
     field: "remark",
-    headerName: "Remark",
+    headerName: "Action",
     flex: 1.5,
     minWidth: 165,
     disableColumnMenu: true,
@@ -3619,8 +3657,8 @@ export const BrokerageModificationStatus: GridColDef[] = [
   {
     field: "status",
     headerName: "Status",
-    flex: 1.1,
-    minWidth: 200,
+    flex: 1,
+    minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3636,7 +3674,27 @@ export const BrokerageKyc: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
-  ...RegionalHead,
+  ...RegionalHead.reduce((acc, col) => {
+    if (col.field === "remark") {
+      // Insert the extra column just before "remark"
+      acc.push(
+        {
+          field: "kycApproveStatusDate",
+          headerName: "Date approved by RH",
+          flex: 1,
+          minWidth: 180,
+          disableColumnMenu: true,
+          headerAlign: "center",
+          align: "left",
+          sortable: false,
+        },
+        col // Then add the "remark" column
+      );
+    } else {
+      acc.push(col);
+    }
+    return acc;
+  }, [] as GridColDef[]),
 ];
 
 export const PreProofUploadColumns: GridColDef[] = [
