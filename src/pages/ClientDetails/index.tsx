@@ -380,7 +380,7 @@ any) => {
     }
   };
 
-  const getUserDetails = (value: any) => {
+  const getUserBrokergageModificationDetails = (value: any) => {
     console.log("useDetails_value", value);
     if (Object.keys(value).length > 0) {
       console.log("The object is not empty.");
@@ -718,7 +718,9 @@ any) => {
                       ? filteredData
                       : inactiveGroupedClients
                   }
-                  getUserDetails={getUserDetails}
+                  getUserBrokergageModificationDetails={
+                    getUserBrokergageModificationDetails
+                  }
                   apiStatus={apiStatus}
                   handleExcel={handleExcel}
                   showSearch={responseStatus}
@@ -738,7 +740,7 @@ any) => {
           // <UserInfoDetail />
           <UserInfo
             isOpen={isModalOpen}
-            onClose={getUserDetails}
+            onClose={getUserBrokergageModificationDetails}
             handleModalClose={handleModalClose}
             selectedClientCode={
               selectedUserInfo?.ctermcode ?? selectedUserInfo?.ClientCode

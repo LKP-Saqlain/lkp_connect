@@ -90,6 +90,7 @@ interface SelectedWidgetProps {
   customCss?: boolean;
   activeMenu?: any;
   onFileUpload?: (selectedRow: string, file: File, remark: string) => void;
+  getUserBrokergageModificationDetails?: any;
 }
 
 const DataTable = ({
@@ -124,6 +125,7 @@ const DataTable = ({
   customCss,
   activeMenu,
   onFileUpload,
+  getUserBrokergageModificationDetails,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -183,10 +185,15 @@ const DataTable = ({
   const handleViewDetails = (row: any) => {
     // debugger;
     console.log("View Details clicked for:", row);
-    getUserDetails?.(row);
+    getUserBrokergageModificationDetails?.(row);
     setSelectedRow(row);
     // tog_center();
   };
+
+  // const handleDpDebitDetails = (row: any) => {
+  //   console.log(row);
+  //   // getUserDetails?.(row);
+  // };
 
   const handleDeleteEntry = (row: any) => {
     handleDeleteClick?.(row);
@@ -236,7 +243,7 @@ const DataTable = ({
                   onClick={() => {
                     // Call both functions
                     // handleEmailSend?.();
-                    handleViewDetails?.(params.row);
+                    // handleDpDebitDetails?.(params.row);
                     setSelectedRow(params.row); // Store the selected row data
                     tog_center(); // Open the modal
                   }}
