@@ -22,6 +22,7 @@ interface BrokerageHistoryItem {
 interface ModalComponentProps {
   isOpen: boolean;
   onClose: () => void;
+  message?: string;
   BrokerageTitle?: any;
 }
 
