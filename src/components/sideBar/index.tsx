@@ -1016,7 +1016,9 @@ const SideBar = () => {
               }}
             >
               {!isMobile ? (
-                <div>
+                <div
+                  style={{ marginRight: !showMyPerformance ? "2rem" : "0rem" }}
+                >
                   <IconButton
                     onClick={isFullScreen ? closeFullScreen : openFullScreen}
                     sx={{ p: 0 }}
@@ -1030,20 +1032,20 @@ const SideBar = () => {
                 </div>
               ) : null}
             </Box>
-            <MenuItem>
-              <IconButton
-                size="large"
-                aria-label="show 6 new notifications"
-                color="inherit"
-                onClick={handleNotificationClick}
-              >
-                {showMyPerformance && (
+            {showMyPerformance && (
+              <MenuItem>
+                <IconButton
+                  size="large"
+                  aria-label="show 6 new notifications"
+                  color="inherit"
+                  onClick={handleNotificationClick}
+                >
                   <Badge badgeContent={nudgeCount} color="error">
                     <NotificationsIcon sx={{ color: "#11395C" }} />
                   </Badge>
-                )}
-              </IconButton>
-            </MenuItem>
+                </IconButton>
+              </MenuItem>
+            )}
             <Typography
               sx={{
                 color: "black",
