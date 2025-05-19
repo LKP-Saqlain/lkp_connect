@@ -7,6 +7,7 @@ import { ClientSegBrok } from "../../../redux/thunk/ClientSegmentBrokerage";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import ButtonGroup from "../../common/ButtonGroup";
 import ShowToast from "../../../utils/toastUtils";
+import { Button } from "@mui/material";
 
 const barColors = ["#11395C", "#F57C00"];
 const categories = [
@@ -32,34 +33,37 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
     const fetchClientBrokerage = () => {
       const Id = localStorage.getItem("Id");
       const currentDate = new Date();
-      let daysToSubtract;
+      let fromDate, toDate;
 
       switch (selectedButton) {
-        case "7 Days":
-          daysToSubtract = 7;
+        case "Last 30 days":
+          fromDate = new Date(currentDate);
+          fromDate.setDate(currentDate.getDate() - 30);
           break;
-        case "15 Days":
-          daysToSubtract = 15;
+        case "Last 90 days":
+          fromDate = new Date(currentDate);
+          fromDate.setDate(currentDate.getDate() - 90);
           break;
-        case "1 Month":
-          daysToSubtract = 30;
+        case "MTD": // Month to Date
+          fromDate = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            1
+          ); // 1st of current month
           break;
-        case "3 Months":
-          daysToSubtract = 90;
-          break;
-        case "6 Months":
-          daysToSubtract = 180;
-          break;
-        case "12 Months":
-          daysToSubtract = 365;
+        case "YTD":
+          const year =
+            currentDate.getMonth() >= 3
+              ? currentDate.getFullYear()
+              : currentDate.getFullYear() - 1;
+          fromDate = new Date(year, 3, 1);
           break;
         default:
-          daysToSubtract = 7; // Default to 7 days if no button is selected
+          fromDate = new Date(currentDate);
+          fromDate.setDate(currentDate.getDate() - 30);
       }
 
-      const toDate = new Date(currentDate);
-      const fromDate = new Date(currentDate);
-      fromDate.setDate(currentDate.getDate() - daysToSubtract);
+      toDate = new Date(currentDate);
 
       const formattedFromDate = fromDate.toISOString().split("T")[0]; // Format as YYYY-MM-DD
       const formattedToDate = toDate.toISOString().split("T")[0];
@@ -67,7 +71,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
       let payload = {
         user_id: Id,
         clientCode: selectedClientCode, //24215 for show data in all btns
-        fromDate: "2020/09/01",
+        fromDate: formattedFromDate,
         toDate: formattedToDate, //"2024/12/01",
       };
       dispatch(showLoader("Please wait"));
@@ -288,8 +292,58 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                         AP Share
                       </p>
                     </div> */}
-                    {/* <div className="d-flex gap-1">
+                    <div className="d-flex gap-1">
                       <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => setSelectedButton("Last 30 days")}
+                        sx={
+                          selectedButton === "Last 30 days"
+                            ? selectedStyle
+                            : nonSelectedStyle
+                        }
+                      >
+                        Last 30 days
+                      </Button>
+                      <Button
+                        variant="outlined" // MUI equivalent of 'btn-soft-primary'
+                        size="small"
+                        color="primary" // 'primary' color corresponds to the blue style in MUI
+                        onClick={() => setSelectedButton("Last 90 days")}
+                        sx={
+                          selectedButton === "Last 90 days"
+                            ? selectedStyle
+                            : nonSelectedStyle
+                        }
+                      >
+                        Last 90 days
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => setSelectedButton("MTD")}
+                        sx={
+                          selectedButton === "MTD"
+                            ? selectedStyle
+                            : nonSelectedStyle
+                        }
+                      >
+                        MTD
+                      </Button>
+                      <Button
+                        variant="outlined" // MUI equivalent of 'btn-soft-primary'
+                        size="small"
+                        color="primary" // 'primary' color corresponds to the blue style in MUI
+                        onClick={() => setSelectedButton("YTD")}
+                        sx={
+                          selectedButton === "YTD"
+                            ? selectedStyle
+                            : nonSelectedStyle
+                        }
+                      >
+                        YTD
+                      </Button>{" "}
+                      {/* <Button
                         variant="outlined"
                         size="small"
                         onClick={() => setSelectedButton("7 Days")}
@@ -300,32 +354,8 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                         }
                       >
                         7 Days
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={() => setSelectedButton("15 Days")}
-                        sx={
-                          selectedButton === "15 Days"
-                            ? selectedStyle
-                            : nonSelectedStyle
-                        }
-                      >
-                        15 Days
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={() => setSelectedButton("1 Month")}
-                        sx={
-                          selectedButton === "1 Month"
-                            ? selectedStyle
-                            : nonSelectedStyle
-                        }
-                      >
-                        1 Month
-                      </Button>
-                      <Button
+                      </Button> */}
+                      {/* <Button
                         variant="contained" // MUI equivalent of 'btn-soft-primary'
                         size="small"
                         color="primary" // 'primary' color corresponds to the blue style in MUI
@@ -350,21 +380,8 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                         }
                       >
                         6 Months
-                      </Button>
-                      <Button
-                        variant="contained" // MUI equivalent of 'btn-soft-primary'
-                        size="small"
-                        color="primary" // 'primary' color corresponds to the blue style in MUI
-                        onClick={() => setSelectedButton("12 Months")}
-                        sx={
-                          selectedButton === "12 Months"
-                            ? selectedStyle
-                            : nonSelectedStyle
-                        }
-                      >
-                        12 Months
-                      </Button>
-                    </div> */}
+                      </Button> */}
+                    </div>
                     <ButtonGroup
                       selectedButton={selectedButton}
                       setSelectedButton={setSelectedButton}

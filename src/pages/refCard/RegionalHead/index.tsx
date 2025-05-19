@@ -63,7 +63,9 @@ const RegionalHead = ({ activeSubItem }: any) => {
               padding: "0.2rem 0.8rem",
             }}
           >
-            <h4 className="card-title mb-0">Regional Head</h4>
+            <h4 className="card-title mb-0">
+              Regional Head - Brokerage change approval
+            </h4>
           </CardHeader>
           <CardBody>
             <DataTable

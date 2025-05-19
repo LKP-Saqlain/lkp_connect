@@ -17,6 +17,7 @@ interface ClientRow {
   BranchCode?: string;
   BranchType?: string;
   ctermcode?: string;
+  ClientCode?: string;
   ClientName?: string;
   PANNO?: string;
   ActivationDate?: string;
@@ -739,7 +740,9 @@ any) => {
             isOpen={isModalOpen}
             onClose={getUserDetails}
             handleModalClose={handleModalClose}
-            selectedClientCode={selectedUserInfo && selectedUserInfo?.ctermcode}
+            selectedClientCode={
+              selectedUserInfo?.ctermcode ?? selectedUserInfo?.ClientCode
+            }
           />
         )}
       </Container>
