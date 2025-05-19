@@ -411,7 +411,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
         data: TPD_Insurance,
       },
       {
-        name: "Liqui Loans",
+        name: "LiquiLoans",
         data: TPD_Liq_Loans,
       },
       {

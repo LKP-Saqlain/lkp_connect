@@ -636,7 +636,7 @@ const DataTable = ({
                       "&:hover": { backgroundColor: "#0d2c45" },
                     }}
                   >
-                    Upload File
+                    Upload
                   </Button>
                 </div>
               );

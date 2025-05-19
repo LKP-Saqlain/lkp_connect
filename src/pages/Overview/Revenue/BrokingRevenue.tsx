@@ -155,13 +155,12 @@ const Revenue = ({
               filteredRevenueData[0]?.Ach_brok_dir +
               filteredRevenueData[0]?.Ach_brokslbm_dir + //til here existing Broking flag below 2 inidirect flags added
               filteredRevenueData[0]?.Ach_brok_indir +
-              filteredRevenueData[0]?.Ach_brok_ind_less2yrs;
+              filteredRevenueData[0]?.Ach_brok_ind_less2yrs +
+              filteredRevenueData[0]?.Ach_brokslbm_dir + //below 3 SLBM new flags added in SLBM
+              filteredRevenueData[0]?.Ach_brokslbm_indir +
+              filteredRevenueData[0]?.Ach_brokslbm_ind_less2yrs;
 
-            const nonBroking =
-              filteredRevenueData[0]?.Ach_brokslbm_dir +
-                filteredRevenueData[0]?.Ach_brokslbm_indir +
-                filteredRevenueData[0]?.Ach_brokslbm_ind_less2yrs +
-                filteredRevenueData[0]?.UnlistedShares_rev || 0;
+            const nonBroking = filteredRevenueData[0]?.UnlistedShares_rev || 0;
 
             // const total = filteredRevenueData[0]?.Net_Rev_Ach || 0; //existing total getting from api
             const total = broking + nonBroking;

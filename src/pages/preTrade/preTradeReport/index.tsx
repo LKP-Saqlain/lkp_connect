@@ -20,6 +20,8 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { DateRangePicker } from "rsuite";
 import moment from "moment";
 import "../style.css";
+import { TextField } from "@mui/material";
+import { regEx } from "../../../helper/method";
 
 interface preTradeReport {
   activeSubItem: string;
@@ -58,6 +60,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
     selectedZone: { label: string; value: string } | null;
     selectedBranchCode: { label: string; value: string } | null;
     isInValue: string;
+    clientCode: string;
     dateRange: any;
   }
 
@@ -66,6 +69,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
       selectedZone: null,
       selectedBranchCode: null,
       isInValue: "",
+      clientCode: "",
       dateRange: [],
     },
     validationSchema,
@@ -227,7 +231,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
 
   const handleViewReport = () => {
     let payload = {
-      clientCode: "",
+      clientCode: formik.values.clientCode,
       dealerID: "",
       dealerName: "",
       branch: formik.values.selectedBranchCode?.value,
@@ -301,6 +305,19 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
         dispatch(hideLoader());
       });
   };
+
+  const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    console.log("value", name, value);
+    if (name === "clientCode") {
+      if (regEx.alphaNumeric.test(value)) {
+        formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
+      }
+    } else {
+      formik.handleChange(e);
+    }
+  };
+
   return (
     <>
       <div className="page-content page-view">
@@ -437,7 +454,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                             </Label>
                             <DateRangePicker
                               id="date-range-picker"
-                              size="lg"
+                              size="md"
                               value={
                                 selectedDateRange &&
                                 selectedDateRange[0] &&
@@ -456,35 +473,50 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                             />
                           </div>
                         </Col>
-                        <Col
-                          className="d-flex flex-column-reverse"
-                          style={{
-                            top:
-                              (formik.touched.selectedZone &&
-                                formik.errors.selectedZone) ||
-                              (formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode) ||
-                              (formik.touched.isInValue &&
-                                formik.errors.isInValue)
-                                ? "-18px"
-                                : "",
-                          }}
-                        >
-                          <div className="mb-3" />
-                          <Button
-                            style={{
-                              backgroundColor: "#11395C",
-                              fontSize: "12px",
-                              height: "40px",
-                              minWidth: "200px",
-                              width: "50%",
-                            }}
-                            // onClick={handleSubmit}
-                            type="submit"
-                          >
-                            View
-                          </Button>
+                        <Col xl={3}>
+                          <div className="mb-3" style={{ maxWidth: "300px" }}>
+                            <Label
+                              htmlFor="client-code-input"
+                              className="form-label text-muted label-font"
+                            >
+                              CLIENT CODE
+                            </Label>
+                            <TextField
+                              size="small"
+                              id="client-code-input"
+                              variant="outlined"
+                              placeholder="Enter Client Code"
+                              name="clientCode"
+                              type="text"
+                              value={formik.values.clientCode}
+                              onChange={handleCustomChange}
+                              onBlur={formik.handleBlur}
+                              error={
+                                formik.touched.clientCode &&
+                                Boolean(formik.errors.clientCode)
+                              }
+                              helperText={
+                                formik.touched.clientCode &&
+                                formik.errors.clientCode
+                              }
+                              fullWidth
+                            />
+                          </div>
                         </Col>
+                        <Button
+                          style={{
+                            backgroundColor: "#11395C",
+                            fontSize: "12px",
+                            height: "40px",
+                            minWidth: "200px",
+                            width: "22.9%",
+                            marginLeft: "0.7rem",
+                          }}
+                          // onClick={handleSubmit}
+                          type="submit"
+                        >
+                          View
+                        </Button>
                       </Row>
                     </div>
                   </form>

@@ -38,11 +38,13 @@ interface CWCB {
 interface DashboardCrypto {
   selectedTrading?: any;
   selectedViewMore?: any;
+  showMyPerformance?: any;
 }
 
 const DashboardCrypto = ({
   selectedTrading,
   selectedViewMore,
+  showMyPerformance,
 }: DashboardCrypto) => {
   const [selectedItem, setSelectedItem] = useState(
     "Clients With Ledger Balance"
@@ -82,38 +84,40 @@ const DashboardCrypto = ({
   };
 
   useEffect(() => {
-    const hasFetched = sessionStorage.getItem("dashboardNudgeFetched");
-    if (hasFetched) return; // If fetched before, do nothing
-    sessionStorage.setItem("dashboardNudgeFetched", "true"); // Mark as fetched
+    if (showMyPerformance) {
+      const hasFetched = sessionStorage.getItem("dashboardNudgeFetched");
+      if (hasFetched) return; // If fetched before, do nothing
+      sessionStorage.setItem("dashboardNudgeFetched", "true"); // Mark as fetched
 
-    const fetchDashboardNudge = async () => {
-      const payload = {
-        user_id: user_id,
-      };
-      // debugger;
-      try {
-        dispatch(showLoader(""));
-        const response = await apiServices.DashboardNudge(payload);
-        console.log("dashBoardNudgeData", typeof response?.data);
+      const fetchDashboardNudge = async () => {
+        const payload = {
+          user_id: user_id,
+        };
+        // debugger;
+        try {
+          dispatch(showLoader(""));
+          const response = await apiServices.DashboardNudge(payload);
+          console.log("dashBoardNudgeData", typeof response?.data);
 
-        const nudgeData = response?.data;
-        setDashboardNudgeData(nudgeData);
+          const nudgeData = response?.data;
+          setDashboardNudgeData(nudgeData);
 
-        dispatch(hideLoader());
+          dispatch(hideLoader());
 
-        if (response?.status === 200) {
-          // ShowToast("success", response?.data?.Message);
-          setIsNudgeOpen(!isNudgeOpen);
-        } else {
-          console.error("Failed");
+          if (response?.status === 200) {
+            // ShowToast("success", response?.data?.Message);
+            setIsNudgeOpen(!isNudgeOpen);
+          } else {
+            console.error("Failed");
+          }
+        } catch (error) {
+          dispatch(hideLoader());
+          console.error("Error sending email:", error);
         }
-      } catch (error) {
-        dispatch(hideLoader());
-        console.error("Error sending email:", error);
-      }
-    };
-    fetchDashboardNudge();
-  }, [dispatch]);
+      };
+      fetchDashboardNudge();
+    }
+  }, [dispatch, showMyPerformance]);
 
   useEffect(() => {
     if (selectedTrading === "T6") {

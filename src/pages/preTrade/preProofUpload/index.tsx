@@ -108,7 +108,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
             .then((response) => {
               dispatch(hideLoader());
               if (response?.status === 200) {
-                ShowToast("success", "File Successfully Uploaded");
+                // ShowToast("success", "File Successfully Uploaded");
                 resolve(fileExt); // Resolve the promise on success
               } else {
                 reject(new Error("File upload failed"));
@@ -186,7 +186,12 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
               dispatch(hideLoader());
               console.log("Response------>", response?.data);
               setUploadApiStatus(true);
-              ShowToast("success", response?.data?.message);
+
+              setTimeout(() => {
+                setUploadApiStatus(false);
+              }, 2000);
+
+              // ShowToast("success", response?.data?.message);
             }
           })
           .catch((error) => {

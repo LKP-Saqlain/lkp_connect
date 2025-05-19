@@ -194,6 +194,8 @@ const SideBar = () => {
   // const settings = ["Change User", "Logout"];
   const [userAccess, setUserAccess] = useState<string[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
+  const [showMyPerformance, setShowMyPerformance] = useState<boolean>(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -346,46 +348,48 @@ const SideBar = () => {
   }, [EmployeeLastBrokingDate, apBrokingLastDate]);
 
   useEffect(() => {
-    const fetchDashboardNudge = async () => {
-      const payload = {
-        user_id: user_id,
-      };
+    if (showMyPerformance) {
+      const fetchDashboardNudge = async () => {
+        const payload = {
+          user_id: user_id,
+        };
 
-      try {
-        dispatch(showLoader(""));
-        const response = await apiServices.DashboardNudge(payload);
-        console.log("dashBoardNudgeData", response?.data);
+        try {
+          dispatch(showLoader(""));
+          const response = await apiServices.DashboardNudge(payload);
+          console.log("dashBoardNudgeData", response?.data);
 
-        const reportTypes = new Set<string>();
+          const reportTypes = new Set<string>();
 
-        Object.values(response?.data).forEach((table: any) => {
-          table.forEach((entry: any) => {
-            if (entry.ReportType) {
-              reportTypes.add(entry.ReportType);
-            }
+          Object.values(response?.data).forEach((table: any) => {
+            table.forEach((entry: any) => {
+              if (entry.ReportType) {
+                reportTypes.add(entry.ReportType);
+              }
+            });
           });
-        });
-        console.log("reportTypeSize", reportTypes.size);
+          console.log("reportTypeSize", reportTypes.size);
 
-        setNudgeCount(reportTypes.size);
-        const nudgeData = response?.data;
-        setSideBarNudge(nudgeData);
+          setNudgeCount(reportTypes.size);
+          const nudgeData = response?.data;
+          setSideBarNudge(nudgeData);
 
-        dispatch(hideLoader());
+          dispatch(hideLoader());
 
-        if (response?.status === 200) {
-          // ShowToast("success", response?.data?.Message);
-          // setIsNudgeOpen(!isNudgeOpen);
-        } else {
-          console.error("Failed");
+          if (response?.status === 200) {
+            // ShowToast("success", response?.data?.Message);
+            // setIsNudgeOpen(!isNudgeOpen);
+          } else {
+            console.error("Failed");
+          }
+        } catch (error) {
+          dispatch(hideLoader());
+          console.error("Error sending email:", error);
         }
-      } catch (error) {
-        dispatch(hideLoader());
-        console.error("Error sending email:", error);
-      }
-    };
-    fetchDashboardNudge();
-  }, [dispatch]);
+      };
+      fetchDashboardNudge();
+    }
+  }, [dispatch, showMyPerformance]);
 
   console.log("user", user_id);
 
@@ -806,7 +810,12 @@ const SideBar = () => {
       case "Stock Study":
         return <StockStudy />;
       case "Trading":
-        return <TradeDashboard selectedTrading={selectedViewMore} />;
+        return (
+          <TradeDashboard
+            selectedTrading={selectedViewMore}
+            showMyPerformance={showMyPerformance}
+          />
+        );
       case "Revenue Details":
       case "Masters":
         switch (activeSubItem) {
@@ -937,6 +946,12 @@ const SideBar = () => {
       .join(" ");
   };
 
+  useEffect(() => {
+    const hasMyPerformance = menuItems.some(
+      (menu) => menu.menu_name === "My Performance"
+    );
+    setShowMyPerformance(hasMyPerformance);
+  }, [menuItems]);
   return (
     <>
       <CustomModal
@@ -1022,9 +1037,11 @@ const SideBar = () => {
                 color="inherit"
                 onClick={handleNotificationClick}
               >
-                <Badge badgeContent={nudgeCount} color="error">
-                  <NotificationsIcon sx={{ color: "#11395C" }} />
-                </Badge>
+                {showMyPerformance && (
+                  <Badge badgeContent={nudgeCount} color="error">
+                    <NotificationsIcon sx={{ color: "#11395C" }} />
+                  </Badge>
+                )}
               </IconButton>
             </MenuItem>
             <Typography
