@@ -6,7 +6,7 @@ import { AppDispatch } from "../../../redux/store";
 import { ClientSegBrok } from "../../../redux/thunk/ClientSegmentBrokerage";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 // import ButtonGroup from "../../common/ButtonGroup";
-import ShowToast from "../../../utils/toastUtils";
+// import ShowToast from "../../../utils/toastUtils";
 import { Button } from "@mui/material";
 
 const barColors = [
@@ -90,7 +90,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
           console.log(formattedFromDate, "TypeCheck", typeof res?.data);
           console.log("ClientSegmentBrokerageResponse", res?.data);
           if (typeof res?.data === "string") {
-            ShowToast("error", res?.data);
+            // ShowToast("error", res?.data);
             setGrossBrokerageData([]);
           }
           if (typeof res?.data === "object") {
@@ -174,8 +174,18 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
       show: false,
     },
     dataLabels: {
+      formatter: function (val: number) {
+        return Math.round(val) + "%";
+      },
       dropShadow: {
         enabled: false,
+      },
+    },
+    tooltip: {
+      y: {
+        formatter: function (val: number) {
+          return Math.round(val);
+        },
       },
     },
     colors: barColors,
