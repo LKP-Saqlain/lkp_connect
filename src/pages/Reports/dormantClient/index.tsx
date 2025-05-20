@@ -720,7 +720,7 @@ const DormantClient = ({ activeSubItem }: any) => {
                                 htmlFor="zone-select"
                                 className="form-label text-muted label-font"
                               >
-                                ZONE
+                                Zone
                               </Label>
                               <Select
                                 // value={selectedZone}
@@ -767,7 +767,7 @@ const DormantClient = ({ activeSubItem }: any) => {
                                 htmlFor="branch-code-select"
                                 className="form-label text-muted label-font"
                               >
-                                BRANCH CODE
+                                Branch Code
                               </Label>
                               <Select
                                 value={formik.values.selectedBranchCode}
@@ -816,7 +816,7 @@ const DormantClient = ({ activeSubItem }: any) => {
                                 htmlFor="client-status-select"
                                 className="form-label text-muted label-font"
                               >
-                                CLIENT STATUS
+                                Client Status
                               </Label>
                               <Select
                                 value={formik.values.selectedClientStatus}

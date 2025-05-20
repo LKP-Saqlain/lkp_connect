@@ -248,7 +248,7 @@ const CoreReport = () => {
                             htmlFor="choices-text-remove-button"
                             className="form-label text-muted label-font"
                           >
-                            CLIENT CODE
+                            Client Code
                           </Label>
                           <Input
                             // invalid={true}
@@ -273,7 +273,7 @@ const CoreReport = () => {
                             htmlFor="choices-text-remove-button"
                             className="form-label text-muted label-font"
                           >
-                            ACCOUNT NO.
+                            Account No.
                           </Label>
                           <Input
                             name="AccNo"
@@ -294,7 +294,7 @@ const CoreReport = () => {
                             htmlFor="choices-text-remove-button"
                             className="form-label text-muted label-font"
                           >
-                            CHEQUE NO.
+                            Cheque No.
                           </Label>
                           <Input
                             name="checkNo"
@@ -314,7 +314,7 @@ const CoreReport = () => {
                           htmlFor="choices-text-remove-button"
                           className="form-label text-muted label-font"
                         >
-                          VALUE DATE
+                          Value Date
                         </Label>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DatePicker
@@ -350,7 +350,7 @@ const CoreReport = () => {
                             htmlFor="choices-single-no-sorting"
                             className="form-label text-muted label-font"
                           >
-                            LKP ACCOUNT NO.
+                            LKP Account No.
                           </Label>
                           <Select
                             className="placeholder-font"
@@ -368,7 +368,7 @@ const CoreReport = () => {
                             htmlFor="choices-single-no-sorting"
                             className="form-label text-muted label-font"
                           >
-                            PAYMENT TYPE
+                            Payment Type
                           </Label>
                           <Select
                             className="placeholder-font"

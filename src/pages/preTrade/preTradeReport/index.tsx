@@ -250,11 +250,11 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
         if (res?.status === 200) {
           dispatch(hideLoader());
           setPreTradeReportData(res?.data?.data);
-          if (res?.data?.data.length === 0) {
-            ShowToast("error", res?.data?.message);
-          } else {
-            ShowToast("success", res?.data?.message);
-          }
+          // if (res?.data?.data.length === 0) {
+          //   ShowToast("error", res?.data?.message);
+          // } else {
+          //   ShowToast("success", res?.data?.message);
+          // }
         }
       })
       .catch((error) => {
@@ -393,7 +393,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                           htmlFor="zone-select"
                           className="form-label text-muted label-font"
                         >
-                          ZONE
+                          Zone
                         </Label>
                         <Select
                           value={formik.values.selectedZone}
@@ -434,12 +434,12 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                             </div>
                           )}
                       </Col>
-                      <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
+                      <Col xl={2} lg={2} className="mb-3">
                         <Label
                           htmlFor="branch-code-select"
                           className="form-label text-muted label-font"
                         >
-                          BRANCH CODE
+                          Brance Code
                         </Label>
                         <Select
                           value={formik.values.selectedBranchCode}
@@ -482,7 +482,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                       </Col>
                       <Col
                         xl={3}
-                        lg={4}
+                        lg={2}
                         md={6}
                         sm={12}
                         xs={12}
@@ -492,7 +492,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                           htmlFor="date-range-picker"
                           className="form-label text-muted label-font"
                         >
-                          SELECT DATE RANGE
+                          Select Date Range
                         </Label>
                         <DateRangePicker
                           id="date-range-picker"
@@ -508,7 +508,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                             setSelectedDateRange(value);
                             handleDateChange(value);
                           }}
-                          placeholder="Select Start date & End date"
+                          placeholder="Start date & End date"
                           showOneCalendar
                           shouldDisableDate={afterToday()}
                           style={{ width: "100%", fontSize: "12px" }}
@@ -516,7 +516,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                       </Col>
                       <Col
                         xl={3}
-                        lg={4}
+                        lg={2}
                         md={6}
                         sm={12}
                         xs={12}
@@ -526,7 +526,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                           htmlFor="client-code-input"
                           className="form-label text-muted label-font"
                         >
-                          CLIENT CODE
+                          Client Code
                         </Label>
                         <TextField
                           size="small"
@@ -554,7 +554,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                           backgroundColor: "#11395C",
                           fontSize: "12px",
                           minWidth: "140px",
-                          width: "5%",
+                          width: "15%",
                           marginBottom: "1rem",
                         }}
                         // onClick={handleSubmit}

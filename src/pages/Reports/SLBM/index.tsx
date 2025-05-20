@@ -453,7 +453,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                               htmlFor="zone-select"
                               className="form-label text-muted label-font"
                             >
-                              ZONE
+                              Zone
                             </Label>
                             <Select
                               value={formik.values.selectedZone}
@@ -502,7 +502,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                               htmlFor="branch-code-select"
                               className="form-label text-muted label-font"
                             >
-                              BRANCH CODE
+                              Branch Code
                             </Label>
                             <Select
                               value={formik.values.selectedBranchCode}
@@ -554,7 +554,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                               htmlFor="choices-text-remove-button"
                               className="form-label text-muted label-font"
                             >
-                              SYMBOL / ISIN
+                              Symbol / ISIN
                             </Label>
                             <Input
                               name="isInValue"
