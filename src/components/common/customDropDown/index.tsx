@@ -246,7 +246,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
                           htmlFor="zone-select"
                           className="form-label text-muted label-font"
                         >
-                          ZONE
+                          Zone
                         </Label>
                         <Select
                           value={selectedZone}
@@ -267,7 +267,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
                           htmlFor="branch-code-select"
                           className="form-label text-muted label-font"
                         >
-                          BRANCH CODE
+                          Branch Code
                         </Label>
                         <Select
                           value={selectedBranchCode}
