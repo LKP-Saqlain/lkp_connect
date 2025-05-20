@@ -3732,21 +3732,19 @@ export const PreProofUploadColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "symbol",
-    headerName: "Symbol",
-    width: 80,
-    disableColumnMenu: true,
-    headerAlign: "center",
+    field: "symbolSeries",
+    headerName: "Symbol / Series",
+    width: 160,
     align: "center",
-  },
-  {
-    field: "series",
-    headerName: "Series",
-    width: 90,
-    disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const symbol = (params.row?.symbol || "").trim();
+      const series = (params.row?.series || "").trim();
+      return `${symbol} / ${series}`;
+    },
   },
   {
     field: "expiryDate",
@@ -3837,20 +3835,17 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "symbol",
-    headerName: "Symbol",
-    width: 80,
-    disableColumnMenu: true,
-    headerAlign: "center",
+    field: "symbolSeries",
+    headerName: "Symbol / Series",
+    width: 160,
     align: "center",
-  },
-  {
-    field: "series",
-    headerName: "Series",
-    width: 90,
-    disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const symbol = (params.row?.symbol || "").trim();
+      const series = (params.row?.series || "").trim();
+      return `${symbol} / ${series}`;
+    },
   },
   {
     field: "expiryDate",
