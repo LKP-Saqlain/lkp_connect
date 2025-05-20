@@ -37,6 +37,8 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
     [Date | null, Date | null]
   >([null, null]);
   const [preTradeReportData, setPreTradeReportData] = useState<[]>([]);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [setShowImg, setSetShowImg] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
@@ -260,10 +262,58 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
         dispatch(hideLoader());
       });
   };
-  const handleDownload = async (row: any) => {
+  // const handleDownload = async (row: any) => {
+  //   const fileExtension = row.userRemarks
+  //     ? `.${row.userRemarks.split(".").pop()}`
+  //     : "";
+  //   const payload = {
+  //     fileName: row.userRemarks,
+  //     filePath: "D:\\FileUpload\\PreTrade",
+  //     fileType: fileExtension,
+  //     contentType: "",
+  //   };
+
+  //   dispatch(showLoader("Downloading..."));
+  //   console.log("row_data", row, payload);
+
+  //   apiServices
+  //     .ComplianceDownload(payload)
+  //     .then((response) => {
+  //       console.log("response", response);
+
+  //       if (response?.status === 200 && response?.data) {
+  //         const url = window.URL.createObjectURL(new Blob([response?.data]));
+  //         const link = document.createElement("a");
+  //         link.href = url;
+  //         link.setAttribute(
+  //           "download",
+  //           `${payload.fileName}${payload.fileType}`
+  //         );
+  //         document.body.appendChild(link);
+  //         link.click();
+  //         dispatch(hideLoader());
+  //       } else {
+  //         console.log("Error during download", response);
+  //         ShowToast("info", "Error downloading file");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       ShowToast(
+  //         "info",
+  //         error.message || "An error occurred while downloading"
+  //       );
+  //     })
+  //     .finally(() => {
+  //       dispatch(hideLoader());
+  //     });
+  // };
+
+  const handlePreview = async (row: any) => {
+    setPreviewUrl("");
     const fileExtension = row.userRemarks
-      ? `.${row.userRemarks.split(".").pop()}`
+      ? `.${row.userRemarks.split(".").pop()?.toLowerCase()}`
       : "";
+
     const payload = {
       fileName: row.userRemarks,
       filePath: "D:\\FileUpload\\PreTrade",
@@ -271,35 +321,29 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
       contentType: "",
     };
 
-    dispatch(showLoader("Downloading..."));
-    console.log("row_data", row, payload);
+    dispatch(showLoader("Loading Preview..."));
 
     apiServices
       .ComplianceDownload(payload)
       .then((response) => {
-        console.log("response", response);
-
         if (response?.status === 200 && response?.data) {
-          const url = window.URL.createObjectURL(new Blob([response?.data]));
-          const link = document.createElement("a");
-          link.href = url;
-          link.setAttribute(
-            "download",
-            `${payload.fileName}${payload.fileType}`
-          );
-          document.body.appendChild(link);
-          link.click();
-          dispatch(hideLoader());
+          const blob = new Blob([response.data]);
+          const url = URL.createObjectURL(blob);
+
+          setPreviewUrl(url);
+          setSetShowImg(false);
+          console.log("fileURL", url, setShowImg);
+
+          // setFileType(fileExtension);
+          // setmodal_center(true); // Open modal to preview
         } else {
-          console.log("Error during download", response);
-          ShowToast("info", "Error downloading file");
+          ShowToast("info", "Error fetching file for preview");
         }
       })
       .catch((error) => {
-        ShowToast(
-          "info",
-          error.message || "An error occurred while downloading"
-        );
+        ShowToast("info", error.message || "Preview failed");
+        setPreviewUrl("");
+        setSetShowImg(false);
       })
       .finally(() => {
         dispatch(hideLoader());
@@ -343,182 +387,182 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                 </CardHeader>
                 <CardBody>
                   <form onSubmit={formik.handleSubmit}>
-                    <div>
-                      <Row>
-                        <Col xl={3}>
-                          <div className="mb-3" style={{ maxWidth: "300px" }}>
-                            <Label
-                              htmlFor="zone-select"
-                              className="form-label text-muted label-font"
-                            >
-                              ZONE
-                            </Label>
-                            <Select
-                              value={formik.values.selectedZone}
-                              onChange={(option: any) =>
-                                formik.setFieldValue("selectedZone", option)
-                              }
-                              onBlur={formik.handleBlur}
-                              options={noSortingGroup}
-                              isClearable
-                              className="placeholder-font"
-                              id="zone-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  cursor: "pointer",
-                                  borderColor:
-                                    formik.touched.selectedZone &&
-                                    formik.errors.selectedZone
-                                      ? "#DC4535"
-                                      : base.borderColor,
-                                  "&:hover": {
-                                    borderColor:
-                                      formik.touched.selectedZone &&
-                                      formik.errors.selectedZone
-                                        ? "#DC4535"
-                                        : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.selectedZone &&
-                              formik.errors.selectedZone && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
-                                  {formik.errors.selectedZone}
-                                </div>
-                              )}
-                          </div>
-                        </Col>
-                        <Col xl={3}>
-                          <div className="mb-3" style={{ maxWidth: "300px" }}>
-                            <Label
-                              htmlFor="branch-code-select"
-                              className="form-label text-muted label-font"
-                            >
-                              BRANCH CODE
-                            </Label>
-                            <Select
-                              value={formik.values.selectedBranchCode}
-                              onChange={(option) =>
-                                formik.setFieldValue(
-                                  "selectedBranchCode",
-                                  option
-                                )
-                              }
-                              onBlur={formik.handleBlur}
-                              options={branchCodeOptions}
-                              isClearable
-                              className="placeholder-font"
-                              id="branch-code-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  cursor: "pointer",
-                                  borderColor:
-                                    formik.touched.selectedBranchCode &&
-                                    formik.errors.selectedBranchCode
-                                      ? "#DC4535"
-                                      : base.borderColor,
-                                  "&:hover": {
-                                    borderColor:
-                                      formik.touched.selectedBranchCode &&
-                                      formik.errors.selectedBranchCode
-                                        ? "#DC4535"
-                                        : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.selectedBranchCode &&
-                              formik.errors.selectedBranchCode && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
-                                  {formik.errors.selectedBranchCode}
-                                </div>
-                              )}
-                          </div>
-                        </Col>
-                        <Col xl={3}>
-                          <div className="mb-3" style={{ maxWidth: "300px" }}>
-                            <Label
-                              htmlFor="date-range-picker"
-                              className="form-label text-muted label-font"
-                            >
-                              SELECT DATE RANGE
-                            </Label>
-                            <DateRangePicker
-                              id="date-range-picker"
-                              size="md"
-                              value={
-                                selectedDateRange &&
-                                selectedDateRange[0] &&
-                                selectedDateRange[1]
-                                  ? [selectedDateRange[0], selectedDateRange[1]]
-                                  : undefined
-                              }
-                              onChange={(value: any) => {
-                                setSelectedDateRange(value);
-                                handleDateChange(value);
-                              }}
-                              placeholder="Select Start date & End date"
-                              showOneCalendar
-                              shouldDisableDate={afterToday()}
-                              style={{ width: "100%", fontSize: "12px" }}
-                            />
-                          </div>
-                        </Col>
-                        <Col xl={3}>
-                          <div className="mb-3" style={{ maxWidth: "300px" }}>
-                            <Label
-                              htmlFor="client-code-input"
-                              className="form-label text-muted label-font"
-                            >
-                              CLIENT CODE
-                            </Label>
-                            <TextField
-                              size="small"
-                              id="client-code-input"
-                              variant="outlined"
-                              placeholder="Enter Client Code"
-                              name="clientCode"
-                              type="text"
-                              value={formik.values.clientCode}
-                              onChange={handleCustomChange}
-                              onBlur={formik.handleBlur}
-                              error={
-                                formik.touched.clientCode &&
-                                Boolean(formik.errors.clientCode)
-                              }
-                              helperText={
-                                formik.touched.clientCode &&
-                                formik.errors.clientCode
-                              }
-                              fullWidth
-                            />
-                          </div>
-                        </Col>
-                        <Button
-                          style={{
-                            backgroundColor: "#11395C",
-                            fontSize: "12px",
-                            height: "40px",
-                            minWidth: "200px",
-                            width: "22.9%",
-                            marginLeft: "0.7rem",
-                          }}
-                          // onClick={handleSubmit}
-                          type="submit"
+                    <Row className="align-items-end">
+                      <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
+                        <Label
+                          htmlFor="zone-select"
+                          className="form-label text-muted label-font"
                         >
-                          View
-                        </Button>
-                      </Row>
-                    </div>
+                          ZONE
+                        </Label>
+                        <Select
+                          value={formik.values.selectedZone}
+                          onChange={(option: any) =>
+                            formik.setFieldValue("selectedZone", option)
+                          }
+                          onBlur={formik.handleBlur}
+                          options={noSortingGroup}
+                          isClearable
+                          className="placeholder-font"
+                          id="zone-select"
+                          styles={{
+                            control: (base: any) => ({
+                              ...base,
+                              cursor: "pointer",
+                              borderColor:
+                                formik.touched.selectedZone &&
+                                formik.errors.selectedZone
+                                  ? "#DC4535"
+                                  : base.borderColor,
+                              "&:hover": {
+                                borderColor:
+                                  formik.touched.selectedZone &&
+                                  formik.errors.selectedZone
+                                    ? "#DC4535"
+                                    : base.borderColor,
+                              },
+                            }),
+                          }}
+                        />
+                        {formik.touched.selectedZone &&
+                          formik.errors.selectedZone && (
+                            <div
+                              className="text-danger"
+                              style={{ fontSize: "12px" }}
+                            >
+                              {formik.errors.selectedZone}
+                            </div>
+                          )}
+                      </Col>
+                      <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
+                        <Label
+                          htmlFor="branch-code-select"
+                          className="form-label text-muted label-font"
+                        >
+                          BRANCH CODE
+                        </Label>
+                        <Select
+                          value={formik.values.selectedBranchCode}
+                          onChange={(option) =>
+                            formik.setFieldValue("selectedBranchCode", option)
+                          }
+                          onBlur={formik.handleBlur}
+                          options={branchCodeOptions}
+                          isClearable
+                          className="placeholder-font"
+                          id="branch-code-select"
+                          styles={{
+                            control: (base: any) => ({
+                              ...base,
+                              cursor: "pointer",
+                              borderColor:
+                                formik.touched.selectedBranchCode &&
+                                formik.errors.selectedBranchCode
+                                  ? "#DC4535"
+                                  : base.borderColor,
+                              "&:hover": {
+                                borderColor:
+                                  formik.touched.selectedBranchCode &&
+                                  formik.errors.selectedBranchCode
+                                    ? "#DC4535"
+                                    : base.borderColor,
+                              },
+                            }),
+                          }}
+                        />
+                        {formik.touched.selectedBranchCode &&
+                          formik.errors.selectedBranchCode && (
+                            <div
+                              className="text-danger"
+                              style={{ fontSize: "12px" }}
+                            >
+                              {formik.errors.selectedBranchCode}
+                            </div>
+                          )}
+                      </Col>
+                      <Col
+                        xl={3}
+                        lg={4}
+                        md={6}
+                        sm={12}
+                        xs={12}
+                        className="mb-3"
+                      >
+                        <Label
+                          htmlFor="date-range-picker"
+                          className="form-label text-muted label-font"
+                        >
+                          SELECT DATE RANGE
+                        </Label>
+                        <DateRangePicker
+                          id="date-range-picker"
+                          size="md"
+                          value={
+                            selectedDateRange &&
+                            selectedDateRange[0] &&
+                            selectedDateRange[1]
+                              ? [selectedDateRange[0], selectedDateRange[1]]
+                              : undefined
+                          }
+                          onChange={(value: any) => {
+                            setSelectedDateRange(value);
+                            handleDateChange(value);
+                          }}
+                          placeholder="Select Start date & End date"
+                          showOneCalendar
+                          shouldDisableDate={afterToday()}
+                          style={{ width: "100%", fontSize: "12px" }}
+                        />
+                      </Col>
+                      <Col
+                        xl={3}
+                        lg={4}
+                        md={6}
+                        sm={12}
+                        xs={12}
+                        className="mb-3"
+                      >
+                        <Label
+                          htmlFor="client-code-input"
+                          className="form-label text-muted label-font"
+                        >
+                          CLIENT CODE
+                        </Label>
+                        <TextField
+                          size="small"
+                          id="client-code-input"
+                          variant="outlined"
+                          placeholder="Enter Client Code"
+                          name="clientCode"
+                          type="text"
+                          value={formik.values.clientCode}
+                          onChange={handleCustomChange}
+                          onBlur={formik.handleBlur}
+                          error={
+                            formik.touched.clientCode &&
+                            Boolean(formik.errors.clientCode)
+                          }
+                          helperText={
+                            formik.touched.clientCode &&
+                            formik.errors.clientCode
+                          }
+                          fullWidth
+                        />
+                      </Col>
+                      <Button
+                        style={{
+                          backgroundColor: "#11395C",
+                          fontSize: "12px",
+                          minWidth: "140px",
+                          width: "5%",
+                          marginBottom: "1rem",
+                        }}
+                        // onClick={handleSubmit}
+                        type="submit"
+                      >
+                        View
+                      </Button>
+                    </Row>
                   </form>
                 </CardBody>
               </Card>
@@ -533,7 +577,9 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                   <UserInfoTable
                     activeSubItem={activeSubItem}
                     T6Data={preTradeReportData}
-                    handleDownload={handleDownload}
+                    handleDownload={handlePreview}
+                    previewUrl={previewUrl}
+                    setSetShowImg={setSetShowImg}
                   />
                 </CardBody>
               </Card>

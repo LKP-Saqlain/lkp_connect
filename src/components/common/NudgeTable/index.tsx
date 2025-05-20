@@ -9,8 +9,8 @@ import {
   newClientAddFiveDays,
   spipSubscriptionColumns,
 } from "../../../helper/tableColumns.tsx";
-import { useTheme } from "@mui/material/styles";
-import { useMediaQuery } from "@mui/material";
+// import { useTheme } from "@mui/material/styles";
+// import { useMediaQuery } from "@mui/material";
 
 const NudgeTable = ({
   isOpen,
@@ -23,8 +23,8 @@ const NudgeTable = ({
   selectedReport: any;
   filteredData: Record<string, any[]>;
 }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  // const theme = useTheme();
+  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     console.log("filteredData:", filteredData);
@@ -67,19 +67,21 @@ const NudgeTable = ({
       size="xl"
       isOpen={isOpen}
       toggle={onClose}
-      style={{
-        maxWidth: "895px",
-        width: "90%",
-        marginTop: "25px",
-        marginLeft: !isMobile ? "260px" : "0px",
-      }}
+      centered
+      // style={
+      //   {
+      //     // maxWidth: "895px",
+      //     // width: "90%",
+      //     // marginLeft: !isMobile ? "260px" : "auto",
+      //   }
+      // }
     >
       <ModalHeader
         className="modal-title"
         id="myExtraLargeModalLabel"
         toggle={onClose}
       >
-        {"selectedReport"}
+        {selectedReport}
       </ModalHeader>
       <ModalBody>
         <Card className="main-card">
