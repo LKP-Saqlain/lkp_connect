@@ -5,11 +5,19 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { ClientSegBrok } from "../../../redux/thunk/ClientSegmentBrokerage";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
-import ButtonGroup from "../../common/ButtonGroup";
+// import ButtonGroup from "../../common/ButtonGroup";
 import ShowToast from "../../../utils/toastUtils";
 import { Button } from "@mui/material";
 
-const barColors = ["#11395C", "#F57C00"];
+const barColors = [
+  "#4E79A7", // Soft Blue
+  "#F28E2B", // Orange
+  "#E15759", // Coral Red
+  "#59A14F", // Green
+  "#EDC948", // Mustard Yellow
+  "#76B7B2", // Teal
+];
+
 const categories = [
   "Equity Intraday",
   "Equity Delivery",
@@ -20,7 +28,7 @@ const categories = [
 ];
 
 const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
-  const [selectedButton, setSelectedButton] = useState<string>("7 Days");
+  const [selectedButton, setSelectedButton] = useState<string>("Last 30 days");
 
   const [grossBrokerageData, setGrossBrokerageData] = useState<number[]>([]);
 
@@ -71,6 +79,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
       let payload = {
         user_id: Id,
         clientCode: selectedClientCode, //24215 for show data in all btns
+        // clientCode: "24215", //24215 for show data in all btns
         fromDate: formattedFromDate,
         toDate: formattedToDate, //"2024/12/01",
       };
@@ -113,7 +122,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
     borderRadius: "7px",
     fontFamily: "Poppins",
     borderColor: "#ABC4DA",
-    textTransform: "capitalize",
+    fontSize: "10px",
   };
 
   const nonSelectedStyle = {
@@ -122,9 +131,10 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
     borderRadius: "7px",
     fontFamily: "Poppins",
     borderColor: "#ABC4DA",
-    textTransform: "capitalize",
+    fontSize: "10px",
   };
-  var options: any = {
+
+  const barOptions: any = {
     chart: {
       zoom: {
         enabled: false,
@@ -136,274 +146,161 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
       },
     },
     dataLabels: {
-      enabled: true, // Enable data labels
-      formatter: function (value: number) {
-        return new Intl.NumberFormat("en-IN").format(value); // Format the value
-      },
-      style: {
-        fontSize: "12px",
-        fontFamily: "Public Sans",
-        fontWeight: 500,
-        colors: ["#000"], // Label color
-      },
-      offsetY: -5, // Adjust the position of the labels (optional)
-    },
-    stroke: {
-      curve: "straight",
-      dashArray: [0, 0, 8],
-      width: [0, 3, 0],
-    },
-    fill: {
-      opacity: [1, 1],
-    },
-    markers: {
-      size: [0, 4, 0],
-      strokeWidth: 2,
-      hover: {
-        size: 4,
+      enabled: false,
+      formatter: function (val: number) {
+        return Math.round(val);
       },
     },
-    xaxis: {
-      categories: categories,
-      axisTicks: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
-      labels: {
-        style: {
-          fontSize: "12px",
-          fontFamily: "Public Sans",
-          fontWeight: 500,
-          colors: "#000",
+    tooltip: {
+      y: {
+        formatter: function (val: number) {
+          return Math.round(val);
         },
-      },
-    },
-    yaxis: {
-      labels: {
-        formatter: function (value: number) {
-          return new Intl.NumberFormat("en-IN").format(value); // Format y-axis labels
-        },
-        style: {
-          fontSize: "12px",
-          fontFamily: "Public Sans",
-          fontWeight: 500,
-          colors: "#000",
-        },
-      },
-    },
-    grid: {
-      show: true,
-      xaxis: {
-        lines: {
-          show: true,
-        },
-      },
-      yaxis: {
-        lines: {
-          show: false,
-        },
-      },
-      padding: {
-        top: 0,
-        right: -2,
-        bottom: 15,
-        left: 10,
-      },
-    },
-    legend: {
-      show: true,
-      horizontalAlign: "center",
-      offsetX: 0,
-      offsetY: -5,
-      markers: {
-        width: 9,
-        height: 9,
-        radius: 6,
-      },
-      itemMargin: {
-        horizontal: 10,
-        vertical: 0,
-      },
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
       },
     },
     colors: barColors,
-    tooltip: {
-      shared: false,
-      y: {
-        formatter: function (y: any) {
-          if (typeof y !== "undefined") {
-            return new Intl.NumberFormat("en-IN").format(Math.round(y));
-          }
-          return y;
-        },
-      },
-    },
   };
 
-  const series = [
-    {
-      name: "Gross Brokerage",
-      type: "bar",
-      data: grossBrokerageData,
+  const DonutOptions: any = {
+    labels: categories,
+    chart: {
+      height: 370,
+      type: "donut",
     },
-  ];
+    legend: {
+      show: false,
+    },
+    stroke: {
+      show: false,
+    },
+    dataLabels: {
+      dropShadow: {
+        enabled: false,
+      },
+    },
+    colors: barColors,
+  };
+
+  const series = grossBrokerageData;
 
   return (
     <React.Fragment>
       <Row>
-        <Col xl={12}>
-          <Card>
-            <CardHeader className="p-0 border-0 bg-light-subtle">
-              <Row className="g-0 text-center">
-                <Col xs={12}>
-                  <div className="p-3 border border-dashed border-start-0 d-flex flex-column flex-md-row align-items-center">
-                    <span className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center chart-header">
-                      Segment wise Brokerage
-                    </span>
-                    {/* <div
-                      className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-end"
-                      style={{ fontFamily: "Public Sans, sans-serif" }}
-                    >
-                      <div
-                        style={{
-                          backgroundColor: "#1c3d5a",
-                          width: "16px",
-                          height: "16px",
-                          marginRight: "8px",
-                        }}
-                      ></div>
-                      <p className="mb-2 mb-md-0 me-4">Gross Brokerage</p>
-
-                      <div
-                        style={{
-                          backgroundColor: "#f57c00",
-                          width: "16px",
-                          height: "16px",
-                          marginRight: "8px",
-                        }}
-                      ></div>
-                      <p className="mb-0" style={{ marginRight: "20px" }}>
-                        AP Share
-                      </p>
-                    </div> */}
-                    <div className="d-flex gap-1">
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={() => setSelectedButton("Last 30 days")}
-                        sx={
-                          selectedButton === "Last 30 days"
-                            ? selectedStyle
-                            : nonSelectedStyle
-                        }
-                      >
-                        Last 30 days
-                      </Button>
-                      <Button
-                        variant="outlined" // MUI equivalent of 'btn-soft-primary'
-                        size="small"
-                        color="primary" // 'primary' color corresponds to the blue style in MUI
-                        onClick={() => setSelectedButton("Last 90 days")}
-                        sx={
-                          selectedButton === "Last 90 days"
-                            ? selectedStyle
-                            : nonSelectedStyle
-                        }
-                      >
-                        Last 90 days
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={() => setSelectedButton("MTD")}
-                        sx={
-                          selectedButton === "MTD"
-                            ? selectedStyle
-                            : nonSelectedStyle
-                        }
-                      >
-                        MTD
-                      </Button>
-                      <Button
-                        variant="outlined" // MUI equivalent of 'btn-soft-primary'
-                        size="small"
-                        color="primary" // 'primary' color corresponds to the blue style in MUI
-                        onClick={() => setSelectedButton("YTD")}
-                        sx={
-                          selectedButton === "YTD"
-                            ? selectedStyle
-                            : nonSelectedStyle
-                        }
-                      >
-                        YTD
-                      </Button>{" "}
-                      {/* <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={() => setSelectedButton("7 Days")}
-                        sx={
-                          selectedButton === "7 Days"
-                            ? selectedStyle
-                            : nonSelectedStyle
-                        }
-                      >
-                        7 Days
-                      </Button> */}
-                      {/* <Button
-                        variant="contained" // MUI equivalent of 'btn-soft-primary'
-                        size="small"
-                        color="primary" // 'primary' color corresponds to the blue style in MUI
-                        onClick={() => setSelectedButton("3 Months")}
-                        sx={
-                          selectedButton === "3 Months"
-                            ? selectedStyle
-                            : nonSelectedStyle
-                        }
-                      >
-                        3 Months
-                      </Button>
-                      <Button
-                        variant="contained" // MUI equivalent of 'btn-soft-primary'
-                        size="small"
-                        color="primary" // 'primary' color corresponds to the blue style in MUI
-                        onClick={() => setSelectedButton("6 Months")}
-                        sx={
-                          selectedButton === "6 Months"
-                            ? selectedStyle
-                            : nonSelectedStyle
-                        }
-                      >
-                        6 Months
-                      </Button> */}
-                    </div>
-                    <ButtonGroup
-                      selectedButton={selectedButton}
-                      setSelectedButton={setSelectedButton}
-                      selectedStyle={selectedStyle}
-                      nonSelectedStyle={nonSelectedStyle}
-                      customClass={true}
-                    />
-                  </div>
-                </Col>
-              </Row>
+        {" "}
+        <Col xl={7}>
+          <Card
+            className="card-height-100"
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <CardHeader
+              className="align-items-center d-flex"
+              style={{
+                borderRadius: "15px 15px 0 0",
+                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff", // optional for contrast
+              }}
+            >
+              <h4 className="card-title flex-grow-1">Month-wise Brokerage</h4>
             </CardHeader>
-            <CardBody className="p-0 pb-2">
+            <CardBody>
+              <ReactApexChart
+                options={barOptions}
+                series={[
+                  {
+                    name: "Brokerage",
+                    data: grossBrokerageData,
+                  },
+                ]}
+                type="bar"
+                height={350}
+              />
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xl={5}>
+          <Card
+            className="card-height-100"
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <CardHeader
+              className="align-items-center d-flex"
+              style={{
+                borderRadius: "15px 15px 0 0",
+                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff", // optional for contrast
+              }}
+            >
+              <h4 className="card-title flex-grow-1">Segment-wise Brokerage</h4>
+            </CardHeader>{" "}
+            <CardBody className="">
               <div>
+                <div className="d-flex gap-1 justify-content-end">
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    onClick={() => setSelectedButton("Last 30 days")}
+                    sx={
+                      selectedButton === "Last 30 days"
+                        ? selectedStyle
+                        : nonSelectedStyle
+                    }
+                  >
+                    Last 30 days
+                  </Button>
+                  <Button
+                    variant="outlined" // MUI equivalent of 'btn-soft-primary'
+                    size="small"
+                    color="primary" // 'primary' color corresponds to the blue style in MUI
+                    onClick={() => setSelectedButton("Last 90 days")}
+                    sx={
+                      selectedButton === "Last 90 days"
+                        ? selectedStyle
+                        : nonSelectedStyle
+                    }
+                  >
+                    Last 90 days
+                  </Button>
+                  <Button
+                    // variant="outlined"
+                    // size="small"
+                    onClick={() => setSelectedButton("MTD")}
+                    sx={
+                      selectedButton === "MTD"
+                        ? selectedStyle
+                        : nonSelectedStyle
+                    }
+                  >
+                    MTD
+                  </Button>
+                  <Button
+                    variant="outlined" // MUI equivalent of 'btn-soft-primary'
+                    size="small"
+                    color="primary" // 'primary' color corresponds to the blue style in MUI
+                    onClick={() => setSelectedButton("YTD")}
+                    sx={
+                      selectedButton === "YTD"
+                        ? selectedStyle
+                        : nonSelectedStyle
+                    }
+                  >
+                    YTD
+                  </Button>
+                </div>
                 <div dir="ltr" className="apex-charts">
                   <Col>
                     <ReactApexChart
-                      dir="ltr"
-                      options={options}
+                      // dir="ltr"
+                      options={DonutOptions}
                       series={series}
-                      type="line"
-                      height="374"
-                      className="apex-charts"
+                      type="donut"
+                      height={350}
+                      // className="apex-charts"
                     />
                   </Col>
                 </div>

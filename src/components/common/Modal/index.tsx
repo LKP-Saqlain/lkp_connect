@@ -212,7 +212,7 @@ const ModalComponent = ({
                         style={{
                           color: "#11395C",
                           fontFamily: "Poppins",
-                          padding: "5px 0 10px",
+                          padding: "3px 0 5px",
                         }}
                       >
                         <RadioInput
@@ -264,7 +264,7 @@ const ModalComponent = ({
                           color: "#11395C",
                           fontSize: "12px",
                           fontFamily: "Poppins",
-                          padding: "5px 0 10px",
+                          padding: "3px 0 15px",
                         }}
                       >
                         {item.modificationDate} <br />

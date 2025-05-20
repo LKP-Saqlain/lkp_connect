@@ -71,7 +71,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "Live Contest": <PollIcon />,
     "Marketing Materials": <AddBusinessIcon />,
     "Referal Lead": <CampaignIcon />,
-    "Kyc Dashboard": <StackedBarChartIcon />,
+    "KYC Dashboard": <StackedBarChartIcon />,
     "Registration Details": <HowToRegIcon />,
     "Stack Study": <StackedBarChartIcon />,
     Reports: <PostAddIcon />,

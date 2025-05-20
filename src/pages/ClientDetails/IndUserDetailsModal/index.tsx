@@ -34,6 +34,7 @@ const UserInfoModal = ({
     City: "",
     Age: 0,
     Email_Id: "",
+    status: "",
     Equity: "",
     "F & O": "",
     Currency: "",
@@ -222,9 +223,9 @@ const UserInfoModal = ({
                       margin: "5px 0",
                     }}
                   >
-                    Age
+                    Client Status
                   </p>
-                  <h6 className="user-info">{clientDetails.Age}</h6>
+                  <h6 className="user-info">{clientDetails.status}</h6>
                 </div>
               </Col>
               {/* Email Id */}

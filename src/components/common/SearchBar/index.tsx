@@ -186,7 +186,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
             <Box sx={{ mr: 2 }}>
               <Typography
                 style={{ fontFamily: "Public Sans" }}
-              >{`Clients Count - ${new Intl.NumberFormat("en-IN").format(
+              >{`Clients Count : ${new Intl.NumberFormat("en-IN").format(
                 Math.round(
                   selectedWidget === "Total Clients"
                     ? totalCount

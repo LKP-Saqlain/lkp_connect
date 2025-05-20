@@ -307,7 +307,7 @@ const SideBar = () => {
       activeMenu !== "Reports" &&
       activeMenu !== "Referal Lead" &&
       activeMenu !== "Compliance" &&
-      activeMenu !== "Kyc Dashboard" &&
+      activeMenu !== "KYC Dashboard" &&
       activeMenu !== "Masters" &&
       activeMenu !== "RMS" &&
       activeMenu !== "IVR" &&
@@ -826,7 +826,7 @@ const SideBar = () => {
           default:
             return null;
         }
-      case "Kyc Dashboard":
+      case "KYC Dashboard":
         switch (activeSubItem) {
           case "RH Approval":
             return <RegionalHead activeSubItem={activeSubItem} />;

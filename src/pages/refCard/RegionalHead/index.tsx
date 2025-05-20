@@ -64,7 +64,7 @@ const RegionalHead = ({ activeSubItem }: any) => {
             }}
           >
             <h4 className="card-title mb-0">
-              Regional Head - Brokerage change approval
+              Regional Head - Brokerage modification approval
             </h4>
           </CardHeader>
           <CardBody>

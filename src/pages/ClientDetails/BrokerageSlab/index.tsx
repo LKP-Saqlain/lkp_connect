@@ -40,28 +40,28 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
         {
           id: 1,
           label: "Equity",
-          status: setClientDetails["EquityTradeDate"] || "",
+          status: setClientDetails["EquityTradeDate"] || "--",
         },
         {
           id: 2,
           label: "F&O",
-          status: setClientDetails["F_OTradeDate"] || "",
+          status: setClientDetails["F_OTradeDate"] || "--",
         },
         {
           id: 3,
           label: "Currency",
-          status: setClientDetails["CurrencyTradeDate"] || "",
+          status: setClientDetails["CurrencyTradeDate"] || "--",
         },
         {
           id: 4,
           label: "Commodity",
-          status: setClientDetails["Commodity_TradeDate"] || "",
+          status: setClientDetails["Commodity_TradeDate"] || "--",
         },
-        { id: 5, label: "MTF", status: setClientDetails[""] || "" },
+        { id: 5, label: "MTF", status: setClientDetails[""] || "--" },
         {
           id: 6,
           label: "SLBM",
-          status: setClientDetails["SLBM_TradeDate"] || "",
+          status: setClientDetails["SLBM_TradeDate"] || "--",
         },
       ];
 
