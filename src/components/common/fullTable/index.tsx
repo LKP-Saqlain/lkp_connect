@@ -174,8 +174,18 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
       show: false,
     },
     dataLabels: {
+      formatter: function (val: number) {
+        return Math.round(val) + "%";
+      },
       dropShadow: {
         enabled: false,
+      },
+    },
+    tooltip: {
+      y: {
+        formatter: function (val: number) {
+          return Math.round(val);
+        },
       },
     },
     colors: barColors,
