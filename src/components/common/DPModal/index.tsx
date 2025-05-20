@@ -37,6 +37,9 @@ interface CustomModalProps {
   isAdmin?: boolean;
   isUploadMode?: boolean;
   handleFileUpload?: (selectedRow: string, file: File, remark: string) => void;
+  setShowImg?: any;
+  previewUrl?: any;
+  setSetShowImg?: any;
 }
 
 const CustomModal = ({
@@ -53,6 +56,9 @@ const CustomModal = ({
   isAdmin,
   isUploadMode,
   handleFileUpload,
+  setShowImg,
+  previewUrl,
+  setSetShowImg,
 }: CustomModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -212,9 +218,26 @@ const CustomModal = ({
       keyboard={expiredtime ? false : undefined}
     >
       <ModalBody className="text-center p-3">
-        {activeSubItem !== "Communication Retrival Checker" && !isAdmin && (
-          <i className="ri-alert-line display-5 text-warning"></i>
-        )}
+        <i
+          className="ri-close-line"
+          onClick={() => {
+            setmodal_center(false);
+            setSelectedFile(null);
+          }}
+          style={{
+            position: "absolute",
+            top: "-6px",
+            right: "-1px",
+            fontSize: "1.5rem",
+            cursor: "pointer",
+            zIndex: 1000,
+            color: "#000",
+          }}
+        />
+        {activeSubItem !== "Communication Retrival Checker" &&
+          activeSubItem !== "PreTradeProofUpload" &&
+          activeSubItem !== "Pre Trade Report" &&
+          !isAdmin && <i className="ri-alert-line display-5 text-warning"></i>}
         {isAdmin && (
           <ChangeCircleIcon sx={{ color: "#11395C", fontSize: "3.5rem" }} />
         )}
@@ -343,7 +366,7 @@ const CustomModal = ({
               </Row>
             </Row>
           )}
-          {!isAdmin && !isUploadMode && (
+          {!isAdmin && !isUploadMode && !setShowImg && (
             <div className="hstack gap-2 pt-2 justify-content-center">
               {expiredtime || activeSubItem === "UCCCode MATCH" ? (
                 <Button
@@ -388,68 +411,90 @@ const CustomModal = ({
             </div>
           )}
           {isUploadMode && (
-            <Col lg={12} style={{ padding: "16px" }}>
-              <label style={{ fontSize: "12px" }} className="form-label">
-                Upload Proof of Communication
-              </label>
-              <Input
-                name="uploadProof"
-                type="file"
-                accept=".jpg,.jpeg,.png,.pdf"
-                className="form-control mb-3"
-                onChange={(e) => {
-                  if (e.target.files && e.target.files[0]) {
-                    setSelectedFile(e.target.files[0]);
-                  }
-                }}
-                style={{ width: "100%", minHeight: "40px" }}
-              />
-              <TextField
-                label="Enter Remark"
-                variant="outlined"
-                fullWidth
-                size="small"
-                className="mb-3"
-                value={formik.values.remark}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                name="remark"
-                error={formik.touched.remark && Boolean(formik.errors.remark)}
-                helperText={formik.touched.remark && formik.errors.remark}
-              />
+            <>
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  gap: "10px",
+                  fontFamily: "Public Sans",
                 }}
               >
-                <Button
-                  className="btn"
-                  style={{
-                    backgroundColor: "#EE4B2B",
-                    borderColor: "#EE4B2B",
-                  }}
-                  onClick={() => {
-                    handleClose();
-                    setSelectedFile(null);
-                    setmodal_center(false);
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  className="btn"
-                  style={{
-                    width: "80px",
-                    backgroundColor: "#11395C",
-                  }}
-                  onClick={handleFileUploadClick}
-                >
-                  Upload
-                </Button>
+                <h5 style={{ margin: 0, fontWeight: 700 }}>
+                  Upload Proof of Communication
+                </h5>
               </div>
-            </Col>
+              <Col lg={12} style={{ padding: "16px" }}>
+                <Input
+                  name="uploadProof"
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.pdf"
+                  className="form-control mb-3"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      setSelectedFile(e.target.files[0]);
+                    }
+                  }}
+                  style={{ width: "100%", minHeight: "40px" }}
+                />
+                <TextField
+                  label="Enter Remark"
+                  variant="outlined"
+                  fullWidth
+                  size="small"
+                  className="mb-3"
+                  value={formik.values.remark}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  name="remark"
+                  error={formik.touched.remark && Boolean(formik.errors.remark)}
+                  helperText={formik.touched.remark && formik.errors.remark}
+                />
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "10px",
+                  }}
+                >
+                  <Button
+                    className="btn"
+                    style={{
+                      backgroundColor: "#EE4B2B",
+                      borderColor: "#EE4B2B",
+                    }}
+                    onClick={() => {
+                      handleClose();
+                      setSelectedFile(null);
+                      setmodal_center(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="btn"
+                    style={{
+                      width: "80px",
+                      backgroundColor: "#11395C",
+                    }}
+                    onClick={handleFileUploadClick}
+                  >
+                    Upload
+                  </Button>
+                </div>
+              </Col>
+            </>
+          )}
+          {setShowImg && (
+            <img
+              src={previewUrl}
+              onLoad={() => {
+                setSetShowImg(true);
+              }}
+              // alt="Preview"
+              style={{
+                maxWidth: "100%",
+                // maxHeight: "100vh",
+                borderRadius: "10px",
+              }}
+            />
           )}
         </form>
       </ModalBody>

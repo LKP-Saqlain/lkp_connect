@@ -40,6 +40,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { RootState } from "../../redux/store.ts";
 import { useSelector } from "react-redux";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 interface Trade {
   id: string;
@@ -91,6 +93,8 @@ interface SelectedWidgetProps {
   activeMenu?: any;
   onFileUpload?: (selectedRow: string, file: File, remark: string) => void;
   getUserBrokergageModificationDetails?: any;
+  previewUrl?: any;
+  setSetShowImg?: any;
 }
 
 const DataTable = ({
@@ -126,6 +130,8 @@ const DataTable = ({
   activeMenu,
   onFileUpload,
   getUserBrokergageModificationDetails,
+  previewUrl,
+  setSetShowImg,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -351,7 +357,7 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  Download
+                  <DownloadForOfflineIcon />
                 </button>
               );
             },
@@ -619,7 +625,7 @@ const DataTable = ({
       // apiStatus
     ) {
       return getClientActivityStatusColumns(handleViewDetails, user_type);
-    } else if (activeSubItem === "PreTradeProofUpload") {
+    } else if (activeSubItem === "Pre Trade Proof Upload") {
       return PreProofUploadColumns.map((column) => {
         if (column.field === "file_upload") {
           return {
@@ -633,17 +639,14 @@ const DataTable = ({
                       tog_center();
                     }}
                     sx={{
-                      fontSize: "10px",
-                      padding: "2px 10px",
-                      backgroundColor: "#11395C",
-                      borderRadius: "5px",
-                      color: "#fff",
-                      textTransform: "capitalize",
-                      fontFamily: "Public Sans",
-                      "&:hover": { backgroundColor: "#0d2c45" },
+                      padding: "1px 18px",
                     }}
                   >
-                    Upload
+                    <Tooltip title={"Upload File"} arrow placement="top">
+                      <UploadFileIcon
+                        style={{ cursor: "pointer", color: "#11395C" }}
+                      />
+                    </Tooltip>
                   </Button>
                 </div>
               );
@@ -662,6 +665,7 @@ const DataTable = ({
                 <button
                   onClick={() => {
                     handleDownload(params.row);
+                    tog_center();
                   }}
                   style={{
                     color: "#11395C",
@@ -671,7 +675,7 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  Download
+                  <DownloadForOfflineIcon />
                 </button>
               );
             },
@@ -765,12 +769,14 @@ const DataTable = ({
             ? `Are you sure want to ${action} this entry`
             : activeMenu === "Regulatory Announcement"
             ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
-            : activeSubItem === "PreTradeProofUpload"
+            : activeSubItem === "Pre Trade Proof Upload"
+            ? ""
+            : activeSubItem === "Pre Trade Report"
             ? ""
             : "Are you sure you want to send the email?"
         }
         activeSubItem={activeSubItem}
-        isUploadMode={activeSubItem === "PreTradeProofUpload" ? true : false}
+        isUploadMode={activeSubItem === "Pre Trade Proof Upload" ? true : false}
         handleFileUpload={(selectedRow, file, remark) => {
           console.log("Uploading file:", selectedRow, file);
           if (typeof onFileUpload === "function") {
@@ -779,6 +785,9 @@ const DataTable = ({
             console.warn("onFileUpload is not defined");
           }
         }}
+        setShowImg={activeSubItem === "Pre Trade Report" ? true : false}
+        previewUrl={previewUrl}
+        setSetShowImg={setSetShowImg}
       />
       {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown

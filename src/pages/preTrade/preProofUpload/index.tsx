@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import ShowToast from "../../../utils/toastUtils";
@@ -21,6 +21,8 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
   const [fileBase64, setFileBase64] = useState<string | null>(null);
   const [getPreTradeRecords, setGetPreTradeRecords] = useState<[]>([]);
   const [uploadApiStatus, setUploadApiStatus] = useState(false);
+
+  const toastShownRef = useRef(false);
 
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -57,10 +59,14 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
         if (response?.status === 200) {
           dispatch(hideLoader());
           setGetPreTradeRecords(response?.data?.data);
-          if (response?.data?.data.length === 0) {
-            ShowToast("error", response?.data?.message);
-          } else {
-            ShowToast("success", response?.data?.message);
+          if (!toastShownRef.current) {
+            toastShownRef.current = true;
+
+            if (response?.data?.data.length === 0) {
+              ShowToast("error", response?.data?.message);
+            } else {
+              ShowToast("success", response?.data?.message);
+            }
           }
         }
       })

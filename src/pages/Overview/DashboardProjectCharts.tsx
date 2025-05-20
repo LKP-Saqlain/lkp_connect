@@ -439,11 +439,12 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
         colors: ["#fff"],
       },
       formatter: function (val: number) {
-        if (val > 0) {
-          return new Intl.NumberFormat("en-IN").format(val);
-        }
-
-        return "";
+        return val > 0
+          ? new Intl.NumberFormat("en-IN", {
+              maximumFractionDigits: 0,
+              minimumFractionDigits: 0,
+            }).format(Math.round(val))
+          : "";
       },
       offsetY: 0,
     },
@@ -455,7 +456,10 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
           size: 0,
         },
         label: {
-          text: new Intl.NumberFormat("en-IN").format(total),
+          text: new Intl.NumberFormat("en-IN", {
+            maximumFractionDigits: 0,
+            minimumFractionDigits: 0,
+          }).format(Math.round(total)),
           style: {
             fontSize: "12px",
             fontWeight: "bold",
@@ -522,7 +526,10 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
       intersect: false,
       y: {
         formatter: (value: number) => {
-          return new Intl.NumberFormat("en-IN").format(value); // Format value in Indian style
+          return new Intl.NumberFormat("en-IN", {
+            maximumFractionDigits: 0,
+            minimumFractionDigits: 0,
+          }).format(Math.round(value));
         },
       },
     },

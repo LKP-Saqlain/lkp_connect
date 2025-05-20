@@ -168,10 +168,13 @@ const SideBar = () => {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState(() => {
-    return localStorage.getItem("activeMenu") || ""; //here before changing Trading was here //  Default to Overview
+    const storedMenu = localStorage.getItem("activeMenu");
+    return storedMenu ?? ""; // Will be set later conditionally if needed
   });
+
   const [activeSubItem, setActiveSubItem] = useState(() => {
-    return localStorage.getItem("activeSubItem") || "";
+    const storedSubItem = localStorage.getItem("activeSubItem");
+    return storedSubItem ?? "";
   });
   // const [selectedPerformanceSection, setSelectedPerformanceSection] =
   //   useState("");
@@ -452,11 +455,21 @@ const SideBar = () => {
         // ) {
         //   setActiveMenu("Trading");
         // }
+        const storedMenu = localStorage.getItem("activeMenu");
+        const storedSubItem = localStorage.getItem("activeSubItem");
 
-        if (user_type === "Partner") {
-          setActiveMenu("My Performance");
-        } else if (user_type === "Employee") {
-          setActiveMenu("Trading");
+        if (!storedMenu) {
+          if (user_type === "Partner") {
+            setActiveMenu("My Performance");
+          } else if (user_type === "Employee") {
+            setActiveMenu("Trading");
+          }
+        } else {
+          // Restore from localStorage
+          setActiveMenu(storedMenu);
+          if (storedSubItem) {
+            setActiveSubItem(storedSubItem);
+          }
         }
       })
       .catch((Err) => {
@@ -499,24 +512,18 @@ const SideBar = () => {
   }, []);
 
   useEffect(() => {
-    console.log("MenuMaster", activeMenu, activeSubItem);
-    console.log("MenuMaster", isNudgeOpen);
-    setIsNudgeOpen(false);
-  }, [activeMenu, activeSubItem]);
-
-  useEffect(() => {
     if (!isMobile) {
       handleDrawerOpen();
     }
   }, []);
 
   useEffect(() => {
+    setIsNudgeOpen(false);
     localStorage.setItem("activeMenu", activeMenu);
-  }, [activeMenu]);
-
-  useEffect(() => {
     localStorage.setItem("activeSubItem", activeSubItem);
-  }, [activeSubItem]);
+    console.log("MenuMaster", activeMenu, activeSubItem);
+    console.log("MenuMaster", isNudgeOpen);
+  }, [activeMenu, activeSubItem]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -909,7 +916,7 @@ const SideBar = () => {
         return <RegisDetails activeSubItem={activeSubItem} />;
       case "IVR":
         switch (activeSubItem) {
-          case "PreTradeProofUpload":
+          case "Pre Trade Proof Upload":
             return <PreProofUpload activeSubItem={activeSubItem} />;
           case "Pre Trade Report":
             return <PreTradeReport activeSubItem={activeSubItem} />;

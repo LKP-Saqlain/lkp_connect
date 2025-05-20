@@ -160,7 +160,11 @@ const Revenue = ({
               filteredRevenueData[0]?.Ach_brokslbm_indir +
               filteredRevenueData[0]?.Ach_brokslbm_ind_less2yrs;
 
-            const nonBroking = filteredRevenueData[0]?.UnlistedShares_rev || 0;
+            const nonBroking =
+              filteredRevenueData[0]?.TPD_Insurance +
+                filteredRevenueData[0]?.TPD_Liq_loans +
+                filteredRevenueData[0]?.TPD_mutualfunds +
+                filteredRevenueData[0]?.UnlistedShares_rev || 0;
 
             // const total = filteredRevenueData[0]?.Net_Rev_Ach || 0; //existing total getting from api
             const total = broking + nonBroking;

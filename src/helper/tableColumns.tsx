@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { Button } from "@mui/material";
 // import PersonAddIcon from "@mui/icons-material/PersonAdd";
 // import { FaUserPen } from "react-icons/fa6";
+import ViewListIcon from "@mui/icons-material/ViewList";
 
 interface ClientRow {
   ClientCode: string;
@@ -213,16 +214,15 @@ export const getClientActivityStatusColumns = (
           variant="contained"
           color="primary"
           style={{
-            padding: "2px 9px",
+            padding: "1px 9px",
             backgroundColor: "#11395C",
-            fontSize: "10px",
-            borderRadius: "10px",
-            textTransform: "capitalize",
-            fontFamily: "Public Sans",
-            whiteSpace: "nowrap", // Prevents button text from wrapping on small screens
+            fontSize: "5px",
+            borderRadius: "18px",
           }}
         >
-          View Details
+          <Tooltip title={"View Details"} arrow placement="top">
+            <ViewListIcon />
+          </Tooltip>
         </Button>
       ),
     },
@@ -579,22 +579,24 @@ export const getClientDormantStatus = (
     headerAlign: "center",
     align: "center",
     renderCell: (params: any) => (
-      <Button
-        onClick={() => handleViewDetails(params.row)}
-        // onClick={() => console.log("rowValues", params.row)}
-        variant="contained"
-        color="primary"
-        style={{
-          padding: "2px 9px",
-          backgroundColor: "#11395C",
-          fontSize: "10px",
-          borderRadius: "10px",
-          textTransform: "capitalize",
-          fontFamily: "Public Sans",
-        }}
-      >
-        View Details
-      </Button>
+      <>
+        <Button
+          onClick={() => handleViewDetails(params.row)}
+          // onClick={() => console.log("rowValues", params.row)}
+          variant="contained"
+          color="primary"
+          style={{
+            padding: "1px 9px",
+            backgroundColor: "#11395C",
+            fontSize: "5px",
+            borderRadius: "18px",
+          }}
+        >
+          <Tooltip title={"View Details"} arrow placement="top">
+            <ViewListIcon />
+          </Tooltip>
+        </Button>
+      </>
     ),
   },
 ];
@@ -1012,6 +1014,7 @@ export const spipRenewalColumns: GridColDef[] = [
     field: "ClientName",
     headerName: "Client Name",
     width: 250,
+    flex: 1,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
@@ -1064,7 +1067,7 @@ export const spipRenewalColumns: GridColDef[] = [
   },
   {
     field: "ActivationDate",
-    headerName: "Activation Date",
+    headerName: "Start Date",
     width: 120,
     headerAlign: "center",
     align: "center",
@@ -3810,6 +3813,16 @@ export const PreProofUploadColumns: GridColDef[] = [
 
 export const preTradeColumns: GridColDef[] = [
   {
+    field: "Uploaded_Document",
+    headerName: "View Document",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
     field: "clientCode",
     headerName: "ClientCode",
     width: 100,
@@ -3912,17 +3925,7 @@ export const preTradeColumns: GridColDef[] = [
   {
     field: "remarks",
     headerName: "Remark",
-    width: 140,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "Uploaded_Document",
-    headerName: "Uploaded Document",
-    headerClassName: "header-wrap-custom",
-    flex: 1,
-    minWidth: 90,
+    width: 160,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
