@@ -177,7 +177,10 @@ export const getClientActivityStatusColumns = (
         //   }}
         // >
         <Tooltip title={"View Details"} arrow placement="top">
-          <OpenInNewIcon onClick={() => handleViewDetails(params.row)} />
+          <OpenInNewIcon
+            style={{ cursor: "pointer" }}
+            onClick={() => handleViewDetails(params.row)}
+          />
         </Tooltip>
         // </Button>
       ),
@@ -595,7 +598,10 @@ export const getClientDormantStatus = (
           }}
         > */}
         <Tooltip title={"View Details"} arrow placement="top">
-          <OpenInNewIcon onClick={() => handleViewDetails(params.row)} />
+          <OpenInNewIcon
+            style={{ cursor: "pointer" }}
+            onClick={() => handleViewDetails(params.row)}
+          />
         </Tooltip>
         {/* </Button> */}
       </>
