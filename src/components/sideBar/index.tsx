@@ -285,6 +285,8 @@ const SideBar = () => {
   // }, []);
 
   useEffect(() => {
+    console.log("Rest");
+
     // const userId = localStorage.getItem("Id");
 
     const updatedSettings = [
