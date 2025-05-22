@@ -253,7 +253,7 @@ const ModalComponent = ({
                   Modification History
                 </p>
                 <Row>
-                  {history.map((item) => (
+                  {history.map((item, index) => (
                     <Col
                       xs={12}
                       md={6}
@@ -267,6 +267,12 @@ const ModalComponent = ({
                           padding: "3px 0 15px",
                         }}
                       >
+                        {index === 0 && (
+                          <strong style={{ color: "#E15759" }}>
+                            Current Plan
+                          </strong>
+                        )}
+                        <br />
                         {item.modificationDate} <br />
                         {item.segment.toLowerCase().includes("option")
                           ? `₹ ${item.brokeragePerc} per lot`

@@ -8,13 +8,14 @@ import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 // import ButtonGroup from "../../common/ButtonGroup";
 // import ShowToast from "../../../utils/toastUtils";
 import { Button } from "@mui/material";
+import { apiServices } from "../../../services";
 
 const barColors = [
   "#4E79A7", // Soft Blue
   "#F28E2B", // Orange
-  "#E15759", // Coral Red
-  "#59A14F", // Green
   "#EDC948", // Mustard Yellow
+  "#59A14F", // Green
+  "#E15759", // Coral Red
   "#76B7B2", // Teal
 ];
 
@@ -29,13 +30,62 @@ const categories = [
 
 const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
   const [selectedButton, setSelectedButton] = useState<string>("Last 30 days");
-
   const [grossBrokerageData, setGrossBrokerageData] = useState<number[]>([]);
+  const [monthBrokerageData, setMonthBrokerageData] = useState<{
+    data: number[];
+    labels: string[];
+  }>({
+    data: [],
+    labels: [],
+  });
 
   const dispatch = useDispatch<AppDispatch>();
 
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  useEffect(() => {
+    const fetchBrokerage = async () => {
+      const payload = {
+        clientcode: selectedClientCode,
+      };
+
+      dispatch(showLoader("Please wait"));
+
+      apiServices
+        .GetClientWiseBrokerage(payload)
+        .then((response: any) => {
+          const fetchedBrokerageData = response?.data?.data;
+          console.log("fetchedBrokerageData raw", fetchedBrokerageData);
+
+          if (fetchedBrokerageData && Array.isArray(fetchedBrokerageData)) {
+            const data = fetchedBrokerageData.map(
+              (item: any) => item.brokerage ?? 0
+            );
+            const labels = fetchedBrokerageData.map(
+              (item: any) => item.monthyr ?? ""
+            );
+
+            setMonthBrokerageData({
+              data,
+              labels,
+            });
+
+            console.log("Mapped monthBrokerageData", { data, labels });
+          }
+        })
+
+        .catch((Err: any) => {
+          const { message } = Err;
+          console.log("Error->", message);
+          dispatch(hideLoader());
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+    };
+    fetchBrokerage();
+  }, [dispatch, selectedClientCode]);
 
   useEffect(() => {
     const fetchClientBrokerage = () => {
@@ -88,7 +138,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
         .unwrap()
         .then((res) => {
           console.log(formattedFromDate, "TypeCheck", typeof res?.data);
-          console.log("ClientSegmentBrokerageResponse", res?.data);
+          console.log("ClientSegmentBrokerageResponse", res?.data?.data);
           if (typeof res?.data === "string") {
             // ShowToast("error", res?.data);
             setGrossBrokerageData([]);
@@ -134,7 +184,9 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
     fontSize: "10px",
   };
 
-  const barOptions: any = {
+  const barOptions: any = (labels: string[]) => ({
+    labels,
+
     chart: {
       zoom: {
         enabled: false,
@@ -154,12 +206,12 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
     tooltip: {
       y: {
         formatter: function (val: number) {
-          return Math.round(val);
+          return Intl.NumberFormat("en-IN").format(Math.round(val));
         },
       },
     },
     colors: barColors,
-  };
+  });
 
   const DonutOptions: any = {
     labels: categories,
@@ -184,7 +236,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
     tooltip: {
       y: {
         formatter: function (val: number) {
-          return Math.round(val);
+          return Intl.NumberFormat("en-IN").format(Math.round(val));
         },
       },
     },
@@ -193,10 +245,17 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
 
   const series = grossBrokerageData;
 
+  const seriess = [
+    {
+      name: "Brokerage",
+      type: "bar",
+      data: grossBrokerageData,
+    },
+  ];
+
   return (
     <React.Fragment>
       <Row>
-        {" "}
         <Col xl={7}>
           <Card
             className="card-height-100"
@@ -217,11 +276,11 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
             </CardHeader>
             <CardBody>
               <ReactApexChart
-                options={barOptions}
+                options={barOptions(monthBrokerageData.labels)}
                 series={[
                   {
                     name: "Brokerage",
-                    data: grossBrokerageData,
+                    data: monthBrokerageData.data,
                   },
                 ]}
                 type="bar"
@@ -247,7 +306,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
               }}
             >
               <h4 className="card-title flex-grow-1">Segment-wise Brokerage</h4>
-            </CardHeader>{" "}
+            </CardHeader>
             <CardBody className="">
               <div>
                 <div className="d-flex gap-1 justify-content-end">
@@ -311,6 +370,43 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                       type="donut"
                       height={350}
                       // className="apex-charts"
+                    />
+                  </Col>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+        <Col xl={12}>
+          <Card
+            className="card-height-100"
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <CardHeader
+              className="align-items-center d-flex"
+              style={{
+                borderRadius: "15px 15px 0 0",
+                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff", // optional for contrast
+              }}
+            >
+              <h4 className="card-title flex-grow-1">Segment-wise Brokerage</h4>
+            </CardHeader>
+            <CardBody className="p-0 pb-2">
+              <div>
+                <div dir="ltr" className="apex-charts">
+                  <Col>
+                    <ReactApexChart
+                      // dir="ltr"
+                      // options={barOptions}
+                      options={barOptions(categories)}
+                      series={seriess}
+                      type="bar"
+                      height="374"
+                      className="apex-charts"
                     />
                   </Col>
                 </div>

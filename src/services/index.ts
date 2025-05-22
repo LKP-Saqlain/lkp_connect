@@ -294,4 +294,7 @@ export const apiServices = {
       payload
     );
   },
+  GetClientWiseBrokerage: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientWiseBrokerage, payload);
+  },
 };
