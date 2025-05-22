@@ -26,6 +26,7 @@ import {
   slbmColumns,
   PreProofUploadColumns,
   preTradeColumns,
+  PreTradeApprovalColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -680,6 +681,146 @@ const DataTable = ({
               );
             },
           };
+        } else if (column.field === "status") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const getStatusStyles = (status: string) => {
+                switch (status.toLowerCase()) {
+                  case "approved":
+                    return {
+                      backgroundColor: "#a5d6a7", // light green
+                      color: "#1b5e20",
+                      border: "1px solid #81c784",
+                    };
+                  case "pending":
+                    return {
+                      backgroundColor: "#fff59d", // light yellow
+                      color: "#ff6f00",
+                      border: "1px solid #ffe082",
+                    };
+                  case "reject":
+                    return {
+                      backgroundColor: "#ef9a9a", // light red
+                      color: "#b71c1c",
+                      border: "1px solid #e57373",
+                    };
+                  default:
+                    return {
+                      backgroundColor: "#cfd8dc",
+                      color: "#263238",
+                      border: "1px solid #b0bec5", // neutral border
+                    };
+                }
+              };
+
+              const statusStyles = getStatusStyles(params.row.status);
+
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    width: "100%",
+                    fontFamily: "Public Sans",
+                  }}
+                >
+                  <div
+                    style={{
+                      ...statusStyles,
+                      borderRadius: "999px",
+                      padding: "3px 16px",
+                      fontSize: "10px",
+                      fontWeight: 600,
+                      textTransform: "capitalize",
+                      whiteSpace: "nowrap",
+                      display: "inline-block",
+                      textAlign: "center",
+                      minWidth: "50px",
+                      lineHeight: "1",
+                    }}
+                  >
+                    {params.row.status}
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "Pre Trade Approval") {
+      return PreTradeApprovalColumns.map((column) => {
+        if (column.field === "Uploaded_Document") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row);
+                    tog_center();
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "Actions") {
+          return {
+            ...column,
+            renderCell: (params: any) => (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <div
+                  onClick={() => {
+                    HandleApprovalModal("approve");
+                    setSelectedRow(params.row.rowID);
+                    console.log(params.row.dummyId, "selectedrow approve");
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: 5,
+                  }}
+                >
+                  <Tooltip title="Approve" arrow placement="top">
+                    <CheckCircleIcon
+                      style={{ color: "#116E11", marginLeft: 4 }}
+                    />
+                  </Tooltip>
+                </div>
+                <div style={{ fontSize: 20, color: "gray" }}>|</div>
+                <div
+                  onClick={() => {
+                    HandleApprovalModal("reject");
+                    setSelectedRow(params.row.rowID);
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: 5,
+                  }}
+                >
+                  <Tooltip title="Reject" arrow placement="top">
+                    <CancelIcon style={{ color: "#FF2400", marginLeft: 4 }} />
+                  </Tooltip>
+                </div>
+              </div>
+            ),
+          };
         }
         return column;
       });
@@ -766,6 +907,8 @@ const DataTable = ({
             : activeSubItem === "KYC Approval"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "RH Approval"
+            ? `Are you sure want to ${action} this entry`
+            : activeSubItem === "Pre Trade Approval"
             ? `Are you sure want to ${action} this entry`
             : activeMenu === "Regulatory Announcement"
             ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "

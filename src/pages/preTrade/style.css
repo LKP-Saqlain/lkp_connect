@@ -3,3 +3,16 @@
     line-height: 1.375;
     padding: 9px 11px;
 }
+
+.rs-input-group.rs-input-group-inside {
+    background-color: #fff;
+    background-color: var(--rs-input-bg);
+    width: 100%;
+    height: 38px !important;
+}
+
+.rs-picker-popup.rs-picker-popup-daterange {
+    padding: 0;
+    top: 220px !important;
+    left: 675px !important;
+}

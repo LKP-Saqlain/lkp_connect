@@ -64,6 +64,8 @@ export const endpoints = {
   UploadTradeFile: "/api/PreTrade/UploadTradeFile",
   GetAllRecords: "/api/PreTrade/GetAllRecords",
   GetPreTradeReport: "/api/PreTrade/GetPreTradeReport",
+  GetPendingApproveStatus: "/api/PreTrade/GetPendingApproveStatus",
+  SavePreTradeApproveStatus: "/api/PreTrade/SavePreTradeApproveStatus",
   GetBrokerageModificationStatus:
     "/api/Brokerage/GetBrokerageModificationStatus",
   GetBrokerageKycStatus: "/api/Brokerage/GetBrokerageKycStatus",

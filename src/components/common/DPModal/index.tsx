@@ -106,6 +106,7 @@ const CustomModal = ({
         getUserDetails(row);
       }
       setmodal_center(false);
+      console.log("test112121212", action, row);
 
       if (action && row) {
         const entryFlag = action === "approve" ? "A" : "R";
@@ -114,6 +115,8 @@ const CustomModal = ({
         } else if (activeSubItem === "KYC Approval") {
           handleApproval?.(row, values.remark, entryFlag);
         } else if (activeSubItem === "RH Approval") {
+          handleApproval?.(row, values.remark, entryFlag);
+        } else if (activeSubItem === "Pre Trade Approval") {
           handleApproval?.(row, values.remark, entryFlag);
         }
         console.log(values.remark, "values.remark", row, entryFlag);
@@ -235,7 +238,7 @@ const CustomModal = ({
           }}
         />
         {activeSubItem !== "Communication Retrival Checker" &&
-          activeSubItem !== "PreTradeProofUpload" &&
+          activeSubItem !== "Pre Trade Proof Upload" &&
           activeSubItem !== "Pre Trade Report" &&
           !isAdmin && <i className="ri-alert-line display-5 text-warning"></i>}
         {isAdmin && (
@@ -259,7 +262,8 @@ const CustomModal = ({
         <form onSubmit={formik.handleSubmit}>
           {(activeSubItem === "Communication Retrival Checker" ||
             activeSubItem === "KYC Approval" ||
-            activeSubItem === "RH Approval") && (
+            activeSubItem === "RH Approval" ||
+            activeSubItem === "Pre Trade Approval") && (
             <TextField
               label="Enter Remark *"
               variant="outlined"

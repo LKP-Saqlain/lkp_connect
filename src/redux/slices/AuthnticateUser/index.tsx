@@ -17,7 +17,13 @@ const AuthnticateUserSlice = createSlice({
   name: "AuthnticateUser",
   initialState,
   reducers: {
-    // Optional: If you need some synchronous actions
+    setAuthenticationValue: (state, action) => {
+      if (!state.data) {
+        state.data = {};
+      }
+      const userPan = action.payload ? action.payload : "";
+      state.data.data.authenticationValue = userPan;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -35,4 +41,5 @@ const AuthnticateUserSlice = createSlice({
       });
   },
 });
+export const { setAuthenticationValue } = AuthnticateUserSlice.actions;
 export default AuthnticateUserSlice.reducer;

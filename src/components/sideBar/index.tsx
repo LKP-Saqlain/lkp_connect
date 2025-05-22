@@ -73,6 +73,8 @@ import BrokerageModificationStatus from "../../pages/refCard/BrokerageModStatus"
 import KycBrokerage from "../../pages/refCard/KycBrokerage";
 import PreProofUpload from "../../pages/preTrade/preProofUpload";
 import PreTradeReport from "../../pages/preTrade/preTradeReport";
+import PreTradeApproval from "../../pages/preTrade/Approval";
+import IVR from "../../pages/preTrade/IVR";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -534,11 +536,22 @@ const SideBar = () => {
   };
 
   // Unified handler for toggling the drawer submenus
-  const handleMenuClick = (menuTitle: string) => {
+  const handleMenuClick = (menuTitle: string, hasSubItems: any) => {
     // setActiveMenu((prevActive) => (prevActive === menuTitle ? "" : menuTitle));
-    setActiveMenu((prevActive) =>
-      prevActive === menuTitle ? menuTitle : menuTitle
-    );
+
+    // ------------------Exisiting Logic-----------
+    // setActiveMenu((prevActive) =>
+    //   prevActive === menuTitle ? menuTitle : menuTitle
+    // );
+    // ----------------------------------------------------
+    setActiveMenu((prevActive) => {
+      // If double-clicked on the same parent and it has submenus, close it
+      if (prevActive === menuTitle && hasSubItems) {
+        return "";
+      }
+      // Otherwise, keep current logic: activate the menu
+      return menuTitle;
+    });
   };
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -920,11 +933,10 @@ const SideBar = () => {
             return <PreProofUpload activeSubItem={activeSubItem} />;
           case "Pre Trade Report":
             return <PreTradeReport activeSubItem={activeSubItem} />;
+          case "Pre Trade Approval":
+            return <PreTradeApproval activeSubItem={activeSubItem} />;
           case "IVR Mapping":
-            return;
-          // (
-          //   <BrokerageModificationStatus activeSubItem={activeSubItem} />
-          // );
+            return <IVR activeSubItem={activeSubItem} />;
           case "Referal Product Wise MIS Report":
             return <KycBrokerage activeSubItem={activeSubItem} />;
           default:
@@ -1156,7 +1168,9 @@ const SideBar = () => {
                   handleDrawerOpen={handleDrawerOpen}
                   isMobile={isMobile}
                   activeMenu={activeMenu}
-                  handleClick={() => handleMenuClick(item.menu_name)}
+                  handleClick={() =>
+                    handleMenuClick(item.menu_name, !!item.subItems?.length)
+                  }
                   handleSubItemClick={handleSubItemClick}
                 />
               ))}

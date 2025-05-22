@@ -31,6 +31,7 @@ import ShowToast from "../../../utils/toastUtils";
 import { useEffect, useState } from "react";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { AuthUser } from "../../../redux/thunk/AuthUser";
+import { setAuthenticationValue } from "../../../redux/slices/AuthnticateUser";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Logo from "../../../assets/logo.png";
 import "../style.css";
@@ -117,6 +118,7 @@ const AuthenticateUser = () => {
       .then((response) => {
         console.log("2FAresponse", response);
         if (response?.status === 200) {
+          dispatch(setAuthenticationValue(formik.values.authentication));
           const { token, name } = response?.data;
           console.log("2FA_Response", response?.data);
           if (verifyPassword !== import.meta.env.VITE_DEFAULT_PASSWORD) {

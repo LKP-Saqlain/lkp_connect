@@ -50,6 +50,9 @@ const LoginPage = () => {
     localStorage.removeItem("Id");
     localStorage.removeItem("uIdType");
     localStorage.removeItem("authenticated");
+    localStorage.removeItem("activeMenu");
+    localStorage.removeItem("activeSubItem");
+    localStorage.removeItem("userName");
   }, []);
 
   // useEffect(() => {

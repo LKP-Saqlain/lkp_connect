@@ -23,11 +23,11 @@ import "../style.css";
 import { TextField } from "@mui/material";
 import { regEx } from "../../../helper/method";
 
-interface preTradeReport {
+interface PreTradeApproval {
   activeSubItem: string;
 }
 
-const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
+const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [formattedDateRange, setFormattedDateRange] = useState<string>("");
@@ -39,6 +39,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
   const [preTradeReportData, setPreTradeReportData] = useState<[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [setShowImg, setSetShowImg] = useState<boolean>(false);
+  const [flag, setFlag] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
@@ -76,15 +77,20 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      // Only called if no validation errors
-      if (formattedDateRange === "") {
-        ShowToast("error", "Please select Date Range");
-        return;
-      }
-      console.log("values1-->", values);
+      console.log("values1-->", values, formattedDateRange);
       handleViewReport();
     },
   });
+
+  console.log(startDate, endDate);
+
+  useEffect(() => {
+    console.log("updateFlag", flag);
+    if (flag === true) {
+      handleViewReport();
+    }
+  }, [flag]);
+
   useEffect(() => {
     const str = user_id;
     const userType = localStorage.getItem("uIdType");
@@ -233,17 +239,26 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
 
   const handleViewReport = () => {
     let payload = {
+      // clientCode: formik.values.clientCode,
+      // dealerID: "",
+      // dealerName: "",
+      // branch: formik.values.selectedBranchCode?.value,
+      // zone: formik.values.selectedZone?.value,
+      // startDate: startDate,
+      // endDate: endDate,
+
+      start: 0,
+      pageSize: 0,
+      rowId: 0,
       clientCode: formik.values.clientCode,
-      dealerID: "",
-      dealerName: "",
-      branch: formik.values.selectedBranchCode?.value,
-      zone: formik.values.selectedZone?.value,
-      startDate: startDate,
-      endDate: endDate,
+      symbol: "",
+      series: "",
+      strikePrice: "",
+      filePath: "",
     };
     dispatch(showLoader("Please wait"));
     apiServices
-      .GetPreTradeReport(payload)
+      .GetPendingApproveStatus(payload)
       .then((res) => {
         console.log("ResponsePreTrade", res);
 
@@ -362,6 +377,32 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
     }
   };
 
+  const handleApproval = (rid: number, remark: string, entryFlag: string) => {
+    console.log("arggss->", rid, remark, entryFlag);
+    const payload = {
+      // rowId: rid,
+      // rHflag: entryFlag,
+      // rhUserId: user_id,
+      // rhRemark: remark,
+      rowId: rid,
+      statusFlag: entryFlag,
+      statusRemarks: remark,
+      approvedby: user_id,
+    };
+    dispatch(showLoader("Please wait..."));
+    apiServices
+      .SavePreTradeApproveStatus(payload)
+      .then((response) => {
+        console.log("SaveResponse", response);
+        // debugger;
+        if (response?.status === 200) {
+          setFlag(true);
+        }
+      })
+      .catch((err) => console.log("Error", err))
+      .finally(() => dispatch(hideLoader()));
+  };
+
   return (
     <>
       <div className="page-content page-view">
@@ -381,9 +422,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                     backgroundColor: "#fff", // optional for contrast
                   }}
                 >
-                  <h4 className="card-title mb-0">
-                    PreTrade Confirmation Report
-                  </h4>
+                  <h4 className="card-title mb-0">PreTrade Approval</h4>
                 </CardHeader>
                 <CardBody>
                   <form onSubmit={formik.handleSubmit}>
@@ -581,6 +620,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                     handleDownload={handlePreview}
                     previewUrl={previewUrl}
                     setSetShowImg={setSetShowImg}
+                    handleApproval={handleApproval}
                   />
                 </CardBody>
               </Card>
@@ -592,4 +632,4 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
   );
 };
 
-export default PreTradeReport;
+export default PreTradeApproval;

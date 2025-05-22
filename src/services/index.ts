@@ -264,6 +264,16 @@ export const apiServices = {
   GetPreTradeReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetPreTradeReport, payload);
   },
+  GetPendingApproveStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.GetPendingApproveStatus, payload);
+  },
+  SavePreTradeApproveStatus: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SavePreTradeApproveStatus,
+      payload
+    );
+  },
   GetBrokerageModificationStatus: async (payload: any) => {
     return await apiService(
       "POST",
