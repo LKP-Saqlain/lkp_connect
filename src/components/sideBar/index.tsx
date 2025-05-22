@@ -849,19 +849,19 @@ const SideBar = () => {
             return null;
         }
       case "KYC Dashboard":
-        //   switch (activeSubItem) {
-        //     case "RH Approval":
-        //       return <RegionalHead activeSubItem={activeSubItem} />;
-        //     case "KYC Approval":
-        //       return <KycBrokerage activeSubItem={activeSubItem} />;
-        //     case "Brokerage Modification Status":
-        //       return (
-        //         <BrokerageModificationStatus activeSubItem={activeSubItem} />
-        //       );
-        //     default:
-        //       return null;
-        //   }
-        // case "Reports":
+      //   switch (activeSubItem) {
+      //     case "RH Approval":
+      //       return <RegionalHead activeSubItem={activeSubItem} />;
+      //     case "KYC Approval":
+      //       return <KycBrokerage activeSubItem={activeSubItem} />;
+      //     case "Brokerage Modification Status":
+      //       return (
+      //         <BrokerageModificationStatus activeSubItem={activeSubItem} />
+      //       );
+      //     default:
+      //       return null;
+      //   }
+      case "Reports":
         switch (activeSubItem) {
           case "Tax P&L Statement":
             return <AnnualPNL />;
