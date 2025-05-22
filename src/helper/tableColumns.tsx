@@ -3823,14 +3823,6 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "status",
-    headerName: "Status",
-    width: 160,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
     field: "clientCode",
     headerName: "ClientCode",
     width: 100,
@@ -3933,6 +3925,14 @@ export const preTradeColumns: GridColDef[] = [
   {
     field: "remarks",
     headerName: "Remark",
+    width: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "status",
+    headerName: "Status",
     width: 160,
     disableColumnMenu: true,
     headerAlign: "center",
