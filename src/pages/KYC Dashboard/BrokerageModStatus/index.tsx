@@ -88,7 +88,7 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
           setModificationStatus(response.data?.data || []);
         }
       })
-      .catch(() => ShowToast("error", "Failed to fetch data"))
+      .catch(() => ShowToast("error", "Date is required"))
       .finally(() => dispatch(hideLoader()));
   };
 
