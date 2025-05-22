@@ -478,7 +478,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
                           htmlFor="branch-code-select"
                           className="form-label text-muted label-font"
                         >
-                          Brance Code
+                          Branch Code
                         </Label>
                         <Select
                           value={formik.values.selectedBranchCode}
