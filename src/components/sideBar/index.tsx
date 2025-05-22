@@ -68,13 +68,13 @@ import RegAnnMaster from "../../pages/Masters/RegulatoryAnnouncement";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 // import { subDays, format } from "date-fns";
-import RegionalHead from "../../pages/KYC Dashboard/RegionalHead/index";
-import BrokerageModificationStatus from "../../pages/KYC Dashboard/BrokerageModStatus";
-import KycBrokerage from "../../pages/KYC Dashboard/KycBrokerage";
-import PreProofUpload from "../../pages/preTrade/preProofUpload";
-import PreTradeReport from "../../pages/preTrade/preTradeReport";
-import PreTradeApproval from "../../pages/preTrade/Approval";
-import IVR from "../../pages/preTrade/IVR";
+// import RegionalHead from "../../pages/KYC Dashboard/RegionalHead/index";
+// import BrokerageModificationStatus from "../../pages/KYC Dashboard/BrokerageModStatus";
+// import KycBrokerage from "../../pages/KYC Dashboard/KycBrokerage";
+// import PreProofUpload from "../../pages/preTrade/preProofUpload";
+// import PreTradeReport from "../../pages/preTrade/preTradeReport";
+// import PreTradeApproval from "../../pages/preTrade/Approval";
+// import IVR from "../../pages/preTrade/IVR";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -847,19 +847,19 @@ const SideBar = () => {
             return null;
         }
       case "KYC Dashboard":
-        switch (activeSubItem) {
-          case "RH Approval":
-            return <RegionalHead activeSubItem={activeSubItem} />;
-          case "KYC Approval":
-            return <KycBrokerage activeSubItem={activeSubItem} />;
-          case "Brokerage Modification Status":
-            return (
-              <BrokerageModificationStatus activeSubItem={activeSubItem} />
-            );
-          default:
-            return null;
-        }
-      case "Reports":
+        //   switch (activeSubItem) {
+        //     case "RH Approval":
+        //       return <RegionalHead activeSubItem={activeSubItem} />;
+        //     case "KYC Approval":
+        //       return <KycBrokerage activeSubItem={activeSubItem} />;
+        //     case "Brokerage Modification Status":
+        //       return (
+        //         <BrokerageModificationStatus activeSubItem={activeSubItem} />
+        //       );
+        //     default:
+        //       return null;
+        //   }
+        // case "Reports":
         switch (activeSubItem) {
           case "Tax P&L Statement":
             return <AnnualPNL />;
@@ -928,21 +928,20 @@ const SideBar = () => {
       case "Registration Details":
         return <RegisDetails activeSubItem={activeSubItem} />;
       case "IVR":
-        switch (activeSubItem) {
-          case "Pre Trade Proof Upload":
-            return <PreProofUpload activeSubItem={activeSubItem} />;
-          case "Pre Trade Report":
-            return <PreTradeReport activeSubItem={activeSubItem} />;
-          case "Pre Trade Approval":
-            return <PreTradeApproval activeSubItem={activeSubItem} />;
-          case "IVR Mapping":
-            return <IVR activeSubItem={activeSubItem} />;
-          case "Referal Product Wise MIS Report":
-            return <KycBrokerage activeSubItem={activeSubItem} />;
-          default:
-            return null;
-        }
-        return <></>;
+      // switch (activeSubItem) {
+      //   case "Pre Trade Proof Upload":
+      //     return <PreProofUpload activeSubItem={activeSubItem} />;
+      //   case "Pre Trade Report":
+      //     return <PreTradeReport activeSubItem={activeSubItem} />;
+      //   case "Pre Trade Approval":
+      //     return <PreTradeApproval activeSubItem={activeSubItem} />;
+      //   case "IVR Mapping":
+      //     return <IVR activeSubItem={activeSubItem} />;
+      //   case "Referal Product Wise MIS Report":
+      //     return <KycBrokerage activeSubItem={activeSubItem} />;
+      //   default:
+      //     return null;
+      // }
     }
   };
 
