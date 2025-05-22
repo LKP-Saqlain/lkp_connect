@@ -403,7 +403,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
         data: TPD_mutualfunds,
       },
       {
-        name: "SPIP",
+        name: "Research",
         data: spIp,
       },
       {
