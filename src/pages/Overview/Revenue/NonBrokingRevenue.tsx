@@ -164,7 +164,7 @@ const NonBrokingRevenue = () => {
                 marginRight: "8px",
               }}
             ></div>
-            <p className="mb-0 me-3">SPIP</p>
+            <p className="mb-0 me-3">Research</p>
             <div
               className="legend-color"
               style={{

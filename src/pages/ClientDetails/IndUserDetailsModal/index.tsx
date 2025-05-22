@@ -225,7 +225,18 @@ const UserInfoModal = ({
                   >
                     Client Status
                   </p>
-                  <h6 className="user-info">{clientDetails.status}</h6>
+                  <h6 className="user-info">
+                    <FiberManualRecordIcon
+                      fontSize="small"
+                      sx={{
+                        color:
+                          clientDetails.status === "Active"
+                            ? "#01D28E"
+                            : "#FF0606",
+                      }}
+                    />
+                    {clientDetails.status}
+                  </h6>
                 </div>
               </Col>
               {/* Email Id */}

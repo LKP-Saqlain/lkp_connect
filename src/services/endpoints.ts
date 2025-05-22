@@ -74,4 +74,5 @@ export const endpoints = {
   UpdateBrokerageRHStatus: "/api/Brokerage/UpdateBrokerageRHStatus",
   GetBrokerageModificationValidity:
     "/api/Brokerage/GetBrokerageModificationValidity",
+  GetClientWiseBrokerage: "/api/Brokerage/GetClientWiseBrokerage",
 };

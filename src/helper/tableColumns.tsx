@@ -3,10 +3,11 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import React from "react";
 import Tooltip from "@mui/material/Tooltip";
 import dayjs from "dayjs";
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 // import PersonAddIcon from "@mui/icons-material/PersonAdd";
 // import { FaUserPen } from "react-icons/fa6";
-import ViewListIcon from "@mui/icons-material/ViewList";
+// import ViewListIcon from "@mui/icons-material/ViewList";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 interface ClientRow {
   ClientCode: string;
@@ -99,52 +100,7 @@ export const getClientActivityStatusColumns = (
       headerAlign: "center",
       disableColumnMenu: true,
     },
-    {
-      field: "ActivationDate",
-      headerName: "Activation Date",
-      headerClassName: "header-wrap-custom",
-      flex: 1.2,
-      minWidth: 130,
-      align: "center",
-      headerAlign: "center",
-      disableColumnMenu: true,
-      valueGetter: (params: any) => {
-        const rawDate = params;
-        if (!rawDate) return null;
-        const parsedDate = new Date(
-          rawDate.replace(
-            /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
-              const monthMap: any = {
-                Jan: "01",
-                Feb: "02",
-                Mar: "03",
-                Apr: "04",
-                May: "05",
-                Jun: "06",
-                Jul: "07",
-                Aug: "08",
-                Sep: "09",
-                Oct: "10",
-                Nov: "11",
-                Dec: "12",
-              };
-              console.log(match);
-              return `20${year}-${monthMap[month]}-${day}`;
-            }
-          )
-        );
-        return parsedDate;
-      },
-      sortComparator: (v1, v2) => {
-        if (!v1 || !v2) return 0; // Handle missing values
-        return v1 - v2; // Sort in ascending order
-      },
-      valueFormatter: (params: any) => {
-        if (!params) return "";
-        return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
-      },
-    },
+
     {
       field: "MobileNo",
       headerName: "Mobile No",
@@ -203,28 +159,74 @@ export const getClientActivityStatusColumns = (
     },
     {
       field: "viewDetails",
-      headerName: "Action",
-      minWidth: 100, // Use minWidth instead of fixed width for better responsiveness
+      headerName: "Details",
+      minWidth: 80, // Use minWidth instead of fixed width for better responsiveness
       flex: 1,
       align: "center",
       headerAlign: "center",
       renderCell: (params: any) => (
-        <Button
-          onClick={() => handleViewDetails(params.row)}
-          variant="contained"
-          color="primary"
-          style={{
-            padding: "1px 9px",
-            backgroundColor: "#11395C",
-            fontSize: "5px",
-            borderRadius: "18px",
-          }}
-        >
-          <Tooltip title={"View Details"} arrow placement="top">
-            <ViewListIcon />
-          </Tooltip>
-        </Button>
+        // <Button
+        //   onClick={() => handleViewDetails(params.row)}
+        //   variant="contained"
+        //   color="primary"
+        //   style={{
+        //     padding: "1px 9px",
+        //     backgroundColor: "#11395C",
+        //     fontSize: "5px",
+        //     borderRadius: "18px",
+        //   }}
+        // >
+        <Tooltip title={"View Details"} arrow placement="top">
+          <OpenInNewIcon onClick={() => handleViewDetails(params.row)} />
+        </Tooltip>
+        // </Button>
       ),
+    },
+    {
+      field: "ActivationDate",
+      headerName: "Activation Date",
+      headerClassName: "header-wrap-custom",
+      flex: 1.2,
+      minWidth: 110,
+      align: "center",
+      headerAlign: "center",
+      disableColumnMenu: true,
+      valueGetter: (params: any) => {
+        const rawDate = params;
+        if (!rawDate) return null;
+        const parsedDate = new Date(
+          rawDate.replace(
+            /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+            (match: any, day: any, month: any, year: any) => {
+              const monthMap: any = {
+                Jan: "01",
+                Feb: "02",
+                Mar: "03",
+                Apr: "04",
+                May: "05",
+                Jun: "06",
+                Jul: "07",
+                Aug: "08",
+                Sep: "09",
+                Oct: "10",
+                Nov: "11",
+                Dec: "12",
+              };
+              console.log(match);
+              return `20${year}-${monthMap[month]}-${day}`;
+            }
+          )
+        );
+        return parsedDate;
+      },
+      sortComparator: (v1, v2) => {
+        if (!v1 || !v2) return 0; // Handle missing values
+        return v1 - v2; // Sort in ascending order
+      },
+      valueFormatter: (params: any) => {
+        if (!params) return "";
+        return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+      },
     },
   ];
 
@@ -573,14 +575,14 @@ export const getClientDormantStatus = (
   },
   {
     field: "viewDetails",
-    headerName: "Action",
+    headerName: "Details",
     width: 130,
     minWidth: 120,
     headerAlign: "center",
     align: "center",
     renderCell: (params: any) => (
       <>
-        <Button
+        {/* <Button
           onClick={() => handleViewDetails(params.row)}
           // onClick={() => console.log("rowValues", params.row)}
           variant="contained"
@@ -591,11 +593,11 @@ export const getClientDormantStatus = (
             fontSize: "5px",
             borderRadius: "18px",
           }}
-        >
-          <Tooltip title={"View Details"} arrow placement="top">
-            <ViewListIcon />
-          </Tooltip>
-        </Button>
+        > */}
+        <Tooltip title={"View Details"} arrow placement="top">
+          <OpenInNewIcon onClick={() => handleViewDetails(params.row)} />
+        </Tooltip>
+        {/* </Button> */}
       </>
     ),
   },
@@ -3584,7 +3586,7 @@ export const RegionalHead: GridColDef[] = [
     field: "clientcode",
     headerName: "Client Code",
     flex: 0.6,
-    minWidth: 110,
+    minWidth: 100,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3593,7 +3595,7 @@ export const RegionalHead: GridColDef[] = [
     field: "clientName",
     headerName: "Client Name",
     flex: 1.5,
-    minWidth: 190,
+    minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3611,7 +3613,7 @@ export const RegionalHead: GridColDef[] = [
     field: "segment",
     headerName: "Segment",
     flex: 1,
-    minWidth: 110,
+    minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3665,6 +3667,60 @@ export const BrokerageModificationStatus: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
+    renderCell: (params: any) => {
+      const status = params.value?.toLowerCase() || "";
+
+      let backgroundColor = "#cfd8dc"; // Default neutral
+      let color = "#263238";
+      let border = "1px solid #b0bec5";
+
+      if (status.includes("approved")) {
+        backgroundColor = "#a5d6a7"; // Light green
+        color = "#1b5e20";
+        border = "1px solid #81c784";
+      } else if (status.includes("pending")) {
+        backgroundColor = "#fff9c4"; // Soft yellow (easy on eyes)
+        color = "#ff8f00";
+        border = "1px solid #ffe082";
+      } else if (status.includes("rejected") || status.includes("reject")) {
+        backgroundColor = "#ef9a9a"; // Light red
+        color = "#b71c1c";
+        border = "1px solid #e57373";
+      }
+
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+            fontFamily: "Public Sans",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor,
+              color,
+              border,
+              borderRadius: "999px",
+              padding: "3px 16px",
+              fontSize: "10px",
+              fontWeight: 600,
+              textTransform: "capitalize",
+              whiteSpace: "nowrap",
+              display: "inline-block",
+              textAlign: "center",
+              minWidth: "50px",
+              lineHeight: "1",
+            }}
+          >
+            {params.value}
+          </div>
+        </div>
+      );
+    },
   },
 ];
 export const BrokerageKyc: GridColDef[] = [
@@ -3677,27 +3733,17 @@ export const BrokerageKyc: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
-  ...RegionalHead.reduce((acc, col) => {
-    if (col.field === "remark") {
-      // Insert the extra column just before "remark"
-      acc.push(
-        {
-          field: "kycApproveStatusDate",
-          headerName: "Date approved by RH",
-          flex: 1,
-          minWidth: 180,
-          disableColumnMenu: true,
-          headerAlign: "center",
-          align: "left",
-          sortable: false,
-        },
-        col // Then add the "remark" column
-      );
-    } else {
-      acc.push(col);
-    }
-    return acc;
-  }, [] as GridColDef[]),
+  ...RegionalHead,
+  {
+    field: "kycApproveStatusDate",
+    headerName: "Date approved by RH",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    sortable: false,
+  },
 ];
 
 export const PreProofUploadColumns: GridColDef[] = [
