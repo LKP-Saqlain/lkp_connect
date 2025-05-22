@@ -1,27 +1,96 @@
-import { Card, CardBody, CardHeader, Container } from "reactstrap";
-import DataTable from "../../../components/common/UserInfoTable";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Container,
+  Row,
+  Label,
+  Button,
+} from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 import { useEffect, useState } from "react";
 import { apiServices } from "../../../services";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-const BrokerageModificationStatus = ({ activeSubItem }: any) => {
-  const [modificationStatus, setModificationStatus] = useState([]);
-  const dispatch = useDispatch<AppDispatch>();
+import Select from "react-select";
+import { TextField } from "@mui/material";
+import { DateRangePicker } from "rsuite";
+import moment from "moment";
+import DataTable from "../../../components/common/UserInfoTable";
+import ShowToast from "../../../utils/toastUtils";
 
+const statusOptions = [
+  { label: "All", value: "" },
+  { label: "Approved", value: "Approved" },
+  { label: "Rejected", value: "Rejected" },
+  { label: "Pending", value: "Pending" },
+];
+
+const BrokerageModificationStatus = ({ activeSubItem }: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { afterToday } = DateRangePicker;
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+  const [modificationStatus, setModificationStatus] = useState([]);
+  const [clientCode, setClientCode] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState(statusOptions[0]);
+  const [zoneOptions, setZoneOptions] = useState<any[]>([]);
+  const [selectedZone, setSelectedZone] = useState<any>(null);
+  const [selectedDateRange, setSelectedDateRange] = useState<
+    [Date | null, Date | null]
+  >([null, null]);
+
+  // Fetch zone options
   useEffect(() => {
-    dispatch(showLoader("Please wait..."));
+    const payload = {
+      user_id: user_id, // Replace with dynamic value if needed
+      option: "zone",
+      userType: "EMP",
+      zone: "ALL",
+    };
+
+    dispatch(showLoader(""));
     apiServices
-      .GetBrokerageModificationStatus({})
-      .then((response) => {
-        if (response?.status === 200) {
-          console.log("ModStatus-data", response?.data?.data);
-          setModificationStatus(response?.data?.data);
+      .getDropDown(payload)
+      .then((res) => {
+        if (res?.status === 200) {
+          const formatted = res.data.map((item: any) => ({
+            label: item.itemVal,
+            value: item.itemVal,
+          }));
+          setZoneOptions(formatted);
         }
       })
-      .catch((err) => console.log("Error", err))
+      .catch(() => ShowToast("error", "Failed to fetch zones"))
       .finally(() => dispatch(hideLoader()));
   }, []);
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
+    const [fromDate, toDate] = selectedDateRange || [];
+    const payload = {
+      clientCode: clientCode.trim(),
+      status: selectedStatus?.value || "",
+      zone: selectedZone?.value || "",
+      startDate: fromDate ? moment(fromDate).format("YYYY-MM-DD") : "",
+      endDate: toDate ? moment(toDate).format("YYYY-MM-DD") : "",
+    };
+    console.log(payload, "payload");
+
+    dispatch(showLoader("Loading..."));
+    apiServices
+      .GetBrokerageModificationStatus(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          setModificationStatus(response.data?.data || []);
+        }
+      })
+      .catch(() => ShowToast("error", "Failed to fetch data"))
+      .finally(() => dispatch(hideLoader()));
+  };
 
   return (
     <div className="page-content page-view">
@@ -37,12 +106,110 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
               borderRadius: "15px 15px 0 0",
               boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
               backgroundColor: "#fff",
-              padding: "0.2rem 0.8rem",
             }}
           >
             <h4 className="card-title mb-0">Brokerage Modification Status</h4>
           </CardHeader>
           <CardBody>
+            <form onSubmit={handleSubmit}>
+              <Row className="align-items-end">
+                <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
+                  <Label className="form-label text-muted label-font">
+                    Client Code
+                  </Label>
+                  <TextField
+                    size="small"
+                    variant="outlined"
+                    placeholder="Enter Client Code"
+                    fullWidth
+                    value={clientCode}
+                    onChange={(e) => setClientCode(e.target.value)}
+                  />
+                </Col>
+
+                <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
+                  <Label className="form-label text-muted label-font">
+                    Status
+                  </Label>
+                  <Select
+                    value={selectedStatus}
+                    onChange={(option: any) => setSelectedStatus(option)}
+                    options={statusOptions}
+                    isClearable={false}
+                    styles={{
+                      control: (base: any) => ({
+                        ...base,
+                        cursor: "pointer",
+                      }),
+                    }}
+                  />
+                </Col>
+
+                <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
+                  <Label className="form-label text-muted label-font">
+                    Zone
+                  </Label>
+                  <Select
+                    value={selectedZone}
+                    onChange={(option: any) => setSelectedZone(option)}
+                    options={zoneOptions}
+                    isClearable
+                    styles={{
+                      control: (base: any) => ({
+                        ...base,
+                        cursor: "pointer",
+                      }),
+                    }}
+                  />
+                </Col>
+
+                <Col xl={3} lg={4} md={6} sm={12} xs={12} className="mb-3">
+                  <Label className="form-label text-muted label-font">
+                    Date Range
+                  </Label>
+                  <DateRangePicker
+                    id="date-range-picker"
+                    size="md"
+                    value={
+                      selectedDateRange[0] && selectedDateRange[1]
+                        ? ([selectedDateRange[0], selectedDateRange[1]] as [
+                            Date,
+                            Date
+                          ])
+                        : undefined
+                    }
+                    onChange={(value: [Date, Date] | null) => {
+                      if (value) {
+                        setSelectedDateRange(value);
+                        // handleDateChange is optional if you don't need extra logic
+                        // handleDateChange(value);
+                      } else {
+                        setSelectedDateRange([null, null]);
+                      }
+                    }}
+                    placeholder="Start Date & End Date"
+                    showOneCalendar
+                    shouldDisableDate={afterToday()}
+                    style={{ width: "100%", fontSize: "12px" }}
+                  />
+                </Col>
+
+                <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
+                  <Button
+                    type="submit"
+                    style={{
+                      backgroundColor: "#11395C",
+                      fontSize: "12px",
+                      width: "100%",
+                      marginTop: "8px",
+                    }}
+                  >
+                    View
+                  </Button>
+                </Col>
+              </Row>
+            </form>
+
             <DataTable
               activeSubItem={activeSubItem}
               T6Data={modificationStatus}

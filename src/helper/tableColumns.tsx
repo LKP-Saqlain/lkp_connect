@@ -3670,32 +3670,55 @@ export const BrokerageModificationStatus: GridColDef[] = [
     renderCell: (params: any) => {
       const status = params.value?.toLowerCase() || "";
 
-      let backgroundColor = "";
+      let backgroundColor = "#cfd8dc"; // Default neutral
+      let color = "#263238";
+      let border = "1px solid #b0bec5";
+
       if (status.includes("approved")) {
-        backgroundColor = "#28a745";
-      } else if (status.includes("rejected")) {
-        backgroundColor = "#dc3545";
+        backgroundColor = "#a5d6a7"; // Light green
+        color = "#1b5e20";
+        border = "1px solid #81c784";
       } else if (status.includes("pending")) {
-        backgroundColor = "#FFB74D";
+        backgroundColor = "#fff9c4"; // Soft yellow (easy on eyes)
+        color = "#ff8f00";
+        border = "1px solid #ffe082";
+      } else if (status.includes("rejected") || status.includes("reject")) {
+        backgroundColor = "#ef9a9a"; // Light red
+        color = "#b71c1c";
+        border = "1px solid #e57373";
       }
 
       return (
-        <span
+        <div
           style={{
-            backgroundColor,
-            color: "whitesmoke",
-            padding: "1px 5px",
-            // borderRadius: "30px",
-            // // fontSize: "12px",
-            display: "inline-block",
-            // minWidth: "80px",
-            // textAlign: "center",
-            // // fontWeight: 500,
-            // // textTransform: "capitalize",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+            fontFamily: "Public Sans",
           }}
         >
-          {params.value}
-        </span>
+          <div
+            style={{
+              backgroundColor,
+              color,
+              border,
+              borderRadius: "999px",
+              padding: "3px 16px",
+              fontSize: "10px",
+              fontWeight: 600,
+              textTransform: "capitalize",
+              whiteSpace: "nowrap",
+              display: "inline-block",
+              textAlign: "center",
+              minWidth: "50px",
+              lineHeight: "1",
+            }}
+          >
+            {params.value}
+          </div>
+        </div>
       );
     },
   },
