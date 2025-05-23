@@ -699,7 +699,7 @@ const DataTable = ({
                       color: "#ff6f00",
                       border: "1px solid #ffe082",
                     };
-                  case "reject":
+                  case "rejected":
                     return {
                       backgroundColor: "#ef9a9a", // light red
                       color: "#b71c1c",
