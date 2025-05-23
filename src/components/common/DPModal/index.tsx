@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Modal as ReactstrapModal,
@@ -73,6 +73,10 @@ const CustomModal = ({
   //   (state: RootState) => state.AuthUser?.data?.data
   // );
 
+  useEffect(() => {
+    console.log("TestProps", action, row);
+  }, [action, row]);
+
   const handleSessionClear = () => {
     localStorage.clear();
     sessionStorage.clear();
@@ -109,7 +113,6 @@ const CustomModal = ({
       }
       setmodal_center(false);
       console.log("test112121212", action, row);
-
       if (action && row) {
         const entryFlag = action === "approve" ? "A" : "R";
         if (activeSubItem === "Communication Retrival Checker") {

@@ -196,6 +196,8 @@ const DataTable = ({
     setShowDocument(false);
   };
   const HandleApprovalModal = (actionType: "approve" | "reject") => {
+    console.log("TestactionType", actionType);
+
     setAction(actionType);
     tog_center();
   };
@@ -399,6 +401,8 @@ const DataTable = ({
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <div
                   onClick={() => {
+                    console.log("rowTest", params.row.rowId);
+
                     HandleApprovalModal("approve");
                     setSelectedRow(params.row.rowId);
                     console.log(params.row.dummyId, "selectedrow approve");
