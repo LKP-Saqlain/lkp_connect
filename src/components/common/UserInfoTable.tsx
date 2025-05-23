@@ -402,9 +402,9 @@ const DataTable = ({
                 <div
                   onClick={() => {
                     console.log("rowTest", params.row.rowId);
-
-                    HandleApprovalModal("approve");
                     setSelectedRow(params.row.rowId);
+                    // HandleApprovalModal("approve", params);
+                    HandleApprovalModal("approve");
                     console.log(params.row.dummyId, "selectedrow approve");
                   }}
                   style={{
@@ -423,8 +423,9 @@ const DataTable = ({
                 <div style={{ fontSize: 20, color: "gray" }}>|</div>
                 <div
                   onClick={() => {
-                    HandleApprovalModal("reject");
                     setSelectedRow(params.row.rowId);
+                    HandleApprovalModal("reject");
+                    // HandleApprovalModal("reject", params);
                   }}
                   style={{
                     cursor: "pointer",
@@ -456,8 +457,9 @@ const DataTable = ({
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <div
                   onClick={() => {
-                    HandleApprovalModal("approve");
                     setSelectedRow(params.row.rowId);
+                    HandleApprovalModal("approve");
+                    // HandleApprovalModal("approve", params);
                     console.log(params.row.rowId, "selectedrow approve");
                   }}
                   style={{
@@ -476,8 +478,8 @@ const DataTable = ({
                 <div style={{ fontSize: 20, color: "gray" }}>|</div>
                 <div
                   onClick={() => {
-                    HandleApprovalModal("reject");
                     setSelectedRow(params.row.rowId);
+                    HandleApprovalModal("reject");
                   }}
                   style={{
                     cursor: "pointer",
@@ -577,8 +579,8 @@ const DataTable = ({
                 >
                   <div
                     onClick={() => {
-                      HandleApprovalModal("approve");
                       setSelectedRow(params.row.RowId);
+                      HandleApprovalModal("approve");
                     }}
                     style={{ cursor: "pointer" }}
                   >
@@ -596,8 +598,8 @@ const DataTable = ({
                   </div>
                   <div
                     onClick={() => {
-                      HandleApprovalModal("reject");
                       setSelectedRow(params.row.RowId);
+                      HandleApprovalModal("reject");
                     }}
                     style={{ cursor: "pointer" }}
                   >
