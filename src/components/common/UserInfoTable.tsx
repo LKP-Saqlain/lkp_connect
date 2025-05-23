@@ -96,6 +96,8 @@ interface SelectedWidgetProps {
   getUserBrokergageModificationDetails?: any;
   previewUrl?: any;
   setSetShowImg?: any;
+  showDocument?: boolean;
+  setShowDocument?: any;
 }
 
 const DataTable = ({
@@ -133,6 +135,8 @@ const DataTable = ({
   getUserBrokergageModificationDetails,
   previewUrl,
   setSetShowImg,
+  showDocument,
+  setShowDocument,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -160,9 +164,15 @@ const DataTable = ({
   // }, []);
 
   useEffect(() => {
-    console.log("subItem and selectedWidgets", activeSubItem, selectedWidget);
+    console.log(
+      "subItem and selectedWidgets",
+      activeSubItem,
+      selectedWidget,
+      "previewUrl-->",
+      typeof previewUrl
+    );
     setCustomLedgerData([]);
-  }, [activeSubItem, selectedWidget]);
+  }, [activeSubItem, selectedWidget, previewUrl]);
 
   useEffect(() => {
     console.log(totalRows, tradeData);
@@ -183,6 +193,7 @@ const DataTable = ({
 
   const tog_center = () => {
     setmodal_center(!modal_center);
+    setShowDocument(false);
   };
   const HandleApprovalModal = (actionType: "approve" | "reject") => {
     setAction(actionType);
@@ -908,13 +919,15 @@ const DataTable = ({
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "RH Approval"
             ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "Pre Trade Approval"
+            : activeSubItem === "Pre Trade Approval" && !showDocument
             ? `Are you sure want to ${action} this entry`
             : activeMenu === "Regulatory Announcement"
             ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
             : activeSubItem === "Pre Trade Proof Upload"
             ? ""
             : activeSubItem === "Pre Trade Report"
+            ? ""
+            : activeSubItem === "Pre Trade Approval" && showDocument
             ? ""
             : "Are you sure you want to send the email?"
         }
@@ -928,9 +941,16 @@ const DataTable = ({
             console.warn("onFileUpload is not defined");
           }
         }}
-        setShowImg={activeSubItem === "Pre Trade Report" ? true : false}
+        setShowImg={
+          activeSubItem === "Pre Trade Report"
+            ? true
+            : activeSubItem === "Pre Trade Approval" && showDocument
+            ? true
+            : false
+        }
         previewUrl={previewUrl}
         setSetShowImg={setSetShowImg}
+        showDocument={showDocument}
       />
       {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown
@@ -939,30 +959,6 @@ const DataTable = ({
           setCustomLedgerData={setCustomLedgerData}
         />
       )}
-      {/* {(selectedWidget === "Total Clients" ||
-        selectedWidget === "Active Clients" ||
-        selectedWidget === "Inactive Clients" ||
-        selectedWidget === "Clients Ageing Report") && (
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            variant="outlined"
-            className="btn-font"
-            sx={{
-              bgcolor: "#11395C",
-              color: "#fff",
-              borderRadius: "7px",
-              fontFamily: "Public Sans",
-              borderColor: "#ABC4DA",
-              textTransform: "capitalize",
-              // marginBottom: "2",
-              // ml: 1,
-            }}
-            onClick={handleExcel}
-          >
-            Download Excel
-          </Button>
-        </Box>
-      )} */}
       {(showSearch || showSearchCustom) && (
         <SearchAppBar
           onSearchChange={handleSearchChange}

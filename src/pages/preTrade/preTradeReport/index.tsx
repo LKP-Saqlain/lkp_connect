@@ -39,7 +39,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
   const [preTradeReportData, setPreTradeReportData] = useState<[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [setShowImg, setSetShowImg] = useState<boolean>(false);
-
+  const [fileType, setFileType] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -81,7 +81,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
         ShowToast("error", "Please select Date Range");
         return;
       }
-      console.log("values1-->", values);
+      console.log("values1-->", values, fileType);
       handleViewReport();
     },
   });
@@ -332,6 +332,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
 
           setPreviewUrl(url);
           setSetShowImg(false);
+          setFileType(fileExtension);
           console.log("fileURL", url, setShowImg);
 
           // setFileType(fileExtension);

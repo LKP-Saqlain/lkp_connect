@@ -40,6 +40,7 @@ interface CustomModalProps {
   setShowImg?: any;
   previewUrl?: any;
   setSetShowImg?: any;
+  showDocument?: any;
 }
 
 const CustomModal = ({
@@ -59,6 +60,7 @@ const CustomModal = ({
   setShowImg,
   previewUrl,
   setSetShowImg,
+  showDocument,
 }: CustomModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -240,6 +242,8 @@ const CustomModal = ({
         {activeSubItem !== "Communication Retrival Checker" &&
           activeSubItem !== "Pre Trade Proof Upload" &&
           activeSubItem !== "Pre Trade Report" &&
+          activeSubItem === "Pre Trade Approval" &&
+          !showDocument &&
           !isAdmin && <i className="ri-alert-line display-5 text-warning"></i>}
         {isAdmin && (
           <ChangeCircleIcon sx={{ color: "#11395C", fontSize: "3.5rem" }} />
@@ -263,7 +267,7 @@ const CustomModal = ({
           {(activeSubItem === "Communication Retrival Checker" ||
             activeSubItem === "KYC Approval" ||
             activeSubItem === "RH Approval" ||
-            activeSubItem === "Pre Trade Approval") && (
+            (activeSubItem === "Pre Trade Approval" && !showDocument)) && (
             <TextField
               label="Enter Remark *"
               variant="outlined"
