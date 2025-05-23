@@ -399,8 +399,11 @@ const DataTable = ({
                     marginRight: 5,
                   }}
                 >
-                  <span>Approve</span>
-                  <CheckCircleIcon style={{ color: "green", marginLeft: 4 }} />
+                  <Tooltip title="Approve" arrow placement="top">
+                    <CheckCircleIcon
+                      style={{ color: "green", marginLeft: 4 }}
+                    />
+                  </Tooltip>
                 </div>
                 <div style={{ fontSize: 20, color: "gray" }}>|</div>
                 <div
@@ -415,8 +418,9 @@ const DataTable = ({
                     marginLeft: 5,
                   }}
                 >
-                  <span>Reject</span>
-                  <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  <Tooltip title="Reject" arrow placement="top">
+                    <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  </Tooltip>
                 </div>
               </div>
             ),
@@ -448,8 +452,11 @@ const DataTable = ({
                     marginRight: 5,
                   }}
                 >
-                  <span>Approve</span>
-                  <CheckCircleIcon style={{ color: "green", marginLeft: 4 }} />
+                  <Tooltip title="Approve" arrow placement="top">
+                    <CheckCircleIcon
+                      style={{ color: "green", marginLeft: 4 }}
+                    />
+                  </Tooltip>
                 </div>
                 <div style={{ fontSize: 20, color: "gray" }}>|</div>
                 <div
@@ -464,8 +471,9 @@ const DataTable = ({
                     marginLeft: 5,
                   }}
                 >
-                  <span>Reject</span>
-                  <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  <Tooltip title="Reject" arrow placement="top">
+                    <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  </Tooltip>
                 </div>
               </div>
             ),
