@@ -75,8 +75,8 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
       clientCode: clientCode.trim(),
       status: selectedStatus?.value || "",
       zone: selectedZone?.value || "",
-      startDate: fromDate ? moment(fromDate).format("YYYY-MM-DD") : "",
-      endDate: toDate ? moment(toDate).format("YYYY-MM-DD") : "",
+      startDate: fromDate ? moment(fromDate).format("YYYY-MM-DD") : null,
+      endDate: toDate ? moment(toDate).format("YYYY-MM-DD") : null,
     };
     console.log(payload, "payload");
 

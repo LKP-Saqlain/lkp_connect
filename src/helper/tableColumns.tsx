@@ -185,52 +185,52 @@ export const getClientActivityStatusColumns = (
         // </Button>
       ),
     },
-    {
-      field: "ActivationDate",
-      headerName: "Activation Date",
-      headerClassName: "header-wrap-custom",
-      flex: 1.2,
-      minWidth: 110,
-      align: "center",
-      headerAlign: "center",
-      disableColumnMenu: true,
-      valueGetter: (params: any) => {
-        const rawDate = params;
-        if (!rawDate) return null;
-        const parsedDate = new Date(
-          rawDate.replace(
-            /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
-              const monthMap: any = {
-                Jan: "01",
-                Feb: "02",
-                Mar: "03",
-                Apr: "04",
-                May: "05",
-                Jun: "06",
-                Jul: "07",
-                Aug: "08",
-                Sep: "09",
-                Oct: "10",
-                Nov: "11",
-                Dec: "12",
-              };
-              console.log(match);
-              return `20${year}-${monthMap[month]}-${day}`;
-            }
-          )
-        );
-        return parsedDate;
-      },
-      sortComparator: (v1, v2) => {
-        if (!v1 || !v2) return 0; // Handle missing values
-        return v1 - v2; // Sort in ascending order
-      },
-      valueFormatter: (params: any) => {
-        if (!params) return "";
-        return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
-      },
-    },
+    // {
+    //   field: "ActivationDate",
+    //   headerName: "Activation Date",
+    //   headerClassName: "header-wrap-custom",
+    //   flex: 1.2,
+    //   minWidth: 110,
+    //   align: "center",
+    //   headerAlign: "center",
+    //   disableColumnMenu: true,
+    //   valueGetter: (params: any) => {
+    //     const rawDate = params;
+    //     if (!rawDate) return null;
+    //     const parsedDate = new Date(
+    //       rawDate.replace(
+    //         /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+    //         (match: any, day: any, month: any, year: any) => {
+    //           const monthMap: any = {
+    //             Jan: "01",
+    //             Feb: "02",
+    //             Mar: "03",
+    //             Apr: "04",
+    //             May: "05",
+    //             Jun: "06",
+    //             Jul: "07",
+    //             Aug: "08",
+    //             Sep: "09",
+    //             Oct: "10",
+    //             Nov: "11",
+    //             Dec: "12",
+    //           };
+    //           console.log(match);
+    //           return `20${year}-${monthMap[month]}-${day}`;
+    //         }
+    //       )
+    //     );
+    //     return parsedDate;
+    //   },
+    //   sortComparator: (v1, v2) => {
+    //     if (!v1 || !v2) return 0; // Handle missing values
+    //     return v1 - v2; // Sort in ascending order
+    //   },
+    //   valueFormatter: (params: any) => {
+    //     if (!params) return "";
+    //     return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    //   },
+    // },
   ];
 
   return finalColumns;
@@ -1563,18 +1563,17 @@ export const T6Columns: GridColDef[] = [
     field: "ClientCode",
     headerName: "Client Code",
     flex: 1,
-    minWidth: 105,
+    minWidth: 100,
     headerAlign: "left",
     align: "left",
-    // sortable: false,
     disableColumnMenu: true,
   },
   {
     field: "ClientName",
     headerName: "Client Name",
+    flex: 2,
+    minWidth: 150,
     disableColumnMenu: true,
-    flex: 2.2,
-    minWidth: 220,
   },
   {
     field: "ClosingBal",
@@ -1596,8 +1595,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "StockValue",
     headerName: "Stock Value",
-    // flex: 1,
-    width: 130,
+    flex: 1.2,
+    minWidth: 120,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1612,7 +1611,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "G5",
     headerName: ">T5",
-    width: 110,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1629,7 +1629,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T5",
     headerName: "T5",
-    width: 100,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1646,7 +1647,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T4",
     headerName: "T4",
-    width: 100,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1663,7 +1665,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T3",
     headerName: "T3",
-    width: 100,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1680,7 +1683,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T2",
     headerName: "T2",
-    width: 100,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1697,7 +1701,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T1",
     headerName: "T1",
-    width: 100,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -3582,8 +3587,8 @@ export const RegionalHead: GridColDef[] = [
   {
     field: "branchcode",
     headerName: "Branch",
-    minWidth: 70,
-    flex: 0.5,
+    minWidth: 90,
+    flex: 0.6,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -3628,7 +3633,7 @@ export const RegionalHead: GridColDef[] = [
     field: "existingPlan",
     headerName: "Existing Plan",
     flex: 1.5,
-    minWidth: 200,
+    minWidth: 230,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3645,8 +3650,8 @@ export const RegionalHead: GridColDef[] = [
   {
     field: "remark",
     headerName: "Action",
-    flex: 1.5,
-    minWidth: 165,
+    flex: 1,
+    minWidth: 100,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3685,9 +3690,9 @@ export const BrokerageModificationStatus: GridColDef[] = [
         color = "#1b5e20";
         border = "1px solid #81c784";
       } else if (status.includes("pending")) {
-        backgroundColor = "#fff9c4"; // Soft yellow (easy on eyes)
-        color = "#ff8f00";
-        border = "1px solid #ffe082";
+        backgroundColor = "#FFF4E5"; // Soft peach / beige
+        color = "#FF9800"; // Warm orange (not too saturated)
+        border = "1px solid #FFB74D"; // Light orange border
       } else if (status.includes("rejected") || status.includes("reject")) {
         backgroundColor = "#ef9a9a"; // Light red
         color = "#b71c1c";
@@ -3712,13 +3717,13 @@ export const BrokerageModificationStatus: GridColDef[] = [
               border,
               borderRadius: "999px",
               padding: "3px 16px",
-              fontSize: "10px",
+              fontSize: "11px",
               fontWeight: 600,
-              textTransform: "capitalize",
+              // textTransform: "capitalize",
               whiteSpace: "nowrap",
               display: "inline-block",
               textAlign: "center",
-              minWidth: "50px",
+              minWidth: "160px",
               lineHeight: "1",
             }}
           >
