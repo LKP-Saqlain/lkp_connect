@@ -253,7 +253,9 @@ const UserInfoModal = ({
                   >
                     Email Id
                   </p>
-                  <h6 className="user-info">{clientDetails.Email_Id}</h6>
+                  <h6 className="user-info">
+                    {clientDetails.Email_Id.toLowerCase()}
+                  </h6>
                 </div>
               </Col>
             </Row>

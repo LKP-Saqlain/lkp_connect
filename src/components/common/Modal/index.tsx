@@ -236,7 +236,8 @@ const ModalComponent = ({
                     ))}
                   </select>
                 </Row>
-                {true && ( // Replace `true` with your condition (e.g., selectedPlan === "XYZ")
+                {true && ( // Replace `true` with your consent condition (e.g., selectedPlan === "XYZ")
+                  // shouldShowConsentForm()
                   <div style={{ marginTop: "12px" }}>
                     <span
                       style={{

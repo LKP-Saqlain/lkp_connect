@@ -202,12 +202,13 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
               backgroundColor: "#11395C",
               borderRadius: "13px",
-              height: "100%", // Make the height 100% to match the content
+              height: brokerageSlab.length > 4 ? "100px" : "50px", // Make the height 100% to match the content
+              // margin: 0,
             }}
           >
             <CardBody
-              className="d-flex justify-content-center align-items-center"
-              style={{ height: "100px" }}
+              className="p-0 d-flex justify-content-center align-items-center "
+              // style={{ height: "100px" }}
             >
               <p
                 style={{

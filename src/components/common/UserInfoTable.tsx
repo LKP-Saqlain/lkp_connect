@@ -584,8 +584,10 @@ const DataTable = ({
                     }}
                     style={{ cursor: "pointer" }}
                   >
-                    <span>Approve</span>
-                    <CheckCircleIcon style={{ color: "green" }} />
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
                   </div>
                   <div
                     style={{
@@ -603,8 +605,9 @@ const DataTable = ({
                     }}
                     style={{ cursor: "pointer" }}
                   >
-                    <span>Reject</span>
-                    <CancelIcon style={{ color: "red" }} />
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
                   </div>
                 </div>
               );

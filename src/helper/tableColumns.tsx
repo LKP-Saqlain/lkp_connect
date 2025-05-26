@@ -376,7 +376,7 @@ export const getCommChecker: GridColDef[] = [
     field: "status",
     headerName: "Approve | Reject",
     headerClassName: "header-wrap-custom",
-    minWidth: 150,
+    minWidth: 120,
     flex: 1,
     align: "center",
     headerAlign: "center",

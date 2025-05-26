@@ -19,6 +19,8 @@ import { DateRangePicker } from "rsuite";
 import moment from "moment";
 import DataTable from "../../../components/common/UserInfoTable";
 import ShowToast from "../../../utils/toastUtils";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -90,6 +92,36 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
       })
       .catch(() => ShowToast("error", "Date is required"))
       .finally(() => dispatch(hideLoader()));
+  };
+
+  const handleExcel = () => {
+    if (!modificationStatus.length) {
+      ShowToast("info", "No data available to export");
+      return;
+    }
+
+    try {
+      // Convert data to a worksheet
+      const worksheet = XLSX.utils.json_to_sheet(modificationStatus);
+      // Create a workbook and append the worksheet
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Brokerage Status");
+
+      // Convert the workbook to a binary file
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      const excelFile = new Blob([excelBuffer], {
+        type: "application/octet-stream",
+      });
+
+      saveAs(excelFile, "Brokerage_Modification_Status.xlsx");
+    } catch (error) {
+      console.error("Excel Export Error:", error);
+      ShowToast("error", "Failed to export Excel");
+    }
   };
 
   return (
@@ -193,19 +225,32 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
                     style={{ width: "100%", fontSize: "12px" }}
                   />
                 </Col>
-
                 <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
-                  <Button
-                    type="submit"
-                    style={{
-                      backgroundColor: "#11395C",
-                      fontSize: "12px",
-                      width: "100%",
-                      marginTop: "8px",
-                    }}
-                  >
-                    View
-                  </Button>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <Button
+                      type="submit"
+                      style={{
+                        backgroundColor: "#11395C",
+                        color: "#fff",
+                        fontSize: "12px",
+                        flex: 1,
+                      }}
+                    >
+                      View
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={handleExcel}
+                      style={{
+                        backgroundColor: "#3C7B40",
+                        color: "#fff",
+                        fontSize: "12px",
+                        flex: 1,
+                      }}
+                    >
+                      Excel
+                    </Button>
+                  </div>
                 </Col>
               </Row>
             </form>

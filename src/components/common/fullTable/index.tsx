@@ -7,7 +7,7 @@ import { ClientSegBrok } from "../../../redux/thunk/ClientSegmentBrokerage";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 // import ButtonGroup from "../../common/ButtonGroup";
 // import ShowToast from "../../../utils/toastUtils";
-import { Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { apiServices } from "../../../services";
 
 const barColors = [
@@ -309,7 +309,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
             </CardHeader>
             <CardBody className="">
               <div>
-                <div className="d-flex gap-1 justify-content-end">
+                <div className="d-flex gap-1 justify-content-center">
                   <Button
                     variant="outlined"
                     size="small"
@@ -363,14 +363,33 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                 </div>
                 <div dir="ltr" className="apex-charts">
                   <Col>
-                    <ReactApexChart
+                    {/* <ReactApexChart
                       // dir="ltr"
                       options={DonutOptions}
-                      series={series}
+                      series={series.length > 0 ? series : [0]}
                       type="donut"
                       height={350}
                       // className="apex-charts"
-                    />
+                    /> */}
+                    {series.length > 0 ? (
+                      <ReactApexChart
+                        options={DonutOptions}
+                        series={series}
+                        type="donut"
+                        height={350}
+                      />
+                    ) : (
+                      <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        height={350}
+                      >
+                        <Typography variant="body1" color="textSecondary">
+                          No records found
+                        </Typography>
+                      </Box>
+                    )}
                   </Col>
                 </div>
               </div>
@@ -399,15 +418,28 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
               <div>
                 <div dir="ltr" className="apex-charts">
                   <Col>
-                    <ReactApexChart
-                      // dir="ltr"
-                      // options={barOptions}
-                      options={barOptions(categories)}
-                      series={seriess}
-                      type="bar"
-                      height="374"
-                      className="apex-charts"
-                    />
+                    {grossBrokerageData.length > 0 ? (
+                      <ReactApexChart
+                        // dir="ltr"
+                        // options={barOptions}
+                        options={barOptions(categories)}
+                        series={seriess}
+                        type="bar"
+                        height="374"
+                        className="apex-charts"
+                      />
+                    ) : (
+                      <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        height={350}
+                      >
+                        <Typography variant="body1" color="textSecondary">
+                          No records found
+                        </Typography>
+                      </Box>
+                    )}
                   </Col>
                 </div>
               </div>
