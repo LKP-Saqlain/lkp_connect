@@ -263,7 +263,7 @@ const CustomModal = ({
           {(activeSubItem === "Communication Retrival Checker" ||
             activeSubItem === "KYC Approval" ||
             activeSubItem === "RH Approval" ||
-            activeSubItem === "Pre Trade Approval") && (
+            (activeSubItem === "Pre Trade Approval" && !isAdmin)) && (
             <TextField
               label="Enter Remark *"
               variant="outlined"
