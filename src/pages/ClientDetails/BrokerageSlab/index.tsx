@@ -21,6 +21,7 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
     currency_Options_brokerage?: number;
     commodity_Futures_brokerage?: number;
     commodity_Options_brokerage?: number;
+    description?: string;
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -242,10 +243,10 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
                   item.commodity_Options_brokerage ||
                   0;
 
-                const isOption = item.type?.toLowerCase().includes("option");
-                const formattedValue = isOption ? `₹ ${value}` : `${value}%`;
+                // const isOption = item.type?.toLowerCase().includes("option");
+                // const formattedValue = isOption ? `₹ ${value}` : `${value}%`;
 
-                const suffix = isOption ? "per lot" : "of turnover";
+                // const suffix = isOption ? "per lot" : "of turnover";
                 return (
                   <Col md={3} key={index}>
                     <Card
@@ -290,7 +291,8 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
                                 }}
                               />
                             )}
-                            {formattedValue} {suffix}
+                            {/* {formattedValue} {suffix} */}
+                            {item.description}
                           </p>
                         </div>
                         <FiEdit
