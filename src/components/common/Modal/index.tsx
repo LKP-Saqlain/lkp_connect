@@ -380,7 +380,7 @@ const ModalComponent = ({
                 </Row>
                 {showConsent && ( // Replace `true` with your consent condition (e.g., selectedPlan === "XYZ")
                   // shouldShowConsentForm()
-                  <div style={{ margin: "6px 0 6px 0" }}>
+                  <div style={{ marginBottom: "5px" }}>
                     <span
                       style={{
                         fontSize: "14px",
@@ -484,7 +484,7 @@ const ModalComponent = ({
                     display: "inline-block",
                     border: "1px solid #EF5350",
                     backgroundColor: "#FFF0F0",
-                    padding: "8px 14px",
+                    padding: "4px 9px",
                     borderRadius: "16px",
                     color: "#C62828",
                     fontSize: "12px",
