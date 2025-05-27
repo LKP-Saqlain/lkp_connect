@@ -309,6 +309,7 @@ const ModalComponent = ({
     setStep(1);
     setSelectedValue("");
     onClose();
+    setShowConsent(false);
   };
 
   return (
