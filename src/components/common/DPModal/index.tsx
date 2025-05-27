@@ -526,14 +526,14 @@ const CustomModal = ({
               onLoad={() => setSetShowImg(true)}
               style={{
                 transform: `scale(${zoomLevel})`,
-                transformOrigin: "top left", // 👈 center zoom
+                transformOrigin: "top left",
                 transition: "transform 0.2s ease",
-                maxWidth: "unset", // ✅ prevent scaling limitation
+                maxWidth: "unset",
                 maxHeight: "unset",
                 width: "auto",
                 height: "auto",
                 userSelect: "none",
-                pointerEvents: "none", // prevent mouse events interfering
+                pointerEvents: "none",
               }}
             />
           )}
@@ -554,61 +554,95 @@ const CustomModal = ({
           )}
         </div>
 
-        {isImage && (
+        {(isImage || isPDF) && (
           <div
             style={{
               marginTop: "10px",
               display: "flex",
               justifyContent: "space-between",
               gap: "10px",
+              flexWrap: "wrap",
             }}
           >
             <Button
               onClick={handleZoomOut}
               variant="outlined"
-              size="small"
               disabled={zoomLevel <= 1}
+              style={{
+                minWidth: "80px",
+                height: "30px",
+                fontSize: "12px",
+                padding: "4px 8px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
               Zoom Out
             </Button>
+            {isPDF && numPages > 1 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "10px",
+                }}
+              >
+                <Button
+                  // size="small"
+                  onClick={() =>
+                    setPdfPageNumber((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={pdfPageNumber <= 1}
+                  style={{
+                    minWidth: "80px",
+                    height: "30px",
+                    fontSize: "12px",
+                    padding: "4px 8px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Prev
+                </Button>
+                <span>
+                  Page {pdfPageNumber} of {numPages}
+                </span>
+                <Button
+                  onClick={() =>
+                    setPdfPageNumber((prev) => Math.min(prev + 1, numPages))
+                  }
+                  disabled={pdfPageNumber >= numPages}
+                  style={{
+                    minWidth: "80px",
+                    height: "30px",
+                    fontSize: "12px",
+                    padding: "4px 8px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  Next
+                </Button>
+              </div>
+            )}
             <Button
               onClick={handleZoomIn}
               variant="outlined"
-              size="small"
               disabled={zoomLevel >= 3}
+              style={{
+                minWidth: "80px",
+                height: "30px",
+                fontSize: "12px",
+                padding: "4px 8px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
             >
               Zoom In
-            </Button>
-          </div>
-        )}
-
-        {isPDF && numPages > 1 && (
-          <div
-            style={{
-              marginTop: "5px",
-              display: "flex",
-              justifyContent: "center",
-              gap: "10px",
-            }}
-          >
-            <Button
-              size="small"
-              onClick={() => setPdfPageNumber((prev) => Math.max(prev - 1, 1))}
-              disabled={pdfPageNumber <= 1}
-            >
-              Prev
-            </Button>
-            <span>
-              Page {pdfPageNumber} of {numPages}
-            </span>
-            <Button
-              size="small"
-              onClick={() =>
-                setPdfPageNumber((prev) => Math.min(prev + 1, numPages))
-              }
-              disabled={pdfPageNumber >= numPages}
-            >
-              Next
             </Button>
           </div>
         )}

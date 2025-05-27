@@ -16,3 +16,30 @@
     top: 220px !important;
     left: 675px !important;
 }
+
+.rs-calendar-table-cell-selected .rs-calendar-table-cell-content {
+    /* background-color: #3498ff; */
+    /* background-color: var(--rs-bg-active); */
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #fff;
+    color: var(--rs-calendar-date-selected-text);
+    background-color: #11395C !important;
+}
+
+.rs-btn-primary {
+    /* background-color: #3498ff; */
+    /* background-color: var(--rs-btn-primary-bg); */
+    border: none;
+    color: #fff;
+    color: var(--rs-btn-primary-text);
+    background-color: #11395C !important;
+}
+
+.rs-btn-link {
+    background-color: transparent;
+    border: none;
+    /* color: #1675e0; */
+    /* color: var(--rs-btn-link-text); */
+    color: #11395C !important;
+}
