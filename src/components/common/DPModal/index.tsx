@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Button,
   Modal as ReactstrapModal,
@@ -22,6 +22,8 @@ import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 // import { isAdminAccess } from "../../../helper/commmon";
+import { pdfjs, Document, Page } from "react-pdf";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 interface CustomModalProps {
   tog_center: () => void;
@@ -41,6 +43,7 @@ interface CustomModalProps {
   previewUrl?: any;
   setSetShowImg?: any;
   showDocument?: any;
+  fileExtension?: any;
 }
 
 const CustomModal = ({
@@ -61,21 +64,35 @@ const CustomModal = ({
   previewUrl,
   setSetShowImg,
   showDocument,
+  fileExtension,
 }: CustomModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [scrollPos, setScrollPos] = useState({ left: 0, top: 0 });
+  const [pdfPageNumber, setPdfPageNumber] = useState(1);
+  const [numPages, setNumPages] = useState(0);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
+  // const isImage = ["jpg", "jpeg", "png", "gif", "bmp"].includes(
+  //   fileExtension.toLowerCase()
+  // );
+  // const isPDF = fileExtension.toLowerCase() === "pdf";
+
   // const { name } = useSelector(
   //   (state: RootState) => state.AuthUser?.data?.data
   // );
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    console.log("TestProps", action, row);
-  }, [action, row]);
+    console.log("TestProps", action, row, activeSubItem);
+  }, [action, row, activeSubItem]);
 
   const handleSessionClear = () => {
     localStorage.clear();
@@ -115,13 +132,14 @@ const CustomModal = ({
       console.log("test112121212", action, row);
       if (action && row) {
         const entryFlag = action === "approve" ? "A" : "R";
-        if (activeSubItem === "Communication Retrival Checker") {
-          handleApproval?.(row, values.remark, entryFlag);
-        } else if (activeSubItem === "KYC Approval") {
-          handleApproval?.(row, values.remark, entryFlag);
-        } else if (activeSubItem === "RH Approval") {
-          handleApproval?.(row, values.remark, entryFlag);
-        } else if (activeSubItem === "Pre Trade Approval") {
+        if (
+          [
+            "Communication Retrival Checker",
+            "KYC Approval",
+            "RH Approval",
+            "Pre Trade Approval",
+          ].includes(activeSubItem)
+        ) {
           handleApproval?.(row, values.remark, entryFlag);
         }
         console.log(values.remark, "values.remark", row, entryFlag);
@@ -133,6 +151,10 @@ const CustomModal = ({
   const handleClose = () => {
     setmodal_center(false);
     formik.resetForm();
+    setZoomLevel(1);
+    setIsDragging(false);
+    setScrollPos({ left: 0, top: 0 });
+    setPdfPageNumber(1);
   };
 
   const handleCustomChange = (event: any) => {
@@ -217,6 +239,382 @@ const CustomModal = ({
     }
   };
 
+  const renderHeaderIcon = () => {
+    if (isAdmin) {
+      return <ChangeCircleIcon sx={{ color: "#11395C", fontSize: "3.5rem" }} />;
+    }
+    if (
+      ![
+        "Communication Retrival Checker",
+        "Pre Trade Proof Upload",
+        "Pre Trade Report",
+        "Pre Trade Approval",
+      ].includes(activeSubItem) &&
+      !showDocument &&
+      !isAdmin
+    ) {
+      return <i className="ri-alert-line display-5 text-warning"></i>;
+    }
+    return null;
+  };
+
+  const renderMessage = () => {
+    if (activeSubItem === "DP Debit Recovery" && !isAdmin) {
+      return (
+        <>
+          <h6 className="mb-4">
+            An email will be sent informing the client about his DP Debit dues
+            along with a link for payment.
+          </h6>
+          <h6 className="mb-3">{Msg}</h6>
+        </>
+      );
+    }
+    return <h6 className="mb-3">{Msg}</h6>;
+  };
+
+  const shouldShowRemarkField = () =>
+    ["Communication Retrival Checker", "KYC Approval", "RH Approval"].includes(
+      activeSubItem
+    ) ||
+    (activeSubItem === "Pre Trade Approval" && !showDocument);
+
+  const renderRemarkField = () => (
+    <TextField
+      label="Enter Remark *"
+      variant="outlined"
+      fullWidth
+      size="small"
+      value={formik.values.remark}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      name="remark"
+      error={formik.touched.remark && Boolean(formik.errors.remark)}
+      helperText={formik.touched.remark && formik.errors.remark}
+    />
+  );
+  const renderAdminFields = () => (
+    <Row style={{ gap: isMobile ? "1rem" : "0", fontFamily: "Public Sans" }}>
+      <Col xs={12}>
+        <TextField
+          size="small"
+          label="Enter Client Code"
+          variant="outlined"
+          name="userChangeValue"
+          value={formik.values.userChangeValue}
+          onChange={handleCustomChange}
+          onBlur={formik.handleBlur}
+          InputProps={{ startAdornment: "EMP- " }}
+          fullWidth
+          inputProps={{ maxLength: 4 }}
+          sx={{ width: isMobile ? "100%" : "50%" }}
+          error={
+            formik.touched.userChangeValue &&
+            Boolean(formik.errors.userChangeValue)
+          }
+          helperText={
+            formik.touched.userChangeValue && formik.errors.userChangeValue
+          }
+        />
+      </Col>
+      <Col xs={12}>
+        <TextField
+          size="small"
+          label="Enter PAN Number"
+          variant="outlined"
+          name="userPanValue"
+          value={formik.values.userPanValue}
+          onChange={handleCustomChange}
+          onBlur={formik.handleBlur}
+          fullWidth
+          inputProps={{ maxLength: 10 }}
+          sx={{ width: isMobile ? "100%" : "50%" }}
+          error={
+            formik.touched.userPanValue && Boolean(formik.errors.userPanValue)
+          }
+          helperText={formik.touched.userPanValue && formik.errors.userPanValue}
+        />
+      </Col>
+      <Row style={{ justifyContent: "center" }}>
+        <Col xs={6} style={{ display: "flex", justifyContent: "flex-start" }}>
+          <Button
+            style={{
+              width: isMobile ? "100%" : "150px",
+              backgroundColor: "#11395C",
+              borderColor: "#11395C",
+            }}
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+        </Col>
+        <Col xs={6} style={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            style={{
+              width: isMobile ? "100%" : "150px",
+              backgroundColor: "#EE4B2B",
+              borderColor: "#EE4B2B",
+            }}
+            onClick={handleUserClick}
+          >
+            Change
+          </Button>
+        </Col>
+      </Row>
+    </Row>
+  );
+
+  const renderConfirmationButtons = () => (
+    <div className="hstack gap-2 pt-2 justify-content-center">
+      {expiredtime || activeSubItem === "UCCCode MATCH" ? (
+        <Button
+          className="btn"
+          style={{
+            width: "80px",
+            backgroundColor: "#11395C",
+            borderColor: "#11395C",
+          }}
+          onClick={
+            expiredtime
+              ? handleSessionClear
+              : () => {
+                  setmodal_center(false);
+                  console.log("clicked Regulator Announcements");
+                }
+          }
+        >
+          OK
+        </Button>
+      ) : (
+        <>
+          <Button
+            className="btn"
+            style={{ backgroundColor: "#EE4B2B", borderColor: "#EE4B2B" }}
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="btn"
+            type="submit"
+            style={{ width: "80px", backgroundColor: "#11395C" }}
+          >
+            Yes
+          </Button>
+        </>
+      )}
+    </div>
+  );
+
+  const renderUploadSection = () => (
+    <>
+      <div style={{ fontFamily: "Public Sans" }}>
+        <h5 style={{ margin: 0, fontWeight: 700 }}>
+          Upload Proof of Communication
+        </h5>
+      </div>
+      <Col lg={12} style={{ padding: "16px" }}>
+        <Input
+          name="uploadProof"
+          type="file"
+          accept=".jpg,.jpeg,.png,.pdf"
+          className="form-control mb-3"
+          onChange={(e) => e.target.files && setSelectedFile(e.target.files[0])}
+          style={{ width: "100%", minHeight: "40px" }}
+        />
+        <TextField
+          label="Enter Remark"
+          variant="outlined"
+          fullWidth
+          size="small"
+          className="mb-3"
+          value={formik.values.remark}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          name="remark"
+          error={formik.touched.remark && Boolean(formik.errors.remark)}
+          helperText={formik.touched.remark && formik.errors.remark}
+        />
+        <div
+          style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}
+        >
+          <Button
+            className="btn"
+            style={{ backgroundColor: "#EE4B2B", borderColor: "#EE4B2B" }}
+            onClick={() => {
+              handleClose();
+              setSelectedFile(null);
+              setmodal_center(false);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="btn"
+            style={{ width: "80px", backgroundColor: "#11395C" }}
+            onClick={handleFileUploadClick}
+          >
+            Upload
+          </Button>
+        </div>
+      </Col>
+    </>
+  );
+
+  const handleZoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev + 0.2, 3));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel((prev) => Math.max(prev - 0.2, 1));
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    setDragStart({ x: e.clientX, y: e.clientY });
+    const container = containerRef.current;
+    if (container) {
+      setScrollPos({ left: container.scrollLeft, top: container.scrollTop });
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const container = containerRef.current;
+    if (container) {
+      const dx = e.clientX - dragStart.x;
+      const dy = e.clientY - dragStart.y;
+      container.scrollLeft = scrollPos.left - dx;
+      container.scrollTop = scrollPos.top - dy;
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const renderImagePreview = () => {
+    const extension = fileExtension?.toLowerCase(); // optional chaining
+    const isImage = [".png", ".jpg", ".jpeg"].includes(extension);
+    const isPDF = extension === ".pdf";
+
+    return (
+      <div style={{ textAlign: "center" }}>
+        <div
+          key={`${fileExtension}-${previewUrl}`}
+          ref={containerRef}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          style={{
+            width: "100%",
+            maxHeight: "400px",
+            overflow: "auto",
+            border: "1px solid #ccc",
+            borderRadius: "10px",
+            cursor: isDragging ? "grabbing" : "grab",
+            display: "flex",
+            // alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {isImage && (
+            <img
+              src={previewUrl}
+              onLoad={() => setSetShowImg(true)}
+              style={{
+                transform: `scale(${zoomLevel})`,
+                transformOrigin: "top left", // 👈 center zoom
+                transition: "transform 0.2s ease",
+                maxWidth: "unset", // ✅ prevent scaling limitation
+                maxHeight: "unset",
+                width: "auto",
+                height: "auto",
+                userSelect: "none",
+                pointerEvents: "none", // prevent mouse events interfering
+              }}
+            />
+          )}
+
+          {isPDF && (
+            <Document
+              file={previewUrl}
+              onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+              loading="Loading PDF..."
+            >
+              <Page
+                pageNumber={pdfPageNumber}
+                width={440 * zoomLevel}
+                renderAnnotationLayer={false}
+                renderTextLayer={false}
+              />
+            </Document>
+          )}
+        </div>
+
+        {isImage && (
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "10px",
+            }}
+          >
+            <Button
+              onClick={handleZoomOut}
+              variant="outlined"
+              size="small"
+              disabled={zoomLevel <= 1}
+            >
+              Zoom Out
+            </Button>
+            <Button
+              onClick={handleZoomIn}
+              variant="outlined"
+              size="small"
+              disabled={zoomLevel >= 3}
+            >
+              Zoom In
+            </Button>
+          </div>
+        )}
+
+        {isPDF && numPages > 1 && (
+          <div
+            style={{
+              marginTop: "5px",
+              display: "flex",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <Button
+              size="small"
+              onClick={() => setPdfPageNumber((prev) => Math.max(prev - 1, 1))}
+              disabled={pdfPageNumber <= 1}
+            >
+              Prev
+            </Button>
+            <span>
+              Page {pdfPageNumber} of {numPages}
+            </span>
+            <Button
+              size="small"
+              onClick={() =>
+                setPdfPageNumber((prev) => Math.min(prev + 1, numPages))
+              }
+              disabled={pdfPageNumber >= numPages}
+            >
+              Next
+            </Button>
+          </div>
+        )}
+      </div>
+    );
+  };
   return (
     <ReactstrapModal
       isOpen={modal_center}
@@ -224,289 +622,47 @@ const CustomModal = ({
       centered
       backdrop={expiredtime ? "static" : undefined} // Disable clicking outside for expired token modal
       keyboard={expiredtime ? false : undefined}
+      style={{ maxWidth: setShowImg ? "700px" : "500px" }}
     >
       <ModalBody className="text-center p-3">
-        <i
-          className="ri-close-line"
-          onClick={() => {
-            setmodal_center(false);
-            setSelectedFile(null);
-          }}
-          style={{
-            position: "absolute",
-            top: "-6px",
-            right: "-1px",
-            fontSize: "1.5rem",
-            cursor: "pointer",
-            zIndex: 1000,
-            color: "#000",
-          }}
-        />
-        {activeSubItem !== "Communication Retrival Checker" &&
-          activeSubItem !== "Pre Trade Proof Upload" &&
-          activeSubItem !== "Pre Trade Report" &&
-          activeSubItem === "Pre Trade Approval" &&
-          !showDocument &&
-          !isAdmin && <i className="ri-alert-line display-5 text-warning"></i>}
-        {isAdmin && (
-          <ChangeCircleIcon sx={{ color: "#11395C", fontSize: "3.5rem" }} />
+        {!expiredtime && (
+          <i
+            className="ri-close-line"
+            onClick={() => {
+              setmodal_center(false);
+              setSelectedFile(null);
+              handleClose();
+            }}
+            style={{
+              position: "absolute",
+              top: "-6px",
+              right: "-1px",
+              fontSize: "1.5rem",
+              cursor: "pointer",
+              zIndex: 1000,
+              color: "#000",
+            }}
+          />
         )}
-
+        {/*  here Icons based on Conditions */}
+        {renderHeaderIcon()}
+        {/* Message Section */}
         <div className="mt-4" style={{ fontFamily: "Public Sans" }}>
-          {activeSubItem === "DP Debit Recovery" && !isAdmin ? (
-            <>
-              <h6 className="mb-4">
-                An email will be sent informing the client about his DP Debit
-                dues along with a link for payment.
-              </h6>
-              <h6 className="mb-3">{Msg}</h6>
-            </>
-          ) : (
-            <h6 className="mb-3">{Msg}</h6>
-          )}
+          {renderMessage()}
         </div>
-
+        {/* Main Form */}
         <form onSubmit={formik.handleSubmit}>
-          {(activeSubItem === "Communication Retrival Checker" ||
-            activeSubItem === "KYC Approval" ||
-            activeSubItem === "RH Approval" ||
-            (activeSubItem === "Pre Trade Approval" && !showDocument)) && (
-            <TextField
-              label="Enter Remark *"
-              variant="outlined"
-              fullWidth
-              size="small"
-              value={formik.values.remark}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              name="remark"
-              error={formik.touched.remark && Boolean(formik.errors.remark)}
-              helperText={formik.touched.remark && formik.errors.remark}
-            />
-          )}
-          {isAdmin && (
-            <Row
-              className=""
-              style={{
-                gap: isMobile ? "1rem" : "0",
-                fontFamily: "Public Sans",
-              }}
-            >
-              <Col xs={12}>
-                <TextField
-                  size="small"
-                  label="Enter Client Code"
-                  variant="outlined"
-                  name="userChangeValue"
-                  value={formik.values.userChangeValue}
-                  onChange={handleCustomChange}
-                  onBlur={formik.handleBlur}
-                  InputProps={{ startAdornment: "EMP- " }}
-                  fullWidth
-                  inputProps={{ maxLength: 4 }}
-                  sx={{ width: isMobile ? "100%" : "50%" }}
-                  error={
-                    formik.touched.userChangeValue &&
-                    Boolean(formik.errors.userChangeValue)
-                  }
-                  helperText={
-                    formik.touched.userChangeValue &&
-                    formik.errors.userChangeValue
-                  }
-                />
-              </Col>
-              <Col xs={12}>
-                <TextField
-                  size="small"
-                  label="Enter PAN Number"
-                  variant="outlined"
-                  name="userPanValue"
-                  value={formik.values.userPanValue}
-                  onChange={handleCustomChange}
-                  onBlur={formik.handleBlur}
-                  fullWidth
-                  inputProps={{ maxLength: 10 }}
-                  sx={{ width: isMobile ? "100%" : "50%" }}
-                  error={
-                    formik.touched.userPanValue &&
-                    Boolean(formik.errors.userPanValue)
-                  }
-                  helperText={
-                    formik.touched.userPanValue && formik.errors.userPanValue
-                  }
-                />
-              </Col>
-              <Row
-                style={{
-                  // gap: isMobile ? "0.5rem" : "0",
-                  justifyContent: "center",
-                }}
-              >
-                <Col
-                  xs={6}
-                  style={{ display: "flex", justifyContent: "flex-start" }}
-                >
-                  <Button
-                    className="btn"
-                    style={{
-                      width: isMobile ? "100%" : "150px",
-                      backgroundColor: "#11395C",
-                      borderColor: "#11395C",
-                    }}
-                    onClick={handleClose}
-                  >
-                    Cancel
-                  </Button>
-                </Col>
-                <Col
-                  xs={6}
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                  <Button
-                    variant="contained"
-                    style={{
-                      width: isMobile ? "100%" : "150px",
-                      backgroundColor: "#EE4B2B",
-                      borderColor: "#EE4B2B",
-                    }}
-                    onClick={handleUserClick}
-                  >
-                    Change
-                  </Button>
-                </Col>
-              </Row>
-            </Row>
-          )}
-          {!isAdmin && !isUploadMode && !setShowImg && (
-            <div className="hstack gap-2 pt-2 justify-content-center">
-              {expiredtime || activeSubItem === "UCCCode MATCH" ? (
-                <Button
-                  className="btn"
-                  style={{
-                    width: "80px",
-                    backgroundColor: "#11395C",
-                    borderColor: "#11395C",
-                  }}
-                  onClick={
-                    expiredtime
-                      ? handleSessionClear
-                      : () => {
-                          setmodal_center(false);
-                          console.log("clicked Regulator Announcements");
-                        }
-                  }
-                >
-                  OK
-                </Button>
-              ) : (
-                <>
-                  <Button
-                    className="btn"
-                    style={{
-                      backgroundColor: "#EE4B2B",
-                      borderColor: "#EE4B2B",
-                    }}
-                    onClick={handleClose}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    className="btn"
-                    style={{ width: "80px", backgroundColor: "#11395C" }}
-                    type="submit"
-                  >
-                    Yes
-                  </Button>
-                </>
-              )}
-            </div>
-          )}
-          {isUploadMode && (
-            <>
-              <div
-                style={{
-                  fontFamily: "Public Sans",
-                }}
-              >
-                <h5 style={{ margin: 0, fontWeight: 700 }}>
-                  Upload Proof of Communication
-                </h5>
-              </div>
-              <Col lg={12} style={{ padding: "16px" }}>
-                <Input
-                  name="uploadProof"
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.pdf"
-                  className="form-control mb-3"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      setSelectedFile(e.target.files[0]);
-                    }
-                  }}
-                  style={{ width: "100%", minHeight: "40px" }}
-                />
-                <TextField
-                  label="Enter Remark"
-                  variant="outlined"
-                  fullWidth
-                  size="small"
-                  className="mb-3"
-                  value={formik.values.remark}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  name="remark"
-                  error={formik.touched.remark && Boolean(formik.errors.remark)}
-                  helperText={formik.touched.remark && formik.errors.remark}
-                />
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    gap: "10px",
-                  }}
-                >
-                  <Button
-                    className="btn"
-                    style={{
-                      backgroundColor: "#EE4B2B",
-                      borderColor: "#EE4B2B",
-                    }}
-                    onClick={() => {
-                      handleClose();
-                      setSelectedFile(null);
-                      setmodal_center(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    className="btn"
-                    style={{
-                      width: "80px",
-                      backgroundColor: "#11395C",
-                    }}
-                    onClick={handleFileUploadClick}
-                  >
-                    Upload
-                  </Button>
-                </div>
-              </Col>
-            </>
-          )}
-          {setShowImg && (
-            <img
-              src={previewUrl}
-              onLoad={() => {
-                setSetShowImg(true);
-              }}
-              // alt="Preview"
-              style={{
-                maxWidth: "100%",
-                // maxHeight: "100vh",
-                borderRadius: "10px",
-              }}
-            />
-          )}
+          {shouldShowRemarkField() && renderRemarkField()}
+          {isAdmin && renderAdminFields()}
+
+          {!isAdmin &&
+            !isUploadMode &&
+            !setShowImg &&
+            renderConfirmationButtons()}
+
+          {isUploadMode && renderUploadSection()}
+
+          {setShowImg && renderImagePreview()}
         </form>
       </ModalBody>
     </ReactstrapModal>

@@ -98,6 +98,7 @@ interface SelectedWidgetProps {
   setSetShowImg?: any;
   showDocument?: boolean;
   setShowDocument?: any;
+  fileExtension?: any;
 }
 
 const DataTable = ({
@@ -137,6 +138,7 @@ const DataTable = ({
   setSetShowImg,
   showDocument,
   setShowDocument,
+  fileExtension,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -965,6 +967,7 @@ const DataTable = ({
         previewUrl={previewUrl}
         setSetShowImg={setSetShowImg}
         showDocument={showDocument}
+        fileExtension={fileExtension}
       />
       {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown
