@@ -367,6 +367,7 @@ const ModalComponent = ({
                       fontSize: "14px",
                       backgroundColor: "#ffffff",
                       boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)",
+                      marginBottom: "10px",
                     }}
                   >
                     <option value="">-- Select a Brokerage Plan --</option>
@@ -379,7 +380,7 @@ const ModalComponent = ({
                 </Row>
                 {showConsent && ( // Replace `true` with your consent condition (e.g., selectedPlan === "XYZ")
                   // shouldShowConsentForm()
-                  <div style={{ marginTop: "12px" }}>
+                  <div style={{ margin: "6px 0 6px 0" }}>
                     <span
                       style={{
                         fontSize: "14px",
