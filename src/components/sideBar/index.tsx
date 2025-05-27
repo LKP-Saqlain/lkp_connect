@@ -1182,7 +1182,7 @@ const SideBar = () => {
           component="main"
           sx={{
             flexGrow: 1,
-            p: 0.5,
+            p: 0.9,
             pt: "72px", // Adjust according to actual AppBar height
             backgroundColor: "#E5E4E2",
             overflow: "hidden",

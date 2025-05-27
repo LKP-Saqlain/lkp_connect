@@ -11,7 +11,8 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
   useEffect(() => {
     console.log("brokData", brokerageData);
 
-    const categories = brokerageData.map((item: any) => item.Dtrandate);
+    const categories =
+      brokerageData && brokerageData.map((item: any) => item.Dtrandate);
     setLatestDates(categories);
     console.log("categories", categories);
   }, [brokerageData]);
