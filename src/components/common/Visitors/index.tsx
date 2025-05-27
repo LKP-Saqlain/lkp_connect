@@ -52,6 +52,13 @@ const StoreVisitsCharts = ({ chartData }: any) => {
     stroke: {
       show: false,
     },
+    tooltip: {
+      y: {
+        formatter: function (val: number) {
+          return Intl.NumberFormat("en-IN").format(Math.round(val));
+        },
+      },
+    },
     dataLabels: {
       dropShadow: {
         enabled: false,

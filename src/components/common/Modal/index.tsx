@@ -27,6 +27,19 @@ interface ModalComponentProps {
   BrokerageTitle?: any;
 }
 
+const keys = [
+  "EquityFutures",
+  "EquityOptions",
+  "CurrencyFutures",
+  "CurrencyOptions",
+  "CommodityFutures",
+  "CommodityOptions",
+  "EquityIntradayPer",
+  "EquityDeliveryPer",
+  "EquityIntradayMin",
+  "EquityDeliveryMin",
+];
+
 const ModalComponent = ({
   isOpen,
   onClose,
@@ -35,7 +48,10 @@ const ModalComponent = ({
   const [selectedValue, setSelectedValue] = useState("");
   const [step, setStep] = useState(1); // Step 1 = Select Plan, Step 2 = Confirm Plan
   const [choosePlans, setChoosePlans] = useState<string[]>([]);
+  const [allPlans, setAllPlans] = useState<any[]>([]);
   const [history, setHistory] = useState<BrokerageHistoryItem[]>([]);
+  const [currentPlan, setCurrentPlan] = useState<any>(null);
+  const [showConsent, setShowConsent] = useState<boolean>(false);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -62,6 +78,7 @@ const ModalComponent = ({
           if (Array.isArray(plans)) {
             const typeList = plans.map((item) => item.Type);
             setChoosePlans(typeList);
+            setAllPlans(plans);
           }
         }
       })
@@ -86,6 +103,9 @@ const ModalComponent = ({
           console.log("Fetched history---raw", plans);
           if (Array.isArray(plans)) {
             setHistory(plans);
+            if (plans.length > 0) {
+              setCurrentPlan(plans[0]); //  Store the current plan
+            }
           }
         }
       })
@@ -93,12 +113,133 @@ const ModalComponent = ({
       .finally(() => dispatch(hideLoader()));
   }, [clientcode, type]);
 
-  // Handle change in plan selection
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setSelectedValue(event.target.value);
-    console.log("Selected value:", event.target.value);
+  // const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const selectedValue = event.target.value;
+  //   setSelectedValue(selectedValue);
+
+  //   const matchedPlan = allPlans.find((plan) => plan.Type === selectedValue);
+  //   console.log("Selected Value:", selectedValue);
+  //   console.log("Brokerage Plans:", matchedPlan);
+  //   console.log("Current History:", currentPlan);
+
+  //   if (!matchedPlan) {
+  //     console.warn("No matched plan found.");
+  //     setShowConsent(false); // reset just in case
+  //     return;
+  //   }
+
+  //   let consentNeeded = false;
+
+  //   for (const key of keys) {
+  //     const value = matchedPlan[key];
+
+  //     if (value === undefined || value === null) continue;
+
+  //     console.log(`${key}:`, value);
+
+  //     if (value > currentPlan.brokeragePerc) {
+  //       console.log(`${key} is greater than brokeragePerc → show consent`);
+  //       consentNeeded = true;
+  //       break;
+  //     } else if (value < currentPlan.brokeragePerc) {
+  //       console.log(`${key} is smaller than brokeragePerc → no consent`);
+  //       continue;
+  //     } else {
+  //       // If equal, check min field only for Intraday/Delivery
+  //       const isIntradayOrDelivery =
+  //         key === "EquityIntradayPer" || key === "EquityDeliveryPer";
+
+  //       if (!isIntradayOrDelivery) continue;
+
+  //       const minKey =
+  //         key === "EquityIntradayPer"
+  //           ? "EquityIntradayMin"
+  //           : "EquityDeliveryMin";
+
+  //       const minValue = matchedPlan[minKey];
+
+  //       if (minValue > currentPlan.brokeragePercMin) {
+  //         console.log(
+  //           `${minKey} (${minValue}) > brokeragePercMin (${currentPlan.brokeragePercMin}) → show consent`
+  //         );
+  //         consentNeeded = true;
+  //         break;
+  //       } else {
+  //         console.log(`${minKey} is lesser or equal → no consent`);
+  //       }
+  //     }
+  //   }
+  //   setShowConsent(consentNeeded);
+  // };
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = event.target.value;
+    setSelectedValue(selectedValue);
+
+    const matchedPlan = allPlans.find((plan) => plan.Type === selectedValue);
+    console.log("Selected Value:", selectedValue);
+    console.log("Brokerage Plans:", matchedPlan);
+    console.log("Current History:", currentPlan);
+
+    if (!matchedPlan) {
+      console.warn("No matched plan found.");
+      setShowConsent(false); // reset just in case
+      return;
+    }
+
+    let consentNeeded = false;
+
+    for (const key of keys) {
+      const value = matchedPlan[key];
+
+      if (value === undefined || value === null) continue;
+
+      console.log(`${key}:`, value);
+
+      if (value > currentPlan.brokeragePerc) {
+        console.log(`${key} is greater than brokeragePerc → show consent`);
+        consentNeeded = true;
+        break;
+      } else if (value < currentPlan.brokeragePerc) {
+        console.log(`${key} is smaller than brokeragePerc → no consent`);
+        continue;
+      } else {
+        // Equal values – further checks needed
+        const isIntradayOrDelivery =
+          key === "EquityIntradayPer" || key === "EquityDeliveryPer";
+
+        if (isIntradayOrDelivery) {
+          const minKey =
+            key === "EquityIntradayPer"
+              ? "EquityIntradayMin"
+              : "EquityDeliveryMin";
+
+          const minValue = matchedPlan[minKey];
+
+          if (minValue > currentPlan.brokeragePercMin) {
+            console.log(
+              `${minKey} (${minValue}) > brokeragePercMin (${currentPlan.brokeragePercMin}) → show consent`
+            );
+            consentNeeded = true;
+            break;
+          } else {
+            console.log(`${minKey} is lesser or equal → no consent`);
+          }
+        } else {
+          // ✅ NEW CONDITION: other keys (not Intraday/Delivery)
+          const min = currentPlan.brokeragePercMin;
+
+          if (min !== undefined && min > 0) {
+            console.log(
+              `${key} equals brokeragePerc, but brokeragePercMin (${min}) > 0 → show consent`
+            );
+            consentNeeded = true;
+            break;
+          }
+        }
+      }
+    }
+
+    setShowConsent(consentNeeded);
   };
 
   // Format date to a more readable format
@@ -226,6 +367,7 @@ const ModalComponent = ({
                       fontSize: "14px",
                       backgroundColor: "#ffffff",
                       boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)",
+                      marginBottom: "10px",
                     }}
                   >
                     <option value="">-- Select a Brokerage Plan --</option>
@@ -236,8 +378,9 @@ const ModalComponent = ({
                     ))}
                   </select>
                 </Row>
-                {true && ( // Replace `true` with your condition (e.g., selectedPlan === "XYZ")
-                  <div style={{ marginTop: "12px" }}>
+                {showConsent && ( // Replace `true` with your consent condition (e.g., selectedPlan === "XYZ")
+                  // shouldShowConsentForm()
+                  <div style={{ marginBottom: "5px" }}>
                     <span
                       style={{
                         fontSize: "14px",
@@ -341,7 +484,7 @@ const ModalComponent = ({
                     display: "inline-block",
                     border: "1px solid #EF5350",
                     backgroundColor: "#FFF0F0",
-                    padding: "8px 14px",
+                    padding: "4px 9px",
                     borderRadius: "16px",
                     color: "#C62828",
                     fontSize: "12px",
