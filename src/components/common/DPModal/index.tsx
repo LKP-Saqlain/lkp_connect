@@ -107,7 +107,8 @@ const CustomModal = ({
       // Remark validation for "Communication Retrival Checker"
       ...((activeSubItem === "Communication Retrival Checker" ||
         activeSubItem === "KYC Approval" ||
-        activeSubItem === "RH Approval") && {
+        activeSubItem === "RH Approval" ||
+        activeSubItem === "Pre Trade Approval") && {
         remark: Yup.string().trim().required("Remark is required"),
       }),
 
