@@ -314,10 +314,13 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
       ? `.${row.userRemarks.split(".").pop()?.toLowerCase()}`
       : "";
 
+    console.log("approvalExtension", fileExtension);
+    setFileType(fileExtension);
+
     const payload = {
       fileName: row.userRemarks,
       filePath: "D:\\FileUpload\\PreTrade",
-      fileType: fileExtension,
+      fileType: fileExtension ? fileExtension : fileType ? fileType : "",
       contentType: "",
     };
 
@@ -332,7 +335,6 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
 
           setPreviewUrl(url);
           setSetShowImg(false);
-          setFileType(fileExtension);
           console.log("fileURL", url, setShowImg);
 
           // setFileType(fileExtension);
@@ -582,6 +584,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                     handleDownload={handlePreview}
                     previewUrl={previewUrl}
                     setSetShowImg={setSetShowImg}
+                    fileExtension={fileType}
                   />
                 </CardBody>
               </Card>

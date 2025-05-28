@@ -328,6 +328,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
   const handlePreview = async (row: any) => {
     console.log("rowData", row);
     setPreviewUrl("");
+    setFileType("");
     const fileExtension = row.userRemarks
       ? `.${row.userRemarks.split(".").pop()?.toLowerCase()}`
       : "";
@@ -338,7 +339,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
     const payload = {
       fileName: row.userRemarks,
       filePath: "D:\\FileUpload\\PreTrade",
-      fileType: fileType,
+      fileType: fileExtension ? fileExtension : fileType ? fileType : "",
       contentType: "",
     };
 
@@ -630,6 +631,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
                     handleApproval={handleApproval}
                     showDocument={showDocument}
                     setShowDocument={setShowDocument}
+                    fileExtension={fileType}
                   />
                 </CardBody>
               </Card>
