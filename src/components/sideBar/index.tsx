@@ -285,7 +285,7 @@ const SideBar = () => {
   // }, []);
 
   useEffect(() => {
-    const userId = localStorage.getItem("Id");
+    const userId = localStorage.getItem("AdminId");
 
     const updatedSettings = [
       ...(userId === import.meta.env.VITE_ADMIN_CRED_1 ||

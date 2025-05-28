@@ -124,6 +124,7 @@ const LoginPage = () => {
           const { user_id, user_type } = response?.data;
           dispatch(hideLoader());
           localStorage.setItem("Id", user_id);
+          localStorage.setItem("AdminId", user_id);
           localStorage.setItem("uIdType", user_type);
           // localStorage.setItem("authenticated", "true");
 
