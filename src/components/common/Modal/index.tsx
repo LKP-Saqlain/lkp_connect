@@ -198,6 +198,7 @@ const ModalComponent = ({
       if (value > currentPlan.brokeragePerc) {
         console.log(`${key} is greater than brokeragePerc → show consent`);
         consentNeeded = true;
+        // setShowConsent(true);
         break;
       } else if (value < currentPlan.brokeragePerc) {
         console.log(`${key} is smaller than brokeragePerc → no consent`);
@@ -220,6 +221,7 @@ const ModalComponent = ({
               `${minKey} (${minValue}) > brokeragePercMin (${currentPlan.brokeragePercMin}) → show consent`
             );
             consentNeeded = true;
+            // setShowConsent(true);
             break;
           } else {
             console.log(`${minKey} is lesser or equal → no consent`);
@@ -233,6 +235,7 @@ const ModalComponent = ({
               `${key} equals brokeragePerc, but brokeragePercMin (${min}) > 0 → show consent`
             );
             consentNeeded = true;
+            // setShowConsent(true);
             break;
           }
         }
@@ -309,6 +312,7 @@ const ModalComponent = ({
     setStep(1);
     setSelectedValue("");
     onClose();
+    setShowConsent(false);
   };
 
   return (
@@ -568,6 +572,7 @@ const ModalComponent = ({
             </>
           )}
         </Row>
+        {/* {showConsent && <span>upload file here</span>} */}
       </ModalBody>
       <div className="modal-footer d-flex align-items-center justify-content-center">
         <Button

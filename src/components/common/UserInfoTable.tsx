@@ -1034,10 +1034,10 @@ const DataTable = ({
               ? row.rowID
               : row.rowId
               ? row.rowId
-              : row.clientName
-              ? row.clientName
-              : row.ClientName
-              ? row.ClientName
+              : row.ClientCode
+              ? row.ClientCode
+              : row.ctermcode
+              ? row.ctermcode
               : row.RowId
               ? row.RowId
               : row.id
@@ -1046,6 +1046,10 @@ const DataTable = ({
               ? row.dummyId
               : row.RowID
               ? row.RowID
+              : row.ClientName
+              ? row.ClientName
+              : row.clientName
+              ? row.clientName
               : row.BOID
               ? `${row.BOName}-${row.TotalDebit}-${Math.random()}`
               : row.Name

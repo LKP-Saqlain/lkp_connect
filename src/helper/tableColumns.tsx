@@ -3587,7 +3587,7 @@ export const RegionalHead: GridColDef[] = [
   {
     field: "branchcode",
     headerName: "Branch",
-    minWidth: 90,
+    minWidth: 70,
     flex: 0.6,
     disableColumnMenu: true,
     headerAlign: "center",
@@ -3633,7 +3633,7 @@ export const RegionalHead: GridColDef[] = [
     field: "existingPlan",
     headerName: "Existing Plan",
     flex: 1.5,
-    minWidth: 230,
+    minWidth: 200,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3716,7 +3716,7 @@ export const BrokerageModificationStatus: GridColDef[] = [
               color,
               border,
               borderRadius: "999px",
-              padding: "3px 16px",
+              padding: "3px 6px",
               fontSize: "11px",
               fontWeight: 600,
               // textTransform: "capitalize",
@@ -3732,6 +3732,24 @@ export const BrokerageModificationStatus: GridColDef[] = [
         </div>
       );
     },
+  },
+  {
+    field: "reason",
+    headerName: "Remarks",
+    minWidth: 100,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "kycApproveStatusDate",
+    headerName: "Status Date",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
   },
 ];
 export const BrokerageKyc: GridColDef[] = [

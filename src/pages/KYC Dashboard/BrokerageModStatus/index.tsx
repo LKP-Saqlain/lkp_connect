@@ -99,24 +99,47 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
       ShowToast("info", "No data available to export");
       return;
     }
-
     try {
-      // Convert data to a worksheet
-      const worksheet = XLSX.utils.json_to_sheet(modificationStatus);
-      // Create a workbook and append the worksheet
+      // 1. Define header name mapping
+      const headerMap: Record<string, string> = {
+        zone: "Zone",
+        status: "Status",
+        clientcode: "Client Code",
+        branchcode: "Branch Code",
+        clientName: "Client Name",
+        clientType: "Client Type",
+        segment: "Segment",
+        existingPlan: "Existing Plan",
+        proposedPlan: "Proposed Plan",
+        Remarks: "Remarks",
+        kycApproveStatusDate: "Status Date",
+      };
+      // 2. Remove 'rowId' and prepare data
+      const cleanedData = (modificationStatus as Record<string, any>[]).map(
+        ({ rowId, ...rest }) => rest
+      );
+      // 3. Create worksheet
+      const worksheet = XLSX.utils.json_to_sheet(cleanedData);
+      // 4. Rename headers
+      const range = XLSX.utils.decode_range(worksheet["!ref"]!);
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ c: C, r: 0 });
+        const cell = worksheet[cellAddress];
+        if (cell && headerMap[cell.v]) {
+          cell.v = headerMap[cell.v];
+        }
+      }
+      // 5. Create workbook and add worksheet
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Brokerage Status");
-
-      // Convert the workbook to a binary file
+      // 6. Export
       const excelBuffer = XLSX.write(workbook, {
         bookType: "xlsx",
         type: "array",
       });
-
       const excelFile = new Blob([excelBuffer], {
         type: "application/octet-stream",
       });
-
       saveAs(excelFile, "Brokerage_Modification_Status.xlsx");
     } catch (error) {
       console.error("Excel Export Error:", error);
