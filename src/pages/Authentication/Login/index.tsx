@@ -53,6 +53,7 @@ const LoginPage = () => {
     localStorage.removeItem("activeMenu");
     localStorage.removeItem("activeSubItem");
     localStorage.removeItem("userName");
+    localStorage.removeItem("AdminId");
   }, []);
 
   // useEffect(() => {

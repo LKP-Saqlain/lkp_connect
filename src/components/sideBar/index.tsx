@@ -568,6 +568,7 @@ const SideBar = () => {
       localStorage.removeItem("uIdType");
       localStorage.removeItem("userName");
       localStorage.removeItem("activeMenu");
+      localStorage.removeItem("AdminId");
       localStorage.removeItem("activeSubItem");
       sessionStorage.removeItem("dashboardNudgeFetched");
       navigate("/");
