@@ -108,9 +108,10 @@ const CustomModal = ({
       ...((activeSubItem === "Communication Retrival Checker" ||
         activeSubItem === "KYC Approval" ||
         activeSubItem === "RH Approval" ||
-        activeSubItem === "Pre Trade Approval") && {
-        remark: Yup.string().trim().required("Remark is required"),
-      }),
+        activeSubItem === "Pre Trade Approval") &&
+        !isAdmin && {
+          remark: Yup.string().trim().required("Remark is required"),
+        }),
 
       // Admin validation for userChangeValue
       ...(isAdmin && {
@@ -205,6 +206,7 @@ const CustomModal = ({
             localStorage.setItem("tkn", token);
             // localStorage.setItem("userName", name);
             dispatch(updateUserId(`EMP-${formik.values.userChangeValue}`));
+            localStorage.setItem("Id", `EMP-${formik.values.userChangeValue}`);
             setmodal_center(false);
             formik.resetForm();
             window.location.reload();
@@ -278,7 +280,7 @@ const CustomModal = ({
     ["Communication Retrival Checker", "KYC Approval", "RH Approval"].includes(
       activeSubItem
     ) ||
-    (activeSubItem === "Pre Trade Approval" && !showDocument);
+    (activeSubItem === "Pre Trade Approval" && !showDocument && !isAdmin);
 
   const renderRemarkField = () => (
     <TextField

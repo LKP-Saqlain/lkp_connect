@@ -285,13 +285,13 @@ const SideBar = () => {
   // }, []);
 
   useEffect(() => {
-    // const userId = localStorage.getItem("Id");
+    const userId = localStorage.getItem("Id");
 
     const updatedSettings = [
-      // ...(userId === import.meta.env.VITE_ADMIN_CRED_1 ||
-      // userId === import.meta.env.VITE_ADMIN_CRED_2
-      //   ? ["Change User"]
-      //   : []),
+      ...(userId === import.meta.env.VITE_ADMIN_CRED_1 ||
+      userId === import.meta.env.VITE_ADMIN_CRED_2
+        ? ["Change User"]
+        : []),
       "Logout",
     ];
 
