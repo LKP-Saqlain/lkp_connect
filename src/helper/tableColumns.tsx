@@ -4449,7 +4449,8 @@ export const ctclUserWiseColumns: GridColDef[] = [
     field: "CTCLUserName",
     headerName: "CTCL User Name",
     headerClassName: "header-wrap-custom",
-    flex: 2,
+    // flex: 2,
+    width: 220,
     headerAlign: "center",
     disableColumnMenu: true,
     align: "center",
@@ -4471,7 +4472,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
     align: "right",
-    width: 100,
+    width: 120,
     valueFormatter: (params: any) => {
       const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
