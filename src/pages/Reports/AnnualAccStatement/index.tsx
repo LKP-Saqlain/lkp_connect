@@ -187,7 +187,7 @@ const AnnualAccStatement = () => {
                               width: isMobile ? "100%" : "60%",
                               backgroundColor: "#11395C",
                             }}
-                            startIcon={<DownloadIcon />}
+                            starticon={<DownloadIcon />}
                           >
                             Download PDF
                           </Button>

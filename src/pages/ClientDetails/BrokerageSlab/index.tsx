@@ -202,8 +202,8 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
             style={{
               boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
               backgroundColor: "#11395C",
-              borderRadius: "13px",
-              height: brokerageSlab.length > 4 ? "100px" : "50px", // Make the height 100% to match the content
+              borderRadius: "10px",
+              height: brokerageSlab.length > 4 ? "140px" : "65px", // Make the height 100% to match the content
               // margin: 0,
             }}
           >
@@ -256,6 +256,7 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
                         borderRadius: "10px",
                         backgroundColor: "#fff",
                         margin: 0,
+                        minHeight: "65px",
                       }}
                     >
                       <CardBody
@@ -269,7 +270,7 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
                               color: "#333",
                               fontWeight: "500",
                               fontSize: "12px",
-                              margin: "5px 0 0 0",
+                              marginTop: "5px",
                             }}
                           >
                             {item.type}
@@ -320,7 +321,7 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
               style={{
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
                 backgroundColor: "#11395C",
-                borderRadius: "13px",
+                borderRadius: "10px",
                 height: "100%", // Matches height of items on the right
               }}
             >
@@ -354,16 +355,17 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
                       border: "1px solid rgba(0, 0, 0, 0.1)",
                       borderRadius: "10px",
                       backgroundColor: "#fff",
+                      height: "50px",
                     }}
                   >
                     <CardBody
                       className="text-center"
                       style={{
-                        height: "50px",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
                         alignItems: "center",
+                        padding: 0,
                       }}
                     >
                       <p
@@ -372,7 +374,7 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
                           color: "#333",
                           fontWeight: "500",
                           fontSize: "12px",
-                          margin: "5px 0",
+                          // margin: "5px 0",
                         }}
                       >
                         {item.label}
