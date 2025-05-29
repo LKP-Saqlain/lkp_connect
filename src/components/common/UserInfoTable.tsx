@@ -859,7 +859,7 @@ const DataTable = ({
         }
         return column;
       });
-    } else if (activeSubItem === "Referal Lead Updation") {
+    } else if (activeSubItem === "Client Trading Pattern Report") {
       const selectedColumn =
         reportType === "summarized"
           ? clientTradingPatternSummarizedColumns
@@ -872,7 +872,7 @@ const DataTable = ({
           ...column,
         }))
       );
-    } else if (activeSubItem === "Referal Product Wise MIS Report") {
+    } else if (activeSubItem === "CTCL Wise Activity Report") {
       return ctclUserWiseColumns.map((column) => ({
         ...column,
       }));
