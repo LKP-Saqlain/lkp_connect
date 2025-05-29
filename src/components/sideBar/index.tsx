@@ -75,6 +75,8 @@ import PreProofUpload from "../../pages/preTrade/preProofUpload";
 import PreTradeReport from "../../pages/preTrade/preTradeReport";
 import PreTradeApproval from "../../pages/preTrade/Approval";
 import IVR from "../../pages/preTrade/IVR";
+import ClientTradingReport from "../../pages/Reports/ClientTradingPatternReport";
+import CTCLReport from "../../pages/Reports/CTCLReport";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -878,6 +880,10 @@ const SideBar = () => {
             return <AccStatement />;
           case "DP Debit Recovery":
             return <DPRecovery activeSubItem={activeSubItem} />;
+          case "Client Trading Pattern Report":
+            return <ClientTradingReport activeSubItem={activeSubItem} />;
+          case "CTCL Wise Activity Report":
+            return <CTCLReport activeSubItem={activeSubItem} />;
           default:
             return null;
         }
@@ -894,6 +900,10 @@ const SideBar = () => {
         switch (activeSubItem) {
           case "Referal Entry Status":
             return <Main activeSubItem={activeSubItem} />;
+          case "Referal Lead Updation":
+            return;
+          case "Referal Product Wise MIS Report":
+            return;
           default:
             return null;
         }
