@@ -180,7 +180,7 @@ const Nudge = ({
           toggle={tog_animationZoom}
           style={{ backgroundColor: "#11395C" }}
         >
-          <h5 style={{ color: "#fff" }}>Actionable Insights</h5>
+          <span style={{ color: "#fff" }}>Actionable Insights</span>
         </ModalHeader>
         <ModalBody
           className="modal-body-custom"

@@ -1077,6 +1077,7 @@ const SideBar = () => {
               </MenuItem>
             )}
             <Typography
+              component="div"
               sx={{
                 color: "black",
                 fontSize: "10px",

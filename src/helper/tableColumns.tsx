@@ -3744,12 +3744,19 @@ export const BrokerageModificationStatus: GridColDef[] = [
   },
   {
     field: "kycApproveStatusDate",
-    headerName: "Status Date",
-    minWidth: 150,
+    headerName: "Date approved by KYC",
+    minWidth: 200,
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    renderCell: (params: any) => {
+      const kycDate = params.row.kycApproveStatusDate;
+      console.log(kycDate, "params");
+      if (kycDate === "0001-01-01 00:00") {
+        return <span>-</span>;
+      }
+    },
   },
 ];
 export const BrokerageKyc: GridColDef[] = [

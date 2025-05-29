@@ -464,7 +464,7 @@ const DataTable = ({
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <div
                   onClick={() => {
-                    setSelectedRow(params.row.rowId);
+                    setSelectedRow(params.row);
                     HandleApprovalModal("approve");
                     // HandleApprovalModal("approve", params);
                     console.log(params.row.rowId, "selectedrow approve");
@@ -485,7 +485,7 @@ const DataTable = ({
                 <div style={{ fontSize: 20, color: "gray" }}>|</div>
                 <div
                   onClick={() => {
-                    setSelectedRow(params.row.rowId);
+                    setSelectedRow(params.row);
                     HandleApprovalModal("reject");
                   }}
                   style={{

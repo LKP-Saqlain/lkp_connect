@@ -27,13 +27,40 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       .finally(() => dispatch(hideLoader()));
   }, [flag]);
 
-  const handleApproval = (rid: number, remark: string, entryFlag: string) => {
+  const handleApproval = (
+    fullRow: {
+      rowId: number;
+      segment: string;
+      clientcode: number;
+      moduleNo: number;
+    },
+    remark: string,
+    entryFlag: string
+  ) => {
+    debugger;
     const payload = {
-      rowID: rid,
+      rowID: fullRow.rowId,
       kycflag: entryFlag,
       kycUserId: user_id,
       kycRemark: remark,
     };
+    const date = new Date();
+    if (entryFlag === "A") {
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+      const year = date.getFullYear();
+
+      const formattedDate = `${day}-${month}-${year}`;
+
+      console.warn(
+        fullRow.segment,
+        fullRow.clientcode,
+        fullRow.moduleNo,
+        "the approval has been clicked",
+        entryFlag,
+        formattedDate
+      );
+    }
     dispatch(showLoader("Please wait..."));
     apiServices
       .UpdateBrokerageKycStatus(payload)
