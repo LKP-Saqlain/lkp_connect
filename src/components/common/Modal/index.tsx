@@ -446,6 +446,7 @@ const ModalComponent = ({
                         textDecoration: "underline",
                         fontSize: "14px",
                         fontFamily: "Poppins",
+                        cursor: "pointer",
                       }}
                     >
                       Click here to download
