@@ -1,6 +1,6 @@
 import { GridColDef } from "@mui/x-data-grid";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import React from "react";
+// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+// import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import dayjs from "dayjs";
 // import { Button } from "@mui/material";
@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 // import { FaUserPen } from "react-icons/fa6";
 // import ViewListIcon from "@mui/icons-material/ViewList";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import CopyToClipboardCell from "./copyToClipBoardCell";
 
 interface ClientRow {
   ClientCode: string;
@@ -1901,44 +1902,7 @@ export const DPDebitRecovery: GridColDef[] = [
         return <span>No Link Available</span>;
 
       const fullLink = `${Payment_link}${EnCAccountCode}`;
-      const [copied, setCopied] = React.useState(false);
-
-      const handleCopy = () => {
-        navigator.clipboard
-          .writeText(fullLink)
-          .then(() => {
-            console.log("Copied to clipboard:", fullLink);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 3000);
-          })
-          .catch((error) => {
-            console.error("Failed to copy:", error);
-          });
-      };
-
-      return (
-        <>
-          {/* <a
-            href={fullLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "#11395C", textDecoration: "underline" }}
-          >
-            Click here
-          </a>{" "} */}
-          {/* or{" "} */}
-          {copied ? (
-            <span style={{ color: "#11395C" }}>Copied!</span> // Show "Copied!" text
-          ) : (
-            <ContentCopyIcon
-              fontSize="small"
-              style={{ color: "#11395C", cursor: "pointer" }}
-              onClick={handleCopy}
-              titleAccess="Copy to clipboard"
-            />
-          )}
-        </>
-      );
+      return <CopyToClipboardCell fullLink={fullLink} />;
     },
   },
   {
