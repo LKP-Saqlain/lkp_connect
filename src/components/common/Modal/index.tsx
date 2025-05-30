@@ -308,7 +308,7 @@ const ModalComponent = ({
       fileName: fileName,
       filePath: "D:\\FileUpload\\KYCDoc",
       fileType,
-      contentType: "", // optional, in case server needs it
+      contentType: "",
     };
 
     dispatch(showLoader("Downloading..."));
@@ -317,12 +317,12 @@ const ModalComponent = ({
       const response = await apiServices.ComplianceDownload(payload);
 
       if (response?.status === 200 && response?.data) {
-        const blob = new Blob([response.data], { type: payload.contentType });
+        const blob = new Blob([response.data], { type: "application/pdf" });
         const url = URL.createObjectURL(blob);
 
         const link = document.createElement("a");
         link.href = url;
-        link.download = payload.fileName;
+        link.download = fileName;
         document.body.appendChild(link);
         link.click();
         link.remove(); // ✅ Clean up
