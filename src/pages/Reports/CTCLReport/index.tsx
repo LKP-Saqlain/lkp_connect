@@ -17,6 +17,9 @@ import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
 import { DateRangePicker } from "rsuite";
 import moment from "moment";
+import DownloadIcon from "@mui/icons-material/Download";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 import UserInfoTable from "../../../components/common/UserInfoTable";
 
@@ -64,7 +67,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
     },
   });
   const handleSubmit = (values: FormValues) => {
-    // debugger;
+    setCtclData([]);
     console.log("Form Submitted", {
       zone: values.selectedZone?.value,
       branch: values.selectedBranchCode?.value,
@@ -250,6 +253,68 @@ const CTCLReport = ({ activeSubItem }: any) => {
     }
   };
 
+  const handleExcelDownload = () => {
+    // Convert data to a worksheet
+    const worksheet = XLSX.utils.json_to_sheet(ctclData);
+
+    // Style the header row (first row, r = 0)
+    const headerKeys = Object.keys(ctclData[0]);
+
+    headerKeys.forEach((key, colIndex) => {
+      console.log(key);
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: colIndex });
+
+      if (worksheet[cellAddress]) {
+        worksheet[cellAddress].s = {
+          fill: {
+            patternType: "solid",
+            fgColor: { rgb: "D9E1F2" },
+          },
+          font: {
+            bold: true,
+            sz: 14,
+            color: { rgb: "000000" },
+          },
+          alignment: {
+            horizontal: "center",
+            vertical: "center",
+          },
+        };
+      }
+    });
+
+    // Set uniform column widths
+    worksheet["!cols"] = headerKeys.map(() => ({ wch: 20 }));
+
+    // Create workbook
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "CTCL Wist Activity Report Data"
+    );
+
+    // Generate timestamp string
+    const now = new Date();
+    const timeString = now
+      .toLocaleTimeString("en-GB", { hour12: false }) // HH:MM:SS
+      .replace(/:/g, "-"); // Replace ':' with '-' for valid filename
+
+    const filename = `CtclActivityReport_${timeString}.xlsx`;
+
+    // Write and save file
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const excelFile = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    saveAs(excelFile, filename);
+  };
+
   return (
     <>
       <div className="page-content page-view">
@@ -407,13 +472,30 @@ const CTCLReport = ({ activeSubItem }: any) => {
                             style={{
                               backgroundColor: "#11395C",
                               height: "40px",
-                              width: "220px",
+                              width: "100px",
                             }}
                             type="submit"
                           >
                             Submit
                           </Button>
                         </Col>
+                        {ctclData.length > 0 && (
+                          <Col className="d-flex flex-column-reverse">
+                            <div className="mb-3" />
+                            <Button
+                              className="btn-font"
+                              style={{
+                                backgroundColor: "#11395C",
+                                height: "40px",
+                                width: "100px",
+                              }}
+                              onClick={handleExcelDownload}
+                            >
+                              Excel
+                              <DownloadIcon />
+                            </Button>
+                          </Col>
+                        )}
                       </Row>
                     </div>
                   </form>
