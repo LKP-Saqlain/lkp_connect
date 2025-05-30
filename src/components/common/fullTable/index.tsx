@@ -213,37 +213,37 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
     colors: barColors,
   });
 
-  const DonutOptions: any = {
-    labels: categories,
-    chart: {
-      height: 370,
-      type: "donut",
-    },
-    legend: {
-      show: false,
-    },
-    stroke: {
-      show: false,
-    },
-    dataLabels: {
-      formatter: function (val: number) {
-        return Math.round(val) + "%";
-      },
-      dropShadow: {
-        enabled: false,
-      },
-    },
-    tooltip: {
-      y: {
-        formatter: function (val: number) {
-          return Intl.NumberFormat("en-IN").format(Math.round(val));
-        },
-      },
-    },
-    colors: barColors,
-  };
+  // const DonutOptions: any = {
+  //   labels: categories,
+  //   chart: {
+  //     height: 370,
+  //     type: "donut",
+  //   },
+  //   legend: {
+  //     show: false,
+  //   },
+  //   stroke: {
+  //     show: false,
+  //   },
+  //   dataLabels: {
+  //     formatter: function (val: number) {
+  //       return Math.round(val) + "%";
+  //     },
+  //     dropShadow: {
+  //       enabled: false,
+  //     },
+  //   },
+  //   tooltip: {
+  //     y: {
+  //       formatter: function (val: number) {
+  //         return Intl.NumberFormat("en-IN").format(Math.round(val));
+  //       },
+  //     },
+  //   },
+  //   colors: barColors,
+  // };
 
-  const series = grossBrokerageData;
+  // const series = grossBrokerageData;
 
   const seriess = [
     {
