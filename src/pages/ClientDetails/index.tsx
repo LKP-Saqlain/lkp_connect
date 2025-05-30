@@ -56,6 +56,7 @@ any) => {
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [responseStatus, setResponseStatus] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [branchCode, setBranchCode] = useState("");
   const [totalEntries, setTotalEntries] = useState(null);
   const [filter, setFilter] = useState<string>("ALL");
   const [selectedUserInfo, setSelectedUserInfo] = useState<ClientRow | null>(
@@ -381,7 +382,8 @@ any) => {
   };
 
   const getUserBrokergageModificationDetails = (value: any) => {
-    console.log("useDetails_value", value);
+    setBranchCode(value.BranchCode);
+    console.log("useDetails_value branchbranch", value, branchCode);
     if (Object.keys(value).length > 0) {
       console.log("The object is not empty.");
       setSelectedUserInfo(value);
@@ -396,6 +398,7 @@ any) => {
   const handleModalClose = (value: any) => {
     console.log("value", value);
     if (value) {
+      setBranchCode("");
       setUserDetails(false);
       setIsModalOpen(!isModalOpen);
       handleDrawerOpen();
@@ -745,6 +748,7 @@ any) => {
             selectedClientCode={
               selectedUserInfo?.ctermcode ?? selectedUserInfo?.ClientCode
             }
+            branch={branchCode}
           />
         )}
       </Container>

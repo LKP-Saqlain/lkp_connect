@@ -299,6 +299,49 @@ const ModalComponent = ({
         setSelectedValue("");
       });
   };
+
+  const handleDownload = async () => {
+    const fileName = "Brokerage_consent_form";
+    const fileType = ".pdf";
+
+    const payload = {
+      fileName: fileName,
+      filePath: "D:\\FileUpload\\KYCDoc",
+      fileType,
+      contentType: "", // optional, in case server needs it
+    };
+
+    dispatch(showLoader("Downloading..."));
+
+    try {
+      const response = await apiServices.ComplianceDownload(payload);
+
+      if (response?.status === 200 && response?.data) {
+        const blob = new Blob([response.data], { type: payload.contentType });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = payload.fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove(); // ✅ Clean up
+        URL.revokeObjectURL(url); // ✅ Revoke after use
+      } else {
+        console.error("Error during download", response);
+        ShowToast("info", "Error downloading file");
+      }
+    } catch (error: any) {
+      console.error("Download failed", error);
+      ShowToast(
+        "info",
+        error?.message || "An error occurred while downloading"
+      );
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
   const handleProceedClick = () => {
     if (step === 1 && selectedValue !== "") {
       setStep(2);
@@ -395,8 +438,9 @@ const ModalComponent = ({
                       Consent Form:
                     </span>
                     <a
-                      href="/path/to/consent-form.pdf" // Replace with your actual file path
+                      // href="/path/to/consent-form.pdf" // Replace with your actual file path
                       download
+                      onClick={handleDownload}
                       style={{
                         color: "#007BFF",
                         textDecoration: "underline",

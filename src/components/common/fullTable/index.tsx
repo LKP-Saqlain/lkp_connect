@@ -256,7 +256,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
   return (
     <React.Fragment>
       <Row>
-        <Col xl={7}>
+        <Col xl={6}>
           <Card
             className="card-height-100"
             style={{
@@ -272,7 +272,9 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                 backgroundColor: "#fff", // optional for contrast
               }}
             >
-              <h4 className="card-title flex-grow-1">Month-wise Brokerage</h4>
+              <h4 className="card-title flex-grow-1 d-flex justify-content-start">
+                Month-wise Brokerage
+              </h4>
             </CardHeader>
             <CardBody>
               <ReactApexChart
@@ -289,7 +291,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
             </CardBody>
           </Card>
         </Col>
-        <Col xl={5}>
+        <Col xl={6}>
           <Card
             className="card-height-100"
             style={{
@@ -305,114 +307,57 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                 backgroundColor: "#fff", // optional for contrast
               }}
             >
-              <h4 className="card-title flex-grow-1">Segment-wise Brokerage</h4>
-            </CardHeader>
-            <CardBody className="">
-              <div>
-                <div className="d-flex gap-1 justify-content-center">
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => setSelectedButton("Last 30 days")}
-                    sx={
-                      selectedButton === "Last 30 days"
-                        ? selectedStyle
-                        : nonSelectedStyle
-                    }
-                  >
-                    Last 30 days
-                  </Button>
-                  <Button
-                    variant="outlined" // MUI equivalent of 'btn-soft-primary'
-                    size="small"
-                    color="primary" // 'primary' color corresponds to the blue style in MUI
-                    onClick={() => setSelectedButton("Last 90 days")}
-                    sx={
-                      selectedButton === "Last 90 days"
-                        ? selectedStyle
-                        : nonSelectedStyle
-                    }
-                  >
-                    Last 90 days
-                  </Button>
-                  <Button
-                    // variant="outlined"
-                    // size="small"
-                    onClick={() => setSelectedButton("MTD")}
-                    sx={
-                      selectedButton === "MTD"
-                        ? selectedStyle
-                        : nonSelectedStyle
-                    }
-                  >
-                    MTD
-                  </Button>
-                  <Button
-                    variant="outlined" // MUI equivalent of 'btn-soft-primary'
-                    size="small"
-                    color="primary" // 'primary' color corresponds to the blue style in MUI
-                    onClick={() => setSelectedButton("YTD")}
-                    sx={
-                      selectedButton === "YTD"
-                        ? selectedStyle
-                        : nonSelectedStyle
-                    }
-                  >
-                    YTD
-                  </Button>
-                </div>
-                <div dir="ltr" className="apex-charts">
-                  <Col>
-                    {/* <ReactApexChart
-                      // dir="ltr"
-                      options={DonutOptions}
-                      series={series.length > 0 ? series : [0]}
-                      type="donut"
-                      height={350}
-                      // className="apex-charts"
-                    /> */}
-                    {series.length > 0 ? (
-                      <ReactApexChart
-                        options={DonutOptions}
-                        series={series}
-                        type="donut"
-                        height={350}
-                      />
-                    ) : (
-                      <Box
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        height={350}
-                      >
-                        <Typography variant="body1" color="textSecondary">
-                          No records found
-                        </Typography>
-                      </Box>
-                    )}
-                  </Col>
-                </div>
+              <h4 className="card-title flex-grow-1  d-flex justify-content-start">
+                Segment-wise Brokerage
+              </h4>
+              <div className="d-flex gap-1 justify-content-end">
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => setSelectedButton("Last 30 days")}
+                  sx={
+                    selectedButton === "Last 30 days"
+                      ? selectedStyle
+                      : nonSelectedStyle
+                  }
+                >
+                  Last 30 days
+                </Button>
+                <Button
+                  variant="outlined" // MUI equivalent of 'btn-soft-primary'
+                  size="small"
+                  color="primary" // 'primary' color corresponds to the blue style in MUI
+                  onClick={() => setSelectedButton("Last 90 days")}
+                  sx={
+                    selectedButton === "Last 90 days"
+                      ? selectedStyle
+                      : nonSelectedStyle
+                  }
+                >
+                  Last 90 days
+                </Button>
+                <Button
+                  // variant="outlined"
+                  // size="small"
+                  onClick={() => setSelectedButton("MTD")}
+                  sx={
+                    selectedButton === "MTD" ? selectedStyle : nonSelectedStyle
+                  }
+                >
+                  MTD
+                </Button>
+                <Button
+                  variant="outlined" // MUI equivalent of 'btn-soft-primary'
+                  size="small"
+                  color="primary" // 'primary' color corresponds to the blue style in MUI
+                  onClick={() => setSelectedButton("YTD")}
+                  sx={
+                    selectedButton === "YTD" ? selectedStyle : nonSelectedStyle
+                  }
+                >
+                  YTD
+                </Button>
               </div>
-            </CardBody>
-          </Card>
-        </Col>
-        <Col xl={12}>
-          <Card
-            className="card-height-100"
-            style={{
-              borderRadius: "15px",
-              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            <CardHeader
-              className="align-items-center d-flex"
-              style={{
-                borderRadius: "15px 15px 0 0",
-                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
-                backgroundColor: "#fff", // optional for contrast
-              }}
-            >
-              <h4 className="card-title flex-grow-1">Segment-wise Brokerage</h4>
             </CardHeader>
             <CardBody className="p-0 pb-2">
               <div>
@@ -446,6 +391,61 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
             </CardBody>
           </Card>
         </Col>
+        {/* <Col xl={6}>
+          <Card
+            className="card-height-100"
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <CardHeader
+              className="align-items-center d-flex"
+              style={{
+                borderRadius: "15px 15px 0 0",
+                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff", // optional for contrast
+              }}
+            >
+              <h4 className="card-title flex-grow-1">Segment-wise Brokerage</h4>
+            </CardHeader>
+            <CardBody className="">
+              <div>
+                <div dir="ltr" className="apex-charts">
+                  <Col>
+                    {/* <ReactApexChart
+                      // dir="ltr"
+                      options={DonutOptions}
+                      series={series.length > 0 ? series : [0]}
+                      type="donut"
+                      height={350}
+                      // className="apex-charts"
+                    /> */}
+        {/* {series.length > 0 ? (
+                      <ReactApexChart
+                        options={DonutOptions}
+                        series={series}
+                        type="donut"
+                        height={350}
+                      />
+                    ) : (
+                      <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        height={350}
+                      >
+                        <Typography variant="body1" color="textSecondary">
+                          No records found
+                        </Typography>
+                      </Box>
+                    )}
+                  </Col>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Col> */}
       </Row>
     </React.Fragment>
   );

@@ -26,6 +26,7 @@ const UserInfoModal = ({
   onClose,
   handleModalClose,
   selectedClientCode,
+  branch,
 }: any) => {
   const [clientDetails, setClientDetails] = useState({
     Client_Name: "",
@@ -358,6 +359,7 @@ const UserInfoModal = ({
         <BrokerageSlab
           setClientDetails={clientDetails}
           selectedClientCode={selectedClientCode}
+          branch={branch}
         />
       </ModalBody>
       {/* <div className="modal-footer">
