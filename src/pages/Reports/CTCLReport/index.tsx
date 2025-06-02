@@ -241,11 +241,6 @@ const CTCLReport = ({ activeSubItem }: any) => {
       const formattedEndDate = moment(end).format("DD/MM/YYYY");
       const formattedRange = `${formattedStartDate} - ${formattedEndDate}`;
       setFormattedDateRange(formattedRange);
-
-      console.log("Payload:", {
-        startDate: isoStart,
-        endDate: isoEnd,
-      });
     } else {
       setStartDate(null);
       setEndDate(null);
@@ -313,6 +308,22 @@ const CTCLReport = ({ activeSubItem }: any) => {
     });
 
     saveAs(excelFile, filename);
+  };
+
+  const onDateRangeChange = (value: [Date | null, Date | null] | null) => {
+    if (
+      !value ||
+      !Array.isArray(value) ||
+      value.length !== 2 ||
+      !value[0] ||
+      !value[1]
+    ) {
+      setSelectedDateRange([null, null]);
+      handleDateChange([null, null]);
+    } else {
+      setSelectedDateRange(value);
+      handleDateChange(value);
+    }
   };
 
   return (
@@ -453,10 +464,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
                                 ? [selectedDateRange[0], selectedDateRange[1]]
                                 : undefined
                             }
-                            onChange={(value: any) => {
-                              setSelectedDateRange(value);
-                              handleDateChange(value);
-                            }}
+                            onChange={onDateRangeChange}
                             placeholder="Select Date Range"
                             showOneCalendar
                             shouldDisableDate={afterToday()}

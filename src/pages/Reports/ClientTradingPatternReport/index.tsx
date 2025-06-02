@@ -40,6 +40,8 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(null);
   const [formattedDateRange, setFormattedDateRange] = useState<string>("");
+  const [summarizedData, setSummarizedData] = useState<any[]>([]);
+  const [detailedData, setDetailedData] = useState<any[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -61,11 +63,16 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
     onSubmit: (values) => {
       // Only called if no validation errors
       console.log("values1-->", values);
+      if (formattedDateRange === "") {
+        ShowToast("error", "Please select Date Range");
+        return;
+      }
       handleSubmit(values);
       // handleExcelDownload();
     },
   });
   const handleSubmit = (values: FormValues) => {
+    const { reportType } = values;
     console.log("Form Submitted", {
       zone: values.selectedZone?.value,
       branch: values.selectedBranchCode?.value,
@@ -74,7 +81,130 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
       endDate,
       formattedDateRange,
     });
+
+    if (reportType === "summarized") {
+      fetchSummarizedReport(values);
+      return;
+    }
+    if (reportType === "detailed") {
+      fetchDetailedReport(values);
+      return;
+    }
     // API call or Excel generation here
+  };
+
+  const fetchSummarizedReport = (values: any) => {
+    let payload = {
+      user_id: user_id, // user_id,
+      fromDate: startDate,
+      toDate: endDate,
+      zone: values.selectedZone?.value,
+      branchCode: values.selectedBranchCode?.value,
+      clientCode: "",
+    };
+    dispatch(showLoader("Please wait"));
+    apiServices
+      .TradingPatternReport(payload)
+      .then((response) => {
+        console.log("TradingPatternReport->", response?.data?.data);
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+
+          if (
+            Array.isArray(response?.data?.data) &&
+            response?.data?.data.length > 0
+          ) {
+            const formattedData = response?.data?.data.map(
+              (item: any, index: any) => ({
+                id: index + 1, // unique ID for DataGrid
+                activeStatus: item.activeStatus,
+                client_Branch: item.client_Branch,
+                client_ID: item.client_ID,
+                client_Name: item.client_Name,
+                client_Zone: item.client_Zone,
+                cnT_Last_Trade_Date: item.cnT_Last_Trade_Date,
+                cnT_Total_Brokerage: item.cnT_Total_Brokerage,
+                offline_Last_Trade_Date: item.offline_Last_Trade_Date,
+                offline_Total_Brokerage: item.offline_Total_Brokerage,
+                online_Last_Trade_Date: item.online_Last_Trade_Date,
+                online_Total_Brokerage: item.online_Total_Brokerage,
+              })
+            );
+
+            console.log("Formatted Data for Grid", formattedData);
+            setSummarizedData(formattedData);
+            ShowToast("success", response?.data?.message);
+          } else {
+            console.warn("No data received from CTCLActivityReport API.");
+            setSummarizedData([]);
+          }
+        }
+      })
+      .catch((Error) => {
+        console.log("error->", Error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+  const fetchDetailedReport = (values: any) => {
+    let payload = {
+      user_id: "EMP-0040", // user_id,
+      fromDate: startDate,
+      toDate: endDate,
+      zone: values.selectedZone?.value,
+      branchCode: values.selectedBranchCode?.value,
+      clientCode: "",
+    };
+    dispatch(showLoader("Please wait"));
+    apiServices
+      .DetailedTradingPatternReport(payload)
+      .then((response) => {
+        console.log("DetailedTradingPatternReport->", response?.data?.data);
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          if (
+            Array.isArray(response?.data?.data) &&
+            response?.data?.data.length > 0
+          ) {
+            const formattedData = response?.data?.data.map(
+              (item: any, index: number) => ({
+                id: index + 1, // unique ID for DataGrid
+                activeStatus: item.activeStatus,
+                client_Branch: item.client_Branch,
+                client_ID: item.client_ID,
+                client_Name: item.client_Name,
+                client_Zone: item.client_Zone,
+                cnT_CM_Brokerage: item.cnT_CM_Brokerage,
+                cnT_FUT_Brokerage: item.cnT_FUT_Brokerage,
+                cnT_Last_Trade_Date: item.cnT_Last_Trade_Date,
+                cnT_OPT_Brokerage: item.cnT_OPT_Brokerage,
+                offline_CM_Brokerage: item.offline_CM_Brokerage,
+                offline_FUT_Brokerage: item.offline_FUT_Brokerage,
+                offline_Last_Trade_Date: item.offline_Last_Trade_Date,
+                offline_OPT_Brokerage: item.offline_OPT_Brokerage,
+                online_CM_Brokerage: item.online_CM_Brokerage,
+                online_FUT_Brokerage: item.online_FUT_Brokerage,
+                online_Last_Trade_Date: item.online_Last_Trade_Date,
+                online_OPT_Brokerage: item.online_OPT_Brokerage,
+              })
+            );
+
+            console.log("Formatted Data for Grid", formattedData);
+            setDetailedData(formattedData);
+            ShowToast("success", response?.data?.message);
+          } else {
+            console.warn("No data received from CTCLActivityReport API.");
+            setDetailedData([]);
+          }
+        }
+      })
+      .catch((Error) => {
+        console.log("error->", Error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
   };
 
   useEffect(() => {
@@ -192,166 +322,28 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
       const formattedEndDate = moment(end).format("DD/MM/YYYY");
       const formattedRange = `${formattedStartDate} - ${formattedEndDate}`;
       setFormattedDateRange(formattedRange);
-
-      console.log("Payload:", {
-        startDate: isoStart,
-        endDate: isoEnd,
-      });
     } else {
       setStartDate(null);
       setEndDate(null);
       setFormattedDateRange("");
     }
   };
-  const dummyClientSummaryData = [
-    {
-      Zone: "North",
-      BranchCode: "BR101",
-      ClientCode: "CL001",
-      ClientName: "Ravi Kumar",
-      OnlineTotalBrok: 1200.5,
-      OfflineTotalBrok: 800.75,
-      CNTTotalBrok: 350.25,
-      OnlineLastTradeDate: "15-Apr-24",
-      OfflineLastTradeDate: "10-Mar-24",
-      CNTLastTradeDate: "05-Feb-24",
-      ActiveStatus: "Active",
-    },
-    {
-      Zone: "South",
-      BranchCode: "BR205",
-      ClientCode: "CL002",
-      ClientName: "Anita Sharma",
-      OnlineTotalBrok: 0.0,
-      OfflineTotalBrok: 0.0,
-      CNTTotalBrok: 0.0,
-      OnlineLastTradeDate: "",
-      OfflineLastTradeDate: "",
-      CNTLastTradeDate: "",
-      ActiveStatus: "Inactive",
-    },
-    {
-      Zone: "West",
-      BranchCode: "BR309",
-      ClientCode: "CL003",
-      ClientName: "John D'Souza",
-      OnlineTotalBrok: 5250.0,
-      OfflineTotalBrok: 1120.0,
-      CNTTotalBrok: 400.0,
-      OnlineLastTradeDate: "12-May-24",
-      OfflineLastTradeDate: "01-Apr-24",
-      CNTLastTradeDate: "15-Jan-24",
-      ActiveStatus: "Active",
-    },
-    {
-      Zone: "East",
-      BranchCode: "BR420",
-      ClientCode: "CL004",
-      ClientName: "Neha Verma",
-      OnlineTotalBrok: 310.0,
-      OfflineTotalBrok: 220.0,
-      CNTTotalBrok: 130.0,
-      OnlineLastTradeDate: "08-Mar-24",
-      OfflineLastTradeDate: "22-Feb-24",
-      CNTLastTradeDate: "10-Jan-24",
-      ActiveStatus: "Active",
-    },
-    {
-      Zone: "Central",
-      BranchCode: "BR515",
-      ClientCode: "CL005",
-      ClientName: "Manish Agarwal",
-      OnlineTotalBrok: 0.0,
-      OfflineTotalBrok: 150.5,
-      CNTTotalBrok: 75.75,
-      OnlineLastTradeDate: "",
-      OfflineLastTradeDate: "28-Feb-24",
-      CNTLastTradeDate: "12-Feb-24",
-      ActiveStatus: "Inactive",
-    },
-  ];
-  const dummyclientTradingPatternDetailedData = [
-    {
-      id: 1,
-      Zone: "North",
-      BranchCode: "B001",
-      ClientCode: "CL1001",
-      ClientName: "Rahul Sharma",
-      OnlineCMBrok: 1250.75,
-      OfflineCMBrok: 980.25,
-      CNTCMBrok: 430.5,
-      OnlineFuturesBrok: 2100.6,
-      OfflineFuturesBrok: 1780.4,
-      CNTFuturesBrok: 600.0,
-      OnlineOptionsBrok: 3200.25,
-      OfflineOptionsBrok: 2900.15,
-      CNTOptionsBrok: 850.0,
-      OnlineLastTradeDate: "2024-12-15",
-      OfflineLastTradeDate: "2024-11-29",
-      CNTLastTradeDate: "2024-12-01",
-      ActiveStatus: "Active",
-    },
-    {
-      id: 2,
-      Zone: "South",
-      BranchCode: "B045",
-      ClientCode: "CL1045",
-      ClientName: "Anita Rao",
-      OnlineCMBrok: 890.0,
-      OfflineCMBrok: 0,
-      CNTCMBrok: 100.0,
-      OnlineFuturesBrok: 0,
-      OfflineFuturesBrok: 450.75,
-      CNTFuturesBrok: 120.0,
-      OnlineOptionsBrok: 1100.0,
-      OfflineOptionsBrok: 0,
-      CNTOptionsBrok: 95.5,
-      OnlineLastTradeDate: "2025-01-10",
-      OfflineLastTradeDate: "2024-10-20",
-      CNTLastTradeDate: "2025-01-12",
-      ActiveStatus: "Inactive",
-    },
-    {
-      id: 3,
-      Zone: "East",
-      BranchCode: "B089",
-      ClientCode: "CL1089",
-      ClientName: "Suresh Kumar",
-      OnlineCMBrok: 450.35,
-      OfflineCMBrok: 380.0,
-      CNTCMBrok: 220.25,
-      OnlineFuturesBrok: 300.0,
-      OfflineFuturesBrok: 0,
-      CNTFuturesBrok: 50.0,
-      OnlineOptionsBrok: 900.0,
-      OfflineOptionsBrok: 450.0,
-      CNTOptionsBrok: 130.0,
-      OnlineLastTradeDate: "2025-02-14",
-      OfflineLastTradeDate: "2024-09-15",
-      CNTLastTradeDate: "2025-02-10",
-      ActiveStatus: "Active",
-    },
-    {
-      id: 4,
-      Zone: "West",
-      BranchCode: "B076",
-      ClientCode: "CL1076",
-      ClientName: "Meera Patel",
-      OnlineCMBrok: 1600.0,
-      OfflineCMBrok: 1500.0,
-      CNTCMBrok: 800.0,
-      OnlineFuturesBrok: 2300.0,
-      OfflineFuturesBrok: 2100.0,
-      CNTFuturesBrok: 1000.0,
-      OnlineOptionsBrok: 4200.0,
-      OfflineOptionsBrok: 4000.0,
-      CNTOptionsBrok: 1500.0,
-      OnlineLastTradeDate: "2025-03-05",
-      OfflineLastTradeDate: "2025-02-20",
-      CNTLastTradeDate: "2025-03-01",
-      ActiveStatus: "Active",
-    },
-  ];
+
+  const onDateRangeChange = (value: [Date | null, Date | null] | null) => {
+    if (
+      !value ||
+      !Array.isArray(value) ||
+      value.length !== 2 ||
+      !value[0] ||
+      !value[1]
+    ) {
+      setSelectedDateRange([null, null]);
+      handleDateChange([null, null]);
+    } else {
+      setSelectedDateRange(value);
+      handleDateChange(value);
+    }
+  };
 
   return (
     <>
@@ -493,10 +485,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
                                 ? [selectedDateRange[0], selectedDateRange[1]]
                                 : undefined
                             }
-                            onChange={(value: any) => {
-                              setSelectedDateRange(value);
-                              handleDateChange(value);
-                            }}
+                            onChange={onDateRangeChange}
                             placeholder="Select Date Range"
                             showOneCalendar
                             shouldDisableDate={afterToday()}
@@ -584,9 +573,12 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
                     activeSubItem={activeSubItem}
                     T6Data={
                       formik.values.reportType === "summarized"
-                        ? dummyClientSummaryData
-                        : dummyclientTradingPatternDetailedData
+                        ? summarizedData
+                        : formik.values.reportType === "detailed"
+                        ? detailedData
+                        : []
                     }
+                    // T6Data={summarizedData}
                     reportType={formik.values.reportType}
                   />
                 </CardBody>
