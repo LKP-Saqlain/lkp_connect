@@ -4531,7 +4531,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
   },
   {
     field: "turnover",
-    headerName: "Turnover",
+    headerName: "Turnover (Cr.)",
     flex: 1,
     minWidth: 120,
     type: "number",
