@@ -81,14 +81,18 @@ const T6Table = ({ handleTradingOpen }: any) => {
       .getUpcompingDormantReport(payload)
       .then((response) => {
         console.log("API Response:", response?.data);
-        if (response?.status === 200) {
-          const data = response?.data || [];
+        if (response?.data.length > 0) {
+          if (response?.status === 200) {
+            const data = response?.data || [];
 
-          const filterRecords = data
-            .filter((item: any) => item.dayCount)
-            .slice(0, 5);
-          console.log("DormantfilterData", filterRecords);
-          setUpcomingOverviewDormantTableData(filterRecords);
+            const filterRecords = data
+              .filter((item: any) => item.dayCount)
+              .slice(0, 5);
+            console.log("DormantfilterData", filterRecords);
+            setUpcomingOverviewDormantTableData(filterRecords);
+          }
+        } else {
+          ShowToast("error", "No Records");
         }
       })
       .catch((error) => {

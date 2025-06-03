@@ -29,11 +29,21 @@ const StoreVisits = ({ getActiveClients }: any) => {
       dispatch(APBrokerage(payload))
         .unwrap()
         .then((response) => {
-          console.log("APSummaryResponse", response?.data?.Table1[0]);
-          const activeClient = response?.data?.Table1[0]?.ActiveClients;
-          getActiveClients(activeClient);
-          setChartData(response?.data?.Table1[0]);
-          // setBrokerageData(response?.data?.data);
+          const firstItem = response?.data?.Table1?.[0];
+
+          if (
+            firstItem &&
+            (firstItem.Active !== null || firstItem.Inactive !== null)
+          ) {
+            console.log("APSummaryResponse", firstItem);
+            getActiveClients(firstItem.Active);
+            setChartData(firstItem);
+          } else {
+            console.warn("API returned all null values");
+            getActiveClients(null);
+            setChartData([]);
+          }
+
           if (response?.status === 200) {
             dispatch(hideLoader());
           }
