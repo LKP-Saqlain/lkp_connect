@@ -149,7 +149,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
   };
   const fetchDetailedReport = (values: any) => {
     let payload = {
-      user_id: "EMP-0040", // user_id,
+      user_id: user_id, // user_id,
       fromDate: startDate,
       toDate: endDate,
       zone: values.selectedZone?.value,
