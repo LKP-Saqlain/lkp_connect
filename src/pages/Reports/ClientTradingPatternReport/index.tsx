@@ -268,7 +268,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
 
       let payload = {
         user_id: user_id,
-        option: "zone",
+        option: "BranchByZone",
         userType: userType === "Employee" ? "EMP" : "APN",
         zone: "ALL",
       };
@@ -284,7 +284,10 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
               label: item.itemVal,
               value: item.itemVal,
             }));
-            branchDropdown = [...branchDropdown];
+            branchDropdown = [
+              { label: "ALL", value: "ALL" },
+              ...branchDropdown,
+            ];
 
             setBranchCodeOptions(branchDropdown);
             if (branchDropdown.length > 0) {
