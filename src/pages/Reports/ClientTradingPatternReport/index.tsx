@@ -96,10 +96,12 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
   const fetchSummarizedReport = (values: any) => {
     let payload = {
       user_id: user_id, // user_id,
-      fromDate: startDate,
-      toDate: endDate,
-      zone: values.selectedZone?.value,
-      branchCode: values.selectedBranchCode?.value,
+      fromDate: startDate ? startDate : "",
+      toDate: endDate ? endDate : "",
+      zone: values.selectedZone?.value ? values.selectedZone?.value : "",
+      branchCode: values.selectedBranchCode?.value
+        ? values.selectedBranchCode?.value
+        : "",
       clientCode: "",
     };
     dispatch(showLoader("Please wait"));
@@ -133,7 +135,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
 
             console.log("Formatted Data for Grid", formattedData);
             setSummarizedData(formattedData);
-            ShowToast("success", response?.data?.message);
+            // ShowToast("success", response?.data?.message);
           } else {
             console.warn("No data received from CTCLActivityReport API.");
             setSummarizedData([]);
@@ -192,7 +194,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
 
             console.log("Formatted Data for Grid", formattedData);
             setDetailedData(formattedData);
-            ShowToast("success", response?.data?.message);
+            // ShowToast("success", response?.data?.message);
           } else {
             console.warn("No data received from CTCLActivityReport API.");
             setDetailedData([]);
@@ -282,10 +284,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
               label: item.itemVal,
               value: item.itemVal,
             }));
-            branchDropdown = [
-              { label: "ALL", value: "ALL" },
-              ...branchDropdown,
-            ];
+            branchDropdown = [...branchDropdown];
 
             setBranchCodeOptions(branchDropdown);
             if (branchDropdown.length > 0) {
@@ -468,7 +467,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
                               )}
                           </div>
                         </Col>
-                        <Col xl={2} className="mb-3">
+                        <Col className="mb-3">
                           <Label
                             htmlFor="date-range-picker"
                             className="form-label text-muted label-font"
