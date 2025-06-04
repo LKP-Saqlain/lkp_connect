@@ -31,7 +31,6 @@ const SessionExpiryHandler = () => {
       const expiryDate = new Date(tokenExpiryTime);
       const now = new Date();
       console.log("CurrentTime", now, "ExpiryTime", expiryDate);
-      debugger;
       if (now > expiryDate) {
         setIsTokenExpired(true);
         setModalCenter(true);
