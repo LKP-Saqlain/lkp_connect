@@ -449,6 +449,31 @@ const DataTable = ({
             ),
           };
         }
+        if (column.field === "consentfilename") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const fileName = params.row?.consentfilename;
+
+              return fileName ? (
+                <button
+                  onClick={() => handleDownload(params.row)}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              ) : (
+                "╶─"
+              );
+            },
+          };
+        }
         return column;
       });
     } else if (activeSubItem === "Brokerage Modification Status") {
@@ -501,6 +526,31 @@ const DataTable = ({
                 </div>
               </div>
             ),
+          };
+        }
+        if (column.field === "consentfilename") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const fileName = params.row?.consentfilename;
+
+              return fileName ? (
+                <button
+                  onClick={() => handleDownload(params.row)}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              ) : (
+                "╶─"
+              );
+            },
           };
         }
         return column;

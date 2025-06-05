@@ -17,6 +17,8 @@ const News = ({ activeMenu, selectedIsin }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [newsList, setNewsList] = useState<any[]>([]);
 
+  console.log("propss-->", activeMenu, selectedIsin);
+
   useEffect(() => {
     if (selectedIsin) {
       const getFundamentalNewsfeed = async () => {

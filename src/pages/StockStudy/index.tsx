@@ -168,26 +168,32 @@ const StockStudy = () => {
     }
   }, [activeMenu, currentSubmenus]);
 
-  const handleSearchClick = () => {
-    if (pendingSelected) {
-      setSelectedIsin(pendingSelected.ISINCode);
-      console.log("Matched ISIN:", pendingSelected.ISINCode);
+  const fetchISIN = (searchValue?: string, selectedItem?: any) => {
+    let matchedISIN = null;
+
+    if (selectedItem) {
+      matchedISIN = selectedItem.ISINCode;
     } else {
       const matched = fundamentalRecords.find(
         (item) =>
-          item.ScripName?.toLowerCase() === inputValue.toLowerCase() ||
-          item.BSECode?.toLowerCase() === inputValue.toLowerCase() ||
-          item.NSECode?.toLowerCase() === inputValue.toLowerCase()
+          item.ScripName?.toLowerCase() === searchValue?.toLowerCase() ||
+          item.BSECode?.toLowerCase() === searchValue?.toLowerCase() ||
+          item.NSECode?.toLowerCase() === searchValue?.toLowerCase()
       );
-
-      if (matched) {
-        setSelectedIsin(matched.ISINCode);
-        console.log("Matched ISIN:", matched.ISINCode);
-      } else {
-        setSelectedIsin(null);
-        console.log("No matching scrip found");
-      }
+      matchedISIN = matched?.ISINCode;
     }
+
+    if (matchedISIN) {
+      setSelectedIsin(matchedISIN);
+      console.log("Matched ISIN:", matchedISIN);
+    } else {
+      setSelectedIsin(null);
+      console.log("No matching scrip found");
+    }
+  };
+
+  const handleSearchClick = () => {
+    fetchISIN(inputValue, pendingSelected);
   };
 
   return (
@@ -224,7 +230,7 @@ const StockStudy = () => {
                     );
                   })
                 }
-                value={null} // prevent autocomplete from auto-selecting
+                value={pendingSelected} // prevent autocomplete from auto-selecting
                 inputValue={inputValue}
                 onInputChange={(event, newInputValue) => {
                   if (regEx.query.test(newInputValue) || newInputValue === "") {
@@ -241,13 +247,15 @@ const StockStudy = () => {
                 }}
                 onChange={(event, newValue) => {
                   if (newValue && typeof newValue !== "string") {
-                    setPendingSelected(newValue); // queue up
+                    console.log(event);
+
+                    setPendingSelected(newValue);
                     setInputValue(newValue.ScripName || "");
-                    console.log("Selected ISIN event:", event);
+                    fetchISIN(undefined, newValue); // 🔁 Trigger search on select
                   } else {
                     setPendingSelected(null);
-                    setSelectedIsin(null); // ✅ Clear on manual clear
-                    setInputValue(""); // reset the input field
+                    setSelectedIsin(null);
+                    setInputValue("");
                     console.log("Cleared ISIN due to deselection");
                   }
                 }}

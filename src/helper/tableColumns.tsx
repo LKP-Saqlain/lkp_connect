@@ -3612,6 +3612,15 @@ export const RegionalHead: GridColDef[] = [
     align: "left",
   },
   {
+    field: "consentfilename",
+    headerName: "Download",
+    // flex: 1,
+    // minWidth: 50,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
     field: "remark",
     headerName: "Action",
     flex: 1,
@@ -3633,7 +3642,9 @@ export const BrokerageModificationStatus: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
-  ...RegionalHead.filter((col) => col.field !== "remark"),
+  ...RegionalHead.filter(
+    (col) => col.field !== "remark" && col.field !== "consentfilename"
+  ),
   {
     field: "status",
     headerName: "Status",

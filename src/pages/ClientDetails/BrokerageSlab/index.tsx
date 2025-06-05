@@ -14,6 +14,8 @@ const BrokerageSlab = ({
   setClientDetails,
   selectedClientCode,
   branch,
+  onFileUpload,
+  uploadedFileName,
 }: any) => {
   interface BrokerageItem {
     type: string;
@@ -201,6 +203,15 @@ const BrokerageSlab = ({
         isOpen={isModalOpen}
         onClose={handleBrokeragePlan}
         BrokerageTitle={selectedBrokerageItem}
+        handleFileUpload={(file, type) => {
+          console.log("Uploading file:", file);
+          if (typeof onFileUpload === "function") {
+            onFileUpload(file, type);
+          } else {
+            console.warn("onFileUpload is not defined");
+          }
+        }}
+        uploadedFileName={uploadedFileName}
       />
       {branch !== "PPAL" && (
         <Row className="gx-3 gy-2 align-items-start">

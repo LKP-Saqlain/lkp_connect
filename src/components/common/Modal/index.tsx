@@ -1,4 +1,12 @@
-import { Modal, ModalBody, Button, ModalHeader, Col, Row } from "reactstrap";
+import {
+  Modal,
+  ModalBody,
+  Button,
+  ModalHeader,
+  Col,
+  Row,
+  Input,
+} from "reactstrap";
 // import RadioInput from "../RadioInput";
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
@@ -25,6 +33,8 @@ interface ModalComponentProps {
   onClose: () => void;
   message?: string;
   BrokerageTitle?: any;
+  handleFileUpload?: (file: File, type?: any) => void;
+  uploadedFileName?: any;
 }
 
 const keys = [
@@ -44,6 +54,8 @@ const ModalComponent = ({
   isOpen,
   onClose,
   BrokerageTitle,
+  handleFileUpload,
+  uploadedFileName,
 }: ModalComponentProps) => {
   const [selectedValue, setSelectedValue] = useState("");
   const [step, setStep] = useState(1); // Step 1 = Select Plan, Step 2 = Confirm Plan
@@ -52,6 +64,7 @@ const ModalComponent = ({
   const [history, setHistory] = useState<BrokerageHistoryItem[]>([]);
   const [currentPlan, setCurrentPlan] = useState<any>(null);
   const [showConsent, setShowConsent] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -273,6 +286,7 @@ const ModalComponent = ({
       moduleNo: latestHistory?.moduleNo || "",
       existingPlan: `${existingPlan} ( ${activeSince} )`,
       proposedPlan: selectedValue,
+      consentfileName: uploadedFileName,
     };
 
     console.log("Confirmed Brokerage Plan Payload:", payload);
@@ -346,7 +360,14 @@ const ModalComponent = ({
     if (step === 1 && selectedValue !== "") {
       setStep(2);
     } else {
-      handleUpdateBrokeragePlan();
+      // debugger;
+      if (showConsent && selectedFile === null) {
+        ShowToast("error", "Please Upload Proof");
+        return;
+      } else {
+        handleUpdateBrokeragePlan();
+        // alert("else ka else");
+      }
     }
   };
 
@@ -357,6 +378,20 @@ const ModalComponent = ({
     onClose();
     setShowConsent(false);
   };
+
+  // const handleFileUploadClick = () => {
+  //   if (selectedFile && handleFileUpload) {
+  //     // console.log("rowCheck-->", row);
+
+  //     handleFileUpload(selectedFile);
+  //     // handleFileUpload(row, selectedFile, formik.values.remark);
+  //     setSelectedFile(null);
+  //     // setmodal_center(false);
+  //     // formik.setFieldValue("remark", "");
+  //   } else {
+  //     ShowToast("error", "Please select a file to upload.");
+  //   }
+  // };
 
   return (
     <Modal
@@ -614,6 +649,30 @@ const ModalComponent = ({
                   </Col>
                 </Row>
               </Col>
+              {showConsent && (
+                <>
+                  <div style={{ fontFamily: "Public Sans" }}>
+                    <h6 style={{ margin: 0 }}>Upload Proof</h6>
+                  </div>
+                  <Col lg={12} style={{ paddingTop: "16px" }}>
+                    <Input
+                      name="uploadProof"
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.pdf"
+                      className="form-control mb-3"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          const file = e.target.files[0];
+                          setSelectedFile(file);
+                          handleFileUpload?.(file, type);
+                          // setSelectedFile(null);
+                        }
+                      }}
+                      style={{ width: "100%", minHeight: "40px" }}
+                    />
+                  </Col>
+                </>
+              )}
             </>
           )}
         </Row>
@@ -639,6 +698,7 @@ const ModalComponent = ({
             backgroundColor: step === 1 ? "#01396B" : "#5CAE60",
             borderColor: step === 1 ? "#01396B" : "#5CAE60",
             color: "#fff",
+            cursor: !selectedValue ? "not-allowed" : "pointer",
           }}
         >
           {step === 1 ? "Proceed" : "Confirm"}

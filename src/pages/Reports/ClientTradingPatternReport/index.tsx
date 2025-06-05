@@ -23,7 +23,10 @@ import {
   FormControlLabel,
   FormControl,
 } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
 import UserInfoTable from "../../../components/common/UserInfoTable";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 interface FormValues {
   selectedZone: { label: string; value: string } | null;
@@ -347,6 +350,73 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
     }
   };
 
+  const handleExcelDownload = () => {
+    // Convert data to a worksheet
+    const selectedData =
+      formik.values.reportType === "summarized" ? summarizedData : detailedData;
+    const worksheet = XLSX.utils.json_to_sheet(selectedData);
+
+    // Style the header row (first row, r = 0)
+
+    const headerKeys = Object.keys(selectedData[0]);
+
+    headerKeys.forEach((key, colIndex) => {
+      console.log(key);
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: colIndex });
+
+      if (worksheet[cellAddress]) {
+        worksheet[cellAddress].s = {
+          fill: {
+            patternType: "solid",
+            fgColor: { rgb: "D9E1F2" },
+          },
+          font: {
+            bold: true,
+            sz: 14,
+            color: { rgb: "000000" },
+          },
+          alignment: {
+            horizontal: "center",
+            vertical: "center",
+          },
+        };
+      }
+    });
+
+    // Set uniform column widths
+    worksheet["!cols"] = headerKeys.map(() => ({ wch: 20 }));
+
+    // Create workbook
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "");
+
+    // Generate timestamp string
+    const now = new Date();
+    const timeString = now
+      .toLocaleTimeString("en-GB", { hour12: false }) // HH:MM:SS
+      .replace(/:/g, "-"); // Replace ':' with '-' for valid filename
+
+    const filename =
+      formik.values.reportType === "summarized"
+        ? `SummarizedReport${timeString}.xlsx`
+        : `DetailedReport${timeString}.xlsx`;
+
+    // Write and save file
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const excelFile = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    saveAs(excelFile, filename);
+  };
+
+  const selectedData =
+    formik.values.reportType === "summarized" ? summarizedData : detailedData;
+
   return (
     <>
       <div className="page-content page-view">
@@ -373,194 +443,259 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
                 </CardHeader>
                 <CardBody>
                   <form onSubmit={formik.handleSubmit}>
-                    <div>
-                      <Row>
-                        <Col xl={2}>
-                          <div className="mb-3">
-                            <Label
-                              htmlFor="zone-select"
-                              className="form-label text-muted label-font"
-                            >
-                              Zone
-                            </Label>
-                            <Select
-                              // value={selectedZone}
-                              value={formik.values.selectedZone}
-                              onChange={(option: any) =>
-                                formik.setFieldValue("selectedZone", option)
-                              }
-                              onBlur={formik.handleBlur}
-                              options={noSortingGroup}
-                              className="placeholder-font"
-                              isClearable
-                              id="zone-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  cursor: "pointer",
-                                  borderColor:
-                                    formik.touched.selectedZone &&
-                                    formik.errors.selectedZone
-                                      ? "#DC4535"
-                                      : base.borderColor,
-                                  "&:hover": {
-                                    borderColor:
-                                      formik.touched.selectedZone &&
-                                      formik.errors.selectedZone
-                                        ? "#DC4535"
-                                        : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.selectedZone &&
-                              formik.errors.selectedZone && (
-                                <div className="text-danger error-msg">
-                                  {formik.errors.selectedZone}
-                                </div>
-                              )}
-                          </div>
-                        </Col>
+                    <Row>
+                      <Col
+                        xs={12}
+                        style={{
+                          flex: "0 0 auto",
+                          minWidth: "140px",
+                          maxWidth: "150px",
+                        }}
+                        className="mb-3"
+                      >
+                        <Label
+                          htmlFor="zone-select"
+                          className="form-label text-muted label-font"
+                        >
+                          Zone
+                        </Label>
+                        <Select
+                          value={formik.values.selectedZone}
+                          onChange={(option: any) =>
+                            formik.setFieldValue("selectedZone", option)
+                          }
+                          onBlur={formik.handleBlur}
+                          options={noSortingGroup}
+                          className="placeholder-font"
+                          isClearable
+                          id="zone-select"
+                          styles={{
+                            control: (base: any) => ({
+                              ...base,
+                              cursor: "pointer",
+                              minHeight: "36px",
+                              fontSize: "12px",
+                              borderColor:
+                                formik.touched.selectedZone &&
+                                formik.errors.selectedZone
+                                  ? "#DC4535"
+                                  : base.borderColor,
+                              "&:hover": {
+                                borderColor:
+                                  formik.touched.selectedZone &&
+                                  formik.errors.selectedZone
+                                    ? "#DC4535"
+                                    : base.borderColor,
+                              },
+                            }),
+                          }}
+                        />
+                        {formik.touched.selectedZone &&
+                          formik.errors.selectedZone && (
+                            <div className="text-danger error-msg">
+                              {formik.errors.selectedZone}
+                            </div>
+                          )}
+                      </Col>
 
-                        <Col xl={2}>
-                          <div className="mb-3">
-                            <Label
-                              htmlFor="branch-code-select"
-                              className="form-label text-muted label-font"
-                            >
-                              Branch Code
-                            </Label>
-                            <Select
-                              value={formik.values.selectedBranchCode}
-                              onChange={(option) =>
-                                formik.setFieldValue(
-                                  "selectedBranchCode",
-                                  option
-                                )
-                              }
-                              onBlur={formik.handleBlur}
-                              options={branchCodeOptions}
-                              className="placeholder-font"
-                              isClearable
-                              id="branch-code-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  cursor: "pointer",
-                                  borderColor:
-                                    formik.touched.selectedBranchCode &&
-                                    formik.errors.selectedBranchCode
-                                      ? "#DC4535"
-                                      : base.borderColor,
-                                  "&:hover": {
-                                    borderColor:
-                                      formik.touched.selectedBranchCode &&
-                                      formik.errors.selectedBranchCode
-                                        ? "#DC4535"
-                                        : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.selectedBranchCode &&
-                              formik.errors.selectedBranchCode && (
-                                <div className="text-danger error-msg">
-                                  {formik.errors.selectedBranchCode}
-                                </div>
-                              )}
-                          </div>
-                        </Col>
-                        <Col className="mb-3">
-                          <Label
-                            htmlFor="date-range-picker"
-                            className="form-label text-muted label-font"
-                          >
-                            Select Date Range
-                          </Label>
-                          <DateRangePicker
-                            id="date-range-picker"
-                            size="md"
-                            value={
-                              selectedDateRange &&
-                              selectedDateRange[0] &&
-                              selectedDateRange[1]
-                                ? [selectedDateRange[0], selectedDateRange[1]]
-                                : undefined
+                      <Col
+                        xs={12}
+                        style={{
+                          flex: "0 0 auto",
+                          minWidth: "140px",
+                          maxWidth: "150px",
+                        }}
+                        className="mb-3"
+                      >
+                        <Label
+                          htmlFor="branch-code-select"
+                          className="form-label text-muted label-font"
+                        >
+                          Branch Code
+                        </Label>
+                        <Select
+                          value={formik.values.selectedBranchCode}
+                          onChange={(option) =>
+                            formik.setFieldValue("selectedBranchCode", option)
+                          }
+                          onBlur={formik.handleBlur}
+                          options={branchCodeOptions}
+                          className="placeholder-font"
+                          isClearable
+                          id="branch-code-select"
+                          styles={{
+                            control: (base: any) => ({
+                              ...base,
+                              cursor: "pointer",
+                              borderColor:
+                                formik.touched.selectedBranchCode &&
+                                formik.errors.selectedBranchCode
+                                  ? "#DC4535"
+                                  : base.borderColor,
+                              "&:hover": {
+                                borderColor:
+                                  formik.touched.selectedBranchCode &&
+                                  formik.errors.selectedBranchCode
+                                    ? "#DC4535"
+                                    : base.borderColor,
+                              },
+                            }),
+                          }}
+                        />
+                        {formik.touched.selectedBranchCode &&
+                          formik.errors.selectedBranchCode && (
+                            <div className="text-danger error-msg">
+                              {formik.errors.selectedBranchCode}
+                            </div>
+                          )}
+                      </Col>
+                      <Col
+                        xs={12}
+                        style={{
+                          flex: "0 0 auto",
+                          minWidth: "140px",
+                          maxWidth: "260px",
+                        }}
+                        className="mb-3"
+                      >
+                        <Label
+                          htmlFor="date-range-picker"
+                          className="form-label text-muted label-font"
+                        >
+                          Select Date Range
+                        </Label>
+                        <DateRangePicker
+                          id="date-range-picker"
+                          size="md"
+                          value={
+                            selectedDateRange &&
+                            selectedDateRange[0] &&
+                            selectedDateRange[1]
+                              ? [selectedDateRange[0], selectedDateRange[1]]
+                              : undefined
+                          }
+                          onChange={onDateRangeChange}
+                          placeholder="Select Date Range"
+                          showOneCalendar
+                          shouldDisableDate={afterToday()}
+                          placement="bottomStart"
+                          style={{ width: "100%", fontSize: "12px" }}
+                        />
+                      </Col>
+                      <Col
+                        xl="auto"
+                        style={{
+                          marginTop: "12px", // reduced top space
+                          padding: 0,
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <FormControl
+                          component="fieldset"
+                          style={{
+                            fontSize: "12px",
+                            margin: 0,
+                          }}
+                        >
+                          <RadioGroup
+                            row
+                            name="reportType"
+                            value={formik.values.reportType}
+                            onChange={(e) =>
+                              formik.setFieldValue("reportType", e.target.value)
                             }
-                            onChange={onDateRangeChange}
-                            placeholder="Select Date Range"
-                            showOneCalendar
-                            shouldDisableDate={afterToday()}
-                            placement="bottomStart"
-                            style={{ width: "100%", fontSize: "12px" }}
-                          />
-                        </Col>
-                        <Col xl={3} style={{ marginTop: "33px" }}>
-                          <FormControl component="fieldset">
-                            <RadioGroup
-                              row
-                              name="reportType"
-                              value={formik.values.reportType}
-                              onChange={(e) =>
-                                formik.setFieldValue(
-                                  "reportType",
-                                  e.target.value
-                                )
+                            sx={{
+                              // gap: "4px",
+                              margin: 1,
+                              padding: 0,
+                            }}
+                          >
+                            <FormControlLabel
+                              value="summarized"
+                              control={
+                                <Radio
+                                  size="small"
+                                  sx={{
+                                    p: 0.2,
+                                    color: "#11395C",
+                                    "&.Mui-checked": {
+                                      color: "#11395C",
+                                    },
+                                  }}
+                                />
                               }
-                              sx={{
-                                gap: "8px", // Minimum horizontal spacing between buttons
-                              }}
-                            >
-                              <FormControlLabel
-                                value="summarized"
-                                control={
-                                  <Radio
-                                    sx={{
+                              label={
+                                <span style={{ fontSize: "12px", padding: 0 }}>
+                                  Summarized
+                                </span>
+                              }
+                              sx={{ margin: 0 }}
+                            />
+                            <FormControlLabel
+                              value="detailed"
+                              control={
+                                <Radio
+                                  size="small"
+                                  sx={{
+                                    p: 0.2,
+                                    color: "#11395C",
+                                    "&.Mui-checked": {
                                       color: "#11395C",
-                                      p: 0.5,
-                                      "&.Mui-checked": {
-                                        color: "#11395C",
-                                      },
-                                    }}
-                                  />
-                                }
-                                label="Summarized"
-                                sx={{ mr: 1 }} // optional: controls spacing to the right
-                              />
-                              <FormControlLabel
-                                value="detailed"
-                                control={
-                                  <Radio
-                                    sx={{
-                                      color: "#11395C",
-                                      p: 0.5,
-                                      "&.Mui-checked": {
-                                        color: "#11395C",
-                                      },
-                                    }}
-                                  />
-                                }
-                                label="Detailed"
-                              />
-                            </RadioGroup>
-                          </FormControl>
-                        </Col>
-                        <Col className="d-flex flex-column-reverse">
-                          <div className="mb-3" />
+                                    },
+                                  }}
+                                />
+                              }
+                              label={
+                                <span style={{ fontSize: "12px", padding: 0 }}>
+                                  Detailed
+                                </span>
+                              }
+                              sx={{ margin: selectedData.length > 0 ? 0 : 1 }}
+                            />
+                          </RadioGroup>
+                        </FormControl>
+                      </Col>
+                      <Col
+                        className="d-flex p-0 m-0 mb-3"
+                        style={{ alignItems: "flex-end", gap: "10px" }}
+                      >
+                        <Button
+                          className="btn-font"
+                          style={{
+                            backgroundColor: "#11395C",
+                            height: "36px",
+                            width: selectedData.length > 0 ? "80px" : "100px",
+                            fontSize: "13px",
+                            padding: "4px 10px",
+                            // marginLeft: selectedData.length > 0 ? "4px" : "0px",
+                          }}
+                          type="submit"
+                        >
+                          Submit
+                        </Button>
+
+                        {selectedData.length > 0 && (
                           <Button
                             className="btn-font"
                             style={{
                               backgroundColor: "#11395C",
-                              height: "40px",
-                              width: "180px",
+                              height: "36px",
+                              width: selectedData.length > 0 ? "80px" : "90px",
+                              fontSize: "13px",
+                              padding: "4px 10px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "4px",
                             }}
-                            type="submit"
+                            onClick={handleExcelDownload}
                           >
-                            Submit
+                            Excel <DownloadIcon style={{ fontSize: "16px" }} />
                           </Button>
-                        </Col>
-                      </Row>
-                    </div>
+                        )}
+                      </Col>
+                    </Row>
+                    {/* </div> */}
                   </form>
                 </CardBody>
               </Card>

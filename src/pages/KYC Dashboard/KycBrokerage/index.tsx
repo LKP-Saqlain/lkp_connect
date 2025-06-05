@@ -5,10 +5,13 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
+import ShowToast from "../../../utils/toastUtils";
 
 const KycBrokerage = ({ activeSubItem }: any) => {
   const [kycData, setKycData] = useState([]);
   const [flag, setFlag] = useState<boolean>(false);
+  const [fileType, setFileType] = useState<string | null>(null);
+
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -93,6 +96,50 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       });
   };
 
+  const handlePreview = async (row: any) => {
+    setFileType("");
+    const fileExtension = row.consentfilename
+      ? `.${row.consentfilename.split(".").pop()?.toLowerCase()}`
+      : "";
+
+    console.log("approvalExtension", fileExtension, row);
+    setFileType(fileExtension);
+
+    const payload = {
+      fileName: row.consentfilename,
+      filePath: "D:\\FileUpload\\KYCConsentForm",
+      fileType: fileExtension ? fileExtension : fileType ? fileType : "",
+      contentType: "",
+    };
+
+    dispatch(showLoader("Download file..."));
+
+    apiServices
+      .ComplianceDownload(payload)
+      .then((response) => {
+        if (response?.status === 200 && response?.data) {
+          const url = window.URL.createObjectURL(new Blob([response?.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute(
+            "download",
+            `${payload.fileName}${payload.fileType}`
+          );
+          document.body.appendChild(link);
+          link.click();
+          dispatch(hideLoader());
+        } else {
+          ShowToast("info", "Error fetching file for preview");
+        }
+      })
+      .catch((error) => {
+        ShowToast("info", error.message || "Preview failed");
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -119,6 +166,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
               activeSubItem={activeSubItem}
               T6Data={kycData}
               handleApproval={handleApproval}
+              handleDownload={handlePreview}
             />
           </CardBody>
         </Card>

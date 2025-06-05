@@ -27,6 +27,8 @@ const UserInfoModal = ({
   handleModalClose,
   selectedClientCode,
   branch,
+  handleFileUpload,
+  uploadedFileName,
 }: any) => {
   const [clientDetails, setClientDetails] = useState({
     Client_Name: "",
@@ -360,6 +362,8 @@ const UserInfoModal = ({
           setClientDetails={clientDetails}
           selectedClientCode={selectedClientCode}
           branch={branch}
+          onFileUpload={handleFileUpload}
+          uploadedFileName={uploadedFileName}
         />
       </ModalBody>
       {/* <div className="modal-footer">
