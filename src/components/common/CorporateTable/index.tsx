@@ -21,7 +21,7 @@ const CorporateTable = ({ CorporateData, name }: any) => {
   }, [CorporateData, name]);
 
   const columnCount = header.length + 1;
-  const columnWidth = `${100 / columnCount}%`;
+  // const columnWidth = `${100 / columnCount}%`;
 
   const cellStyle = {
     padding: "4px 8px",
@@ -32,12 +32,12 @@ const CorporateTable = ({ CorporateData, name }: any) => {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: "50vh" }}>
-        <Table stickyHeader>
+        <Table stickyHeader sx={{ tableLayout: "fixed", width: "100%" }}>
           <TableHead>
             <TableRow>
               <TableCell
                 align="center"
-                style={{ ...cellStyle, fontWeight: "bold", width: columnWidth }}
+                style={{ ...cellStyle, fontWeight: "bold" }}
               >
                 Sr. No
               </TableCell>
@@ -49,7 +49,6 @@ const CorporateTable = ({ CorporateData, name }: any) => {
                     style={{
                       ...cellStyle,
                       fontWeight: "bold",
-                      width: columnWidth,
                     }}
                   >
                     {headerItem.name}
@@ -61,17 +60,14 @@ const CorporateTable = ({ CorporateData, name }: any) => {
             {data && data.length > 0 ? (
               data.map((row, rowIndex) => (
                 <TableRow key={rowIndex}>
-                  <TableCell
-                    align="center"
-                    sx={{ ...cellStyle, width: columnWidth }}
-                  >
+                  <TableCell align="center" sx={{ ...cellStyle }}>
                     {rowIndex + 1}
                   </TableCell>
                   {row.map((cell: any, cellIndex: any) => (
                     <TableCell
                       align="left"
                       key={cellIndex}
-                      sx={{ ...cellStyle, width: columnWidth }}
+                      sx={{ ...cellStyle }}
                     >
                       {cell}
                     </TableCell>

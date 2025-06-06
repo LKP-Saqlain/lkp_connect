@@ -8,42 +8,47 @@ import {
   Box,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { apiServices } from "../../../services";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { fetchFundamentalNewsfeed } from "../../../redux/thunk/fundamental/news";
 
-const News = ({ activeMenu, selectedIsin }: any) => {
+const News = ({ selectedIsin }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [newsList, setNewsList] = useState<any[]>([]);
 
-  console.log("propss-->", activeMenu, selectedIsin);
+  const currentIsin = useSelector(
+    (state: RootState) => state.fundamentalNews.currentIsin
+  );
+
+  const newsData: any = useSelector((state: RootState) => {
+    const data = state.fundamentalNews.currentNews?.data;
+    console.log("NewsDataFetch", data, data.length);
+    return data;
+  });
 
   useEffect(() => {
-    if (selectedIsin) {
-      const getFundamentalNewsfeed = async () => {
-        dispatch(showLoader("Please wait, we are processing your request"));
+    if (selectedIsin && selectedIsin !== currentIsin) {
+      console.log("Dispatching API call for new ISIN", selectedIsin);
+      dispatch(fetchFundamentalNewsfeed(selectedIsin));
+    } else if (selectedIsin === currentIsin) {
+      console.log("ISIN already loaded, skipping API call", selectedIsin);
+    }
+  }, [selectedIsin, currentIsin, dispatch]);
 
-        try {
-          const response = await apiServices.getFundamentalNewsfeed(
-            selectedIsin
-          );
-          dispatch(hideLoader());
-          const data = response?.data?.body?.newsList ?? [];
-          setNewsList(data);
-          console.log("getFundamentalNewsFeed", data);
-        } catch (error) {
-          console.error("Error fetching news:", error);
-        } finally {
-          dispatch(hideLoader());
-        }
-      };
-
-      getFundamentalNewsfeed();
+  useEffect(() => {
+    console.log("currentISIN", currentIsin, "selecteISIN", selectedIsin);
+    if (selectedIsin === currentIsin) {
+      if (newsData && newsData.length > 0) {
+        setNewsList(newsData);
+      } else {
+        // API returned empty → clear UI also
+        setNewsList([]);
+      }
     } else {
+      // ISIN changed → clear
       setNewsList([]);
     }
-  }, [selectedIsin, activeMenu, dispatch]);
+  }, [newsData, selectedIsin, currentIsin]);
 
   return (
     <Box display="flex" flexDirection="column" gap={2} mt={2}>
