@@ -39,7 +39,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
   const [preTradeReportData, setPreTradeReportData] = useState<[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [setShowImg, setSetShowImg] = useState<boolean>(false);
-
+  const [fileType, setFileType] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -81,7 +81,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
         ShowToast("error", "Please select Date Range");
         return;
       }
-      console.log("values1-->", values);
+      console.log("values1-->", values, fileType);
       handleViewReport();
     },
   });
@@ -314,10 +314,13 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
       ? `.${row.userRemarks.split(".").pop()?.toLowerCase()}`
       : "";
 
+    console.log("approvalExtension", fileExtension);
+    setFileType(fileExtension);
+
     const payload = {
       fileName: row.userRemarks,
       filePath: "D:\\FileUpload\\PreTrade",
-      fileType: fileExtension,
+      fileType: fileExtension ? fileExtension : fileType ? fileType : "",
       contentType: "",
     };
 
@@ -581,6 +584,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                     handleDownload={handlePreview}
                     previewUrl={previewUrl}
                     setSetShowImg={setSetShowImg}
+                    fileExtension={fileType}
                   />
                 </CardBody>
               </Card>

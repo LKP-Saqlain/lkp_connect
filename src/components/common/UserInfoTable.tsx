@@ -99,6 +99,9 @@ interface SelectedWidgetProps {
   getUserBrokergageModificationDetails?: any;
   previewUrl?: any;
   setSetShowImg?: any;
+  showDocument?: boolean;
+  setShowDocument?: any;
+  fileExtension?: any;
   reportType?: string;
 }
 
@@ -137,6 +140,9 @@ const DataTable = ({
   getUserBrokergageModificationDetails,
   previewUrl,
   setSetShowImg,
+  showDocument,
+  setShowDocument,
+  fileExtension,
   reportType,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
@@ -165,9 +171,15 @@ const DataTable = ({
   // }, []);
 
   useEffect(() => {
-    console.log("subItem and selectedWidgets", activeSubItem, selectedWidget);
+    console.log(
+      "subItem and selectedWidgets",
+      activeSubItem,
+      selectedWidget,
+      "previewUrl-->",
+      typeof previewUrl
+    );
     setCustomLedgerData([]);
-  }, [activeSubItem, selectedWidget]);
+  }, [activeSubItem, selectedWidget, previewUrl]);
 
   useEffect(() => {
     console.log(totalRows, tradeData);
@@ -188,8 +200,11 @@ const DataTable = ({
 
   const tog_center = () => {
     setmodal_center(!modal_center);
+    setShowDocument(false);
   };
   const HandleApprovalModal = (actionType: "approve" | "reject") => {
+    console.log("TestactionType", actionType);
+
     setAction(actionType);
     tog_center();
   };
@@ -393,8 +408,10 @@ const DataTable = ({
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <div
                   onClick={() => {
-                    HandleApprovalModal("approve");
+                    console.log("rowTest", params.row.rowId);
                     setSelectedRow(params.row.rowId);
+                    // HandleApprovalModal("approve", params);
+                    HandleApprovalModal("approve");
                     console.log(params.row.dummyId, "selectedrow approve");
                   }}
                   style={{
@@ -404,14 +421,18 @@ const DataTable = ({
                     marginRight: 5,
                   }}
                 >
-                  <span>Approve</span>
-                  <CheckCircleIcon style={{ color: "green", marginLeft: 4 }} />
+                  <Tooltip title="Approve" arrow placement="top">
+                    <CheckCircleIcon
+                      style={{ color: "green", marginLeft: 4 }}
+                    />
+                  </Tooltip>
                 </div>
                 <div style={{ fontSize: 20, color: "gray" }}>|</div>
                 <div
                   onClick={() => {
-                    HandleApprovalModal("reject");
                     setSelectedRow(params.row.rowId);
+                    HandleApprovalModal("reject");
+                    // HandleApprovalModal("reject", params);
                   }}
                   style={{
                     cursor: "pointer",
@@ -420,11 +441,37 @@ const DataTable = ({
                     marginLeft: 5,
                   }}
                 >
-                  <span>Reject</span>
-                  <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  <Tooltip title="Reject" arrow placement="top">
+                    <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  </Tooltip>
                 </div>
               </div>
             ),
+          };
+        }
+        if (column.field === "consentfilename") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const fileName = params.row?.consentfilename;
+
+              return fileName ? (
+                <button
+                  onClick={() => handleDownload(params.row)}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              ) : (
+                "╶─"
+              );
+            },
           };
         }
         return column;
@@ -442,8 +489,9 @@ const DataTable = ({
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <div
                   onClick={() => {
+                    setSelectedRow(params.row);
                     HandleApprovalModal("approve");
-                    setSelectedRow(params.row.rowId);
+                    // HandleApprovalModal("approve", params);
                     console.log(params.row.rowId, "selectedrow approve");
                   }}
                   style={{
@@ -453,14 +501,17 @@ const DataTable = ({
                     marginRight: 5,
                   }}
                 >
-                  <span>Approve</span>
-                  <CheckCircleIcon style={{ color: "green", marginLeft: 4 }} />
+                  <Tooltip title="Approve" arrow placement="top">
+                    <CheckCircleIcon
+                      style={{ color: "green", marginLeft: 4 }}
+                    />
+                  </Tooltip>
                 </div>
                 <div style={{ fontSize: 20, color: "gray" }}>|</div>
                 <div
                   onClick={() => {
+                    setSelectedRow(params.row);
                     HandleApprovalModal("reject");
-                    setSelectedRow(params.row.rowId);
                   }}
                   style={{
                     cursor: "pointer",
@@ -469,11 +520,37 @@ const DataTable = ({
                     marginLeft: 5,
                   }}
                 >
-                  <span>Reject</span>
-                  <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  <Tooltip title="Reject" arrow placement="top">
+                    <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  </Tooltip>
                 </div>
               </div>
             ),
+          };
+        }
+        if (column.field === "consentfilename") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const fileName = params.row?.consentfilename;
+
+              return fileName ? (
+                <button
+                  onClick={() => handleDownload(params.row)}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              ) : (
+                "╶─"
+              );
+            },
           };
         }
         return column;
@@ -559,13 +636,15 @@ const DataTable = ({
                 >
                   <div
                     onClick={() => {
-                      HandleApprovalModal("approve");
                       setSelectedRow(params.row.RowId);
+                      HandleApprovalModal("approve");
                     }}
                     style={{ cursor: "pointer" }}
                   >
-                    <span>Approve</span>
-                    <CheckCircleIcon style={{ color: "green" }} />
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
                   </div>
                   <div
                     style={{
@@ -578,13 +657,14 @@ const DataTable = ({
                   </div>
                   <div
                     onClick={() => {
-                      HandleApprovalModal("reject");
                       setSelectedRow(params.row.RowId);
+                      HandleApprovalModal("reject");
                     }}
                     style={{ cursor: "pointer" }}
                   >
-                    <span>Reject</span>
-                    <CancelIcon style={{ color: "red" }} />
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
                   </div>
                 </div>
               );
@@ -704,7 +784,7 @@ const DataTable = ({
                       color: "#ff6f00",
                       border: "1px solid #ffe082",
                     };
-                  case "reject":
+                  case "rejected":
                     return {
                       backgroundColor: "#ef9a9a", // light red
                       color: "#b71c1c",
@@ -930,13 +1010,15 @@ const DataTable = ({
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "RH Approval"
             ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "Pre Trade Approval"
+            : activeSubItem === "Pre Trade Approval" && !showDocument
             ? `Are you sure want to ${action} this entry`
             : activeMenu === "Regulatory Announcement"
             ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
             : activeSubItem === "Pre Trade Proof Upload"
             ? ""
             : activeSubItem === "Pre Trade Report"
+            ? ""
+            : activeSubItem === "Pre Trade Approval" && showDocument
             ? ""
             : "Are you sure you want to send the email?"
         }
@@ -950,9 +1032,17 @@ const DataTable = ({
             console.warn("onFileUpload is not defined");
           }
         }}
-        setShowImg={activeSubItem === "Pre Trade Report" ? true : false}
+        setShowImg={
+          activeSubItem === "Pre Trade Report"
+            ? true
+            : activeSubItem === "Pre Trade Approval" && showDocument
+            ? true
+            : false
+        }
         previewUrl={previewUrl}
         setSetShowImg={setSetShowImg}
+        showDocument={showDocument}
+        fileExtension={fileExtension}
       />
       {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown
@@ -961,30 +1051,6 @@ const DataTable = ({
           setCustomLedgerData={setCustomLedgerData}
         />
       )}
-      {/* {(selectedWidget === "Total Clients" ||
-        selectedWidget === "Active Clients" ||
-        selectedWidget === "Inactive Clients" ||
-        selectedWidget === "Clients Ageing Report") && (
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button
-            variant="outlined"
-            className="btn-font"
-            sx={{
-              bgcolor: "#11395C",
-              color: "#fff",
-              borderRadius: "7px",
-              fontFamily: "Public Sans",
-              borderColor: "#ABC4DA",
-              textTransform: "capitalize",
-              // marginBottom: "2",
-              // ml: 1,
-            }}
-            onClick={handleExcel}
-          >
-            Download Excel
-          </Button>
-        </Box>
-      )} */}
       {(showSearch || showSearchCustom) && (
         <SearchAppBar
           onSearchChange={handleSearchChange}
@@ -1043,10 +1109,10 @@ const DataTable = ({
               ? row.rowID
               : row.rowId
               ? row.rowId
-              : row.clientName
-              ? row.clientName
-              : row.ClientName
-              ? row.ClientName
+              : row.ClientCode
+              ? row.ClientCode
+              : row.ctermcode
+              ? row.ctermcode
               : row.RowId
               ? row.RowId
               : row.id
@@ -1055,6 +1121,10 @@ const DataTable = ({
               ? row.dummyId
               : row.RowID
               ? row.RowID
+              : row.ClientName
+              ? row.ClientName
+              : row.clientName
+              ? row.clientName
               : row.BOID
               ? `${row.BOName}-${row.TotalDebit}-${Math.random()}`
               : row.Name

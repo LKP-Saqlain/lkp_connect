@@ -40,6 +40,8 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [setShowImg, setSetShowImg] = useState<boolean>(false);
   const [flag, setFlag] = useState<boolean>(false);
+  const [fileType, setFileType] = useState<string | null>(null);
+  const [showDocument, setShowDocument] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
@@ -324,15 +326,20 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
   // };
 
   const handlePreview = async (row: any) => {
+    console.log("rowData", row);
     setPreviewUrl("");
+    setFileType("");
     const fileExtension = row.userRemarks
       ? `.${row.userRemarks.split(".").pop()?.toLowerCase()}`
       : "";
 
+    console.log("approvalExtension", fileExtension);
+    setFileType(fileExtension);
+
     const payload = {
       fileName: row.userRemarks,
       filePath: "D:\\FileUpload\\PreTrade",
-      fileType: fileExtension,
+      fileType: fileExtension ? fileExtension : fileType ? fileType : "",
       contentType: "",
     };
 
@@ -347,9 +354,9 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
 
           setPreviewUrl(url);
           setSetShowImg(false);
+          setShowDocument(true);
           console.log("fileURL", url, setShowImg);
 
-          // setFileType(fileExtension);
           // setmodal_center(true); // Open modal to preview
         } else {
           ShowToast("info", "Error fetching file for preview");
@@ -359,6 +366,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
         ShowToast("info", error.message || "Preview failed");
         setPreviewUrl("");
         setSetShowImg(false);
+        setShowDocument(false);
       })
       .finally(() => {
         dispatch(hideLoader());
@@ -621,6 +629,9 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
                     previewUrl={previewUrl}
                     setSetShowImg={setSetShowImg}
                     handleApproval={handleApproval}
+                    showDocument={showDocument}
+                    setShowDocument={setShowDocument}
+                    fileExtension={fileType}
                   />
                 </CardBody>
               </Card>

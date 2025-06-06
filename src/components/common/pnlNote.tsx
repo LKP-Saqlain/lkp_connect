@@ -3,7 +3,7 @@ import { CardBody, Row } from "reactstrap";
 const PNLNote = () => {
   return (
     <CardBody>
-      <Row style={{ marginTop: "5rem" }}>
+      <Row style={{ marginTop: "3.7rem" }}>
         <div>
           <p style={{ color: "red", fontWeight: "bold" }}>Important Note:</p>
           <p>

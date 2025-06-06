@@ -2,22 +2,34 @@ import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 // import getChartColorsArray from "../ChartsDynamicColor";
 import "../../../pages/Overview/style.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 const StoreVisitsCharts = ({ chartData }: any) => {
   const [labels, setLabels] = useState<string[]>([]);
   const [seriess, setSeriess] = useState<number[]>([]);
 
+  const { user_type } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+
   const chartColors = ["#11395C", "#F57C00"];
 
   useEffect(() => {
     console.log("chartData", chartData);
-
-    const newLabels = chartData.map((item: any) => item.name);
-    const newSeries = chartData.map((item: any) => Number(item.value) || 0);
-    console.log("res12", newLabels, newSeries);
-
-    setLabels(newLabels);
-    setSeriess(newSeries);
+    if (user_type === "Employee") {
+      const newLabels = chartData.map((item: any) => item.name);
+      const newSeries = chartData.map((item: any) => Number(item.value) || 0);
+      setLabels(newLabels);
+      setSeriess(newSeries);
+      console.log("res12", newLabels, newSeries);
+    } else {
+      const newLabels = Object.keys(chartData);
+      const newSeries = Object.values(chartData) as number[];
+      setLabels(newLabels);
+      setSeriess(newSeries);
+      console.log("res12", newLabels, newSeries);
+    }
   }, [chartData]);
 
   useEffect(() => {
@@ -51,6 +63,13 @@ const StoreVisitsCharts = ({ chartData }: any) => {
     },
     stroke: {
       show: false,
+    },
+    tooltip: {
+      y: {
+        formatter: function (val: number) {
+          return Intl.NumberFormat("en-IN").format(Math.round(val));
+        },
+      },
     },
     dataLabels: {
       dropShadow: {

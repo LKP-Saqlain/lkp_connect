@@ -60,6 +60,9 @@ const DashboardCrypto = ({
   const [filteredtradeCWCBData, setFilteredtradeCWCBData] = useState<any[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
+  const sessionExpired = useSelector(
+    (state: RootState) => state.sessionExpired.data.session
+  );
 
   useEffect(() => {
     console.log("testProps->", selectedViewMore);
@@ -293,7 +296,7 @@ const DashboardCrypto = ({
     <React.Fragment>
       <div className="page-content page-view">
         <Container fluid>
-          {isNudgeOpen && (
+          {isNudgeOpen && !sessionExpired && (
             <Nudge
               modal_animationZoom={modal_animationZoom}
               tog_animationZoom={tog_animationZoom}

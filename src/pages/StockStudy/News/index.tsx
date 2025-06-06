@@ -17,6 +17,8 @@ const News = ({ activeMenu, selectedIsin }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [newsList, setNewsList] = useState<any[]>([]);
 
+  console.log("propss-->", activeMenu, selectedIsin);
+
   useEffect(() => {
     if (selectedIsin) {
       const getFundamentalNewsfeed = async () => {
@@ -27,7 +29,7 @@ const News = ({ activeMenu, selectedIsin }: any) => {
             selectedIsin
           );
           dispatch(hideLoader());
-          const data = response?.data?.body?.newsList;
+          const data = response?.data?.body?.newsList ?? [];
           setNewsList(data);
           console.log("getFundamentalNewsFeed", data);
         } catch (error) {
@@ -60,7 +62,7 @@ const News = ({ activeMenu, selectedIsin }: any) => {
               alt={item.stockName}
               image={
                 item.imageUrl ||
-                "https://www.bseindia.com/images/logo/logoBseIndia.png"
+                "https://www.bseindia.com/include/images/bselogo.png"
               }
               sx={{
                 width: 100,

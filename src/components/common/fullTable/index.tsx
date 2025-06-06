@@ -7,7 +7,7 @@ import { ClientSegBrok } from "../../../redux/thunk/ClientSegmentBrokerage";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 // import ButtonGroup from "../../common/ButtonGroup";
 // import ShowToast from "../../../utils/toastUtils";
-import { Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { apiServices } from "../../../services";
 
 const barColors = [
@@ -213,37 +213,37 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
     colors: barColors,
   });
 
-  const DonutOptions: any = {
-    labels: categories,
-    chart: {
-      height: 370,
-      type: "donut",
-    },
-    legend: {
-      show: false,
-    },
-    stroke: {
-      show: false,
-    },
-    dataLabels: {
-      formatter: function (val: number) {
-        return Math.round(val) + "%";
-      },
-      dropShadow: {
-        enabled: false,
-      },
-    },
-    tooltip: {
-      y: {
-        formatter: function (val: number) {
-          return Intl.NumberFormat("en-IN").format(Math.round(val));
-        },
-      },
-    },
-    colors: barColors,
-  };
+  // const DonutOptions: any = {
+  //   labels: categories,
+  //   chart: {
+  //     height: 370,
+  //     type: "donut",
+  //   },
+  //   legend: {
+  //     show: false,
+  //   },
+  //   stroke: {
+  //     show: false,
+  //   },
+  //   dataLabels: {
+  //     formatter: function (val: number) {
+  //       return Math.round(val) + "%";
+  //     },
+  //     dropShadow: {
+  //       enabled: false,
+  //     },
+  //   },
+  //   tooltip: {
+  //     y: {
+  //       formatter: function (val: number) {
+  //         return Intl.NumberFormat("en-IN").format(Math.round(val));
+  //       },
+  //     },
+  //   },
+  //   colors: barColors,
+  // };
 
-  const series = grossBrokerageData;
+  // const series = grossBrokerageData;
 
   const seriess = [
     {
@@ -256,7 +256,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
   return (
     <React.Fragment>
       <Row>
-        <Col xl={7}>
+        <Col xl={6}>
           <Card
             className="card-height-100"
             style={{
@@ -272,7 +272,9 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                 backgroundColor: "#fff", // optional for contrast
               }}
             >
-              <h4 className="card-title flex-grow-1">Month-wise Brokerage</h4>
+              <h4 className="card-title flex-grow-1 d-flex justify-content-start">
+                Month-wise Brokerage
+              </h4>
             </CardHeader>
             <CardBody>
               <ReactApexChart
@@ -289,7 +291,107 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
             </CardBody>
           </Card>
         </Col>
-        <Col xl={5}>
+        <Col xl={6}>
+          <Card
+            className="card-height-100"
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <CardHeader
+              className="align-items-center d-flex"
+              style={{
+                borderRadius: "15px 15px 0 0",
+                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff", // optional for contrast
+              }}
+            >
+              <h4 className="card-title flex-grow-1  d-flex justify-content-start">
+                Segment-wise Brokerage
+              </h4>
+              <div className="d-flex gap-1 justify-content-end">
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => setSelectedButton("Last 30 days")}
+                  sx={
+                    selectedButton === "Last 30 days"
+                      ? selectedStyle
+                      : nonSelectedStyle
+                  }
+                >
+                  Last 30 days
+                </Button>
+                <Button
+                  variant="outlined" // MUI equivalent of 'btn-soft-primary'
+                  size="small"
+                  color="primary" // 'primary' color corresponds to the blue style in MUI
+                  onClick={() => setSelectedButton("Last 90 days")}
+                  sx={
+                    selectedButton === "Last 90 days"
+                      ? selectedStyle
+                      : nonSelectedStyle
+                  }
+                >
+                  Last 90 days
+                </Button>
+                <Button
+                  // variant="outlined"
+                  // size="small"
+                  onClick={() => setSelectedButton("MTD")}
+                  sx={
+                    selectedButton === "MTD" ? selectedStyle : nonSelectedStyle
+                  }
+                >
+                  MTD
+                </Button>
+                <Button
+                  variant="outlined" // MUI equivalent of 'btn-soft-primary'
+                  size="small"
+                  color="primary" // 'primary' color corresponds to the blue style in MUI
+                  onClick={() => setSelectedButton("YTD")}
+                  sx={
+                    selectedButton === "YTD" ? selectedStyle : nonSelectedStyle
+                  }
+                >
+                  YTD
+                </Button>
+              </div>
+            </CardHeader>
+            <CardBody className="p-0 pb-2">
+              <div>
+                <div dir="ltr" className="apex-charts">
+                  <Col>
+                    {grossBrokerageData.length > 0 ? (
+                      <ReactApexChart
+                        // dir="ltr"
+                        // options={barOptions}
+                        options={barOptions(categories)}
+                        series={seriess}
+                        type="bar"
+                        height="374"
+                        className="apex-charts"
+                      />
+                    ) : (
+                      <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        height={350}
+                      >
+                        <Typography variant="body1" color="textSecondary">
+                          No records found
+                        </Typography>
+                      </Box>
+                    )}
+                  </Col>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </Col>
+        {/* <Col xl={6}>
           <Card
             className="card-height-100"
             style={{
@@ -309,111 +411,41 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
             </CardHeader>
             <CardBody className="">
               <div>
-                <div className="d-flex gap-1 justify-content-end">
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    onClick={() => setSelectedButton("Last 30 days")}
-                    sx={
-                      selectedButton === "Last 30 days"
-                        ? selectedStyle
-                        : nonSelectedStyle
-                    }
-                  >
-                    Last 30 days
-                  </Button>
-                  <Button
-                    variant="outlined" // MUI equivalent of 'btn-soft-primary'
-                    size="small"
-                    color="primary" // 'primary' color corresponds to the blue style in MUI
-                    onClick={() => setSelectedButton("Last 90 days")}
-                    sx={
-                      selectedButton === "Last 90 days"
-                        ? selectedStyle
-                        : nonSelectedStyle
-                    }
-                  >
-                    Last 90 days
-                  </Button>
-                  <Button
-                    // variant="outlined"
-                    // size="small"
-                    onClick={() => setSelectedButton("MTD")}
-                    sx={
-                      selectedButton === "MTD"
-                        ? selectedStyle
-                        : nonSelectedStyle
-                    }
-                  >
-                    MTD
-                  </Button>
-                  <Button
-                    variant="outlined" // MUI equivalent of 'btn-soft-primary'
-                    size="small"
-                    color="primary" // 'primary' color corresponds to the blue style in MUI
-                    onClick={() => setSelectedButton("YTD")}
-                    sx={
-                      selectedButton === "YTD"
-                        ? selectedStyle
-                        : nonSelectedStyle
-                    }
-                  >
-                    YTD
-                  </Button>
-                </div>
                 <div dir="ltr" className="apex-charts">
                   <Col>
-                    <ReactApexChart
+                    {/* <ReactApexChart
                       // dir="ltr"
                       options={DonutOptions}
-                      series={series}
+                      series={series.length > 0 ? series : [0]}
                       type="donut"
                       height={350}
                       // className="apex-charts"
-                    />
+                    /> */}
+        {/* {series.length > 0 ? (
+                      <ReactApexChart
+                        options={DonutOptions}
+                        series={series}
+                        type="donut"
+                        height={350}
+                      />
+                    ) : (
+                      <Box
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        height={350}
+                      >
+                        <Typography variant="body1" color="textSecondary">
+                          No records found
+                        </Typography>
+                      </Box>
+                    )}
                   </Col>
                 </div>
               </div>
             </CardBody>
           </Card>
-        </Col>
-        <Col xl={12}>
-          <Card
-            className="card-height-100"
-            style={{
-              borderRadius: "15px",
-              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            <CardHeader
-              className="align-items-center d-flex"
-              style={{
-                borderRadius: "15px 15px 0 0",
-                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
-                backgroundColor: "#fff", // optional for contrast
-              }}
-            >
-              <h4 className="card-title flex-grow-1">Segment-wise Brokerage</h4>
-            </CardHeader>
-            <CardBody className="p-0 pb-2">
-              <div>
-                <div dir="ltr" className="apex-charts">
-                  <Col>
-                    <ReactApexChart
-                      // dir="ltr"
-                      // options={barOptions}
-                      options={barOptions(categories)}
-                      series={seriess}
-                      type="bar"
-                      height="374"
-                      className="apex-charts"
-                    />
-                  </Col>
-                </div>
-              </div>
-            </CardBody>
-          </Card>
-        </Col>
+        </Col> */}
       </Row>
     </React.Fragment>
   );

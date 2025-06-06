@@ -19,6 +19,8 @@ import { DateRangePicker } from "rsuite";
 import moment from "moment";
 import DataTable from "../../../components/common/UserInfoTable";
 import ShowToast from "../../../utils/toastUtils";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -75,8 +77,8 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
       clientCode: clientCode.trim(),
       status: selectedStatus?.value || "",
       zone: selectedZone?.value || "",
-      startDate: fromDate ? moment(fromDate).format("YYYY-MM-DD") : "",
-      endDate: toDate ? moment(toDate).format("YYYY-MM-DD") : "",
+      startDate: fromDate ? moment(fromDate).format("YYYY-MM-DD") : null,
+      endDate: toDate ? moment(toDate).format("YYYY-MM-DD") : null,
     };
     console.log(payload, "payload");
 
@@ -90,6 +92,59 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
       })
       .catch(() => ShowToast("error", "Date is required"))
       .finally(() => dispatch(hideLoader()));
+  };
+
+  const handleExcel = () => {
+    if (!modificationStatus.length) {
+      ShowToast("info", "No data available to export");
+      return;
+    }
+    try {
+      // 1. Define header name mapping
+      const headerMap: Record<string, string> = {
+        zone: "Zone",
+        status: "Status",
+        clientcode: "Client Code",
+        branchcode: "Branch Code",
+        clientName: "Client Name",
+        clientType: "Client Type",
+        segment: "Segment",
+        existingPlan: "Existing Plan",
+        proposedPlan: "Proposed Plan",
+        Remarks: "Remarks",
+        kycApproveStatusDate: "Status Date",
+      };
+      // 2. Remove 'rowId' and prepare data
+      const cleanedData = (modificationStatus as Record<string, any>[]).map(
+        ({ rowId, ...rest }) => rest
+      );
+      // 3. Create worksheet
+      const worksheet = XLSX.utils.json_to_sheet(cleanedData);
+      // 4. Rename headers
+      const range = XLSX.utils.decode_range(worksheet["!ref"]!);
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ c: C, r: 0 });
+        const cell = worksheet[cellAddress];
+        if (cell && headerMap[cell.v]) {
+          cell.v = headerMap[cell.v];
+        }
+      }
+      // 5. Create workbook and add worksheet
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Brokerage Status");
+      // 6. Export
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const excelFile = new Blob([excelBuffer], {
+        type: "application/octet-stream",
+      });
+      saveAs(excelFile, "Brokerage_Modification_Status.xlsx");
+    } catch (error) {
+      console.error("Excel Export Error:", error);
+      ShowToast("error", "Failed to export Excel");
+    }
   };
 
   return (
@@ -193,19 +248,32 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
                     style={{ width: "100%", fontSize: "12px" }}
                   />
                 </Col>
-
                 <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
-                  <Button
-                    type="submit"
-                    style={{
-                      backgroundColor: "#11395C",
-                      fontSize: "12px",
-                      width: "100%",
-                      marginTop: "8px",
-                    }}
-                  >
-                    View
-                  </Button>
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <Button
+                      type="submit"
+                      style={{
+                        backgroundColor: "#11395C",
+                        color: "#fff",
+                        fontSize: "12px",
+                        flex: 1,
+                      }}
+                    >
+                      View
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={handleExcel}
+                      style={{
+                        backgroundColor: "#3C7B40",
+                        color: "#fff",
+                        fontSize: "12px",
+                        flex: 1,
+                      }}
+                    >
+                      Excel
+                    </Button>
+                  </div>
                 </Col>
               </Row>
             </form>

@@ -1,5 +1,13 @@
-import { Modal, ModalBody, Button, ModalHeader, Col, Row } from "reactstrap";
-import RadioInput from "../RadioInput";
+import {
+  Modal,
+  ModalBody,
+  Button,
+  ModalHeader,
+  Col,
+  Row,
+  Input,
+} from "reactstrap";
+// import RadioInput from "../RadioInput";
 import { useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
@@ -13,6 +21,7 @@ import ShowToast from "../../../utils/toastUtils";
 interface BrokerageHistoryItem {
   moduleNo: string;
   modificationDate: string;
+  description: string;
   brokeragePerc: number;
   rowNum: number;
   clientcode: string;
@@ -24,17 +33,38 @@ interface ModalComponentProps {
   onClose: () => void;
   message?: string;
   BrokerageTitle?: any;
+  handleFileUpload?: (file: File, type?: any) => void;
+  uploadedFileName?: any;
 }
+
+const keys = [
+  "EquityFutures",
+  "EquityOptions",
+  "CurrencyFutures",
+  "CurrencyOptions",
+  "CommodityFutures",
+  "CommodityOptions",
+  "EquityIntradayPer",
+  "EquityDeliveryPer",
+  "EquityIntradayMin",
+  "EquityDeliveryMin",
+];
 
 const ModalComponent = ({
   isOpen,
   onClose,
   BrokerageTitle,
+  handleFileUpload,
+  uploadedFileName,
 }: ModalComponentProps) => {
   const [selectedValue, setSelectedValue] = useState("");
   const [step, setStep] = useState(1); // Step 1 = Select Plan, Step 2 = Confirm Plan
   const [choosePlans, setChoosePlans] = useState<string[]>([]);
+  const [allPlans, setAllPlans] = useState<any[]>([]);
   const [history, setHistory] = useState<BrokerageHistoryItem[]>([]);
+  const [currentPlan, setCurrentPlan] = useState<any>(null);
+  const [showConsent, setShowConsent] = useState<boolean>(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -61,6 +91,7 @@ const ModalComponent = ({
           if (Array.isArray(plans)) {
             const typeList = plans.map((item) => item.Type);
             setChoosePlans(typeList);
+            setAllPlans(plans);
           }
         }
       })
@@ -85,6 +116,9 @@ const ModalComponent = ({
           console.log("Fetched history---raw", plans);
           if (Array.isArray(plans)) {
             setHistory(plans);
+            if (plans.length > 0) {
+              setCurrentPlan(plans[0]); //  Store the current plan
+            }
           }
         }
       })
@@ -92,10 +126,136 @@ const ModalComponent = ({
       .finally(() => dispatch(hideLoader()));
   }, [clientcode, type]);
 
-  // Handle change in plan selection
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedValue(event.target.value);
-    console.log("Selected value:", event.target.value);
+  // const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const selectedValue = event.target.value;
+  //   setSelectedValue(selectedValue);
+
+  //   const matchedPlan = allPlans.find((plan) => plan.Type === selectedValue);
+  //   console.log("Selected Value:", selectedValue);
+  //   console.log("Brokerage Plans:", matchedPlan);
+  //   console.log("Current History:", currentPlan);
+
+  //   if (!matchedPlan) {
+  //     console.warn("No matched plan found.");
+  //     setShowConsent(false); // reset just in case
+  //     return;
+  //   }
+
+  //   let consentNeeded = false;
+
+  //   for (const key of keys) {
+  //     const value = matchedPlan[key];
+
+  //     if (value === undefined || value === null) continue;
+
+  //     console.log(`${key}:`, value);
+
+  //     if (value > currentPlan.brokeragePerc) {
+  //       console.log(`${key} is greater than brokeragePerc → show consent`);
+  //       consentNeeded = true;
+  //       break;
+  //     } else if (value < currentPlan.brokeragePerc) {
+  //       console.log(`${key} is smaller than brokeragePerc → no consent`);
+  //       continue;
+  //     } else {
+  //       // If equal, check min field only for Intraday/Delivery
+  //       const isIntradayOrDelivery =
+  //         key === "EquityIntradayPer" || key === "EquityDeliveryPer";
+
+  //       if (!isIntradayOrDelivery) continue;
+
+  //       const minKey =
+  //         key === "EquityIntradayPer"
+  //           ? "EquityIntradayMin"
+  //           : "EquityDeliveryMin";
+
+  //       const minValue = matchedPlan[minKey];
+
+  //       if (minValue > currentPlan.brokeragePercMin) {
+  //         console.log(
+  //           `${minKey} (${minValue}) > brokeragePercMin (${currentPlan.brokeragePercMin}) → show consent`
+  //         );
+  //         consentNeeded = true;
+  //         break;
+  //       } else {
+  //         console.log(`${minKey} is lesser or equal → no consent`);
+  //       }
+  //     }
+  //   }
+  //   setShowConsent(consentNeeded);
+  // };
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = event.target.value;
+    setSelectedValue(selectedValue);
+
+    const matchedPlan = allPlans.find((plan) => plan.Type === selectedValue);
+    console.log("Selected Value:", selectedValue);
+    console.log("Brokerage Plans:", matchedPlan);
+    console.log("Current History:", currentPlan);
+
+    if (!matchedPlan) {
+      console.warn("No matched plan found.");
+      setShowConsent(false); // reset just in case
+      return;
+    }
+
+    let consentNeeded = false;
+
+    for (const key of keys) {
+      const value = matchedPlan[key];
+
+      if (value === undefined || value === null) continue;
+
+      console.log(`${key}:`, value);
+
+      if (value > currentPlan.brokeragePerc) {
+        console.log(`${key} is greater than brokeragePerc → show consent`);
+        consentNeeded = true;
+        // setShowConsent(true);
+        break;
+      } else if (value < currentPlan.brokeragePerc) {
+        console.log(`${key} is smaller than brokeragePerc → no consent`);
+        continue;
+      } else {
+        // Equal values – further checks needed
+        const isIntradayOrDelivery =
+          key === "EquityIntradayPer" || key === "EquityDeliveryPer";
+
+        if (isIntradayOrDelivery) {
+          const minKey =
+            key === "EquityIntradayPer"
+              ? "EquityIntradayMin"
+              : "EquityDeliveryMin";
+
+          const minValue = matchedPlan[minKey];
+
+          if (minValue > currentPlan.brokeragePercMin) {
+            console.log(
+              `${minKey} (${minValue}) > brokeragePercMin (${currentPlan.brokeragePercMin}) → show consent`
+            );
+            consentNeeded = true;
+            // setShowConsent(true);
+            break;
+          } else {
+            console.log(`${minKey} is lesser or equal → no consent`);
+          }
+        } else {
+          // ✅ NEW CONDITION: other keys (not Intraday/Delivery)
+          const min = currentPlan.brokeragePercMin;
+
+          if (min !== undefined && min > 0) {
+            console.log(
+              `${key} equals brokeragePerc, but brokeragePercMin (${min}) > 0 → show consent`
+            );
+            consentNeeded = true;
+            // setShowConsent(true);
+            break;
+          }
+        }
+      }
+    }
+
+    setShowConsent(consentNeeded);
   };
 
   // Format date to a more readable format
@@ -126,6 +286,7 @@ const ModalComponent = ({
       moduleNo: latestHistory?.moduleNo || "",
       existingPlan: `${existingPlan} ( ${activeSince} )`,
       proposedPlan: selectedValue,
+      consentfileName: uploadedFileName,
     };
 
     console.log("Confirmed Brokerage Plan Payload:", payload);
@@ -152,11 +313,61 @@ const ModalComponent = ({
         setSelectedValue("");
       });
   };
+
+  const handleDownload = async () => {
+    const fileName = "Brokerage_consent_form";
+    const fileType = ".pdf";
+
+    const payload = {
+      fileName: fileName,
+      filePath: "D:\\FileUpload\\KYCDoc",
+      fileType,
+      contentType: "",
+    };
+
+    dispatch(showLoader("Downloading..."));
+
+    try {
+      const response = await apiServices.ComplianceDownload(payload);
+
+      if (response?.status === 200 && response?.data) {
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove(); // ✅ Clean up
+        URL.revokeObjectURL(url); // ✅ Revoke after use
+      } else {
+        console.error("Error during download", response);
+        ShowToast("info", "Error downloading file");
+      }
+    } catch (error: any) {
+      console.error("Download failed", error);
+      ShowToast(
+        "info",
+        error?.message || "An error occurred while downloading"
+      );
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
   const handleProceedClick = () => {
     if (step === 1 && selectedValue !== "") {
       setStep(2);
     } else {
-      handleUpdateBrokeragePlan();
+      // debugger;
+      if (showConsent && selectedFile === null) {
+        ShowToast("error", "Please Upload Proof");
+        return;
+      } else {
+        handleUpdateBrokeragePlan();
+        // alert("else ka else");
+      }
     }
   };
 
@@ -165,7 +376,22 @@ const ModalComponent = ({
     setStep(1);
     setSelectedValue("");
     onClose();
+    setShowConsent(false);
   };
+
+  // const handleFileUploadClick = () => {
+  //   if (selectedFile && handleFileUpload) {
+  //     // console.log("rowCheck-->", row);
+
+  //     handleFileUpload(selectedFile);
+  //     // handleFileUpload(row, selectedFile, formik.values.remark);
+  //     setSelectedFile(null);
+  //     // setmodal_center(false);
+  //     // formik.setFieldValue("remark", "");
+  //   } else {
+  //     ShowToast("error", "Please select a file to upload.");
+  //   }
+  // };
 
   return (
     <Modal
@@ -189,98 +415,170 @@ const ModalComponent = ({
         <Row>
           {step === 1 ? (
             <>
-              {/* Left: Select Plan */}
+              {/* Top: Select Plan */}
               <Col
                 xs={12}
-                md={6}
-                style={{ borderRight: "2px solid grey", marginBottom: "15px" }}
+                style={{
+                  borderBottom: "2px solid grey",
+                  marginBottom: "12px",
+                  paddingBottom: "8px",
+                }}
               >
                 <p
                   className="text-center"
                   style={{
                     color: "#11395C",
-                    fontSize: "16px",
+                    fontSize: "18px",
                     fontFamily: "Poppins",
+                    fontWeight: 600,
+                    marginBottom: "12px",
                   }}
                 >
                   Brokerage Plans
                 </p>
                 <Row>
-                  {choosePlans.map((planType, index) => (
-                    <Col xs={12} md={6} key={planType}>
-                      <p
-                        style={{
-                          color: "#11395C",
-                          fontFamily: "Poppins",
-                          padding: "3px 0 5px",
-                        }}
-                      >
-                        <RadioInput
-                          onChange={handleChange}
-                          value={planType}
-                          id={`plan${index}`}
-                          name="brokeragePlan"
-                          label={planType}
-                        />
-                      </p>
-                    </Col>
-                  ))}
+                  <select
+                    onChange={handleChange}
+                    name="brokeragePlan"
+                    style={{
+                      width: "100%",
+                      padding: "10px 14px",
+                      fontFamily: "Poppins",
+                      borderRadius: "10px",
+                      border: "1px solid #ccc",
+                      fontSize: "14px",
+                      backgroundColor: "#ffffff",
+                      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <option value="">-- Select a Brokerage Plan --</option>
+                    {choosePlans.map((planType, index) => (
+                      <option value={planType} key={index}>
+                        {planType}
+                      </option>
+                    ))}
+                  </select>
                 </Row>
-                <span
-                  style={{
-                    border: "1px solid #FE4747",
-                    padding: "6px",
-                    borderRadius: "16px",
-                    color: "#FE4747",
-                    fontSize: "9px",
-                    fontFamily: "Poppins",
-                  }}
-                >
-                  Note : Brokerage Plan can be modified after 90 days
-                </span>
+                {showConsent && ( // Replace `true` with your consent condition (e.g., selectedPlan === "XYZ")
+                  // shouldShowConsentForm()
+                  <div style={{ marginBottom: "5px" }}>
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        fontFamily: "Poppins",
+                        marginRight: "10px",
+                      }}
+                    >
+                      Consent Form:
+                    </span>
+                    <a
+                      // href="/path/to/consent-form.pdf" // Replace with your actual file path
+                      download
+                      onClick={handleDownload}
+                      style={{
+                        color: "#007BFF",
+                        textDecoration: "underline",
+                        fontSize: "14px",
+                        fontFamily: "Poppins",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Click here to download
+                    </a>
+                  </div>
+                )}
+                {/* Placeholder for conditional rendering */}
               </Col>
 
-              {/* Right: History */}
-              <Col xs={12} md={6}>
+              {/* Bottom: History */}
+              <Col xs={12}>
                 <p
                   className="text-center"
                   style={{
                     color: "#11395C",
-                    fontSize: "16px",
+                    fontSize: "18px",
                     fontFamily: "Poppins",
+                    fontWeight: 600,
+                    marginBottom: "12px",
                   }}
                 >
                   Modification History
                 </p>
-                <Row>
+                <Row className="justify-content-center">
                   {history.map((item, index) => (
                     <Col
                       xs={12}
                       md={6}
-                      key={item.modificationDate + item.moduleNo}
+                      key={item.rowNum}
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginBottom: "10px",
+                      }}
                     >
-                      <p
+                      <div
                         style={{
-                          color: "#11395C",
-                          fontSize: "12px",
-                          fontFamily: "Poppins",
-                          padding: "3px 0 15px",
+                          width: "100%",
+                          maxWidth: "360px", // Fixes inconsistent width
+                          // padding: "16px",
+                          borderRadius: "12px",
+                          border: "1px solid rgb(163, 163, 163)",
+                          backgroundColor: "#F9FAFB",
+                          textAlign: "center", // Center-aligns text
+                          // minHeight: "120px", // Ensures even height if needed
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
                         }}
                       >
-                        {index === 0 && (
-                          <strong style={{ color: "#E15759" }}>
-                            Current Plan
-                          </strong>
-                        )}
-                        <br />
-                        {item.modificationDate} <br />
-                        {item.segment.toLowerCase().includes("option")
-                          ? `₹ ${item.brokeragePerc} per lot`
-                          : `${item.brokeragePerc} % of turnover`}
-                      </p>
+                        <p
+                          style={{
+                            color: "#11395C",
+                            fontSize: "14px",
+                            fontFamily: "Poppins",
+                            lineHeight: "1.6",
+                            margin: 0,
+                          }}
+                        >
+                          {index === 0 && (
+                            <strong style={{ color: "#E15759" }}>
+                              Current Plan
+                            </strong>
+                          )}
+                          <br />
+                          {item.modificationDate}
+                          <br />
+                          {item.description}
+                          {/* 
+            Keeping this logic commented intentionally as per your original code
+            {item.segment.toLowerCase().includes("option")
+              ? `₹ ${item.brokeragePerc} per lot`
+              : `${item.brokeragePerc} % of turnover`} 
+          */}
+                        </p>
+                      </div>
                     </Col>
                   ))}
                 </Row>
+
+                {/* Note */}
+                <span
+                  style={{
+                    display: "inline-block",
+                    border: "1px solid #EF5350",
+                    backgroundColor: "#FFF0F0",
+                    padding: "4px 9px",
+                    borderRadius: "16px",
+                    color: "#C62828",
+                    fontSize: "12px",
+                    fontFamily: "Poppins",
+                    // marginTop: "16px",
+                    fontWeight: 500,
+                  }}
+                >
+                  Note: Brokerage Plan can be modified after 90 days
+                </span>
               </Col>
             </>
           ) : (
@@ -295,7 +593,7 @@ const ModalComponent = ({
                   className="text-center"
                   style={{
                     color: "#11395C",
-                    fontSize: "16px",
+                    fontSize: "17px",
                     fontFamily: "Poppins",
                   }}
                 >
@@ -307,15 +605,17 @@ const ModalComponent = ({
                       <p
                         style={{
                           color: "#11395C",
-                          fontSize: "12px",
+                          fontSize: "13px",
                           fontFamily: "Poppins",
                         }}
                       >
-                        {history[0].brokeragePerc}{" "}
-                        {history[0].segment.toLowerCase().includes("option")
+                        {/* {history[0].brokeragePerc} */}
+                        {history[0].description}
+                        {/* {history[0].segment.toLowerCase().includes("option")
                           ? "per lot"
-                          : "% of turnover"}{" "}
-                        Plan <br />
+                          : "% of turnover"}{" "} */}
+                        {/* Plan */}
+                        <br />
                         Active since {formatDate(history[0].modificationDate)}
                       </p>
                     )}
@@ -324,12 +624,12 @@ const ModalComponent = ({
               </Col>
 
               {/* Right: Selected Plan */}
-              <Col xs={12} md={6}>
+              <Col xs={12} md={6} style={{ marginBottom: "15px" }}>
                 <p
                   className="text-center"
                   style={{
                     color: "#11395C",
-                    fontSize: "16px",
+                    fontSize: "17px",
                     fontFamily: "Poppins",
                   }}
                 >
@@ -340,7 +640,7 @@ const ModalComponent = ({
                     <p
                       style={{
                         color: "#11395C",
-                        fontSize: "12px",
+                        fontSize: "13px",
                         fontFamily: "Poppins",
                       }}
                     >
@@ -349,9 +649,34 @@ const ModalComponent = ({
                   </Col>
                 </Row>
               </Col>
+              {showConsent && (
+                <>
+                  <div style={{ fontFamily: "Public Sans" }}>
+                    <h6 style={{ margin: 0 }}>Upload Proof</h6>
+                  </div>
+                  <Col lg={12} style={{ paddingTop: "16px" }}>
+                    <Input
+                      name="uploadProof"
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.pdf"
+                      className="form-control mb-3"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          const file = e.target.files[0];
+                          setSelectedFile(file);
+                          handleFileUpload?.(file, type);
+                          // setSelectedFile(null);
+                        }
+                      }}
+                      style={{ width: "100%", minHeight: "40px" }}
+                    />
+                  </Col>
+                </>
+              )}
             </>
           )}
         </Row>
+        {/* {showConsent && <span>upload file here</span>} */}
       </ModalBody>
       <div className="modal-footer d-flex align-items-center justify-content-center">
         <Button
@@ -373,6 +698,7 @@ const ModalComponent = ({
             backgroundColor: step === 1 ? "#01396B" : "#5CAE60",
             borderColor: step === 1 ? "#01396B" : "#5CAE60",
             color: "#fff",
+            cursor: !selectedValue ? "not-allowed" : "pointer",
           }}
         >
           {step === 1 ? "Proceed" : "Confirm"}

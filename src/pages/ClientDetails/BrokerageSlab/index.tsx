@@ -10,7 +10,13 @@ import { AppDispatch } from "../../../redux/store.ts";
 import { apiServices } from "../../../services/index.ts";
 import ShowToast from "../../../utils/toastUtils.tsx";
 
-const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
+const BrokerageSlab = ({
+  setClientDetails,
+  selectedClientCode,
+  branch,
+  onFileUpload,
+  uploadedFileName,
+}: any) => {
   interface BrokerageItem {
     type: string;
     equity_intraday_brokerage?: number;
@@ -21,6 +27,7 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
     currency_Options_brokerage?: number;
     commodity_Futures_brokerage?: number;
     commodity_Options_brokerage?: number;
+    description?: string;
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,6 +90,9 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
       console.log("mappedDPSchemes", mappedDPScheme);
     }
   }, [setClientDetails]);
+  useEffect(() => {
+    console.log("branchbranch", branch);
+  }, []);
 
   useEffect(() => {
     const payload = {
@@ -108,7 +118,7 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
   }, [selectedClientCode]);
 
   useEffect(() => {
-    console.log("Fetched Brokerage Details-use", brokerageSlab);
+    console.log("Fetched Brokerage Details-use", brokerageSlab, branch);
   }, [brokerageSlab]);
 
   const handleBrokeragePlan = (item?: any) => {
@@ -193,121 +203,135 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
         isOpen={isModalOpen}
         onClose={handleBrokeragePlan}
         BrokerageTitle={selectedBrokerageItem}
+        handleFileUpload={(file, type) => {
+          console.log("Uploading file:", file);
+          if (typeof onFileUpload === "function") {
+            onFileUpload(file, type);
+          } else {
+            console.warn("onFileUpload is not defined");
+          }
+        }}
+        uploadedFileName={uploadedFileName}
       />
-      <Row className="gx-3 gy-2 align-items-start">
-        {/* Left Side: Brokerage Slab */}
-        <Col md={3}>
-          <Card
-            style={{
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
-              backgroundColor: "#11395C",
-              borderRadius: "13px",
-              height: "100%", // Make the height 100% to match the content
-            }}
-          >
-            <CardBody
-              className="d-flex justify-content-center align-items-center"
-              style={{ height: "100px" }}
+      {branch !== "PPAL" && (
+        <Row className="gx-3 gy-2 align-items-start">
+          {/* Left Side: Brokerage Slab */}
+          <Col md={3}>
+            <Card
+              style={{
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
+                backgroundColor: "#11395C",
+                borderRadius: "10px",
+                height: brokerageSlab.length > 4 ? "140px" : "65px", // Make the height 100% to match the content
+                // margin: 0,
+              }}
             >
-              <p
-                style={{
-                  fontFamily: "Poppins",
-                  color: "#fff",
-                  fontWeight: "bold",
-                  fontSize: "20px",
-                  margin: 0,
-                }}
+              <CardBody
+                className="p-0 d-flex justify-content-center align-items-center "
+                // style={{ height: "100px" }}
               >
-                Brokerage Slab
-              </p>
-            </CardBody>
-          </Card>
-        </Col>
+                <p
+                  style={{
+                    fontFamily: "Poppins",
+                    color: "#fff",
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    margin: 0,
+                  }}
+                >
+                  Brokerage Slab
+                </p>
+              </CardBody>
+            </Card>
+          </Col>
 
-        {/* Right Side: Brokerage Items */}
-        <Col md={9}>
-          <Row className="gx-2 gy-2">
-            {Array.isArray(brokerageSlab) &&
-              brokerageSlab.map((item, index) => {
-                // Extract the first non-zero brokerage value
-                const value =
-                  item.equity_intraday_brokerage ||
-                  item.equity_Delivery_brokerage ||
-                  item.equity_Futures_brokerage ||
-                  item.equity_Options_brokerage ||
-                  item.currency_Futures_brokerage ||
-                  item.currency_Options_brokerage ||
-                  item.commodity_Futures_brokerage ||
-                  item.commodity_Options_brokerage ||
-                  0;
+          {/* Right Side: Brokerage Items */}
+          <Col md={9}>
+            <Row className="gx-2 gy-2">
+              {Array.isArray(brokerageSlab) &&
+                brokerageSlab.map((item, index) => {
+                  // Extract the first non-zero brokerage value
+                  const value =
+                    item.equity_intraday_brokerage ||
+                    item.equity_Delivery_brokerage ||
+                    item.equity_Futures_brokerage ||
+                    item.equity_Options_brokerage ||
+                    item.currency_Futures_brokerage ||
+                    item.currency_Options_brokerage ||
+                    item.commodity_Futures_brokerage ||
+                    item.commodity_Options_brokerage ||
+                    0;
 
-                const isOption = item.type?.toLowerCase().includes("option");
-                const formattedValue = isOption ? `₹ ${value}` : `${value}%`;
+                  // const isOption = item.type?.toLowerCase().includes("option");
+                  // const formattedValue = isOption ? `₹ ${value}` : `${value}%`;
 
-                const suffix = isOption ? "per lot" : "of turnover";
-                return (
-                  <Col md={3} key={index}>
-                    <Card
-                      style={{
-                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-                        border: "1px solid rgba(0, 0, 0, 0.1)",
-                        borderRadius: "10px",
-                        backgroundColor: "#fff",
-                        margin: 0,
-                      }}
-                    >
-                      <CardBody
-                        className="d-flex justify-content-between align-items-center"
-                        style={{ padding: "0px 10px" }}
+                  // const suffix = isOption ? "per lot" : "of turnover";
+                  return (
+                    <Col md={3} key={index}>
+                      <Card
+                        style={{
+                          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                          border: "1px solid rgba(0, 0, 0, 0.1)",
+                          borderRadius: "10px",
+                          backgroundColor: "#fff",
+                          margin: 0,
+                          minHeight: "65px",
+                        }}
                       >
-                        <div className="text-container">
-                          <p
+                        <CardBody
+                          className="d-flex justify-content-between align-items-center"
+                          style={{ padding: "0px 10px" }}
+                        >
+                          <div className="text-container">
+                            <p
+                              style={{
+                                fontFamily: "Poppins",
+                                color: "#333",
+                                fontWeight: "500",
+                                fontSize: "12px",
+                                marginTop: "5px",
+                              }}
+                            >
+                              {item.type}
+                            </p>
+                            <p
+                              style={{
+                                fontFamily: "Poppins",
+                                color: "#777",
+                                fontSize: "11px",
+                                margin: "0 0 5px 0",
+                              }}
+                            >
+                              {value === 0 && (
+                                <FiberManualRecordIcon
+                                  fontSize="small"
+                                  sx={{
+                                    color: "#FF0606",
+                                    marginRight: "5px",
+                                  }}
+                                />
+                              )}
+                              {/* {formattedValue} {suffix} */}
+                              {item.description}
+                            </p>
+                          </div>
+                          <FiEdit
                             style={{
-                              fontFamily: "Poppins",
-                              color: "#333",
-                              fontWeight: "500",
-                              fontSize: "12px",
-                              margin: "5px 0 0 0",
-                            }}
-                          >
-                            {item.type}
-                          </p>
-                          <p
-                            style={{
-                              fontFamily: "Poppins",
+                              cursor: "pointer",
+                              fontSize: "16px",
                               color: "#777",
-                              fontSize: "11px",
-                              margin: "0 0 5px 0",
                             }}
-                          >
-                            {value === 0 && (
-                              <FiberManualRecordIcon
-                                fontSize="small"
-                                sx={{
-                                  color: "#FF0606",
-                                  marginRight: "5px",
-                                }}
-                              />
-                            )}
-                            {formattedValue} {suffix}
-                          </p>
-                        </div>
-                        <FiEdit
-                          style={{
-                            cursor: "pointer",
-                            fontSize: "16px",
-                            color: "#777",
-                          }}
-                          onClick={() => handleEditClick(item)}
-                        />
-                      </CardBody>
-                    </Card>
-                  </Col>
-                );
-              })}
-          </Row>
-        </Col>
-      </Row>
+                            onClick={() => handleEditClick(item)}
+                          />
+                        </CardBody>
+                      </Card>
+                    </Col>
+                  );
+                })}
+            </Row>
+          </Col>
+        </Row>
+      )}
       <div>
         {/* First Section: Last Trade Date and Last Trade Date Items */}
         <Row className="gx-3 gy-2 align-items-start">
@@ -317,7 +341,7 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
               style={{
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
                 backgroundColor: "#11395C",
-                borderRadius: "13px",
+                borderRadius: "10px",
                 height: "100%", // Matches height of items on the right
               }}
             >
@@ -351,16 +375,17 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
                       border: "1px solid rgba(0, 0, 0, 0.1)",
                       borderRadius: "10px",
                       backgroundColor: "#fff",
+                      height: "50px",
                     }}
                   >
                     <CardBody
                       className="text-center"
                       style={{
-                        height: "50px",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "center",
                         alignItems: "center",
+                        padding: 0,
                       }}
                     >
                       <p
@@ -369,7 +394,7 @@ const BrokerageSlab = ({ setClientDetails, selectedClientCode }: any) => {
                           color: "#333",
                           fontWeight: "500",
                           fontSize: "12px",
-                          margin: "5px 0",
+                          // margin: "5px 0",
                         }}
                       >
                         {item.label}

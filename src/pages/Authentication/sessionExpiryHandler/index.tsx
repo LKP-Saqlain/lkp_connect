@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store"; // Adjust path as needed
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store"; // Adjust path as needed
 import CustomModal from "../../../components/common/DPModal"; // Adjust path as needed
 import "../style.css";
-
+import { isSetSessionExpired } from "../../../redux/slices/sessionExpired";
 const SessionExpiryHandler = () => {
   const [modal_center, setModalCenter] = useState(false);
   const [isTokenExpired, setIsTokenExpired] = useState(false);
 
   const location = useLocation();
   const { data } = useSelector((state: RootState) => state.UserLogin);
-
+  const dispatch = useDispatch<AppDispatch>();
   const tokenExpiryTime = data?.data?.tokenExpiryTime;
   // const tokenExpiryTime = new Date(Date.now() - 1 * 60 * 1000).toISOString(); //for testing
   // const istTime = new Date(tokenExpiryTime).toLocaleString("en-IN", {
@@ -27,14 +27,14 @@ const SessionExpiryHandler = () => {
   // console.log("IST Time:", istTime);
 
   useEffect(() => {
-    if (tokenExpiryTime) {
+    if (true) {
       const expiryDate = new Date(tokenExpiryTime);
       const now = new Date();
       console.log("CurrentTime", now, "ExpiryTime", expiryDate);
-
       if (now > expiryDate) {
         setIsTokenExpired(true);
         setModalCenter(true);
+        dispatch(isSetSessionExpired(true));
         return;
       }
 
@@ -44,11 +44,12 @@ const SessionExpiryHandler = () => {
       const timer = setTimeout(() => {
         setIsTokenExpired(true);
         setModalCenter(true);
+        dispatch(isSetSessionExpired(true));
       }, timeUntilExpiry);
 
       return () => clearTimeout(timer);
     }
-  }, [tokenExpiryTime]);
+  }, [true]);
 
   return (
     isTokenExpired &&

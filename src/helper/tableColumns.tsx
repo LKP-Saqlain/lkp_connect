@@ -1,13 +1,14 @@
 import { GridColDef } from "@mui/x-data-grid";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import React from "react";
+// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+// import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import dayjs from "dayjs";
 // import { Button } from "@mui/material";
 // import PersonAddIcon from "@mui/icons-material/PersonAdd";
 // import { FaUserPen } from "react-icons/fa6";
 // import ViewListIcon from "@mui/icons-material/ViewList";
-// import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import CopyToClipboardCell from "./copyToClipBoardCell";
 
 interface ClientRow {
   ClientCode: string;
@@ -157,80 +158,80 @@ export const getClientActivityStatusColumns = (
       disableColumnMenu: true,
       headerClassName: "header-wrap-custom",
     },
-    // {
-    //   field: "viewDetails",
-    //   headerName: "Details",
-    //   minWidth: 80, // Use minWidth instead of fixed width for better responsiveness
-    //   flex: 1,
-    //   align: "center",
-    //   headerAlign: "center",
-    //   renderCell: (params: any) => (
-    //     // <Button
-    //     //   onClick={() => handleViewDetails(params.row)}
-    //     //   variant="contained"
-    //     //   color="primary"
-    //     //   style={{
-    //     //     padding: "1px 9px",
-    //     //     backgroundColor: "#11395C",
-    //     //     fontSize: "5px",
-    //     //     borderRadius: "18px",
-    //     //   }}
-    //     // >
-    //     <Tooltip title={"View Details"} arrow placement="top">
-    //       <OpenInNewIcon
-    //         style={{ cursor: "pointer", color: "#11395C" }}
-    //         onClick={() => handleViewDetails(params.row)}
-    //       />
-    //     </Tooltip>
-    //     // </Button>
-    //   ),
-    // },
     {
-      field: "ActivationDate",
-      headerName: "Activation Date",
-      headerClassName: "header-wrap-custom",
-      flex: 1.2,
-      minWidth: 110,
+      field: "viewDetails",
+      headerName: "Details",
+      minWidth: 80, // Use minWidth instead of fixed width for better responsiveness
+      flex: 1,
       align: "center",
       headerAlign: "center",
-      disableColumnMenu: true,
-      valueGetter: (params: any) => {
-        const rawDate = params;
-        if (!rawDate) return null;
-        const parsedDate = new Date(
-          rawDate.replace(
-            /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
-              const monthMap: any = {
-                Jan: "01",
-                Feb: "02",
-                Mar: "03",
-                Apr: "04",
-                May: "05",
-                Jun: "06",
-                Jul: "07",
-                Aug: "08",
-                Sep: "09",
-                Oct: "10",
-                Nov: "11",
-                Dec: "12",
-              };
-              console.log(match);
-              return `20${year}-${monthMap[month]}-${day}`;
-            }
-          )
-        );
-        return parsedDate;
-      },
-      sortComparator: (v1, v2) => {
-        if (!v1 || !v2) return 0; // Handle missing values
-        return v1 - v2; // Sort in ascending order
-      },
-      valueFormatter: (params: any) => {
-        if (!params) return "";
-        return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
-      },
+      renderCell: (params: any) => (
+        // <Button
+        //   onClick={() => handleViewDetails(params.row)}
+        //   variant="contained"
+        //   color="primary"
+        //   style={{
+        //     padding: "1px 9px",
+        //     backgroundColor: "#11395C",
+        //     fontSize: "5px",
+        //     borderRadius: "18px",
+        //   }}
+        // >
+        <Tooltip title={"View Details"} arrow placement="top">
+          <OpenInNewIcon
+            style={{ cursor: "pointer", color: "#11395C" }}
+            onClick={() => handleViewDetails(params.row)}
+          />
+        </Tooltip>
+        // </Button>
+      ),
     },
+    // {
+    //   field: "ActivationDate",
+    //   headerName: "Activation Date",
+    //   headerClassName: "header-wrap-custom",
+    //   flex: 1.2,
+    //   minWidth: 110,
+    //   align: "center",
+    //   headerAlign: "center",
+    //   disableColumnMenu: true,
+    //   valueGetter: (params: any) => {
+    //     const rawDate = params;
+    //     if (!rawDate) return null;
+    //     const parsedDate = new Date(
+    //       rawDate.replace(
+    //         /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+    //         (match: any, day: any, month: any, year: any) => {
+    //           const monthMap: any = {
+    //             Jan: "01",
+    //             Feb: "02",
+    //             Mar: "03",
+    //             Apr: "04",
+    //             May: "05",
+    //             Jun: "06",
+    //             Jul: "07",
+    //             Aug: "08",
+    //             Sep: "09",
+    //             Oct: "10",
+    //             Nov: "11",
+    //             Dec: "12",
+    //           };
+    //           console.log(match);
+    //           return `20${year}-${monthMap[month]}-${day}`;
+    //         }
+    //       )
+    //     );
+    //     return parsedDate;
+    //   },
+    //   sortComparator: (v1, v2) => {
+    //     if (!v1 || !v2) return 0; // Handle missing values
+    //     return v1 - v2; // Sort in ascending order
+    //   },
+    //   valueFormatter: (params: any) => {
+    //     if (!params) return "";
+    //     return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    //   },
+    // },
   ];
 
   return finalColumns;
@@ -376,7 +377,7 @@ export const getCommChecker: GridColDef[] = [
     field: "status",
     headerName: "Approve | Reject",
     headerClassName: "header-wrap-custom",
-    minWidth: 150,
+    minWidth: 120,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -576,37 +577,37 @@ export const getClientDormantStatus = (
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
   },
-  // {
-  //   field: "viewDetails",
-  //   headerName: "Details",
-  //   width: 130,
-  //   minWidth: 120,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   renderCell: (params: any) => (
-  //     <>
-  //       {/* <Button
-  //         onClick={() => handleViewDetails(params.row)}
-  //         // onClick={() => console.log("rowValues", params.row)}
-  //         variant="contained"
-  //         color="primary"
-  //         style={{
-  //           padding: "1px 9px",
-  //           backgroundColor: "#11395C",
-  //           fontSize: "5px",
-  //           borderRadius: "18px",
-  //         }}
-  //       > */}
-  //       <Tooltip title={"View Details"} arrow placement="top">
-  //         <OpenInNewIcon
-  //           style={{ cursor: "pointer", color: "#11395C" }}
-  //           onClick={() => handleViewDetails(params.row)}
-  //         />
-  //       </Tooltip>
-  //       {/* </Button> */}
-  //     </>
-  //   ),
-  // },
+  {
+    field: "viewDetails",
+    headerName: "Details",
+    width: 130,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params: any) => (
+      <>
+        {/* <Button
+          onClick={() => handleViewDetails(params.row)}
+          // onClick={() => console.log("rowValues", params.row)}
+          variant="contained"
+          color="primary"
+          style={{
+            padding: "1px 9px",
+            backgroundColor: "#11395C",
+            fontSize: "5px",
+            borderRadius: "18px",
+          }}
+        > */}
+        <Tooltip title={"View Details"} arrow placement="top">
+          <OpenInNewIcon
+            style={{ cursor: "pointer", color: "#11395C" }}
+            onClick={() => handleViewDetails(params.row)}
+          />
+        </Tooltip>
+        {/* </Button> */}
+      </>
+    ),
+  },
 ];
 
 export const Corecolumns: GridColDef[] = [
@@ -1563,18 +1564,17 @@ export const T6Columns: GridColDef[] = [
     field: "ClientCode",
     headerName: "Client Code",
     flex: 1,
-    minWidth: 105,
+    minWidth: 100,
     headerAlign: "left",
     align: "left",
-    // sortable: false,
     disableColumnMenu: true,
   },
   {
     field: "ClientName",
     headerName: "Client Name",
+    flex: 2,
+    minWidth: 150,
     disableColumnMenu: true,
-    flex: 2.2,
-    minWidth: 220,
   },
   {
     field: "ClosingBal",
@@ -1596,8 +1596,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "StockValue",
     headerName: "Stock Value",
-    // flex: 1,
-    width: 130,
+    flex: 1.2,
+    minWidth: 120,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1612,7 +1612,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "G5",
     headerName: ">T5",
-    width: 110,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1629,7 +1630,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T5",
     headerName: "T5",
-    width: 100,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1646,7 +1648,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T4",
     headerName: "T4",
-    width: 100,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1663,7 +1666,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T3",
     headerName: "T3",
-    width: 100,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1680,7 +1684,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T2",
     headerName: "T2",
-    width: 100,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1697,7 +1702,8 @@ export const T6Columns: GridColDef[] = [
   {
     field: "T1",
     headerName: "T1",
-    width: 100,
+    flex: 1,
+    minWidth: 100,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -1896,44 +1902,7 @@ export const DPDebitRecovery: GridColDef[] = [
         return <span>No Link Available</span>;
 
       const fullLink = `${Payment_link}${EnCAccountCode}`;
-      const [copied, setCopied] = React.useState(false);
-
-      const handleCopy = () => {
-        navigator.clipboard
-          .writeText(fullLink)
-          .then(() => {
-            console.log("Copied to clipboard:", fullLink);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 3000);
-          })
-          .catch((error) => {
-            console.error("Failed to copy:", error);
-          });
-      };
-
-      return (
-        <>
-          {/* <a
-            href={fullLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "#11395C", textDecoration: "underline" }}
-          >
-            Click here
-          </a>{" "} */}
-          {/* or{" "} */}
-          {copied ? (
-            <span style={{ color: "#11395C" }}>Copied!</span> // Show "Copied!" text
-          ) : (
-            <ContentCopyIcon
-              fontSize="small"
-              style={{ color: "#11395C", cursor: "pointer" }}
-              onClick={handleCopy}
-              titleAccess="Copy to clipboard"
-            />
-          )}
-        </>
-      );
+      return <CopyToClipboardCell fullLink={fullLink} />;
     },
   },
   {
@@ -3583,7 +3552,7 @@ export const RegionalHead: GridColDef[] = [
     field: "branchcode",
     headerName: "Branch",
     minWidth: 70,
-    flex: 0.5,
+    flex: 0.6,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -3643,10 +3612,19 @@ export const RegionalHead: GridColDef[] = [
     align: "left",
   },
   {
+    field: "consentfilename",
+    headerName: "Download",
+    // flex: 1,
+    // minWidth: 50,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
     field: "remark",
     headerName: "Action",
-    flex: 1.5,
-    minWidth: 165,
+    flex: 1,
+    minWidth: 100,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3664,7 +3642,9 @@ export const BrokerageModificationStatus: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
-  ...RegionalHead.filter((col) => col.field !== "remark"),
+  ...RegionalHead.filter(
+    (col) => col.field !== "remark" && col.field !== "consentfilename"
+  ),
   {
     field: "status",
     headerName: "Status",
@@ -3685,9 +3665,9 @@ export const BrokerageModificationStatus: GridColDef[] = [
         color = "#1b5e20";
         border = "1px solid #81c784";
       } else if (status.includes("pending")) {
-        backgroundColor = "#fff9c4"; // Soft yellow (easy on eyes)
-        color = "#ff8f00";
-        border = "1px solid #ffe082";
+        backgroundColor = "#FFF4E5"; // Soft peach / beige
+        color = "#FF9800"; // Warm orange (not too saturated)
+        border = "1px solid #FFB74D"; // Light orange border
       } else if (status.includes("rejected") || status.includes("reject")) {
         backgroundColor = "#ef9a9a"; // Light red
         color = "#b71c1c";
@@ -3711,14 +3691,14 @@ export const BrokerageModificationStatus: GridColDef[] = [
               color,
               border,
               borderRadius: "999px",
-              padding: "3px 16px",
-              fontSize: "10px",
+              padding: "3px 6px",
+              fontSize: "11px",
               fontWeight: 600,
-              textTransform: "capitalize",
+              // textTransform: "capitalize",
               whiteSpace: "nowrap",
               display: "inline-block",
               textAlign: "center",
-              minWidth: "50px",
+              minWidth: "160px",
               lineHeight: "1",
             }}
           >
@@ -3726,6 +3706,31 @@ export const BrokerageModificationStatus: GridColDef[] = [
           </div>
         </div>
       );
+    },
+  },
+  {
+    field: "reason",
+    headerName: "Remarks",
+    minWidth: 100,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "kycApproveStatusDate",
+    headerName: "Date approved by KYC",
+    minWidth: 200,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params: any) => {
+      const kycDate = params.row.kycApproveStatusDate;
+      console.log(kycDate, "params");
+      if (kycDate === "0001-01-01 00:00") {
+        return <span>-</span>;
+      }
     },
   },
 ];

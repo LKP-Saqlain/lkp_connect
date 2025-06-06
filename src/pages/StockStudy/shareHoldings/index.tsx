@@ -1,7 +1,7 @@
 import { Container, Col, Row } from "reactstrap";
 import HoldingSummary from "../../../components/common/holdingSummary";
 import HoldingsInfo from "./holdingsInfo";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
@@ -13,11 +13,21 @@ const ShareHolding = ({ activeMenu, selectedIsin }: any) => {
   const [fundamentalShareHolding, setFundamentalShareHolding] = useState<[]>(
     []
   );
+  const prevIsinRef = useRef<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     console.log("ShareHolding activeMenu:", activeMenu, selectedIsin);
-  }, [activeMenu]);
+    // debugger;
+    // Check if ISIN changed or cleared
+    if (prevIsinRef.current && prevIsinRef.current !== selectedIsin) {
+      console.log("ISIN changed, clearing ShareHolding data");
+      setFundamentalShareHolding([]);
+    }
+
+    // Update previous ISIN for next comparison
+    prevIsinRef.current = selectedIsin;
+  }, [activeMenu, selectedIsin, fundamentalShareHolding]);
 
   useEffect(() => {
     if (selectedIsin) {
@@ -29,8 +39,16 @@ const ShareHolding = ({ activeMenu, selectedIsin }: any) => {
             selectedIsin
           );
           dispatch(hideLoader());
-          console.log("getFundamentalShareholdingResponse", response?.data);
-          setFundamentalShareHolding(response?.data);
+          console.log(
+            "getFundamentalShareholdingResponse",
+            Object.keys(response?.data).length
+          );
+
+          if (Object.keys(response?.data).length > 0) {
+            setFundamentalShareHolding(response?.data);
+          } else {
+            setFundamentalShareHolding([]);
+          }
         } catch (error) {
           dispatch(hideLoader());
           console.log("error", error);

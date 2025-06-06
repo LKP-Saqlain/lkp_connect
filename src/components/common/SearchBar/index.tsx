@@ -81,7 +81,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   activeSubItem,
   dormantCount,
 }) => {
-  const [searchValue, setSearchValue] = React.useState(searchTableValue);
+  const [searchValue, setSearchValue] = React.useState(searchTableValue ?? "");
   // const [selectedButton, setSelectedButton] = React.useState<string>("ALL");
 
   // const selectedStyle = {

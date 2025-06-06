@@ -297,6 +297,9 @@ export const apiServices = {
   UpdateBrokerageRHStatus: async (payload: any) => {
     return await apiService("POST", endpoints.UpdateBrokerageRHStatus, payload);
   },
+  GetTechExcelApiResponse: async (payload: any) => {
+    return await apiService("POST", endpoints.GetTechExcelApiResponse, payload);
+  },
   GetBrokerageModificationValidity: async (payload: any) => {
     return await apiService(
       "POST",

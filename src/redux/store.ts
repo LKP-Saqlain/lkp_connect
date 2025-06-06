@@ -13,6 +13,7 @@ import DealerPerformance from "./slices/DealerPerformance";
 import ClientUserDetails from "./slices/ClientUserDetails";
 import ClientSegmentBrokerage from "./slices/ClientSegmentBrokerage";
 import APBrokerageOverview from "./slices/AP/lastWeekBrokerage";
+import IsSessionExpired from "./slices/sessionExpired";
 
 // Configure the persist settings
 const persistConfig = {
@@ -37,6 +38,7 @@ const store = configureStore({
     ClientUserDashboardDetails: ClientUserDetails,
     ClientSegmentBrokerageDetails: ClientSegmentBrokerage,
     APBrokerage: APBrokerageOverview,
+    sessionExpired: IsSessionExpired,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

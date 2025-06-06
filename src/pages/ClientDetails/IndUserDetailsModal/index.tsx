@@ -26,6 +26,9 @@ const UserInfoModal = ({
   onClose,
   handleModalClose,
   selectedClientCode,
+  branch,
+  handleFileUpload,
+  uploadedFileName,
 }: any) => {
   const [clientDetails, setClientDetails] = useState({
     Client_Name: "",
@@ -253,7 +256,9 @@ const UserInfoModal = ({
                   >
                     Email Id
                   </p>
-                  <h6 className="user-info">{clientDetails.Email_Id}</h6>
+                  <h6 className="user-info">
+                    {clientDetails.Email_Id.toLowerCase()}
+                  </h6>
                 </div>
               </Col>
             </Row>
@@ -356,6 +361,9 @@ const UserInfoModal = ({
         <BrokerageSlab
           setClientDetails={clientDetails}
           selectedClientCode={selectedClientCode}
+          branch={branch}
+          onFileUpload={handleFileUpload}
+          uploadedFileName={uploadedFileName}
         />
       </ModalBody>
       {/* <div className="modal-footer">
