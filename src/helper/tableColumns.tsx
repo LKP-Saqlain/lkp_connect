@@ -3458,7 +3458,7 @@ export const FundamentalQuarterlyPNLHeader = [
 export const FundamentalAnnualPNLHeader = [
   {
     title: "Total Revenue",
-    shortKey: "RevenueFromOperationsNet_A",
+    shortKey: "SR_A",
     isSubpoint: false,
   },
   {

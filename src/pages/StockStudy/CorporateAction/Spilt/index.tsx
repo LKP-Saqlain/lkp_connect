@@ -18,7 +18,7 @@ const Spilt = ({ selectedIsin }: SelectedIsinProps) => {
       try {
         const response = await apiServices.getFundamentalSplit(selectedIsin);
         dispatch(hideLoader());
-        console.log("getFundamentalDividendResponse", response?.data);
+        console.log("getFundamentalSplitResponse", response?.data);
         setData(response?.data);
       } catch (error) {
         dispatch(hideLoader());
