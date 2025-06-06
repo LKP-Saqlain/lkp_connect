@@ -307,4 +307,17 @@ export const apiServices = {
   GetClientWiseBrokerage: async (payload: any) => {
     return await apiService("POST", endpoints.GetClientWiseBrokerage, payload);
   },
+  CTCLActivityReport: async (payload: any) => {
+    return await apiService("POST", endpoints.CTCLActivityReport, payload);
+  },
+  TradingPatternReport: async (payload: any) => {
+    return await apiService("POST", endpoints.TradingPatternReport, payload);
+  },
+  DetailedTradingPatternReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DetailedTradingPatternReport,
+      payload
+    );
+  },
 };

@@ -4122,3 +4122,480 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
 ];
+export const clientTradingPatternSummarizedColumns: GridColDef[] = [
+  {
+    field: "client_Zone",
+    headerName: "Zone",
+    flex: 0.5,
+    minWidth: 60,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "client_Branch",
+    headerName: "Branch Code",
+    flex: 0.7,
+    minWidth: 70,
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "client_ID",
+    headerName: "Client Code",
+    flex: 0.8,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "client_Name",
+    headerName: "Client Name",
+    flex: 1.5,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "online_Total_Brokerage",
+    headerName: "Online Total Brok",
+    flex: 1,
+    minWidth: 80,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "offline_Total_Brokerage",
+    headerName: "Offline Total Brok",
+    flex: 1,
+    minWidth: 80,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "cnT_Total_Brokerage",
+    headerName: "CNT Total Brok",
+    flex: 1,
+    minWidth: 80,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "online_Last_Trade_Date",
+    headerName: "Online Last Trade Date",
+    flex: 1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "offline_Last_Trade_Date",
+    headerName: "Offline Last Trade Date",
+    flex: 1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "cnT_Last_Trade_Date",
+    headerName: "CNT Last Trade Date",
+    flex: 1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "activeStatus",
+    headerName: "Active Status",
+    flex: 0.8,
+    minWidth: 70,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+];
+
+export const clientTradingPatternDetailedColumns: GridColDef[] = [
+  {
+    field: "client_Zone",
+    headerName: "Zone",
+    flex: 0.5,
+    minWidth: 60,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "client_Branch",
+    headerName: "Branch Code",
+    flex: 0.7,
+    minWidth: 70,
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "client_ID",
+    headerName: "Client Code",
+    flex: 0.8,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "client_Name",
+    headerName: "Client Name",
+    flex: 1.3,
+    minWidth: 240,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "online_CM_Brokerage",
+    headerName: "Online CM Brok",
+    flex: 1,
+    minWidth: 75,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "offline_CM_Brokerage",
+    headerName: "Offline CM Brok",
+    flex: 1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "cnT_CM_Brokerage",
+    headerName: "CNT CM Brok",
+    flex: 1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "online_FUT_Brokerage",
+    headerName: "Online Futures Brok",
+    flex: 1.2,
+    minWidth: 80,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "offline_FUT_Brokerage",
+    headerName: "Offline Futures Brok",
+    flex: 1.2,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "cnT_FUT_Brokerage",
+    headerName: "CNT Futures Brok",
+    flex: 1.1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "online_OPT_Brokerage",
+    headerName: "Online Options Brok",
+    flex: 1.2,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "offline_OPT_Brokerage",
+    headerName: "Offline Options Brok",
+    flex: 1.2,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "cnT_OPT_Brokerage",
+    headerName: "CNT Options Brok",
+    flex: 1.1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "online_Last_Trade_Date",
+    headerName: "Online Last Trade Date",
+    flex: 1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "offline_Last_Trade_Date",
+    headerName: "Offline Last Trade Date",
+    flex: 1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "cnT_Last_Trade_Date",
+    headerName: "CNT Last Trade Date",
+    flex: 1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "activeStatus",
+    headerName: "Active Status",
+    flex: 0.8,
+    minWidth: 80,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+];
+
+export const ctclUserWiseColumns: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 0.8,
+    minWidth: 60,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "branchCode",
+    headerName: "Branch Code",
+    flex: 1,
+    minWidth: 100,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "CTCLLoginID",
+    headerName: "CTCL Login ID",
+    flex: 1,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "CTCLUserName",
+    headerName: "CTCL User Name",
+    flex: 1.5,
+    minWidth: 210,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "exchangeSegment",
+    headerName: "Exchange / SegmentTT",
+    flex: 1.2,
+    minWidth: 90,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "turnover",
+    headerName: "Turnover (Cr.)",
+    flex: 1,
+    minWidth: 120,
+    type: "number",
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "grossBrokerage",
+    headerName: "Gross Brokerage",
+    flex: 1,
+    minWidth: 100,
+    type: "number",
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "netBrokerage",
+    headerName: "Net Brokerage",
+    flex: 1,
+    minWidth: 100,
+    type: "number",
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "last_Trade_Date",
+    headerName: "Last Trade Date",
+    flex: 1,
+    minWidth: 100,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+];

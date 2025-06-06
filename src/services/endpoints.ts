@@ -75,4 +75,7 @@ export const endpoints = {
   GetBrokerageModificationValidity:
     "/api/Brokerage/GetBrokerageModificationValidity",
   GetClientWiseBrokerage: "/api/Brokerage/GetClientWiseBrokerage",
+  CTCLActivityReport: "/api/MIS/CTCLActivityReport",
+  TradingPatternReport: "/api/MIS/TradingPatternReport",
+  DetailedTradingPatternReport: "/api/MIS/DetailedTradingPatternReport",
 };

@@ -27,6 +27,9 @@ import {
   PreProofUploadColumns,
   preTradeColumns,
   PreTradeApprovalColumns,
+  clientTradingPatternSummarizedColumns,
+  clientTradingPatternDetailedColumns,
+  ctclUserWiseColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -96,6 +99,7 @@ interface SelectedWidgetProps {
   getUserBrokergageModificationDetails?: any;
   previewUrl?: any;
   setSetShowImg?: any;
+  reportType?: string;
 }
 
 const DataTable = ({
@@ -133,6 +137,7 @@ const DataTable = ({
   getUserBrokergageModificationDetails,
   previewUrl,
   setSetShowImg,
+  reportType,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -824,6 +829,23 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "Client Trading Pattern Report") {
+      const selectedColumn =
+        reportType === "summarized"
+          ? clientTradingPatternSummarizedColumns
+          : reportType === "detailed"
+          ? clientTradingPatternDetailedColumns
+          : [];
+      return (
+        selectedColumn &&
+        selectedColumn.map((column) => ({
+          ...column,
+        }))
+      );
+    } else if (activeSubItem === "CTCL Wise Activity Report") {
+      return ctclUserWiseColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
