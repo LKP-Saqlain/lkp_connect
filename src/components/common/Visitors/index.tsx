@@ -12,8 +12,8 @@ const StoreVisitsCharts = ({ chartData }: any) => {
   useEffect(() => {
     console.log("chartData", chartData);
 
-    const newLabels = Object.keys(chartData);
-    const newSeries = Object.values(chartData) as number[];
+    const newLabels = chartData.map((item: any) => item.name);
+    const newSeries = chartData.map((item: any) => Number(item.value) || 0);
     console.log("res12", newLabels, newSeries);
 
     setLabels(newLabels);

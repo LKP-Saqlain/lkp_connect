@@ -17,6 +17,31 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
     console.log("categories", categories);
   }, [brokerageData]);
 
+  const noData =
+    !brokerageData ||
+    brokerageData.length === 0 ||
+    !series ||
+    series.length === 0 ||
+    series.every((s: any) => !s.data || s.data.length === 0);
+
+  if (noData) {
+    return (
+      <div
+        style={{
+          height: 374,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "14px",
+          color: "#000",
+          // fontWeight: "bold",
+        }}
+      >
+        No Records!
+      </div>
+    );
+  }
+
   var options: any = {
     chart: {
       zoom: {

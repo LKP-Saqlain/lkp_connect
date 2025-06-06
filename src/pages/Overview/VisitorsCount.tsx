@@ -10,7 +10,9 @@ import { ClientSummary } from "../../redux/thunk/ClientSummary";
 import ShowToast from "../../utils/toastUtils";
 
 const StoreVisits = ({ getActiveClients }: any) => {
-  const [chartData, setChartData] = useState<[]>([]);
+  const [chartData, setChartData] = useState<{ name: string; value: number }[]>(
+    []
+  );
 
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -20,7 +22,6 @@ const StoreVisits = ({ getActiveClients }: any) => {
 
   useEffect(() => {
     const fetchActiveInactiveCli = async () => {
-      // const Id = localStorage.getItem("Id");
       const payload = {
         user_id: user_id,
       };
@@ -28,45 +29,34 @@ const StoreVisits = ({ getActiveClients }: any) => {
       dispatch(ClientSummary(payload))
         .unwrap()
         .then((response) => {
-          console.log("ClientSummaryResponse", response?.data?.data[0].Active);
-          const activeClient = response?.data?.data[0].Active;
-          getActiveClients(activeClient);
-          setChartData(response?.data?.data[0]);
-          // setBrokerageData(response?.data?.data);
+          const clientData = response?.data?.data?.[0] || {};
+
+          const active = Number(clientData?.Active ?? 0); // Handle null -> 0
+          const inactive = Number(clientData?.Inactive ?? 0); // Handle null -> 0
+
+          console.log("ChartData Debug:", { active, inactive });
+
+          setChartData([
+            { name: "Active", value: active },
+            { name: "Inactive", value: inactive },
+          ]);
+
+          getActiveClients(active);
+
           if (response?.status === 200) {
             dispatch(hideLoader());
           }
         })
-        .catch((Err) => {
-          const { message } = Err;
-          console.log("Error->", message);
+        .catch((err) => {
+          console.log("Error->", err?.message);
           dispatch(hideLoader());
-          // formik.setFieldError("password", message);
-          ShowToast(
-            "error",
-            message ||
-              "Sorry for the inconvenience, please try after some time."
-          );
-        })
-        .finally(() => {
-          // dispatch(hideLoader());
+          ShowToast("error", err?.message || "Try again later.");
         });
-      // try {
-      //   dispatch(showLoader(""));
-      //   const response = await apiServices.GetClientStatusCnt(payload);
-      //   console.log("GetClientStatusCntresponse", response?.data?.data[0]);
-      //   setChartData(response?.data?.data[0]);
-      //   // setBrokerageData(response?.data?.data);
-      //   if (response?.status === 200) {
-      //     dispatch(hideLoader());
-      //   }
-      // } catch (error) {
-      //   console.error("Error->", error);
-      //   dispatch(hideLoader());
-      // }
     };
+
     fetchActiveInactiveCli();
   }, [dispatch]);
+
   return (
     <React.Fragment>
       <Col xl={4}>
