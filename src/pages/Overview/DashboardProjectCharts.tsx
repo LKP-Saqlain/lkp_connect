@@ -258,6 +258,11 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
   const directBrokingData = series[0]?.data || [];
   const indirectBrokingData = series[1]?.data || [];
 
+  const isDataAvailable =
+    revenueMonths?.length > 0 &&
+    series?.length > 0 &&
+    series.some((s: any) => s.data?.some((d: number) => d !== 0));
+
   var options: any = {
     series: [
       {
@@ -387,14 +392,29 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
   };
   return (
     <React.Fragment>
-      <ReactApexChart
-        dir="ltr"
-        options={options}
-        series={options?.series}
-        type="bar"
-        height="370"
-        className="apex-charts"
-      />
+      {isDataAvailable ? (
+        <ReactApexChart
+          dir="ltr"
+          options={options}
+          series={options?.series}
+          type="bar"
+          height="370"
+          className="apex-charts"
+        />
+      ) : (
+        <div
+          style={{
+            height: 374,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "14px",
+            color: "#000",
+          }}
+        >
+          No Records!
+        </div>
+      )}
     </React.Fragment>
   );
 };
@@ -421,6 +441,11 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
   const spIp = series[2]?.data || [];
   const TPD_mutualfunds = series[3]?.data || [];
   const unlistedBrokingData = series[4]?.data || [];
+
+  const isNonBrokingDataAvailable =
+    revenueMonths?.length > 0 &&
+    series?.length > 0 &&
+    series.some((s: any) => s.data?.some((d: number) => d !== 0));
 
   var options: any = {
     series: [
@@ -562,14 +587,29 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
   };
   return (
     <React.Fragment>
-      <ReactApexChart
-        dir="ltr"
-        options={options}
-        series={options?.series}
-        type="bar"
-        height="370"
-        className="apex-charts"
-      />
+      {isNonBrokingDataAvailable ? (
+        <ReactApexChart
+          dir="ltr"
+          options={options}
+          series={options?.series}
+          type="bar"
+          height="370"
+          className="apex-charts"
+        />
+      ) : (
+        <div
+          style={{
+            height: 374,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "14px",
+            color: "#000",
+          }}
+        >
+          No Records!
+        </div>
+      )}
     </React.Fragment>
   );
 };
