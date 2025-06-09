@@ -6,10 +6,10 @@ import {
   Col,
   Label,
   Row,
-  Input,
+  // Input,
   Button,
 } from "reactstrap";
-import { regEx } from "../../../helper/method";
+// import { regEx } from "../../../helper/method";
 // import DownloadIcon from "@mui/icons-material/Download";
 import { apiServices } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +25,7 @@ import { useFormik } from "formik";
 import "../style.css";
 // import { slbmColumns } from "../../../helper/tableColumns.tsx";
 import UserInfoTable from "../../../components/common/UserInfoTable";
+import { Autocomplete, TextField } from "@mui/material";
 
 // interface Option {
 //   label: string;
@@ -40,6 +41,8 @@ const SlbmHoling = ({ activeSubItem }: any) => {
   // const [searchValue, setSearchValue] = React.useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [isinRecords, setIsinRecords] = useState<any[]>([]);
+  const [inputText, setInputText] = useState<string>("");
 
   // const [page, setPage] = useState(1); // Track current page
 
@@ -87,6 +90,22 @@ const SlbmHoling = ({ activeSubItem }: any) => {
       // handleDownloadExcel();
     },
   });
+
+  useEffect(() => {
+    dispatch(showLoader("Please wait we are processing your request"));
+    apiServices
+      .ScripSearch()
+      .then((response) => {
+        dispatch(hideLoader());
+        console.log("scriptSearchResponse", response?.data?.Table);
+
+        setIsinRecords(response?.data?.Table || []);
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        console.log("error", error);
+      });
+  }, []);
 
   // useEffect(() => {
   //   if (accessType === "") {
@@ -217,13 +236,13 @@ const SlbmHoling = ({ activeSubItem }: any) => {
     }
   }, [formik.values.selectedZone, dispatch]); // This effect runs when `selectedZone` changes
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    console.log("value", name, value);
-    if (regEx.alphaNumeric.test(value)) {
-      formik.setFieldValue(name, value);
-    }
-  };
+  // const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   console.log("value", name, value);
+  //   if (regEx.alphaNumeric.test(value)) {
+  //     formik.setFieldValue(name, value);
+  //   }
+  // };
 
   // const handlePageChange = (
   //   event: React.ChangeEvent<unknown>,
@@ -305,58 +324,6 @@ const SlbmHoling = ({ activeSubItem }: any) => {
       });
   };
 
-  // ];
-
-  // const handleDownloadExcel = async () => {
-  //   if (!formik.values.selectedZone || !formik.values.selectedBranchCode) {
-  //     formik.setTouched({
-  //       selectedZone: true,
-  //       selectedBranchCode: true,
-  //     });
-  //     return; // Stop execution if validation fails
-  //   }
-
-  //   // const Id = localStorage.getItem("Id");
-  //   const payload = {
-  //     loginName: user_id,
-  //     start: 0,
-  //     pageSize: 50,
-  //     searchKey: "",
-  //     zone: formik.values.selectedZone?.value,
-  //     branchCode: formik.values.selectedBranchCode?.value,
-  //     symbolISIN: formik.values.isInValue,
-  //   };
-  //   try {
-  //     let token = localStorage.getItem("tkn");
-  //     dispatch(showLoader("Please wait, We are Processing your Request"));
-  //     const response = await axios.post(
-  //       `https://middlewareapi.lkp.net.in${endpoints.SLBMHoldingsReportExcel}`,
-  //       payload,
-  //       {
-  //         responseType: "blob",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     const url = window.URL.createObjectURL(new Blob([response.data]));
-  //     const link = document.createElement("a");
-  //     link.href = url;
-  //     link.setAttribute("download", "file.xlsx"); // Specify the file name
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     dispatch(hideLoader());
-  //   } catch (error: any) {
-  //     console.error("Download error", error?.message);
-  //     dispatch(hideLoader());
-  //     ShowToast(
-  //       "error",
-  //       error?.message ||
-  //         "Sorry for the inconvenience, please try after some time."
-  //     );
-  //   }
-  // };
-
   const handleSearchBasedOnInput = (value: string) => {
     console.log("handleSearchBasedOnInputValue", value);
     // setSearchValue(value);
@@ -374,52 +341,6 @@ const SlbmHoling = ({ activeSubItem }: any) => {
     setFilteredData(filtered);
     console.log("filteredSearch Records", filteredData);
   };
-
-  // const handleSearchUser = async () => {
-  //   setUserData([]);
-  //   if (searchValue !== "") {
-  //     const pageSize = 10; // Define pageSize
-
-  //     // Calculate start based on the new page (0-indexed)
-  //     // const start = (value - 1) * pageSize;
-
-  //     const payload = {
-  //       loginName: user_id,
-  //       start: pageSize, // Calculate start based on the new page
-  //       pageSize: 10,
-  //       searchKey: searchValue !== "" ? searchValue : "",
-  //       zone: formik.values.selectedZone?.value,
-  //       branchCode: formik.values.selectedBranchCode?.value,
-  //       symbolISIN: formik.values.isInValue,
-  //     };
-  //     dispatch(showLoader(""));
-  //     await apiServices
-  //       .SLBMHoldingsReport(payload)
-  //       .then((response) => {
-  //         console.log("response", response?.data);
-  //         console.log("response", response?.data?.sLBMHoldings[0]);
-  //         const { recordsTotal } = response?.data?.sLBMHoldings[0];
-  //         setTotalEntries(recordsTotal);
-  //         dispatch(hideLoader());
-  //         if (response?.status === 200) {
-  //           setResponseStatus(true);
-  //           setUserData(response.data?.sLBMHoldings);
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.log("Error->", error.response);
-  //         // const zoneError = error.response?.data?.errors?.Zone["0"];
-  //         // const branchCodeError = error?.response?.data?.errors?.BranchCode["0"];
-  //         dispatch(hideLoader());
-  //         ShowToast("error", error.response?.data?.message);
-  //         // ShowToast("error", zoneError);
-  //         // ShowToast("error", branchCodeError);
-  //       })
-  //       .finally(() => {
-  //         dispatch(hideLoader());
-  //       });
-  //   }
-  // };
 
   document.title = "LKP Securities | Dormant Client Report";
 
@@ -560,53 +481,86 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                             >
                               Symbol / ISIN
                             </Label>
-                            <Input
-                              name="isInValue"
-                              type="text"
-                              className={`core-report-form-control ${
-                                formik.touched.isInValue &&
-                                formik.errors.isInValue
-                                  ? "is-invalid"
-                                  : ""
-                              }`} // Add 'is-invalid' class if there's an error
-                              value={formik.values.isInValue}
-                              placeholder="Please enter SYMBOL/ISIN"
-                              onChange={handleOnChange}
-                              onBlur={formik.handleBlur}
-                              id="choices-text-remove-button"
-                              invalid={
-                                formik.touched.isInValue &&
-                                Boolean(formik.errors.isInValue)
+                            <Autocomplete
+                              freeSolo
+                              options={isinRecords}
+                              getOptionLabel={(option) =>
+                                typeof option === "string"
+                                  ? option
+                                  : option.ScripName || ""
                               }
-                              data-choices
-                              data-choices-limit="3"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  borderColor:
+                              filterOptions={(options, state) =>
+                                options.filter((option) => {
+                                  const input = state.inputValue.toLowerCase();
+                                  return (
+                                    option.ScripName?.toLowerCase().includes(
+                                      input
+                                    ) ||
+                                    option.BSECode?.toLowerCase().includes(
+                                      input
+                                    ) ||
+                                    option.NSECode?.toLowerCase().includes(
+                                      input
+                                    ) ||
+                                    option.ISINCode?.toLowerCase().includes(
+                                      input
+                                    )
+                                  );
+                                })
+                              }
+                              value={
+                                isinRecords.find(
+                                  (item) =>
+                                    item.ISINCode === formik.values.isInValue
+                                ) || null
+                              }
+                              inputValue={inputText}
+                              onInputChange={(event, newInputValue) => {
+                                setInputText(newInputValue);
+                                console.log(event);
+
+                                if (newInputValue === "") {
+                                  formik.setFieldValue("isInValue", "");
+                                }
+                              }}
+                              onChange={(event, newValue) => {
+                                if (newValue && typeof newValue !== "string") {
+                                  console.log(event);
+                                  formik.setFieldValue(
+                                    "isInValue",
+                                    newValue.ISINCode || ""
+                                  );
+                                  setInputText(newValue.ISINCode || "");
+                                } else {
+                                  formik.setFieldValue("isInValue", "");
+                                  setInputText("");
+                                }
+                              }}
+                              renderOption={(props, option) => (
+                                <li {...props} key={option.ISINCode}>
+                                  {option.ScripName}
+                                </li>
+                              )}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  placeholder="Please search ISIN"
+                                  name="isInValue"
+                                  onBlur={formik.handleBlur}
+                                  error={
+                                    formik.touched.isInValue &&
+                                    Boolean(formik.errors.isInValue)
+                                  }
+                                  helperText={
                                     formik.touched.isInValue &&
                                     formik.errors.isInValue
-                                      ? "#DC4535"
-                                      : base.borderColor,
-                                  "&:hover": {
-                                    borderColor:
-                                      formik.touched.isInValue &&
-                                      formik.errors.isInValue
-                                        ? "#DC4535"
-                                        : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.isInValue &&
-                              formik.errors.isInValue && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
-                                  {formik.errors.isInValue}
-                                </div>
+                                      ? formik.errors.isInValue
+                                      : ""
+                                  }
+                                  size="small"
+                                />
                               )}
+                            />
                           </div>
                         </Col>
 

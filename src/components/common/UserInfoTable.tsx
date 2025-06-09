@@ -559,7 +559,7 @@ const DataTable = ({
       return terminalcol.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "SLBM ClientHolding") {
+    } else if (activeSubItem === "SLBM Client Holding") {
       return slbmColumns.map((column) => ({
         ...column,
       }));
