@@ -135,7 +135,9 @@ const SlbmHoling = ({ activeSubItem }: any) => {
           }));
           console.log("dropdown value", zoneDropdown);
           setNoSortingGroup(zoneDropdown);
-
+          if (zoneDropdown.length > 0) {
+            formik.setFieldValue("selectedZone", zoneDropdown[0]);
+          }
           // setSelectedNoSortingGroup(selectedNoSortingGroup);
         }
       })
@@ -193,8 +195,10 @@ const SlbmHoling = ({ activeSubItem }: any) => {
               { label: "ALL", value: "ALL" },
               ...branchDropdown,
             ];
-
             setBranchCodeOptions(branchDropdown); // Set the updated branch dropdown
+            if (branchDropdown.length > 0) {
+              formik.setFieldValue("selectedBranchCode", branchDropdown[0]);
+            }
           }
           dispatch(hideLoader());
         })

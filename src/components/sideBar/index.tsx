@@ -615,8 +615,8 @@ const SideBar = () => {
   };
 
   const revenueDetailsSubItems: Record<string, JSX.Element> = {
-    "Menu Master": <MasterMenuMarketing />,
-    "User Access Mapping": <RegAnnMaster />,
+    "Regulatory Announcement": <MasterMenuMarketing />,
+    "Marketing Material": <RegAnnMaster />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {
