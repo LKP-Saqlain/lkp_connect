@@ -30,6 +30,7 @@ import {
   clientTradingPatternSummarizedColumns,
   clientTradingPatternDetailedColumns,
   ctclUserWiseColumns,
+  ctclUserWiseDetailedColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -923,9 +924,18 @@ const DataTable = ({
         }))
       );
     } else if (activeSubItem === "CTCL Wise Activity Report") {
-      return ctclUserWiseColumns.map((column) => ({
-        ...column,
-      }));
+      const selectedColumn =
+        reportType === "summarized"
+          ? ctclUserWiseColumns
+          : reportType === "detailed"
+          ? ctclUserWiseDetailedColumns
+          : [];
+      return (
+        selectedColumn &&
+        selectedColumn.map((column) => ({
+          ...column,
+        }))
+      );
     } else {
       return [];
     }
