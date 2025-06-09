@@ -4148,7 +4148,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "branchType",
+    field: "branch_Type",
     headerName: "Branch Type",
     flex: 0.8,
     minWidth: 120,
@@ -4288,7 +4288,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "branchType",
+    field: "branch_Type",
     headerName: "Branch Type",
     flex: 0.8,
     minWidth: 120,
@@ -4529,7 +4529,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "branchType",
+    field: "branch_Type",
     headerName: "Branch Type",
     flex: 0.8,
     minWidth: 120,
@@ -4621,15 +4621,6 @@ export const ctclUserWiseColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
   },
-  {
-    field: "branchType",
-    headerName: "Branch Type",
-    flex: 0.8,
-    minWidth: 120,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
-  },
 ];
 export const ctclUserWiseDetailedColumns: GridColDef[] = [
   {
@@ -4651,7 +4642,7 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "branchType",
+    field: "branch_Type",
     headerName: "Branch Type",
     flex: 0.8,
     minWidth: 120,

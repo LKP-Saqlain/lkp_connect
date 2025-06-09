@@ -45,6 +45,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
   const [endDate, setEndDate] = useState<string | null>(null);
   const [formattedDateRange, setFormattedDateRange] = useState<string>("");
   const [ctclData, setCtclData] = useState<any[]>([]);
+  const [ctclDetailedData, setCtclDetailedData] = useState<any[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -86,17 +87,71 @@ const CTCLReport = ({ activeSubItem }: any) => {
       formattedDateRange,
     });
     if (reportType === "summarized") {
-      fetchSummarizedReport();
+      fetchSummarizedReport(values);
       return;
     }
     if (reportType === "detailed") {
-      // fetchDetailedReport(values);
+      fetchDetailedReport(values);
       return;
     }
   };
 
-  const fetchSummarizedReport = () => {
+  const fetchDetailedReport = (values: any) => {
     let payload = {
+      option: values.reportType,
+      fromDate: startDate,
+      toDate: endDate,
+      zone: formik.values.selectedZone?.value,
+      branchCode: formik.values.selectedBranchCode?.value,
+    };
+
+    dispatch(showLoader("Please wait"));
+    apiServices
+      .DetailedCTCLActivityReport(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+        console.log("CTCL_Response", response?.data?.data);
+        if (response?.status === 200) {
+          if (
+            Array.isArray(response?.data?.data) &&
+            response?.data?.data.length > 0
+          ) {
+            const formattedData = response?.data?.data.map(
+              (item: any, index: any) => ({
+                id: index + 1, // unique ID for DataGrid
+                zone: item.client_Zone,
+                branchCode: item.client_Branch,
+                ctclTerminalID: item.ctcL_Terminal_ID,
+                CTCLLoginID: item.ctcL_Login_ID,
+                CTCLUserName: item.ctcL_Username,
+                exchangeSegment: item.segment,
+                turnover: parseFloat(item.turnover),
+                grossBrokerage: parseFloat(item.gross_Brokerage),
+                netBrokerage: parseFloat(item.net_Brokerage),
+                last_Trade_Date: item.last_Trade_Date,
+                branch_Type: item.branch_Type,
+              })
+            );
+
+            console.log("Formatted CTCL Detailed Data", formattedData);
+            setCtclDetailedData(formattedData); // 👉 save to state
+          } else {
+            console.warn("No data received from CTCLActivityReport API.");
+            setCtclDetailedData([]); // clear state if empty
+          }
+        }
+      })
+      .catch((Error) => {
+        console.log("ERROR", Error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
+  const fetchSummarizedReport = (values: any) => {
+    let payload = {
+      option: values.reportType,
       fromDate: startDate,
       toDate: endDate,
       zone: formik.values.selectedZone?.value,
@@ -127,6 +182,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
                 grossBrokerage: parseFloat(item.gross_Brokerage),
                 netBrokerage: parseFloat(item.net_Brokerage),
                 last_Trade_Date: item.last_Trade_Date,
+                branch_Type: item.branch_Type,
               })
             );
 
@@ -644,7 +700,13 @@ const CTCLReport = ({ activeSubItem }: any) => {
                 <CardBody style={{ zIndex: 0 }}>
                   <UserInfoTable
                     activeSubItem={activeSubItem}
-                    T6Data={ctclData}
+                    T6Data={
+                      formik.values.reportType === "summarized"
+                        ? ctclData
+                        : formik.values.reportType === "detailed"
+                        ? ctclDetailedData
+                        : []
+                    }
                     reportType={formik.values.reportType}
                   />
                 </CardBody>

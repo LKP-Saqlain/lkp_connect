@@ -313,6 +313,13 @@ export const apiServices = {
   CTCLActivityReport: async (payload: any) => {
     return await apiService("POST", endpoints.CTCLActivityReport, payload);
   },
+  DetailedCTCLActivityReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DetailedCTCLActivityReport,
+      payload
+    );
+  },
   TradingPatternReport: async (payload: any) => {
     return await apiService("POST", endpoints.TradingPatternReport, payload);
   },
