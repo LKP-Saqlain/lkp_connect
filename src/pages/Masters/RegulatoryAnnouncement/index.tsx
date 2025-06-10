@@ -126,7 +126,7 @@ const RegAnnMaster = () => {
               padding: "0.2rem 0.8rem",
             }}
           >
-            <h4 className="card-title mb-0">Master Regulatory Announcement</h4>
+            <h4 className="card-title mb-0">Regulatory Announcement</h4>
           </CardHeader>
           <CardBody>
             <form onSubmit={formik.handleSubmit}>

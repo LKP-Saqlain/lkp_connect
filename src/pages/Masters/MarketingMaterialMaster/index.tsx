@@ -140,7 +140,7 @@ const MasterMenuMarketing = () => {
               padding: "0.2rem 0.8rem",
             }}
           >
-            <h4 className="card-title mb-0">Master Marketing Materials</h4>
+            <h4 className="card-title mb-0">Marketing Materials</h4>
           </CardHeader>
           <CardBody>
             <form onSubmit={formik.handleSubmit}>
