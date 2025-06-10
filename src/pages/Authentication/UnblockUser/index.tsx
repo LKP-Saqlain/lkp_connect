@@ -120,7 +120,7 @@ const UnblockUser = () => {
         user_type: formik.values.forgotButtonGroup,
         sender_type: "E,S",
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       dispatch(SendOtp(payload))
         .unwrap()
         .then((response) => {
@@ -153,7 +153,7 @@ const UnblockUser = () => {
       user_id: formik.values.userId,
       otp: formik.values.otp,
     };
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     dispatch(UnblockUsers(payload))
       .unwrap()
       .then((response) => {

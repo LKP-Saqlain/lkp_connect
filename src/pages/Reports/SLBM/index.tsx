@@ -142,7 +142,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
       Authorization: LoginauthHeader, // Use LoginauthHeader for this request
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
@@ -199,7 +199,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
         zone: formik.values.selectedZone.value,
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getDropDown(payload)
@@ -277,7 +277,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
           : formik.values.selectedBranchCode?.value,
       symbolISIN: formik.values.isInValue,
     };
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     await apiServices
       .SLBMHoldingsReport(payload)
       .then((response) => {

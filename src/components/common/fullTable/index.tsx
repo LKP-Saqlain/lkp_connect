@@ -50,7 +50,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
         clientcode: selectedClientCode,
       };
 
-      dispatch(showLoader("Please wait"));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .GetClientWiseBrokerage(payload)
@@ -133,7 +133,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
         fromDate: formattedFromDate,
         toDate: formattedToDate, //"2024/12/01",
       };
-      dispatch(showLoader("Please wait"));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       dispatch(ClientSegBrok(payload))
         .unwrap()
         .then((res) => {

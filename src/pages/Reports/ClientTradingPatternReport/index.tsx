@@ -107,7 +107,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
         : "",
       clientCode: "",
     };
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .TradingPatternReport(payload)
       .then((response) => {
@@ -161,7 +161,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
       branchCode: values.selectedBranchCode?.value,
       clientCode: "",
     };
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .DetailedTradingPatternReport(payload)
       .then((response) => {
@@ -231,7 +231,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
       Authorization: LoginauthHeader, // Use LoginauthHeader for this request
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
@@ -276,7 +276,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
         zone: "ALL",
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getDropDown(payload)

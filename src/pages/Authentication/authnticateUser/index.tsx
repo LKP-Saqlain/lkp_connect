@@ -112,7 +112,7 @@ const AuthenticateUser = () => {
         ? formik.values.authentication
         : formik.values.DateOfBirth,
     };
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     dispatch(AuthUser(payload))
       .unwrap()
       .then((response) => {

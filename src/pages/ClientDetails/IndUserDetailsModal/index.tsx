@@ -69,7 +69,7 @@ const UserInfoModal = ({
         user_id: Id,
         clientCode: selectedClientCode,
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       dispatch(ClientUserDetails(payload))
         .unwrap()
         .then((response) => {

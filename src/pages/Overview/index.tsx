@@ -124,7 +124,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   //     };
 
   //     try {
-  //       dispatch(showLoader(""));
+  //       dispatch(showLoader("Please wait, we are processing your request..."));
   //       const response = await apiServices.DashboardNudge(payload);
   //       console.log("dashBoardNudgeData", typeof response?.data);
 

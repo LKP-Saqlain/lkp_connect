@@ -81,7 +81,7 @@ const RMSAllocation = () => {
     }
 
     try {
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       // Create an array to store the promises for file reading
       const filePromises: Promise<{

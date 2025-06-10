@@ -49,7 +49,7 @@ const NonBrokingRevenue = () => {
       const payload = {
         user_id: user_id,
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       dispatch(DealerPerformance(payload))
         .unwrap()
         .then((response) => {

@@ -89,7 +89,7 @@ const DormantClient = ({ activeSubItem }: any) => {
             ? "N"
             : "ALL",
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       // const test = dispatch(fetchDormantReport(payload));
       // console.log("testReduxThnk", test);
       await apiServices
@@ -175,7 +175,7 @@ const DormantClient = ({ activeSubItem }: any) => {
         Authorization: LoginauthHeader, // Use LoginauthHeader for this request
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       apiServices
         .getDropDown(payload, customHeaders)
         .then((res) => {
@@ -217,7 +217,7 @@ const DormantClient = ({ activeSubItem }: any) => {
         zone: formik.values.selectedZone.value, // Use the selected zone value
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getDropDown(payload)
@@ -309,7 +309,7 @@ const DormantClient = ({ activeSubItem }: any) => {
   //           ? "N"
   //           : "ALL",
   //     };
-  //     dispatch(showLoader(""));
+  //     dispatch(showLoader("Please wait, we are processing your request..."));
   //     await apiServices
   //       .getDormantReport(payload)
   //       .then((response) => {
@@ -363,7 +363,7 @@ const DormantClient = ({ activeSubItem }: any) => {
           ? "N"
           : "ALL",
     };
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     // const test = dispatch(fetchDormantReport(payload));
     // console.log("testReduxThnk", test);
     await apiServices
@@ -436,7 +436,7 @@ const DormantClient = ({ activeSubItem }: any) => {
     };
 
     let token = localStorage.getItem("tkn");
-    dispatch(showLoader("Please wait, We are Processing your Request"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     console.log("payload-->excel", payload);
     axios
       .post(

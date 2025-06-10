@@ -114,7 +114,7 @@ const ChangePassword = () => {
       user_type: user_type,
       user_id,
     };
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .ChangePassword(payload)
       .then((response) => {

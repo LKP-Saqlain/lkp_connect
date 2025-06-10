@@ -98,7 +98,9 @@ const DashboardCrypto = ({
         };
         // debugger;
         try {
-          dispatch(showLoader(""));
+          dispatch(
+            showLoader("Please wait, we are processing your request...")
+          );
           const response = await apiServices.DashboardNudge(payload);
           console.log("dashBoardNudgeData", typeof response?.data);
 
@@ -136,7 +138,7 @@ const DashboardCrypto = ({
   useEffect(() => {
     if (accessType === "") {
       setT6Data([]);
-      dispatch(showLoader("Please wait"));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       const fetchCWCBReport = async () => {
         // tradeData([]);
         // setSelectedZone(null);
@@ -146,7 +148,7 @@ const DashboardCrypto = ({
           zone: "ALL",
           branchCode: "ALL",
         };
-        dispatch(showLoader(""));
+        dispatch(showLoader("Please wait, we are processing your request..."));
         apiServices
           .ClientCash(payload)
           .then((response) => {
@@ -187,7 +189,9 @@ const DashboardCrypto = ({
           user_id: user_id,
         };
         try {
-          dispatch(showLoader(""));
+          dispatch(
+            showLoader("Please wait, we are processing your request...")
+          );
           const response = await apiServices.T6Selling(payload);
           console.log("ClientCashresponse", response?.data?.data?.Table);
           if (response?.status === 200) {
@@ -214,7 +218,7 @@ const DashboardCrypto = ({
       user_id: user_id,
     };
     try {
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       const response = await apiServices.T6Selling(payload);
       console.log("ClientCashresponse", response?.data?.data?.Table);
       if (response?.status === 200) {

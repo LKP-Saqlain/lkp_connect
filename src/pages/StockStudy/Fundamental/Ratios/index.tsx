@@ -17,7 +17,7 @@ const Ratios = ({ activeMenu, selectedIsin }: any) => {
     if (selectedIsin) {
       const fetchFundamentalRatios = async () => {
         setLoading(true); // Start loading
-        dispatch(showLoader("Please wait, we are processing your request"));
+        dispatch(showLoader("Please wait, we are processing your request..."));
 
         try {
           const response = await apiServices.getFundamentalRatios(selectedIsin);

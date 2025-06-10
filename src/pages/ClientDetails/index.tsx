@@ -98,7 +98,7 @@ any) => {
   }, [selectedTrading]);
   useEffect(() => {
     if (selectedCapsule === "Total Clients") {
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       const fetchClientCash = async () => {
         if (apiStatus) {
           const Id = localStorage.getItem("Id");
@@ -112,7 +112,9 @@ any) => {
             searchkey: "",
           };
           try {
-            dispatch(showLoader(""));
+            dispatch(
+              showLoader("Please wait, we are processing your request...")
+            );
             const response = await apiServices.ClientDetails(payload);
             console.log(
               "ClientClientDetailsResponse",
@@ -186,7 +188,7 @@ any) => {
           branchCode: "ALL",
           clientStatus: "ALL",
         };
-        dispatch(showLoader(""));
+        dispatch(showLoader("Please wait, we are processing your request..."));
         await apiServices
           .getUpcompingDormantReport(payload)
           .then((response) => {
@@ -263,7 +265,9 @@ any) => {
           searchkey: "",
         };
         try {
-          dispatch(showLoader(""));
+          dispatch(
+            showLoader("Please wait, we are processing your request...")
+          );
           const response = await apiServices.ClientDetails(payload);
           console.log(
             "ClientClientDetailsResponse",
@@ -334,7 +338,7 @@ any) => {
       searchkey: "",
     };
     try {
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       const response = await apiServices.ClientDetails(payload);
       console.log("ClientClientDetailsResponse", response?.data);
 
@@ -614,7 +618,7 @@ any) => {
         clientStatus: "ALL",
       };
 
-      dispatch(showLoader("")); // Show loader while fetching data
+      dispatch(showLoader("Please wait, we are processing your request...")); // Show loader while fetching data
 
       apiServices
         .getUpcompingDormantReport(payload)

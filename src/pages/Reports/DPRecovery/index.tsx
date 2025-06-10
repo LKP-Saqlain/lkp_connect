@@ -57,7 +57,7 @@ const DPRecovery = ({ activeSubItem }: any) => {
       };
 
       try {
-        dispatch(showLoader("Please wait"));
+        dispatch(showLoader("Please wait, we are processing your request..."));
         const response = await apiServices.DPDebitRecovery(payload);
         dispatch(hideLoader());
 
@@ -160,7 +160,7 @@ const DPRecovery = ({ activeSubItem }: any) => {
     };
 
     try {
-      dispatch(showLoader("Please wait"));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       const response = await apiServices.DPEmail(payload);
       dispatch(hideLoader());
 

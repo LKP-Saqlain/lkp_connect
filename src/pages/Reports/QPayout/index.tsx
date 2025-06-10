@@ -124,7 +124,7 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
   //     userId: user_id,
   //     financialQtr: `2024-${formik.values.quarter?.value}`,
   //   };
-  //   dispatch(showLoader(""));
+  //   dispatch(showLoader("Please wait, we are processing your request..."));
   //   await apiServices
   //     .GetQuaterlyPayoutGrid(payload)
   //     .then((response) => {
@@ -193,7 +193,7 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
         userId: user_id,
         financialQtr: financialQtr,
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       await apiServices
         .GetQuaterlyPayoutGrid(payload)
         .then((response) => {

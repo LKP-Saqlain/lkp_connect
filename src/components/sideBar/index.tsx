@@ -239,7 +239,7 @@ const SideBar = () => {
       const payload = {
         user_id: user_id,
       };
-      dispatch(showLoader("Please wait"));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       dispatch(userOverview(payload))
         .unwrap()
         .then((response) => {
@@ -362,7 +362,9 @@ const SideBar = () => {
         };
 
         try {
-          dispatch(showLoader(""));
+          dispatch(
+            showLoader("Please wait, we are processing your request...")
+          );
           const response = await apiServices.DashboardNudge(payload);
           console.log("dashBoardNudgeData", response?.data);
 

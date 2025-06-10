@@ -75,7 +75,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
       clientStatus: "ALL",
     };
 
-    dispatch(showLoader("")); // Show loader while fetching data
+    dispatch(showLoader("Please wait, we are processing your request...")); // Show loader while fetching data
 
     apiServices
       .getUpcompingDormantReport(payload)
@@ -114,7 +114,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
         user_id: user_id,
       };
       try {
-        dispatch(showLoader(""));
+        dispatch(showLoader("Please wait, we are processing your request..."));
         const response = await apiServices.T6Selling(payload);
         console.log("T6SellingResponse", response?.data?.data?.Table);
         if (response?.status === 200) {

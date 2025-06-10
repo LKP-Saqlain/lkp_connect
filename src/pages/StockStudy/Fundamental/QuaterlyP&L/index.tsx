@@ -18,7 +18,7 @@ const Quarterly = ({ activeMenu, selectedIsin }: any) => {
     if (selectedIsin) {
       const fetchFundamentalRecords = async () => {
         setLoading(true);
-        dispatch(showLoader("Please wait, we are processing your request"));
+        dispatch(showLoader("Please wait, we are processing your request..."));
         try {
           const response = await apiServices.getFundamentalQuaterlyPNL(
             selectedIsin

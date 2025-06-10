@@ -54,7 +54,7 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
       zone: "ALL",
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .getDropDown(payload)
       .then((res) => {
@@ -272,7 +272,8 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
                         height: "40px",
                       }}
                     >
-                      Excel <DownloadIcon style={{ fontSize: "16px" }} />
+                      Excel
+                      <DownloadIcon style={{ fontSize: "16px" }} />
                     </Button>
                   </div>
                 </Col>
