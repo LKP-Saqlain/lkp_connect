@@ -15,7 +15,7 @@
     "@emotion/styled": "^11.13.0",
     "@lordicon/react": "^1.10.1",
     "@lottiefiles/lottie-player": "^2.0.12",
-    "@mui/icons-material": "^6.1.1",
+    "@mui/icons-material": "^7.1.1",
     "@mui/material": "^6.1.5",
     "@mui/x-data-grid": "^7.21.0",
     "@mui/x-date-pickers": "^7.25.0",

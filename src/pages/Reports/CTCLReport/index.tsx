@@ -20,12 +20,19 @@ import moment from "moment";
 import DownloadIcon from "@mui/icons-material/Download";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+} from "@mui/material";
 
 import UserInfoTable from "../../../components/common/UserInfoTable";
 
 interface FormValues {
   selectedZone: { label: string; value: string } | null;
   selectedBranchCode: { label: string; value: string } | null;
+  reportType: "summarized" | "detailed";
 }
 
 const CTCLReport = ({ activeSubItem }: any) => {
@@ -38,6 +45,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
   const [endDate, setEndDate] = useState<string | null>(null);
   const [formattedDateRange, setFormattedDateRange] = useState<string>("");
   const [ctclData, setCtclData] = useState<any[]>([]);
+  const [ctclDetailedData, setCtclDetailedData] = useState<any[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -53,6 +61,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
     initialValues: {
       selectedZone: null,
       selectedBranchCode: null,
+      reportType: "summarized",
     },
     // validationSchema,
     onSubmit: (values) => {
@@ -68,19 +77,83 @@ const CTCLReport = ({ activeSubItem }: any) => {
   });
   const handleSubmit = (values: FormValues) => {
     setCtclData([]);
+    const { reportType } = values;
     console.log("Form Submitted", {
       zone: values.selectedZone?.value,
       branch: values.selectedBranchCode?.value,
+      reportType: values.reportType,
       startDate,
       endDate,
       formattedDateRange,
     });
+    if (reportType === "summarized") {
+      fetchSummarizedReport();
+      return;
+    }
+    if (reportType === "detailed") {
+      fetchDetailedReport();
+      return;
+    }
+  };
 
+  const fetchDetailedReport = () => {
     let payload = {
       fromDate: startDate,
       toDate: endDate,
-      zone: values.selectedZone?.value,
-      branchCode: values.selectedBranchCode?.value,
+      zone: formik.values.selectedZone?.value,
+      branchCode: formik.values.selectedBranchCode?.value,
+    };
+
+    dispatch(showLoader("Please wait"));
+    apiServices
+      .DetailedCTCLActivityReport(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+        console.log("CTCL_Response", response?.data?.data);
+        if (response?.status === 200) {
+          if (
+            Array.isArray(response?.data?.data) &&
+            response?.data?.data.length > 0
+          ) {
+            const formattedData = response?.data?.data.map(
+              (item: any, index: any) => ({
+                id: index + 1, // unique ID for DataGrid
+                zone: item.client_Zone,
+                branchCode: item.client_Branch,
+                ctclTerminalID: item.ctcL_Terminal_ID,
+                CTCLLoginID: item.ctcL_Login_ID,
+                CTCLUserName: item.ctcL_Username,
+                exchangeSegment: item.segment,
+                turnover: parseFloat(item.turnover),
+                grossBrokerage: parseFloat(item.gross_Brokerage),
+                netBrokerage: parseFloat(item.net_Brokerage),
+                last_Trade_Date: item.last_Trade_Date,
+                branch_Type: item.branch_Type,
+              })
+            );
+
+            console.log("Formatted CTCL Detailed Data", formattedData);
+            setCtclDetailedData(formattedData); // 👉 save to state
+          } else {
+            console.warn("No data received from CTCLActivityReport API.");
+            setCtclDetailedData([]); // clear state if empty
+          }
+        }
+      })
+      .catch((Error) => {
+        console.log("ERROR", Error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
+  const fetchSummarizedReport = () => {
+    let payload = {
+      fromDate: startDate,
+      toDate: endDate,
+      zone: formik.values.selectedZone?.value,
+      branchCode: formik.values.selectedBranchCode?.value,
     };
 
     dispatch(showLoader("Please wait"));
@@ -107,6 +180,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
                 grossBrokerage: parseFloat(item.gross_Brokerage),
                 netBrokerage: parseFloat(item.net_Brokerage),
                 last_Trade_Date: item.last_Trade_Date,
+                branch_Type: item.branch_Type,
               })
             );
 
@@ -352,102 +426,120 @@ const CTCLReport = ({ activeSubItem }: any) => {
                   <form onSubmit={formik.handleSubmit}>
                     <div>
                       <Row>
-                        <Col xl={3}>
-                          <div className="mb-3">
-                            <Label
-                              htmlFor="zone-select"
-                              className="form-label text-muted label-font"
-                            >
-                              Zone
-                            </Label>
-                            <Select
-                              // value={selectedZone}
-                              value={formik.values.selectedZone}
-                              onChange={(option: any) =>
-                                formik.setFieldValue("selectedZone", option)
-                              }
-                              onBlur={formik.handleBlur}
-                              options={noSortingGroup}
-                              className="placeholder-font"
-                              isClearable
-                              id="zone-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  cursor: "pointer",
+                        <Col
+                          xs={12}
+                          style={{
+                            flex: "0 0 auto",
+                            minWidth: "140px",
+                            maxWidth: "150px",
+                          }}
+                          className="mb-3"
+                        >
+                          <Label
+                            htmlFor="zone-select"
+                            className="form-label text-muted label-font"
+                          >
+                            Zone
+                          </Label>
+                          <Select
+                            value={formik.values.selectedZone}
+                            onChange={(option: any) =>
+                              formik.setFieldValue("selectedZone", option)
+                            }
+                            onBlur={formik.handleBlur}
+                            options={noSortingGroup}
+                            className="placeholder-font"
+                            isClearable
+                            id="zone-select"
+                            styles={{
+                              control: (base: any) => ({
+                                ...base,
+                                cursor: "pointer",
+                                minHeight: "36px",
+                                fontSize: "12px",
+                                borderColor:
+                                  formik.touched.selectedZone &&
+                                  formik.errors.selectedZone
+                                    ? "#DC4535"
+                                    : base.borderColor,
+                                "&:hover": {
                                   borderColor:
                                     formik.touched.selectedZone &&
                                     formik.errors.selectedZone
                                       ? "#DC4535"
                                       : base.borderColor,
-                                  "&:hover": {
-                                    borderColor:
-                                      formik.touched.selectedZone &&
-                                      formik.errors.selectedZone
-                                        ? "#DC4535"
-                                        : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.selectedZone &&
-                              formik.errors.selectedZone && (
-                                <div className="text-danger error-msg">
-                                  {formik.errors.selectedZone}
-                                </div>
-                              )}
-                          </div>
+                                },
+                              }),
+                            }}
+                          />
+                          {formik.touched.selectedZone &&
+                            formik.errors.selectedZone && (
+                              <div className="text-danger error-msg">
+                                {formik.errors.selectedZone}
+                              </div>
+                            )}
                         </Col>
 
-                        <Col xl={3}>
-                          <div className="mb-3">
-                            <Label
-                              htmlFor="branch-code-select"
-                              className="form-label text-muted label-font"
-                            >
-                              Branch Code
-                            </Label>
-                            <Select
-                              value={formik.values.selectedBranchCode}
-                              onChange={(option) =>
-                                formik.setFieldValue(
-                                  "selectedBranchCode",
-                                  option
-                                )
-                              }
-                              onBlur={formik.handleBlur}
-                              options={branchCodeOptions}
-                              className="placeholder-font"
-                              isClearable
-                              id="branch-code-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  cursor: "pointer",
+                        <Col
+                          xs={12}
+                          style={{
+                            flex: "0 0 auto",
+                            minWidth: "140px",
+                            maxWidth: "150px",
+                          }}
+                          className="mb-3"
+                        >
+                          <Label
+                            htmlFor="branch-code-select"
+                            className="form-label text-muted label-font"
+                          >
+                            Branch Code
+                          </Label>
+                          <Select
+                            value={formik.values.selectedBranchCode}
+                            onChange={(option) =>
+                              formik.setFieldValue("selectedBranchCode", option)
+                            }
+                            onBlur={formik.handleBlur}
+                            options={branchCodeOptions}
+                            className="placeholder-font"
+                            isClearable
+                            id="branch-code-select"
+                            styles={{
+                              control: (base: any) => ({
+                                ...base,
+                                cursor: "pointer",
+                                borderColor:
+                                  formik.touched.selectedBranchCode &&
+                                  formik.errors.selectedBranchCode
+                                    ? "#DC4535"
+                                    : base.borderColor,
+                                "&:hover": {
                                   borderColor:
                                     formik.touched.selectedBranchCode &&
                                     formik.errors.selectedBranchCode
                                       ? "#DC4535"
                                       : base.borderColor,
-                                  "&:hover": {
-                                    borderColor:
-                                      formik.touched.selectedBranchCode &&
-                                      formik.errors.selectedBranchCode
-                                        ? "#DC4535"
-                                        : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.selectedBranchCode &&
-                              formik.errors.selectedBranchCode && (
-                                <div className="text-danger error-msg">
-                                  {formik.errors.selectedBranchCode}
-                                </div>
-                              )}
-                          </div>
+                                },
+                              }),
+                            }}
+                          />
+                          {formik.touched.selectedBranchCode &&
+                            formik.errors.selectedBranchCode && (
+                              <div className="text-danger error-msg">
+                                {formik.errors.selectedBranchCode}
+                              </div>
+                            )}
                         </Col>
-                        <Col xl={3} className="mb-3">
+                        <Col
+                          xs={12}
+                          style={{
+                            flex: "0 0 auto",
+                            minWidth: "140px",
+                            maxWidth: "260px",
+                          }}
+                          className="mb-3"
+                        >
                           <Label
                             htmlFor="date-range-picker"
                             className="form-label text-muted label-font"
@@ -472,38 +564,126 @@ const CTCLReport = ({ activeSubItem }: any) => {
                             style={{ width: "100%", fontSize: "12px" }}
                           />
                         </Col>
-
-                        <Col className="d-flex flex-column-reverse">
-                          <div className="mb-3" />
+                        <Col
+                          xl="auto"
+                          style={{
+                            marginTop: "12px", // reduced top space
+                            padding: 0,
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <FormControl
+                            component="fieldset"
+                            style={{
+                              fontSize: "12px",
+                              margin: 0,
+                            }}
+                          >
+                            <RadioGroup
+                              row
+                              name="reportType"
+                              value={formik.values.reportType}
+                              onChange={(e) =>
+                                formik.setFieldValue(
+                                  "reportType",
+                                  e.target.value
+                                )
+                              }
+                              sx={{
+                                // gap: "4px",
+                                margin: 1,
+                                padding: 0,
+                              }}
+                            >
+                              <FormControlLabel
+                                value="summarized"
+                                control={
+                                  <Radio
+                                    size="small"
+                                    sx={{
+                                      p: 0.2,
+                                      color: "#11395C",
+                                      "&.Mui-checked": {
+                                        color: "#11395C",
+                                      },
+                                    }}
+                                  />
+                                }
+                                label={
+                                  <span
+                                    style={{ fontSize: "12px", padding: 0 }}
+                                  >
+                                    Summarized
+                                  </span>
+                                }
+                                sx={{ margin: 0 }}
+                              />
+                              <FormControlLabel
+                                value="detailed"
+                                control={
+                                  <Radio
+                                    size="small"
+                                    sx={{
+                                      p: 0.2,
+                                      color: "#11395C",
+                                      "&.Mui-checked": {
+                                        color: "#11395C",
+                                      },
+                                    }}
+                                  />
+                                }
+                                label={
+                                  <span
+                                    style={{ fontSize: "12px", padding: 0 }}
+                                  >
+                                    Detailed
+                                  </span>
+                                }
+                                sx={{ margin: ctclData.length > 0 ? 0 : 1 }}
+                              />
+                            </RadioGroup>
+                          </FormControl>
+                        </Col>
+                        <Col
+                          className="d-flex p-0 m-0 mb-3"
+                          style={{ alignItems: "flex-end", gap: "10px" }}
+                        >
                           <Button
                             className="btn-font"
                             style={{
                               backgroundColor: "#11395C",
-                              height: "40px",
-                              width: "100px",
+                              height: "36px",
+                              width: ctclData.length > 0 ? "80px" : "100px",
+                              fontSize: "13px",
+                              padding: "4px 10px",
+                              // marginLeft: ctclData.length > 0 ? "4px" : "0px",
                             }}
                             type="submit"
                           >
                             Submit
                           </Button>
-                        </Col>
-                        {ctclData.length > 0 && (
-                          <Col className="d-flex flex-column-reverse">
-                            <div className="mb-3" />
+
+                          {ctclData.length > 0 && (
                             <Button
                               className="btn-font"
                               style={{
                                 backgroundColor: "#11395C",
-                                height: "40px",
-                                width: "100px",
+                                height: "36px",
+                                width: ctclData.length > 0 ? "80px" : "90px",
+                                fontSize: "13px",
+                                padding: "4px 10px",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "4px",
                               }}
                               onClick={handleExcelDownload}
                             >
-                              Excel
-                              <DownloadIcon />
+                              Excel{" "}
+                              <DownloadIcon style={{ fontSize: "16px" }} />
                             </Button>
-                          </Col>
-                        )}
+                          )}
+                        </Col>
                       </Row>
                     </div>
                   </form>
@@ -518,7 +698,14 @@ const CTCLReport = ({ activeSubItem }: any) => {
                 <CardBody style={{ zIndex: 0 }}>
                   <UserInfoTable
                     activeSubItem={activeSubItem}
-                    T6Data={ctclData}
+                    T6Data={
+                      formik.values.reportType === "summarized"
+                        ? ctclData
+                        : formik.values.reportType === "detailed"
+                        ? ctclDetailedData
+                        : []
+                    }
+                    reportType={formik.values.reportType}
                   />
                 </CardBody>
               </Card>

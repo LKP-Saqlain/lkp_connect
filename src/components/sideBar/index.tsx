@@ -615,8 +615,8 @@ const SideBar = () => {
   };
 
   const revenueDetailsSubItems: Record<string, JSX.Element> = {
-    "Menu Master": <MasterMenuMarketing />,
-    "User Access Mapping": <RegAnnMaster />,
+    "Regulatory Announcement": <MasterMenuMarketing />,
+    "Marketing Material": <RegAnnMaster />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {
@@ -634,7 +634,7 @@ const SideBar = () => {
     "Quarterly Payout Recovery": (
       <QuarterlyPayout activeSubItem={activeSubItem} />
     ),
-    "SLBM ClientHolding": <SLBM activeSubItem={activeSubItem} />,
+    "SLBM Client Holding": <SLBM activeSubItem={activeSubItem} />,
     "Core Alerts Report": <CoreReport />,
     "Account Performance Report": <AccStatement />,
     "DP Debit Recovery": <DPRecovery activeSubItem={activeSubItem} />,
