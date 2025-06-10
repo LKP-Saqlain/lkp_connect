@@ -87,18 +87,17 @@ const CTCLReport = ({ activeSubItem }: any) => {
       formattedDateRange,
     });
     if (reportType === "summarized") {
-      fetchSummarizedReport(values);
+      fetchSummarizedReport();
       return;
     }
     if (reportType === "detailed") {
-      fetchDetailedReport(values);
+      fetchDetailedReport();
       return;
     }
   };
 
-  const fetchDetailedReport = (values: any) => {
+  const fetchDetailedReport = () => {
     let payload = {
-      option: values.reportType,
       fromDate: startDate,
       toDate: endDate,
       zone: formik.values.selectedZone?.value,
@@ -149,9 +148,8 @@ const CTCLReport = ({ activeSubItem }: any) => {
       });
   };
 
-  const fetchSummarizedReport = (values: any) => {
+  const fetchSummarizedReport = () => {
     let payload = {
-      option: values.reportType,
       fromDate: startDate,
       toDate: endDate,
       zone: formik.values.selectedZone?.value,
