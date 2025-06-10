@@ -52,7 +52,7 @@ import Retrival from "../../pages/Reports/ComplianceReport";
 import OTDetails from "../../pages/OT";
 import CommEntry from "../../pages/Compilance/commEntry";
 import ComChecker from "../../pages/Compilance/commChecker";
-import Main from "../../pages/refCard";
+// import Main from "../../pages/refCard";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Nudge from "../common/Nudge";
@@ -77,6 +77,7 @@ import PreTradeApproval from "../../pages/preTrade/Approval";
 import IVR from "../../pages/preTrade/IVR";
 import ClientTradingReport from "../../pages/Reports/ClientTradingPatternReport";
 import CTCLReport from "../../pages/Reports/CTCLReport";
+import SPIP from "../../pages/SPIPReports";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -646,9 +647,9 @@ const SideBar = () => {
     "CTCL Wise Activity Report": <CTCLReport activeSubItem={activeSubItem} />,
   };
 
-  const referalSubItems: Record<string, JSX.Element> = {
-    "Referal Entry Status": <Main activeSubItem={activeSubItem} />,
-  };
+  // const referalSubItems: Record<string, JSX.Element> = {
+  //   "Referal Entry Status": <Main activeSubItem={activeSubItem} />,
+  // };
 
   const complianceSubItems: Record<string, JSX.Element> = {
     "Communication Retrival Entry": <CommEntry activeSubItem={activeSubItem} />,
@@ -829,7 +830,8 @@ const SideBar = () => {
       Masters: revenueDetailsSubItems[activeSubItem] || null,
       "KYC Dashboard": kycSubItems[activeSubItem] || null,
       Reports: reportsSubItems[activeSubItem] || null,
-      "Referal Lead": referalSubItems[activeSubItem] || null,
+      "Referal Lead":
+        <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} /> || null,
       Compliance: complianceSubItems[activeSubItem] || null,
       "Client Details": (
         <ClientDetails
