@@ -1,93 +1,98 @@
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  useMediaQuery,
-} from "@mui/material";
+import { TextField, useMediaQuery } from "@mui/material";
 import { useFormik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Card, CardBody, CardHeader, Col, Row, Button } from "reactstrap";
 import * as Yup from "yup";
-import { AppDispatch, RootState } from "../../../redux/store";
+import { AppDispatch } from "../../../redux/store";
 import DataTable from "../../../components/common/UserInfoTable";
 import { regEx } from "../../../helper/method";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface SPIPPeformance {
   activeSubItem: string;
 }
 
-const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
+export const spipPerformanceReport = [
+  {
+    id: 1,
+    month: "June 2025",
+    clientCode: "C00123",
+    clientName: "John Doe",
+    status: "Active",
+    scripName: "RELIANCE",
+    securityName: "Reliance Industries Ltd",
+    buyQty: 100,
+    buyRate: 2500.5,
+    buyValue: 250050,
+    sellQty: 50,
+    sellRate: 2550.75,
+    sellValue: 127537.5,
+    openQty: 50,
+    marketRate: 2560.0,
+    marketValue: 128000,
+    profitLoss: 7487.5,
+    plPercent: "2.99%",
+  },
+  {
+    id: 2,
+    month: "June 2025",
+    clientCode: "C00456",
+    clientName: "Jane Smith",
+    status: "Active",
+    scripName: "TCS",
+    securityName: "Tata Consultancy Services",
+    buyQty: 200,
+    buyRate: 3500.0,
+    buyValue: 700000,
+    sellQty: 150,
+    sellRate: 3600.5,
+    sellValue: 540075,
+    openQty: 50,
+    marketRate: 3620.0,
+    marketValue: 181000,
+    profitLoss: 21075,
+    plPercent: "3.01%",
+  },
+];
+
+const SPIPClientDetails = ({ activeSubItem }: SPIPPeformance) => {
   const [report, setReport] = useState<any[]>([]);
-  const [quarterList, setQuarterList] = useState<any[]>([]);
 
   const isMobile = useMediaQuery("(max-width:600px)");
   const dispatch = useDispatch<AppDispatch>();
 
-  const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
-  );
+  // const { user_id } = useSelector(
+  //   (state: RootState) => state.UserLogin?.data?.data
+  // );
 
   const formik = useFormik({
     initialValues: {
-      finYear: "",
       clientCode: "",
     },
     validationSchema: Yup.object({
-      finYear: Yup.string().required("Please select a Financial Year"),
-      clientCode: Yup.string().required("Please enter a Terminal Code"),
+      clientCode: Yup.string().required("Please enter a Client Code"),
     }),
     onSubmit: (values) => {
+      const { clientCode } = values;
+      console.log("submitClick", clientCode);
       fetchReport(values);
     },
   });
 
-  useEffect(() => {
-    let payload = {
-      clientCode: "",
-    };
-    dispatch(showLoader(""));
-    apiServices
-      .FillQuarterName(payload)
-      .then((response) => {
-        dispatch(hideLoader());
-        console.log("Response-->", response?.data?.data);
-        const quarters = response?.data?.data?.quarterDetails1 || [];
-        setQuarterList(quarters);
-        console.log("Quarter List-->", quarters);
-      })
-      .catch((Err) => {
-        dispatch(hideLoader());
-        console.log("Error", Err);
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
-  }, []);
-
   const fetchReport = (values: any) => {
-    const { finYear, clientCode } = values;
-    console.log("QuarterId", finYear, "clientCode", clientCode);
-
     let payload = {
-      quarterId: finYear,
-      option: "",
-      loginName: user_id,
-      clientCode: clientCode, //900001441
-      branchCode: "",
-      userType: "",
+      branchCode: "", //0408
+      clientCode: values?.clientCode,
+      option: "RAPortal",
     };
 
     dispatch(showLoader(""));
     apiServices
-      .SPIPClientPerformanceDashboard(payload)
+      .SPIPB2BClientDetails(payload)
       .then((response) => {
-        console.log("SPIPResponse-->", response?.data?.data);
+        console.log("SPIPSummaryResponse-->", response?.data?.data);
         dispatch(hideLoader());
         if (response?.status === 200) {
           const filteredResponse = response?.data?.data?.map(
@@ -141,54 +146,11 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
                   padding: "0.2rem 0.8rem",
                 }}
               >
-                <h4 className="card-title mb-0">SPIP Performance Dashboard</h4>
+                <h4 className="card-title mb-0">Client Details</h4>
               </CardHeader>
               <CardBody>
                 <form onSubmit={formik.handleSubmit}>
                   <Row>
-                    <Col xs={12} md={6} lg={4} className="mb-3">
-                      <Box sx={{ minWidth: 120 }}>
-                        <FormControl
-                          fullWidth
-                          size="small"
-                          error={
-                            formik.touched.finYear &&
-                            Boolean(formik.errors.finYear)
-                          }
-                        >
-                          <InputLabel
-                            id="financial-year-select-label"
-                            sx={{ backgroundColor: "white", px: 0.5 }}
-                          >
-                            Financial Year
-                          </InputLabel>
-                          <Select
-                            size="small"
-                            labelId="financial-year-select-label"
-                            id="financial-year-select"
-                            name="finYear"
-                            value={formik.values.finYear}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            label="Financial Year"
-                          >
-                            {quarterList.map((qtr: any) => (
-                              <MenuItem
-                                key={qtr.quarterId}
-                                value={qtr.quarterId}
-                              >
-                                {qtr.quarterName}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                          {formik.touched.finYear && formik.errors.finYear && (
-                            <p className="text-error">
-                              {formik.errors.finYear}
-                            </p>
-                          )}
-                        </FormControl>
-                      </Box>
-                    </Col>
                     <Col
                       xs={12}
                       md={6}
@@ -198,7 +160,7 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
                       <TextField
                         size="small"
                         id="client-code-input"
-                        label="Terminal Code"
+                        label="Enter Client Code"
                         variant="outlined"
                         name="clientCode"
                         type="text"
@@ -245,7 +207,12 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
               }}
             >
               <CardBody>
-                <DataTable activeSubItem={activeSubItem} T6Data={report} />
+                <DataTable
+                  activeSubItem={activeSubItem}
+                  T6Data={report}
+                  // handleApproval={handleApproval}
+                  // handleDownload={handlePreview}
+                />
               </CardBody>
             </Card>
           </Col>
@@ -255,4 +222,4 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
   );
 };
 
-export default SPIPPerformanceDashboard;
+export default SPIPClientDetails;

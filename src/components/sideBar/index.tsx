@@ -319,6 +319,7 @@ const SideBar = () => {
       activeMenu !== "Masters" &&
       activeMenu !== "RMS" &&
       activeMenu !== "IVR" &&
+      activeMenu !== "SPIP" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -830,8 +831,7 @@ const SideBar = () => {
       Masters: revenueDetailsSubItems[activeSubItem] || null,
       "KYC Dashboard": kycSubItems[activeSubItem] || null,
       Reports: reportsSubItems[activeSubItem] || null,
-      "Referal Lead":
-        <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} /> || null,
+      "Referal Lead": <></>,
       Compliance: complianceSubItems[activeSubItem] || null,
       "Client Details": (
         <ClientDetails
@@ -850,6 +850,8 @@ const SideBar = () => {
       "Other Details": <OTDetails />,
       "Registration Details": <RegisDetails activeSubItem={activeSubItem} />,
       IVR: ivrSubItems[activeSubItem] || null,
+      SPIP:
+        <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} /> || null,
     };
 
     return contentMap[activeMenu] || null;

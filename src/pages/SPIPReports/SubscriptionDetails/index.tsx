@@ -1,12 +1,4 @@
-import {
-  Box,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  useMediaQuery,
-} from "@mui/material";
+import { TextField, useMediaQuery } from "@mui/material";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardBody, CardHeader, Col, Row, Button } from "reactstrap";
@@ -16,15 +8,15 @@ import DataTable from "../../../components/common/UserInfoTable";
 import { regEx } from "../../../helper/method";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import ShowToast from "../../../utils/toastUtils";
 
 interface SPIPPeformance {
   activeSubItem: string;
 }
 
-const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
+const SubScriptionDetails = ({ activeSubItem }: SPIPPeformance) => {
   const [report, setReport] = useState<any[]>([]);
-  const [quarterList, setQuarterList] = useState<any[]>([]);
 
   const isMobile = useMediaQuery("(max-width:600px)");
   const dispatch = useDispatch<AppDispatch>();
@@ -35,60 +27,39 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
 
   const formik = useFormik({
     initialValues: {
-      finYear: "",
-      clientCode: "",
+      riaCode: "",
     },
     validationSchema: Yup.object({
-      finYear: Yup.string().required("Please select a Financial Year"),
-      clientCode: Yup.string().required("Please enter a Terminal Code"),
+      riaCode: Yup.string().required("Please enter a RIA Code"),
     }),
     onSubmit: (values) => {
+      const { riaCode } = values;
+      console.log("submitClick", riaCode);
       fetchReport(values);
     },
   });
 
-  useEffect(() => {
-    let payload = {
-      clientCode: "",
-    };
-    dispatch(showLoader(""));
-    apiServices
-      .FillQuarterName(payload)
-      .then((response) => {
-        dispatch(hideLoader());
-        console.log("Response-->", response?.data?.data);
-        const quarters = response?.data?.data?.quarterDetails1 || [];
-        setQuarterList(quarters);
-        console.log("Quarter List-->", quarters);
-      })
-      .catch((Err) => {
-        dispatch(hideLoader());
-        console.log("Error", Err);
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
-  }, []);
-
   const fetchReport = (values: any) => {
-    const { finYear, clientCode } = values;
-    console.log("QuarterId", finYear, "clientCode", clientCode);
-
     let payload = {
-      quarterId: finYear,
-      option: "",
-      loginName: user_id,
-      clientCode: clientCode, //900001441
-      branchCode: "",
-      userType: "",
+      clientCode: values?.riaCode, //RA000029
+      userType: "B2B",
+      loginName: user_id, //1315
     };
 
     dispatch(showLoader(""));
     apiServices
-      .SPIPClientPerformanceDashboard(payload)
+      .SPIPsubScriptionDetail(payload)
       .then((response) => {
-        console.log("SPIPResponse-->", response?.data?.data);
+        console.log(
+          "SPIPsubScriptionDetailResponse-->",
+          response?.data.message
+        );
         dispatch(hideLoader());
+        if (response?.data?.statusCode === 400) {
+          setReport([]);
+          ShowToast("error", response?.data?.message);
+          return;
+        }
         if (response?.status === 200) {
           const filteredResponse = response?.data?.data?.map(
             (item: any, index: number) => ({
@@ -113,7 +84,7 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
   const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
     console.log("value", name, value);
-    if (name === "clientCode") {
+    if (name === "riaCode") {
       if (regEx.alphaNumeric.test(value)) {
         formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
       }
@@ -141,54 +112,11 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
                   padding: "0.2rem 0.8rem",
                 }}
               >
-                <h4 className="card-title mb-0">SPIP Performance Dashboard</h4>
+                <h4 className="card-title mb-0">Client Subscription Details</h4>
               </CardHeader>
               <CardBody>
                 <form onSubmit={formik.handleSubmit}>
                   <Row>
-                    <Col xs={12} md={6} lg={4} className="mb-3">
-                      <Box sx={{ minWidth: 120 }}>
-                        <FormControl
-                          fullWidth
-                          size="small"
-                          error={
-                            formik.touched.finYear &&
-                            Boolean(formik.errors.finYear)
-                          }
-                        >
-                          <InputLabel
-                            id="financial-year-select-label"
-                            sx={{ backgroundColor: "white", px: 0.5 }}
-                          >
-                            Financial Year
-                          </InputLabel>
-                          <Select
-                            size="small"
-                            labelId="financial-year-select-label"
-                            id="financial-year-select"
-                            name="finYear"
-                            value={formik.values.finYear}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            label="Financial Year"
-                          >
-                            {quarterList.map((qtr: any) => (
-                              <MenuItem
-                                key={qtr.quarterId}
-                                value={qtr.quarterId}
-                              >
-                                {qtr.quarterName}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                          {formik.touched.finYear && formik.errors.finYear && (
-                            <p className="text-error">
-                              {formik.errors.finYear}
-                            </p>
-                          )}
-                        </FormControl>
-                      </Box>
-                    </Col>
                     <Col
                       xs={12}
                       md={6}
@@ -198,19 +126,19 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
                       <TextField
                         size="small"
                         id="client-code-input"
-                        label="Terminal Code"
+                        label="Enter RIA Code"
                         variant="outlined"
-                        name="clientCode"
+                        name="riaCode"
                         type="text"
-                        value={formik.values.clientCode}
+                        value={formik.values.riaCode}
                         onChange={handleCustomChange}
                         onBlur={formik.handleBlur}
                         error={
-                          formik.touched.clientCode &&
-                          Boolean(formik.errors.clientCode)
+                          formik.touched.riaCode &&
+                          Boolean(formik.errors.riaCode)
                         }
                         helperText={
-                          formik.touched.clientCode && formik.errors.clientCode
+                          formik.touched.riaCode && formik.errors.riaCode
                         }
                         fullWidth
                       />
@@ -255,4 +183,4 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
   );
 };
 
-export default SPIPPerformanceDashboard;
+export default SubScriptionDetails;

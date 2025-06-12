@@ -15,7 +15,7 @@ import {
   CompliancneReport,
   getClientActivityStatusColumns,
   getClientDormantStatus,
-  getAccountDetails,
+  // getAccountDetails,
   getCommChecker,
   getRegulatorAnnouncement,
   terminalcol,
@@ -31,6 +31,12 @@ import {
   clientTradingPatternDetailedColumns,
   ctclUserWiseColumns,
   ctclUserWiseDetailedColumns,
+  spipPerformanceReportColumns,
+  SPIPOverallPerformanceReport,
+  spipSubSciptionDetailColumns,
+  ZONEWiseCommissionReport,
+  spipClientDetails,
+  ClientWiseCommissonReport,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -396,11 +402,13 @@ const DataTable = ({
       return getClientActivityStatusColumns(handleViewDetails, user_type);
     } else if (selectedWidget === "Upcoming Dormant Client") {
       return getClientDormantStatus(handleViewDetails);
-    } else if (activeSubItem === "Referal Entry Status") {
-      return getAccountDetails.map((column) => ({
-        ...column,
-      }));
-    } else if (activeSubItem === "RH Approval") {
+    }
+    // else if (activeSubItem === "Referal Entry Status") {
+    //   return getAccountDetails.map((column) => ({
+    //     ...column,
+    //   }));
+    // }
+    else if (activeSubItem === "RH Approval") {
       return RegionalHead.map((column) => {
         if (column.field === "remark") {
           return {
@@ -936,6 +944,56 @@ const DataTable = ({
           ...column,
         }))
       );
+    } else if (activeSubItem === "SPIP Performance Dashboard") {
+      return spipPerformanceReportColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client Performance Summary") {
+      return SPIPOverallPerformanceReport.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client Subscription Details") {
+      // return spipSubSciptionDetailColumns.map((column) => ({
+      //   ...column,
+      // }));
+      return spipSubSciptionDetailColumns.map((column) => {
+        if (column.field === "invoiceDownload") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row);
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "Branch-Wise Fees Sharing Report") {
+      return ZONEWiseCommissionReport.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client-Wise Fees Sharing Report") {
+      return ClientWiseCommissonReport.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client Details Report") {
+      return spipClientDetails.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }

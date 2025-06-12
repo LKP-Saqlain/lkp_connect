@@ -80,4 +80,10 @@ export const endpoints = {
   DetailedCTCLActivityReport: "/api/MIS/DetailedCTCLActivityReport",
   TradingPatternReport: "/api/MIS/TradingPatternReport",
   DetailedTradingPatternReport: "/api/MIS/DetailedTradingPatternReport",
+  SPIPClientPerformanceDashboard: "/api/SPIP/ClientPerformanceDashboard",
+  SPIPClientPerformanceSummary: "/api/SPIP/ClientPerformanceSummary",
+  SPIPsubScriptionDetail: "/api/SPIP/ClientSubscriptionDetails",
+  SPIPFeesSharingReport: "/api/SPIP/FeesSharingReport",
+  SPIPB2BClientDetails: "/api/SPIP/B2BClientDetails",
+  FillQuarterName: "/api/SPIP/FillQuarterName",
 };
