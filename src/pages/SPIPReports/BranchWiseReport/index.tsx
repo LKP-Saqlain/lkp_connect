@@ -245,7 +245,7 @@ const SPIPBranchWiseFeesReport = ({ activeSubItem }: SPIPPeformance) => {
                       </FormControl>
                     </Col>
 
-                    <Col xs={12} md={6} lg={4} style={{ marginTop: "2rem" }}>
+                    <Col xs={12} md={6} lg={4} style={{ marginTop: "30px" }}>
                       <FormControl
                         fullWidth
                         error={
@@ -281,7 +281,7 @@ const SPIPBranchWiseFeesReport = ({ activeSubItem }: SPIPPeformance) => {
                       sm={6}
                       md={3}
                       lg={2}
-                      style={{ marginTop: "2rem" }}
+                      style={{ marginTop: "30px" }}
                     >
                       <Button
                         className="btn-font w-100"

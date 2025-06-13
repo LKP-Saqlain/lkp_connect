@@ -14,49 +14,6 @@ interface SPIPPeformance {
   activeSubItem: string;
 }
 
-export const spipPerformanceReport = [
-  {
-    id: 1,
-    month: "June 2025",
-    clientCode: "C00123",
-    clientName: "John Doe",
-    status: "Active",
-    scripName: "RELIANCE",
-    securityName: "Reliance Industries Ltd",
-    buyQty: 100,
-    buyRate: 2500.5,
-    buyValue: 250050,
-    sellQty: 50,
-    sellRate: 2550.75,
-    sellValue: 127537.5,
-    openQty: 50,
-    marketRate: 2560.0,
-    marketValue: 128000,
-    profitLoss: 7487.5,
-    plPercent: "2.99%",
-  },
-  {
-    id: 2,
-    month: "June 2025",
-    clientCode: "C00456",
-    clientName: "Jane Smith",
-    status: "Active",
-    scripName: "TCS",
-    securityName: "Tata Consultancy Services",
-    buyQty: 200,
-    buyRate: 3500.0,
-    buyValue: 700000,
-    sellQty: 150,
-    sellRate: 3600.5,
-    sellValue: 540075,
-    openQty: 50,
-    marketRate: 3620.0,
-    marketValue: 181000,
-    profitLoss: 21075,
-    plPercent: "3.01%",
-  },
-];
-
 const SPIPClientDetails = ({ activeSubItem }: SPIPPeformance) => {
   const [report, setReport] = useState<any[]>([]);
 
@@ -188,6 +145,8 @@ const SPIPClientDetails = ({ activeSubItem }: SPIPPeformance) => {
                           backgroundColor: "#11395C",
                           height: "36px",
                           marginBottom: "20px",
+                          marginTop: isMobile ? "10px" : "0px",
+                          marginLeft: isMobile ? "12px" : "0px",
                           fontSize: "13px",
                           padding: "4px 10px",
                         }}

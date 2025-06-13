@@ -850,8 +850,7 @@ const SideBar = () => {
       "Other Details": <OTDetails />,
       "Registration Details": <RegisDetails activeSubItem={activeSubItem} />,
       IVR: ivrSubItems[activeSubItem] || null,
-      SPIP:
-        <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} /> || null,
+      SPIP: <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} />,
     };
 
     return contentMap[activeMenu] || null;

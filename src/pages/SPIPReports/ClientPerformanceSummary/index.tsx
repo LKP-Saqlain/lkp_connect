@@ -9,6 +9,10 @@ import { regEx } from "../../../helper/method";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 import { useState } from "react";
+import ShowToast from "../../../utils/toastUtils";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import DownloadIcon from "@mui/icons-material/Download";
 
 interface SPIPPeformance {
   activeSubItem: string;
@@ -39,6 +43,7 @@ const SPIPPerformanceSummary = ({ activeSubItem }: SPIPPeformance) => {
   });
 
   const fetchReport = (values: any) => {
+    setReport([]);
     let payload = {
       quarterId: "",
       option: "",
@@ -65,6 +70,11 @@ const SPIPPerformanceSummary = ({ activeSubItem }: SPIPPeformance) => {
 
           setReport(filteredResponse);
         }
+        if (response?.data?.statusCode === 400) {
+          setReport([]);
+          ShowToast("error", response?.data?.message);
+          return;
+        }
       })
       .catch((error) => {
         dispatch(hideLoader());
@@ -85,6 +95,63 @@ const SPIPPerformanceSummary = ({ activeSubItem }: SPIPPeformance) => {
     } else {
       formik.handleChange(e);
     }
+  };
+  const handleExcelDownload = () => {
+    // Convert data to a worksheet
+    const worksheet = XLSX.utils.json_to_sheet(report);
+
+    // Style the header row (first row, r = 0)
+    const headerKeys = Object.keys(report[0]);
+
+    headerKeys.forEach((key, colIndex) => {
+      console.log(key);
+      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: colIndex });
+
+      if (worksheet[cellAddress]) {
+        worksheet[cellAddress].s = {
+          fill: {
+            patternType: "solid",
+            fgColor: { rgb: "D9E1F2" },
+          },
+          font: {
+            bold: true,
+            sz: 14,
+            color: { rgb: "000000" },
+          },
+          alignment: {
+            horizontal: "center",
+            vertical: "center",
+          },
+        };
+      }
+    });
+
+    // Set uniform column widths
+    worksheet["!cols"] = headerKeys.map(() => ({ wch: 20 }));
+
+    // Create workbook
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Report_data");
+
+    // Generate timestamp string
+    const now = new Date();
+    const timeString = now
+      .toLocaleTimeString("en-GB", { hour12: false }) // HH:MM:SS
+      .replace(/:/g, "-"); // Replace ':' with '-' for valid filename
+
+    const filename = `SPIP_Performance_summary${timeString}.xlsx`;
+
+    // Write and save file
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const excelFile = new Blob([excelBuffer], {
+      type: "application/octet-stream",
+    });
+
+    saveAs(excelFile, filename);
   };
 
   return (
@@ -148,6 +215,8 @@ const SPIPPerformanceSummary = ({ activeSubItem }: SPIPPeformance) => {
                           backgroundColor: "#11395C",
                           height: "36px",
                           marginBottom: "20px",
+                          marginTop: isMobile ? "10px" : "0px",
+                          marginLeft: isMobile ? "12px" : "0px",
                           fontSize: "13px",
                           padding: "4px 10px",
                         }}
@@ -155,6 +224,24 @@ const SPIPPerformanceSummary = ({ activeSubItem }: SPIPPeformance) => {
                       >
                         Submit
                       </Button>
+                      {report.length > 0 && (
+                        <Button
+                          className="btn-font"
+                          style={{
+                            backgroundColor: "#11395C",
+                            height: "36px",
+                            fontSize: "13px",
+                            padding: "4px 10px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            marginBottom: "20px",
+                          }}
+                          onClick={handleExcelDownload}
+                        >
+                          Excel <DownloadIcon style={{ fontSize: "16px" }} />
+                        </Button>
+                      )}
                     </Col>
                   </Row>
                 </form>
