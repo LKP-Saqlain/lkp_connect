@@ -964,6 +964,32 @@ const DataTable = ({
               return (
                 <button
                   onClick={() => {
+                    handleDownload(params.row); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              );
+            },
+          };
+        }
+        return column;
+      });
+      return spipSubSciptionDetailColumns.map((column) => {
+        if (column.field === "invoiceDownload") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
                     handleDownload(params.row);
                   }}
                   style={{

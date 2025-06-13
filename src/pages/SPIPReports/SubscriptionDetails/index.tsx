@@ -44,10 +44,14 @@ const SubScriptionDetails = ({ activeSubItem }: SPIPPeformance) => {
 
   const fetchReport = (values: any) => {
     setReport([]);
+
+    const userId = user_id.includes("-") ? user_id.split("-")[1] : user_id;
+    console.log("userId", userId);
+
     let payload = {
       clientCode: values?.riaCode, //RA000029
       userType: "B2B",
-      loginName: user_id, //1315
+      loginName: userId, //1315
     };
 
     dispatch(showLoader(""));
@@ -155,6 +159,53 @@ const SubScriptionDetails = ({ activeSubItem }: SPIPPeformance) => {
     saveAs(excelFile, filename);
   };
 
+  const handleDownload = async (row: any) => {
+    console.log("test1111", row);
+    const userId = user_id.includes("-") ? user_id.split("-")[1] : user_id;
+    console.log("userId", userId);
+    const payload = {
+      commandName:
+        row?.productName === "SPIP" ? "spipInvoice" : "trilogyInvoice",
+      loginName: userId,
+      quarterId: row?.quarterId,
+      clientCode: row?.clientCode,
+      invoiceMonth: row?.invoiceMonth,
+    };
+
+    try {
+      // dispatch(showLoader("Downloading..."));
+
+      const response = await apiServices.GenerateAndDownloadInvoice(payload);
+
+      if (response?.status === 200 && response?.data) {
+        // Create blob from response
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a temporary anchor tag
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+          "download",
+          `${row?.clientCode}_${row?.invoiceMonth}_Invoice.pdf`
+        );
+
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      } else {
+        ShowToast("info", "Failed to download file");
+      }
+    } catch (error: any) {
+      ShowToast("info", error.message || "An error occurred while downloading");
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
   return (
     <div className="page-content page-view">
       <div className="container-fluid">
@@ -255,7 +306,11 @@ const SubScriptionDetails = ({ activeSubItem }: SPIPPeformance) => {
               }}
             >
               <CardBody>
-                <DataTable activeSubItem={activeSubItem} T6Data={report} />
+                <DataTable
+                  activeSubItem={activeSubItem}
+                  T6Data={report}
+                  handleDownload={handleDownload}
+                />
               </CardBody>
             </Card>
           </Col>

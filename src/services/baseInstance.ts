@@ -59,6 +59,7 @@ baseInstance.interceptors.request.use(
     const isPdfRequest = [
       endpoints.GetPNLAccountDetailsPdf,
       endpoints.ComplainceFileDownload,
+      endpoints.GenerateAndDownloadInvoice,
     ].some((endpoint) => config.url?.includes(endpoint));
 
     // Check if it's a public endpoint

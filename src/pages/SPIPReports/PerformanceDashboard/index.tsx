@@ -78,11 +78,12 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
     setReport([]);
     const { finYear, clientCode } = values;
     console.log("QuarterId", finYear, "clientCode", clientCode);
-
+    const userId = user_id.includes("-") ? user_id.split("-")[1] : user_id;
+    console.log("userId", userId);
     let payload = {
       quarterId: finYear,
       option: "",
-      loginName: user_id,
+      loginName: userId,
       clientCode: clientCode, //900001441
       branchCode: "",
       userType: "",

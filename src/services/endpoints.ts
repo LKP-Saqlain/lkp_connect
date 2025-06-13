@@ -86,4 +86,5 @@ export const endpoints = {
   SPIPFeesSharingReport: "/api/SPIP/FeesSharingReport",
   SPIPB2BClientDetails: "/api/SPIP/B2BClientDetails",
   FillQuarterName: "/api/SPIP/FillQuarterName",
+  GenerateAndDownloadInvoice: "/api/SPIP/GenerateAndDownloadInvoice",
 };

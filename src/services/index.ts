@@ -356,4 +356,11 @@ export const apiServices = {
   FillQuarterName: async (payload: any) => {
     return await apiService("POST", endpoints.FillQuarterName, payload);
   },
+  GenerateAndDownloadInvoice: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GenerateAndDownloadInvoice,
+      payload
+    );
+  },
 };

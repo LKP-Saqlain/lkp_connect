@@ -71,9 +71,12 @@ const SPIPBranchWiseFeesReport = ({ activeSubItem }: SPIPPeformance) => {
   });
 
   const fetchReport = (values: any) => {
+    const userId = user_id.includes("-") ? user_id.split("-")[1] : user_id;
+    console.log("userId", userId);
+
     let payload = {
       option: "BranchWiseFeesReport",
-      loginName: user_id,
+      loginName: userId,
       loginType: "",
       branchCode: "", //1200
       clientCode: values?.BranchCode, //RA000654
