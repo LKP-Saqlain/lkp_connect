@@ -330,4 +330,30 @@ export const apiServices = {
       payload
     );
   },
+  SPIPClientPerformanceDashboard: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SPIPClientPerformanceDashboard,
+      payload
+    );
+  },
+  SPIPClientPerformanceSummary: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SPIPClientPerformanceSummary,
+      payload
+    );
+  },
+  SPIPsubScriptionDetail: async (payload: any) => {
+    return await apiService("POST", endpoints.SPIPsubScriptionDetail, payload);
+  },
+  SPIPFeesSharingReport: async (payload: any) => {
+    return await apiService("POST", endpoints.SPIPFeesSharingReport, payload);
+  },
+  SPIPB2BClientDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.SPIPB2BClientDetails, payload);
+  },
+  FillQuarterName: async (payload: any) => {
+    return await apiService("POST", endpoints.FillQuarterName, payload);
+  },
 };
