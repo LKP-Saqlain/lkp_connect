@@ -157,7 +157,7 @@ const DormantClient = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     // const Id = localStorage.getItem("Id");
-    if (accessType === "ALL") {
+    if (accessType === "ALL" || accessType === "ZONE") {
       let payload = {
         user_id: user_id,
         option: "zone",
