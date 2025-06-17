@@ -2,7 +2,7 @@ import { TextField, useMediaQuery } from "@mui/material";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardBody, CardHeader, Col, Row, Button } from "reactstrap";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { AppDispatch, RootState } from "../../../redux/store";
 import DataTable from "../../../components/common/UserInfoTable";
 import { regEx } from "../../../helper/method";
@@ -32,9 +32,9 @@ const SPIPPerformanceSummary = ({ activeSubItem }: SPIPPeformance) => {
     initialValues: {
       clientCode: "",
     },
-    validationSchema: Yup.object({
-      clientCode: Yup.string().required("Please enter a Client Code"),
-    }),
+    // validationSchema: Yup.object({
+    //   clientCode: Yup.string().required("Please enter a Client Code"),
+    // }),
     onSubmit: (values) => {
       const { clientCode } = values;
       console.log("submitClick", clientCode);

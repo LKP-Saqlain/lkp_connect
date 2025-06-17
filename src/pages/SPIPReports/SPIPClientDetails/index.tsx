@@ -1,9 +1,9 @@
 import { TextField, useMediaQuery } from "@mui/material";
 import { useFormik } from "formik";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Card, CardBody, CardHeader, Col, Row, Button } from "reactstrap";
-import * as Yup from "yup";
-import { AppDispatch } from "../../../redux/store";
+// import * as Yup from "yup";
+import { AppDispatch, RootState } from "../../../redux/store";
 import DataTable from "../../../components/common/UserInfoTable";
 import { regEx } from "../../../helper/method";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
@@ -20,6 +20,10 @@ const SPIPClientDetails = ({ activeSubItem }: SPIPPeformance) => {
   const isMobile = useMediaQuery("(max-width:600px)");
   const dispatch = useDispatch<AppDispatch>();
 
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+
   // const { user_id } = useSelector(
   //   (state: RootState) => state.UserLogin?.data?.data
   // );
@@ -28,9 +32,9 @@ const SPIPClientDetails = ({ activeSubItem }: SPIPPeformance) => {
     initialValues: {
       clientCode: "",
     },
-    validationSchema: Yup.object({
-      clientCode: Yup.string().required("Please enter a Client Code"),
-    }),
+    // validationSchema: Yup.object({
+    //   clientCode: Yup.string().required("Please enter a Client Code"),
+    // }),
     onSubmit: (values) => {
       const { clientCode } = values;
       console.log("submitClick", clientCode);
@@ -39,10 +43,12 @@ const SPIPClientDetails = ({ activeSubItem }: SPIPPeformance) => {
   });
 
   const fetchReport = (values: any) => {
+    const userId = user_id.includes("-") ? user_id.split("-")[1] : user_id;
+    console.log("userId", userId);
     let payload = {
-      branchCode: "", //0408
+      branchCode: userId, //0408
       clientCode: values?.clientCode,
-      option: "RAPortal",
+      option: "",
     };
 
     dispatch(showLoader(""));
@@ -103,7 +109,7 @@ const SPIPClientDetails = ({ activeSubItem }: SPIPPeformance) => {
                   padding: "0.2rem 0.8rem",
                 }}
               >
-                <h4 className="card-title mb-0">Client Details</h4>
+                <h4 className="card-title mb-0">Client Details Report</h4>
               </CardHeader>
               <CardBody>
                 <form onSubmit={formik.handleSubmit}>

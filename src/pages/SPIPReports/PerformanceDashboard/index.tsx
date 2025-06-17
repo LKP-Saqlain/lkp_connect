@@ -10,7 +10,7 @@ import {
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardBody, CardHeader, Col, Row, Button } from "reactstrap";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { AppDispatch, RootState } from "../../../redux/store";
 import DataTable from "../../../components/common/UserInfoTable";
 import { regEx } from "../../../helper/method";
@@ -42,10 +42,10 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
       finYear: "",
       clientCode: "",
     },
-    validationSchema: Yup.object({
-      finYear: Yup.string().required("Please select a Financial Year"),
-      clientCode: Yup.string().required("Please enter a Terminal Code"),
-    }),
+    // validationSchema: Yup.object({
+    //   finYear: Yup.string().required("Please select a Financial Year"),
+    //   clientCode: Yup.string().required("Please enter a Terminal Code"),
+    // }),
     onSubmit: (values) => {
       fetchReport(values);
     },

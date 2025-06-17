@@ -5123,7 +5123,7 @@ export const SPIPOverallPerformanceReport: GridColDef[] = [
     },
   },
   {
-    field: "profitlossPerc",
+    field: "profitloss_Perc",
     headerName: "Profit & Loss (%)",
     width: 130,
     disableColumnMenu: true,
@@ -5422,7 +5422,7 @@ export const ZONEWiseCommissionReport: GridColDef[] = [
 
 export const ClientWiseCommissonReport: GridColDef[] = [
   {
-    field: "clientCode",
+    field: "clientcode",
     headerName: "Client Code",
     flex: 1,
     minWidth: 120,
@@ -5438,7 +5438,7 @@ export const ClientWiseCommissonReport: GridColDef[] = [
     align: "left",
   },
   {
-    field: "zone",
+    field: "crocode",
     headerName: "ZONE",
     flex: 1,
     minWidth: 110,
@@ -5446,7 +5446,7 @@ export const ClientWiseCommissonReport: GridColDef[] = [
     align: "center",
   },
   {
-    field: "partnerCode",
+    field: "branchcode",
     headerName: "Partner Code",
     flex: 1,
     minWidth: 130,
@@ -5454,7 +5454,7 @@ export const ClientWiseCommissonReport: GridColDef[] = [
     align: "center",
   },
   {
-    field: "partnerName",
+    field: "branchname",
     headerName: "Partner Name",
     flex: 1.5,
     minWidth: 160,
@@ -5462,7 +5462,7 @@ export const ClientWiseCommissonReport: GridColDef[] = [
     align: "left",
   },
   {
-    field: "month",
+    field: "dtoftran",
     headerName: "Month",
     flex: 1,
     minWidth: 120,
@@ -5486,7 +5486,7 @@ export const ClientWiseCommissonReport: GridColDef[] = [
     align: "right",
   },
   {
-    field: "feesWithoutGst",
+    field: "feeswithoutGST",
     headerName: "Fees w/o GST (₹)",
     flex: 1.2,
     minWidth: 140,
@@ -5594,21 +5594,21 @@ export const spipClientDetails: GridColDef[] = [
   },
   {
     field: "active",
-    headerName: "Active",
+    headerName: "Status",
     flex: 0.8,
     minWidth: 100,
     headerAlign: "center",
     align: "center",
-    renderCell: ({ value }) => (
-      <span
-        style={{
-          color: value === "Yes" ? "green" : "red",
-          fontWeight: 600,
-        }}
-      >
-        {value}
-      </span>
-    ),
+    // renderCell: ({ value }) => (
+    //   <span
+    //     style={{
+    //       color: value === "Yes" ? "green" : "red",
+    //       fontWeight: 600,
+    //     }}
+    //   >
+    //     {value}
+    //   </span>
+    // ),
   },
   {
     field: "activationDate",
@@ -5663,15 +5663,15 @@ export const spipClientDetails: GridColDef[] = [
     minWidth: 140,
     headerAlign: "center",
     align: "center",
-    renderCell: ({ value }) => (
-      <span
-        style={{
-          color: value === "Expired" ? "red" : "green",
-          fontWeight: 600,
-        }}
-      >
-        {value}
-      </span>
-    ),
+    // renderCell: ({ value }) => (
+    //   <span
+    //     style={{
+    //       color: value === "Expired" ? "red" : "green",
+    //       fontWeight: 600,
+    //     }}
+    //   >
+    //     {value}
+    //   </span>
+    // ),
   },
 ];

@@ -2,7 +2,7 @@ import { TextField, useMediaQuery } from "@mui/material";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardBody, CardHeader, Col, Row, Button } from "reactstrap";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { AppDispatch, RootState } from "../../../redux/store";
 import DataTable from "../../../components/common/UserInfoTable";
 import { regEx } from "../../../helper/method";
@@ -32,9 +32,9 @@ const SubScriptionDetails = ({ activeSubItem }: SPIPPeformance) => {
     initialValues: {
       riaCode: "",
     },
-    validationSchema: Yup.object({
-      riaCode: Yup.string().required("Please enter a RIA Code"),
-    }),
+    // validationSchema: Yup.object({
+    //   riaCode: Yup.string().required("Please enter a RIA Code"),
+    // }),
     onSubmit: (values) => {
       const { riaCode } = values;
       console.log("submitClick", riaCode);
@@ -65,7 +65,7 @@ const SubScriptionDetails = ({ activeSubItem }: SPIPPeformance) => {
         dispatch(hideLoader());
         if (response?.data?.statusCode === 400) {
           setReport([]);
-          ShowToast("error", response?.data?.message);
+          // ShowToast("error", response?.data?.message);
           return;
         }
         if (response?.status === 200) {

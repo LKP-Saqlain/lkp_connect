@@ -982,32 +982,6 @@ const DataTable = ({
         }
         return column;
       });
-      return spipSubSciptionDetailColumns.map((column) => {
-        if (column.field === "invoiceDownload") {
-          return {
-            ...column,
-            renderCell: (params: any) => {
-              return (
-                <button
-                  onClick={() => {
-                    handleDownload(params.row);
-                  }}
-                  style={{
-                    color: "#11395C",
-                    textDecoration: "underline",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  <DownloadForOfflineIcon />
-                </button>
-              );
-            },
-          };
-        }
-        return column;
-      });
     } else if (activeSubItem === "Branch-Wise Fees Sharing Report") {
       return ZONEWiseCommissionReport.map((column) => ({
         ...column,
@@ -1017,9 +991,68 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "Client Details Report") {
-      return spipClientDetails.map((column) => ({
-        ...column,
-      }));
+      // return spipClientDetails.map((column) => ({
+      //   ...column,
+      // }));
+      return spipClientDetails.map((column) => {
+        if (column.field === "expiryStatus") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const status = params.row.expiryStatus;
+
+              if (status === "E") {
+                return (
+                  <div
+                    onClick={() =>
+                      window.open("https://spip.lkp.net.in/Products", "_blank")
+                    }
+                    style={{
+                      backgroundColor: "#11395C",
+                      color: "white",
+                      borderRadius: "8px",
+                      // padding: "0px 2px",
+                      cursor: "pointer",
+                      display: "inline-block",
+                      textAlign: "center",
+                      userSelect: "none",
+                      fontSize: "9px",
+                      width: "110px",
+                      // margin: "2px",
+                    }}
+                  >
+                    Subscription Expire
+                  </div>
+                );
+              } else if (status === "A") {
+                return (
+                  <div
+                    style={{
+                      backgroundColor: "#4CAF50",
+                      color: "white",
+                      borderRadius: "8px",
+                      padding: "0px 4px",
+                      cursor: "default",
+                      display: "inline-block",
+                      textAlign: "center",
+                      userSelect: "none",
+                      opacity: 0.85, // optional for "disabled" look
+                      fontSize: "9px",
+                      width: "110px",
+                      // margin: "2px",
+                    }}
+                  >
+                    Ongoing
+                  </div>
+                );
+              } else {
+                return null;
+              }
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }

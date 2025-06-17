@@ -15,14 +15,14 @@ import {
   Button,
   Label,
 } from "reactstrap";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { AppDispatch, RootState } from "../../../redux/store";
 import DataTable from "../../../components/common/UserInfoTable";
 import { regEx } from "../../../helper/method";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 import { useState } from "react";
-import ShowToast from "../../../utils/toastUtils";
+// import ShowToast from "../../../utils/toastUtils";
 import { DateRangePicker } from "rsuite";
 const { afterToday } = DateRangePicker;
 import moment from "moment";
@@ -53,11 +53,11 @@ const SPIPClientWiseReport = ({ activeSubItem }: SPIPPeformance) => {
       startDate: "",
       endDate: "",
     },
-    validationSchema: Yup.object({
-      riaCode: Yup.string().required("Please enter RIA Code"),
-      // startDate: Yup.string().required("Start date is required"),
-      // endDate: Yup.string().required("End date is required"),
-    }),
+    // validationSchema: Yup.object({
+    //   riaCode: Yup.string().required("Please enter RIA Code"),
+    //   // startDate: Yup.string().required("Start date is required"),
+    //   // endDate: Yup.string().required("End date is required"),
+    // }),
     onSubmit: (values) => {
       const { riaCode } = values;
       console.log("submitClick", riaCode);
@@ -76,9 +76,9 @@ const SPIPClientWiseReport = ({ activeSubItem }: SPIPPeformance) => {
     let payload = {
       option: "ClientWiseFeesReport",
       loginName: userId,
-      loginType: "",
+      loginType: "B2B",
       branchCode: "", //1200
-      clientCode: values?.BranchCode, //RA000654
+      clientCode: values?.riaCode, //RA000654
       zone: "", //0001
       fromDate: startDate,
       toDate: endDate,
@@ -97,7 +97,7 @@ const SPIPClientWiseReport = ({ activeSubItem }: SPIPPeformance) => {
         dispatch(hideLoader());
         if (response?.data?.statusCode === 400) {
           setReport([]);
-          ShowToast("error", response?.data?.message);
+          // ShowToast("error", response?.data?.message);
           return;
         }
         if (response?.status === 200) {
@@ -247,7 +247,7 @@ const SPIPClientWiseReport = ({ activeSubItem }: SPIPPeformance) => {
                       </FormControl>
                     </Col>
 
-                    <Col xs={12} md={6} lg={4} style={{ marginTop: "30px" }}>
+                    <Col xs={12} md={6} lg={4} style={{ marginTop: "28px" }}>
                       <FormControl
                         fullWidth
                         error={
@@ -282,7 +282,7 @@ const SPIPClientWiseReport = ({ activeSubItem }: SPIPPeformance) => {
                       sm={6}
                       md={3}
                       lg={2}
-                      style={{ marginTop: "30px" }}
+                      style={{ marginTop: "28px" }}
                     >
                       <Button
                         className="btn-font w-100"
