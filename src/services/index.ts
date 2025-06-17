@@ -363,4 +363,7 @@ export const apiServices = {
       payload
     );
   },
+  EKycSSOLogin: async (payload: any) => {
+    return await apiService("POST", endpoints.EKycSSOLogin, payload);
+  },
 };

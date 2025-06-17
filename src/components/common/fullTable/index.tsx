@@ -381,7 +381,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                         height={350}
                       >
                         <Typography variant="body1" color="textSecondary">
-                          No records found
+                          No records!
                         </Typography>
                       </Box>
                     )}
@@ -436,7 +436,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                         height={350}
                       >
                         <Typography variant="body1" color="textSecondary">
-                          No records found
+                          No records!
                         </Typography>
                       </Box>
                     )}
