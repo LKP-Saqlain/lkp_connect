@@ -229,7 +229,7 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
                             id="financial-year-select-label"
                             sx={{ backgroundColor: "white", px: 0.5 }}
                           >
-                            Financial Year
+                            Quarter Name
                           </InputLabel>
                           <Select
                             size="small"
