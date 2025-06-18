@@ -13,21 +13,9 @@ const SessionExpiryHandler = () => {
   const { data } = useSelector((state: RootState) => state.UserLogin);
   const dispatch = useDispatch<AppDispatch>();
   const tokenExpiryTime = data?.data?.tokenExpiryTime;
-  // const tokenExpiryTime = new Date(Date.now() - 1 * 60 * 1000).toISOString(); //for testing
-  // const istTime = new Date(tokenExpiryTime).toLocaleString("en-IN", {
-  //   timeZone: "Asia/Kolkata",
-  //   hour12: true,
-  //   year: "numeric",
-  //   month: "long",
-  //   day: "numeric",
-  //   hour: "2-digit",
-  //   minute: "2-digit",
-  //   second: "2-digit",
-  // });
-  // console.log("IST Time:", istTime);
 
   useEffect(() => {
-    if (true) {
+    if (data?.data?.token && tokenExpiryTime) {
       const expiryDate = new Date(tokenExpiryTime);
       const now = new Date();
       console.log("CurrentTime", now, "ExpiryTime", expiryDate);
@@ -39,7 +27,7 @@ const SessionExpiryHandler = () => {
       }
 
       const timeUntilExpiry = expiryDate.getTime() - now.getTime();
-      console.log("timeUntilExpiry", timeUntilExpiry);
+      console.log("Testtest", timeUntilExpiry);
 
       const timer = setTimeout(() => {
         setIsTokenExpired(true);
@@ -49,7 +37,7 @@ const SessionExpiryHandler = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [true]);
+  }, [data?.data?.token, tokenExpiryTime, dispatch]);
 
   return (
     isTokenExpired &&
