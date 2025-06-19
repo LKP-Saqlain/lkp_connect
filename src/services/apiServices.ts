@@ -23,10 +23,10 @@ const apiService = async (
       response = await baseInstance.post(endpoint, payload, config);
       return response;
     }
-    return response; // This line is probably unreachable, but can be kept for safety
+    return response;
   } catch (error) {
     console.error(`Error in ${method} request to ${endpoint}:`, error);
-    throw error; // Rethrow the error for further handling
+    throw error;
   }
 };
 

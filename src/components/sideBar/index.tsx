@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
-import { useMediaQuery, Box } from "@mui/material";
+import { useMediaQuery, Box, Button } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -217,8 +217,8 @@ const SideBar = () => {
     (state: RootState) => state.UserLogin && state.UserLogin?.data?.data
   );
 
-  const { name } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data
+  const { name, emailID } = useSelector(
+    (state: RootState) => state.AuthUser && state.AuthUser?.data?.data
   );
   console.log("reduxStateUserName", name, user_type);
 
@@ -887,6 +887,36 @@ const SideBar = () => {
     );
     setShowMyPerformance(hasMyPerformance);
   }, [menuItems]);
+
+  const handleSSOLogin = () => {
+    console.log("TestSSOLogin");
+    const userEmail = (emailID && emailID) || "";
+    let payload = {
+      email: userEmail,
+    };
+
+    dispatch(showLoader(""));
+    apiServices
+      .EKycSSOLogin(payload)
+      .then((response) => {
+        console.log("EKycSSOLoginResponse", response?.data?.data);
+        dispatch(hideLoader());
+        if (response?.status === 200) {
+          if (response?.data?.data?.success) {
+            const url = response?.data?.data?.url;
+            window.open(url, "_blank", "noopener,noreferrer");
+          }
+        }
+      })
+      .catch((Error) => {
+        console.log("Errrror", Error);
+        dispatch(hideLoader());
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   return (
     <>
       <CustomModal
@@ -944,7 +974,13 @@ const SideBar = () => {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
-
+            {showMyPerformance && (
+              <>
+                <Button onClick={handleSSOLogin} style={{ color: "#11395C" }}>
+                  EKYC Link
+                </Button>
+              </>
+            )}
             <Box
               sx={{
                 padding: isMobile ? "0" : "10px",
