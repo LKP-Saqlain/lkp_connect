@@ -132,11 +132,17 @@ const AppBar = styled(MuiAppBar, {
       duration: theme.transitions.duration.enteringScreen,
     }),
     width: isMobile
-      ? "calc(100% - 30px)" // Always full width minus margin on mobile
+      ? open
+        ? `calc(100% - ${drawerWidth + 30}px)`
+        : "calc(100% - 30px)"
       : open
       ? `calc(100% - ${leftMargin + 30}px)`
       : `calc(100% - 30px)`,
-    marginLeft: isMobile ? 0 : `${leftMargin}px`,
+    marginLeft: isMobile
+      ? open
+        ? `${drawerWidth}px`
+        : "0px"
+      : `${leftMargin}px`,
   };
 });
 
@@ -155,7 +161,7 @@ const Drawer = styled(MuiDrawer, {
       "& .MuiDrawer-paper": {
         ...openedMixin(theme, width),
         height: "100vh",
-        overflowY: "auto", // 👈 Enables vertical scroll
+        overflowY: "auto",
       },
     }),
     ...(!open && {
@@ -163,7 +169,7 @@ const Drawer = styled(MuiDrawer, {
       "& .MuiDrawer-paper": {
         ...closedMixin(theme),
         height: "100vh",
-        overflowY: "auto", // 👈 Enables vertical scroll
+        overflowY: "auto",
       },
     }),
   };
@@ -208,7 +214,7 @@ const SideBar = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id, user_type } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin && state.UserLogin?.data?.data
   );
 
   const { name } = useSelector(

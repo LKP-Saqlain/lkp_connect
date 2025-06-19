@@ -11,10 +11,16 @@ const SessionExpiryHandler = () => {
 
   const location = useLocation();
   const { data } = useSelector((state: RootState) => state.UserLogin);
+  const isNewUser = useSelector(
+    (state: RootState) => state.isNewUser.isNewUser
+  );
+  console.log("IsNewUser", isNewUser);
+
   const dispatch = useDispatch<AppDispatch>();
   const tokenExpiryTime = data?.data?.tokenExpiryTime;
 
   useEffect(() => {
+    if (isNewUser) return;
     if (data?.data?.token && tokenExpiryTime) {
       const expiryDate = new Date(tokenExpiryTime);
       const now = new Date();
@@ -37,9 +43,10 @@ const SessionExpiryHandler = () => {
 
       return () => clearTimeout(timer);
     }
-  }, [data?.data?.token, tokenExpiryTime, dispatch]);
+  }, [data?.data?.token, tokenExpiryTime, dispatch, isNewUser]);
 
   return (
+    !isNewUser &&
     isTokenExpired &&
     location.pathname === "/dashboard" && (
       <CustomModal
