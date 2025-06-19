@@ -211,8 +211,8 @@ const SideBar = () => {
     (state: RootState) => state.UserLogin?.data?.data
   );
 
-  const { name } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data
+  const { name, emailID } = useSelector(
+    (state: RootState) => state.AuthUser && state.AuthUser?.data?.data
   );
   console.log("reduxStateUserName", name, user_type);
 
@@ -884,8 +884,9 @@ const SideBar = () => {
 
   const handleSSOLogin = () => {
     console.log("TestSSOLogin");
+    const userEmail = (emailID && emailID) || "";
     let payload = {
-      email: "haresh@lkpsec.com",
+      email: userEmail,
     };
 
     dispatch(showLoader(""));
