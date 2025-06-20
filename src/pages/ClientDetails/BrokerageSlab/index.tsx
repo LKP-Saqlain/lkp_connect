@@ -39,6 +39,11 @@ const BrokerageSlab = ({
   >(null);
   const dispatch = useDispatch<AppDispatch>();
 
+  const formatStatus = (value: string | undefined | null): string => {
+    if (!value || value === "01-Jan-00") return "--";
+    return value;
+  };
+
   useEffect(() => {
     console.log("test124", setClientDetails);
 
@@ -47,28 +52,32 @@ const BrokerageSlab = ({
         {
           id: 1,
           label: "Equity",
-          status: setClientDetails["EquityTradeDate"] || "--",
+          status: formatStatus(setClientDetails["EquityTradeDate"]),
         },
         {
           id: 2,
           label: "F&O",
-          status: setClientDetails["F_OTradeDate"] || "--",
+          status: formatStatus(setClientDetails["F_OTradeDate"]),
         },
         {
           id: 3,
           label: "Currency",
-          status: setClientDetails["CurrencyTradeDate"] || "--",
+          status: formatStatus(setClientDetails["CurrencyTradeDate"]),
         },
         {
           id: 4,
           label: "Commodity",
-          status: setClientDetails["Commodity_TradeDate"] || "--",
+          status: formatStatus(setClientDetails["Commodity_TradeDate"]),
         },
-        { id: 5, label: "MTF", status: setClientDetails[""] || "--" },
+        {
+          id: 5,
+          label: "MTF",
+          status: formatStatus(setClientDetails["MTF_TradeDate"]),
+        },
         {
           id: 6,
           label: "SLBM",
-          status: setClientDetails["SLBM_TradeDate"] || "--",
+          status: formatStatus(setClientDetails["SLBM_TradeDate"]),
         },
       ];
 

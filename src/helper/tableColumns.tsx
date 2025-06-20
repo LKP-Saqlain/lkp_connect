@@ -255,7 +255,7 @@ export const getRegulatorAnnouncement: GridColDef[] = [
   {
     field: "Dates",
     headerName: "Date",
-    flex: 0.5,
+    flex: 0.6,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -263,14 +263,14 @@ export const getRegulatorAnnouncement: GridColDef[] = [
   {
     field: "Department",
     headerName: "Department",
-    flex: 1,
+    flex: 0.8,
     disableColumnMenu: true,
     headerAlign: "center",
   },
   {
     field: "Subject",
     headerName: "Subject",
-    flex: 3.1,
+    flex: 1.5,
     disableColumnMenu: true,
     headerAlign: "center",
     // renderCell: (params) => (
@@ -280,7 +280,7 @@ export const getRegulatorAnnouncement: GridColDef[] = [
   {
     field: "LKPComments",
     headerName: "LKP Comments",
-    flex: 1.1,
+    flex: 3,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -289,7 +289,7 @@ export const getRegulatorAnnouncement: GridColDef[] = [
   {
     field: "CircularFilePath",
     headerName: "Circular",
-    flex: 1.1,
+    flex: 0.8,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
