@@ -4164,6 +4164,24 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const name = params.row?.rM_Name || "N/A";
+      const mobile = params.row?.rM_Mobile || "N/A";
+      return (
+        <Tooltip
+          title={
+            <>
+              <div>RM Name: {name}</div>
+              <div>Mobile No: {mobile}</div>
+            </>
+          }
+          arrow
+          placement="top"
+        >
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "client_Name",
@@ -4304,6 +4322,25 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const name = params.row?.rM_Name || "N/A";
+      const mobile = params.row?.rM_Mobile || "N/A";
+
+      return (
+        <Tooltip
+          title={
+            <>
+              <div>RM Name: {name}</div>
+              <div>Mobile No: {mobile}</div>
+            </>
+          }
+          arrow
+          placement="top"
+        >
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "client_Name",

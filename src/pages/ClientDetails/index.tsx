@@ -439,20 +439,28 @@ any) => {
     let filteredAllClients: any[] = [];
 
     if (selectedCapsule === "Upcoming Dormant Client") {
-      filteredAllClients = tableData.filter((item: any) =>
-        item.clientName.toLowerCase().includes(value.toLowerCase())
+      filteredAllClients = tableData.filter(
+        (item: any) =>
+          item.clientName.toLowerCase().includes(value.toLowerCase()) ||
+          item.ctermcode?.toLowerCase().includes(value.toLowerCase())
       );
     } else if (selectedCapsule === "Active Clients") {
-      filteredAllClients = activeGroupedClients.filter((item: any) =>
-        item.ClientName.toLowerCase().includes(value.toLowerCase())
+      filteredAllClients = activeGroupedClients.filter(
+        (item: any) =>
+          item.ClientName.toLowerCase().includes(value.toLowerCase()) ||
+          item.ClientCode?.toLowerCase().includes(value.toLowerCase())
       );
     } else if (selectedCapsule === "Inactive Clients") {
-      filteredAllClients = inactiveGroupedClients.filter((item: any) =>
-        item.ClientName.toLowerCase().includes(value.toLowerCase())
+      filteredAllClients = inactiveGroupedClients.filter(
+        (item: any) =>
+          item.ClientName.toLowerCase().includes(value.toLowerCase()) ||
+          item.ClientCode?.toLowerCase().includes(value.toLowerCase())
       );
     } else {
-      filteredAllClients = tableData.filter((item: any) =>
-        item.ClientName.toLowerCase().includes(value.toLowerCase())
+      filteredAllClients = tableData.filter(
+        (item: any) =>
+          item.ClientName.toLowerCase().includes(value.toLowerCase()) ||
+          item.ClientCode?.toLowerCase().includes(value.toLowerCase())
       );
     }
 

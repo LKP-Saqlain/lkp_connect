@@ -191,8 +191,10 @@ const DPRecovery = ({ activeSubItem }: any) => {
     const query = value;
     setSearchQuery(query);
 
-    const filteredAllClients = userData.filter((item: any) =>
-      item.BOName.toLowerCase().includes(value.toLowerCase())
+    const filteredAllClients = userData.filter(
+      (item: any) =>
+        item.BOName.toLowerCase().includes(value.toLowerCase()) ||
+        item.ClientCode.toLowerCase().includes(value.toLowerCase())
     );
 
     if (value.trim() === "") {
@@ -203,16 +205,18 @@ const DPRecovery = ({ activeSubItem }: any) => {
         .flat()
         .filter(
           (item: any) =>
-            item.BOStatus === "Active" &&
-            item.BOName.toLowerCase().includes(value.toLowerCase())
+            (item.BOStatus === "Active" &&
+              item.BOName.toLowerCase().includes(value.toLowerCase())) ||
+            item.ClientCode.toLowerCase().includes(value.toLowerCase())
         );
 
       const filteredInactiveClients = inactiveGroupedClients
         .flat()
         .filter(
           (item: any) =>
-            item.BOStatus === "Inactive" &&
-            item.BOName.toLowerCase().includes(value.toLowerCase())
+            (item.BOStatus === "Inactive" &&
+              item.BOName.toLowerCase().includes(value.toLowerCase())) ||
+            item.ClientCode.toLowerCase().includes(value.toLowerCase())
         );
 
       setFilteredActiveGroupClients(filteredActiveClients);

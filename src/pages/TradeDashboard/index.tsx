@@ -265,12 +265,16 @@ const DashboardCrypto = ({
     let filteredtradeCWCBData: any[] = [];
 
     if (selectedItem === "Clients Ageing Report") {
-      filteredAllClients = t6Data.filter((item: any) =>
-        item.ClientName.toLowerCase().includes(value.toLowerCase())
+      filteredAllClients = t6Data.filter(
+        (item: any) =>
+          item.ClientName.toLowerCase().includes(value.toLowerCase()) ||
+          item.ClientCode.toLowerCase().includes(value.toLowerCase())
       );
     } else if (selectedItem === "Clients With Ledger Balance") {
-      filteredtradeCWCBData = tradeCWCBData.filter((item: any) =>
-        item.ClientName.toLowerCase().includes(value.toLowerCase())
+      filteredtradeCWCBData = tradeCWCBData.filter(
+        (item: any) =>
+          item.ClientName.toLowerCase().includes(value.toLowerCase()) ||
+          item.ClientCode.toLowerCase().includes(value.toLowerCase())
       );
       console.log(
         "ledger agee",

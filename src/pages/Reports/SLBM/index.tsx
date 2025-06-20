@@ -326,20 +326,30 @@ const SlbmHoling = ({ activeSubItem }: any) => {
 
   const handleSearchBasedOnInput = (value: string) => {
     console.log("handleSearchBasedOnInputValue", value);
-    // setSearchValue(value);
     const query = value;
     setSearchQuery(query);
 
     const lowerCaseValue = value.toLowerCase();
 
-    const filtered = userData.filter((item: any) =>
-      Object.keys(item).some((key) =>
+    const filtered = userData.filter((item: any) => {
+      const clientNameMatch = item.clientName
+        ?.toLowerCase()
+        .includes(lowerCaseValue);
+      const accountCodeMatch = item.clientCode
+        ?.toString()
+        .toLowerCase()
+        .includes(lowerCaseValue);
+
+      // Optional: keep other fields also searchable
+      const otherMatch = Object.keys(item).some((key) =>
         item[key]?.toString().toLowerCase().includes(lowerCaseValue)
-      )
-    );
+      );
+
+      return clientNameMatch || accountCodeMatch || otherMatch;
+    });
 
     setFilteredData(filtered);
-    console.log("filteredSearch Records", filteredData);
+    console.log("filteredSearch Records", filtered);
   };
 
   document.title = "LKP Securities | Dormant Client Report";
