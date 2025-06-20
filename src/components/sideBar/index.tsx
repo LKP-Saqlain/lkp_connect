@@ -209,6 +209,7 @@ const SideBar = () => {
   const [userAccess, setUserAccess] = useState<string[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
   const [showMyPerformance, setShowMyPerformance] = useState<boolean>(false);
+  const [activeClickCount, setActiveClickCount] = useState(0);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -532,6 +533,12 @@ const SideBar = () => {
   }, []);
 
   useEffect(() => {
+    if (activeMenu === "IVR" && activeSubItem === "IVR Mapping") {
+      setActiveSubItem("");
+    }
+  }, [activeMenu, activeSubItem]);
+
+  useEffect(() => {
     setIsNudgeOpen(false);
     localStorage.setItem("activeMenu", activeMenu);
     localStorage.setItem("activeSubItem", activeSubItem);
@@ -595,7 +602,14 @@ const SideBar = () => {
 
   const handleSubItemClick = (subItem: string) => {
     console.log("value-->", subItem);
-    setActiveSubItem(subItem); // Set active sub-item
+    // setActiveSubItem(subItem); // Set active sub-item
+    if (activeSubItem === subItem) {
+      // user clicked same tab again
+      setActiveClickCount((prev) => prev + 1);
+    } else {
+      setActiveSubItem(subItem);
+      setActiveClickCount(1); // reset count for new tab
+    }
     if (isMobile) {
       setTimeout(() => {
         handleMobileDrawerClose();
@@ -670,7 +684,13 @@ const SideBar = () => {
     "Pre Trade Proof Upload": <PreProofUpload activeSubItem={activeSubItem} />,
     "Pre Trade Report": <PreTradeReport activeSubItem={activeSubItem} />,
     "Pre Trade Approval": <PreTradeApproval activeSubItem={activeSubItem} />,
-    "IVR Mapping": <IVR activeSubItem={activeSubItem} />,
+    "IVR Mapping": (
+      <IVR
+        activeMenu={activeMenu}
+        activeSubItem={activeSubItem}
+        activeClickCount={activeClickCount}
+      />
+    ),
     "Referal Product Wise MIS Report": (
       <KycBrokerage activeSubItem={activeSubItem} />
     ),
