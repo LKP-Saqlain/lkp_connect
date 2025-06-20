@@ -604,29 +604,29 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "LKPComments") {
-          return {
-            ...column,
-            renderCell: () => {
-              return (
-                <button
-                  onClick={() => setmodal_center(!modal_center)}
-                  style={{
-                    color: "white",
-                    // textDecoration: "underline",
-                    background: "#11395C",
-                    border: "none",
-                    cursor: "pointer",
-                    borderRadius: "10px",
-                    width: "90px",
-                  }}
-                >
-                  View
-                </button>
-              );
-            },
-          };
-        }
+        // if (column.field === "LKPComments") {
+        //   return {
+        //     ...column,
+        //     renderCell: () => {
+        //       return (
+        //         <button
+        //           onClick={() => setmodal_center(!modal_center)}
+        //           style={{
+        //             color: "white",
+        //             // textDecoration: "underline",
+        //             background: "#11395C",
+        //             border: "none",
+        //             cursor: "pointer",
+        //             borderRadius: "10px",
+        //             width: "90px",
+        //           }}
+        //         >
+        //           View
+        //         </button>
+        //       );
+        //     },
+        //   };
+        // }
         return column;
       });
     } else if (activeSubItem === "Communication Retrival Checker") {

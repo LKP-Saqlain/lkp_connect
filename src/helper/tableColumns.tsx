@@ -255,7 +255,7 @@ export const getRegulatorAnnouncement: GridColDef[] = [
   {
     field: "Dates",
     headerName: "Date",
-    flex: 1,
+    flex: 0.5,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -273,9 +273,9 @@ export const getRegulatorAnnouncement: GridColDef[] = [
     flex: 3.1,
     disableColumnMenu: true,
     headerAlign: "center",
-    renderCell: (params) => (
-      <div style={{ padding: "0px 3px" }}>{params.value}</div>
-    ),
+    // renderCell: (params) => (
+    //   <div style={{ padding: "0px 3px" }}>{params.value}</div>
+    // ),
   },
   {
     field: "LKPComments",

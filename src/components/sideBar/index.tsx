@@ -977,7 +977,7 @@ const SideBar = () => {
             {showMyPerformance && (
               <>
                 <Button onClick={handleSSOLogin} style={{ color: "#11395C" }}>
-                  EKYC Link
+                  E-KYC
                 </Button>
               </>
             )}
