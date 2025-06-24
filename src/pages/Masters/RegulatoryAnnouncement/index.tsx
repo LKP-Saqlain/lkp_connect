@@ -3,27 +3,26 @@ import {
   Card,
   CardHeader,
   Button,
-  FormGroup,
-  Label,
-  Input,
+  // FormGroup,
+  // Label,
+  // Input,
   CardBody,
   Row,
   Col,
-  FormFeedback,
+  // FormFeedback,
   Container,
 } from "reactstrap";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ShowToast from "../../../utils/toastUtils";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import dayjs, { Dayjs } from "dayjs";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { apiServices } from "../../../services";
 import { Box } from "@mui/material";
 import ModalComponent from "../../../components/common/masterModal";
 
-const DEPARTMENTS = ["IT", "Account", "RMS"];
 const allowedFileFormats = ["doc", "docx", "pdf", "xls", "xlsx"];
 
 const RegAnnMaster = () => {
@@ -99,19 +98,19 @@ const RegAnnMaster = () => {
     },
   });
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-    if (file) {
-      const ext = file.name.split(".").pop()?.toLowerCase();
-      if (!ext || !allowedFileFormats.includes(ext)) {
-        formik.setFieldError("circular", "Invalid file format.");
-        setUploadedFile(null);
-        return;
-      }
-      setUploadedFile(file);
-      formik.setFieldValue("circular", file);
-    }
-  };
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0] ?? null;
+  //   if (file) {
+  //     const ext = file.name.split(".").pop()?.toLowerCase();
+  //     if (!ext || !allowedFileFormats.includes(ext)) {
+  //       formik.setFieldError("circular", "Invalid file format.");
+  //       setUploadedFile(null);
+  //       return;
+  //     }
+  //     setUploadedFile(file);
+  //     formik.setFieldValue("circular", file);
+  //   }
+  // };
 
   function tog_grid() {
     setmodal_grid(!modal_grid);
