@@ -20,12 +20,17 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { apiServices } from "../../../services";
+import { Box } from "@mui/material";
+import ModalComponent from "../../../components/common/masterModal";
 
 const DEPARTMENTS = ["IT", "Account", "RMS"];
 const allowedFileFormats = ["doc", "docx", "pdf", "xls", "xlsx"];
 
 const RegAnnMaster = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [modal_grid, setmodal_grid] = useState<boolean>(false);
+  const [editUserCheck, setEditUserCheck] = useState(false);
+
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
 
   const formik = useFormik({
@@ -108,6 +113,11 @@ const RegAnnMaster = () => {
     }
   };
 
+  function tog_grid() {
+    setmodal_grid(!modal_grid);
+    setEditUserCheck(false);
+  }
+
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -131,8 +141,29 @@ const RegAnnMaster = () => {
           <CardBody>
             <form onSubmit={formik.handleSubmit}>
               <Row>
+                <ModalComponent
+                  modal_grid={modal_grid}
+                  tog_grid={tog_grid}
+                  // editData={editData}
+                  // onSubmit={handleFormSubmit}
+                  editUserCheck={editUserCheck}
+                />
                 <Col md="4">
-                  <FormGroup>
+                  <Box>
+                    <Button
+                      // type="submit"
+                      variant="contained"
+                      className="btn-font"
+                      onClick={tog_grid}
+                      style={{
+                        backgroundColor: "#11395C",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      Add
+                    </Button>
+                  </Box>
+                  {/* <FormGroup>
                     <Label for="dateOfCommunication">Date</Label>
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -166,10 +197,10 @@ const RegAnnMaster = () => {
                         />
                       </LocalizationProvider>
                     </div>
-                  </FormGroup>
+                  </FormGroup> */}
                 </Col>
 
-                <Col md="4">
+                {/* <Col md="4">
                   <FormGroup>
                     <Label for="department">Department</Label>
                     <Input
@@ -212,10 +243,10 @@ const RegAnnMaster = () => {
                     />
                     <FormFeedback>{formik.errors.subject}</FormFeedback>
                   </FormGroup>
-                </Col>
+                </Col> */}
               </Row>
 
-              <Row>
+              {/* <Row>
                 <Col md="6">
                   <FormGroup>
                     <Label for="lkpComments">LKP Comments</Label>
@@ -253,9 +284,9 @@ const RegAnnMaster = () => {
                     <FormFeedback>{formik.errors.circular}</FormFeedback>
                   </FormGroup>
                 </Col>
-              </Row>
+              </Row> */}
 
-              <Button
+              {/* <Button
                 type="submit"
                 color="primary"
                 style={{
@@ -265,7 +296,7 @@ const RegAnnMaster = () => {
                 }}
               >
                 Submit
-              </Button>
+              </Button> */}
             </form>
           </CardBody>
         </Card>
