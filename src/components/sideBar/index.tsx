@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
-import { useMediaQuery, Box } from "@mui/material";
+import { useMediaQuery, Box, Button } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -68,8 +68,8 @@ import RegAnnMaster from "../../pages/Masters/RegulatoryAnnouncement";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 // import { subDays, format } from "date-fns";
-// import RegionalHead from "../../pages/KYC Dashboard/RegionalHead/index";
-// import BrokerageModificationStatus from "../../pages/KYC Dashboard/BrokerageModStatus";
+import RegionalHead from "../../pages/KYC Dashboard/RegionalHead/index";
+import BrokerageModificationStatus from "../../pages/KYC Dashboard/BrokerageModStatus";
 import KycBrokerage from "../../pages/KYC Dashboard/KycBrokerage";
 import PreProofUpload from "../../pages/preTrade/preProofUpload";
 import PreTradeReport from "../../pages/preTrade/preTradeReport";
@@ -77,7 +77,7 @@ import PreTradeApproval from "../../pages/preTrade/Approval";
 import IVR from "../../pages/preTrade/IVR";
 import ClientTradingReport from "../../pages/Reports/ClientTradingPatternReport";
 import CTCLReport from "../../pages/Reports/CTCLReport";
-// import SPIP from "../../pages/SPIPReports";
+import SPIP from "../../pages/SPIPReports";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -218,10 +218,7 @@ const SideBar = () => {
     (state: RootState) => state.UserLogin && state.UserLogin?.data?.data
   );
 
-  // const { name, emailID } = useSelector(
-  //   (state: RootState) => state.AuthUser && state.AuthUser?.data?.data
-  // );
-  const { name } = useSelector(
+  const { name, emailID } = useSelector(
     (state: RootState) => state.AuthUser && state.AuthUser?.data?.data
   );
   console.log("reduxStateUserName", name, user_type);
@@ -642,16 +639,16 @@ const SideBar = () => {
   };
 
   const revenueDetailsSubItems: Record<string, JSX.Element> = {
-    "Regulatory Announcement": <RegAnnMaster />,
+    "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {
-    // "RH Approval": <RegionalHead activeSubItem={activeSubItem} />,
-    // "KYC Approval": <KycBrokerage activeSubItem={activeSubItem} />,
-    // "Brokerage Modification Status": (
-    //   <BrokerageModificationStatus activeSubItem={activeSubItem} />
-    // ),
+    "RH Approval": <RegionalHead activeSubItem={activeSubItem} />,
+    "KYC Approval": <KycBrokerage activeSubItem={activeSubItem} />,
+    "Brokerage Modification Status": (
+      <BrokerageModificationStatus activeSubItem={activeSubItem} />
+    ),
   };
 
   const reportsSubItems: Record<string, JSX.Element> = {
@@ -879,7 +876,7 @@ const SideBar = () => {
       "Other Details": <OTDetails />,
       "Registration Details": <RegisDetails activeSubItem={activeSubItem} />,
       IVR: ivrSubItems[activeSubItem] || null,
-      // SPIP: <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} />,
+      SPIP: <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} />,
     };
 
     return contentMap[activeMenu] || null;
@@ -911,34 +908,34 @@ const SideBar = () => {
     setShowMyPerformance(hasMyPerformance);
   }, [menuItems]);
 
-  // const handleSSOLogin = () => {
-  //   console.log("TestSSOLogin");
-  //   const userEmail = (emailID && emailID) || "";
-  //   let payload = {
-  //     email: userEmail,
-  //   };
+  const handleSSOLogin = () => {
+    console.log("TestSSOLogin");
+    const userEmail = (emailID && emailID) || "";
+    let payload = {
+      email: userEmail,
+    };
 
-  //   dispatch(showLoader(""));
-  //   apiServices
-  //     .EKycSSOLogin(payload)
-  //     .then((response) => {
-  //       console.log("EKycSSOLoginResponse", response?.data?.data);
-  //       dispatch(hideLoader());
-  //       if (response?.status === 200) {
-  //         if (response?.data?.data?.success) {
-  //           const url = response?.data?.data?.url;
-  //           window.open(url, "_blank", "noopener,noreferrer");
-  //         }
-  //       }
-  //     })
-  //     .catch((Error) => {
-  //       console.log("Errrror", Error);
-  //       dispatch(hideLoader());
-  //     })
-  //     .finally(() => {
-  //       dispatch(hideLoader());
-  //     });
-  // };
+    dispatch(showLoader(""));
+    apiServices
+      .EKycSSOLogin(payload)
+      .then((response) => {
+        console.log("EKycSSOLoginResponse", response?.data?.data);
+        dispatch(hideLoader());
+        if (response?.status === 200) {
+          if (response?.data?.data?.success) {
+            const url = response?.data?.data?.url;
+            window.open(url, "_blank", "noopener,noreferrer");
+          }
+        }
+      })
+      .catch((Error) => {
+        console.log("Errrror", Error);
+        dispatch(hideLoader());
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
 
   return (
     <>
@@ -997,13 +994,13 @@ const SideBar = () => {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
-            {/* {showMyPerformance && (
+            {showMyPerformance && (
               <>
                 <Button onClick={handleSSOLogin} style={{ color: "#11395C" }}>
                   E-KYC
                 </Button>
               </>
-            )} */}
+            )}
             <Box
               sx={{
                 padding: isMobile ? "0" : "10px",

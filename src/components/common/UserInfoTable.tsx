@@ -577,56 +577,100 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeMenu === "Regulatory Announcement") {
+      return getRegulatorAnnouncement
+        .filter((column) => column.field !== "action")
+        .map((column) => {
+          if (column.field === "CircularFilePath") {
+            return {
+              ...column,
+              renderCell: (params: any) => (
+                <Tooltip title="Download" arrow placement="top">
+                  <DownloadForOfflineIcon
+                    onClick={() => handleDownload(params.row)}
+                    sx={{ color: "#11395C", cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ),
+            };
+          }
+          return column;
+        });
+    } else if (activeSubItem === "Regulatory Announcement") {
       return getRegulatorAnnouncement.map((column) => {
         if (column.field === "CircularFilePath") {
           return {
             ...column,
             renderCell: (params: any) => {
               return (
-                <button
-                  onClick={
-                    () => handleDownload(params.row)
-                    // console.log("count6", params.row.CircularFilePath)
-                  }
-                  style={{
-                    color: "white",
-                    // textDecoration: "underline",
-                    background: "#11395C",
-                    border: "none",
-                    cursor: "pointer",
-                    borderRadius: "10px",
-                    width: "90px",
-                  }}
-                >
-                  Download
-                </button>
+                <Tooltip title="Download" arrow placement="top">
+                  <DownloadForOfflineIcon
+                    onClick={() => handleDownload(params.row)}
+                    sx={{ color: "#11395C", cursor: "pointer" }}
+                  />
+                </Tooltip>
               );
             },
           };
         }
-        // if (column.field === "LKPComments") {
-        //   return {
-        //     ...column,
-        //     renderCell: () => {
-        //       return (
-        //         <button
-        //           onClick={() => setmodal_center(!modal_center)}
-        //           style={{
-        //             color: "white",
-        //             // textDecoration: "underline",
-        //             background: "#11395C",
-        //             border: "none",
-        //             cursor: "pointer",
-        //             borderRadius: "10px",
-        //             width: "90px",
-        //           }}
-        //         >
-        //           View
-        //         </button>
-        //       );
-        //     },
-        //   };
-        // }
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted; // Add condition based on your row data
+
+              const handleEdit = () => {
+                handleEditClick?.(params.row, true); // Call edit function for Communication Retrieval Entry
+              };
+
+              return (
+                <>
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <button
+                    onClick={() => {
+                      handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
+                      setSelectedRow(params.row); // Store the selected row for confirmation
+                      tog_center(); // Open the modal for deletion confirmation
+                    }}
+                    disabled={isDeleted}
+                    style={{
+                      color: isDeleted ? "red" : "#11395C",
+                      textDecoration: isDeleted ? "none" : "underline",
+                      background: "none",
+                      border: "none",
+                      cursor: isDeleted ? "default" : "pointer",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    {isDeleted ? (
+                      "Deleted"
+                    ) : (
+                      <Tooltip title="Delete" arrow placement="top">
+                        <IconButton
+                          sx={{ p: 0 }}
+                          color="primary"
+                          onClick={() => handleDeleteEntry?.(params.row)}
+                        >
+                          <DeleteIcon
+                            fontSize="small"
+                            sx={{ color: "#11395C" }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </button>
+                </>
+              );
+            },
+          };
+        }
         return column;
       });
     } else if (activeSubItem === "Communication Retrival Checker") {
@@ -1129,6 +1173,8 @@ const DataTable = ({
         Msg={
           activeSubItem === "RMS Allocation"
             ? ""
+            : activeSubItem === "Regulatory Announcement"
+            ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Entry"
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Checker"
@@ -1139,8 +1185,6 @@ const DataTable = ({
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Pre Trade Approval" && !showDocument
             ? `Are you sure want to ${action} this entry`
-            : activeMenu === "Regulatory Announcement"
-            ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
             : activeSubItem === "Pre Trade Proof Upload"
             ? ""
             : activeSubItem === "Pre Trade Report"

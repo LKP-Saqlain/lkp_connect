@@ -248,6 +248,13 @@ export const apiServices = {
   viewRegAnnoucement: async (payload: any) => {
     return await apiService("POST", endpoints.viewRegAnnoucement, payload);
   },
+  DeleteRegulatoryAnnoucement: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DeleteRegulatoryAnnoucement,
+      payload
+    );
+  },
   GetAPDashboard: async (payload: any) => {
     return await apiService("POST", endpoints.GetAPDashboard, payload);
   },
