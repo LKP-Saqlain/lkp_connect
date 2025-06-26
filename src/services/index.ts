@@ -242,6 +242,13 @@ export const apiServices = {
   getInUpMarketMaterial: async (payload: any) => {
     return await apiService("POST", endpoints.getInUpMarketMaterial, payload);
   },
+  DeleteMarketingMaterials: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DeleteMarketingMaterials,
+      payload
+    );
+  },
   getInUpRegAnnoucement: async (payload: any) => {
     return await apiService("POST", endpoints.getInUpRegAnnoucement, payload);
   },

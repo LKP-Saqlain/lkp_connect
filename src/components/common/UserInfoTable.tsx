@@ -18,6 +18,7 @@ import {
   // getAccountDetails,
   getCommChecker,
   getRegulatorAnnouncement,
+  getMarketingMaterials,
   terminalcol,
   RegisDetails,
   RegionalHead,
@@ -576,6 +577,71 @@ const DataTable = ({
       return RegisDetails.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Marketing Material") {
+      return getMarketingMaterials.map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted;
+
+              const handleEdit = () => {
+                handleEditClick?.(params.row, true);
+                console.log("handleEdit row", params);
+              };
+
+              const handleDelete = () => {
+                handleDeleteEntry?.(params.row);
+                setSelectedRow(params.row);
+                tog_center();
+                console.log("handleDelete row", params);
+              };
+
+              return (
+                <>
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+
+                  {isDeleted ? (
+                    <span
+                      style={{
+                        color: "red",
+                        marginLeft: "10px",
+                        cursor: "not-allowed",
+                      }}
+                    >
+                      Deleted
+                    </span>
+                  ) : (
+                    <Tooltip title="Delete" arrow placement="top">
+                      <IconButton
+                        sx={{ p: 0, ml: 1 }}
+                        color="primary"
+                        onClick={handleDelete}
+                      >
+                        <DeleteIcon
+                          fontSize="small"
+                          sx={{ color: "#11395C" }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
+              );
+            },
+          };
+        }
+
+        // Return other columns unchanged
+        return column;
+      });
     } else if (activeMenu === "Regulatory Announcement") {
       return getRegulatorAnnouncement
         .filter((column) => column.field !== "action")
@@ -1175,7 +1241,8 @@ const DataTable = ({
             ? ""
             : activeSubItem === "Regulatory Announcement"
             ? "Are you sure want to delete this entry"
-            : activeSubItem === "Communication Retrival Entry"
+            : activeSubItem === "Communication Retrival Entry" ||
+              activeSubItem === "Marketing Material"
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Checker"
             ? `Are you sure want to ${action} this entry`

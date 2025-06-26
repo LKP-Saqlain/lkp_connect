@@ -1,127 +1,124 @@
-import React, { useState } from "react";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Button,
-  Input,
-  Container,
-} from "reactstrap";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import { useEffect, useState } from "react";
+import { Card, CardBody, CardHeader, Button, Container } from "reactstrap";
+
 import Box from "@mui/material/Box";
-import { Typography, useMediaQuery } from "@mui/material";
+import UserInfoTable from "../../../components/common/UserInfoTable";
+
 import ShowToast from "../../../utils/toastUtils"; // Assuming ShowToast is available
 import { apiServices } from "../../../services";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import ModalComponent from "../../../components/common/masterModal";
 
-// Define allowed file extensions for validation
-const allowedFileFormats = ["pdf", "ppt", "pptx"];
-const allowedImageFormats = ["jpg", "jpeg", "png"];
+const MasterMenuMarketing = ({ activeSubItem }: any) => {
+  interface MarketingEditData {
+    RowId: number;
+    UploadImages: string;
+    Description: string;
+    UploadDocuments: string;
+  }
+  const [userData, setUserData] = useState([]);
+  const [modal_grid, setmodal_grid] = useState<boolean>(false);
+  const [editUserCheck, setEditUserCheck] = useState(false);
+  const [editData, setEditData] = useState<MarketingEditData | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-const MasterMenuMarketing = () => {
-  const isMobile = useMediaQuery("(max-width:800px)");
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-  const formik = useFormik({
-    initialValues: {
-      description: "",
-      fileUpload: "",
-      image: "",
-    },
-    validationSchema: Yup.object({
-      fileUpload: Yup.mixed().required("Please upload a marketing file."),
-      description: Yup.string().required("Please provide a description."),
-      image: Yup.mixed().required("Please upload an image."),
-    }),
-    onSubmit: (values) => {
-      if (!uploadedFile || !uploadedImage) {
-        ShowToast("error", "Please upload both document and image files.");
-        return;
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    const fetchMaterials = async () => {
+      dispatch(showLoader("Please wait..."));
+      try {
+        const response = await apiServices.ViewMarketingMaterials({});
+        const data = response?.data?.Table || [];
+        setUserData(data);
+        console.log("marketing data", data);
+      } catch (error) {
+        console.error("Error fetching marketing materials:", error);
+      } finally {
+        dispatch(hideLoader());
       }
+    };
 
-      const readFileAsBase64 = (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => {
-            const base64 = (reader.result as string).split(",")[1];
-            resolve(base64);
-          };
-          reader.onerror = reject;
-        });
+    fetchMaterials();
+  }, [dispatch, refreshTrigger]);
+
+  // Initialize state with proper typing
+  // const [editData, setEditData] = useState<MarketingEditData | null>(null);
+
+  const handleMarketingFormSubmit = async (formData: any) => {
+    console.log("Received from modal:", formData, editData);
+    const getFileName = (filePath: string): string => {
+      return filePath.split("\\").pop() || filePath;
+    };
+
+    try {
+      const payload = {
+        options: editData && editData.RowId > 0 ? "UPDATE" : "INSERT",
+        rowId: editData && editData.RowId > 0 ? editData.RowId : 0,
+
+        uploadDocumentsBase64: formData.documentBase64,
+        documentFileName: getFileName(formData.fileUpload),
+        uploadImagesBase64: formData.imageBase64,
+        imageFileName: getFileName(formData.image),
+        description: formData.description,
       };
+      console.log("Payload to API:", payload);
 
-      Promise.all([
-        readFileAsBase64(uploadedFile),
-        readFileAsBase64(uploadedImage),
-      ])
-        .then(([docBase64, imgBase64]) => {
-          const payload = {
-            options: "INSERT",
-            rowId: 0,
-            uploadDocumentsBase64: docBase64,
-            documentFileName: uploadedFile.name,
-            uploadImagesBase64: imgBase64,
-            imageFileName: uploadedImage.name,
-            description: values.description,
-          };
-
-          return apiServices.getInUpMarketMaterial(payload);
-        })
-        .then((response) => {
-          if (response?.status === 200) {
-            ShowToast("success", "Marketing materials uploaded successfully!");
-            formik.resetForm();
-            setUploadedFile(null);
-            setUploadedImage(null);
-          } else {
-            throw new Error("Upload failed.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error submitting materials:", error);
-          ShowToast("error", "There was an error submitting the materials.");
-        });
-    },
-  });
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    if (file) {
-      const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
-      if (!allowedFileFormats.includes(fileExt)) {
-        formik.setFieldError(
-          "fileUpload",
-          "Invalid format! Only pdf, ppt, pptx allowed."
-        );
-        setUploadedFile(null);
-        return;
+      const response = await apiServices.getInUpMarketMaterial(payload);
+      if (response?.status === 200) {
+        ShowToast("success", response.data.message);
+        setRefreshTrigger((prev) => prev + 1); // Trigger refresh
+        setmodal_grid(false); // Close modal if needed
+      } else {
+        throw new Error("Upload failed");
       }
-
-      setUploadedFile(file);
-      formik.setFieldValue("fileUpload", file.name);
-      formik.setFieldError("fileUpload", "");
+    } catch (error) {
+      console.error("API error:", error);
+      ShowToast("error", "There was an error submitting the materials.");
     }
   };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    if (file) {
-      const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
-      if (!allowedImageFormats.includes(fileExt)) {
-        formik.setFieldError(
-          "image",
-          "Invalid format! Only jpg, jpeg, png allowed."
-        );
-        setUploadedImage(null);
-        return;
-      }
+  const handleDeleteClick = async (row: any) => {
+    console.log("handleDeleteClick confirmation", row.RowId);
 
-      setUploadedImage(file);
-      formik.setFieldValue("image", file.name);
-      formik.setFieldError("image", "");
+    const payload = {
+      RowId: row.RowId, // Ensure the correct casing matches API expectations
+    };
+
+    try {
+      const response = await apiServices.DeleteMarketingMaterials(payload);
+
+      if (response?.status === 200) {
+        ShowToast("success", "Marketing material deleted successfully!");
+        setRefreshTrigger((prev) => prev + 1); // Trigger refresh
+      } else {
+        throw new Error("Delete failed");
+      }
+    } catch (error) {
+      console.error("Delete API error:", error);
+      ShowToast("error", "There was an error deleting the material.");
     }
   };
+  const handleEditClick = (data: any, editCheck: boolean) => {
+    // debugger;
+    console.log("TestModalData", data, editCheck);
+    // const formattedDate = data.DateOfCommunication
+    //   ? dayjs(data.DateOfCommunication, "DD-MMM-YY").format("DD/MM/YYYY")
+    //   : "";
+    // const updatedData = { ...data, DateOfCommunication: formattedDate };
+
+    setmodal_grid(true);
+    setEditData(data);
+    setEditUserCheck(editCheck);
+  };
+
+  function tog_grid() {
+    setmodal_grid(!modal_grid);
+    setEditUserCheck(false);
+    setEditData(null);
+  }
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -143,89 +140,35 @@ const MasterMenuMarketing = () => {
             <h4 className="card-title mb-0"> Marketing Materials</h4>
           </CardHeader>
           <CardBody>
-            <form onSubmit={formik.handleSubmit}>
-              <Box
-                display="flex"
-                flexDirection={isMobile ? "column" : "row"}
-                alignItems="flex-start"
-                gap="16px"
-                width="100%"
+            <ModalComponent
+              modal_grid={modal_grid}
+              tog_grid={tog_grid}
+              editData={editData}
+              onSubmit={handleMarketingFormSubmit}
+              editUserCheck={editUserCheck}
+              isMarketingMaterial={true}
+            />
+
+            <Box>
+              <Button
+                type="submit"
+                variant="contained"
+                className="btn-font"
+                onClick={tog_grid}
+                style={{
+                  backgroundColor: "#11395C",
+                  marginBottom: "1rem",
+                }}
               >
-                {/* Image Upload Section */}
-                <Box flex="1" style={{ width: "100%" }}>
-                  <Typography>Upload Images</Typography>
-                  <Input
-                    name="image"
-                    type="file"
-                    accept=".jpg,.jpeg,.png"
-                    className="form-control"
-                    onChange={handleImageChange}
-                    invalid={
-                      formik.touched.image && Boolean(formik.errors.image)
-                    }
-                  />
-                  {formik.touched.image && formik.errors.image && (
-                    <div style={{ color: "red" }}>{formik.errors.image}</div>
-                  )}
-                </Box>
-                {/* Description Section */}
-                <Box flex="1" style={{ width: "100%" }}>
-                  <Typography>Description</Typography>
-                  <Input
-                    name="description"
-                    type="text"
-                    value={formik.values.description}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    invalid={
-                      formik.touched.description &&
-                      Boolean(formik.errors.description)
-                    }
-                    placeholder="Description"
-                  />
-                  {formik.touched.description && formik.errors.description && (
-                    <div style={{ color: "red" }}>
-                      {formik.errors.description}
-                    </div>
-                  )}
-                </Box>
-
-                {/* File Upload Section (Marketing File) */}
-                <Box flex="1" style={{ width: "100%" }}>
-                  <Typography>Upload Documents</Typography>
-                  <Input
-                    name="fileUpload"
-                    type="file"
-                    accept=".pdf,.ppt,.pptx"
-                    className="form-control"
-                    onChange={handleFileChange}
-                    invalid={
-                      formik.touched.fileUpload &&
-                      Boolean(formik.errors.fileUpload)
-                    }
-                  />
-                  {formik.touched.fileUpload && formik.errors.fileUpload && (
-                    <div style={{ color: "red" }}>
-                      {formik.errors.fileUpload}
-                    </div>
-                  )}
-                </Box>
-              </Box>
-
-              {/* Submit Button */}
-              <Box textAlign={isMobile ? "center" : "left"} mt={2}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  style={{
-                    backgroundColor: "#11395C",
-                    height: "35px",
-                  }}
-                >
-                  Submit
-                </Button>
-              </Box>
-            </form>
+                Add
+              </Button>
+            </Box>
+            <UserInfoTable
+              activeSubItem={activeSubItem}
+              T6Data={userData}
+              getUserDetails={handleDeleteClick}
+              handleEditClick={handleEditClick}
+            />
           </CardBody>
         </Card>
       </Container>

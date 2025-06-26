@@ -164,7 +164,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
         } else {
           setResponseStatus(false); // hide search field if no valid data
           setCustomLedgerData([]);
-          ShowToast("error", response?.data);
+          // ShowToast("error", response?.data);
           handleValues([], false);
         }
 

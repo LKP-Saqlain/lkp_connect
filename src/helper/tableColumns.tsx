@@ -303,6 +303,57 @@ export const getRegulatorAnnouncement: GridColDef[] = [
     align: "center",
   },
 ];
+export const getMarketingMaterials: GridColDef[] = [
+  {
+    field: "UploadImages",
+    headerName: "Image",
+    headerClassName: "header-wrap-custom",
+    flex: 0.7,
+    minWidth: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params: any) => {
+      const fullPath = params.row.UploadImages;
+      const fileName = fullPath?.split(/[/\\]/).pop();
+
+      return <span>{fileName}</span>;
+    },
+  },
+  {
+    field: "Description",
+    headerName: "Description",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "UploadDocuments",
+    headerName: "Document name",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params: any) => {
+      const fullPath = params.row.UploadDocuments;
+      const fileName = fullPath?.split(/[/\\]/).pop();
+      return <span>{fileName}</span>;
+    },
+  },
+  {
+    field: "action",
+    headerName: "Action",
+    width: 120,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+];
 
 export const getAccountDetails: GridColDef[] = [
   {

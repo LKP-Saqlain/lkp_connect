@@ -19,6 +19,14 @@ import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { TypeOfDepartment } from "../../../helper/tableColumns.tsx";
+import ShowToast from "../../../utils/toastUtils";
+
+interface IsMarketingMaterialEditData {
+  CommunicationProofPath?: string;
+  fileUpload?: File;
+  image?: File;
+}
+
 interface EditData {
   CommunicationProofPath?: string;
 }
@@ -29,7 +37,8 @@ const ModalComponent = ({
   onSubmit,
   editData,
   editUserCheck,
-  isRegulatoryContent,
+  isRegulatoryContent = false,
+  isMarketingMaterial = false,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
@@ -37,12 +46,17 @@ const ModalComponent = ({
   editData?: any;
   editUserCheck: boolean;
   isRegulatoryContent?: any;
+  isMarketingMaterial?: boolean;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadedFileM, setUploadedFileM] = useState<File | null>(null);
+  const [uploadedImageM, setUploadedImageM] = useState<File | null>(null);
   const [fileExtension, setFileExtension] = useState("");
   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [fileBase64, setFileBase64] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const fileInputRefImage = useRef<HTMLInputElement>(null);
+  const fileInputRefDocument = useRef<HTMLInputElement>(null);
 
   const allowedFormats = ["doc", "docx", "pdf", "xls", "xlsx", "jpg", "jpeg"];
 
@@ -52,7 +66,20 @@ const ModalComponent = ({
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const getValidationSchema = (editData: EditData) =>
+  const getMarketingMaterialValidationSchema = (
+    editData?: IsMarketingMaterialEditData
+  ) =>
+    Yup.object().shape({
+      description: Yup.string().required("Please provide a description."),
+      fileUpload: editData?.fileUpload
+        ? Yup.mixed().notRequired()
+        : Yup.mixed().required("Please upload a marketing file."),
+      image: editData?.image
+        ? Yup.mixed().notRequired()
+        : Yup.mixed().required("Please upload an image."),
+    });
+
+  const getRegulatoryValidationSchema = (editData: EditData) =>
     Yup.object().shape({
       dateOfCommunication: Yup.string().required(
         "Date of Communication is required"
@@ -67,16 +94,57 @@ const ModalComponent = ({
       }),
     });
 
+  const getValidationSchema = (editData?: EditData) => {
+    if (isRegulatoryContent) {
+      return getRegulatoryValidationSchema(editData!);
+    } else if (isMarketingMaterial) {
+      return getMarketingMaterialValidationSchema(editData);
+    } else {
+      return Yup.object(); // fallback schema (or handle general case)
+    }
+  };
+
+  const initialValues = isRegulatoryContent
+    ? {
+        dateOfCommunication: null as string | null,
+        TypeOfDepartment: "",
+        SubjectType: "",
+        LkpComments: "",
+        uploadProof: "",
+      }
+    : {
+        fileUpload: "",
+        description: "",
+        image: "",
+      };
+
   const formik = useFormik({
-    initialValues: {
-      dateOfCommunication: null as string | null,
-      TypeOfDepartment: "",
-      SubjectType: "",
-      LkpComments: "",
-      uploadProof: "",
-    },
+    initialValues,
     validationSchema: getValidationSchema(editData),
     onSubmit: async (values, { setTouched }) => {
+      try {
+        if (isRegulatoryContent) {
+          const regulatoryPayload = {
+            dateOfCommunication: values.dateOfCommunication,
+            TypeOfDepartment: values.TypeOfDepartment,
+            SubjectType: values.SubjectType,
+            LkpComments: values.LkpComments,
+            uploadProof: values.uploadProof,
+          };
+          console.log(regulatoryPayload);
+        } else if (isMarketingMaterial) {
+          const marketingPayload = {
+            fileUpload: values.fileUpload,
+            description: values.description,
+            image: values.image,
+          };
+          fetchMarketingMaterialVals(marketingPayload);
+          return;
+        }
+      } catch (error) {
+        console.error("Submission Error", error);
+      }
+
       setTouched({
         dateOfCommunication: true,
         TypeOfDepartment: true,
@@ -131,6 +199,60 @@ const ModalComponent = ({
     },
   });
 
+  const fetchMarketingMaterialVals = async (values: any) => {
+    console.log("marketingMaterialData", values);
+
+    const isEdit = !!editData;
+
+    if (!isEdit && (!uploadedFileM || !uploadedImageM)) {
+      ShowToast("error", "Please upload both document and image files.");
+      return;
+    }
+    const readFileAsBase64 = (file: File): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const base64 = (reader.result as string).split(",")[1];
+          resolve(base64);
+        };
+        reader.onerror = reject;
+      });
+    };
+    try {
+      let docBase64 = "";
+      let imgBase64 = "";
+
+      if (uploadedFileM) {
+        docBase64 = await readFileAsBase64(uploadedFileM);
+      }
+
+      if (uploadedImageM) {
+        imgBase64 = await readFileAsBase64(uploadedImageM);
+      }
+      const formData = {
+        ...values, // includes description, etc.
+        documentBase64: docBase64,
+        imageBase64: imgBase64,
+      };
+
+      onSubmit?.(formData);
+
+      // Reset form after submit
+      formik.resetForm();
+      setUploadedFileM(null);
+      setUploadedImageM(null);
+      formik.setFieldValue("fileUpload", "");
+      if (fileInputRefDocument.current) fileInputRefDocument.current.value = "";
+      setUploadedImageM(null);
+      formik.setFieldValue("image", "");
+      if (fileInputRefImage.current) fileInputRefImage.current.value = "";
+    } catch (error) {
+      console.error("Error submitting materials:", error);
+      ShowToast("error", "There was an error submitting the materials.");
+    }
+  };
+
   useEffect(() => {
     console.log("editInfoData", editData, editUserCheck, fileExtension);
     // debugger;
@@ -138,15 +260,24 @@ const ModalComponent = ({
       console.log("editInfoData not zero");
     }
     if (editData) {
-      formik.setValues({
-        dateOfCommunication: editData.Dates
-          ? dayjs(editData.Dates).format("YYYY/MM/DD") // Convert to string
-          : "",
-        TypeOfDepartment: editData.Department || "",
-        SubjectType: editData.Subject || "",
-        LkpComments: editData.LKPComments || "",
-        uploadProof: editData.CircularFilePath || "",
-      });
+      if (isRegulatoryContent) {
+        formik.setValues({
+          dateOfCommunication: editData.Dates
+            ? dayjs(editData.Dates).format("YYYY/MM/DD") // Convert to string
+            : "",
+          TypeOfDepartment: editData.Department || "",
+          SubjectType: editData.Subject || "",
+          LkpComments: editData.LKPComments || "",
+          uploadProof: editData.CircularFilePath || "",
+        });
+      }
+      if (isMarketingMaterial) {
+        formik.setValues({
+          fileUpload: editData.UploadDocuments || "",
+          description: editData.Description || "",
+          image: editData.UploadImages || "",
+        });
+      }
     }
   }, [editData, editUserCheck]);
 
@@ -219,19 +350,45 @@ const ModalComponent = ({
     console.log("base64FILE-->", fileBase64);
   }, [fileBase64]);
 
-  const handleFileDelete = () => {
-    dispatch(showLoader("Please wait, we are processing your request...")); // Show loader before deleting
+  const handleFileDelete = (field: "fileUpload" | "image" | "uploadProof") => {
+    // debugger;
+    return (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      // const { name, value } = event.target;
 
-    setTimeout(() => {
-      setUploadedFile(null);
-      setFileExtension("");
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Reset the file input value
-        // formik.setFieldError("uploadProof", "");
-        formik.setFieldError("uploadProof", "Please upload a proof document");
-      }
-      dispatch(hideLoader()); // Hide loader after reset
-    }, 500);
+      dispatch(showLoader("Please wait, we are processing your request..."));
+
+      setTimeout(() => {
+        if (isRegulatoryContent) {
+          setUploadedFile(null);
+          setFileExtension("");
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+            formik.setFieldError(
+              "uploadProof",
+              "Please upload a proof document"
+            );
+          }
+          dispatch(hideLoader());
+        }
+
+        if (isMarketingMaterial) {
+          if (field === "fileUpload") {
+            setUploadedFileM(null);
+            formik.setFieldValue("fileUpload", "");
+            if (fileInputRefDocument.current)
+              fileInputRefDocument.current.value = "";
+          }
+          if (field === "image") {
+            setUploadedImageM(null);
+            formik.setFieldValue("image", "");
+            if (fileInputRefImage.current) fileInputRefImage.current.value = "";
+          }
+
+          dispatch(hideLoader());
+        }
+      }, 500);
+    };
   };
 
   const handleCancel = () => {
@@ -432,7 +589,152 @@ const ModalComponent = ({
                     <Button
                       variant="contained"
                       style={{ backgroundColor: "#11395C" }}
-                      onClick={handleFileDelete}
+                      onClick={handleFileDelete("uploadProof")}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                )}
+              </Col>
+
+              <Col lg={12}>
+                <div className="hstack gap-2 justify-content-end">
+                  <Button
+                    style={{
+                      backgroundColor: "#11395C",
+                      fontSize: "11px",
+                      minHeight: "35px",
+                      width: "80px",
+                    }}
+                    type="submit"
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    style={{
+                      backgroundColor: "#11395C",
+                      fontSize: "11px",
+                      minHeight: "35px",
+                      width: "80px",
+                    }}
+                    onClick={handleCancel}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Col>
+            </div>
+          </form>
+        </ModalBody>
+      )}
+      {isMarketingMaterial && (
+        <ModalBody
+          style={{ maxHeight: "70vh", overflowY: "auto", padding: "10px 15px" }}
+        >
+          <form onSubmit={formik.handleSubmit}>
+            <div className="row g-2">
+              <Col lg={12}>
+                <label style={{ fontSize: "12px" }} className="form-label">
+                  Upload Images
+                </label>
+                <Input
+                  name="image"
+                  innerRef={fileInputRefImage}
+                  type="file"
+                  accept=".png,.jpg,.jpeg"
+                  className="form-control"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setUploadedImageM(file); // Save file to uploadedFileM state
+                      formik.setFieldValue("image", file.name);
+                      formik.setFieldError("image", "");
+                    }
+                  }}
+                  style={{ width: "100%", minHeight: "40px" }}
+                />
+                {formik.touched.image && formik.errors.image && (
+                  <p className="text-error">{formik.errors.image}</p>
+                )}
+                {uploadedImageM && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: "10px",
+                    }}
+                  >
+                    <p>File: {uploadedImageM.name}</p>
+                    <Button
+                      variant="contained"
+                      style={{ backgroundColor: "#11395C" }}
+                      onClick={handleFileDelete("image")}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                )}
+              </Col>
+              <Col lg={12}>
+                <label style={{ fontSize: "12px" }} className="form-label">
+                  Description
+                </label>
+                <TextField
+                  fullWidth
+                  id="description"
+                  name="description"
+                  label="Description"
+                  variant="outlined"
+                  size="small"
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.description &&
+                    Boolean(formik.errors.description)
+                  }
+                  helperText={
+                    formik.touched.description && formik.errors.description
+                  }
+                  // InputProps={{ sx: { fontSize: "14px" } }} // Adjust font size if needed
+                />
+              </Col>
+              <Col lg={12}>
+                <label style={{ fontSize: "12px" }} className="form-label">
+                  Upload Documents
+                </label>
+                <Input
+                  name="fileUpload"
+                  innerRef={fileInputRefDocument}
+                  type="file"
+                  accept=".pdf,.ppt,.pptx"
+                  className="form-control"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setUploadedFileM(file); // Save file to uploadedFileM state
+                      formik.setFieldValue("fileUpload", file.name);
+                      formik.setFieldError("fileUpload", "");
+                    }
+                  }}
+                  style={{ width: "100%", minHeight: "40px" }}
+                />
+                {formik.touched.fileUpload && formik.errors.fileUpload && (
+                  <p className="text-error">{formik.errors.fileUpload}</p>
+                )}
+                {uploadedFileM && (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: "10px",
+                    }}
+                  >
+                    <p>File: {uploadedFileM.name}</p>
+                    <Button
+                      variant="contained"
+                      style={{ backgroundColor: "#11395C" }}
+                      onClick={handleFileDelete("fileUpload")}
                     >
                       Delete
                     </Button>

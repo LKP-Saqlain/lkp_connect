@@ -56,6 +56,7 @@ export const endpoints = {
   DashboardNudge: "/api/Dashboard/DashboardNudge",
   ViewMarketingMaterials: "/api/Dashboard/ViewMarketingMaterials",
   getInUpMarketMaterial: "/api/Dashboard/InsertUpdateMakertingMaterials",
+  DeleteMarketingMaterials: "/api/Dashboard/DeleteMarketingMaterials",
   getInUpRegAnnoucement: "/api/Dashboard/InsertUpdateRegulatoryAnnoucement",
   viewRegAnnoucement: "/api/Dashboard/ViewRegulatoryAnnoucement",
   DeleteRegulatoryAnnoucement: "/api/Dashboard/DeleteRegulatoryAnnoucement",
