@@ -996,7 +996,20 @@ const SideBar = () => {
             <Box sx={{ flexGrow: 1 }} />
             {showMyPerformance && (
               <>
-                <Button onClick={handleSSOLogin} style={{ color: "#11395C" }}>
+                <Button
+                  onClick={handleSSOLogin}
+                  style={{
+                    height: "25px",
+                    width: "80px",
+                    borderRadius: "5px",
+                    fontSize: "12px",
+                    padding: "0",
+                    fontFamily: "Public Sans",
+                    backgroundColor: "#11395C",
+                    color: "#fff",
+                  }}
+                  className="btn-sm"
+                >
                   E-KYC
                 </Button>
               </>
