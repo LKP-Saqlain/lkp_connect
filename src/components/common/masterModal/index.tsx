@@ -1,4 +1,4 @@
-import { Button, Col, Input, Modal, ModalBody, ModalHeader } from "reactstrap";
+import { Button, Col, Modal, ModalBody, ModalHeader } from "reactstrap";
 import {
   FormControl,
   InputLabel,
@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { TypeOfDepartment } from "../../../helper/tableColumns.tsx";
 import ShowToast from "../../../utils/toastUtils";
+import FileUploadField from "../fileUploadField/index.tsx";
 
 interface IsMarketingMaterialEditData {
   CommunicationProofPath?: string;
@@ -350,46 +351,48 @@ const ModalComponent = ({
     console.log("base64FILE-->", fileBase64);
   }, [fileBase64]);
 
-  const handleFileDelete = (field: "fileUpload" | "image" | "uploadProof") => {
-    // debugger;
-    return (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      // const { name, value } = event.target;
+  const handleFileDelete =
+    (field: "fileUpload" | "image" | "uploadProof") => () => {
+      // debugger;
+      return (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        // const { name, value } = event.target;
 
-      dispatch(showLoader("Please wait, we are processing your request..."));
+        dispatch(showLoader("Please wait, we are processing your request..."));
 
-      setTimeout(() => {
-        if (isRegulatoryContent) {
-          setUploadedFile(null);
-          setFileExtension("");
-          if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-            formik.setFieldError(
-              "uploadProof",
-              "Please upload a proof document"
-            );
-          }
-          dispatch(hideLoader());
-        }
-
-        if (isMarketingMaterial) {
-          if (field === "fileUpload") {
-            setUploadedFileM(null);
-            formik.setFieldValue("fileUpload", "");
-            if (fileInputRefDocument.current)
-              fileInputRefDocument.current.value = "";
-          }
-          if (field === "image") {
-            setUploadedImageM(null);
-            formik.setFieldValue("image", "");
-            if (fileInputRefImage.current) fileInputRefImage.current.value = "";
+        setTimeout(() => {
+          if (isRegulatoryContent) {
+            setUploadedFile(null);
+            setFileExtension("");
+            if (fileInputRef.current) {
+              fileInputRef.current.value = "";
+              formik.setFieldError(
+                "uploadProof",
+                "Please upload a proof document"
+              );
+            }
+            dispatch(hideLoader());
           }
 
-          dispatch(hideLoader());
-        }
-      }, 500);
+          if (isMarketingMaterial) {
+            if (field === "fileUpload") {
+              setUploadedFileM(null);
+              formik.setFieldValue("fileUpload", "");
+              if (fileInputRefDocument.current)
+                fileInputRefDocument.current.value = "";
+            }
+            if (field === "image") {
+              setUploadedImageM(null);
+              formik.setFieldValue("image", "");
+              if (fileInputRefImage.current)
+                fileInputRefImage.current.value = "";
+            }
+
+            dispatch(hideLoader());
+          }
+        }, 500);
+      };
     };
-  };
 
   const handleCancel = () => {
     formik.resetForm(); // Reset form fields
@@ -429,14 +432,15 @@ const ModalComponent = ({
       >
         {editUserCheck ? "Edit Entry" : "Add Entry"}
       </ModalHeader>
-      {isRegulatoryContent && (
-        <ModalBody
-          style={{ maxHeight: "70vh", overflowY: "auto", padding: "10px 15px" }}
-        >
-          <form onSubmit={formik.handleSubmit}>
-            <div className="row g-2">
-              <Col lg={12}>
-                <div>
+
+      <ModalBody
+        style={{ maxHeight: "70vh", overflowY: "auto", padding: "10px 15px" }}
+      >
+        <form onSubmit={formik.handleSubmit}>
+          <div className="row g-2">
+            {isRegulatoryContent && (
+              <>
+                <Col lg={12}>
                   <FormControl fullWidth>
                     <label style={{ fontSize: "12px" }} className="form-label">
                       Date of Communication
@@ -474,304 +478,193 @@ const ModalComponent = ({
                       />
                     </LocalizationProvider>
                   </FormControl>
-                </div>
-              </Col>
-              <Col lg={12}>
-                <FormControl
-                  fullWidth
-                  error={
-                    formik.touched.TypeOfDepartment &&
-                    Boolean(formik.errors.TypeOfDepartment)
-                  }
-                >
-                  <InputLabel id="DocumentType-modal-select-label">
-                    Select Department
-                  </InputLabel>
-                  <Select
+                </Col>
+
+                <Col lg={12}>
+                  <FormControl
+                    fullWidth
+                    error={
+                      formik.touched.TypeOfDepartment &&
+                      Boolean(formik.errors.TypeOfDepartment)
+                    }
+                  >
+                    <InputLabel id="Department-select-label">
+                      Select Department
+                    </InputLabel>
+                    <Select
+                      size="small"
+                      labelId="Department-select-label"
+                      id="TypeOfDepartment"
+                      name="TypeOfDepartment"
+                      value={formik.values.TypeOfDepartment}
+                      label="Select Department"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      sx={{ width: "100%", minHeight: "40px" }}
+                    >
+                      {TypeOfDepartment.map((docType) => (
+                        <MenuItem key={docType.value} value={docType.value}>
+                          {docType.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {formik.touched.TypeOfDepartment &&
+                      formik.errors.TypeOfDepartment && (
+                        <p className="text-error">
+                          {formik.errors.TypeOfDepartment}
+                        </p>
+                      )}
+                  </FormControl>
+                </Col>
+
+                <Col lg={12}>
+                  <TextField
+                    fullWidth
+                    id="SubjectType"
+                    name="SubjectType"
+                    label="Enter Subject"
+                    variant="outlined"
                     size="small"
-                    labelId="DocumentType-modal-select-label"
-                    id="DocumentType-select"
-                    name="TypeOfDepartment"
-                    value={formik.values.TypeOfDepartment}
-                    label="Select Department"
+                    value={formik.values.SubjectType}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    sx={{ width: "100%", minHeight: "40px" }}
-                  >
-                    {TypeOfDepartment.map((docType) => (
-                      <MenuItem key={docType.value} value={docType.value}>
-                        {docType.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {formik.touched.TypeOfDepartment &&
-                    formik.errors.TypeOfDepartment && (
-                      <p className="text-error">
-                        {formik.errors.TypeOfDepartment}
-                      </p>
-                    )}
-                </FormControl>
-              </Col>
-              <Col lg={12}>
-                <TextField
-                  fullWidth
-                  id="SubjectType"
-                  name="SubjectType"
-                  label="Enter Subject"
-                  variant="outlined"
-                  size="small"
-                  value={formik.values.SubjectType}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={
-                    formik.touched.SubjectType &&
-                    Boolean(formik.errors.SubjectType)
-                  }
-                  helperText={
-                    formik.touched.SubjectType && formik.errors.SubjectType
-                  }
-                  // InputProps={{ sx: { fontSize: "14px" } }} // Adjust font size if needed
-                />
-              </Col>
-              <Col lg={12}>
-                <TextField
-                  fullWidth
-                  id="LkpComments"
-                  name="LkpComments"
-                  label="Enter LKP Comment"
-                  variant="outlined"
-                  size="small"
-                  value={formik.values.LkpComments}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={
-                    formik.touched.LkpComments &&
-                    Boolean(formik.errors.LkpComments)
-                  }
-                  helperText={
-                    formik.touched.LkpComments && formik.errors.LkpComments
-                  }
-                  // InputProps={{ sx: { fontSize: "14px" } }} // Adjust font size if needed
-                />
-              </Col>
-              <Col lg={12}>
-                <label style={{ fontSize: "12px" }} className="form-label">
-                  Upload Proof of Communication
-                </label>
-                <Input
-                  name="uploadProof"
-                  innerRef={fileInputRef}
-                  type="file"
-                  accept=".doc,.docx,.pdf,.xls,.xlsx,.jpg,.jpeg"
-                  className="form-control"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setUploadedFile(file); // Save file to uploadedFile state
-                      formik.setFieldValue("uploadProof", file.name);
-                      formik.setFieldError("uploadProof", "");
+                    error={
+                      formik.touched.SubjectType &&
+                      Boolean(formik.errors.SubjectType)
                     }
-                  }}
-                  style={{ width: "100%", minHeight: "40px" }}
-                />
-                {formik.touched.uploadProof && formik.errors.uploadProof && (
-                  <p className="text-error">{formik.errors.uploadProof}</p>
-                )}
-                {uploadedFile && (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: "10px",
-                    }}
-                  >
-                    <p>File: {uploadedFile.name}</p>
-                    <Button
-                      variant="contained"
-                      style={{ backgroundColor: "#11395C" }}
-                      onClick={handleFileDelete("uploadProof")}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                )}
-              </Col>
+                    helperText={
+                      formik.touched.SubjectType && formik.errors.SubjectType
+                    }
+                  />
+                </Col>
 
-              <Col lg={12}>
-                <div className="hstack gap-2 justify-content-end">
-                  <Button
-                    style={{
-                      backgroundColor: "#11395C",
-                      fontSize: "11px",
-                      minHeight: "35px",
-                      width: "80px",
-                    }}
-                    type="submit"
-                  >
-                    Submit
-                  </Button>
-                  <Button
-                    style={{
-                      backgroundColor: "#11395C",
-                      fontSize: "11px",
-                      minHeight: "35px",
-                      width: "80px",
-                    }}
-                    onClick={handleCancel}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Col>
-            </div>
-          </form>
-        </ModalBody>
-      )}
-      {isMarketingMaterial && (
-        <ModalBody
-          style={{ maxHeight: "70vh", overflowY: "auto", padding: "10px 15px" }}
-        >
-          <form onSubmit={formik.handleSubmit}>
-            <div className="row g-2">
-              <Col lg={12}>
-                <label style={{ fontSize: "12px" }} className="form-label">
-                  Upload Images
-                </label>
-                <Input
-                  name="image"
-                  innerRef={fileInputRefImage}
-                  type="file"
+                <Col lg={12}>
+                  <TextField
+                    fullWidth
+                    id="LkpComments"
+                    name="LkpComments"
+                    label="Enter LKP Comment"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.LkpComments}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.LkpComments &&
+                      Boolean(formik.errors.LkpComments)
+                    }
+                    helperText={
+                      formik.touched.LkpComments && formik.errors.LkpComments
+                    }
+                  />
+                </Col>
+
+                <FileUploadField
+                  label="Upload Proof of Communication"
+                  fieldName="uploadProof"
+                  fileRef={fileInputRef}
+                  file={uploadedFile}
+                  onDelete={handleFileDelete("uploadProof")}
+                  error={formik.errors.uploadProof}
+                  touched={formik.touched.uploadProof}
+                  onChange={(file) => {
+                    setUploadedFile(file);
+                    formik.setFieldValue("uploadProof", file.name);
+                    formik.setFieldError("uploadProof", "");
+                  }}
+                />
+              </>
+            )}
+
+            {isMarketingMaterial && (
+              <>
+                <FileUploadField
+                  label="Upload Images"
+                  fieldName="image"
+                  fileRef={fileInputRefImage}
+                  file={uploadedImageM}
+                  onDelete={handleFileDelete("image")}
+                  error={formik.errors.image}
+                  touched={formik.touched.image}
+                  onChange={(file) => {
+                    setUploadedImageM(file);
+                    formik.setFieldValue("image", file.name);
+                    formik.setFieldError("image", "");
+                  }}
                   accept=".png,.jpg,.jpeg"
-                  className="form-control"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setUploadedImageM(file); // Save file to uploadedFileM state
-                      formik.setFieldValue("image", file.name);
-                      formik.setFieldError("image", "");
-                    }
-                  }}
-                  style={{ width: "100%", minHeight: "40px" }}
                 />
-                {formik.touched.image && formik.errors.image && (
-                  <p className="text-error">{formik.errors.image}</p>
-                )}
-                {uploadedImageM && (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: "10px",
-                    }}
-                  >
-                    <p>File: {uploadedImageM.name}</p>
-                    <Button
-                      variant="contained"
-                      style={{ backgroundColor: "#11395C" }}
-                      onClick={handleFileDelete("image")}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                )}
-              </Col>
-              <Col lg={12}>
-                <label style={{ fontSize: "12px" }} className="form-label">
-                  Description
-                </label>
-                <TextField
-                  fullWidth
-                  id="description"
-                  name="description"
-                  label="Description"
-                  variant="outlined"
-                  size="small"
-                  value={formik.values.description}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={
-                    formik.touched.description &&
-                    Boolean(formik.errors.description)
-                  }
-                  helperText={
-                    formik.touched.description && formik.errors.description
-                  }
-                  // InputProps={{ sx: { fontSize: "14px" } }} // Adjust font size if needed
-                />
-              </Col>
-              <Col lg={12}>
-                <label style={{ fontSize: "12px" }} className="form-label">
-                  Upload Documents
-                </label>
-                <Input
-                  name="fileUpload"
-                  innerRef={fileInputRefDocument}
-                  type="file"
-                  accept=".pdf,.ppt,.pptx"
-                  className="form-control"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setUploadedFileM(file); // Save file to uploadedFileM state
-                      formik.setFieldValue("fileUpload", file.name);
-                      formik.setFieldError("fileUpload", "");
-                    }
-                  }}
-                  style={{ width: "100%", minHeight: "40px" }}
-                />
-                {formik.touched.fileUpload && formik.errors.fileUpload && (
-                  <p className="text-error">{formik.errors.fileUpload}</p>
-                )}
-                {uploadedFileM && (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: "10px",
-                    }}
-                  >
-                    <p>File: {uploadedFileM.name}</p>
-                    <Button
-                      variant="contained"
-                      style={{ backgroundColor: "#11395C" }}
-                      onClick={handleFileDelete("fileUpload")}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                )}
-              </Col>
 
-              <Col lg={12}>
-                <div className="hstack gap-2 justify-content-end">
-                  <Button
-                    style={{
-                      backgroundColor: "#11395C",
-                      fontSize: "11px",
-                      minHeight: "35px",
-                      width: "80px",
-                    }}
-                    type="submit"
-                  >
-                    Submit
-                  </Button>
-                  <Button
-                    style={{
-                      backgroundColor: "#11395C",
-                      fontSize: "11px",
-                      minHeight: "35px",
-                      width: "80px",
-                    }}
-                    onClick={handleCancel}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </Col>
-            </div>
-          </form>
-        </ModalBody>
-      )}
+                <Col lg={12}>
+                  <label style={{ fontSize: "12px" }} className="form-label">
+                    Description
+                  </label>
+                  <TextField
+                    fullWidth
+                    id="description"
+                    name="description"
+                    label="Description"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.description}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.description &&
+                      Boolean(formik.errors.description)
+                    }
+                    helperText={
+                      formik.touched.description && formik.errors.description
+                    }
+                  />
+                </Col>
+
+                <FileUploadField
+                  label="Upload Documents"
+                  fieldName="fileUpload"
+                  fileRef={fileInputRefDocument}
+                  file={uploadedFileM}
+                  onDelete={handleFileDelete("fileUpload")}
+                  error={formik.errors.fileUpload}
+                  touched={formik.touched.fileUpload}
+                  onChange={(file) => {
+                    setUploadedFileM(file);
+                    formik.setFieldValue("fileUpload", file.name);
+                    formik.setFieldError("fileUpload", "");
+                  }}
+                  accept=".pdf,.ppt,.pptx"
+                />
+              </>
+            )}
+
+            <Col lg={12}>
+              <div className="hstack gap-2 justify-content-end">
+                <Button
+                  style={{
+                    backgroundColor: "#11395C",
+                    fontSize: "11px",
+                    minHeight: "35px",
+                    width: "80px",
+                  }}
+                  type="submit"
+                >
+                  Submit
+                </Button>
+                <Button
+                  style={{
+                    backgroundColor: "#11395C",
+                    fontSize: "11px",
+                    minHeight: "35px",
+                    width: "80px",
+                  }}
+                  onClick={handleCancel}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </Col>
+          </div>
+        </form>
+      </ModalBody>
     </Modal>
   );
 };
