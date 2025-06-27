@@ -267,7 +267,7 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
                       <TextField
                         size="small"
                         id="client-code-input"
-                        label="Terminal Code"
+                        label="Trading Code"
                         variant="outlined"
                         name="clientCode"
                         type="text"

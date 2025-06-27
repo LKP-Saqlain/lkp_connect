@@ -239,7 +239,7 @@ const SubScriptionDetails = ({ activeSubItem }: SPIPPeformance) => {
                       <TextField
                         size="small"
                         id="client-code-input"
-                        label="Enter RIA Code"
+                        label="Enter Client Code"
                         variant="outlined"
                         name="riaCode"
                         type="text"

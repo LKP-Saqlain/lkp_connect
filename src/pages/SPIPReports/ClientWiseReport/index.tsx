@@ -54,7 +54,7 @@ const SPIPClientWiseReport = ({ activeSubItem }: SPIPPeformance) => {
       endDate: "",
     },
     // validationSchema: Yup.object({
-    //   riaCode: Yup.string().required("Please enter RIA Code"),
+    //   riaCode: Yup.string().required("Please enter Client Code"),
     //   // startDate: Yup.string().required("Start date is required"),
     //   // endDate: Yup.string().required("End date is required"),
     // }),
@@ -258,7 +258,7 @@ const SPIPClientWiseReport = ({ activeSubItem }: SPIPPeformance) => {
                         <TextField
                           size="small"
                           id="client-code-input"
-                          label="Enter RIA Code"
+                          label="Enter Client Code"
                           variant="outlined"
                           name="riaCode"
                           type="text"
