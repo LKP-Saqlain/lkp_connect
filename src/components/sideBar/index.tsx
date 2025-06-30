@@ -65,6 +65,8 @@ import CustomModal from "../common/DPModal";
 import { userOverview } from "../../redux/thunk/Overview";
 import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
 import ViewApproverOne from "../../pages/UnlistedShare/ApproverOne";
+import ViewApproverTwo from "../../pages/UnlistedShare/ApproverTwo";
+import VendorsFile from "../../pages/UnlistedShare/UploadFile";
 import RegAnnMaster from "../../pages/Masters/RegulatoryAnnouncement";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
@@ -643,6 +645,7 @@ const SideBar = () => {
     "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
     "Menu Master": <ViewApproverOne activeSubItem={activeSubItem} />,
+    "User Access Mapping": <ViewApproverTwo activeSubItem={activeSubItem} />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {
@@ -680,6 +683,7 @@ const SideBar = () => {
       <ComChecker activeSubItem={activeSubItem} />
     ),
     "Communication Retrival Report": <Retrival activeSubItem={activeSubItem} />,
+    "UCCCode MATCH": <VendorsFile />,
   };
 
   const ivrSubItems: Record<string, JSX.Element> = {

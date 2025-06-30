@@ -38,6 +38,8 @@ import {
   ZONEWiseCommissionReport,
   spipClientDetails,
   ClientWiseCommissonReport,
+  getApproverOneDetails,
+  getApproverTwoDetails,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1163,6 +1165,114 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "Menu Master") {
+      return getApproverOneDetails.map((column) => {
+        if (column.field === "Action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowID);
+                      HandleApprovalModal("approve");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      margin: "0 5px 0 5px",
+                    }}
+                  >
+                    |
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowID);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
+    } else if (activeSubItem === "User Access Mapping") {
+      return getApproverTwoDetails.map((column) => {
+        if (column.field === "Action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowID);
+                      HandleApprovalModal("approve");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      margin: "0 5px 0 5px",
+                    }}
+                  >
+                    |
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowID);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
     } else {
       return [];
     }
@@ -1249,6 +1359,9 @@ const DataTable = ({
             : activeSubItem === "KYC Approval"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "RH Approval"
+            ? `Are you sure want to ${action} this entry`
+            : activeSubItem === "Menu Master" ||
+              activeSubItem === "User Access Mapping"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Pre Trade Approval" && !showDocument
             ? `Are you sure want to ${action} this entry`

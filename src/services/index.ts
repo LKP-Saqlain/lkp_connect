@@ -380,4 +380,17 @@ export const apiServices = {
   EKycSSOLogin: async (payload: any) => {
     return await apiService("POST", endpoints.EKycSSOLogin, payload);
   },
+  Approver1ViewUnlisted: async (payload: any) => {
+    return await apiService("POST", endpoints.Approver1ViewUnlisted, payload);
+  },
+  Approver2ViewUnlisted: async (payload: any) => {
+    return await apiService("POST", endpoints.Approver2ViewUnlisted, payload);
+  },
+  ApproverActionUnlistedShares: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ApproverActionUnlistedShares,
+      payload
+    );
+  },
 };

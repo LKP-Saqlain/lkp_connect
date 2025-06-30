@@ -90,4 +90,7 @@ export const endpoints = {
   FillQuarterName: "/api/SPIP/FillQuarterName",
   GenerateAndDownloadInvoice: "/api/SPIP/GenerateAndDownloadInvoice",
   EKycSSOLogin: "/api/Kyc/EKycSSOLogin",
+  Approver1ViewUnlisted: "api/Account/Approver1ViewUnlisted",
+  Approver2ViewUnlisted: "api/Account/Approver2ViewUnlisted",
+  ApproverActionUnlistedShares: "api/Account/ApproverActionUnlistedShares",
 };
