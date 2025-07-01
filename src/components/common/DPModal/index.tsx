@@ -108,7 +108,7 @@ const CustomModal = ({
       ...((activeSubItem === "Communication Retrival Checker" ||
         activeSubItem === "KYC Approval" ||
         activeSubItem === "RH Approval" ||
-        activeSubItem === "User Access Mapping" ||
+        activeSubItem === "Unlisted Shares Approval 2" ||
         activeSubItem === "Unlisted Shares Approval 1" ||
         activeSubItem === "Pre Trade Approval") &&
         !isAdmin && {
@@ -143,7 +143,7 @@ const CustomModal = ({
             "KYC Approval",
             "RH Approval",
             "Pre Trade Approval",
-            "User Access Mapping",
+            "Unlisted Shares Approval 2",
             "Unlisted Shares Approval 1",
           ].includes(activeSubItem)
         ) {
@@ -286,7 +286,7 @@ const CustomModal = ({
       "Communication Retrival Checker",
       "KYC Approval",
       "RH Approval",
-      "User Access Mapping",
+      "Unlisted Shares Approval 2",
       "Unlisted Shares Approval 1",
     ].includes(activeSubItem) ||
     (activeSubItem === "Pre Trade Approval" && !showDocument && !isAdmin);

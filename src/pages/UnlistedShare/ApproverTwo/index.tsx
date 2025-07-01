@@ -88,7 +88,7 @@ const index = ({ activeSubItem }: any) => {
               padding: "0.2rem 0.8rem",
             }}
           >
-            <h4 className="card-title mb-0">Approver Two</h4>
+            <h4 className="card-title mb-0">Unlisted Shares Approval 2</h4>
           </CardHeader>
           <CardBody>
             <DataTable

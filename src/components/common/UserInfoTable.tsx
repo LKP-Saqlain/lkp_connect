@@ -1219,7 +1219,7 @@ const DataTable = ({
         // Return unchanged column if not the 'status' or 'document' field
         return column;
       });
-    } else if (activeSubItem === "User Access Mapping") {
+    } else if (activeSubItem === "Unlisted Shares Approval 2") {
       return getApproverTwoDetails.map((column) => {
         if (column.field === "Action") {
           return {
@@ -1361,7 +1361,7 @@ const DataTable = ({
             : activeSubItem === "RH Approval"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Unlisted Shares Approval 1" ||
-              activeSubItem === "User Access Mapping"
+              activeSubItem === "Unlisted Shares Approval 2"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Pre Trade Approval" && !showDocument
             ? `Are you sure want to ${action} this entry`

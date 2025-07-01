@@ -649,7 +649,7 @@ const SideBar = () => {
     "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
     // "Menu Master": <ViewApproverOne activeSubItem={activeSubItem} />,
-    "User Access Mapping": <ViewApproverTwo activeSubItem={activeSubItem} />,
+    // "User Access Mapping": <ViewApproverTwo activeSubItem={activeSubItem} />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {
@@ -687,7 +687,7 @@ const SideBar = () => {
       <ComChecker activeSubItem={activeSubItem} />
     ),
     "Communication Retrival Report": <Retrival activeSubItem={activeSubItem} />,
-    "UCCCode MATCH": <VendorsFile />,
+    // "UCCCode MATCH": <VendorsFile />,
   };
 
   const ivrSubItems: Record<string, JSX.Element> = {
@@ -713,6 +713,10 @@ const SideBar = () => {
     "Unlisted Shares Approval 1": (
       <ViewApproverOne activeSubItem={activeSubItem} />
     ),
+    "Unlisted Shares Approval 2": (
+      <ViewApproverTwo activeSubItem={activeSubItem} />
+    ),
+    "Unlisted Shares File Upload": <VendorsFile />,
   };
   const dashboardSubItems: Record<string, JSX.Element> = {
     RHDashboard: <ShowUnlistedRecords activeSubItem={activeSubItem} />,
