@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 // import PersonAddIcon from "@mui/icons-material/PersonAdd";
 // import { FaUserPen } from "react-icons/fa6";
 // import ViewListIcon from "@mui/icons-material/ViewList";
-// import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CopyToClipboardCell from "./copyToClipBoardCell";
 
 interface ClientRow {
@@ -158,34 +158,34 @@ export const getClientActivityStatusColumns = (
       disableColumnMenu: true,
       headerClassName: "header-wrap-custom",
     },
-    // {
-    //   field: "viewDetails",
-    //   headerName: "Details",
-    //   minWidth: 80, // Use minWidth instead of fixed width for better responsiveness
-    //   flex: 1,
-    //   align: "center",
-    //   headerAlign: "center",
-    //   renderCell: (params: any) => (
-    //     // <Button
-    //     //   onClick={() => handleViewDetails(params.row)}
-    //     //   variant="contained"
-    //     //   color="primary"
-    //     //   style={{
-    //     //     padding: "1px 9px",
-    //     //     backgroundColor: "#11395C",
-    //     //     fontSize: "5px",
-    //     //     borderRadius: "18px",
-    //     //   }}
-    //     // >
-    //     <Tooltip title={"View Details"} arrow placement="top">
-    //       <OpenInNewIcon
-    //         style={{ cursor: "pointer", color: "#11395C" }}
-    //         onClick={() => handleViewDetails(params.row)}
-    //       />
-    //     </Tooltip>
-    //     // </Button>
-    //   ),
-    // },
+    {
+      field: "viewDetails",
+      headerName: "Details",
+      minWidth: 80, // Use minWidth instead of fixed width for better responsiveness
+      flex: 1,
+      align: "center",
+      headerAlign: "center",
+      renderCell: (params: any) => (
+        // <Button
+        //   onClick={() => handleViewDetails(params.row)}
+        //   variant="contained"
+        //   color="primary"
+        //   style={{
+        //     padding: "1px 9px",
+        //     backgroundColor: "#11395C",
+        //     fontSize: "5px",
+        //     borderRadius: "18px",
+        //   }}
+        // >
+        <Tooltip title={"View Details"} arrow placement="top">
+          <OpenInNewIcon
+            style={{ cursor: "pointer", color: "#11395C" }}
+            onClick={() => handleViewDetails(params.row)}
+          />
+        </Tooltip>
+        // </Button>
+      ),
+    },
     // {
     //   field: "ActivationDate",
     //   headerName: "Activation Date",
@@ -636,37 +636,37 @@ export const getClientDormantStatus = (
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
   },
-  // {
-  //   field: "viewDetails",
-  //   headerName: "Details",
-  //   width: 130,
-  //   minWidth: 120,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   renderCell: (params: any) => (
-  //     <>
-  //       {/* <Button
-  //         onClick={() => handleViewDetails(params.row)}
-  //         // onClick={() => console.log("rowValues", params.row)}
-  //         variant="contained"
-  //         color="primary"
-  //         style={{
-  //           padding: "1px 9px",
-  //           backgroundColor: "#11395C",
-  //           fontSize: "5px",
-  //           borderRadius: "18px",
-  //         }}
-  //       > */}
-  //       <Tooltip title={"View Details"} arrow placement="top">
-  //         <OpenInNewIcon
-  //           style={{ cursor: "pointer", color: "#11395C" }}
-  //           onClick={() => handleViewDetails(params.row)}
-  //         />
-  //       </Tooltip>
-  //       {/* </Button> */}
-  //     </>
-  //   ),
-  // },
+  {
+    field: "viewDetails",
+    headerName: "Details",
+    width: 130,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params: any) => (
+      <>
+        {/* <Button
+          onClick={() => handleViewDetails(params.row)}
+          // onClick={() => console.log("rowValues", params.row)}
+          variant="contained"
+          color="primary"
+          style={{
+            padding: "1px 9px",
+            backgroundColor: "#11395C",
+            fontSize: "5px",
+            borderRadius: "18px",
+          }}
+        > */}
+        <Tooltip title={"View Details"} arrow placement="top">
+          <OpenInNewIcon
+            style={{ cursor: "pointer", color: "#11395C" }}
+            onClick={() => handleViewDetails(params.row)}
+          />
+        </Tooltip>
+        {/* </Button> */}
+      </>
+    ),
+  },
 ];
 
 export const Corecolumns: GridColDef[] = [

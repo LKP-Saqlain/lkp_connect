@@ -26,6 +26,9 @@ const categories = [
   "Equity Options",
   "Commodity Futures",
   "Commodity Options",
+  "Currency Futures",
+  "Currency Options",
+  "SLBM",
 ];
 
 const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
@@ -207,6 +210,13 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
       y: {
         formatter: function (val: number) {
           return Intl.NumberFormat("en-IN").format(Math.round(val));
+        },
+      },
+    },
+    yaxis: {
+      labels: {
+        formatter: function (val: number) {
+          return Math.round(val).toString(); // ensures no decimals
         },
       },
     },
