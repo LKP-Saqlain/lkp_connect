@@ -353,45 +353,41 @@ const ModalComponent = ({
 
   const handleFileDelete =
     (field: "fileUpload" | "image" | "uploadProof") => () => {
-      // debugger;
-      return (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        // const { name, value } = event.target;
+      console.log("Test1123", field);
+      // return (event: React.MouseEvent<HTMLButtonElement>) => {
+      // const { name, value } = event.target;
+      dispatch(showLoader("Please wait, we are processing your request..."));
+      setTimeout(() => {
+        if (isRegulatoryContent) {
+          setUploadedFile(null);
+          setFileExtension("");
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+            formik.setFieldError(
+              "uploadProof",
+              "Please upload a proof document"
+            );
+          }
+          dispatch(hideLoader());
+        }
 
-        dispatch(showLoader("Please wait, we are processing your request..."));
-
-        setTimeout(() => {
-          if (isRegulatoryContent) {
-            setUploadedFile(null);
-            setFileExtension("");
-            if (fileInputRef.current) {
-              fileInputRef.current.value = "";
-              formik.setFieldError(
-                "uploadProof",
-                "Please upload a proof document"
-              );
-            }
-            dispatch(hideLoader());
+        if (isMarketingMaterial) {
+          if (field === "fileUpload") {
+            setUploadedFileM(null);
+            formik.setFieldValue("fileUpload", "");
+            if (fileInputRefDocument.current)
+              fileInputRefDocument.current.value = "";
+          }
+          if (field === "image") {
+            setUploadedImageM(null);
+            formik.setFieldValue("image", "");
+            if (fileInputRefImage.current) fileInputRefImage.current.value = "";
           }
 
-          if (isMarketingMaterial) {
-            if (field === "fileUpload") {
-              setUploadedFileM(null);
-              formik.setFieldValue("fileUpload", "");
-              if (fileInputRefDocument.current)
-                fileInputRefDocument.current.value = "";
-            }
-            if (field === "image") {
-              setUploadedImageM(null);
-              formik.setFieldValue("image", "");
-              if (fileInputRefImage.current)
-                fileInputRefImage.current.value = "";
-            }
-
-            dispatch(hideLoader());
-          }
-        }, 500);
-      };
+          dispatch(hideLoader());
+        }
+      }, 500);
+      // };
     };
 
   const handleCancel = () => {
