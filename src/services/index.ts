@@ -242,11 +242,25 @@ export const apiServices = {
   getInUpMarketMaterial: async (payload: any) => {
     return await apiService("POST", endpoints.getInUpMarketMaterial, payload);
   },
+  DeleteMarketingMaterials: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DeleteMarketingMaterials,
+      payload
+    );
+  },
   getInUpRegAnnoucement: async (payload: any) => {
     return await apiService("POST", endpoints.getInUpRegAnnoucement, payload);
   },
   viewRegAnnoucement: async (payload: any) => {
     return await apiService("POST", endpoints.viewRegAnnoucement, payload);
+  },
+  DeleteRegulatoryAnnoucement: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DeleteRegulatoryAnnoucement,
+      payload
+    );
   },
   GetAPDashboard: async (payload: any) => {
     return await apiService("POST", endpoints.GetAPDashboard, payload);
@@ -329,5 +343,41 @@ export const apiServices = {
       endpoints.DetailedTradingPatternReport,
       payload
     );
+  },
+  SPIPClientPerformanceDashboard: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SPIPClientPerformanceDashboard,
+      payload
+    );
+  },
+  SPIPClientPerformanceSummary: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SPIPClientPerformanceSummary,
+      payload
+    );
+  },
+  SPIPsubScriptionDetail: async (payload: any) => {
+    return await apiService("POST", endpoints.SPIPsubScriptionDetail, payload);
+  },
+  SPIPFeesSharingReport: async (payload: any) => {
+    return await apiService("POST", endpoints.SPIPFeesSharingReport, payload);
+  },
+  SPIPB2BClientDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.SPIPB2BClientDetails, payload);
+  },
+  FillQuarterName: async (payload: any) => {
+    return await apiService("POST", endpoints.FillQuarterName, payload);
+  },
+  GenerateAndDownloadInvoice: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GenerateAndDownloadInvoice,
+      payload
+    );
+  },
+  EKycSSOLogin: async (payload: any) => {
+    return await apiService("POST", endpoints.EKycSSOLogin, payload);
   },
 };

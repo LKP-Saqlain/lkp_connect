@@ -107,7 +107,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
         : "",
       clientCode: "",
     };
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .TradingPatternReport(payload)
       .then((response) => {
@@ -123,6 +123,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
               (item: any, index: any) => ({
                 id: index + 1, // unique ID for DataGrid
                 activeStatus: item.activeStatus,
+                branch_Type: item.branch_Type,
                 client_Branch: item.client_Branch,
                 client_ID: item.client_ID,
                 client_Name: item.client_Name,
@@ -133,6 +134,9 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
                 offline_Total_Brokerage: item.offline_Total_Brokerage,
                 online_Last_Trade_Date: item.online_Last_Trade_Date,
                 online_Total_Brokerage: item.online_Total_Brokerage,
+                client_Mobile: item.client_Mobile,
+                rM_Mobile: item.rM_Mobile,
+                rM_Name: item.rM_Name,
               })
             );
 
@@ -161,7 +165,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
       branchCode: values.selectedBranchCode?.value,
       clientCode: "",
     };
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .DetailedTradingPatternReport(payload)
       .then((response) => {
@@ -177,6 +181,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
                 id: index + 1, // unique ID for DataGrid
                 activeStatus: item.activeStatus,
                 client_Branch: item.client_Branch,
+                branch_Type: item.branch_Type,
                 client_ID: item.client_ID,
                 client_Name: item.client_Name,
                 client_Zone: item.client_Zone,
@@ -192,6 +197,9 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
                 online_FUT_Brokerage: item.online_FUT_Brokerage,
                 online_Last_Trade_Date: item.online_Last_Trade_Date,
                 online_OPT_Brokerage: item.online_OPT_Brokerage,
+                client_Mobile: item.client_Mobile,
+                rM_Mobile: item.rM_Mobile,
+                rM_Name: item.rM_Name,
               })
             );
 
@@ -231,7 +239,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
       Authorization: LoginauthHeader, // Use LoginauthHeader for this request
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
@@ -276,7 +284,7 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
         zone: "ALL",
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getDropDown(payload)

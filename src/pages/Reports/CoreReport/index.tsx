@@ -90,7 +90,7 @@ const CoreReport = () => {
 
     try {
       let token = localStorage.getItem("tkn");
-      dispatch(showLoader("Please wait, We are Processing your Request"));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       const response = await axios.post(
         `https://middlewareapi.lkp.net.in${endpoints.GetCoreAlertsReport}`,
@@ -152,7 +152,7 @@ const CoreReport = () => {
       option: "",
     };
 
-    dispatch(showLoader("")); // Show the loader
+    dispatch(showLoader("Please wait, we are processing your request...")); // Show the loader
 
     apiServices
       .GetCoreAlertsReport(payload)

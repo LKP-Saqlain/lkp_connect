@@ -76,7 +76,7 @@ const Retrival = ({ activeSubItem }: any) => {
       entryFlag: "",
       remark: "",
     };
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .ComplainceReport(payload)
       .then((response) => {

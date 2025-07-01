@@ -34,6 +34,7 @@ import { AuthUser } from "../../../redux/thunk/AuthUser";
 import { setAuthenticationValue } from "../../../redux/slices/AuthnticateUser";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Logo from "../../../assets/logo.png";
+import { setIsNewUser } from "../../../redux/slices/userSlice";
 import "../style.css";
 
 const AuthenticateUser = () => {
@@ -112,7 +113,7 @@ const AuthenticateUser = () => {
         ? formik.values.authentication
         : formik.values.DateOfBirth,
     };
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     dispatch(AuthUser(payload))
       .unwrap()
       .then((response) => {
@@ -128,6 +129,7 @@ const AuthenticateUser = () => {
           localStorage.setItem("userName", name);
           console.log("testverifyPassword", verifyPassword);
           if (verifyPassword === import.meta.env.VITE_DEFAULT_PASSWORD) {
+            dispatch(setIsNewUser(true));
             navigate("/change-password");
           } else {
             navigate("/dashboard");

@@ -173,7 +173,7 @@ const ModalComponent = ({
       entryFlag: "",
       remark: "",
     };
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .ComplainceReport(payload)
       .then((response) => {
@@ -289,7 +289,7 @@ const ModalComponent = ({
   }, [fileBase64]);
 
   const handleFileDelete = () => {
-    dispatch(showLoader("")); // Show loader before deleting
+    dispatch(showLoader("Please wait, we are processing your request...")); // Show loader before deleting
 
     setTimeout(() => {
       setUploadedFile(null);

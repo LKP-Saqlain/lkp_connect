@@ -192,7 +192,7 @@ const CustomModal = ({
       auth_type: "PAN",
       auth_value: formik.values.userPanValue,
     };
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     dispatch(AuthUser(payload))
       .unwrap()
       .then((response) => {

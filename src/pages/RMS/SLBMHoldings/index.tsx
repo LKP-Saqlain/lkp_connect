@@ -55,7 +55,7 @@ const SLBMHoldings = () => {
       return;
     }
     try {
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       const file = selectedFiles[0];
       const fileContent = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
@@ -74,7 +74,7 @@ const SLBMHoldings = () => {
         file_name: file.name,
         file_content: fileContent,
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       let token = localStorage.getItem("tkn");
       const response = await axios.post(
         `https://middlewareapi.lkp.net.in${endpoints.SLBMHoldingsUpload}`,

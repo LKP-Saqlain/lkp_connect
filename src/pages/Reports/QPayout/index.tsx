@@ -95,20 +95,30 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
 
   const handleSearchBasedOnInput = (value: string) => {
     console.log("handleSearchBasedOnInputValue", value);
-    // setSearchValue(value);
     const query = value;
     setSearchQuery(query);
 
     const lowerCaseValue = value.toLowerCase();
 
-    const filtered = qPayoutData.filter((item: any) =>
-      Object.keys(item).some((key) =>
+    const filtered = qPayoutData.filter((item: any) => {
+      const clientNameMatch = item.clientName
+        ?.toLowerCase()
+        .includes(lowerCaseValue);
+      const accountCodeMatch = item.accountcode
+        ?.toString()
+        .toLowerCase()
+        .includes(lowerCaseValue);
+
+      // Optional: keep other fields also searchable
+      const otherMatch = Object.keys(item).some((key) =>
         item[key]?.toString().toLowerCase().includes(lowerCaseValue)
-      )
-    );
+      );
+
+      return clientNameMatch || accountCodeMatch || otherMatch;
+    });
 
     setFilteredData(filtered);
-    console.log("filteredSearch Records", filteredData);
+    console.log("filteredSearch Records", filtered);
   };
 
   // const handleSearchUser = async () => {
@@ -124,7 +134,7 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
   //     userId: user_id,
   //     financialQtr: `2024-${formik.values.quarter?.value}`,
   //   };
-  //   dispatch(showLoader(""));
+  //   dispatch(showLoader("Please wait, we are processing your request..."));
   //   await apiServices
   //     .GetQuaterlyPayoutGrid(payload)
   //     .then((response) => {
@@ -193,7 +203,7 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
         userId: user_id,
         financialQtr: financialQtr,
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       await apiServices
         .GetQuaterlyPayoutGrid(payload)
         .then((response) => {

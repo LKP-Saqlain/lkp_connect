@@ -25,7 +25,7 @@ const StoreVisits = ({ getActiveClients }: any) => {
       const payload = {
         user_id: user_id,
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       dispatch(ClientSummary(payload))
         .unwrap()
         .then((response) => {

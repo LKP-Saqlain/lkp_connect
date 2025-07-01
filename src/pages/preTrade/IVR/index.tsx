@@ -3,11 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 
-const IVR = ({ activeSubItem }: any) => {
+const IVR = ({ activeSubItem, activeClickCount, activeMenu }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const { authenticationValue, user_id, user_type, token } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
   );
+  useEffect(() => {
+    console.log("Test123456", activeMenu);
+  }, [activeMenu]);
 
   const handleOpenTab = () => {
     dispatch(showLoader("Please wait we will redirect you"));
@@ -40,12 +43,12 @@ const IVR = ({ activeSubItem }: any) => {
     dispatch(hideLoader());
   };
   useEffect(() => {
-    console.log("activeSubItemTest", activeSubItem);
+    console.log("activeSubItemTest", activeSubItem, activeClickCount);
 
     if (activeSubItem === "IVR Mapping") {
       handleOpenTab();
     }
-  }, [activeSubItem]);
+  }, [activeSubItem, activeClickCount]);
 
   return <h5></h5>;
 };

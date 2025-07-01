@@ -142,7 +142,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
       Authorization: LoginauthHeader, // Use LoginauthHeader for this request
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
@@ -199,7 +199,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
         zone: formik.values.selectedZone.value,
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getDropDown(payload)
@@ -277,7 +277,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
           : formik.values.selectedBranchCode?.value,
       symbolISIN: formik.values.isInValue,
     };
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     await apiServices
       .SLBMHoldingsReport(payload)
       .then((response) => {
@@ -326,20 +326,30 @@ const SlbmHoling = ({ activeSubItem }: any) => {
 
   const handleSearchBasedOnInput = (value: string) => {
     console.log("handleSearchBasedOnInputValue", value);
-    // setSearchValue(value);
     const query = value;
     setSearchQuery(query);
 
     const lowerCaseValue = value.toLowerCase();
 
-    const filtered = userData.filter((item: any) =>
-      Object.keys(item).some((key) =>
+    const filtered = userData.filter((item: any) => {
+      const clientNameMatch = item.clientName
+        ?.toLowerCase()
+        .includes(lowerCaseValue);
+      const accountCodeMatch = item.clientCode
+        ?.toString()
+        .toLowerCase()
+        .includes(lowerCaseValue);
+
+      // Optional: keep other fields also searchable
+      const otherMatch = Object.keys(item).some((key) =>
         item[key]?.toString().toLowerCase().includes(lowerCaseValue)
-      )
-    );
+      );
+
+      return clientNameMatch || accountCodeMatch || otherMatch;
+    });
 
     setFilteredData(filtered);
-    console.log("filteredSearch Records", filteredData);
+    console.log("filteredSearch Records", filtered);
   };
 
   document.title = "LKP Securities | Dormant Client Report";

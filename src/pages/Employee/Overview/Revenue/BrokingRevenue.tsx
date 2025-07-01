@@ -44,7 +44,7 @@ const Revenue = ({}: any) => {
         branchCode: user_id,
       };
 
-      dispatch(showLoader("Please wait"));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       dispatch(APBrokerage(payload))
         .unwrap()
         .then((response) => {

@@ -133,7 +133,7 @@ const ForgotPassword = () => {
         user_type: formik.values.forgotButtonGroup,
         sender_type: "E,S",
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       dispatch(SendOtp(payload))
         .unwrap()
         .then((response) => {
@@ -168,7 +168,7 @@ const ForgotPassword = () => {
       confirm_password: formik.values.confirmPassword,
       otp: formik.values.otp,
     };
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     dispatch(ForgotUserPassword(payload))
       .unwrap()
       .then((response) => {

@@ -15,9 +15,10 @@ import {
   CompliancneReport,
   getClientActivityStatusColumns,
   getClientDormantStatus,
-  getAccountDetails,
+  // getAccountDetails,
   getCommChecker,
   getRegulatorAnnouncement,
+  getMarketingMaterials,
   terminalcol,
   RegisDetails,
   RegionalHead,
@@ -31,6 +32,12 @@ import {
   clientTradingPatternDetailedColumns,
   ctclUserWiseColumns,
   ctclUserWiseDetailedColumns,
+  spipPerformanceReportColumns,
+  SPIPOverallPerformanceReport,
+  spipSubSciptionDetailColumns,
+  ZONEWiseCommissionReport,
+  spipClientDetails,
+  ClientWiseCommissonReport,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -396,11 +403,13 @@ const DataTable = ({
       return getClientActivityStatusColumns(handleViewDetails, user_type);
     } else if (selectedWidget === "Upcoming Dormant Client") {
       return getClientDormantStatus(handleViewDetails);
-    } else if (activeSubItem === "Referal Entry Status") {
-      return getAccountDetails.map((column) => ({
-        ...column,
-      }));
-    } else if (activeSubItem === "RH Approval") {
+    }
+    // else if (activeSubItem === "Referal Entry Status") {
+    //   return getAccountDetails.map((column) => ({
+    //     ...column,
+    //   }));
+    // }
+    else if (activeSubItem === "RH Approval") {
       return RegionalHead.map((column) => {
         if (column.field === "remark") {
           return {
@@ -568,53 +577,162 @@ const DataTable = ({
       return RegisDetails.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Marketing Material") {
+      return getMarketingMaterials.map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted;
+
+              const handleEdit = () => {
+                handleEditClick?.(params.row, true);
+                console.log("handleEdit row", params);
+              };
+
+              const handleDelete = () => {
+                handleDeleteEntry?.(params.row);
+                setSelectedRow(params.row);
+                tog_center();
+                console.log("handleDelete row", params);
+              };
+
+              return (
+                <>
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+
+                  {isDeleted ? (
+                    <span
+                      style={{
+                        color: "red",
+                        marginLeft: "10px",
+                        cursor: "not-allowed",
+                      }}
+                    >
+                      Deleted
+                    </span>
+                  ) : (
+                    <Tooltip title="Delete" arrow placement="top">
+                      <IconButton
+                        sx={{ p: 0, ml: 1 }}
+                        color="primary"
+                        onClick={handleDelete}
+                      >
+                        <DeleteIcon
+                          fontSize="small"
+                          sx={{ color: "#11395C" }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </>
+              );
+            },
+          };
+        }
+
+        // Return other columns unchanged
+        return column;
+      });
     } else if (activeMenu === "Regulatory Announcement") {
+      return getRegulatorAnnouncement
+        .filter((column) => column.field !== "action")
+        .map((column) => {
+          if (column.field === "CircularFilePath") {
+            return {
+              ...column,
+              renderCell: (params: any) => (
+                <Tooltip title="Download" arrow placement="top">
+                  <DownloadForOfflineIcon
+                    onClick={() => handleDownload(params.row)}
+                    sx={{ color: "#11395C", cursor: "pointer" }}
+                  />
+                </Tooltip>
+              ),
+            };
+          }
+          return column;
+        });
+    } else if (activeSubItem === "Regulatory Announcement") {
       return getRegulatorAnnouncement.map((column) => {
         if (column.field === "CircularFilePath") {
           return {
             ...column,
             renderCell: (params: any) => {
               return (
-                <button
-                  onClick={
-                    () => handleDownload(params.row)
-                    // console.log("count6", params.row.CircularFilePath)
-                  }
-                  style={{
-                    color: "white",
-                    // textDecoration: "underline",
-                    background: "#11395C",
-                    border: "none",
-                    cursor: "pointer",
-                    borderRadius: "10px",
-                    width: "90px",
-                  }}
-                >
-                  Download
-                </button>
+                <Tooltip title="Download" arrow placement="top">
+                  <DownloadForOfflineIcon
+                    onClick={() => handleDownload(params.row)}
+                    sx={{ color: "#11395C", cursor: "pointer" }}
+                  />
+                </Tooltip>
               );
             },
           };
         }
-        if (column.field === "LKPComments") {
+        if (column.field === "action") {
           return {
             ...column,
-            renderCell: () => {
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted; // Add condition based on your row data
+
+              const handleEdit = () => {
+                handleEditClick?.(params.row, true); // Call edit function for Communication Retrieval Entry
+              };
+
               return (
-                <button
-                  onClick={() => setmodal_center(!modal_center)}
-                  style={{
-                    color: "white",
-                    // textDecoration: "underline",
-                    background: "#11395C",
-                    border: "none",
-                    cursor: "pointer",
-                    borderRadius: "10px",
-                    width: "90px",
-                  }}
-                >
-                  View
-                </button>
+                <>
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <button
+                    onClick={() => {
+                      handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
+                      setSelectedRow(params.row); // Store the selected row for confirmation
+                      tog_center(); // Open the modal for deletion confirmation
+                    }}
+                    disabled={isDeleted}
+                    style={{
+                      color: isDeleted ? "red" : "#11395C",
+                      textDecoration: isDeleted ? "none" : "underline",
+                      background: "none",
+                      border: "none",
+                      cursor: isDeleted ? "default" : "pointer",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    {isDeleted ? (
+                      "Deleted"
+                    ) : (
+                      <Tooltip title="Delete" arrow placement="top">
+                        <IconButton
+                          sx={{ p: 0 }}
+                          color="primary"
+                          onClick={() => handleDeleteEntry?.(params.row)}
+                        >
+                          <DeleteIcon
+                            fontSize="small"
+                            sx={{ color: "#11395C" }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </button>
+                </>
               );
             },
           };
@@ -936,6 +1054,115 @@ const DataTable = ({
           ...column,
         }))
       );
+    } else if (activeSubItem === "SPIP Performance Dashboard") {
+      return spipPerformanceReportColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client Performance Summary") {
+      return SPIPOverallPerformanceReport.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client Subscription Details") {
+      // return spipSubSciptionDetailColumns.map((column) => ({
+      //   ...column,
+      // }));
+      return spipSubSciptionDetailColumns.map((column) => {
+        if (column.field === "invoiceDownload") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "Branch-Wise Fees Sharing Report") {
+      return ZONEWiseCommissionReport.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client-Wise Fees Sharing Report") {
+      return ClientWiseCommissonReport.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client Details Report") {
+      // return spipClientDetails.map((column) => ({
+      //   ...column,
+      // }));
+      return spipClientDetails.map((column) => {
+        if (column.field === "expiryStatus") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const status = params.row.expiryStatus;
+
+              if (status === "E") {
+                return (
+                  <div
+                    onClick={() =>
+                      window.open("https://spip.lkp.net.in/Products", "_blank")
+                    }
+                    style={{
+                      backgroundColor: "#11395C",
+                      color: "white",
+                      borderRadius: "8px",
+                      // padding: "0px 2px",
+                      cursor: "pointer",
+                      display: "inline-block",
+                      textAlign: "center",
+                      userSelect: "none",
+                      fontSize: "9px",
+                      width: "110px",
+                      // margin: "2px",
+                    }}
+                  >
+                    Subscription Expire
+                  </div>
+                );
+              } else if (status === "A") {
+                return (
+                  <div
+                    style={{
+                      backgroundColor: "#4CAF50",
+                      color: "white",
+                      borderRadius: "8px",
+                      padding: "0px 4px",
+                      cursor: "default",
+                      display: "inline-block",
+                      textAlign: "center",
+                      userSelect: "none",
+                      opacity: 0.85, // optional for "disabled" look
+                      fontSize: "9px",
+                      width: "110px",
+                      // margin: "2px",
+                    }}
+                  >
+                    Ongoing
+                  </div>
+                );
+              } else {
+                return null;
+              }
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }
@@ -1012,7 +1239,10 @@ const DataTable = ({
         Msg={
           activeSubItem === "RMS Allocation"
             ? ""
-            : activeSubItem === "Communication Retrival Entry"
+            : activeSubItem === "Regulatory Announcement"
+            ? "Are you sure want to delete this entry"
+            : activeSubItem === "Communication Retrival Entry" ||
+              activeSubItem === "Marketing Material"
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Checker"
             ? `Are you sure want to ${action} this entry`
@@ -1022,8 +1252,6 @@ const DataTable = ({
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Pre Trade Approval" && !showDocument
             ? `Are you sure want to ${action} this entry`
-            : activeMenu === "Regulatory Announcement"
-            ? "Lorem Id malesuada blandit cursus sollicitudin amet nequene quenequ eneque egestas montes.clicked Regulator Announcements check console "
             : activeSubItem === "Pre Trade Proof Upload"
             ? ""
             : activeSubItem === "Pre Trade Report"

@@ -89,7 +89,7 @@ const DormantClient = ({ activeSubItem }: any) => {
             ? "N"
             : "ALL",
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       // const test = dispatch(fetchDormantReport(payload));
       // console.log("testReduxThnk", test);
       await apiServices
@@ -175,7 +175,7 @@ const DormantClient = ({ activeSubItem }: any) => {
         Authorization: LoginauthHeader, // Use LoginauthHeader for this request
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       apiServices
         .getDropDown(payload, customHeaders)
         .then((res) => {
@@ -217,7 +217,7 @@ const DormantClient = ({ activeSubItem }: any) => {
         zone: formik.values.selectedZone.value, // Use the selected zone value
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getDropDown(payload)
@@ -268,25 +268,32 @@ const DormantClient = ({ activeSubItem }: any) => {
 
   const handleSearchBasedOnInput = (value: string) => {
     console.log("handleSearchBasedOnInputValue", value);
-    // setSearchValue(value);
-
     const query = value;
     setSearchQuery(query);
 
-    // const filtered = userData.filter(
-    //   (item: any) => item.clientName.toLowerCase().includes(value.toLowerCase()) // Check if the client name includes the query
-    // );
-
     const lowerCaseValue = value.toLowerCase();
 
-    const filtered = userData.filter((item: any) =>
-      Object.keys(item).some((key) =>
+    const filtered = userData.filter((item: any) => {
+      const clientNameMatch = item.clientName
+        ?.toLowerCase()
+        .includes(lowerCaseValue);
+      const accountCodeMatch = item.ctermcode
+        ?.toString()
+        .toLowerCase()
+        .includes(lowerCaseValue);
+
+      // Optional: keep other fields also searchable
+      const otherMatch = Object.keys(item).some((key) =>
         item[key]?.toString().toLowerCase().includes(lowerCaseValue)
-      )
-    );
+      );
+
+      return clientNameMatch || accountCodeMatch || otherMatch;
+    });
+
     setFilteredData(filtered);
-    console.log("filteredSearch Records", filteredData);
+    console.log("filteredSearch Records", filtered);
   };
+
   // const handleSearchUser = async () => {
   //   setUserData([]);
   //   if (searchValue !== "") {
@@ -309,7 +316,7 @@ const DormantClient = ({ activeSubItem }: any) => {
   //           ? "N"
   //           : "ALL",
   //     };
-  //     dispatch(showLoader(""));
+  //     dispatch(showLoader("Please wait, we are processing your request..."));
   //     await apiServices
   //       .getDormantReport(payload)
   //       .then((response) => {
@@ -363,7 +370,7 @@ const DormantClient = ({ activeSubItem }: any) => {
           ? "N"
           : "ALL",
     };
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     // const test = dispatch(fetchDormantReport(payload));
     // console.log("testReduxThnk", test);
     await apiServices
@@ -436,7 +443,7 @@ const DormantClient = ({ activeSubItem }: any) => {
     };
 
     let token = localStorage.getItem("tkn");
-    dispatch(showLoader("Please wait, We are Processing your Request"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     console.log("payload-->excel", payload);
     axios
       .post(

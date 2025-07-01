@@ -122,7 +122,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
       Authorization: LoginauthHeader, // Use LoginauthHeader for this request
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
@@ -176,7 +176,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
         zone: formik.values.selectedZone.value,
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getDropDown(payload)
@@ -258,7 +258,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
       strikePrice: "",
       filePath: "",
     };
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .GetPendingApproveStatus(payload)
       .then((res) => {

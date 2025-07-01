@@ -25,7 +25,7 @@ const Search = styled("div")(({ theme }) => ({
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
+  padding: theme.spacing(0, 1),
   height: "100%",
   position: "absolute",
   pointerEvents: "none",
@@ -42,12 +42,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     [theme.breakpoints.up("sm")]: {
-      width: "18ch",
+      width: "20ch",
       "&:focus": {
         width: "20ch",
       },
     },
   },
+  fontFamily: "Public Sans",
 }));
 
 interface SearchAppBarProps {
@@ -147,7 +148,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
           value={searchValue}
           onChange={handleInputChange}
           onBlur={handleBlur}
-          placeholder="Search Client Name"
+          placeholder="Search Client Code/Name"
           inputProps={{ "aria-label": "search" }}
         />
       </Search>
