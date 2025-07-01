@@ -23,7 +23,7 @@ const UnlistedShareUploadFile = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && (file.name.endsWith(".xls") || file.name.endsWith(".xlsx"))) {
+    if (file && file.name.endsWith(".xlsx")) {
       setSelectedFile(file);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -32,7 +32,7 @@ const UnlistedShareUploadFile = () => {
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
-      ShowToast("error", "Please upload a valid Excel file (.xls or .xlsx)");
+      ShowToast("error", "Please upload a valid Excel file (.xlsx)");
     }
   };
 
@@ -51,6 +51,11 @@ const UnlistedShareUploadFile = () => {
       const response = await apiServices.UploadUnlistedSharesVendorFile(
         formData
       );
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+        dispatch(hideLoader());
+      }
       dispatch(hideLoader());
       console.log("Response:", response);
     } catch (error) {
@@ -93,12 +98,12 @@ const UnlistedShareUploadFile = () => {
             <Row>
               <Col lg={12}>
                 <label style={{ fontSize: "12px" }} className="form-label">
-                  Upload Excel File (.xls, .xlsx)
+                  Upload Excel File (.xlsx)
                 </label>
                 <Input
                   type="file"
                   innerRef={fileInputRef}
-                  accept=".xls,.xlsx"
+                  accept=".xlsx"
                   className="form-control"
                   onChange={handleFileChange}
                   style={{ width: "50%", minHeight: "40px" }}
