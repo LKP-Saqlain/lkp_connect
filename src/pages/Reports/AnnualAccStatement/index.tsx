@@ -39,7 +39,7 @@ const AnnualAccStatement = () => {
         userId: user_id,
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       try {
         const response: any = await apiServices.GetPNLAccountDetailsPdf(

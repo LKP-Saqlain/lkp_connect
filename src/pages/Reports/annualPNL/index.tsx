@@ -23,6 +23,7 @@ import ShowToast from "../../../utils/toastUtils";
 const financialYears = [
   // { value: "2023-2024", label: "2023-2024" },
   { value: "2024-2025", label: "2024-2025" },
+  { value: "2025-2026", label: "2025-2026" },
 ];
 
 const AnnualPNL = () => {
@@ -54,7 +55,7 @@ const AnnualPNL = () => {
       };
 
       const token = localStorage.getItem("tkn");
-      dispatch(showLoader("Please wait, We are Processing your Request"));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       let apiUrl = "";
       if (finYear === "2023-2024") {
         apiUrl = `https://middlewareapi.lkp.net.in${endpoints.GetPNL}`; // Old API

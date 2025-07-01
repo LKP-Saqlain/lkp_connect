@@ -114,7 +114,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
       Authorization: LoginauthHeader, // Use LoginauthHeader for this request
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
@@ -168,7 +168,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
         zone: formik.values.selectedZone.value,
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getDropDown(payload)
@@ -241,7 +241,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
       startDate: startDate,
       endDate: endDate,
     };
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .GetPreTradeReport(payload)
       .then((res) => {

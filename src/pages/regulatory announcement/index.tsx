@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
+import ShowToast from "../../utils/toastUtils";
 // import ShowToast from "../../utils/toastUtils";
 
 const RegulatoryAnnouncement = ({ activeMenu }: any) => {
@@ -34,7 +35,54 @@ const RegulatoryAnnouncement = ({ activeMenu }: any) => {
   }, [dispatch]);
 
   const handleDownload = async (row: any) => {
-    console.log("roww response", row.CircularFilePath);
+    console.log("roww response", row);
+
+    try {
+      // Extract file path and name
+      const fullPath = row.CircularFilePath || "";
+      const pathParts = fullPath.split("\\");
+      const fullFileName = pathParts[pathParts.length - 1]; // e.g. "sample..pdf"
+      const filePath = pathParts.slice(0, -1).join("\\"); // e.g. "D:\\PROJECT"
+
+      // Extract file name and extension safely
+      const lastDotIndex = fullFileName.lastIndexOf(".");
+      const fileName =
+        lastDotIndex !== -1
+          ? fullFileName.slice(0, lastDotIndex)
+          : fullFileName;
+      const fileType =
+        lastDotIndex !== -1 ? fullFileName.slice(lastDotIndex) : ".pdf"; // default to .pdf if missing
+
+      const payload = {
+        fileName,
+        filePath,
+        fileType,
+        contentType: "",
+      };
+
+      dispatch(showLoader("Downloading..."));
+      const response = await apiServices.ComplianceDownload(payload);
+
+      if (response?.status === 200 && response?.data) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.setAttribute("download", `${fileName}${fileType}`);
+        document.body.appendChild(link);
+        link.click();
+      } else {
+        console.error("Download failed", response);
+        ShowToast("info", "Error downloading file");
+      }
+    } catch (error: any) {
+      ShowToast(
+        "info",
+        error?.message || "An error occurred while downloading"
+      );
+    } finally {
+      dispatch(hideLoader());
+    }
   };
 
   useEffect(() => {

@@ -115,7 +115,7 @@ const LoginPage = () => {
       user_password: values.password,
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     // debugger;
     dispatch(UserLogin(payload))
       .unwrap()

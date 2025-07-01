@@ -104,7 +104,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
       branchCode: formik.values.selectedBranchCode?.value,
     };
 
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .DetailedCTCLActivityReport(payload)
       .then((response) => {
@@ -156,7 +156,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
       branchCode: formik.values.selectedBranchCode?.value,
     };
 
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .CTCLActivityReport(payload)
       .then((response) => {
@@ -219,7 +219,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
       Authorization: LoginauthHeader, // Use LoginauthHeader for this request
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
@@ -264,7 +264,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
         zone: "ALL",
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getDropDown(payload)

@@ -15,6 +15,7 @@ import ClientSegmentBrokerage from "./slices/ClientSegmentBrokerage";
 import APBrokerageOverview from "./slices/AP/lastWeekBrokerage";
 import IsSessionExpired from "./slices/sessionExpired";
 import NewsReducer from "./slices/fundamental/news";
+import IsNewUser from "./slices/userSlice";
 
 // Configure the persist settings
 const persistConfig = {
@@ -29,6 +30,7 @@ const persistFundamentalNewsReducer = persistReducer(
   persistConfig,
   NewsReducer
 );
+const persistIsNewUserReducer = persistReducer(persistConfig, IsNewUser);
 
 const store = configureStore({
   reducer: {
@@ -45,6 +47,7 @@ const store = configureStore({
     APBrokerage: APBrokerageOverview,
     sessionExpired: IsSessionExpired,
     fundamentalNews: persistFundamentalNewsReducer,
+    isNewUser: persistIsNewUserReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

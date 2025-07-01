@@ -69,7 +69,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
       Authorization: LoginauthHeader, // Use LoginauthHeader for this request
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
@@ -102,7 +102,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
         zone: selectedZone.value, // Use the selected zone value
       };
 
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getDropDown(payload)
@@ -144,7 +144,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
       zone: accessType === "" ? "ALL" : selectedZone?.value,
       branchCode: accessType === "" ? "ALL" : selectedBranchCode?.value,
     };
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .ClientCash(payload)
       .then((response) => {
@@ -164,7 +164,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
         } else {
           setResponseStatus(false); // hide search field if no valid data
           setCustomLedgerData([]);
-          ShowToast("error", response?.data);
+          // ShowToast("error", response?.data);
           handleValues([], false);
         }
 
@@ -197,7 +197,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
   //     zone: selectedZone?.value,
   //     branchCode: selectedBranchCode?.value,
   //   };
-  //   dispatch(showLoader(""));
+  //   dispatch(showLoader("Please wait, we are processing your request..."));
   //   apiServices
   //     .ClientCash(payload)
   //     .then((response) => {

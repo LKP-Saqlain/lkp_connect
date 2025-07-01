@@ -87,7 +87,7 @@ const LastTrade = () => {
   };
 
   const handleExcel = async () => {
-    dispatch(showLoader("Please wait, We are Processing your Request"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
 
     try {
       const extractUserId = getUserIdFromLocalStorage();

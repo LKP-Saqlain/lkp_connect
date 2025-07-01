@@ -25,7 +25,7 @@ const StoreVisits = ({ getActiveClients }: any) => {
       const payload = {
         branchCode: user_id,
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       dispatch(APBrokerage(payload))
         .unwrap()
         .then((response) => {
@@ -63,7 +63,7 @@ const StoreVisits = ({ getActiveClients }: any) => {
           // dispatch(hideLoader());
         });
       // try {
-      //   dispatch(showLoader(""));
+      //   dispatch(showLoader("Please wait, we are processing your request..."));
       //   const response = await apiServices.GetClientStatusCnt(payload);
       //   console.log("GetClientStatusCntresponse", response?.data?.data[0]);
       //   setChartData(response?.data?.data[0]);

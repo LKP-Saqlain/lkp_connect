@@ -31,6 +31,7 @@ import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import LinkIcon from "@mui/icons-material/Link";
 import DetailsIcon from "@mui/icons-material/Details";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import AnalyticsIcon from "@mui/icons-material/Analytics";
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -79,6 +80,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     EKYC: <LinkIcon />,
     "Other Details": <DetailsIcon />,
     IVR: <PublishedWithChangesIcon />,
+    SPIP: <AnalyticsIcon />,
   };
 
   const getIcon = (title: string) => {

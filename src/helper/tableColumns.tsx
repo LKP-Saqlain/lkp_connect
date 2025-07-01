@@ -263,36 +263,95 @@ export const getRegulatorAnnouncement: GridColDef[] = [
   {
     field: "Department",
     headerName: "Department",
-    flex: 1,
+    flex: 0.8,
     disableColumnMenu: true,
     headerAlign: "center",
   },
   {
     field: "Subject",
     headerName: "Subject",
-    flex: 3.1,
+    flex: 1.5,
     disableColumnMenu: true,
     headerAlign: "center",
-    renderCell: (params) => (
-      <div style={{ padding: "0px 3px" }}>{params.value}</div>
-    ),
+    // renderCell: (params) => (
+    //   <div style={{ padding: "0px 3px" }}>{params.value}</div>
+    // ),
   },
   {
     field: "LKPComments",
     headerName: "LKP Comments",
-    flex: 1.1,
+    flex: 3,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
     // alignItems:"center"
   },
   {
+    field: "action",
+    headerName: "Action",
+    width: 120,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
     field: "CircularFilePath",
     headerName: "Circular",
-    flex: 1.1,
+    flex: 0.8,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+  },
+];
+export const getMarketingMaterials: GridColDef[] = [
+  {
+    field: "UploadImages",
+    headerName: "Image",
+    headerClassName: "header-wrap-custom",
+    flex: 0.7,
+    minWidth: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params: any) => {
+      const fullPath = params.row.UploadImages;
+      const fileName = fullPath?.split(/[/\\]/).pop();
+
+      return <span>{fileName}</span>;
+    },
+  },
+  {
+    field: "Description",
+    headerName: "Description",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "UploadDocuments",
+    headerName: "Document name",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params: any) => {
+      const fullPath = params.row.UploadDocuments;
+      const fileName = fullPath?.split(/[/\\]/).pop();
+      return <span>{fileName}</span>;
+    },
+  },
+  {
+    field: "action",
+    headerName: "Action",
+    width: 120,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
   },
 ];
 
@@ -3247,6 +3306,11 @@ export const TypeOfDocuments = [
   { value: "Circular", label: "Circular" },
   { value: "SEBI", label: "SEBI" },
 ];
+export const TypeOfDepartment = [
+  { value: "IT", label: "IT" },
+  { value: "Account", label: "Account" },
+  { value: "RMS", label: "RMS" },
+];
 
 export const InfoCapsules = [
   {
@@ -4164,6 +4228,24 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const name = params.row?.rM_Name || "N/A";
+      const mobile = params.row?.rM_Mobile || "N/A";
+      return (
+        <Tooltip
+          title={
+            <>
+              <div>RM Name: {name}</div>
+              <div>Mobile No: {mobile}</div>
+            </>
+          }
+          arrow
+          placement="top"
+        >
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "client_Name",
@@ -4304,6 +4386,25 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const name = params.row?.rM_Name || "N/A";
+      const mobile = params.row?.rM_Mobile || "N/A";
+
+      return (
+        <Tooltip
+          title={
+            <>
+              <div>RM Name: {name}</div>
+              <div>Mobile No: {mobile}</div>
+            </>
+          }
+          arrow
+          placement="top"
+        >
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "client_Name",
@@ -4742,5 +4843,936 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     align: "center",
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
+  },
+];
+
+export const quotes = [
+  {
+    text: "Price is what you pay. Value is what you get.",
+    author: "Warren Buffett",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "Risk comes from not knowing what you are doing.",
+    author: "Warren Buffett",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "Stay hungry, stay foolish.",
+    author: "Steve Jobs",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "The best way to predict the future is to create it.",
+    author: "Peter Drucker",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "If something is important enough, even if the odds are against you, you should still do it.",
+    author: "Elon Musk",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "When something is important enough, you do it even if the odds are not in your favor.",
+    author: "Elon Musk",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "Success is not in what you have, but who you are.",
+    author: "Bo Bennett",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "Your time is limited, so don’t waste it living someone else’s life.",
+    author: "Steve Jobs",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "I find that the harder I work, the more luck I seem to have.",
+    author: "Thomas Jefferson",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "Don't be afraid to give up the good to go for the great.",
+    author: "John D. Rockefeller",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "Opportunities don't happen. You create them.",
+    author: "Chris Grosser",
+  },
+  {
+    text: `Please wait, we are processing your request...`,
+    author: "",
+  },
+  {
+    text: "Success usually comes to those who are too busy to be looking for it.",
+    author: "Henry David Thoreau",
+  },
+];
+
+export const spipPerformanceReportColumns: GridColDef[] = [
+  {
+    field: "quarterMonth",
+    headerName: "Month",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    width: 200,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "scripCode",
+    headerName: "Scrip Name",
+    width: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "securityName",
+    headerName: "Security Name",
+    width: 220,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "buyQty",
+    headerName: "Buy Qty",
+    width: 70,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "buyRate",
+    headerName: "Buy Rate",
+    width: 80,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = Number(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "buyValue",
+    headerName: "Buy Value",
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "sellQty",
+    headerName: "Sell Qty",
+    width: 70,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "sellRate",
+    headerName: "Sell Rate",
+    width: 80,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = Number(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "sellValue",
+    headerName: "Sell Value",
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "openQty",
+    headerName: "Open Qty",
+    width: 80,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = Number(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "marketRate",
+    headerName: "Market Rate",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = Number(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "marketValue",
+    headerName: "Market Value",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = Number(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "profitLoss",
+    headerName: "Profit / Loss",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "profitLoss_Perc",
+    headerName: "P/L %",
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+  },
+];
+
+export const SPIPOverallPerformanceReport: GridColDef[] = [
+  {
+    field: "reportMonth",
+    headerName: "Report Months",
+    width: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    width: 110,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "investmentAmt",
+    headerName: "Investment Amount",
+    width: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = Number(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "openPosition",
+    headerName: "Open Position Amount",
+    width: 170,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = Number(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "profitLoss",
+    headerName: "Profit & Loss (Rs)",
+    width: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = Number(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "profitloss_Perc",
+    headerName: "Profit & Loss (%)",
+    width: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = Number(params);
+      return isNaN(value) ? "-" : `${value.toFixed(2)}%`;
+    },
+  },
+];
+
+export const spipSubSciptionDetailColumns: GridColDef[] = [
+  {
+    field: "branchCode",
+    headerName: "Branch Code",
+    width: 70,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1, // Make this responsive
+    minWidth: 250,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    renderCell: (params) => (
+      <div
+        style={{
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          width: "100%",
+        }}
+        title={params.value}
+      >
+        {params.value}
+      </div>
+    ),
+  },
+  {
+    field: "productName",
+    headerName: "Product",
+    width: 70,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "invoiceMonth",
+    headerName: "Payment Month",
+    headerClassName: "header-wrap-custom",
+    width: 80,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "duration",
+    headerName: "Duration (Month)",
+    headerClassName: "header-wrap-custom",
+    width: 80,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = Number(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "startMonth",
+    headerName: "Start Month",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "endMonth",
+    headerName: "End Month",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "invoiceDownload",
+    headerName: "Invoice Download",
+    width: 80,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+];
+
+export const ZONEWiseCommissionReport: GridColDef[] = [
+  {
+    field: "crocode",
+    headerName: "ZONE",
+    // flex: 1,
+    width: 80,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "branchcode",
+    headerName: "Partner Code",
+    width: 70,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    // flex: 1,
+  },
+  {
+    field: "branchname",
+    headerName: "Partner Name",
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    flex: 2,
+  },
+  {
+    field: "dtoftran",
+    headerName: "Month",
+    width: 70,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    // flex: 1,
+  },
+  {
+    field: "totalFees",
+    headerName: "Total Fees",
+    headerClassName: "header-wrap-custom",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    // flex: 1,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "gst",
+    headerName: "GST",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    // flex: 1,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "feeswithoutGST",
+    headerName: "Fees without GST",
+    width: 90,
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+    align: "right",
+    // flex: 1,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "totalCommission",
+    headerName: "Total Commission",
+    headerClassName: "header-wrap-custom",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    // flex: 1,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "monthlyCommission",
+    headerName: "Monthly Commission",
+    headerClassName: "header-wrap-custom",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    // flex: 1,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "tds",
+    headerName: "TDS",
+    width: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    flex: 1,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "commissionReleased",
+    headerName: "Commission Released",
+    headerClassName: "header-wrap-custom",
+    width: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    // flex: 1,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "balanceCommission",
+    headerName: "Balance Commission",
+    headerClassName: "header-wrap-custom",
+    width: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    // flex: 1,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+];
+
+export const ClientWiseCommissonReport: GridColDef[] = [
+  {
+    field: "clientcode",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1.5,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "crocode",
+    headerName: "ZONE",
+    flex: 1,
+    minWidth: 110,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "branchcode",
+    headerName: "Partner Code",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "branchname",
+    headerName: "Partner Name",
+    flex: 1.5,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "dtoftran",
+    headerName: "Month",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "totalFees",
+    headerName: "Total Fees (₹)",
+    flex: 1.2,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "gst",
+    headerName: "GST (₹)",
+    flex: 1,
+    minWidth: 100,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "feeswithoutGST",
+    headerName: "Fees w/o GST (₹)",
+    flex: 1.2,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "totalCommission",
+    headerName: "Total Commission (₹)",
+    flex: 1.5,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "monthlyCommission",
+    headerName: "Monthly Commission (₹)",
+    flex: 1.5,
+    minWidth: 170,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "tds",
+    headerName: "TDS (₹)",
+    flex: 1,
+    minWidth: 100,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "commissionReleased",
+    headerName: "Commission Released (₹)",
+    flex: 1.5,
+    minWidth: 170,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "balanceCommission",
+    headerName: "Balance Commission (₹)",
+    flex: 1.5,
+    minWidth: 170,
+    headerAlign: "center",
+    align: "right",
+  },
+];
+
+export const spipClientDetails: GridColDef[] = [
+  {
+    field: "iaCode",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 2,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "backofficecode",
+    headerName: "Backoffice Code",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "branchCode",
+    headerName: "Branch Code",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "pan",
+    headerName: "PAN",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile No.",
+    flex: 1.2,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "emailId",
+    headerName: "Email ID",
+    flex: 1.8,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "active",
+    headerName: "Status",
+    flex: 0.8,
+    minWidth: 100,
+    headerAlign: "center",
+    align: "center",
+    // renderCell: ({ value }) => (
+    //   <span
+    //     style={{
+    //       color: value === "Yes" ? "green" : "red",
+    //       fontWeight: 600,
+    //     }}
+    //   >
+    //     {value}
+    //   </span>
+    // ),
+  },
+  {
+    field: "activationDate",
+    headerName: "Activation Date",
+    flex: 1.2,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "center",
+    // valueFormatter: ({ value }) =>
+    //   value ? new Date(value).toLocaleDateString("en-GB") : "-",
+  },
+  {
+    field: "rmCode",
+    headerName: "Introducer",
+    flex: 1.5,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "address",
+    headerName: "Address",
+    flex: 2,
+    minWidth: 220,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "startDate",
+    headerName: "Start Date",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    // valueFormatter: ({ value }) =>
+    //   value ? new Date(value).toLocaleDateString("en-GB") : "-",
+  },
+  {
+    field: "endDate",
+    headerName: "End Date",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    // valueFormatter: ({ value }) =>
+    //   value ? new Date(value).toLocaleDateString("en-GB") : "-",
+  },
+  {
+    field: "expiryStatus",
+    headerName: "Expiry Status",
+    flex: 1.2,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "center",
+    // renderCell: ({ value }) => (
+    //   <span
+    //     style={{
+    //       color: value === "Expired" ? "red" : "green",
+    //       fontWeight: 600,
+    //     }}
+    //   >
+    //     {value}
+    //   </span>
+    // ),
   },
 ];

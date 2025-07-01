@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
-import { useMediaQuery, Box } from "@mui/material";
+import { useMediaQuery, Box, Button } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -52,7 +52,7 @@ import Retrival from "../../pages/Reports/ComplianceReport";
 import OTDetails from "../../pages/OT";
 import CommEntry from "../../pages/Compilance/commEntry";
 import ComChecker from "../../pages/Compilance/commChecker";
-import Main from "../../pages/refCard";
+// import Main from "../../pages/refCard";
 import Badge from "@mui/material/Badge";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import Nudge from "../common/Nudge";
@@ -77,6 +77,7 @@ import PreTradeApproval from "../../pages/preTrade/Approval";
 import IVR from "../../pages/preTrade/IVR";
 import ClientTradingReport from "../../pages/Reports/ClientTradingPatternReport";
 import CTCLReport from "../../pages/Reports/CTCLReport";
+import SPIP from "../../pages/SPIPReports";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -131,11 +132,17 @@ const AppBar = styled(MuiAppBar, {
       duration: theme.transitions.duration.enteringScreen,
     }),
     width: isMobile
-      ? "calc(100% - 30px)" // Always full width minus margin on mobile
+      ? open
+        ? `calc(100% - ${drawerWidth + 30}px)`
+        : "calc(100% - 30px)"
       : open
       ? `calc(100% - ${leftMargin + 30}px)`
       : `calc(100% - 30px)`,
-    marginLeft: isMobile ? 0 : `${leftMargin}px`,
+    marginLeft: isMobile
+      ? open
+        ? `${drawerWidth}px`
+        : "0px"
+      : `${leftMargin}px`,
   };
 });
 
@@ -154,7 +161,7 @@ const Drawer = styled(MuiDrawer, {
       "& .MuiDrawer-paper": {
         ...openedMixin(theme, width),
         height: "100vh",
-        overflowY: "auto", // 👈 Enables vertical scroll
+        overflowY: "auto",
       },
     }),
     ...(!open && {
@@ -162,7 +169,7 @@ const Drawer = styled(MuiDrawer, {
       "& .MuiDrawer-paper": {
         ...closedMixin(theme),
         height: "100vh",
-        overflowY: "auto", // 👈 Enables vertical scroll
+        overflowY: "auto",
       },
     }),
   };
@@ -202,16 +209,17 @@ const SideBar = () => {
   const [userAccess, setUserAccess] = useState<string[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
   const [showMyPerformance, setShowMyPerformance] = useState<boolean>(false);
+  const [activeClickCount, setActiveClickCount] = useState(0);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id, user_type } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin && state.UserLogin?.data?.data
   );
 
-  const { name } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data
+  const { name, emailID } = useSelector(
+    (state: RootState) => state.AuthUser && state.AuthUser?.data?.data
   );
   console.log("reduxStateUserName", name, user_type);
 
@@ -239,7 +247,7 @@ const SideBar = () => {
       const payload = {
         user_id: user_id,
       };
-      dispatch(showLoader("Please wait"));
+      dispatch(showLoader("Please wait, we are processing your request..."));
       dispatch(userOverview(payload))
         .unwrap()
         .then((response) => {
@@ -318,6 +326,7 @@ const SideBar = () => {
       activeMenu !== "Masters" &&
       activeMenu !== "RMS" &&
       activeMenu !== "IVR" &&
+      activeMenu !== "SPIP" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -362,7 +371,9 @@ const SideBar = () => {
         };
 
         try {
-          dispatch(showLoader(""));
+          dispatch(
+            showLoader("Please wait, we are processing your request...")
+          );
           const response = await apiServices.DashboardNudge(payload);
           console.log("dashBoardNudgeData", response?.data);
 
@@ -522,6 +533,12 @@ const SideBar = () => {
   }, []);
 
   useEffect(() => {
+    if (activeMenu === "IVR" && activeSubItem === "IVR Mapping") {
+      setActiveSubItem("");
+    }
+  }, [activeMenu, activeSubItem]);
+
+  useEffect(() => {
     setIsNudgeOpen(false);
     localStorage.setItem("activeMenu", activeMenu);
     localStorage.setItem("activeSubItem", activeSubItem);
@@ -585,7 +602,14 @@ const SideBar = () => {
 
   const handleSubItemClick = (subItem: string) => {
     console.log("value-->", subItem);
-    setActiveSubItem(subItem); // Set active sub-item
+    // setActiveSubItem(subItem); // Set active sub-item
+    if (activeSubItem === subItem) {
+      // user clicked same tab again
+      setActiveClickCount((prev) => prev + 1);
+    } else {
+      setActiveSubItem(subItem);
+      setActiveClickCount(1); // reset count for new tab
+    }
     if (isMobile) {
       setTimeout(() => {
         handleMobileDrawerClose();
@@ -615,8 +639,8 @@ const SideBar = () => {
   };
 
   const revenueDetailsSubItems: Record<string, JSX.Element> = {
-    "Regulatory Announcement": <RegAnnMaster />,
-    "Marketing Material": <MasterMenuMarketing />,
+    "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
+    "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
   };
 
   // const kycSubItems: Record<string, JSX.Element> = {
@@ -644,9 +668,9 @@ const SideBar = () => {
     "CTCL Wise Activity Report": <CTCLReport activeSubItem={activeSubItem} />,
   };
 
-  const referalSubItems: Record<string, JSX.Element> = {
-    "Referal Entry Status": <Main activeSubItem={activeSubItem} />,
-  };
+  // const referalSubItems: Record<string, JSX.Element> = {
+  //   "Referal Entry Status": <Main activeSubItem={activeSubItem} />,
+  // };
 
   const complianceSubItems: Record<string, JSX.Element> = {
     "Communication Retrival Entry": <CommEntry activeSubItem={activeSubItem} />,
@@ -660,7 +684,13 @@ const SideBar = () => {
     "Pre Trade Proof Upload": <PreProofUpload activeSubItem={activeSubItem} />,
     "Pre Trade Report": <PreTradeReport activeSubItem={activeSubItem} />,
     "Pre Trade Approval": <PreTradeApproval activeSubItem={activeSubItem} />,
-    "IVR Mapping": <IVR activeSubItem={activeSubItem} />,
+    "IVR Mapping": (
+      <IVR
+        activeMenu={activeMenu}
+        activeSubItem={activeSubItem}
+        activeClickCount={activeClickCount}
+      />
+    ),
     "Referal Product Wise MIS Report": (
       <KycBrokerage activeSubItem={activeSubItem} />
     ),
@@ -827,7 +857,7 @@ const SideBar = () => {
       Masters: revenueDetailsSubItems[activeSubItem] || null,
       // "KYC Dashboard": kycSubItems[activeSubItem] || null,
       Reports: reportsSubItems[activeSubItem] || null,
-      "Referal Lead": referalSubItems[activeSubItem] || null,
+      "Referal Lead": <></>,
       Compliance: complianceSubItems[activeSubItem] || null,
       "Client Details": (
         <ClientDetails
@@ -846,6 +876,7 @@ const SideBar = () => {
       "Other Details": <OTDetails />,
       "Registration Details": <RegisDetails activeSubItem={activeSubItem} />,
       IVR: ivrSubItems[activeSubItem] || null,
+      SPIP: <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} />,
     };
 
     return contentMap[activeMenu] || null;
@@ -876,6 +907,36 @@ const SideBar = () => {
     );
     setShowMyPerformance(hasMyPerformance);
   }, [menuItems]);
+
+  const handleSSOLogin = () => {
+    console.log("TestSSOLogin");
+    const userEmail = (emailID && emailID) || "";
+    let payload = {
+      email: userEmail,
+    };
+
+    dispatch(showLoader(""));
+    apiServices
+      .EKycSSOLogin(payload)
+      .then((response) => {
+        console.log("EKycSSOLoginResponse", response?.data?.data);
+        dispatch(hideLoader());
+        if (response?.status === 200) {
+          if (response?.data?.data?.success) {
+            const url = response?.data?.data?.url;
+            window.open(url, "_blank", "noopener,noreferrer");
+          }
+        }
+      })
+      .catch((Error) => {
+        console.log("Errrror", Error);
+        dispatch(hideLoader());
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   return (
     <>
       <CustomModal
@@ -933,7 +994,26 @@ const SideBar = () => {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
-
+            {showMyPerformance && (
+              <>
+                <Button
+                  onClick={handleSSOLogin}
+                  style={{
+                    height: "25px",
+                    width: "80px",
+                    borderRadius: "5px",
+                    fontSize: "12px",
+                    padding: "0",
+                    fontFamily: "Public Sans",
+                    backgroundColor: "#11395C",
+                    color: "#fff",
+                  }}
+                  className="btn-sm"
+                >
+                  E-KYC
+                </Button>
+              </>
+            )}
             <Box
               sx={{
                 padding: isMobile ? "0" : "10px",

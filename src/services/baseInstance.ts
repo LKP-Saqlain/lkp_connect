@@ -2,30 +2,39 @@
 import axios from "axios";
 import { endpoints } from "./endpoints";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-const FUNDAMENTAL_URL = import.meta.env.VITE_FUNDAMENTAL_URL;
+// Load environment variables
+const {
+  VITE_BASE_URL,
+  VITE_FUNDAMENTAL_URL,
+  VITE_BASIC_AUTH_USERNAME,
+  VITE_BASIC_AUTH_PASSOWORD,
+  VITE_FUNDAMENTAL_USERNAME,
+  VITE_FUNDAMENTAL_PASSWORD,
+} = import.meta.env;
 
-// Create an Axios instance
+// Axios instance
 const baseInstance = axios.create({
-  baseURL: BASE_URL,
-  timeout: 120000, // Timeout for the requests
+  baseURL: VITE_BASE_URL,
+  timeout: 120000,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-const username = import.meta.env.VITE_BASIC_AUTH_USERNAME;
-const password = import.meta.env.VITE_BASIC_AUTH_PASSOWORD;
-const credentials = `${username}:${password}`;
-const encodedCredentials = btoa(credentials); // Base64 encode
-const LoginauthHeader = `Basic ${encodedCredentials}`;
+// Create Basic Auth headers
+const createBasicAuthHeader = (username: string, password: string): string =>
+  `Basic ${btoa(`${username}:${password}`)}`;
 
-const privateUsername = import.meta.env.VITE_FUNDAMENTAL_USERNAME;
-const privatePassword = import.meta.env.VITE_FUNDAMENTAL_PASSWORD;
-const privateCredentials = `${privateUsername}:${privatePassword}`;
-const encodedprivateCredentials = btoa(privateCredentials); // Base64 encode
-const PrivateLoginauthHeader = `Basic ${encodedprivateCredentials}`;
+const publicAuthHeader = createBasicAuthHeader(
+  VITE_BASIC_AUTH_USERNAME,
+  VITE_BASIC_AUTH_PASSOWORD
+);
+const privateAuthHeader = createBasicAuthHeader(
+  VITE_FUNDAMENTAL_USERNAME,
+  VITE_FUNDAMENTAL_PASSWORD
+);
 
+// Lists of endpoints
 const publicEndpoints = [
   endpoints.Login,
   endpoints.sendOtp,
@@ -34,70 +43,67 @@ const publicEndpoints = [
   endpoints.UnblockUser,
 ];
 
-// Add a request interceptor
+const fundamentalEndpoints = [
+  endpoints.getFundamentalOverview,
+  endpoints.getFundamentalShareholding,
+  endpoints.getFundamentalDividend,
+  endpoints.getFundamentalBonus,
+  endpoints.getFundamentalSplit,
+  endpoints.getFundamentalBoardMeeting,
+  endpoints.getFundamentalBalanceSheet,
+  endpoints.getFundamentalcashflow,
+  endpoints.getFundamentalAnnualPNL,
+  endpoints.getFundamentalQuaterlyPNL,
+  endpoints.getFundamentalNewsfeed,
+  endpoints.getFundamentalRatios,
+];
+
+const pdfDownloadEndpoints = [
+  endpoints.GetPNLAccountDetailsPdf,
+  endpoints.ComplainceFileDownload,
+  endpoints.GenerateAndDownloadInvoice,
+];
+
+// Utility functions
+const isEndpointMatched = (url: string | undefined, endpoints: string[]) =>
+  !!url && endpoints.some((ep) => url.includes(ep));
+
+// Request Interceptor
 baseInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("tkn");
+    const url = config.url;
 
-    // Helper function to check if the request is for a fundamental API
-    const isFundamentalAPI = [
-      endpoints.getFundamentalOverview,
-      endpoints.getFundamentalShareholding,
-      endpoints.getFundamentalDividend,
-      endpoints.getFundamentalBonus,
-      endpoints.getFundamentalSplit,
-      endpoints.getFundamentalBoardMeeting,
-      endpoints.getFundamentalBalanceSheet,
-      endpoints.getFundamentalcashflow,
-      endpoints.getFundamentalAnnualPNL,
-      endpoints.getFundamentalQuaterlyPNL,
-      endpoints.getFundamentalNewsfeed,
-      endpoints.getFundamentalRatios,
-    ].some((endpoint) => config.url?.includes(endpoint));
+    const isFundamental = isEndpointMatched(url, fundamentalEndpoints);
+    const isPublic = isEndpointMatched(url, publicEndpoints);
+    const isPdfRequest = isEndpointMatched(url, pdfDownloadEndpoints);
 
-    // Helper function to check if the request is for a PDF download
-    const isPdfRequest = [
-      endpoints.GetPNLAccountDetailsPdf,
-      endpoints.ComplainceFileDownload,
-    ].some((endpoint) => config.url?.includes(endpoint));
+    // Set baseURL and authorization
+    config.baseURL = isFundamental ? VITE_FUNDAMENTAL_URL : VITE_BASE_URL;
+    config.headers.Authorization = isFundamental
+      ? privateAuthHeader
+      : isPublic || !token
+      ? publicAuthHeader
+      : `Bearer ${token}`;
 
-    // Check if it's a public endpoint
-    const isPublicEndpoint = publicEndpoints.some((endpoint) =>
-      config.url?.includes(endpoint)
-    );
-
-    // Set base URL & Authorization based on request type
-    if (isFundamentalAPI) {
-      config.baseURL = FUNDAMENTAL_URL;
-      config.headers.Authorization = PrivateLoginauthHeader;
-    } else {
-      config.baseURL = BASE_URL;
-      config.headers.Authorization =
-        isPublicEndpoint || !token ? LoginauthHeader : `Bearer ${token}`;
-    }
-
-    // Configure response type & headers for PDF downloads
+    // Configure PDF-specific settings
     if (isPdfRequest) {
       config.responseType = "blob";
-      config.headers["Accept"] = "application/pdf";
+      config.headers.Accept = "application/pdf";
     }
 
     return config;
   },
-  (error) => Promise.reject(error) // Handle request error
+  (error) => Promise.reject(error)
 );
 
-// Add a response interceptor
+// Response Interceptor
 baseInstance.interceptors.response.use(
-  (response) => {
-    // Any status code in the range of 2xx causes this function to trigger
-    return response;
-  },
+  (response) => response,
   (error) => {
-    // Handle response error (e.g., display a notification or logout)
-    if (error.response && error.response.status === 401) {
-      // Redirect to login or show a message
+    if (error.response?.status === 401) {
       console.error("Unauthorized - redirecting to login");
+      // You can add redirection logic here
     }
     return Promise.reject(error);
   }

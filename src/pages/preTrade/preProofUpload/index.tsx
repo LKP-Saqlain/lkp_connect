@@ -51,7 +51,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
       strikePrice: "",
       filePath: "",
     };
-    dispatch(showLoader("Please wait"));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .GetAllRecords(payload)
       .then((response) => {

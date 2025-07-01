@@ -21,6 +21,7 @@ import DataTable from "../../../components/common/UserInfoTable";
 import ShowToast from "../../../utils/toastUtils";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const statusOptions = [
   { label: "All", value: "" },
@@ -53,7 +54,7 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
       zone: "ALL",
     };
 
-    dispatch(showLoader(""));
+    dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .getDropDown(payload)
       .then((res) => {
@@ -265,13 +266,14 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
                       type="button"
                       onClick={handleExcel}
                       style={{
-                        backgroundColor: "#3C7B40",
-                        color: "#fff",
                         fontSize: "12px",
                         flex: 1,
+                        backgroundColor: "#11395C",
+                        height: "40px",
                       }}
                     >
                       Excel
+                      <DownloadIcon style={{ fontSize: "16px" }} />
                     </Button>
                   </div>
                 </Col>
