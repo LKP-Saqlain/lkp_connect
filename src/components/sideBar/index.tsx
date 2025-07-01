@@ -333,6 +333,7 @@ const SideBar = () => {
       activeMenu !== "IVR" &&
       activeMenu !== "SPIP" &&
       activeMenu !== "DashBoard" &&
+      activeMenu !== "TPD Report" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -647,7 +648,7 @@ const SideBar = () => {
   const revenueDetailsSubItems: Record<string, JSX.Element> = {
     "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
-    "Menu Master": <ViewApproverOne activeSubItem={activeSubItem} />,
+    // "Menu Master": <ViewApproverOne activeSubItem={activeSubItem} />,
     "User Access Mapping": <ViewApproverTwo activeSubItem={activeSubItem} />,
   };
 
@@ -707,6 +708,11 @@ const SideBar = () => {
 
   const rmsSubItems: Record<string, JSX.Element> = {
     "RMS Allocation": <InsertUnlistedShares activeSubItem={activeSubItem} />,
+  };
+  const tpdSubItems: Record<string, JSX.Element> = {
+    "Unlisted Shares Approval 1": (
+      <ViewApproverOne activeSubItem={activeSubItem} />
+    ),
   };
   const dashboardSubItems: Record<string, JSX.Element> = {
     RHDashboard: <ShowUnlistedRecords activeSubItem={activeSubItem} />,
@@ -895,6 +901,7 @@ const SideBar = () => {
       SPIP: <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} />,
       RMS: rmsSubItems[activeSubItem] || null,
       DashBoard: dashboardSubItems[activeSubItem] || null,
+      "TPD Report": tpdSubItems[activeSubItem] || null,
     };
 
     return contentMap[activeMenu] || null;

@@ -1165,7 +1165,7 @@ const DataTable = ({
         }
         return column;
       });
-    } else if (activeSubItem === "Menu Master") {
+    } else if (activeSubItem === "Unlisted Shares Approval 1") {
       return getApproverOneDetails.map((column) => {
         if (column.field === "Action") {
           return {
@@ -1360,7 +1360,7 @@ const DataTable = ({
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "RH Approval"
             ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "Menu Master" ||
+            : activeSubItem === "Unlisted Shares Approval 1" ||
               activeSubItem === "User Access Mapping"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Pre Trade Approval" && !showDocument

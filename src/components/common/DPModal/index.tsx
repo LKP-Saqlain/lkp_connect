@@ -109,7 +109,7 @@ const CustomModal = ({
         activeSubItem === "KYC Approval" ||
         activeSubItem === "RH Approval" ||
         activeSubItem === "User Access Mapping" ||
-        activeSubItem === "Menu Master" ||
+        activeSubItem === "Unlisted Shares Approval 1" ||
         activeSubItem === "Pre Trade Approval") &&
         !isAdmin && {
           remark: Yup.string().trim().required("Remark is required"),
@@ -144,7 +144,7 @@ const CustomModal = ({
             "RH Approval",
             "Pre Trade Approval",
             "User Access Mapping",
-            "Menu Master",
+            "Unlisted Shares Approval 1",
           ].includes(activeSubItem)
         ) {
           handleApproval?.(row, values.remark, entryFlag);
@@ -287,7 +287,7 @@ const CustomModal = ({
       "KYC Approval",
       "RH Approval",
       "User Access Mapping",
-      "Menu Master",
+      "Unlisted Shares Approval 1",
     ].includes(activeSubItem) ||
     (activeSubItem === "Pre Trade Approval" && !showDocument && !isAdmin);
 
