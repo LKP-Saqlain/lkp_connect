@@ -20,8 +20,8 @@ const index = ({ activeSubItem }: any) => {
   useEffect(() => {
     const fetchApprover1 = () => {
       const payload = {
-        userID: user_id,
-        // userID: "EMP-5347",
+        // userID: user_id,
+        userID: "EMP-5347",
       };
       dispatch(showLoader("Please wait, we are processing your request..."));
 
@@ -44,8 +44,8 @@ const index = ({ activeSubItem }: any) => {
   const handleApproval = (rid: number, remark: string, entryFlag: string) => {
     const payload = {
       rowID: rid,
-      userID: user_id,
-      // userID: "EMP-5347",
+      // userID: user_id,
+      userID: "EMP-5347",
       status: entryFlag === "A" ? "Approved" : "Rejected",
       remarks: remark,
     };

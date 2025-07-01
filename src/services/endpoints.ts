@@ -93,4 +93,6 @@ export const endpoints = {
   Approver1ViewUnlisted: "api/Account/Approver1ViewUnlisted",
   Approver2ViewUnlisted: "api/Account/Approver2ViewUnlisted",
   ApproverActionUnlistedShares: "api/Account/ApproverActionUnlistedShares",
+  UploadUnlistedSharesVendorFile: "/api/Account/UploadUnlistedSharesVendorFile",
+  InsertUnlistedSharesRecord: "/api/Account/InsertUnlistedSharesRecord",
 };

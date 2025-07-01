@@ -81,6 +81,8 @@ import IVR from "../../pages/preTrade/IVR";
 import ClientTradingReport from "../../pages/Reports/ClientTradingPatternReport";
 import CTCLReport from "../../pages/Reports/CTCLReport";
 import SPIP from "../../pages/SPIPReports";
+import InsertUnlistedShares from "../../pages/UnlistedShare/showUnlistedRecords";
+import ShowUnlistedRecords from "../../pages/UnlistedShare/showUnlistedRecords";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -330,6 +332,7 @@ const SideBar = () => {
       activeMenu !== "RMS" &&
       activeMenu !== "IVR" &&
       activeMenu !== "SPIP" &&
+      activeMenu !== "DashBoard" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -702,6 +705,13 @@ const SideBar = () => {
     ),
   };
 
+  const rmsSubItems: Record<string, JSX.Element> = {
+    "RMS Allocation": <InsertUnlistedShares activeSubItem={activeSubItem} />,
+  };
+  const dashboardSubItems: Record<string, JSX.Element> = {
+    RHDashboard: <ShowUnlistedRecords activeSubItem={activeSubItem} />,
+  };
+
   // const renderContent = () => {
   //   console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
   //   // const hasOverview = menuItems.some((item) => item.menu_name === "Overview");
@@ -883,6 +893,8 @@ const SideBar = () => {
       "Registration Details": <RegisDetails activeSubItem={activeSubItem} />,
       IVR: ivrSubItems[activeSubItem] || null,
       SPIP: <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} />,
+      RMS: rmsSubItems[activeSubItem] || null,
+      DashBoard: dashboardSubItems[activeSubItem] || null,
     };
 
     return contentMap[activeMenu] || null;

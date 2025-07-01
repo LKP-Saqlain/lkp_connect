@@ -393,4 +393,18 @@ export const apiServices = {
       payload
     );
   },
+  UploadUnlistedSharesVendorFile: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UploadUnlistedSharesVendorFile,
+      payload
+    );
+  },
+  InsertUnlistedSharesRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.InsertUnlistedSharesRecord,
+      payload
+    );
+  },
 };
