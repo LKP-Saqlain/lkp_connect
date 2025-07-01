@@ -68,8 +68,8 @@ import RegAnnMaster from "../../pages/Masters/RegulatoryAnnouncement";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
 // import { subDays, format } from "date-fns";
-// import RegionalHead from "../../pages/KYC Dashboard/RegionalHead/index";
-// import BrokerageModificationStatus from "../../pages/KYC Dashboard/BrokerageModStatus";
+import RegionalHead from "../../pages/KYC Dashboard/RegionalHead/index";
+import BrokerageModificationStatus from "../../pages/KYC Dashboard/BrokerageModStatus";
 import KycBrokerage from "../../pages/KYC Dashboard/KycBrokerage";
 import PreProofUpload from "../../pages/preTrade/preProofUpload";
 import PreTradeReport from "../../pages/preTrade/preTradeReport";
@@ -643,13 +643,13 @@ const SideBar = () => {
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
   };
 
-  // const kycSubItems: Record<string, JSX.Element> = {
-  //   "RH Approval": <RegionalHead activeSubItem={activeSubItem} />,
-  //   "KYC Approval": <KycBrokerage activeSubItem={activeSubItem} />,
-  //   "Brokerage Modification Status": (
-  //     <BrokerageModificationStatus activeSubItem={activeSubItem} />
-  //   ),
-  // };
+  const kycSubItems: Record<string, JSX.Element> = {
+    "RH Approval": <RegionalHead activeSubItem={activeSubItem} />,
+    "KYC Approval": <KycBrokerage activeSubItem={activeSubItem} />,
+    "Brokerage Modification Status": (
+      <BrokerageModificationStatus activeSubItem={activeSubItem} />
+    ),
+  };
 
   const reportsSubItems: Record<string, JSX.Element> = {
     "Tax P&L Statement": <AnnualPNL />,
@@ -855,7 +855,7 @@ const SideBar = () => {
       ),
       "Revenue Details": revenueDetailsSubItems[activeSubItem] || null,
       Masters: revenueDetailsSubItems[activeSubItem] || null,
-      // "KYC Dashboard": kycSubItems[activeSubItem] || null,
+      "KYC Dashboard": kycSubItems[activeSubItem] || null,
       Reports: reportsSubItems[activeSubItem] || null,
       "Referal Lead": <></>,
       Compliance: complianceSubItems[activeSubItem] || null,
