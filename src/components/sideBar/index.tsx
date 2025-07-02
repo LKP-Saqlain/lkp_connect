@@ -64,6 +64,9 @@ import RegulatorAnnouncement from "../../pages/regulatory announcement";
 import CustomModal from "../common/DPModal";
 import { userOverview } from "../../redux/thunk/Overview";
 import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
+import ViewApproverOne from "../../pages/UnlistedShare/ApproverOne";
+import ViewApproverTwo from "../../pages/UnlistedShare/ApproverTwo";
+import VendorsFile from "../../pages/UnlistedShare/UploadFile";
 import RegAnnMaster from "../../pages/Masters/RegulatoryAnnouncement";
 import APOverview from "../../pages/Employee/Overview";
 // import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
@@ -78,6 +81,8 @@ import IVR from "../../pages/preTrade/IVR";
 import ClientTradingReport from "../../pages/Reports/ClientTradingPatternReport";
 import CTCLReport from "../../pages/Reports/CTCLReport";
 import SPIP from "../../pages/SPIPReports";
+import InsertUnlistedShares from "../../pages/UnlistedShare/showUnlistedRecords";
+import ShowUnlistedRecords from "../../pages/UnlistedShare/showUnlistedRecords";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -327,6 +332,8 @@ const SideBar = () => {
       activeMenu !== "RMS" &&
       activeMenu !== "IVR" &&
       activeMenu !== "SPIP" &&
+      activeMenu !== "DashBoard" &&
+      activeMenu !== "TPD Report" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -641,6 +648,8 @@ const SideBar = () => {
   const revenueDetailsSubItems: Record<string, JSX.Element> = {
     "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
+    // "Menu Master": <ViewApproverOne activeSubItem={activeSubItem} />,
+    // "User Access Mapping": <ViewApproverTwo activeSubItem={activeSubItem} />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {
@@ -678,6 +687,7 @@ const SideBar = () => {
       <ComChecker activeSubItem={activeSubItem} />
     ),
     "Communication Retrival Report": <Retrival activeSubItem={activeSubItem} />,
+    // "UCCCode MATCH": <VendorsFile />,
   };
 
   const ivrSubItems: Record<string, JSX.Element> = {
@@ -695,6 +705,29 @@ const SideBar = () => {
       <KycBrokerage activeSubItem={activeSubItem} />
     ),
   };
+
+  // const rmsSubItems: Record<string, JSX.Element> = {
+  //   "RMS Allocation": <InsertUnlistedShares activeSubItem={activeSubItem} />,
+  // };
+  const tpdSubItems: Record<string, JSX.Element> = {
+    "Unlisted Shares Entry": (
+      <ShowUnlistedRecords activeSubItem={activeSubItem} />
+    ),
+    "Unlisted Shares Approval 1": (
+      <ViewApproverOne activeSubItem={activeSubItem} />
+    ),
+    "Unlisted Shares Approval 2": (
+      <ViewApproverTwo activeSubItem={activeSubItem} />
+    ),
+    "Unlisted Shares Status": (
+      <InsertUnlistedShares activeSubItem={activeSubItem} />
+    ),
+
+    "Unlisted Shares File Upload": <VendorsFile />,
+  };
+  // const dashboardSubItems: Record<string, JSX.Element> = {
+  //   RHDashboard: <ShowUnlistedRecords activeSubItem={activeSubItem} />,
+  // };
 
   // const renderContent = () => {
   //   console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
@@ -877,6 +910,9 @@ const SideBar = () => {
       "Registration Details": <RegisDetails activeSubItem={activeSubItem} />,
       IVR: ivrSubItems[activeSubItem] || null,
       SPIP: <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} />,
+      // RMS: rmsSubItems[activeSubItem] || null,
+      // DashBoard: dashboardSubItems[activeSubItem] || null,
+      "TPD Report": tpdSubItems[activeSubItem] || null,
     };
 
     return contentMap[activeMenu] || null;
