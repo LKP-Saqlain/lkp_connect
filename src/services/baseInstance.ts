@@ -64,6 +64,8 @@ const pdfDownloadEndpoints = [
   endpoints.GenerateAndDownloadInvoice,
 ];
 
+const multipartEndpoints = [endpoints.UploadUnlistedSharesVendorFile];
+
 // Utility functions
 const isEndpointMatched = (url: string | undefined, endpoints: string[]) =>
   !!url && endpoints.some((ep) => url.includes(ep));
@@ -77,6 +79,7 @@ baseInstance.interceptors.request.use(
     const isFundamental = isEndpointMatched(url, fundamentalEndpoints);
     const isPublic = isEndpointMatched(url, publicEndpoints);
     const isPdfRequest = isEndpointMatched(url, pdfDownloadEndpoints);
+    const isMultipart = isEndpointMatched(url, multipartEndpoints);
 
     // Set baseURL and authorization
     config.baseURL = isFundamental ? VITE_FUNDAMENTAL_URL : VITE_BASE_URL;
@@ -85,6 +88,12 @@ baseInstance.interceptors.request.use(
       : isPublic || !token
       ? publicAuthHeader
       : `Bearer ${token}`;
+
+    if (isMultipart) {
+      delete config.headers["Content-Type"];
+    } else {
+      config.headers["Content-Type"] = "application/json";
+    }
 
     // Configure PDF-specific settings
     if (isPdfRequest) {

@@ -380,4 +380,52 @@ export const apiServices = {
   EKycSSOLogin: async (payload: any) => {
     return await apiService("POST", endpoints.EKycSSOLogin, payload);
   },
+  Approver1ViewUnlisted: async (payload: any) => {
+    return await apiService("POST", endpoints.Approver1ViewUnlisted, payload);
+  },
+  Approver2ViewUnlisted: async (payload: any) => {
+    return await apiService("POST", endpoints.Approver2ViewUnlisted, payload);
+  },
+  ApproverActionUnlistedShares: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ApproverActionUnlistedShares,
+      payload
+    );
+  },
+  UploadUnlistedSharesVendorFile: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UploadUnlistedSharesVendorFile,
+      payload
+    );
+  },
+  ViewUnlistedSharesRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ViewUnlistedSharesRecord,
+      payload
+    );
+  },
+  InsertUnlistedSharesRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.InsertUnlistedSharesRecord,
+      payload
+    );
+  },
+  UpdateUnlistedSharesRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateUnlistedSharesRecord,
+      payload
+    );
+  },
+  DeleteUnlistedSharesRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DeleteUnlistedSharesRecord,
+      payload
+    );
+  },
 };
