@@ -95,4 +95,7 @@ export const endpoints = {
   ApproverActionUnlistedShares: "api/Account/ApproverActionUnlistedShares",
   UploadUnlistedSharesVendorFile: "/api/Account/UploadUnlistedSharesVendorFile",
   InsertUnlistedSharesRecord: "/api/Account/InsertUnlistedSharesRecord",
+  ViewUnlistedSharesRecord: "/api/Account/ViewUnlistedSharesRecord",
+  UpdateUnlistedSharesRecord: "/api/Account/UpdateUnlistedSharesRecord",
+  DeleteUnlistedSharesRecord: "/api/Account/DeleteUnlistedSharesRecord",
 };

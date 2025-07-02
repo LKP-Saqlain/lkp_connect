@@ -3724,11 +3724,11 @@ export const BrokerageModificationStatus: GridColDef[] = [
       let color = "#263238";
       let border = "1px solid #b0bec5";
 
-      if (status.includes("approved")) {
+      if (status.includes("Approved")) {
         backgroundColor = "#a5d6a7"; // Light green
         color = "#1b5e20";
         border = "1px solid #81c784";
-      } else if (status.includes("pending")) {
+      } else if (status.includes("Pending with Approver 2")) {
         backgroundColor = "#FFF4E5"; // Soft peach / beige
         color = "#FF9800"; // Warm orange (not too saturated)
         border = "1px solid #FFB74D"; // Light orange border
@@ -5923,4 +5923,190 @@ export const getApproverTwoDetails: GridColDef[] = [
     headerAlign: "center",
   },
   ...getApproverOneDetails,
+];
+
+export const unListedTradeColumns: GridColDef[] = [
+  {
+    field: "action",
+    headerName: "Actions",
+    headerClassName: "header-wrap-custom",
+    // flex: 1,
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "rmCode",
+    headerName: "RM Code",
+    width: 80,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "transactionDate",
+    headerName: "Transaction Date",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "nameOfSecurities",
+    headerName: "Securities Name",
+    width: 120,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "noOfShares",
+    headerName: "No. of Shares",
+    headerClassName: "header-wrap-custom",
+    width: 70,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+  },
+  {
+    field: "brokeragePerShare",
+    headerName: "Brokerage / Share",
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    width: 90,
+  },
+  {
+    field: "brokerageInclusiveGST",
+    headerName: "Brokerage (Incl. GST)",
+    width: 100,
+    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    // valueFormatter: (params: any) => {
+    //   const value = parseFloat(params); // Convert the value to a number
+    //   return new Intl.NumberFormat("en-IN", {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2,
+    //   }).format(value);
+    // },
+  },
+  {
+    field: "gst",
+    headerName: "GST",
+    width: 90,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    // valueFormatter: (params: any) => {
+    //   const value = parseFloat(params); // Convert the value to a number
+    //   return new Intl.NumberFormat("en-IN", {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2,
+    //   }).format(value);
+    // },
+  },
+  {
+    field: "brokerageExclusiveGST",
+    headerName: "Brokerage (Excl. GST)",
+    width: 100,
+    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    // valueFormatter: (params: any) => {
+    //   const value = parseFloat(params); // Convert the value to a number
+    //   return new Intl.NumberFormat("en-IN", {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2,
+    //   }).format(value);
+    // },
+  },
+  {
+    field: "sbRate",
+    headerName: "SubBroker Rate",
+    width: 90,
+    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+  },
+  {
+    field: "sbCode",
+    headerName: "SubBroker Code",
+    width: 90,
+    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    // valueFormatter: (params: any) => {
+    //   const value = parseFloat(params); // Convert the value to a number
+    //   return new Intl.NumberFormat("en-IN", {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2,
+    //   }).format(value);
+    // },
+  },
+  {
+    field: "sbCommission",
+    headerName: "SubBroker Commission",
+    width: 100,
+    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    // valueFormatter: (params: any) => {
+    //   const value = parseFloat(params); // Convert the value to a number
+    //   return new Intl.NumberFormat("en-IN", {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2,
+    //   }).format(value);
+    // },
+  },
+  {
+    field: "netBrokerage",
+    headerName: "Net Brokerage",
+    width: 90,
+    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    // valueFormatter: (params: any) => {
+    //   const value = parseFloat(params); // Convert the value to a number
+    //   return new Intl.NumberFormat("en-IN", {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2,
+    //   }).format(value);
+    // },
+  },
+  {
+    field: "remarks",
+    headerName: "Remark",
+    // flex: 0.8,
+    minWidth: 200,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    // flex: 0.8,
+    minWidth: 200,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
 ];

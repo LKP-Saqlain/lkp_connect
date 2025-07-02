@@ -345,6 +345,36 @@ const ModalComponent = ({
           image: editData.UploadImages || "",
         });
       }
+      if (isUnlistedContent) {
+        formik.setFieldValue(
+          "transactionDate",
+          editData?.transactionDate || null
+        );
+        formik.setFieldValue("clientName", editData?.clientName || null);
+        formik.setFieldValue(
+          "securitiesName",
+          editData?.nameOfSecurities || null
+        );
+        formik.setFieldValue("noOfShare", editData?.noOfShares || null);
+        formik.setFieldValue(
+          "brokPerShare",
+          editData?.brokeragePerShare || null
+        );
+        formik.setFieldValue(
+          "brokIncGST",
+          editData?.brokerageInclusiveGST || null
+        );
+        formik.setFieldValue("gst", editData?.gst || null);
+        formik.setFieldValue(
+          "brokExcGST",
+          editData?.brokerageExclusiveGST || null
+        );
+        formik.setFieldValue("sbRate", editData?.sbRate || null);
+        formik.setFieldValue("sbCode", editData?.sbCode || null);
+        formik.setFieldValue("netBrokerage", editData?.netBrokerage || null);
+        formik.setFieldValue("rmCode", editData?.rmCode || null);
+        formik.setFieldValue("sbCommision", editData?.sbCommission || null);
+      }
     }
   }, [editData, editUserCheck]);
 
@@ -502,6 +532,14 @@ const ModalComponent = ({
       }
     };
 
+    const resetBrokerageFields = () => {
+      formik.setFieldValue("brokIncGST", "");
+      formik.setFieldValue("gst", "");
+      formik.setFieldValue("brokExcGST", "");
+      formik.setFieldValue("sbCommision", "");
+      formik.setFieldValue("netBrokerage", "");
+    };
+
     if (name === "noOfShare" || name === "brokPerShare") {
       formik.setFieldValue(name, numericValue);
       formik.setFieldError(name, "");
@@ -524,9 +562,25 @@ const ModalComponent = ({
         formik.setFieldValue("brokIncGST", formatIndianNumber(inCGST));
         formik.setFieldValue("gst", formatIndianNumber(gst));
         formik.setFieldValue("brokExcGST", formatIndianNumber(exclGST));
+
+        // Also try recalculating sbCommission and netBrokerage if sbRate is present
+        const sbRate = parseFloat(formik.values.sbRate || "0");
+        if (sbRate > 0) {
+          const sbValue = sbRate * noOfShare;
+          const stComm = sbValue * 0.18;
+          const subBrokerCommission = sbValue - stComm;
+          const brokExcGST = exclGST;
+
+          const netBrokerage = brokExcGST - subBrokerCommission;
+
+          formik.setFieldValue("sbCommision", subBrokerCommission);
+          formik.setFieldValue("netBrokerage", netBrokerage);
+        } else {
+          formik.setFieldValue("sbCommision", "");
+          formik.setFieldValue("netBrokerage", "");
+        }
       } else {
-        formik.setFieldValue("brokIncGST", "");
-        formik.setFieldValue("gst", "");
+        resetBrokerageFields();
       }
     } else if (name === "sbRate") {
       if (regEx.alphaNumeric.test(value)) {
@@ -549,6 +603,9 @@ const ModalComponent = ({
 
           formik.setFieldValue("sbCommision", subBrokerCommission);
           formik.setFieldValue("netBrokerage", netBrokerage);
+        } else {
+          formik.setFieldValue("sbCommision", "");
+          formik.setFieldValue("netBrokerage", "");
         }
       }
     } else if (name === "sbCode" || name === "rmCode") {
@@ -560,7 +617,11 @@ const ModalComponent = ({
 
   return (
     <Modal
-      style={{ fontFamily: "Public Sans", maxWidth: "500px", width: "100%" }}
+      style={{
+        fontFamily: "Public Sans",
+        maxWidth: isUnlistedContent ? "700px" : "500px",
+        width: "100%",
+      }}
       isOpen={modal_grid}
       toggle={toggle}
       centered
@@ -589,30 +650,27 @@ const ModalComponent = ({
                       <DatePicker
                         format="DD/MM/YYYY"
                         value={
-                          formik.values.dateOfCommunication
-                            ? dayjs(
-                                formik.values.dateOfCommunication,
-                                "YYYY/MM/DD"
-                              )
+                          formik.values.transactionDate
+                            ? dayjs(formik.values.transactionDate, "YYYY-MM-DD")
                             : null
                         }
                         maxDate={dayjs()}
                         minDate={dayjs().subtract(64, "year")}
                         onChange={(date: Dayjs | null) =>
                           formik.setFieldValue(
-                            "dateOfCommunication",
-                            date ? date.format("YYYY/MM/DD") : ""
+                            "transactionDate",
+                            date ? date.format("YYYY-MM-DD") : ""
                           )
                         }
                         slotProps={{
                           textField: {
                             error: Boolean(
-                              formik.touched.dateOfCommunication &&
-                                formik.errors.dateOfCommunication
+                              formik.touched.transactionDate &&
+                                formik.errors.transactionDate
                             ),
                             helperText:
-                              formik.touched.dateOfCommunication &&
-                              formik.errors.dateOfCommunication,
+                              formik.touched.transactionDate &&
+                              formik.errors.transactionDate,
                           },
                         }}
                       />
@@ -777,17 +835,31 @@ const ModalComponent = ({
             )}
             {isUnlistedContent && (
               <>
-                <Col lg={12}>
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="rmCode"
+                    name="rmCode"
+                    label="Enter RM Code"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.rmCode}
+                    onChange={handleCustomChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.rmCode && Boolean(formik.errors.rmCode)
+                    }
+                    helperText={formik.touched.rmCode && formik.errors.rmCode}
+                  />
+                </Col>
+                <Col lg={6}>
                   <FormControl fullWidth>
-                    <label style={{ fontSize: "12px" }} className="form-label">
-                      Transaction Date
-                    </label>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
                         format="DD/MM/YYYY"
                         value={
                           formik.values.transactionDate
-                            ? dayjs(formik.values.transactionDate, "YYYY-MM-DD")
+                            ? dayjs(formik.values.transactionDate, "DD/MM/YYYY")
                             : null
                         }
                         maxDate={dayjs()}
@@ -795,7 +867,7 @@ const ModalComponent = ({
                         onChange={(date: Dayjs | null) =>
                           formik.setFieldValue(
                             "transactionDate",
-                            date ? date.format("YYYY-MM-DD") : ""
+                            date ? date.format("DD-MM-YYYY") : ""
                           )
                         }
                         slotProps={{
@@ -813,7 +885,7 @@ const ModalComponent = ({
                     </LocalizationProvider>
                   </FormControl>
                 </Col>
-                <Col lg={12}>
+                <Col lg={6}>
                   <TextField
                     fullWidth
                     id="clientName"
@@ -833,12 +905,12 @@ const ModalComponent = ({
                     }
                   />
                 </Col>
-                <Col lg={12}>
+                <Col lg={6}>
                   <TextField
                     fullWidth
                     id="securitiesName"
                     name="securitiesName"
-                    label="Enter Client Name"
+                    label="Enter Securities Name"
                     variant="outlined"
                     size="small"
                     value={formik.values.securitiesName}
@@ -854,7 +926,7 @@ const ModalComponent = ({
                     }
                   />
                 </Col>
-                <Col lg={12}>
+                <Col lg={6}>
                   <TextField
                     fullWidth
                     id="noOfShare"
@@ -876,7 +948,7 @@ const ModalComponent = ({
                     }
                   />
                 </Col>
-                <Col lg={12}>
+                <Col lg={6}>
                   <TextField
                     fullWidth
                     id="brokPerShare"
@@ -898,7 +970,7 @@ const ModalComponent = ({
                     }
                   />
                 </Col>
-                <Col lg={12}>
+                <Col lg={6}>
                   <TextField
                     fullWidth
                     id="brokIncGST"
@@ -925,7 +997,7 @@ const ModalComponent = ({
                     }
                   />
                 </Col>
-                <Col lg={12}>
+                <Col lg={6}>
                   <TextField
                     fullWidth
                     id="gst"
@@ -945,7 +1017,7 @@ const ModalComponent = ({
                     helperText={formik.touched.gst && formik.errors.gst}
                   />
                 </Col>
-                <Col lg={12}>
+                <Col lg={6}>
                   <TextField
                     fullWidth
                     id="brokExcGST"
@@ -972,24 +1044,7 @@ const ModalComponent = ({
                     }
                   />
                 </Col>
-                <Col lg={12}>
-                  <TextField
-                    fullWidth
-                    id="sbCode"
-                    name="sbCode"
-                    label="Enter Sub-broker Code"
-                    variant="outlined"
-                    size="small"
-                    value={formik.values.sbCode}
-                    onChange={handleCustomChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.sbCode && Boolean(formik.errors.sbCode)
-                    }
-                    helperText={formik.touched.sbCode && formik.errors.sbCode}
-                  />
-                </Col>
-                <Col lg={12}>
+                <Col lg={6}>
                   <TextField
                     fullWidth
                     id="sbRate"
@@ -1006,7 +1061,25 @@ const ModalComponent = ({
                     helperText={formik.touched.sbRate && formik.errors.sbRate}
                   />
                 </Col>
-                <Col lg={12}>
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="sbCode"
+                    name="sbCode"
+                    label="Enter Sub-broker Code"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.sbCode}
+                    onChange={handleCustomChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.sbCode && Boolean(formik.errors.sbCode)
+                    }
+                    helperText={formik.touched.sbCode && formik.errors.sbCode}
+                  />
+                </Col>
+
+                <Col lg={6}>
                   <TextField
                     fullWidth
                     id="sbCommision"
@@ -1058,23 +1131,6 @@ const ModalComponent = ({
                     helperText={
                       formik.touched.netBrokerage && formik.errors.netBrokerage
                     }
-                  />
-                </Col>
-                <Col lg={12}>
-                  <TextField
-                    fullWidth
-                    id="rmCode"
-                    name="rmCode"
-                    label="Enter RM Code"
-                    variant="outlined"
-                    size="small"
-                    value={formik.values.rmCode}
-                    onChange={handleCustomChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.rmCode && Boolean(formik.errors.rmCode)
-                    }
-                    helperText={formik.touched.rmCode && formik.errors.rmCode}
                   />
                 </Col>
               </>

@@ -400,10 +400,31 @@ export const apiServices = {
       payload
     );
   },
+  ViewUnlistedSharesRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ViewUnlistedSharesRecord,
+      payload
+    );
+  },
   InsertUnlistedSharesRecord: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.InsertUnlistedSharesRecord,
+      payload
+    );
+  },
+  UpdateUnlistedSharesRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateUnlistedSharesRecord,
+      payload
+    );
+  },
+  DeleteUnlistedSharesRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DeleteUnlistedSharesRecord,
       payload
     );
   },
