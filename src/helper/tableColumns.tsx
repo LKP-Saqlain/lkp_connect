@@ -3724,11 +3724,11 @@ export const BrokerageModificationStatus: GridColDef[] = [
       let color = "#263238";
       let border = "1px solid #b0bec5";
 
-      if (status.includes("Approved")) {
+      if (status.includes("approved")) {
         backgroundColor = "#a5d6a7"; // Light green
         color = "#1b5e20";
         border = "1px solid #81c784";
-      } else if (status.includes("Pending with Approver 2")) {
+      } else if (status.includes("pending")) {
         backgroundColor = "#FFF4E5"; // Soft peach / beige
         color = "#FF9800"; // Warm orange (not too saturated)
         border = "1px solid #FFB74D"; // Light orange border

@@ -281,15 +281,17 @@ const CustomModal = ({
     return <h6 className="mb-3">{Msg}</h6>;
   };
 
-  const shouldShowRemarkField = () =>
-    [
+  const shouldShowRemarkField = () => {
+    const remarkItems = [
       "Communication Retrival Checker",
       "KYC Approval",
       "RH Approval",
-      "Unlisted Shares Approval 2",
+      "Pre Trade Approval",
       "Unlisted Shares Approval 1",
-    ].includes(activeSubItem) ||
-    (activeSubItem === "Pre Trade Approval" && !showDocument && !isAdmin);
+      "Unlisted Shares Approval 2",
+    ];
+    return remarkItems.includes(activeSubItem) && !showDocument && !isAdmin;
+  };
 
   const renderRemarkField = () => (
     <TextField
