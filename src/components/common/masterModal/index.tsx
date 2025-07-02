@@ -558,6 +558,9 @@ const ModalComponent = ({
         formik.setFieldValue("brokIncGST", formatIndianNumber(inCGST));
         formik.setFieldValue("gst", formatIndianNumber(gst));
         formik.setFieldValue("brokExcGST", formatIndianNumber(exclGST));
+        if (formik.values.sbCode === null && formik.values.sbRate === null) {
+          formik.setFieldValue("netBrokerage", formatIndianNumber(exclGST));
+        }
 
         // Also try recalculating sbCommission and netBrokerage if sbRate is present
         const sbRate = parseFloat(formik.values.sbRate || "0");
@@ -573,7 +576,10 @@ const ModalComponent = ({
           formik.setFieldValue("netBrokerage", netBrokerage);
         } else {
           formik.setFieldValue("sbCommision", "");
-          formik.setFieldValue("netBrokerage", "");
+          if (!formik.values.sbCode && !formik.values.sbRate) {
+            formik.setFieldValue("netBrokerage", formatIndianNumber(exclGST));
+          }
+          // formik.setFieldValue("netBrokerage", "");
         }
       } else {
         resetBrokerageFields();

@@ -1493,7 +1493,7 @@ const DataTable = ({
             ? ""
             : activeSubItem === "Regulatory Announcement"
             ? "Are you sure want to delete this entry"
-            : activeSubItem === "RHDashboard"
+            : activeSubItem === "Unlisted Shares Entry"
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Entry" ||
               activeSubItem === "Marketing Material"

@@ -55,7 +55,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     let payload = {
-      user_Id: "EMP-0040",
+      user_Id: user_id,
     };
     dispatch(showLoader(""));
     apiServices
@@ -106,7 +106,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
     console.log(formattedDate, "formattedDate");
     setmodal_grid(false);
     let payload = {
-      user_Id: "EMP-0040",
+      user_Id: user_id,
       transactionDate: formattedDate,
       clientName: data.clientName,
       securitiesName: data.securitiesName,
@@ -115,9 +115,9 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       brokerageInclusiveGST: cleanNumber(data?.brokIncGST),
       gst: cleanNumber(data?.gst),
       brokerageExclusiveGST: cleanNumber(data?.brokExcGST),
-      sbCode: data.sbCode,
-      sbRate: cleanNumber(data?.sbRate),
-      sbCommission: data?.sbCommision ?? editData?.sbCommission ?? "",
+      sbCode: data.sbCode ? data.sbCode : "",
+      sbRate: cleanNumber(data?.sbRate) ? cleanNumber(data?.sbRate) : 0,
+      sbCommission: data?.sbCommision ?? editData?.sbCommission ?? 0,
       netBrokerage: cleanNumber(data?.netBrokerage),
       rowId: editData?.rowID,
     };
@@ -207,9 +207,11 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       brokerageInclusiveGST: unformatNumber(brokIncGST),
       gst: unformatNumber(gst),
       brokerageExclusiveGST: unformatNumber(brokExcGST),
-      sbCode: sbCode?.toString().trim(),
-      sbRate: unformatNumber(sbRate),
-      sbCommission: unformatNumber(sbCommision),
+      sbCode: sbCode?.toString().trim() ? sbCode?.toString().trim() : "",
+      sbRate: unformatNumber(sbRate) ? unformatNumber(sbRate) : 0,
+      sbCommission: unformatNumber(sbCommision)
+        ? unformatNumber(sbCommision)
+        : 0,
       netBrokerage: unformatNumber(netBrokerage),
       rmCode: rmCode?.toString().trim(),
     };
@@ -228,7 +230,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
           setmodal_grid(false);
 
           let payload = {
-            user_Id: "EMP-0040",
+            user_Id: user_id,
           };
 
           dispatch(showLoader(""));
@@ -281,7 +283,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
     dispatch(showLoader(""));
     let payload = {
       rowId: row.rowID,
-      user_Id: "EMP-0040",
+      user_Id: user_id,
     };
 
     const response = await apiServices.DeleteUnlistedSharesRecord(payload);
@@ -293,7 +295,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       setmodal_grid(false);
 
       let payload = {
-        user_Id: "EMP-0040",
+        user_Id: user_id,
       };
       const viewResponse = await apiServices.ViewUnlistedSharesRecord(payload);
       console.log("viewResponse123", viewResponse?.data);
