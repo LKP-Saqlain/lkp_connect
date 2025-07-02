@@ -329,7 +329,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                   padding: "0.2rem 0.8rem",
                 }}
               >
-                <h4 className="card-title mb-0">Unlisted Record Insert</h4>
+                <h4 className="card-title mb-0">Unlisted Shares Entry</h4>
               </CardHeader>
               <CardBody>
                 {" "}
@@ -342,18 +342,20 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                     editUserCheck={editUserCheck}
                     isUnlistedContent={true}
                   />
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    className="btn-font"
-                    onClick={tog_grid}
-                    style={{
-                      backgroundColor: "#11395C",
-                      marginBottom: "1rem",
-                    }}
-                  >
-                    Add
-                  </Button>
+                  {activeSubItem === "Unlisted Shares Entry" && (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      className="btn-font"
+                      onClick={tog_grid}
+                      style={{
+                        backgroundColor: "#11395C",
+                        marginBottom: "1rem",
+                      }}
+                    >
+                      Add
+                    </Button>
+                  )}
                 </Box>
                 <DataTable
                   activeSubItem={activeSubItem}
