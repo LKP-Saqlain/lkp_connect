@@ -20,8 +20,8 @@ const index = ({ activeSubItem }: any) => {
   useEffect(() => {
     const fetchApprover2 = () => {
       const payload = {
-        // userID: user_id,
-        userID: "EMP-3699",
+        userID: user_id,
+        // userID: "EMP-3699",
       };
       dispatch(showLoader("Please wait, we are processing your request..."));
 
@@ -45,9 +45,9 @@ const index = ({ activeSubItem }: any) => {
   const handleApproval = (rid: number, remark: string, entryFlag: string) => {
     const payload = {
       rowID: rid,
-      // userID: user_id,
-      userID: "EMP-3699",
-      status: entryFlag === "A" ? "Approved" : "Rejected",
+      userID: user_id,
+      // userID: "EMP-3699",
+      status: entryFlag,
       remarks: remark,
     };
     dispatch(showLoader("Approving..."));
@@ -88,7 +88,7 @@ const index = ({ activeSubItem }: any) => {
               padding: "0.2rem 0.8rem",
             }}
           >
-            <h4 className="card-title mb-0">Approver Two</h4>
+            <h4 className="card-title mb-0">Unlisted Shares Approval 2</h4>
           </CardHeader>
           <CardBody>
             <DataTable
