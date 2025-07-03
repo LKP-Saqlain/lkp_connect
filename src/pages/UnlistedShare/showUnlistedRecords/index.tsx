@@ -117,7 +117,10 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       brokerageExclusiveGST: cleanNumber(data?.brokExcGST),
       sbCode: data.sbCode ? data.sbCode : "",
       sbRate: cleanNumber(data?.sbRate) ? cleanNumber(data?.sbRate) : 0,
-      sbCommission: data?.sbCommision ?? editData?.sbCommission ?? 0,
+      sbCommission:
+        cleanNumber(data?.sbCommision) ??
+        cleanNumber(editData?.sbCommission) ??
+        0,
       netBrokerage: cleanNumber(data?.netBrokerage),
       rowId: editData?.rowID,
     };
@@ -131,7 +134,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
           console.log("UpdateResponse", response?.data);
           dispatch(hideLoader());
           setmodal_grid(false);
-
+          ShowToast("success", response?.data?.message);
           if (response?.data?.data === null) {
             ShowToast("error", response?.data?.message);
           }
@@ -223,6 +226,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       .then((respones) => {
         if (respones?.status === 200) {
           console.log("InsertResponse", respones?.status);
+          ShowToast("success", respones?.data?.message);
           if (respones?.data?.data === null) {
             ShowToast("error", respones?.data?.message);
           }
@@ -291,7 +295,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
 
     if (response?.status === 200) {
       dispatch(hideLoader());
-      // ShowToast("success", response.data?.message);
+      ShowToast("success", response.data?.message);
       setmodal_grid(false);
 
       let payload = {

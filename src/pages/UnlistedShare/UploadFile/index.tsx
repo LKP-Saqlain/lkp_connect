@@ -56,6 +56,12 @@ const UnlistedShareUploadFile = () => {
         fileInputRef.current.value = "";
         dispatch(hideLoader());
       }
+      console.log(response?.status);
+      if (response?.data?.statusCode == 200) {
+        ShowToast("success", response?.data?.data?.message);
+      } else {
+        ShowToast("error", response?.data?.message);
+      }
       dispatch(hideLoader());
       console.log("Response:", response);
     } catch (error) {
