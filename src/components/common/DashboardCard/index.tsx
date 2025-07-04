@@ -28,7 +28,7 @@ interface DashboardCardProps {
   activeClients?: any;
   activeClientsEmpty?: any;
   rightTitle?: string;
-  rightSubtitle?: number;
+  rightValue?: number;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -45,7 +45,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   activeClients,
   activeClientsEmpty,
   rightTitle,
-  rightSubtitle,
+  rightValue,
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -64,7 +64,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
         }}
       >
         <CardBody>
-          {rightTitle || rightSubtitle ? (
+          {rightTitle || rightValue ? (
             <div className="d-flex justify-content-between align-items-center">
               <h6 className="fs-14 mb-0">{title}</h6>
               <h6
@@ -83,7 +83,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           )}
           <div
             className={`d-flex justify-content-between align-items-center ${
-              rightTitle || rightSubtitle ? "flex-row" : ""
+              rightTitle || rightValue ? "flex-row" : ""
             }`}
             style={{
               marginTop: !customClass ? "1.5rem" : "0rem",
@@ -94,7 +94,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
             <div
               className="d-flex align-items-center gap-2"
               style={{
-                flex: rightTitle || rightSubtitle ? 0 : 1,
+                flex: rightTitle || rightValue ? 0 : 1,
                 justifyContent: "space-between",
               }}
             >
@@ -131,7 +131,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     className="fs-12"
                     style={{
                       fontWeight: "bold",
-                      marginLeft: "10px",
                     }}
                   >
                     {suffix}
@@ -139,7 +138,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 </h5>
               </div>
             </div>
-            {(rightTitle || rightSubtitle) && (
+            {(rightTitle || rightValue) && (
               <div
                 style={{
                   width: "1px",
@@ -149,7 +148,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 }}
               />
             )}
-            {(rightTitle || rightSubtitle) && (
+            {(rightTitle || rightValue) && (
               <div className="d-flex align-items-center gap-2">
                 <Lottie
                   loop
@@ -159,7 +158,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 />
 
                 <div className="text-end">
-                  {typeof rightSubtitle === "number" && (
+                  {typeof rightValue === "number" && (
                     <span
                       style={{
                         color: "#1B1B1B",
@@ -168,12 +167,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     >
                       <CountUp
                         start={0}
-                        end={rightSubtitle}
+                        end={rightValue ?? 0}
                         separator=","
                         duration={1}
-                        formattingFn={(val: number) =>
-                          `${val.toLocaleString("en-IN")}`
-                        }
+                        formattingFn={formatIndianNumber}
                       />
                     </span>
                   )}
