@@ -12,7 +12,7 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 
 type RevenueBadge = "total" | "broking" | "nonBroking";
-type ClientBadge = "total" | "new" | "reactivate";
+type ClientBadge = "totalClient" | "newClient" | "reactivate";
 interface APContestData {
   rowId: number;
   apCode: string;
@@ -25,7 +25,12 @@ interface APContestData {
 
 const index = () => {
   const [revenueBadge, setRevenueBadge] = useState<RevenueBadge>("total");
-  const [clientBadge, setClientBadge] = useState<ClientBadge>("total");
+  const [clientBadge, setClientBadge] = useState<ClientBadge>("totalClient");
+  const [clientCard, setClientCard] = useState({
+    totalClient: 0,
+    newClient: 0,
+    reactivate: 0,
+  });
   const [revenueCard, setRevenueCard] = useState({
     total: 0,
     broking: 0,
@@ -40,6 +45,7 @@ const index = () => {
   useEffect(() => {
     const payload = {
       user_id: "EMP-0238",
+      // user_id:user_id
     };
 
     dispatch(showLoader(""));
@@ -50,13 +56,18 @@ const index = () => {
         if (response?.status === 200) {
           const data = response?.data?.data[0];
           console.log("GetEmpContestTargetDetails", data);
-
           setTargetData(data);
-
+          const totalClient = data.totalAccountCount;
+          const newClient = data.newAccountCount;
+          const reactivate = data.reactivationCount;
+          setClientCard({
+            totalClient,
+            newClient,
+            reactivate,
+          });
           const total = data.totalRevnTarget;
           const broking = data.brokingRevnTarget;
           const nonBroking = data.nonBrokingRevnTarget;
-
           setRevenueCard({
             total,
             broking,
@@ -110,14 +121,14 @@ const index = () => {
     {
       type: "primary",
       label: "Total",
-      isActive: clientBadge === "total",
-      onClick: () => handleClientBadgeClick("total"),
+      isActive: clientBadge === "totalClient",
+      onClick: () => handleClientBadgeClick("totalClient"),
     },
     {
       type: "info",
       label: "NewClient",
-      isActive: clientBadge === "new",
-      onClick: () => handleClientBadgeClick("new"),
+      isActive: clientBadge === "newClient",
+      onClick: () => handleClientBadgeClick("newClient"),
     },
     {
       type: "warning",
@@ -127,24 +138,16 @@ const index = () => {
     },
   ];
 
-  function formatIndianNumber(value: number): string {
-    return `₹${value.toLocaleString("en-IN")}`;
-  }
-
   return (
     <div>
       <Row style={{ marginTop: "20px" }}>
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Revenue target*"
-            // value={
-            //   targetData?.qtarget ? formatIndianNumber(targetData.qtarget) : "-"
-            // }
             value={revenueCard[revenueBadge]}
+            // formatIndianNumber={formatIndianNumber}
             animationData={RevenueImg}
             badges={revenueBadges}
-            // formatIndianNumber={formatIndianNumber}
-            // suffix=".00"
             note={isMobile && `* Contest Period - 1st July to 30th September`}
             customClass={true}
           />
@@ -153,11 +156,10 @@ const index = () => {
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Clients target*"
-            value={targetData?.newClientCount}
+            value={clientCard[clientBadge]}
             animationData={ActiveClient}
-            activeClientsEmpty={true}
-            customClass={true}
             badges={clientBadges}
+            customClass={true}
           />
         </Col>
 
@@ -170,13 +172,11 @@ const index = () => {
           />
         </Col>
       </Row>
-      <Row style={{ marginTop: "20px" }}>
+      <Row>
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Revenue achieve*"
-            value={
-              targetData?.qtarget ? formatIndianNumber(targetData.qtarget) : "-"
-            }
+            value={targetData?.qtarget ? targetData.qtarget : "-"}
             animationData={RevenueImg}
             badges={revenueBadges}
             // formatIndianNumber={formatIndianNumber}
@@ -189,7 +189,7 @@ const index = () => {
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Clients achieve*"
-            value={targetData?.newClientCount}
+            value={targetData?.newClientCount ? targetData.qtarget : "-"}
             animationData={ActiveClient}
             activeClientsEmpty={true}
             customClass={true}
