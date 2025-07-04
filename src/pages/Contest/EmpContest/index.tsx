@@ -21,9 +21,11 @@ interface APContestData {
   qtarget: number;
   newClientCount: number;
   prize: string;
+  freshCashMargin: number;
+  mfauM_Net: number;
 }
 
-const index = () => {
+const EMPContest = () => {
   const [revenueBadge, setRevenueBadge] = useState<RevenueBadge>("total");
   const [clientBadge, setClientBadge] = useState<ClientBadge>("totalClient");
   const [clientCard, setClientCard] = useState({
@@ -35,6 +37,8 @@ const index = () => {
     total: 0,
     broking: 0,
     nonBroking: 0,
+    freeCash_Margin: 0,
+    mfAUM_NET: 0,
   });
   const [targetData, setTargetData] = useState<APContestData | null>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -68,10 +72,15 @@ const index = () => {
           const total = data.totalRevnTarget;
           const broking = data.brokingRevnTarget;
           const nonBroking = data.nonBrokingRevnTarget;
+          const freeCash_Margin = data.freshCashMargin;
+          const mfAUM_NET = data.mfauM_Net;
+
           setRevenueCard({
             total,
             broking,
             nonBroking,
+            freeCash_Margin,
+            mfAUM_NET,
           });
         }
       })
@@ -169,6 +178,8 @@ const index = () => {
             value={targetData?.prize}
             animationData={CoinIcon}
             customClass={true}
+            rightTitle="Weekly Contest"
+            rightSubtitle={0}
           />
         </Col>
       </Row>
@@ -199,10 +210,12 @@ const index = () => {
 
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
-            title="Prize*"
-            value={targetData?.prize}
+            title="Fresh cash Margin*"
+            value={targetData?.freshCashMargin}
             animationData={CoinIcon}
             customClass={true}
+            rightTitle="Mf aum Net*"
+            rightSubtitle={targetData?.mfauM_Net}
           />
         </Col>
       </Row>
@@ -210,4 +223,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default EMPContest;

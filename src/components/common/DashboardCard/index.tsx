@@ -27,6 +27,8 @@ interface DashboardCardProps {
   customClass?: any;
   activeClients?: any;
   activeClientsEmpty?: any;
+  rightTitle?: string;
+  rightSubtitle?: number;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -42,6 +44,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   customClass,
   activeClients,
   activeClientsEmpty,
+  rightTitle,
+  rightSubtitle,
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -60,61 +64,122 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
         }}
       >
         <CardBody>
-          {/* Title */}
-          <h6 className="fs-14">{title}</h6>
-
-          {/* Value and Animation */}
-          <div
-            className="d-flex align-items-center justify-content-between"
-            style={{
-              marginTop: !customClass ? "1.5rem" : "0rem",
-              marginBottom: customClass ? "1rem" : "0rem",
-            }}
-          >
-            <div className="mr-3">
-              <Lottie
-                loop={true}
-                play
-                animationData={animationData}
-                style={{ width: 40, height: 40 }}
-              />
-            </div>
-            <div className="text-center">
-              <h5
-                className="mb-0"
+          {rightTitle && rightSubtitle ? (
+            <div className="d-flex justify-content-between align-items-center">
+              <h6 className="fs-14 mb-0">{title}</h6>
+              <h6
+                className="fs-14 mb-0"
                 style={{
                   color: "#1B1B1B",
                   fontSize: "17px",
                   fontWeight: "bold",
                 }}
               >
-                {prefix}
-                {typeof value === "number" ? (
-                  <CountUp
-                    start={0}
-                    end={value ?? 0}
-                    separator=","
-                    decimals={decimals}
-                    prefix=""
-                    duration={1}
-                    formattingFn={formatIndianNumber}
-                  />
-                ) : (
-                  <span>{value}</span> // fallback for strings like "iPhone 16" contest prize
-                )}
-
-                <small
-                  className="fs-12"
+                {rightTitle}
+              </h6>
+            </div>
+          ) : (
+            <h6 className="fs-14 mb-0">{title}</h6>
+          )}
+          <div
+            className={`d-flex justify-content-between align-items-center ${
+              rightTitle || rightSubtitle ? "flex-row" : ""
+            }`}
+            style={{
+              marginTop: !customClass ? "1.5rem" : "0rem",
+              marginBottom: customClass ? "1rem" : "0rem",
+            }}
+          >
+            {/* Left Side */}
+            <div
+              className="d-flex align-items-center gap-2"
+              style={{ flex: 1 }}
+            >
+              <Lottie
+                loop
+                play
+                animationData={animationData}
+                style={{ width: 40, height: 40 }}
+              />
+              <div>
+                <h5
+                  className="mb-0"
                   style={{
+                    color: "#1B1B1B",
+                    fontSize: "17px",
                     fontWeight: "bold",
-                    marginRight: "15px",
                   }}
                 >
-                  {suffix}
-                </small>
-              </h5>
+                  {prefix}
+                  {typeof value === "number" ? (
+                    <CountUp
+                      start={0}
+                      end={value ?? 0}
+                      separator=","
+                      decimals={decimals}
+                      prefix=""
+                      duration={1}
+                      formattingFn={formatIndianNumber}
+                    />
+                  ) : (
+                    <span>{value}</span>
+                  )}
+                  <small
+                    className="fs-12"
+                    style={{
+                      fontWeight: "bold",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    {suffix}
+                  </small>
+                </h5>
+              </div>
             </div>
+            {(rightTitle || rightSubtitle) && (
+              <div
+                style={{
+                  width: "1px",
+                  height: "40px",
+                  backgroundColor: "#DCDCDC",
+                  margin: "0 15px",
+                }}
+              />
+            )}
+            {(rightTitle || rightSubtitle) && (
+              <div className="d-flex align-items-center gap-2">
+                <Lottie
+                  loop
+                  play
+                  animationData={animationData}
+                  style={{ width: 40, height: 40 }}
+                />
+
+                <div className="text-end">
+                  {typeof rightSubtitle === "number" && (
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        color: "#1B1B1B",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <CountUp
+                        start={0}
+                        end={rightSubtitle}
+                        separator=","
+                        duration={1}
+                        formattingFn={(val: number) =>
+                          `${val.toLocaleString("en-IN")}`
+                        }
+                      />
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
+
           {activeClients && (
             <div
               className="position-absolute"
