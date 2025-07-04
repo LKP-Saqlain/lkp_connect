@@ -64,7 +64,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
         }}
       >
         <CardBody>
-          {rightTitle && rightSubtitle ? (
+          {rightTitle || rightSubtitle ? (
             <div className="d-flex justify-content-between align-items-center">
               <h6 className="fs-14 mb-0">{title}</h6>
               <h6
@@ -93,7 +93,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
             {/* Left Side */}
             <div
               className="d-flex align-items-center gap-2"
-              style={{ flex: 1 }}
+              style={{
+                flex: rightTitle || rightSubtitle ? 0 : 1,
+                justifyContent: "space-between",
+              }}
             >
               <Lottie
                 loop
@@ -159,7 +162,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                   {typeof rightSubtitle === "number" && (
                     <span
                       style={{
-                        fontSize: "14px",
                         color: "#1B1B1B",
                         fontWeight: "bold",
                       }}

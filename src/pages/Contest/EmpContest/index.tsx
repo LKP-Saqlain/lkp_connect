@@ -174,12 +174,12 @@ const EMPContest = () => {
 
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
-            title="Prize*"
-            value={targetData?.prize}
+            title="Fresh cash Margin*"
+            value={targetData?.freshCashMargin}
             animationData={CoinIcon}
             customClass={true}
-            rightTitle="Weekly Contest"
-            rightSubtitle={0}
+            rightTitle="Mf aum Net*"
+            rightSubtitle={targetData?.mfauM_Net}
           />
         </Col>
       </Row>
@@ -211,11 +211,11 @@ const EMPContest = () => {
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Fresh cash Margin*"
-            value={targetData?.freshCashMargin}
+            value={0}
             animationData={CoinIcon}
             customClass={true}
             rightTitle="Mf aum Net*"
-            rightSubtitle={targetData?.mfauM_Net}
+            rightSubtitle={0}
           />
         </Col>
       </Row>
