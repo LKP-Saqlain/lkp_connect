@@ -83,6 +83,8 @@ import CTCLReport from "../../pages/Reports/CTCLReport";
 import SPIP from "../../pages/SPIPReports";
 import InsertUnlistedShares from "../../pages/UnlistedShare/showUnlistedRecords";
 import ShowUnlistedRecords from "../../pages/UnlistedShare/showUnlistedRecords";
+import ApnContest from "../../pages/Contest/ApnContest";
+import EmpContest from "../../pages/Contest/EmpContest";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -913,6 +915,8 @@ const SideBar = () => {
       // RMS: rmsSubItems[activeSubItem] || null,
       // DashBoard: dashboardSubItems[activeSubItem] || null,
       "TPD Report": tpdSubItems[activeSubItem] || null,
+      "Partner Contest": <ApnContest />,
+      "Employee Contest": <EmpContest />,
     };
 
     return contentMap[activeMenu] || null;

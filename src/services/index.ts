@@ -428,4 +428,18 @@ export const apiServices = {
       payload
     );
   },
+  GetAPContestTargetDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetAPContestTargetDetails,
+      payload
+    );
+  },
+  GetEMPContestTargetDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetEMPContestTargetDetails,
+      payload
+    );
+  },
 };

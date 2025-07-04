@@ -98,4 +98,6 @@ export const endpoints = {
   ViewUnlistedSharesRecord: "/api/Account/ViewUnlistedSharesRecord",
   UpdateUnlistedSharesRecord: "/api/Account/UpdateUnlistedSharesRecord",
   DeleteUnlistedSharesRecord: "/api/Account/DeleteUnlistedSharesRecord",
+  GetAPContestTargetDetails: "api/MIS/GetAPContestTargetDetails",
+  GetEMPContestTargetDetails: "api/MIS/GetEMPContestTargetDetails",
 };

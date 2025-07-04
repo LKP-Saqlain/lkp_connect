@@ -16,7 +16,7 @@ interface Badge {
 
 interface DashboardCardProps {
   title: string;
-  value?: number;
+  value?: number | string;
   animationData: any;
   prefix?: string;
   suffix?: string;
@@ -89,15 +89,20 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 }}
               >
                 {prefix}
-                <CountUp
-                  start={0}
-                  end={value ?? 0}
-                  separator=","
-                  decimals={decimals}
-                  prefix=""
-                  duration={1}
-                  formattingFn={formatIndianNumber}
-                />
+                {typeof value === "number" ? (
+                  <CountUp
+                    start={0}
+                    end={value ?? 0}
+                    separator=","
+                    decimals={decimals}
+                    prefix=""
+                    duration={1}
+                    formattingFn={formatIndianNumber}
+                  />
+                ) : (
+                  <span>{value}</span> // fallback for strings like "iPhone 16" contest prize
+                )}
+
                 <small
                   className="fs-12"
                   style={{
