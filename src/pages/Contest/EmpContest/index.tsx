@@ -13,7 +13,6 @@ import { apiServices } from "../../../services";
 
 type RevenueBadge = "total" | "broking" | "nonBroking";
 type ClientBadge = "total" | "new" | "reactivate";
-
 interface APContestData {
   rowId: number;
   apCode: string;
@@ -22,16 +21,9 @@ interface APContestData {
   qtarget: number;
   newClientCount: number;
   prize: string;
-  totalRevnTarget: number;
-  brokingRevnTarget: number;
-  nonBrokingRevnTarget: number;
 }
 
-// 🔧 Utility Function
-const formatIndianNumber = (value: number | undefined): string =>
-  value !== undefined ? `₹${value.toLocaleString("en-IN")}` : "-";
-
-const Index = () => {
+const index = () => {
   const [revenueBadge, setRevenueBadge] = useState<RevenueBadge>("total");
   const [clientBadge, setClientBadge] = useState<ClientBadge>("total");
   const [revenueCard, setRevenueCard] = useState({
@@ -43,12 +35,10 @@ const Index = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data || {}
+    (state: RootState) => state.UserLogin?.data?.data
   );
-
   useEffect(() => {
     const payload = {
-      // user_id: user_id
       user_id: "EMP-0238",
     };
 
@@ -56,122 +46,168 @@ const Index = () => {
     apiServices
       .GetEMPContestTargetDetails(payload)
       .then((response) => {
+        dispatch(hideLoader());
         if (response?.status === 200) {
           const data = response?.data?.data[0];
+          console.log("GetEmpContestTargetDetails", data);
+
           setTargetData(data);
+
+          const total = data.totalRevnTarget;
+          const broking = data.brokingRevnTarget;
+          const nonBroking = data.nonBrokingRevnTarget;
+
           setRevenueCard({
-            total: data.totalRevnTarget,
-            broking: data.brokingRevnTarget,
-            nonBroking: data.nonBrokingRevnTarget,
+            total,
+            broking,
+            nonBroking,
           });
         }
       })
-      .catch((error) => console.error("Error fetching data", error))
+      .catch((error) => {
+        console.log("Error", error);
+        dispatch(hideLoader());
+      })
       .finally(() => {
         dispatch(hideLoader());
       });
-  }, [dispatch, user_id]);
+  }, []);
 
+  // ✅ Revenue badge handler
+  const handleRevenueBadgeClick = (type: RevenueBadge) => {
+    setRevenueBadge(type);
+  };
+
+  // ✅ Client badge handler
+  const handleClientBadgeClick = (type: ClientBadge) => {
+    setClientBadge(type);
+  };
+
+  // ✅ Revenue badge control array
   const revenueBadges = [
-    { type: "primary", label: "Total", key: "total" },
-    { type: "info", label: "Broking", key: "broking" },
-    { type: "warning", label: "Non-broking", key: "nonBroking" },
-  ] as const;
+    {
+      type: "primary",
+      label: "Total",
+      isActive: revenueBadge === "total",
+      onClick: () => handleRevenueBadgeClick("total"),
+    },
+    {
+      type: "info",
+      label: "Broking",
+      isActive: revenueBadge === "broking",
+      onClick: () => handleRevenueBadgeClick("broking"),
+    },
+    {
+      type: "warning",
+      label: "Non-broking",
+      isActive: revenueBadge === "nonBroking",
+      onClick: () => handleRevenueBadgeClick("nonBroking"),
+    },
+  ];
 
+  // ✅ Client badge control array
   const clientBadges = [
-    { type: "primary", label: "Total", key: "total" },
-    { type: "info", label: "NewClient", key: "new" },
-    { type: "warning", label: "Reactivate", key: "reactivate" },
-  ] as const;
-
-  const cards = [
     {
-      title: "Revenue target*",
-      value: formatIndianNumber(revenueCard[revenueBadge]),
-      animationData: RevenueImg,
-      badges: revenueBadges.map((badge) => ({
-        ...badge,
-        isActive: revenueBadge === badge.key,
-        onClick: () => setRevenueBadge(badge.key),
-      })),
+      type: "primary",
+      label: "Total",
+      isActive: clientBadge === "total",
+      onClick: () => handleClientBadgeClick("total"),
     },
     {
-      title: "Clients target*",
-      value: targetData?.newClientCount ?? "-",
-      animationData: ActiveClient,
-      badges: clientBadges.map((badge) => ({
-        ...badge,
-        isActive: clientBadge === badge.key,
-        onClick: () => setClientBadge(badge.key),
-      })),
+      type: "info",
+      label: "NewClient",
+      isActive: clientBadge === "new",
+      onClick: () => handleClientBadgeClick("new"),
     },
     {
-      title: "Prize*",
-      value: targetData?.prize ?? "-",
-      animationData: CoinIcon,
+      type: "warning",
+      label: "Reactivate",
+      isActive: clientBadge === "reactivate",
+      onClick: () => handleClientBadgeClick("reactivate"),
     },
   ];
 
-  const achievedCards = [
-    {
-      title: "Revenue achieve*",
-      value: formatIndianNumber(targetData?.qtarget),
-      animationData: RevenueImg,
-      badges: revenueBadges.map((badge) => ({
-        ...badge,
-        isActive: revenueBadge === badge.key,
-        onClick: () => setRevenueBadge(badge.key),
-      })),
-    },
-    {
-      title: "Clients achieve*",
-      value: targetData?.newClientCount ?? "-",
-      animationData: ActiveClient,
-      badges: clientBadges.map((badge) => ({
-        ...badge,
-        isActive: clientBadge === badge.key,
-        onClick: () => setClientBadge(badge.key),
-      })),
-    },
-    {
-      title: "Prize*",
-      value: targetData?.prize ?? "-",
-      animationData: CoinIcon,
-    },
-  ];
+  function formatIndianNumber(value: number): string {
+    return `₹${value.toLocaleString("en-IN")}`;
+  }
 
   return (
     <div>
       <Row style={{ marginTop: "20px" }}>
-        {cards.map((card, index) => (
-          <Col key={index} xxl={3} lg={4} md={6} sm={12}>
-            <DashboardCard
-              {...card}
-              customClass
-              note={
-                isMobile && card.title.includes("target")
-                  ? "* Contest Period - 1st July to 30th September"
-                  : ""
-              }
-              activeClientsEmpty={card.title.includes("Clients")}
-            />
-          </Col>
-        ))}
-      </Row>
+        <Col xxl={3} lg={4} md={6} sm={12}>
+          <DashboardCard
+            title="Revenue target*"
+            // value={
+            //   targetData?.qtarget ? formatIndianNumber(targetData.qtarget) : "-"
+            // }
+            value={revenueCard[revenueBadge]}
+            animationData={RevenueImg}
+            badges={revenueBadges}
+            // formatIndianNumber={formatIndianNumber}
+            // suffix=".00"
+            note={isMobile && `* Contest Period - 1st July to 30th September`}
+            customClass={true}
+          />
+        </Col>
 
-      <Row style={{ marginTop: "2px" }}>
-        {achievedCards.map((card, index) => (
-          <Col key={index} xxl={3} lg={4} md={6} sm={12}>
-            <DashboardCard
-              {...card}
-              customClass
-              activeClientsEmpty={card.title.includes("Clients")}
-            />
-          </Col>
-        ))}
+        <Col xxl={3} lg={4} md={6} sm={12}>
+          <DashboardCard
+            title="Clients target*"
+            value={targetData?.newClientCount}
+            animationData={ActiveClient}
+            activeClientsEmpty={true}
+            customClass={true}
+            badges={clientBadges}
+          />
+        </Col>
+
+        <Col xxl={3} lg={4} md={6} sm={12}>
+          <DashboardCard
+            title="Prize*"
+            value={targetData?.prize}
+            animationData={CoinIcon}
+            customClass={true}
+          />
+        </Col>
+      </Row>
+      <Row style={{ marginTop: "20px" }}>
+        <Col xxl={3} lg={4} md={6} sm={12}>
+          <DashboardCard
+            title="Revenue achieve*"
+            value={
+              targetData?.qtarget ? formatIndianNumber(targetData.qtarget) : "-"
+            }
+            animationData={RevenueImg}
+            badges={revenueBadges}
+            // formatIndianNumber={formatIndianNumber}
+            // suffix=".00"
+
+            customClass={true}
+          />
+        </Col>
+
+        <Col xxl={3} lg={4} md={6} sm={12}>
+          <DashboardCard
+            title="Clients achieve*"
+            value={targetData?.newClientCount}
+            animationData={ActiveClient}
+            activeClientsEmpty={true}
+            customClass={true}
+            badges={clientBadges}
+          />
+        </Col>
+
+        <Col xxl={3} lg={4} md={6} sm={12}>
+          <DashboardCard
+            title="Prize*"
+            value={targetData?.prize}
+            animationData={CoinIcon}
+            customClass={true}
+          />
+        </Col>
       </Row>
     </div>
   );
 };
 
-export default Index;
+export default index;
