@@ -3,6 +3,9 @@ import { Card, CardBody } from "reactstrap";
 import Lottie from "react-lottie-player";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
+import IphoneImg from "../../../assets/images/iphone.png";
+import IpadImg from "../../../assets/images/Ipad.png";
+import AirPodsImg from "../../../assets/images/Airpods.png";
 // import { useTheme } from "@mui/material/styles";
 // import { useMediaQuery } from "@mui/material";
 import "./style.css";
@@ -17,7 +20,7 @@ interface Badge {
 interface DashboardCardProps {
   title: string;
   value?: number | string;
-  animationData: any;
+  animationData?: any;
   prefix?: string;
   suffix?: string;
   badges?: Badge[];
@@ -59,8 +62,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           maxWidth: "500px",
           overflow: "hidden",
           marginBottom: "20px",
-          // borderRadius: "15px",
-          // boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          height: title === "Prizes*" ? "100px" : "auto",
+          minHeight: title === "Prizes*" ? "110px" : "auto",
         }}
       >
         <CardBody>
@@ -98,12 +101,67 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 justifyContent: "space-between",
               }}
             >
-              <Lottie
-                loop
-                play
-                animationData={animationData}
-                style={{ width: 40, height: 40 }}
-              />
+              {title === "Prizes*" ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  {/* Left: Value */}
+                  <div
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      color: "#1B1B1B",
+                      textAlign: "left",
+                      maxWidth: "60%",
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {value}
+                  </div>
+
+                  <div
+                    style={{
+                      width: 100,
+                      height: 40,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={
+                        value === "Iphone 16"
+                          ? IphoneImg
+                          : value === "Ipad 11"
+                          ? IpadImg
+                          : value === "AirPod 4"
+                          ? AirPodsImg
+                          : ""
+                      }
+                      alt="Prize Icon"
+                      style={{
+                        width: "100%",
+                        height: value === "Iphone 16" ? "120px" : "80px",
+                        objectFit: "contain",
+                        marginBottom: "1rem",
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <Lottie
+                  loop
+                  play
+                  animationData={animationData}
+                  style={{ width: 40, height: 40 }}
+                />
+              )}
+
               <div>
                 <h5
                   className="mb-0"
@@ -125,7 +183,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                       formattingFn={formatIndianNumber}
                     />
                   ) : (
-                    <span>{value}</span>
+                    // <span>{value}</span>
+                    <></>
                   )}
                   <small
                     className="fs-12"

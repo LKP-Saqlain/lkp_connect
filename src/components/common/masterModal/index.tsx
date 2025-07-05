@@ -211,6 +211,7 @@ const ModalComponent = ({
       sbRate: true,
     });
     onSubmit?.(values);
+    formik.resetForm();
   };
   const fetchIsRegulatoryContent = async (setTouched: any, values: any) => {
     setTouched({
@@ -652,27 +653,30 @@ const ModalComponent = ({
                       <DatePicker
                         format="DD/MM/YYYY"
                         value={
-                          formik.values.transactionDate
-                            ? dayjs(formik.values.transactionDate, "YYYY-MM-DD")
+                          formik.values.dateOfCommunication
+                            ? dayjs(
+                                formik.values.dateOfCommunication,
+                                "YYYY-MM-DD"
+                              )
                             : null
                         }
                         maxDate={dayjs()}
                         minDate={dayjs().subtract(64, "year")}
                         onChange={(date: Dayjs | null) =>
                           formik.setFieldValue(
-                            "transactionDate",
+                            "dateOfCommunication",
                             date ? date.format("YYYY-MM-DD") : ""
                           )
                         }
                         slotProps={{
                           textField: {
                             error: Boolean(
-                              formik.touched.transactionDate &&
-                                formik.errors.transactionDate
+                              formik.touched.dateOfCommunication &&
+                                formik.errors.dateOfCommunication
                             ),
                             helperText:
-                              formik.touched.transactionDate &&
-                              formik.errors.transactionDate,
+                              formik.touched.dateOfCommunication &&
+                              formik.errors.dateOfCommunication,
                           },
                         }}
                       />

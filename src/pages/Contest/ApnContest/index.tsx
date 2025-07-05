@@ -4,14 +4,18 @@ import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
 import theme from "../../../theme";
 import RevenueImg from "../../../assets/images/revenue_new.json";
 import ActiveClient from "../../../assets/images/Clients.json";
-import CoinIcon from "../../../assets/images/coins.json";
+// import CoinIcon from "../../../assets/images/coins.json";
+// import IphoneIcon from "../../../assets/images/Iphone.json";
+// import IpadIcon from "../../../assets/images/Ipad.json";
+// import AirPodsIcon from "../../../assets/images/Airpods.json";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 
-type BrokerageBadge = "Target" | "Achieve" | "nonBroking";
+// type BrokerageBadge = "Target" | "Achieve" | "nonBroking";
+
 interface APContestData {
   rowId: number;
   apCode: string;
@@ -21,19 +25,19 @@ interface APContestData {
   newClientCount: number;
   prize: string;
 }
+// const prizeAnimations = [IphoneIcon, IpadIcon, AirPodsIcon];
 
-const index = () => {
-  // ✅ Separate state for Revenue badge
-  const [revenueBadge, setRevenueBadge] = useState<BrokerageBadge>("Target");
-
-  // ✅ Separate state for Clients badge
-  const [clientBadge, setClientBadge] = useState<BrokerageBadge>("Target");
+const APContest = () => {
+  // const [revenueBadge, setRevenueBadge] = useState<BrokerageBadge>("Target");
+  // const [clientBadge, setClientBadge] = useState<BrokerageBadge>("Target");
   const [targetData, setTargetData] = useState<APContestData | null>(null);
+
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch<AppDispatch>();
-  const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
-  );
+  // const { user_id } = useSelector(
+  //   (state: RootState) => state.UserLogin?.data?.data
+  // );
+
   useEffect(() => {
     let payload = {
       user_id: "APN-7161",
@@ -59,47 +63,43 @@ const index = () => {
         dispatch(hideLoader());
       });
   }, []);
-  // ✅ Revenue badge handler
-  const handleRevenueBadgeClick = (type: BrokerageBadge) => {
-    setRevenueBadge(type);
-  };
+  // const handleRevenueBadgeClick = (type: BrokerageBadge) => {
+  //   setRevenueBadge(type);
+  // };
 
-  // ✅ Client badge handler
-  const handleClientBadgeClick = (type: BrokerageBadge) => {
-    setClientBadge(type);
-  };
+  // const handleClientBadgeClick = (type: BrokerageBadge) => {
+  //   setClientBadge(type);
+  // };
 
-  // ✅ Revenue badge control array
-  const revenueBadges = [
-    {
-      type: "primary",
-      label: "Target",
-      isActive: revenueBadge === "Target",
-      onClick: () => handleRevenueBadgeClick("Target"),
-    },
-    {
-      type: "info",
-      label: "Achieve",
-      isActive: revenueBadge === "Achieve",
-      onClick: () => handleRevenueBadgeClick("Achieve"),
-    },
-  ];
+  // const revenueBadges = [
+  //   {
+  //     type: "primary",
+  //     label: "Target",
+  //     isActive: revenueBadge === "Target",
+  //     onClick: () => handleRevenueBadgeClick("Target"),
+  //   },
+  //   {
+  //     type: "info",
+  //     label: "Achieve",
+  //     isActive: revenueBadge === "Achieve",
+  //     onClick: () => handleRevenueBadgeClick("Achieve"),
+  //   },
+  // ];
 
-  // ✅ Client badge control array
-  const clientBadges = [
-    {
-      type: "primary",
-      label: "Target",
-      isActive: clientBadge === "Target",
-      onClick: () => handleClientBadgeClick("Target"),
-    },
-    {
-      type: "info",
-      label: "Achieve",
-      isActive: clientBadge === "Achieve",
-      onClick: () => handleClientBadgeClick("Achieve"),
-    },
-  ];
+  // const clientBadges = [
+  //   {
+  //     type: "primary",
+  //     label: "Target",
+  //     isActive: clientBadge === "Target",
+  //     onClick: () => handleClientBadgeClick("Target"),
+  //   },
+  //   {
+  //     type: "info",
+  //     label: "Achieve",
+  //     isActive: clientBadge === "Achieve",
+  //     onClick: () => handleClientBadgeClick("Achieve"),
+  //   },
+  // ];
 
   function formatIndianNumber(value: number): string {
     return `₹${value.toLocaleString("en-IN")}`;
@@ -108,43 +108,79 @@ const index = () => {
   return (
     <div>
       <Row style={{ marginTop: "20px" }}>
-        <Col xxl={3} lg={4} md={6} sm={12}>
-          <DashboardCard
-            title="Revenue*"
-            value={
-              targetData?.qtarget ? formatIndianNumber(targetData.qtarget) : "-"
-            }
-            animationData={RevenueImg}
-            badges={revenueBadges}
-            // formatIndianNumber={formatIndianNumber}
-            // suffix=".00"
-            note={isMobile && `* Contest Period - 1st July to 30th September`}
-            customClass={true}
-          />
+        {/* Left Side: 2 rows of 2 cards each */}
+        <Col xxl={9} lg={8} md={12}>
+          <Row>
+            <Col xxl={6} lg={6} md={6} sm={12}>
+              <DashboardCard
+                title="Revenue Targets*"
+                value={
+                  targetData?.qtarget
+                    ? formatIndianNumber(targetData.qtarget)
+                    : "-"
+                }
+                animationData={RevenueImg}
+                note={
+                  isMobile && `* Contest Period - 1st July to 30th September`
+                }
+                customClass={true}
+              />
+            </Col>
+            <Col xxl={6} lg={6} md={6} sm={12}>
+              <DashboardCard
+                title="Client Targets*"
+                value={targetData?.newClientCount}
+                animationData={ActiveClient}
+                activeClientsEmpty={true}
+                customClass={true}
+              />
+            </Col>
+          </Row>
+          {/* <Row>
+            <Col xxl={6} lg={6} md={6} sm={12}>
+              <DashboardCard
+                title="Revenue Achieved*"
+                value={
+                  targetData?.qtarget
+                    ? formatIndianNumber(targetData.qtarget)
+                    : "-"
+                }
+                animationData={RevenueImg}
+                customClass={true}
+              />
+            </Col>
+            <Col xxl={6} lg={6} md={6} sm={12}>
+              <DashboardCard
+                title="Clients Achieved*"
+                value={targetData?.newClientCount}
+                animationData={ActiveClient}
+                activeClientsEmpty={true}
+                customClass={true}
+              />
+            </Col>
+          </Row> */}
         </Col>
 
-        <Col xxl={3} lg={4} md={6} sm={12}>
-          <DashboardCard
-            title="Clients*"
-            value={targetData?.newClientCount}
-            animationData={ActiveClient}
-            activeClientsEmpty={true}
-            customClass={true}
-            badges={clientBadges}
-          />
-        </Col>
-
-        <Col xxl={3} lg={4} md={6} sm={12}>
-          <DashboardCard
-            title="Prize*"
-            value={targetData?.prize}
-            animationData={CoinIcon}
-            customClass={true}
-          />
+        {/* Right Side: Prize Card (Tall) */}
+        <Col xxl={3} lg={4} md={12} sm={12}>
+          <div
+            style={{
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <DashboardCard
+              title="Prizes*"
+              value={targetData?.prize}
+              customClass={true}
+            />
+          </div>
         </Col>
       </Row>
     </div>
   );
 };
 
-export default index;
+export default APContest;
