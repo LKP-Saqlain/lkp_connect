@@ -9,8 +9,8 @@ import ActiveClient from "../../../assets/images/Clients.json";
 // import IpadIcon from "../../../assets/images/Ipad.json";
 // import AirPodsIcon from "../../../assets/images/Airpods.json";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 
@@ -34,14 +34,14 @@ const APContest = () => {
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch<AppDispatch>();
-  // const { user_id } = useSelector(
-  //   (state: RootState) => state.UserLogin?.data?.data
-  // );
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   useEffect(() => {
     let payload = {
-      user_id: "APN-7161",
-      //   user_id: user_id,
+      // user_id: "APN-7161",
+      user_id: user_id,
     };
 
     dispatch(showLoader(""));

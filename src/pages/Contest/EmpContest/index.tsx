@@ -1,11 +1,11 @@
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
+import { Col, Row } from "reactstrap";
 import DashboardCard from "../../../components/common/DashboardCard";
 import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
 import theme from "../../../theme";
 import RevenueImg from "../../../assets/images/revenue_new.json";
 import ActiveClient from "../../../assets/images/Clients.json";
 import CoinIcon from "../../../assets/images/coins.json";
-import DataTable from "../../../components/common/UserInfoTable";
+// import DataTable from "../../../components/common/UserInfoTable";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -49,8 +49,8 @@ const EMPContest = () => {
   );
   useEffect(() => {
     const payload = {
-      user_id: "EMP-0238",
-      // user_id:user_id
+      // user_id: "EMP-0238",
+      user_id: user_id,
     };
 
     dispatch(showLoader(""));
