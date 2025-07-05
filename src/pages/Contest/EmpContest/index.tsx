@@ -220,7 +220,7 @@ const EMPContest = () => {
           />
         </Col>
       </Row> */}
-      <Card
+      {/* <Card
         style={{
           borderRadius: "15px",
           boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
@@ -245,7 +245,7 @@ const EMPContest = () => {
           // handleDownload={handleDownload}
           />
         </CardBody>
-      </Card>
+      </Card> */}
     </div>
   );
 };

@@ -916,7 +916,7 @@ const SideBar = () => {
       // DashBoard: dashboardSubItems[activeSubItem] || null,
       "TPD Report": tpdSubItems[activeSubItem] || null,
       "Partner Contest": <ApnContest />,
-      "Employee Contest": <EmpContest />,
+      "Employee Target": <EmpContest />,
     };
 
     return contentMap[activeMenu] || null;
