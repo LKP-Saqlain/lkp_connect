@@ -3,6 +3,9 @@ import { Card, CardBody } from "reactstrap";
 import Lottie from "react-lottie-player";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
+import IphoneImg from "../../../assets/images/iphone.png";
+import IpadImg from "../../../assets/images/Ipad.png";
+import AirPodsImg from "../../../assets/images/Airpods.png";
 // import { useTheme } from "@mui/material/styles";
 // import { useMediaQuery } from "@mui/material";
 import "./style.css";
@@ -16,8 +19,8 @@ interface Badge {
 
 interface DashboardCardProps {
   title: string;
-  value?: number;
-  animationData: any;
+  value?: number | string;
+  animationData?: any;
   prefix?: string;
   suffix?: string;
   badges?: Badge[];
@@ -27,6 +30,8 @@ interface DashboardCardProps {
   customClass?: any;
   activeClients?: any;
   activeClientsEmpty?: any;
+  rightTitle?: string;
+  rightValue?: number;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -42,6 +47,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   customClass,
   activeClients,
   activeClientsEmpty,
+  rightTitle,
+  rightValue,
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -55,61 +62,182 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           maxWidth: "500px",
           overflow: "hidden",
           marginBottom: "20px",
-          // borderRadius: "15px",
-          // boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          height: title === "Prizes*" ? "100px" : "auto",
+          minHeight: title === "Prizes*" ? "110px" : "auto",
         }}
       >
         <CardBody>
-          {/* Title */}
-          <h6 className="fs-14">{title}</h6>
-
-          {/* Value and Animation */}
-          <div
-            className="d-flex align-items-center justify-content-between"
-            style={{
-              marginTop: !customClass ? "1.5rem" : "0rem",
-              marginBottom: customClass ? "1rem" : "0rem",
-            }}
-          >
-            <div className="mr-3">
-              <Lottie
-                loop={true}
-                play
-                animationData={animationData}
-                style={{ width: 40, height: 40 }}
-              />
-            </div>
-            <div className="text-center">
-              <h5
-                className="mb-0"
+          {rightTitle || rightValue ? (
+            <div className="d-flex justify-content-between align-items-center">
+              <h6 className="fs-14 mb-0">{title}</h6>
+              <h6
+                className="fs-14 mb-0"
                 style={{
                   color: "#1B1B1B",
                   fontSize: "17px",
                   fontWeight: "bold",
                 }}
               >
-                {prefix}
-                <CountUp
-                  start={0}
-                  end={value ?? 0}
-                  separator=","
-                  decimals={decimals}
-                  prefix=""
-                  duration={1}
-                  formattingFn={formatIndianNumber}
-                />
-                <small
-                  className="fs-12"
+                {rightTitle}
+              </h6>
+            </div>
+          ) : (
+            <h6 className="fs-14 mb-0">{title}</h6>
+          )}
+          <div
+            className={`d-flex justify-content-between align-items-center ${
+              rightTitle || rightValue ? "flex-row" : ""
+            }`}
+            style={{
+              marginTop: !customClass ? "1.5rem" : "0rem",
+              marginBottom: customClass ? "1rem" : "0rem",
+            }}
+          >
+            {/* Left Side */}
+            <div
+              className="d-flex align-items-center gap-2"
+              style={{
+                flex: rightTitle || rightValue ? 0 : 1,
+                justifyContent: "space-between",
+              }}
+            >
+              {title === "Prizes*" ? (
+                <div
                   style={{
-                    fontWeight: "bold",
-                    marginRight: "15px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
                   }}
                 >
-                  {suffix}
-                </small>
-              </h5>
+                  {/* Left: Value */}
+                  <div
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "18px",
+                      color: "#1B1B1B",
+                      textAlign: "left",
+                      maxWidth: "60%",
+                      wordBreak: "break-word",
+                    }}
+                  >
+                    {value}
+                  </div>
+
+                  <div
+                    style={{
+                      width: 100,
+                      height: 40,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={
+                        value === "Iphone 16"
+                          ? IphoneImg
+                          : value === "Ipad 11"
+                          ? IpadImg
+                          : value === "AirPod 4"
+                          ? AirPodsImg
+                          : ""
+                      }
+                      alt="Prize Icon"
+                      style={{
+                        width: "100%",
+                        height: value === "Iphone 16" ? "120px" : "80px",
+                        objectFit: "contain",
+                        marginBottom: "1rem",
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <Lottie
+                  loop
+                  play
+                  animationData={animationData}
+                  style={{ width: 40, height: 40 }}
+                />
+              )}
+
+              <div>
+                <h5
+                  className="mb-0"
+                  style={{
+                    color: "#1B1B1B",
+                    fontSize: "17px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {prefix}
+                  {typeof value === "number" ? (
+                    <CountUp
+                      start={0}
+                      end={value ?? 0}
+                      separator=","
+                      decimals={decimals}
+                      prefix=""
+                      duration={1}
+                      formattingFn={formatIndianNumber}
+                    />
+                  ) : (
+                    // <span>{value}</span>
+                    <></>
+                  )}
+                  <small
+                    className="fs-12"
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {suffix}
+                  </small>
+                </h5>
+              </div>
             </div>
+            {(rightTitle || rightValue) && (
+              <div
+                style={{
+                  width: "1px",
+                  height: "40px",
+                  backgroundColor: "#DCDCDC",
+                  margin: "0 15px",
+                }}
+              />
+            )}
+            {(rightTitle || rightValue) && (
+              <div className="d-flex align-items-center gap-2">
+                <Lottie
+                  loop
+                  play
+                  animationData={animationData}
+                  style={{ width: 40, height: 40 }}
+                />
+
+                <div className="text-end">
+                  {typeof rightValue === "number" && (
+                    <span
+                      style={{
+                        color: "#1B1B1B",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <CountUp
+                        start={0}
+                        end={rightValue ?? 0}
+                        separator=","
+                        duration={1}
+                        formattingFn={formatIndianNumber}
+                      />
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
+
           {activeClients && (
             <div
               className="position-absolute"

@@ -343,7 +343,7 @@ const BrokerageSlab = ({
       )}
       <div>
         {/* First Section: Last Trade Date and Last Trade Date Items */}
-        <Row className="gx-3 gy-2 align-items-start">
+        <Row className="gx-3 gy-2 mt-1 align-items-start">
           {/* Left Side: Last Trade Date */}
           <Col md={3}>
             <Card

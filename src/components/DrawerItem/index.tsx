@@ -32,6 +32,8 @@ import LinkIcon from "@mui/icons-material/Link";
 import DetailsIcon from "@mui/icons-material/Details";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
+import { FaFileInvoice } from "react-icons/fa";
+import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -81,6 +83,9 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "Other Details": <DetailsIcon />,
     IVR: <PublishedWithChangesIcon />,
     SPIP: <AnalyticsIcon />,
+    "TPD Report": <FaFileInvoice size={17} />,
+    "Employee Target": <LocalPoliceIcon />,
+    "Partner Contest": <LocalPoliceIcon />,
   };
 
   const getIcon = (title: string) => {

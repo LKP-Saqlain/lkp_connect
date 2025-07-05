@@ -108,6 +108,8 @@ const CustomModal = ({
       ...((activeSubItem === "Communication Retrival Checker" ||
         activeSubItem === "KYC Approval" ||
         activeSubItem === "RH Approval" ||
+        activeSubItem === "Unlisted Shares Approval 2" ||
+        activeSubItem === "Unlisted Shares Approval 1" ||
         activeSubItem === "Pre Trade Approval") &&
         !isAdmin && {
           remark: Yup.string().trim().required("Remark is required"),
@@ -133,6 +135,7 @@ const CustomModal = ({
       setmodal_center(false);
       console.log("test112121212", action, row);
       if (action && row) {
+        // debugger;
         const entryFlag = action === "approve" ? "A" : "R";
         if (
           [
@@ -140,6 +143,8 @@ const CustomModal = ({
             "KYC Approval",
             "RH Approval",
             "Pre Trade Approval",
+            "Unlisted Shares Approval 2",
+            "Unlisted Shares Approval 1",
           ].includes(activeSubItem)
         ) {
           handleApproval?.(row, values.remark, entryFlag);
@@ -276,11 +281,17 @@ const CustomModal = ({
     return <h6 className="mb-3">{Msg}</h6>;
   };
 
-  const shouldShowRemarkField = () =>
-    ["Communication Retrival Checker", "KYC Approval", "RH Approval"].includes(
-      activeSubItem
-    ) ||
-    (activeSubItem === "Pre Trade Approval" && !showDocument && !isAdmin);
+  const shouldShowRemarkField = () => {
+    const remarkItems = [
+      "Communication Retrival Checker",
+      "KYC Approval",
+      "RH Approval",
+      "Pre Trade Approval",
+      "Unlisted Shares Approval 1",
+      "Unlisted Shares Approval 2",
+    ];
+    return remarkItems.includes(activeSubItem) && !showDocument && !isAdmin;
+  };
 
   const renderRemarkField = () => (
     <TextField

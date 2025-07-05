@@ -38,6 +38,9 @@ import {
   ZONEWiseCommissionReport,
   spipClientDetails,
   ClientWiseCommissonReport,
+  getApproverOneDetails,
+  getApproverTwoDetails,
+  unListedTradeColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1163,6 +1166,255 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "Unlisted Shares Approval 1") {
+      return getApproverOneDetails.map((column) => {
+        if (column.field === "Action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowID);
+                      HandleApprovalModal("approve");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      margin: "0 5px 0 5px",
+                    }}
+                  >
+                    |
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowID);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
+    } else if (activeSubItem === "Unlisted Shares Approval 2") {
+      return getApproverTwoDetails.map((column) => {
+        if (column.field === "Action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowID);
+                      HandleApprovalModal("approve");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      margin: "0 5px 0 5px",
+                    }}
+                  >
+                    |
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowID);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
+    } else if (
+      activeSubItem === "Unlisted Shares Entry" ||
+      activeSubItem === "Unlisted Shares Status"
+    ) {
+      return unListedTradeColumns
+        .filter((column) => {
+          if (
+            activeSubItem === "Unlisted Shares Status" &&
+            column.field === "action"
+          ) {
+            return false;
+          }
+          return true;
+        })
+        .map((column) => {
+          if (column.field === "action") {
+            return {
+              ...column,
+              renderCell: (params: any) => {
+                const isDeleted = params.row.isDeleted; // Add condition based on your row data
+
+                const handleEdit = () => {
+                  handleEditClick?.(params.row, true); // Call edit function for Communication Retrieval Entry
+                };
+
+                return (
+                  <>
+                    <Tooltip title="Edit" arrow placement="top">
+                      <IconButton
+                        sx={{ p: 0 }}
+                        color="primary"
+                        onClick={handleEdit}
+                      >
+                        <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                      </IconButton>
+                    </Tooltip>
+                    <button
+                      onClick={() => {
+                        handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
+                        setSelectedRow(params.row); // Store the selected row for confirmation
+                        tog_center(); // Open the modal for deletion confirmation
+                      }}
+                      disabled={isDeleted}
+                      style={{
+                        color: isDeleted ? "red" : "#11395C",
+                        textDecoration: isDeleted ? "none" : "underline",
+                        background: "none",
+                        border: "none",
+                        cursor: isDeleted ? "default" : "pointer",
+                        marginLeft: "10px",
+                      }}
+                    >
+                      {isDeleted ? (
+                        "Deleted"
+                      ) : (
+                        <Tooltip title="Delete" arrow placement="top">
+                          <IconButton
+                            sx={{ p: 0 }}
+                            color="primary"
+                            onClick={() => handleDeleteEntry?.(params.row)}
+                          >
+                            <DeleteIcon
+                              fontSize="small"
+                              sx={{ color: "#11395C" }}
+                            />
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </button>
+                  </>
+                );
+              },
+            };
+          } else if (column.field === "status") {
+            return {
+              ...column,
+              renderCell: (params: any) => {
+                const status = params.value?.toLowerCase() || "";
+
+                let backgroundColor = "#cfd8dc";
+                let color = "#263238";
+                let border = "1px solid #b0bec5";
+
+                if (status.includes("approved")) {
+                  backgroundColor = "#a5d6a7";
+                  color = "#1b5e20";
+                  border = "1px solid #81c784";
+                } else if (status.includes("pending with approver 2")) {
+                  backgroundColor = "#FFF4E5";
+                  color = "#FF9800";
+                  border = "1px solid #FFB74D";
+                } else if (status.includes("pending")) {
+                  backgroundColor = "#FFF4E5";
+                  color = "#FF9800";
+                  border = "1px solid #FFB74D";
+                } else if (
+                  status.includes("rejected") ||
+                  status.includes("reject")
+                ) {
+                  backgroundColor = "#ef9a9a";
+                  color = "#b71c1c";
+                  border = "1px solid #e57373";
+                }
+
+                return (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                      width: "100%",
+                      fontFamily: "Public Sans",
+                    }}
+                  >
+                    <div
+                      style={{
+                        backgroundColor,
+                        color,
+                        border,
+                        borderRadius: "999px",
+                        padding: "3px 6px",
+                        fontSize: "11px",
+                        fontWeight: 600,
+                        whiteSpace: "nowrap",
+                        textAlign: "center",
+                        minWidth: "160px",
+                        lineHeight: "1",
+                      }}
+                    >
+                      {params.value}
+                    </div>
+                  </div>
+                );
+              },
+            };
+          }
+
+          // Return other columns unchanged
+          return column;
+        });
     } else {
       return [];
     }
@@ -1241,6 +1493,8 @@ const DataTable = ({
             ? ""
             : activeSubItem === "Regulatory Announcement"
             ? "Are you sure want to delete this entry"
+            : activeSubItem === "Unlisted Shares Entry"
+            ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Entry" ||
               activeSubItem === "Marketing Material"
             ? "Are you sure want to delete this entry"
@@ -1249,6 +1503,9 @@ const DataTable = ({
             : activeSubItem === "KYC Approval"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "RH Approval"
+            ? `Are you sure want to ${action} this entry`
+            : activeSubItem === "Unlisted Shares Approval 1" ||
+              activeSubItem === "Unlisted Shares Approval 2"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Pre Trade Approval" && !showDocument
             ? `Are you sure want to ${action} this entry`
