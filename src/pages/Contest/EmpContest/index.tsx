@@ -1,10 +1,11 @@
-import { Col, Row } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import DashboardCard from "../../../components/common/DashboardCard";
 import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
 import theme from "../../../theme";
 import RevenueImg from "../../../assets/images/revenue_new.json";
 import ActiveClient from "../../../assets/images/Clients.json";
 import CoinIcon from "../../../assets/images/coins.json";
+import DataTable from "../../../components/common/UserInfoTable";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -179,11 +180,11 @@ const EMPContest = () => {
             animationData={CoinIcon}
             customClass={true}
             rightTitle="Mf aum Net*"
-            rightSubtitle={targetData?.mfauM_Net}
+            rightValue={targetData?.mfauM_Net}
           />
         </Col>
       </Row>
-      <Row>
+      {/* <Row>
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Revenue achieve*"
@@ -215,10 +216,36 @@ const EMPContest = () => {
             animationData={CoinIcon}
             customClass={true}
             rightTitle="Mf aum Net*"
-            rightSubtitle={0}
+            rightValue={0}
           />
         </Col>
-      </Row>
+      </Row> */}
+      {/* <Card
+        style={{
+          borderRadius: "15px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          marginTop: "20px",
+        }}
+      >
+        <CardHeader
+          style={{
+            borderRadius: "15px 15px 0 0",
+            boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+            backgroundColor: "#fff",
+            padding: "0.2rem 0.8rem",
+          }}
+        >
+          <h4 className="card-title mb-0">Employee contest</h4>
+        </CardHeader>
+        <CardBody>
+          <DataTable
+          // activeSubItem={activeSubItem}
+          // T6Data={data}
+          // handleApproval={handleApproval}
+          // handleDownload={handleDownload}
+          />
+        </CardBody>
+      </Card> */}
     </div>
   );
 };

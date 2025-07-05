@@ -1276,7 +1276,7 @@ const DataTable = ({
       });
     } else if (
       activeSubItem === "Unlisted Shares Entry" ||
-      "Unlisted Shares Status"
+      activeSubItem === "Unlisted Shares Status"
     ) {
       return unListedTradeColumns
         .filter((column) => {

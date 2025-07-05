@@ -916,7 +916,7 @@ const SideBar = () => {
       // DashBoard: dashboardSubItems[activeSubItem] || null,
       "TPD Report": tpdSubItems[activeSubItem] || null,
       "Partner Contest": <ApnContest />,
-      "Employee Contest": <EmpContest />,
+      "Employee Target": <EmpContest />,
     };
 
     return contentMap[activeMenu] || null;
@@ -1083,6 +1083,7 @@ const SideBar = () => {
                   aria-label="show 6 new notifications"
                   color="inherit"
                   onClick={handleNotificationClick}
+                  sx={{ p: 0 }}
                 >
                   <Badge badgeContent={nudgeCount} color="error">
                     <NotificationsIcon sx={{ color: "#11395C" }} />
