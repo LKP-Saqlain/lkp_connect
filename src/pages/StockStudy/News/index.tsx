@@ -88,7 +88,15 @@ const News = ({ selectedIsin }: any) => {
                   {item.description}
                 </Typography>
               </CardContent>
-              <CardActions sx={{ p: 0 }}>
+              <CardActions
+                sx={{
+                  p: 0,
+                  // display: "flex",
+                  // justifyContent: "space-between",
+                  // alignItems: "center",
+                  // width: "100%",
+                }}
+              >
                 <Button
                   size="small"
                   style={{ color: "#11395C" }}
@@ -98,6 +106,14 @@ const News = ({ selectedIsin }: any) => {
                 >
                   Learn More
                 </Button>
+
+                <span style={{ fontSize: "14px" }}>
+                  {new Date(item.pubDate).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
               </CardActions>
             </Box>
           </Card>
