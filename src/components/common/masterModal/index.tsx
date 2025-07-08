@@ -797,6 +797,16 @@ const ModalComponent = ({
                   }}
                   accept=".png,.jpg,.jpeg"
                 />
+                <p
+                  style={{
+                    fontSize: "12px",
+                    color: "#11395C",
+                    marginTop: "2px ",
+                  }}
+                >
+                  Please upload an image less than 512px width and 384px height
+                  (or 4:3 aspect ratio).
+                </p>
 
                 <Col lg={12}>
                   <label style={{ fontSize: "12px" }} className="form-label">
