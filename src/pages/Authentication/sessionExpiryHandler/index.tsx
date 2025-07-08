@@ -18,6 +18,7 @@ const SessionExpiryHandler = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const tokenExpiryTime = data?.data?.tokenExpiryTime;
+  console.log("TokenExpiryTime", tokenExpiryTime);
 
   useEffect(() => {
     if (isNewUser) return;
