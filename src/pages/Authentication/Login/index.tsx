@@ -46,14 +46,8 @@ const LoginPage = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    localStorage.removeItem("tkn");
-    localStorage.removeItem("Id");
-    localStorage.removeItem("uIdType");
-    localStorage.removeItem("authenticated");
-    localStorage.removeItem("activeMenu");
-    localStorage.removeItem("activeSubItem");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("AdminId");
+    localStorage.clear();
+    sessionStorage.clear();
   }, []);
 
   // useEffect(() => {
