@@ -85,6 +85,7 @@ import InsertUnlistedShares from "../../pages/UnlistedShare/showUnlistedRecords"
 import ShowUnlistedRecords from "../../pages/UnlistedShare/showUnlistedRecords";
 import ApnContest from "../../pages/Contest/ApnContest";
 import EmpContest from "../../pages/Contest/EmpContest";
+import PledgeRequest from "../../pages/PledgeRequest";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -281,25 +282,6 @@ const SideBar = () => {
 
     fetchBrokerage();
   }, [dispatch]);
-  // useClearStorageOnTabClose();   //use to remove local and session storage when tab is changed
-
-  // useEffect(() => {
-  //   const checkReactAlive = () => {
-  //     if (document.readyState === "complete") {
-  //       alert("LKP Site is UP");
-  //     } else {
-  //       alert("LKP site might be down!");
-  //     }
-  //   };
-
-  //   const interval = setInterval(checkReactAlive, 5000);
-
-  //   window.onerror = () => {
-  //     alert("LKP SITE IS CRASED!");
-  //   };
-
-  //   return () => clearInterval(interval);
-  // }, []);
 
   useEffect(() => {
     const userId = localStorage.getItem("AdminId");
@@ -336,6 +318,7 @@ const SideBar = () => {
       activeMenu !== "SPIP" &&
       activeMenu !== "DashBoard" &&
       activeMenu !== "TPD Report" &&
+      activeMenu !== "Trading" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -359,16 +342,6 @@ const SideBar = () => {
         apBrokingLastDate[apBrokingLastDate.length - 1]?.Dtrandate;
       console.log("LASTDATE-->", apLastDate);
       setDataStatus(apLastDate || "No date available");
-
-      // if (apLastDate) {
-      //   setDataStatus(apLastDate);
-      //   console.log("testasdasd", apLastDate);
-      // }
-      //  else {
-      //   const yesterday = format(subDays(new Date(), 1), "dd-MM-yyyy");
-      //   setDataStatus(yesterday);
-      //   console.log("Setting yesterday's date:", yesterday);
-      // }
     }
   }, [EmployeeLastBrokingDate, apBrokingLastDate]);
 
@@ -468,17 +441,6 @@ const SideBar = () => {
         console.log("menuItems-->", processedMenus);
         setMenuItems(processedMenus);
 
-        // if (
-        //   user_type === "Partner" &&
-        //   processedMenus[0].menu_name === "My Performance"
-        // ) {
-        //   setActiveMenu("My Performance");
-        // } else if (
-        //   user_type === "Employee" &&
-        //   processedMenus[0].menu_name === "Trading"
-        // ) {
-        //   setActiveMenu("Trading");
-        // }
         const storedMenu = localStorage.getItem("activeMenu");
         const storedSubItem = localStorage.getItem("activeSubItem");
 
@@ -564,20 +526,35 @@ const SideBar = () => {
   };
 
   // Unified handler for toggling the drawer submenus
-  const handleMenuClick = (menuTitle: string, hasSubItems: any) => {
-    // setActiveMenu((prevActive) => (prevActive === menuTitle ? "" : menuTitle));
+  // const handleMenuClick = (menuTitle: string, hasSubItems: any) => {
+  //   // setActiveMenu((prevActive) => (prevActive === menuTitle ? "" : menuTitle));
 
-    // ------------------Exisiting Logic-----------
-    // setActiveMenu((prevActive) =>
-    //   prevActive === menuTitle ? menuTitle : menuTitle
-    // );
-    // ----------------------------------------------------
+  //   // ------------------Exisiting Logic-----------
+  //   // setActiveMenu((prevActive) =>
+  //   //   prevActive === menuTitle ? menuTitle : menuTitle
+  //   // );
+  //   // ----------------------------------------------------
+  //   setActiveMenu((prevActive) => {
+  //     // If double-clicked on the same parent and it has submenus, close it
+  //     if (prevActive === menuTitle && hasSubItems) {
+  //       return "";
+  //     }
+  //     // Otherwise, keep current logic: activate the menu
+  //     return menuTitle;
+  //   });
+  // };
+
+  const handleMenuClick = (menuTitle: string, hasSubItems: any) => {
     setActiveMenu((prevActive) => {
-      // If double-clicked on the same parent and it has submenus, close it
       if (prevActive === menuTitle && hasSubItems) {
+        // If clicking the same menu with subitems, collapse it and reset subitem
+        setActiveSubItem("");
         return "";
       }
-      // Otherwise, keep current logic: activate the menu
+
+      // Always reset subitem when switching to a new main menu
+      setActiveSubItem("");
+
       return menuTitle;
     });
   };
@@ -610,7 +587,7 @@ const SideBar = () => {
   };
 
   const handleSubItemClick = (subItem: string) => {
-    console.log("value-->", subItem);
+    console.log("SubItemClickvalue-->", subItem);
     // setActiveSubItem(subItem); // Set active sub-item
     if (activeSubItem === subItem) {
       // user clicked same tab again
@@ -650,8 +627,6 @@ const SideBar = () => {
   const revenueDetailsSubItems: Record<string, JSX.Element> = {
     "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
-    // "Menu Master": <ViewApproverOne activeSubItem={activeSubItem} />,
-    // "User Access Mapping": <ViewApproverTwo activeSubItem={activeSubItem} />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {
@@ -706,6 +681,9 @@ const SideBar = () => {
     "Referal Product Wise MIS Report": (
       <KycBrokerage activeSubItem={activeSubItem} />
     ),
+  };
+  const tradingSubItems: Record<string, JSX.Element> = {
+    "Client Pledge Request": <PledgeRequest activeSubItem={activeSubItem} />,
   };
 
   // const rmsSubItems: Record<string, JSX.Element> = {
@@ -882,12 +860,13 @@ const SideBar = () => {
           : performanceComponents.Default,
       "Zone Overview": <RegOverview />,
       "Stock Study": <StockStudy />,
-      Trading: (
+      Trading: tradingSubItems[activeSubItem] || (
         <TradeDashboard
           selectedTrading={selectedViewMore}
           showMyPerformance={showMyPerformance}
         />
       ),
+
       "Revenue Details": revenueDetailsSubItems[activeSubItem] || null,
       Masters: revenueDetailsSubItems[activeSubItem] || null,
       "KYC Dashboard": kycSubItems[activeSubItem] || null,

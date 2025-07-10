@@ -184,7 +184,7 @@ const EMPContest = () => {
           />
         </Col>
       </Row>
-      {/* <Row>
+      <Row>
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Revenue achieve*"
@@ -219,7 +219,7 @@ const EMPContest = () => {
             rightValue={0}
           />
         </Col>
-      </Row> */}
+      </Row>
       {/* <Card
         style={{
           borderRadius: "15px",

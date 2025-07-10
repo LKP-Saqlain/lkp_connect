@@ -193,8 +193,8 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
       }
 
       // Construct the financial quarter string
-      // const financialQtr = `${year}-Q${previousQuarter}`;   //no data in 2025 so added 2024
-      const financialQtr = `${2024}-Q${previousQuarter}`;
+      const financialQtr = `${year}-Q${previousQuarter}`; //no data in 2025 so added 2024
+      // const financialQtr = `${2024}-Q${previousQuarter}`;
 
       const payload = {
         start: 0,
