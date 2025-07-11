@@ -84,7 +84,8 @@ const StoreVisits = ({ getActiveClients }: any) => {
             <div dir="ltr">
               <StoreVisitsCharts
                 chartData={chartData}
-                dataColors='["--vz-primary", "--vz-success", "--vz-secondary", "--vz-info", "--vz-warning"]'
+                // dataColors='["--vz-primary", "--vz-success", "--vz-secondary", "--vz-info", "--vz-warning"]'
+                componentsFlag={true}
               />
             </div>
           </div>

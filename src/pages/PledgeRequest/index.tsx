@@ -26,6 +26,7 @@ const Index = ({ activeSubItem }: any) => {
   const [branchCodeOptions, setBranchCodeOptions] = useState<any[]>([]); // Add if needed
   const [selectedZone, setSelectedZone] = useState<any>(null);
   const [clientCode, setClientCode] = useState("");
+  const [currentClient, setCurrentClient] = useState("");
   const [selectedBranchCode, setSelectedBranchCode] = useState<any>(null);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -169,12 +170,17 @@ const Index = ({ activeSubItem }: any) => {
 
   const handleClick = (row: any) => {
     const encryptedCode = row?.encryptedCode;
-    const url = `https://allocation.lkp.net.in:51528/Pledge/direct?UserId=${encryptedCode}`;
-    // https://allocation.lkp.net.in:51528/Pledge/direct?UserId={encryptedcode}
+    const clientCode = row?.clientCode;
 
-    setIframeSrc(url);
-    console.log("pledge", encryptedCode);
-    setFlag(true);
+    if (!encryptedCode || !clientCode) {
+      console.warn("Missing client or encrypted code");
+      return;
+    }
+    const url = `https://allocation.lkp.net.in:51528/Pledge/direct?UserId=${encryptedCode}`;
+    setCurrentClient(clientCode); // Set client code for display
+    setIframeSrc(url); // Update iframe URL
+    setFlag(true); // Trigger rendering if flag is used
+    console.log("Pledge Encrypted Code:", encryptedCode);
   };
 
   return (
@@ -215,7 +221,10 @@ const Index = ({ activeSubItem }: any) => {
 
             {flag && (
               <button
-                onClick={() => setFlag(false)}
+                onClick={() => {
+                  setFlag(false);
+                  setCurrentClient("");
+                }}
                 style={{
                   position: "absolute",
                   right: "12px",
@@ -316,13 +325,19 @@ const Index = ({ activeSubItem }: any) => {
           </CardHeader>
           <CardBody style={flag ? { padding: 0 } : {}}>
             {flag ? (
-              <iframe
-                src={iframeSrc}
-                width="100%"
-                height="380"
-                style={{ border: "none" }}
-                title="Pledge Frame"
-              />
+              <>
+                <div className="mb-3 px-3 py-2 bg-light rounded border d-flex align-items-center">
+                  <strong className="me-2 ">Client Code:</strong>
+                  <span className="text-dark ">{currentClient || "N/A"}</span>
+                </div>
+                <iframe
+                  src={iframeSrc}
+                  width="100%"
+                  height="400"
+                  style={{ border: "none" }}
+                  title="Pledge Frame"
+                />
+              </>
             ) : (
               <DataTable
                 activeSubItem={activeSubItem}
