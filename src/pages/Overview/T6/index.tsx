@@ -245,7 +245,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
               height: `${
                 upcomingOverviewDormantTableData.length > 0
                   ? Math.min(
-                      upcomingOverviewDormantTableData.length * 50 + 40,
+                      upcomingOverviewDormantTableData.length * 70 + 40,
                       250
                     )
                   : 450 // Minimum height when data is empty
