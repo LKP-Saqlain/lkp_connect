@@ -105,4 +105,6 @@ export const endpoints = {
   GetUniqueSubclientCount: "api/SPIP/GetUniqueSubclientCount",
   GetClientActiveInactiveCount: "api/SPIP/GetClientActiveInactiveCount",
   GetCommissionRevenueSummary: "api/SPIP/GetCommissionRevenueSummary",
+  GetClientPledgeDetails: "api/Dashboard/GetClientPledgeDetails",
+  GetEmpContestAchievedDetails: "api/MIS/GetEmpContestAchievedDetails",
 };

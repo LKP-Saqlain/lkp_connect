@@ -31,7 +31,7 @@ interface DashboardCardProps {
   activeClients?: any;
   activeClientsEmpty?: any;
   rightTitle?: string;
-  rightValue?: number;
+  rightValue?: number | string;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({

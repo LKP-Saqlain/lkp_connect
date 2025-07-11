@@ -465,4 +465,14 @@ export const apiServices = {
       payload
     );
   },
+  GetClientPledgeDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientPledgeDetails, payload);
+  },
+  GetEmpContestAchievedDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetEmpContestAchievedDetails,
+      payload
+    );
+  },
 };
