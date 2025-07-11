@@ -1103,7 +1103,10 @@ const DataTable = ({
       return ClientWiseCommissonReport.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Client Details Report") {
+    } else if (
+      activeSubItem === "Client Details Report" ||
+      selectedWidget === "Client Details Report"
+    ) {
       // return spipClientDetails.map((column) => ({
       //   ...column,
       // }));
@@ -1565,7 +1568,7 @@ const DataTable = ({
       )}
       <Paper
         sx={{
-          height: "72vh",
+          height: selectedWidget === "Client Details Report" ? "200px" : "72vh",
           // height: `${calculatedHeight}px`,
           width: "100%",
           overflowX: "auto",

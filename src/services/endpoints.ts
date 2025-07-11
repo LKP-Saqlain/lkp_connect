@@ -100,4 +100,9 @@ export const endpoints = {
   DeleteUnlistedSharesRecord: "/api/Account/DeleteUnlistedSharesRecord",
   GetAPContestTargetDetails: "api/MIS/GetAPContestTargetDetails",
   GetEMPContestTargetDetails: "api/MIS/GetEMPContestTargetDetails",
+  GetB2BCommissionSummary: "api/SPIP/GetB2BCommissionSummary",
+  GetNewClientCount: "api/SPIP/GetNewClientCount",
+  GetUniqueSubclientCount: "api/SPIP/GetUniqueSubclientCount",
+  GetClientActiveInactiveCount: "api/SPIP/GetClientActiveInactiveCount",
+  GetCommissionRevenueSummary: "api/SPIP/GetCommissionRevenueSummary",
 };

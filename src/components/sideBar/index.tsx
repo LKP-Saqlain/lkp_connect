@@ -636,6 +636,10 @@ const SideBar = () => {
       setActiveMenu("Client Details");
       setSelectedViewMore(value);
     }
+    if (value === "spipSubExpiry") {
+      setActiveSubItem("Client Details Report");
+      setSelectedViewMore(value);
+    }
   };
 
   const handleMobileDrawerClose = () => {
@@ -911,7 +915,14 @@ const SideBar = () => {
       "Other Details": <OTDetails />,
       "Registration Details": <RegisDetails activeSubItem={activeSubItem} />,
       IVR: ivrSubItems[activeSubItem] || null,
-      SPIP: <SPIP activeSubItem={activeSubItem} activeMenu={activeMenu} />,
+      SPIP: (
+        <SPIP
+          activeSubItem={activeSubItem}
+          activeMenu={activeMenu}
+          handleTradingOpen={handleTradingOpen}
+          selectedViewMore={selectedViewMore}
+        />
+      ),
       // RMS: rmsSubItems[activeSubItem] || null,
       // DashBoard: dashboardSubItems[activeSubItem] || null,
       "TPD Report": tpdSubItems[activeSubItem] || null,

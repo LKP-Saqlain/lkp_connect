@@ -7,12 +7,13 @@ const ProjectsOverviewCharts = ({
   series,
   brokerageData,
   brokerageDate,
+  tripleBarData,
   revenueYear,
 }: any) => {
   const [latestDates, setLatestDates] = useState<any>("");
   const barColors = brokerageDate
-    ? ["#11395C", "#F57C00"]
-    : ["#1890ff", "#00E396"];
+    ? ["#11395C", "#F57C00", "#4CAF50"] // Example colors for 3 series
+    : ["#1890ff", "#00E396", "#FF4560"];
 
   useEffect(() => {
     console.log("brokData", brokerageData);
@@ -24,6 +25,10 @@ const ProjectsOverviewCharts = ({
       const categories = brokerageData.map((item: any) => item.YearMonth);
       setLatestDates(categories);
       console.log("categories", categories);
+    } else if (tripleBarData) {
+      const categories = brokerageData.map((item: any) => item.monthYear);
+      setLatestDates(categories);
+      console.log("commissionRevenueResponse tripleBarData", categories);
     }
   }, [brokerageData]);
 
@@ -184,35 +189,25 @@ const ProjectsOverviewCharts = ({
       // ],
       custom: function ({ dataPointIndex, w }: any) {
         const date = w.globals.labels[dataPointIndex];
-        const grossBrokerage = w.globals.initialSeries[0].data[dataPointIndex];
-        const apShare = w.globals.initialSeries[1].data[dataPointIndex];
+        let tooltipHtml = `<div style="padding:10px; font-size:12px">
+                             <div style="margin-bottom:6px;"><strong>${date}</strong></div>`;
 
-        const grossFormatted = new Intl.NumberFormat("en-IN", {
-          maximumFractionDigits: 0,
-        }).format(grossBrokerage);
+        w.config.series.forEach((series: any, i: number) => {
+          const value = w.globals.initialSeries[i]?.data[dataPointIndex];
+          const color = w.config.colors[i];
+          const formattedValue = new Intl.NumberFormat("en-IN", {
+            maximumFractionDigits: 0,
+          }).format(value);
 
-        const apFormatted = new Intl.NumberFormat("en-IN", {
-          maximumFractionDigits: 0,
-        }).format(apShare);
-
-        const grossColor = w.config.colors[0];
-        const apColor = w.config.colors[1];
-
-        return `
-          <div style="padding:10px; font-size:12px">
-            <div style="margin-bottom:6px;"><strong>${date}</strong></div>
-            
+          tooltipHtml += `
             <div style="display: flex; align-items: center; margin-bottom:6px;">
-              <span style="width:8px; height:8px; background-color:${grossColor}; border-radius:50%; display:inline-block; margin-right:6px;"></span>
-              <strong>GrossBrokerage:</strong>&nbsp;${grossFormatted}
-            </div>
-            
-            <div style="display: flex; align-items: center;">
-              <span style="width:8px; height:8px; background-color:${apColor}; border-radius:50%; display:inline-block; margin-right:6px;"></span>
-              <strong>AP Share:</strong>&nbsp;${apFormatted}
-            </div>
-          </div>
-        `;
+              <span style="width:8px; height:8px; background-color:${color}; border-radius:50%; display:inline-block; margin-right:6px;"></span>
+              <strong>${series.name}:</strong>&nbsp;${formattedValue}
+            </div>`;
+        });
+
+        tooltipHtml += `</div>`;
+        return tooltipHtml;
       },
     },
   };
