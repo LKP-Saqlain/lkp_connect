@@ -1628,6 +1628,8 @@ const DataTable = ({
           getRowId={(row: any) =>
             row.rowID
               ? row.rowID
+              : row.id
+              ? row.id
               : row.rowId
               ? row.rowId
               : row.ClientCode
@@ -1638,8 +1640,6 @@ const DataTable = ({
               ? row.ctermcode
               : row.RowId
               ? row.RowId
-              : row.id
-              ? row.id
               : row.dummyId
               ? row.dummyId
               : row.RowID
