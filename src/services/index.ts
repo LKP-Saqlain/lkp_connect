@@ -475,4 +475,25 @@ export const apiServices = {
       payload
     );
   },
+  GetAPContestAchievedBrokerage: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetAPContestAchievedBrokerage,
+      payload
+    );
+  },
+  GetAPContestAchievedClients: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetAPContestAchievedClients,
+      payload
+    );
+  },
+  GetAPContestAchievedSummary: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetAPContestAchievedSummary,
+      payload
+    );
+  },
 };

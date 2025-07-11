@@ -131,7 +131,7 @@ const AnnualPNL = () => {
       <div className="page-content page-view">
         <div className="container-fluid">
           <Row className="row-font">
-            <Col lg={12}>
+            <Col lg={11}>
               <Card
                 style={{
                   minHeight: "80vh",
