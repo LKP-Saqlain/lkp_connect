@@ -3,17 +3,25 @@ import SPIPPerformanceDashboard from "./PerformanceDashboard";
 import SPIPPerformanceSummary from "./ClientPerformanceSummary";
 import SubScriptionDetails from "./SubscriptionDetails";
 import SPIPBranchWise from "./BranchWiseReport";
-import SPIPClientWiseReport from "./ClientWiseReport";
+// import SPIPClientWiseReport from "./ClientWiseReport";
 import ClientDetails from "./SPIPClientDetails";
+import SPIPOverview from "./SPIPOverview";
 import { SubItemKeys } from "../../constants/subItemKeys";
 import Loader from "../../components/common/Loader";
 
 interface SPIPProps {
   activeSubItem: string;
   activeMenu: string;
+  handleTradingOpen?: (value: any) => void;
+  selectedViewMore: string;
 }
 
-const SPIP = ({ activeSubItem, activeMenu }: SPIPProps) => {
+const SPIP = ({
+  activeSubItem,
+  activeMenu,
+  handleTradingOpen,
+  selectedViewMore,
+}: SPIPProps) => {
   useEffect(() => {
     console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
   }, [activeSubItem, activeMenu]);
@@ -32,10 +40,16 @@ const SPIP = ({ activeSubItem, activeMenu }: SPIPProps) => {
       <SPIPBranchWise activeSubItem={activeSubItem} />
     ),
     [SubItemKeys.SPIP_CLIENT_WISE_FEES]: (
-      <SPIPClientWiseReport activeSubItem={activeSubItem} />
+      <SPIPOverview
+        activeSubItem={activeSubItem}
+        handleTradingOpen={handleTradingOpen}
+      />
     ),
     [SubItemKeys.SPIP_CLIENT_DETAILS]: (
-      <ClientDetails activeSubItem={activeSubItem} />
+      <ClientDetails
+        activeSubItem={activeSubItem}
+        selectedViewMore={selectedViewMore}
+      />
     ),
   };
 
