@@ -468,18 +468,6 @@ const SideBar = () => {
         const processedMenus = buildMenuHierarchy(res?.data);
         console.log("menuItems-->", processedMenus);
         setMenuItems(processedMenus);
-
-        // if (
-        //   user_type === "Partner" &&
-        //   processedMenus[0].menu_name === "My Performance"
-        // ) {
-        //   setActiveMenu("My Performance");
-        // } else if (
-        //   user_type === "Employee" &&
-        //   processedMenus[0].menu_name === "Trading"
-        // ) {
-        //   setActiveMenu("Trading");
-        // }
         const storedMenu = localStorage.getItem("activeMenu");
         const storedSubItem = localStorage.getItem("activeSubItem");
 
@@ -500,15 +488,13 @@ const SideBar = () => {
       .catch((Err) => {
         const { message } = Err;
         console.log("Error->", message);
-        // dispatch(hideLoader());
-        // formik.setFieldError("password", message);
         ShowToast(
           "error",
           message || "Sorry for the inconvenience, please try after some time."
         );
       })
       .finally(() => {
-        // dispatch(hideLoader());
+        dispatch(hideLoader());
       });
     const buildMenuHierarchy = (data: any) => {
       // Create a map of menu items with the `menu_code` as the key
@@ -733,174 +719,18 @@ const SideBar = () => {
 
     "Unlisted Shares File Upload": <VendorsFile />,
   };
-  // const dashboardSubItems: Record<string, JSX.Element> = {
-  //   RHDashboard: <ShowUnlistedRecords activeSubItem={activeSubItem} />,
-  // };
 
-  // const renderContent = () => {
-  //   console.log("activeMenu", activeMenu, "activeSubItem", activeSubItem);
-  //   // const hasOverview = menuItems.some((item) => item.menu_name === "Overview");
-  //   // if (!activeMenu && hasOverview) {
-  //   //   setActiveMenu("Overview");
-  //   //   return <OverviewComponent />;
-  //   // }
-  //   switch (activeMenu) {
-  //     case "My Performance":
-  //       return user_type === "Employee" ? (
-  //         <OverviewComponent handleTradingOpen={handleTradingOpen} />
-  //       ) : (
-  //         <APOverview handleTradingOpen={handleTradingOpen} />
-  //       );
-  //     case "Zone Overview":
-  //       return <RegOverview />;
-  //     case "Stock Study":
-  //       return <StockStudy />;
-  //     case "Trading":
-  //       return (
-  //         <TradeDashboard
-  //           selectedTrading={selectedViewMore}
-  //           showMyPerformance={showMyPerformance}
-  //         />
-  //       );
-  //     case "Revenue Details":
-  //     case "Masters":
-  //       switch (activeSubItem) {
-  //         case "Menu Master":
-  //           return <MasterMenuMarketing />;
-  //         case "User Access Mapping":
-  //           return <RegAnnMaster />;
-  //         default:
-  //           return null;
-  //       }
-  //     case "KYC Dashboard":
-  //       switch (activeSubItem) {
-  //         case "RH Approval":
-  //           return <RegionalHead activeSubItem={activeSubItem} />;
-  //         case "KYC Approval":
-  //           return <KycBrokerage activeSubItem={activeSubItem} />;
-  //         case "Brokerage Modification Status":
-  //           return (
-  //             <BrokerageModificationStatus activeSubItem={activeSubItem} />
-  //           );
-  //         default:
-  //           return null;
-  //       }
-  //     case "Reports":
-  //       switch (activeSubItem) {
-  //         case "Tax P&L Statement":
-  //           return <AnnualPNL />;
-  //         case "Dormant Client Report":
-  //           return <DormantClient activeSubItem={activeSubItem} />;
-  //         case "Last Trade Data":
-  //           return <LastTrade />;
-  //         case "Quarterly Payout Recovery":
-  //           return <QuarterlyPayout activeSubItem={activeSubItem} />;
-  //         case "SLBM ClientHolding":
-  //           return <SLBM activeSubItem={activeSubItem} />;
-  //         case "Core Alerts Report":
-  //           return <CoreReport />;
-  //         case "Account Performance Report":
-  //           return <AccStatement />;
-  //         case "DP Debit Recovery":
-  //           return <DPRecovery activeSubItem={activeSubItem} />;
-  //         case "Client Trading Pattern Report":
-  //           return <ClientTradingReport activeSubItem={activeSubItem} />;
-  //         case "CTCL Wise Activity Report":
-  //           return <CTCLReport activeSubItem={activeSubItem} />;
-  //         default:
-  //           return null;
-  //       }
-  //     case "RMS":
-  //       switch (activeSubItem) {
-  //         case "RMS Allocation":
-  //           return;
-  //         case "Upload SLBM Holding":
-  //           return;
-  //         default:
-  //           return null;
-  //       }
-  //     case "Referal Lead":
-  //       switch (activeSubItem) {
-  //         case "Referal Entry Status":
-  //           return <Main activeSubItem={activeSubItem} />;
-  //         case "Referal Lead Updation":
-  //           return;
-  //         case "Referal Product Wise MIS Report":
-  //           return;
-  //         default:
-  //           return null;
-  //       }
-  //     case "Compliance":
-  //       switch (activeSubItem) {
-  //         case "Communication Retrival Entry":
-  //           return <CommEntry activeSubItem={activeSubItem} />;
-  //         case "Communication Retrival Checker":
-  //           return <ComChecker activeSubItem={activeSubItem} />;
-  //         case "Communication Retrival Report":
-  //           return <Retrival activeSubItem={activeSubItem} />;
-  //         default:
-  //           return null;
-  //       }
-  //     case "Client Details":
-  //       return (
-  //         <ClientDetails
-  //           handleDrawerClose={handleDrawerClose}
-  //           handleDrawerOpen={handleDrawerOpen}
-  //           apiStatus={apiStatus}
-  //           selectedTrading={selectedViewMore}
-  //           activeMenu={activeMenu}
-  //         />
-  //       );
-  //     case "Regulatory Announcement":
-  //       return <RegulatorAnnouncement activeMenu={activeMenu} />;
-  //     case "Marketing Materials":
-  //       return <MarketingMaterial />;
-  //     case "EKYC":
-  //       return <EkycLinks />;
-  //     case "Other Details":
-  //       return <OTDetails />;
-  //     case "Registration Details":
-  //       return <RegisDetails activeSubItem={activeSubItem} />;
-  //     case "IVR":
-  //       switch (activeSubItem) {
-  //         case "Pre Trade Proof Upload":
-  //           return <PreProofUpload activeSubItem={activeSubItem} />;
-  //         case "Pre Trade Report":
-  //           return <PreTradeReport activeSubItem={activeSubItem} />;
-  //         case "Pre Trade Approval":
-  //           return <PreTradeApproval activeSubItem={activeSubItem} />;
-  //         case "IVR Mapping":
-  //           return <IVR activeSubItem={activeSubItem} />;
-  //         case "Referal Product Wise MIS Report":
-  //           return <KycBrokerage activeSubItem={activeSubItem} />;
-  //         default:
-  //           return null;
-  //       }
-  //       return <></>;
-  //   }
-  // };
+  const getSubItemComponent = (
+    subItems: Record<string, JSX.Element | null>
+  ): JSX.Element | null => subItems[activeSubItem] || null;
 
-  const renderContent = () => {
-    const contentMap: Record<string, JSX.Element | null> = {
-      "My Performance":
+  const componentResolver = (menu_order: number): JSX.Element | null => {
+    const dynamicMap: Record<number, () => JSX.Element | null> = {
+      1: () =>
         user_type === "Employee"
           ? performanceComponents.Employee
           : performanceComponents.Default,
-      "Zone Overview": <RegOverview />,
-      "Stock Study": <StockStudy />,
-      Trading: (
-        <TradeDashboard
-          selectedTrading={selectedViewMore}
-          showMyPerformance={showMyPerformance}
-        />
-      ),
-      "Revenue Details": revenueDetailsSubItems[activeSubItem] || null,
-      Masters: revenueDetailsSubItems[activeSubItem] || null,
-      "KYC Dashboard": kycSubItems[activeSubItem] || null,
-      Reports: reportsSubItems[activeSubItem] || null,
-      "Referal Lead": <></>,
-      Compliance: complianceSubItems[activeSubItem] || null,
-      "Client Details": (
+      2: () => (
         <ClientDetails
           handleDrawerClose={handleDrawerClose}
           handleDrawerOpen={handleDrawerOpen}
@@ -909,15 +739,31 @@ const SideBar = () => {
           activeMenu={activeMenu}
         />
       ),
-      "Regulatory Announcement": (
-        <RegulatorAnnouncement activeMenu={activeMenu} />
+      3: () => (
+        <TradeDashboard
+          selectedTrading={selectedViewMore}
+          showMyPerformance={showMyPerformance}
+        />
       ),
-      "Marketing Materials": <MarketingMaterial />,
-      EKYC: <EkycLinks />,
-      "Other Details": <OTDetails />,
-      "Registration Details": <RegisDetails activeSubItem={activeSubItem} />,
-      IVR: ivrSubItems[activeSubItem] || null,
-      SPIP: (
+      4: () => getSubItemComponent(reportsSubItems),
+      5: () => <RegOverview />,
+      6: () => getSubItemComponent(revenueDetailsSubItems),
+      8: () => getSubItemComponent(complianceSubItems),
+      9: () => getSubItemComponent(kycSubItems),
+      10: () => <StockStudy />,
+      21: () => <RegulatorAnnouncement activeMenu={activeMenu} />,
+      22: () => <MarketingMaterial />,
+      23: () => <EkycLinks />,
+      24: () => <OTDetails />,
+      25: () => <RegisDetails activeSubItem={activeSubItem} />,
+      26: () => getSubItemComponent(ivrSubItems),
+      28: () => (
+        <SPIPOverview
+          activeSubItem={activeSubItem}
+          handleTradingOpen={handleTradingOpen}
+        />
+      ),
+      29: () => (
         <SPIP
           activeSubItem={activeSubItem}
           activeMenu={activeMenu}
@@ -925,20 +771,19 @@ const SideBar = () => {
           selectedViewMore={selectedViewMore}
         />
       ),
-      "SPIP Dashboard": (
-        <SPIPOverview
-          activeSubItem={activeSubItem}
-          handleTradingOpen={handleTradingOpen}
-        />
-      ),
-      // RMS: rmsSubItems[activeSubItem] || null,
-      // DashBoard: dashboardSubItems[activeSubItem] || null,
-      "TPD Report": tpdSubItems[activeSubItem] || null,
-      "Partner Contest": <ApnContest />,
-      "Employee Target": <EmpContest />,
+      30: () => getSubItemComponent(tpdSubItems),
+      31: () => <EmpContest />,
+      32: () => <ApnContest />,
     };
 
-    return contentMap[activeMenu] || null;
+    return dynamicMap[menu_order]?.() || null;
+  };
+
+  const renderContent = () => {
+    const active = menuItems.find((item) => item.menu_name === activeMenu);
+    console.log("activeMenu", active);
+
+    return active ? componentResolver(active.menu_order) : null;
   };
 
   const handleNotificationClick = () => {
