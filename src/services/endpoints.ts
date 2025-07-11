@@ -101,4 +101,5 @@ export const endpoints = {
   GetAPContestTargetDetails: "api/MIS/GetAPContestTargetDetails",
   GetEMPContestTargetDetails: "api/MIS/GetEMPContestTargetDetails",
   GetClientPledgeDetails: "api/Dashboard/GetClientPledgeDetails",
+  GetEmpContestAchievedDetails: "api/MIS/GetEmpContestAchievedDetails",
 };
