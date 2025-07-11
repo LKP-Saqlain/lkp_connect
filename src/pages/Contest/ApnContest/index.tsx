@@ -9,8 +9,8 @@ import ActiveClient from "../../../assets/images/Clients.json";
 // import IpadIcon from "../../../assets/images/Ipad.json";
 // import AirPodsIcon from "../../../assets/images/Airpods.json";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 
@@ -34,14 +34,14 @@ const APContest = () => {
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch<AppDispatch>();
-  // const { user_id } = useSelector(
-  //   (state: RootState) => state.UserLogin?.data?.data
-  // );
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   useEffect(() => {
     let payload = {
-      user_id: "APN-7161",
-      //   user_id: user_id,
+      // user_id: "APN-7161",
+      user_id: user_id,
     };
 
     dispatch(showLoader(""));
@@ -107,76 +107,42 @@ const APContest = () => {
 
   return (
     <div>
-      <Row style={{ marginTop: "20px" }}>
+      <Row className="g-3" style={{ marginTop: "5px" }}>
         {/* Left Side: 2 rows of 2 cards each */}
-        <Col xxl={9} lg={8} md={12}>
-          <Row>
-            <Col xxl={6} lg={6} md={6} sm={12}>
-              <DashboardCard
-                title="Revenue Targets*"
-                value={
-                  targetData?.qtarget
-                    ? formatIndianNumber(targetData.qtarget)
-                    : "-"
-                }
-                animationData={RevenueImg}
-                note={
-                  isMobile && `* Contest Period - 1st July to 30th September`
-                }
-                customClass={true}
-              />
-            </Col>
-            <Col xxl={6} lg={6} md={6} sm={12}>
-              <DashboardCard
-                title="Client Targets*"
-                value={targetData?.newClientCount}
-                animationData={ActiveClient}
-                activeClientsEmpty={true}
-                customClass={true}
-              />
-            </Col>
-          </Row>
-          {/* <Row>
-            <Col xxl={6} lg={6} md={6} sm={12}>
-              <DashboardCard
-                title="Revenue Achieved*"
-                value={
-                  targetData?.qtarget
-                    ? formatIndianNumber(targetData.qtarget)
-                    : "-"
-                }
-                animationData={RevenueImg}
-                customClass={true}
-              />
-            </Col>
-            <Col xxl={6} lg={6} md={6} sm={12}>
-              <DashboardCard
-                title="Clients Achieved*"
-                value={targetData?.newClientCount}
-                animationData={ActiveClient}
-                activeClientsEmpty={true}
-                customClass={true}
-              />
-            </Col>
-          </Row> */}
+
+        <Col
+          xxl={4}
+          lg={4}
+          md={6}
+          sm={12}
+          // style={{ marginTop: isMobile ? "10px" : "" }}
+        >
+          <DashboardCard
+            title="Revenue Targets*"
+            value={
+              targetData?.qtarget ? formatIndianNumber(targetData.qtarget) : "-"
+            }
+            animationData={RevenueImg}
+            note={isMobile && `* Contest Period - 1st July to 30th September`}
+            customClass={true}
+          />
+        </Col>
+        <Col xxl={4} lg={4} md={6} sm={12}>
+          <DashboardCard
+            title="Client Targets*"
+            value={targetData?.newClientCount}
+            animationData={ActiveClient}
+            activeClientsEmpty={true}
+            customClass={true}
+          />
         </Col>
 
-        {/* Right Side: Prize Card (Tall) */}
-        <Col xxl={3} lg={4} md={12} sm={12}>
-          <div
-            style={{
-              height: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <DashboardCard
-              title="Prizes*"
-              value={targetData?.prize}
-              customClass={true}
-            />
-          </div>
+        <Col xxl={4} lg={4} md={6} sm={12}>
+          <DashboardCard
+            title="Prizes*"
+            value={targetData?.prize}
+            customClass={true}
+          />
         </Col>
       </Row>
     </div>

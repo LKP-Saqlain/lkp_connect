@@ -446,8 +446,8 @@ export const getCommChecker: GridColDef[] = [
   {
     field: "DateOfCommunication",
     headerName: "Date",
-    minWidth: 110,
-    flex: 0.9,
+    minWidth: 100,
+    flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -493,15 +493,16 @@ export const getCommChecker: GridColDef[] = [
   {
     field: "TypeOfDocuments",
     headerName: "Type of Document",
-    minWidth: 180,
-    flex: 1.2,
+    minWidth: 120,
+    flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "CommunicationType",
     headerName: "Communication Type",
-    minWidth: 160,
+    minWidth: 120,
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
@@ -511,14 +512,14 @@ export const getCommChecker: GridColDef[] = [
     field: "CommunicationProof",
     headerName: "Communication Description",
     minWidth: 240,
-    flex: 1.8,
+    flex: 2,
     disableColumnMenu: true,
     headerAlign: "center",
   },
   {
     field: "Department",
     headerName: "Department",
-    minWidth: 150,
+    minWidth: 100,
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
@@ -526,7 +527,7 @@ export const getCommChecker: GridColDef[] = [
   {
     field: "CommunicationProofPath",
     headerName: "Document",
-    minWidth: 150,
+    minWidth: 100,
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
@@ -6132,5 +6133,146 @@ export const unListedTradeColumns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
+  },
+];
+
+export const ClientPledgeRequest: GridColDef[] = [
+  {
+    disableColumnMenu: true,
+    field: "clientCode",
+    headerName: "Client Code",
+    align: "left",
+    flex: 1,
+    minWidth: 100, // Reasonable on all screens
+  },
+  {
+    disableColumnMenu: true,
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 2,
+    minWidth: 160, // Names can be long; ensure space
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile No",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          console.log(prefix, suffix); // Added only for testing purpose
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "clientStatus",
+    headerName: "Status",
+    flex: 0.8,
+    minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "poaStatus",
+    headerName: "POA Status",
+    flex: 1,
+    minWidth: 70, // Slightly wider for better label display
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "lastTradeDate",
+    headerName: "Last Trade Date",
+    minWidth: 120,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => {
+      const rawDate = params;
+      if (!rawDate) return null; // Handle missing data
+
+      const parsedDate = new Date(
+        rawDate.replace(
+          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+          (match: any, day: any, month: any, year: any) => {
+            const monthMap: any = {
+              Jan: "01",
+              Feb: "02",
+              Mar: "03",
+              Apr: "04",
+              May: "05",
+              Jun: "06",
+              Jul: "07",
+              Aug: "08",
+              Sep: "09",
+              Oct: "10",
+              Nov: "11",
+              Dec: "12",
+            };
+            console.log(match);
+            return `20${year}-${monthMap[month]}-${day}`;
+          }
+        )
+      );
+
+      return parsedDate;
+    },
+    sortComparator: (v1: any, v2: any) => {
+      if (!v1 || !v2) return 0; // Handle missing values
+      return v1 - v2; // Sort in ascending order
+    },
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+  },
+
+  {
+    field: "holdingValue",
+    headerName: "Holding Value",
+    headerClassName: "header-wrap-custom",
+    minWidth: 120,
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "encryptedCode",
+    headerName: "Pledge Request",
+    headerClassName: "header-wrap-custom",
+    // flex: 1,
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
   },
 ];

@@ -442,4 +442,37 @@ export const apiServices = {
       payload
     );
   },
+  GetB2BCommissionSummary: async (payload: any) => {
+    return await apiService("POST", endpoints.GetB2BCommissionSummary, payload);
+  },
+  GetNewClientCount: async (payload: any) => {
+    return await apiService("POST", endpoints.GetNewClientCount, payload);
+  },
+  GetUniqueSubclientCount: async (payload: any) => {
+    return await apiService("POST", endpoints.GetUniqueSubclientCount, payload);
+  },
+  GetClientActiveInactiveCount: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetClientActiveInactiveCount,
+      payload
+    );
+  },
+  GetCommissionRevenueSummary: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetCommissionRevenueSummary,
+      payload
+    );
+  },
+  GetClientPledgeDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientPledgeDetails, payload);
+  },
+  GetEmpContestAchievedDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetEmpContestAchievedDetails,
+      payload
+    );
+  },
 };

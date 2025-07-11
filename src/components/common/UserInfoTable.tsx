@@ -41,6 +41,7 @@ import {
   getApproverOneDetails,
   getApproverTwoDetails,
   unListedTradeColumns,
+  ClientPledgeRequest,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -49,6 +50,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import CustomModal from "./DPModal";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Tooltip from "@mui/material/Tooltip";
 import { Button, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -1103,7 +1105,10 @@ const DataTable = ({
       return ClientWiseCommissonReport.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Client Details Report") {
+    } else if (
+      activeSubItem === "Client Details Report" ||
+      selectedWidget === "Client Details Report"
+    ) {
       // return spipClientDetails.map((column) => ({
       //   ...column,
       // }));
@@ -1415,6 +1420,27 @@ const DataTable = ({
           // Return other columns unchanged
           return column;
         });
+    } else if (activeSubItem === "Client Pledge Request") {
+      return ClientPledgeRequest.map((column) => {
+        if (column.field === "encryptedCode") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div
+                  onClick={() => {
+                    handleDownload(params.row);
+                  }}
+                >
+                  <OpenInNewIcon />
+                </div>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
     } else {
       return [];
     }
@@ -1565,7 +1591,7 @@ const DataTable = ({
       )}
       <Paper
         sx={{
-          height: "72vh",
+          height: selectedWidget === "Client Details Report" ? "200px" : "72vh",
           // height: `${calculatedHeight}px`,
           width: "100%",
           overflowX: "auto",
@@ -1606,6 +1632,8 @@ const DataTable = ({
               ? row.rowId
               : row.ClientCode
               ? row.ClientCode
+              : row.clientCode
+              ? row.clientCode
               : row.ctermcode
               ? row.ctermcode
               : row.RowId

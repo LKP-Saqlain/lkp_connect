@@ -126,58 +126,7 @@ const Revenue = ({}: any) => {
           <div
             className="d-flex align-items-center flex-wrap mt-2 mt-sm-0 justify-content-between"
             style={{ fontFamily: "Public Sans, sans-serif" }}
-          >
-            <div className="d-flex align-items-center flex-wrap">
-              {/* <div
-                className="legend-color"
-                style={{
-                  backgroundColor: "#1890FF",
-                  width: "16px",
-                  height: "16px",
-                  marginRight: "8px",
-                }}
-              ></div>
-              <p className="mb-0 me-3">Gross Brokerage</p>
-
-              <div
-                className="legend-color"
-                style={{
-                  backgroundColor: "#00E396",
-                  width: "16px",
-                  height: "16px",
-                  marginRight: "8px",
-                }}
-              ></div>
-              <p className="mb-0 me-3">AP Share</p> */}
-              {/* Broking Data */}
-            </div>
-
-            {/* <div style={{ minWidth: 160, maxHeight: 36 }}>
-              <FormControl fullWidth size="small" sx={{ maxHeight: 36 }}>
-                <InputLabel
-                  id="financial-year-select-label"
-                  sx={{ fontSize: "0.8rem", top: "5px" }}
-                >
-                  Financial Year
-                </InputLabel>
-                <Select
-                  size="small"
-                  labelId="financial-year-select-label"
-                  id="financial-year-select"
-                  name="finYear"
-                  value={selectedYear}
-                  label="Financial Year"
-                  onChange={handleChange}
-                >
-                  {financialYears.map((year) => (
-                    <MenuItem key={year.value} value={year.value}>
-                      {year.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div> */}
-          </div>
+          ></div>
         </CardHeader>
 
         <CardBody className="p-0 pb-2">

@@ -46,13 +46,13 @@ span.apexcharts-legend-text {
 }
 
 .main-card {
-  margin-bottom: 20px; /* Adds spacing between cards */
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Shadow for better visuals */
+  margin-bottom: 20px; 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
 }
 
 .main-card-body {
-  padding: 10px; /* Consistent padding across all cards */
-  height: auto; /* Allow card height to adapt to content */
+  padding: 10px;
+  height: auto; 
 }
 
 .custom-card {

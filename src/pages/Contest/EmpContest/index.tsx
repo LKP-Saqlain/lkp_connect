@@ -1,11 +1,11 @@
-import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
+import { Col, Row } from "reactstrap";
 import DashboardCard from "../../../components/common/DashboardCard";
 import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
 import theme from "../../../theme";
 import RevenueImg from "../../../assets/images/revenue_new.json";
 import ActiveClient from "../../../assets/images/Clients.json";
 import CoinIcon from "../../../assets/images/coins.json";
-import DataTable from "../../../components/common/UserInfoTable";
+// import DataTable from "../../../components/common/UserInfoTable";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -41,112 +41,119 @@ const EMPContest = () => {
     freeCash_Margin: 0,
     mfAUM_NET: 0,
   });
+  const [achieveCard, setAchieveCard] = useState({
+    total: 0,
+    broking: 0,
+    nonBroking: 0,
+    freeCash_Margin: 0,
+    mfAUM_NET: 0,
+  });
   const [targetData, setTargetData] = useState<APContestData | null>(null);
+  // const [achievedData, setAchievedData] = useState<APContestData | null>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+  console.log(setAchieveCard);
+
   useEffect(() => {
-    const payload = {
-      user_id: "EMP-0238",
-      // user_id:user_id
-    };
+    const payload = { user_id: user_id };
 
     dispatch(showLoader(""));
+
     apiServices
       .GetEMPContestTargetDetails(payload)
       .then((response) => {
-        dispatch(hideLoader());
         if (response?.status === 200) {
-          const data = response?.data?.data[0];
-          console.log("GetEmpContestTargetDetails", data);
-          setTargetData(data);
-          const totalClient = data.totalAccountCount;
-          const newClient = data.newAccountCount;
-          const reactivate = data.reactivationCount;
-          setClientCard({
-            totalClient,
-            newClient,
-            reactivate,
-          });
-          const total = data.totalRevnTarget;
-          const broking = data.brokingRevnTarget;
-          const nonBroking = data.nonBrokingRevnTarget;
-          const freeCash_Margin = data.freshCashMargin;
-          const mfAUM_NET = data.mfauM_Net;
+          const data = response?.data?.data?.[0];
 
-          setRevenueCard({
-            total,
-            broking,
-            nonBroking,
-            freeCash_Margin,
-            mfAUM_NET,
-          });
+          if (data) {
+            console.log("GetEmpContestTargetDetails", data);
+
+            const {
+              totalAccountCount: totalClient = 0,
+              newAccountCount: newClient = 0,
+              reactivationCount: reactivate = 0,
+              totalRevnTarget: total = 0,
+              brokingRevnTarget: broking = 0,
+              nonBrokingRevnTarget: nonBroking = 0,
+              freshCashMargin: freeCash_Margin = 0,
+              mfauM_Net: mfAUM_NET = 0,
+            } = data;
+
+            setTargetData(data);
+            setClientCard({ totalClient, newClient, reactivate });
+            setRevenueCard({
+              total,
+              broking,
+              nonBroking,
+              freeCash_Margin,
+              mfAUM_NET,
+            });
+          } else {
+            // No data found - reset to 0
+            setTargetData(null);
+            setClientCard({ totalClient: 0, newClient: 0, reactivate: 0 });
+            setRevenueCard({
+              total: 0,
+              broking: 0,
+              nonBroking: 0,
+              freeCash_Margin: 0,
+              mfAUM_NET: 0,
+            });
+          }
         }
       })
       .catch((error) => {
         console.log("Error", error);
-        dispatch(hideLoader());
+        // On error, also reset states to zero
+        setTargetData(null);
+        setClientCard({ totalClient: 0, newClient: 0, reactivate: 0 });
+        setRevenueCard({
+          total: 0,
+          broking: 0,
+          nonBroking: 0,
+          freeCash_Margin: 0,
+          mfAUM_NET: 0,
+        });
       })
       .finally(() => {
         dispatch(hideLoader());
       });
   }, []);
 
-  // ✅ Revenue badge handler
-  const handleRevenueBadgeClick = (type: RevenueBadge) => {
-    setRevenueBadge(type);
-  };
+  const handleRevenueBadgeClick = (type: RevenueBadge) => setRevenueBadge(type);
+  const handleClientBadgeClick = (type: ClientBadge) => setClientBadge(type);
 
-  // ✅ Client badge handler
-  const handleClientBadgeClick = (type: ClientBadge) => {
-    setClientBadge(type);
-  };
-
-  // ✅ Revenue badge control array
-  const revenueBadges = [
-    {
-      type: "primary",
-      label: "Total",
-      isActive: revenueBadge === "total",
-      onClick: () => handleRevenueBadgeClick("total"),
-    },
-    {
-      type: "info",
-      label: "Broking",
-      isActive: revenueBadge === "broking",
-      onClick: () => handleRevenueBadgeClick("broking"),
-    },
-    {
-      type: "warning",
-      label: "Non-broking",
-      isActive: revenueBadge === "nonBroking",
-      onClick: () => handleRevenueBadgeClick("nonBroking"),
-    },
+  const revenueBadgeTypes: {
+    type: string;
+    label: string;
+    key: RevenueBadge;
+  }[] = [
+    { type: "primary", label: "Total", key: "total" },
+    { type: "info", label: "Broking", key: "broking" },
+    { type: "warning", label: "Non-broking", key: "nonBroking" },
   ];
 
-  // ✅ Client badge control array
-  const clientBadges = [
-    {
-      type: "primary",
-      label: "Total",
-      isActive: clientBadge === "totalClient",
-      onClick: () => handleClientBadgeClick("totalClient"),
-    },
-    {
-      type: "info",
-      label: "NewClient",
-      isActive: clientBadge === "newClient",
-      onClick: () => handleClientBadgeClick("newClient"),
-    },
-    {
-      type: "warning",
-      label: "Reactivate",
-      isActive: clientBadge === "reactivate",
-      onClick: () => handleClientBadgeClick("reactivate"),
-    },
-  ];
+  const revenueBadges = revenueBadgeTypes.map((badge) => ({
+    ...badge,
+    isActive: revenueBadge === badge.key,
+    onClick: () => handleRevenueBadgeClick(badge.key),
+  }));
+
+  const clientBadgeTypes: { type: string; label: string; key: ClientBadge }[] =
+    [
+      { type: "primary", label: "Total", key: "totalClient" },
+      { type: "info", label: "NewClient", key: "newClient" },
+      { type: "warning", label: "Reactivate", key: "reactivate" },
+    ];
+
+  const clientBadges = clientBadgeTypes.map((badge) => ({
+    ...badge,
+    isActive: clientBadge === badge.key,
+    onClick: () => handleClientBadgeClick(badge.key),
+  }));
 
   return (
     <div>
@@ -175,20 +182,24 @@ const EMPContest = () => {
 
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
-            title="Fresh cash Margin*"
+            title="Fresh Cash Margin*"
             value={targetData?.freshCashMargin}
             animationData={CoinIcon}
             customClass={true}
-            rightTitle="Mf aum Net*"
+            rightTitle="MF AUM Net*"
             rightValue={targetData?.mfauM_Net}
           />
         </Col>
       </Row>
-      {/* <Row>
+      <Row>
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Revenue achieve*"
-            value={targetData?.qtarget ? targetData.qtarget : "-"}
+            value={
+              typeof achieveCard[revenueBadge] === "number"
+                ? achieveCard[revenueBadge]
+                : 0
+            }
             animationData={RevenueImg}
             badges={revenueBadges}
             // formatIndianNumber={formatIndianNumber}
@@ -201,7 +212,7 @@ const EMPContest = () => {
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Clients achieve*"
-            value={targetData?.newClientCount ? targetData.qtarget : "-"}
+            value={0}
             animationData={ActiveClient}
             activeClientsEmpty={true}
             customClass={true}
@@ -211,15 +222,15 @@ const EMPContest = () => {
 
         <Col xxl={3} lg={4} md={6} sm={12}>
           <DashboardCard
-            title="Fresh cash Margin*"
-            value={0}
+            title="Fresh Cash Margin*"
+            value={""}
             animationData={CoinIcon}
             customClass={true}
-            rightTitle="Mf aum Net*"
-            rightValue={0}
+            rightTitle="MF AUM Net*"
+            rightValue={""}
           />
         </Col>
-      </Row> */}
+      </Row>
       {/* <Card
         style={{
           borderRadius: "15px",

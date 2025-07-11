@@ -5,7 +5,7 @@ import "../../../pages/Overview/style.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 
-const StoreVisitsCharts = ({ chartData }: any) => {
+const StoreVisitsCharts = ({ chartData, componentsFlag }: any) => {
   const [labels, setLabels] = useState<string[]>([]);
   const [seriess, setSeriess] = useState<number[]>([]);
 
@@ -17,7 +17,7 @@ const StoreVisitsCharts = ({ chartData }: any) => {
 
   useEffect(() => {
     console.log("chartData", chartData);
-    if (user_type === "Employee") {
+    if (user_type === "Employee" || componentsFlag) {
       const newLabels = chartData.map((item: any) => item.name);
       const newSeries = chartData.map((item: any) => Number(item.value) || 0);
       setLabels(newLabels);
