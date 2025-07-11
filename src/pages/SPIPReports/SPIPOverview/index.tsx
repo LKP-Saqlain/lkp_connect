@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
+import { Col, Container, Row } from "reactstrap";
 import DashboardCard from "../../../components/common/DashboardCard";
 import { useTheme } from "@mui/material/styles";
 import { useMediaQuery } from "@mui/material";
@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
-import { ProjectsOverviewCharts } from "../../Employee/Overview/DashboardProjectCharts";
+import TripleBar from "./TripleBar";
 
 type BrokerageBadge = "total" | "release" | "balance";
 
@@ -26,14 +26,7 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
   const [newSubClient, setNewSubClient] = useState(0);
   const [activeBrokerageBadge, setActiveBrokerageBadge] =
     useState<BrokerageBadge>("total");
-  const [brokerageData, setBrokerageData] = useState<[]>([]);
-  const [monthProjectData, setMonthProjectData] = useState([
-    {
-      name: "Gross Brokerage",
-      type: "bar",
-      data: [],
-    },
-  ]);
+
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -46,10 +39,10 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
   }, [activeSubItem]);
 
   useEffect(() => {
-    const branchCode = user_id?.split("-")[1] || "";
-    const payload = {
-      // branchCode: branchCode,
-      branchCode: "1676",
+    const userId = user_id?.split("-")[1] || "";
+    console.log("userprop", userId);
+    let payload = {
+      branchCode: userId, //1676
     };
 
     dispatch(showLoader(""));
@@ -61,12 +54,7 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
       apiServices.GetCommissionRevenueSummary(payload),
     ])
       .then(
-        ([
-          commissionResponse,
-          clientCountResponse,
-          uniqueSubCountResponse,
-          commissionRevenueResponse,
-        ]) => {
+        ([commissionResponse, clientCountResponse, uniqueSubCountResponse]) => {
           // Set commission summary card
           if (commissionResponse?.status === 200) {
             const {
@@ -87,43 +75,6 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
           if (uniqueSubCountResponse?.status === 200) {
             const { uniqueSubclientcount } = uniqueSubCountResponse.data;
             setNewSubClient(uniqueSubclientcount);
-          }
-
-          // Set chart data
-          if (commissionRevenueResponse?.status === 200) {
-            setBrokerageData(commissionRevenueResponse?.data);
-            const fetchedBrokerageData = commissionRevenueResponse?.data;
-
-            const balanceCommission = fetchedBrokerageData.map(
-              (item: any) => item.balanceCommission
-            );
-            const commissionReleased = fetchedBrokerageData.map(
-              (item: any) => item.commissionReleased
-            );
-            const totalCommission = fetchedBrokerageData.map(
-              (item: any) => item.totalCommission
-            );
-
-            setMonthProjectData([
-              {
-                name: "Total Commission",
-                type: "bar",
-                data: totalCommission,
-              },
-              {
-                name: "Commission Released",
-                type: "bar",
-                data: commissionReleased,
-              },
-              {
-                name: "Balance Commission",
-                type: "bar",
-                data: balanceCommission,
-              },
-            ]);
-
-            setBrokerageData(fetchedBrokerageData);
-            console.log(fetchedBrokerageData, "commissionRevenueResponse");
           }
         }
       )
@@ -164,10 +115,6 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
       onClick: () => handleBrokerageBadgeClick("balance"),
     },
   ];
-  useEffect(() => {
-    console.log(monthProjectData, brokerageData, "check data111");
-  }, [brokerageData]);
-
   return (
     <React.Fragment>
       <div className="page-content">
@@ -225,45 +172,9 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
               </div>
             </Col>
             <UserCount />
-            {/* <UserCount getActiveClients={getActiveClients} /> */}
           </Row>
           <Row>
-            <Card
-              style={{
-                borderRadius: "15px",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-              }}
-            >
-              <CardHeader
-                className="align-items-center d-flex"
-                style={{
-                  borderRadius: "15px 15px 0 0",
-                  boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
-                  backgroundColor: "#fff", // optional for contrast
-                }}
-              >
-                <h4 className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center">
-                  Commission Details for Last 12 months
-                </h4>
-                <div
-                  className="d-flex align-items-center flex-wrap mt-2 mt-sm-0"
-                  style={{ fontFamily: "Public Sans, sans-serif" }}
-                ></div>
-              </CardHeader>
-
-              <CardBody className="p-0 pb-2">
-                <div>
-                  <div dir="ltr" className="apex-charts">
-                    <ProjectsOverviewCharts
-                      series={monthProjectData}
-                      // dataColors='["--vz-primary", "--vz-secondary", "--vz-danger"]'
-                      brokerageData={brokerageData}
-                      tripleBarData={true}
-                    />
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
+            <TripleBar />
           </Row>
 
           <Row>

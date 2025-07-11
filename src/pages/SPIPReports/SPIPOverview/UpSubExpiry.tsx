@@ -19,9 +19,9 @@ const UpSubExpiry = ({ handleTradingOpen }: any) => {
 
   useEffect(() => {
     const userId = user_id.includes("-") ? user_id.split("-")[1] : user_id;
-    console.log("userId", userId);
+    console.log("userIdupco", userId);
     let payload = {
-      branchCode: userId, //0408
+      branchCode: userId, //1676
       clientCode: "",
       option: "",
     };
