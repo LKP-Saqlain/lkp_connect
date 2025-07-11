@@ -3,9 +3,9 @@ import SPIPPerformanceDashboard from "./PerformanceDashboard";
 import SPIPPerformanceSummary from "./ClientPerformanceSummary";
 import SubScriptionDetails from "./SubscriptionDetails";
 import SPIPBranchWise from "./BranchWiseReport";
-// import SPIPClientWiseReport from "./ClientWiseReport";
+import SPIPClientWiseReport from "./ClientWiseReport";
 import ClientDetails from "./SPIPClientDetails";
-import SPIPOverview from "./SPIPOverview";
+// import SPIPOverview from "./SPIPOverview";
 import { SubItemKeys } from "../../constants/subItemKeys";
 import Loader from "../../components/common/Loader";
 
@@ -19,7 +19,7 @@ interface SPIPProps {
 const SPIP = ({
   activeSubItem,
   activeMenu,
-  handleTradingOpen,
+  // handleTradingOpen,
   selectedViewMore,
 }: SPIPProps) => {
   useEffect(() => {
@@ -40,10 +40,11 @@ const SPIP = ({
       <SPIPBranchWise activeSubItem={activeSubItem} />
     ),
     [SubItemKeys.SPIP_CLIENT_WISE_FEES]: (
-      <SPIPOverview
-        activeSubItem={activeSubItem}
-        handleTradingOpen={handleTradingOpen}
-      />
+      // <SPIPOverview
+      //   activeSubItem={activeSubItem}
+      //   handleTradingOpen={handleTradingOpen}
+      // />
+      <SPIPClientWiseReport activeSubItem={activeSubItem} />
     ),
     [SubItemKeys.SPIP_CLIENT_DETAILS]: (
       <ClientDetails

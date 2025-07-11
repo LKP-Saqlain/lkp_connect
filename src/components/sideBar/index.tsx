@@ -85,6 +85,7 @@ import InsertUnlistedShares from "../../pages/UnlistedShare/showUnlistedRecords"
 import ShowUnlistedRecords from "../../pages/UnlistedShare/showUnlistedRecords";
 import ApnContest from "../../pages/Contest/ApnContest";
 import EmpContest from "../../pages/Contest/EmpContest";
+import SPIPOverview from "../../pages/SPIPReports/SPIPOverview";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -637,6 +638,7 @@ const SideBar = () => {
       setSelectedViewMore(value);
     }
     if (value === "spipSubExpiry") {
+      setActiveMenu("SPIP");
       setActiveSubItem("Client Details Report");
       setSelectedViewMore(value);
     }
@@ -921,6 +923,12 @@ const SideBar = () => {
           activeMenu={activeMenu}
           handleTradingOpen={handleTradingOpen}
           selectedViewMore={selectedViewMore}
+        />
+      ),
+      "SPIP Dashboard": (
+        <SPIPOverview
+          activeSubItem={activeSubItem}
+          handleTradingOpen={handleTradingOpen}
         />
       ),
       // RMS: rmsSubItems[activeSubItem] || null,
