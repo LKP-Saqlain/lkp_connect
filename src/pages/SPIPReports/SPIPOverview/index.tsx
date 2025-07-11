@@ -42,7 +42,7 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
     const userId = user_id?.split("-")[1] || "";
     console.log("userprop", userId);
     let payload = {
-      branchCode: userId, //1676
+      branchCode: userId, //for getting static data--> 1676
     };
 
     dispatch(showLoader(""));
