@@ -327,13 +327,13 @@ const Index = ({ activeSubItem }: any) => {
             {flag ? (
               <>
                 <div className="mb-3 px-3 py-2 bg-light rounded border d-flex align-items-center">
-                  <strong className="me-2 text-muted">Client Code:</strong>
-                  <span className="text-dark">{currentClient || "N/A"}</span>
+                  <strong className="me-2 ">Client Code:</strong>
+                  <span className="text-dark ">{currentClient || "N/A"}</span>
                 </div>
                 <iframe
                   src={iframeSrc}
                   width="100%"
-                  height="380"
+                  height="400"
                   style={{ border: "none" }}
                   title="Pledge Frame"
                 />
