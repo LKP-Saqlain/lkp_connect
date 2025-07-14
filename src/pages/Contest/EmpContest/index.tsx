@@ -5,12 +5,12 @@ import theme from "../../../theme";
 import RevenueImg from "../../../assets/images/revenue_new.json";
 import ActiveClient from "../../../assets/images/Clients.json";
 import CoinIcon from "../../../assets/images/coins.json";
-// import DataTable from "../../../components/common/UserInfoTable";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
+import AchieveCard from "./AchieveCard";
 
 type RevenueBadge = "total" | "broking" | "nonBroking";
 type ClientBadge = "totalClient" | "newClient" | "reactivate";
@@ -24,6 +24,8 @@ interface APContestData {
   prize: string;
   freshCashMargin: number;
   mfauM_Net: number;
+  freshCash: number;
+  mfaum: number;
 }
 
 const EMPContest = () => {
@@ -47,76 +49,87 @@ const EMPContest = () => {
     nonBroking: 0,
     freeCash_Margin: 0,
     mfAUM_NET: 0,
+    totalClient: 0,
+    newClient: 0,
+    reactivate: 0,
   });
   const [targetData, setTargetData] = useState<APContestData | null>(null);
-  // const [achievedData, setAchievedData] = useState<APContestData | null>(null);
+  const [achievedData, setAchievedData] = useState<APContestData | null>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
-  console.log(setAchieveCard);
 
   useEffect(() => {
     const payload = { user_id: user_id };
-
     dispatch(showLoader(""));
+    Promise.all([
+      apiServices.GetEMPContestTargetDetails(payload),
+      apiServices.GetEmpContestAchievedSummary(payload),
+    ])
 
-    apiServices
-      .GetEMPContestTargetDetails(payload)
-      .then((response) => {
-        if (response?.status === 200) {
-          const data = response?.data?.data?.[0];
+      .then(([GetEMPContestTargetDetails, GetEmpContestAchievedSummary]) => {
+        if (GetEMPContestTargetDetails?.status === 200) {
+          const data = GetEMPContestTargetDetails?.data?.data?.[0] || {};
 
-          if (data) {
-            console.log("GetEmpContestTargetDetails", data);
+          const {
+            totalAccountCount: totalClient = 0,
+            newAccountCount: newClient = 0,
+            reactivationCount: reactivate = 0,
+            totalRevnTarget: total = 0,
+            brokingRevnTarget: broking = 0,
+            nonBrokingRevnTarget: nonBroking = 0,
+            freshCashMargin: freeCash_Margin = 0,
+            mfauM_Net: mfAUM_NET = 0,
+          } = data;
 
-            const {
-              totalAccountCount: totalClient = 0,
-              newAccountCount: newClient = 0,
-              reactivationCount: reactivate = 0,
-              totalRevnTarget: total = 0,
-              brokingRevnTarget: broking = 0,
-              nonBrokingRevnTarget: nonBroking = 0,
-              freshCashMargin: freeCash_Margin = 0,
-              mfauM_Net: mfAUM_NET = 0,
-            } = data;
+          setTargetData(data);
+          setClientCard({ totalClient, newClient, reactivate });
+          setRevenueCard({
+            total,
+            broking,
+            nonBroking,
+            freeCash_Margin,
+            mfAUM_NET,
+          });
+        }
+        if (GetEmpContestAchievedSummary?.status === 200) {
+          const data = GetEmpContestAchievedSummary?.data?.data || {};
+          console.log(data, "GetEmpContestAchievedSummary");
+          setAchievedData(data);
+          console.log("achievedData", achievedData);
 
-            setTargetData(data);
-            setClientCard({ totalClient, newClient, reactivate });
-            setRevenueCard({
-              total,
-              broking,
-              nonBroking,
-              freeCash_Margin,
-              mfAUM_NET,
-            });
-          } else {
-            // No data found - reset to 0
-            setTargetData(null);
-            setClientCard({ totalClient: 0, newClient: 0, reactivate: 0 });
-            setRevenueCard({
-              total: 0,
-              broking: 0,
-              nonBroking: 0,
-              freeCash_Margin: 0,
-              mfAUM_NET: 0,
-            });
-          }
+          const broking =
+            (data.brokerageNetToLKP || 0) + (data.slbmNetToLKPBrokerage || 0);
+
+          const nonbroking =
+            (data.spipRevenue || 0) +
+            (data.loanRevenue || 0) +
+            (data.trilogyRevenue || 0) +
+            (data.mfNetToLKP || 0) +
+            (data.netToLKPInsurance || 0) +
+            (data.liquiLoanNetToLKPBrokerage || 0);
+
+          const freeCash_Margin = data.freshCash || 0;
+          const mfAUM_NET = data.mfaum || 0;
+          const newClient = data.newClients || 0;
+          const reactivate = data.reactivatedClients || 0;
+
+          setAchieveCard({
+            total: broking + nonbroking,
+            broking,
+            nonBroking: nonbroking,
+            freeCash_Margin,
+            mfAUM_NET,
+            totalClient: newClient + reactivate,
+            newClient,
+            reactivate,
+          });
         }
       })
       .catch((error) => {
-        console.log("Error", error);
-        // On error, also reset states to zero
-        setTargetData(null);
-        setClientCard({ totalClient: 0, newClient: 0, reactivate: 0 });
-        setRevenueCard({
-          total: 0,
-          broking: 0,
-          nonBroking: 0,
-          freeCash_Margin: 0,
-          mfAUM_NET: 0,
-        });
+        console.error("Error fetching contest target details:", error);
       })
       .finally(() => {
         dispatch(hideLoader());
@@ -154,7 +167,9 @@ const EMPContest = () => {
     isActive: clientBadge === badge.key,
     onClick: () => handleClientBadgeClick(badge.key),
   }));
-
+  function formatIndianNumber(value: number): string {
+    return `₹${value.toLocaleString("en-IN")}`;
+  }
   return (
     <div>
       <Row style={{ marginTop: "20px" }}>
@@ -162,7 +177,7 @@ const EMPContest = () => {
           <DashboardCard
             title="Revenue target*"
             value={revenueCard[revenueBadge]}
-            // formatIndianNumber={formatIndianNumber}
+            formatIndianNumber={formatIndianNumber}
             animationData={RevenueImg}
             badges={revenueBadges}
             note={isMobile && `* Contest Period - 1st July to 30th September`}
@@ -184,6 +199,7 @@ const EMPContest = () => {
           <DashboardCard
             title="Fresh Cash Margin*"
             value={targetData?.freshCashMargin}
+            formatIndianNumber={formatIndianNumber}
             animationData={CoinIcon}
             customClass={true}
             rightTitle="MF AUM Net*"
@@ -202,7 +218,7 @@ const EMPContest = () => {
             }
             animationData={RevenueImg}
             badges={revenueBadges}
-            // formatIndianNumber={formatIndianNumber}
+            formatIndianNumber={formatIndianNumber}
             // suffix=".00"
 
             customClass={true}
@@ -212,7 +228,7 @@ const EMPContest = () => {
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Clients achieve*"
-            value={0}
+            value={achieveCard[clientBadge]}
             animationData={ActiveClient}
             activeClientsEmpty={true}
             customClass={true}
@@ -223,40 +239,16 @@ const EMPContest = () => {
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Fresh Cash Margin*"
-            value={""}
+            value={achievedData?.freshCash}
             animationData={CoinIcon}
             customClass={true}
             rightTitle="MF AUM Net*"
-            rightValue={""}
+            rightValue={achievedData?.mfaum}
+            formatIndianNumber={formatIndianNumber}
           />
         </Col>
       </Row>
-      {/* <Card
-        style={{
-          borderRadius: "15px",
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-          marginTop: "20px",
-        }}
-      >
-        <CardHeader
-          style={{
-            borderRadius: "15px 15px 0 0",
-            boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
-            backgroundColor: "#fff",
-            padding: "0.2rem 0.8rem",
-          }}
-        >
-          <h4 className="card-title mb-0">Employee contest</h4>
-        </CardHeader>
-        <CardBody>
-          <DataTable
-          // activeSubItem={activeSubItem}
-          // T6Data={data}
-          // handleApproval={handleApproval}
-          // handleDownload={handleDownload}
-          />
-        </CardBody>
-      </Card> */}
+      <AchieveCard />
     </div>
   );
 };

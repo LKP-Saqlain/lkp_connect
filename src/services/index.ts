@@ -468,10 +468,10 @@ export const apiServices = {
   GetClientPledgeDetails: async (payload: any) => {
     return await apiService("POST", endpoints.GetClientPledgeDetails, payload);
   },
-  GetEmpContestAchievedDetails: async (payload: any) => {
+  GetEmpContestAchievedSummary: async (payload: any) => {
     return await apiService(
       "POST",
-      endpoints.GetEmpContestAchievedDetails,
+      endpoints.GetEmpContestAchievedSummary,
       payload
     );
   },
@@ -493,6 +493,27 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetAPContestAchievedSummary,
+      payload
+    );
+  },
+  GetEmpContestAchievedBrokerage: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetEmpContestAchievedBrokerage,
+      payload
+    );
+  },
+  GetEmpContestAchievedClients: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetEmpContestAchievedClients,
+      payload
+    );
+  },
+  GetEmpContestAchievedNonBrokerage: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetEmpContestAchievedNonBrokerage,
       payload
     );
   },
