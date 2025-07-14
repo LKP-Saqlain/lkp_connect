@@ -44,6 +44,8 @@ import {
   ClientPledgeRequest,
   clientAPBrokerageColumns,
   APContestAchievedClients,
+  EmpBrokerageAchieved,
+  EmpNonBrokerageAchieved,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1447,8 +1449,19 @@ const DataTable = ({
       return clientAPBrokerageColumns.map((column) => ({
         ...column,
       }));
-    } else if (activeMenu === "AP Contest Achieved Clients") {
+    } else if (
+      activeMenu === "AP Contest Achieved Clients" ||
+      activeMenu === "Employee Clients Achieved"
+    ) {
       return APContestAchievedClients.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "Employee Brokerage Achieved") {
+      return EmpBrokerageAchieved.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "Employee Non-Brokerage Achieved") {
+      return EmpNonBrokerageAchieved.map((column) => ({
         ...column,
       }));
     } else {

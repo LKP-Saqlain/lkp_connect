@@ -106,8 +106,12 @@ export const endpoints = {
   GetClientActiveInactiveCount: "api/SPIP/GetClientActiveInactiveCount",
   GetCommissionRevenueSummary: "api/SPIP/GetCommissionRevenueSummary",
   GetClientPledgeDetails: "api/Dashboard/GetClientPledgeDetails",
-  GetEmpContestAchievedDetails: "api/MIS/GetEmpContestAchievedDetails",
+  GetEmpContestAchievedSummary: "api/MIS/GetEmpContestAchievedSummary",
   GetAPContestAchievedBrokerage: "api/MIS/GetAPContestAchievedBrokerage",
   GetAPContestAchievedClients: "api/MIS/GetAPContestAchievedClients",
   GetAPContestAchievedSummary: "api/MIS/GetAPContestAchievedSummary",
+  GetEmpContestAchievedBrokerage: "api/MIS/GetEmpContestAchievedBrokerage",
+  GetEmpContestAchievedClients: "api/MIS/GetEmpContestAchievedClients",
+  GetEmpContestAchievedNonBrokerage:
+    "api/MIS/GetEmpContestAchievedNonBrokerage",
 };
