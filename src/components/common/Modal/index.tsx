@@ -652,7 +652,7 @@ const ModalComponent = ({
               {showConsent && (
                 <>
                   <div style={{ fontFamily: "Public Sans" }}>
-                    <h6 style={{ margin: 0 }}>Upload Proof</h6>
+                    <h6 style={{ margin: 0 }}>Upload Consent Form</h6>
                   </div>
                   <Col lg={12} style={{ paddingTop: "16px" }}>
                     <Input

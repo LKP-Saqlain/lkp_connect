@@ -55,6 +55,8 @@ const LoginPage = () => {
     localStorage.removeItem("userName");
     localStorage.removeItem("AdminId");
     localStorage.removeItem("persist:root");
+    localStorage.clear();
+    sessionStorage.clear();
   }, []);
 
   // useEffect(() => {

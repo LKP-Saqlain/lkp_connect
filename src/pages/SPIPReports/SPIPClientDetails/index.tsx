@@ -8,13 +8,17 @@ import DataTable from "../../../components/common/UserInfoTable";
 import { regEx } from "../../../helper/method";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SPIPPeformance {
   activeSubItem: string;
+  selectedViewMore: string;
 }
 
-const SPIPClientDetails = ({ activeSubItem }: SPIPPeformance) => {
+const SPIPClientDetails = ({
+  activeSubItem,
+  selectedViewMore,
+}: SPIPPeformance) => {
   const [report, setReport] = useState<any[]>([]);
 
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -27,6 +31,14 @@ const SPIPClientDetails = ({ activeSubItem }: SPIPPeformance) => {
   // const { user_id } = useSelector(
   //   (state: RootState) => state.UserLogin?.data?.data
   // );
+
+  useEffect(() => {
+    console.log("Testst", selectedViewMore);
+
+    if (selectedViewMore === "spipSubExpiry") {
+      fetchReport();
+    }
+  }, [selectedViewMore]);
 
   const formik = useFormik({
     initialValues: {
@@ -42,12 +54,12 @@ const SPIPClientDetails = ({ activeSubItem }: SPIPPeformance) => {
     },
   });
 
-  const fetchReport = (values: any) => {
+  const fetchReport = (values?: any) => {
     const userId = user_id.includes("-") ? user_id.split("-")[1] : user_id;
     console.log("userId", userId);
     let payload = {
       branchCode: userId, //0408
-      clientCode: values?.clientCode,
+      clientCode: values?.clientCode ? values?.clientCode : "",
       option: "",
     };
 
