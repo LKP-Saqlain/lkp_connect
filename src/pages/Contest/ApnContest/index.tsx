@@ -48,29 +48,26 @@ const APContest = ({ activeMenu }: any) => {
   );
 
   useEffect(() => {
-    let payload = {
-      // user_id: "APN-7161",
-      user_id: user_id,
+    const payload = { user_id };
+
+    const fetchContestTargetDetails = async () => {
+      try {
+        dispatch(showLoader(""));
+        const response = await apiServices.GetAPContestTargetDetails(payload);
+
+        if (response?.status === 200) {
+          const data = response?.data?.data?.[0];
+          console.log("GetAPContestTargetDetails", data);
+          setTargetData(data);
+        }
+      } catch (error) {
+        console.error("Error fetching AP Contest Target Details", error);
+      } finally {
+        dispatch(hideLoader());
+      }
     };
 
-    dispatch(showLoader(""));
-    apiServices
-      .GetAPContestTargetDetails(payload)
-      .then((response) => {
-        // console.log("GetAPContestTargetDetails", response?.data);
-        dispatch(hideLoader());
-        if (response?.status === 200) {
-          console.log("GetAPContestTargetDetails", response?.data?.data[0]);
-          setTargetData(response?.data?.data[0]);
-        }
-      })
-      .catch((Error) => {
-        console.log("Errrror", Error);
-        dispatch(hideLoader());
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
+    fetchContestTargetDetails();
     fetchAPachievedBrokerage();
     fetchAPContestAchClients();
     fetchAPContestSummary();
@@ -276,7 +273,8 @@ const APContest = ({ activeMenu }: any) => {
                   }}
                 >
                   <h4 className="card-title mb-0">
-                    AP Contest Achieved Brokerage
+                    AP Contest Achieved Brokerage{" "}
+                    <span style={{ fontSize: "12px" }}>(July- September)</span>
                   </h4>
                 </CardHeader>
                 <CardBody>
@@ -299,7 +297,8 @@ const APContest = ({ activeMenu }: any) => {
                   }}
                 >
                   <h4 className="card-title mb-0">
-                    AP Contest Achieved Clients
+                    AP Contest Achieved Clients{" "}
+                    <span style={{ fontSize: "12px" }}>(July- September)</span>
                   </h4>
                 </CardHeader>
                 <CardBody

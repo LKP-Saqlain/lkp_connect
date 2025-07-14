@@ -6297,7 +6297,7 @@ export const clientAPBrokerageColumns: GridColDef[] = [
   },
   {
     field: "monthYr",
-    headerName: "Month-Year",
+    headerName: "Month",
     width: 110,
     headerAlign: "center",
     align: "center",
