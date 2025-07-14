@@ -78,7 +78,8 @@ const APContest = ({ activeMenu }: any) => {
 
   const fetchAPachievedBrokerage = () => {
     let payload = {
-      user_id: "APN-7161",
+      // user_id: "APN-7161",
+      user_id: user_id,
     };
     dispatch(showLoader(""));
 
@@ -98,7 +99,8 @@ const APContest = ({ activeMenu }: any) => {
 
   const fetchAPContestAchClients = () => {
     let payload = {
-      user_id: "APN-7161",
+      // user_id: "APN-7161",
+      user_id: user_id,
     };
     dispatch(showLoader(""));
 
@@ -118,7 +120,8 @@ const APContest = ({ activeMenu }: any) => {
 
   const fetchAPContestSummary = () => {
     let payload = {
-      user_id: "APN-7161",
+      // user_id: "APN-7161",
+      user_id: user_id,
     };
     dispatch(showLoader(""));
 
@@ -247,6 +250,9 @@ const APContest = ({ activeMenu }: any) => {
                   value={targetData?.prize}
                   customClass={true}
                   cardStyle={{ minHeight: "225px" }}
+                  note={
+                    !isMobile && `* Contest Period - 1st July to 30th September`
+                  }
                 />
               </div>
             </Col>
