@@ -158,7 +158,7 @@ const EMPContest = () => {
   return (
     <div>
       <Row style={{ marginTop: "20px" }}>
-        <Col xxl={3} lg={4} md={6} sm={12}>
+        <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Revenue target*"
             value={revenueCard[revenueBadge]}
@@ -170,7 +170,7 @@ const EMPContest = () => {
           />
         </Col>
 
-        <Col xxl={3} lg={4} md={6} sm={12}>
+        <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Clients target*"
             value={clientCard[clientBadge]}
@@ -180,7 +180,7 @@ const EMPContest = () => {
           />
         </Col>
 
-        <Col xxl={3} lg={4} md={6} sm={12}>
+        <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Fresh Cash Margin*"
             value={targetData?.freshCashMargin}
@@ -192,7 +192,7 @@ const EMPContest = () => {
         </Col>
       </Row>
       <Row>
-        <Col xxl={3} lg={4} md={6} sm={12}>
+        <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Revenue achieve*"
             value={
@@ -209,7 +209,7 @@ const EMPContest = () => {
           />
         </Col>
 
-        <Col xxl={3} lg={4} md={6} sm={12}>
+        <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Clients achieve*"
             value={0}
@@ -220,7 +220,7 @@ const EMPContest = () => {
           />
         </Col>
 
-        <Col xxl={3} lg={4} md={6} sm={12}>
+        <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Fresh Cash Margin*"
             value={""}

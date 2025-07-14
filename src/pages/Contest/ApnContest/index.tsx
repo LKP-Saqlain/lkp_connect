@@ -110,13 +110,7 @@ const APContest = () => {
       <Row className="g-3" style={{ marginTop: "5px" }}>
         {/* Left Side: 2 rows of 2 cards each */}
 
-        <Col
-          xxl={4}
-          lg={4}
-          md={6}
-          sm={12}
-          // style={{ marginTop: isMobile ? "10px" : "" }}
-        >
+        <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Revenue Targets*"
             value={
