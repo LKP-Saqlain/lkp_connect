@@ -6276,3 +6276,112 @@ export const ClientPledgeRequest: GridColDef[] = [
     align: "center",
   },
 ];
+
+export const clientAPBrokerageColumns: GridColDef[] = [
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    width: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 200,
+    flex: 1,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "monthYr",
+    headerName: "Month",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "grossBrokerage",
+    headerName: "Gross Brokerage",
+    width: 140,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "sbBrokerage",
+    headerName: "Sub-Broker Brokerage",
+    width: 160,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "netBrokerage",
+    headerName: "Net Brokerage",
+    width: 140,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+];
+
+export const APContestAchievedClients: GridColDef[] = [
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 200,
+    flex: 1,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "activationDate",
+    headerName: "Activation Date",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "lastTradeDate",
+    headerName: "Last Trade Date",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+];

@@ -32,6 +32,7 @@ interface DashboardCardProps {
   activeClientsEmpty?: any;
   rightTitle?: string;
   rightValue?: number | string;
+  cardStyle?: any;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -49,6 +50,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   activeClientsEmpty,
   rightTitle,
   rightValue,
+  cardStyle,
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -64,6 +66,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           marginBottom: "20px",
           height: title === "Prizes*" ? "100px" : "auto",
           minHeight: title === "Prizes*" ? "110px" : "auto",
+          ...cardStyle,
         }}
       >
         <CardBody>
@@ -145,8 +148,9 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                       }
                       alt="Prize Icon"
                       style={{
-                        width: "100%",
-                        height: value === "Iphone 16" ? "120px" : "80px",
+                        // width: "100%",
+                        marginTop: value === "Iphone 16" ? "5rem" : "",
+                        height: value === "Iphone 16" ? "270px" : "140px",
                         objectFit: "contain",
                         marginBottom: "1rem",
                       }}
@@ -183,8 +187,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                       formattingFn={formatIndianNumber}
                     />
                   ) : (
-                    // <span>{value}</span>
-                    <></>
+                    title !== "Prizes*" && <span>{value}</span>
+                    // <></>
                   )}
                   <small
                     className="fs-12"

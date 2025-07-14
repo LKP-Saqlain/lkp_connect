@@ -107,4 +107,7 @@ export const endpoints = {
   GetCommissionRevenueSummary: "api/SPIP/GetCommissionRevenueSummary",
   GetClientPledgeDetails: "api/Dashboard/GetClientPledgeDetails",
   GetEmpContestAchievedDetails: "api/MIS/GetEmpContestAchievedDetails",
+  GetAPContestAchievedBrokerage: "api/MIS/GetAPContestAchievedBrokerage",
+  GetAPContestAchievedClients: "api/MIS/GetAPContestAchievedClients",
+  GetAPContestAchievedSummary: "api/MIS/GetAPContestAchievedSummary",
 };

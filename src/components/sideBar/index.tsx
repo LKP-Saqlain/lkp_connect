@@ -764,7 +764,7 @@ const SideBar = () => {
       ),
       30: () => getSubItemComponent(tpdSubItems),
       31: () => <EmpContest />,
-      32: () => <ApnContest />,
+      32: () => <ApnContest activeMenu={activeMenu} />,
     };
 
     return dynamicMap[menu_order]?.() || null;

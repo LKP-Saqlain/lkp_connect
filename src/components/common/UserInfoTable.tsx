@@ -42,6 +42,8 @@ import {
   getApproverTwoDetails,
   unListedTradeColumns,
   ClientPledgeRequest,
+  clientAPBrokerageColumns,
+  APContestAchievedClients,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1441,6 +1443,14 @@ const DataTable = ({
         // Return unchanged column if not the 'status' or 'document' field
         return column;
       });
+    } else if (activeMenu === "Partner Contest") {
+      return clientAPBrokerageColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "AP Contest Achieved Clients") {
+      return APContestAchievedClients.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
