@@ -31,17 +31,20 @@ interface APContestData {
 const EMPContest = () => {
   const [revenueBadge, setRevenueBadge] = useState<RevenueBadge>("total");
   const [clientBadge, setClientBadge] = useState<ClientBadge>("totalClient");
-  const [clientCard, setClientCard] = useState({
-    totalClient: 0,
-    newClient: 0,
-    reactivate: 0,
-  });
+  // const [clientCard, setClientCard] = useState({
+  //   totalClient: 0,
+  //   newClient: 0,
+  //   reactivate: 0,
+  // });
   const [revenueCard, setRevenueCard] = useState({
     total: 0,
     broking: 0,
     nonBroking: 0,
     freeCash_Margin: 0,
     mfAUM_NET: 0,
+    totalClient: 0,
+    newClient: 0,
+    reactivate: 0,
   });
   const [achieveCard, setAchieveCard] = useState({
     total: 0,
@@ -85,13 +88,16 @@ const EMPContest = () => {
           } = data;
 
           setTargetData(data);
-          setClientCard({ totalClient, newClient, reactivate });
+          // setClientCard({ totalClient, newClient, reactivate });
           setRevenueCard({
             total,
             broking,
             nonBroking,
             freeCash_Margin,
             mfAUM_NET,
+            totalClient,
+            newClient,
+            reactivate,
           });
         }
         if (GetEmpContestAchievedSummary?.status === 200) {
@@ -188,7 +194,7 @@ const EMPContest = () => {
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Clients target*"
-            value={clientCard[clientBadge]}
+            value={revenueCard[clientBadge]}
             animationData={ActiveClient}
             badges={clientBadges}
             customClass={true}
