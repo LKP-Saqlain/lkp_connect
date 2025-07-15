@@ -163,9 +163,9 @@ const Index = ({ activeSubItem }: any) => {
       });
 
     // Optional: Reset fields
-    setSelectedZone(null);
-    setSelectedBranchCode(null);
-    setClientCode("");
+    // setSelectedZone(null);
+    // setSelectedBranchCode(null);
+    // setClientCode("");
   };
 
   const handleClick = (row: any) => {
