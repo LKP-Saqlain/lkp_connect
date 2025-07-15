@@ -4853,89 +4853,125 @@ export const quotes = [
     author: "Warren Buffett",
   },
   {
-    text: `Please wait, we are processing your request...`,
-    author: "",
+    text: "In investing, what is comfortable is rarely profitable.",
+    author: "Robert Arnott",
   },
+  {
+    text: "The stock market is filled with individuals who know the price of everything, but the value of nothing.",
+    author: "Philip Fisher",
+  },
+  {
+    text: "Know what you own, and know why you own it.",
+    author: "Peter Lynch",
+  },
+  {
+    text: "An investment in knowledge pays the best interest.",
+    author: "Benjamin Franklin",
+  },
+  {
+    text: "The four most dangerous words in investing are: 'This time it's different.'",
+    author: "Sir John Templeton",
+  },
+  {
+    text: "Time is your friend; impulse is your enemy.",
+    author: "John C. Bogle",
+  },
+  {
+    text: "Wide diversification is only required when investors do not understand what they are doing.",
+    author: "Warren Buffett",
+  },
+  {
+    text: "Financial freedom is available to those who learn about it and work for it.",
+    author: "Robert Kiyosaki",
+  },
+  {
+    text: "Behind every stock is a company. Find out what it's doing.",
+    author: "Peter Lynch",
+  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "Risk comes from not knowing what you are doing.",
     author: "Warren Buffett",
   },
-  {
-    text: `Please wait, we are processing your request...`,
-    author: "",
-  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "Stay hungry, stay foolish.",
     author: "Steve Jobs",
   },
-  {
-    text: `Please wait, we are processing your request...`,
-    author: "",
-  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "The best way to predict the future is to create it.",
     author: "Peter Drucker",
   },
-  {
-    text: `Please wait, we are processing your request...`,
-    author: "",
-  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "If something is important enough, even if the odds are against you, you should still do it.",
     author: "Elon Musk",
   },
-  {
-    text: `Please wait, we are processing your request...`,
-    author: "",
-  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "When something is important enough, you do it even if the odds are not in your favor.",
     author: "Elon Musk",
   },
-  {
-    text: `Please wait, we are processing your request...`,
-    author: "",
-  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "Success is not in what you have, but who you are.",
     author: "Bo Bennett",
   },
-  {
-    text: `Please wait, we are processing your request...`,
-    author: "",
-  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "Your time is limited, so don’t waste it living someone else’s life.",
     author: "Steve Jobs",
   },
-  {
-    text: `Please wait, we are processing your request...`,
-    author: "",
-  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "I find that the harder I work, the more luck I seem to have.",
     author: "Thomas Jefferson",
   },
-  {
-    text: `Please wait, we are processing your request...`,
-    author: "",
-  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "Don't be afraid to give up the good to go for the great.",
     author: "John D. Rockefeller",
   },
-  {
-    text: `Please wait, we are processing your request...`,
-    author: "",
-  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "Opportunities don't happen. You create them.",
     author: "Chris Grosser",
   },
-  {
-    text: `Please wait, we are processing your request...`,
-    author: "",
-  },
+  // {
+  //   text: `Please wait, we are processing your request...`,
+  //   author: "",
+  // },
   {
     text: "Success usually comes to those who are too busy to be looking for it.",
     author: "Henry David Thoreau",

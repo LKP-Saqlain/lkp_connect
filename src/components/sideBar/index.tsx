@@ -1,92 +1,86 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  CssBaseline,
+  Typography,
+  Divider,
+  Avatar,
+  Tooltip,
+  Menu,
+  MenuItem,
+  Toolbar,
+  List,
+  IconButton,
+  useMediaQuery,
+  Badge,
+} from "@mui/material";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
-import { useMediaQuery, Box, Button } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import Menu from "@mui/material/Menu";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import Logo1 from "../../assets/images/logo1.png";
-import Logo from "../../assets/logo.png";
-import DrawerItem from "../DrawerItem/index";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import OverviewComponent from "../../pages/Overview";
-import TradeDashboard from "../../pages/TradeDashboard";
-import AnnualPNL from "../../pages/Reports/annualPNL";
-import DormantClient from "../../pages/Reports/dormantClient";
-// import Table from "../../components/common/table";
-import LastTrade from "../../pages/Reports/LastTrade";
-import QuarterlyPayout from "../../pages/Reports/QPayout";
-import SLBM from "../../pages/Reports/SLBM";
-import CoreReport from "../../pages/Reports/CoreReport";
-// import { apiServices } from "../../services";
-import { MenuItems } from "../../types";
-// import MenuMaster from "../../pages/Masters/MenuMaster";
-// import AccessMapping from "../../pages/Masters/AccessMapping";
-// import RMSAllocation from "../../pages/RMS/Allocation";
-// import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
-import { persistor } from "../../redux/store";
-import { RootState, AppDispatch } from "../../redux/store";
-import ShowToast from "../../utils/toastUtils";
-import { useDispatch, useSelector } from "react-redux";
-import { GetMenu } from "../../redux/thunk/GetMenus";
-import ClientDetails from "../../pages/ClientDetails";
-import RegOverview from "../../pages/regOverView";
-import AccStatement from "../../pages/Reports/AnnualAccStatement";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import { SlSizeFullscreen } from "react-icons/sl";
 import { BsFullscreen } from "react-icons/bs";
+import Logo from "../../assets/logo.png";
+import Logo1 from "../../assets/images/logo1.png";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState, persistor } from "../../redux/store";
+import { GetMenu } from "../../redux/thunk/GetMenus";
+import { userOverview } from "../../redux/thunk/Overview";
+import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
+import ShowToast from "../../utils/toastUtils";
+import { apiServices } from "../../services";
+import DrawerItem from "../DrawerItem";
+import Nudge from "../common/Nudge";
+import CustomModal from "../common/DPModal";
+import OverviewComponent from "../../pages/Overview";
+import TradeDashboard from "../../pages/TradeDashboard";
+import ClientDetails from "../../pages/ClientDetails";
+import RegOverview from "../../pages/regOverView";
 import EkycLinks from "../../pages/ekycLinks";
 import StockStudy from "../../pages/StockStudy";
-import DPRecovery from "../../pages/Reports/DPRecovery";
-import Retrival from "../../pages/Reports/ComplianceReport";
 import OTDetails from "../../pages/OT";
-import CommEntry from "../../pages/Compilance/commEntry";
-import ComChecker from "../../pages/Compilance/commChecker";
-// import Main from "../../pages/refCard";
-import Badge from "@mui/material/Badge";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import Nudge from "../common/Nudge";
-import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
-import { apiServices } from "../../services";
-import MarketingMaterial from "../../pages/Marketing Materials";
-import RegisDetails from "../../pages/Registration Details";
-import RegulatorAnnouncement from "../../pages/regulatory announcement";
-import CustomModal from "../common/DPModal";
-import { userOverview } from "../../redux/thunk/Overview";
-import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
+import SPIP from "../../pages/SPIPReports";
+import SPIPOverview from "../../pages/SPIPReports/SPIPOverview";
+import ApnContest from "../../pages/Contest/ApnContest";
+import EmpContest from "../../pages/Contest/EmpContest";
+import PledgeRequest from "../../pages/PledgeRequest";
+import InsertUnlistedShares from "../../pages/UnlistedShare/showUnlistedRecords";
+import ShowUnlistedRecords from "../../pages/UnlistedShare/showUnlistedRecords";
 import ViewApproverOne from "../../pages/UnlistedShare/ApproverOne";
 import ViewApproverTwo from "../../pages/UnlistedShare/ApproverTwo";
 import VendorsFile from "../../pages/UnlistedShare/UploadFile";
+import MarketingMaterial from "../../pages/Marketing Materials";
+import RegisDetails from "../../pages/Registration Details";
+import RegulatorAnnouncement from "../../pages/regulatory announcement";
+import MasterMenuMarketing from "../../pages/Masters/MarketingMaterialMaster";
 import RegAnnMaster from "../../pages/Masters/RegulatoryAnnouncement";
-import APOverview from "../../pages/Employee/Overview";
-// import useClearStorageOnTabClose from "../../components/customHooks/clearStorage";
-// import { subDays, format } from "date-fns";
-import RegionalHead from "../../pages/KYC Dashboard/RegionalHead/index";
+import RegionalHead from "../../pages/KYC Dashboard/RegionalHead";
 import BrokerageModificationStatus from "../../pages/KYC Dashboard/BrokerageModStatus";
 import KycBrokerage from "../../pages/KYC Dashboard/KycBrokerage";
 import PreProofUpload from "../../pages/preTrade/preProofUpload";
 import PreTradeReport from "../../pages/preTrade/preTradeReport";
 import PreTradeApproval from "../../pages/preTrade/Approval";
 import IVR from "../../pages/preTrade/IVR";
+import CommEntry from "../../pages/Compilance/commEntry";
+import ComChecker from "../../pages/Compilance/commChecker";
+import AnnualPNL from "../../pages/Reports/annualPNL";
+import DormantClient from "../../pages/Reports/dormantClient";
+import LastTrade from "../../pages/Reports/LastTrade";
+import QuarterlyPayout from "../../pages/Reports/QPayout";
+import SLBM from "../../pages/Reports/SLBM";
+import CoreReport from "../../pages/Reports/CoreReport";
+import AccStatement from "../../pages/Reports/AnnualAccStatement";
+import DPRecovery from "../../pages/Reports/DPRecovery";
+import Retrival from "../../pages/Reports/ComplianceReport";
 import ClientTradingReport from "../../pages/Reports/ClientTradingPatternReport";
 import CTCLReport from "../../pages/Reports/CTCLReport";
-import SPIP from "../../pages/SPIPReports";
-import InsertUnlistedShares from "../../pages/UnlistedShare/showUnlistedRecords";
-import ShowUnlistedRecords from "../../pages/UnlistedShare/showUnlistedRecords";
-import ApnContest from "../../pages/Contest/ApnContest";
-import EmpContest from "../../pages/Contest/EmpContest";
-import SPIPOverview from "../../pages/SPIPReports/SPIPOverview";
-import PledgeRequest from "../../pages/PledgeRequest";
+import APOverview from "../../pages/Employee/Overview";
+import { MenuItems } from "../../types";
 import "./style.css";
 
 const drawerWidth = 260;

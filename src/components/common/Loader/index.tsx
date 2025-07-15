@@ -1,7 +1,9 @@
-import { Backdrop, CircularProgress } from "@mui/material";
+// import { Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { quotes } from "../../../helper/tableColumns";
+import { CgSpinnerTwoAlt } from "react-icons/cg";
 
 const Loader = () => {
   const loading = useSelector((state: any) => state.loader.loading);
@@ -14,6 +16,7 @@ const Loader = () => {
   useEffect(() => {
     if (loading) {
       const randomIndex = Math.floor(Math.random() * quotes.length);
+      console.log("RandomIndex", randomIndex);
       setQuote(quotes[randomIndex]);
 
       // Optional: Rotate quotes every 5 seconds
@@ -37,12 +40,21 @@ const Loader = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.7)", // darker backdrop
+        backgroundColor: "rgba(0, 0, 0, 0.8)", // darker backdrop
         textAlign: "center",
         padding: "20px",
       }}
     >
-      <CircularProgress color="inherit" size={35} />
+      <CgSpinnerTwoAlt
+        style={{
+          fontSize: 25,
+          fontWeight: 400,
+          color: "#fff",
+          animation: "spin 1s linear infinite",
+        }}
+      />
+      {/* <CircularProgress color="inherit" size={35} /> */}
+
       {quote && (
         <div
           style={{
@@ -50,7 +62,7 @@ const Loader = () => {
             maxWidth: "550px",
             fontStyle: "italic",
             fontFamily: "Poppins",
-            fontSize: "12px",
+            fontSize: "11px",
             fontWeight: 500,
             lineHeight: "1.5",
             color: "#f5f5f5",
@@ -59,7 +71,7 @@ const Loader = () => {
           “{quote.text}”
           <div
             style={{
-              marginTop: "8px",
+              marginTop: "2px",
               fontSize: "9px",
               fontStyle: "italic",
               fontWeight: 400,
