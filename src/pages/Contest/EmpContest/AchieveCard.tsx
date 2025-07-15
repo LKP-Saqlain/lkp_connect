@@ -73,27 +73,31 @@ const AchieveCard = () => {
     title: string;
     dataKey: AchieveDataKey;
     menu: string;
+    timeFrame: string;
   }[] = [
     {
-      title: "Brokerage Achieved (July-Sept)",
+      title: "Brokerage Achieved ",
       dataKey: "broking",
       menu: "Employee Brokerage Achieved",
+      timeFrame: "(July-Sept)",
     },
     {
-      title: "Non-Brokerage Achieved (July-Sept)",
+      title: "Non-Brokerage Achieved ",
       dataKey: "nonBroking",
       menu: "Employee Non-Brokerage Achieved",
+      timeFrame: "(July-Sept)",
     },
     {
-      title: "Clients Achieved (July-Sept)",
+      title: "Clients Achieved ",
       dataKey: "client",
       menu: "Employee Clients Achieved",
+      timeFrame: "(July-Sept)",
     },
   ];
 
   return (
     <div>
-      {cardConfigs.map(({ title, dataKey, menu }) => (
+      {cardConfigs.map(({ title, dataKey, menu, timeFrame }) => (
         <Card
           key={title}
           style={{
@@ -110,7 +114,10 @@ const AchieveCard = () => {
               padding: "0.2rem 0.8rem",
             }}
           >
-            <h4 className="card-title mb-0">{title}</h4>
+            <h4 className="card-title mb-0">
+              {title}
+              <span style={{ fontSize: "12px" }}>{timeFrame}</span>
+            </h4>
           </CardHeader>
           <CardBody>
             <DataTable T6Data={achieveData[dataKey]} activeMenu={menu} />

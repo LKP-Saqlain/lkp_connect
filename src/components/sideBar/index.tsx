@@ -121,7 +121,7 @@ interface CustomAppBarProps extends MuiAppBarProps {
 
 // Custom AppBar
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== "open" && prop !== "isNudgeOpen",
 })<CustomAppBarProps>(({ theme, open, isNudgeOpen }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const drawerWidth = isMobile ? 180 : 260;
