@@ -81,6 +81,7 @@ import ClientTradingReport from "../../pages/Reports/ClientTradingPatternReport"
 import CTCLReport from "../../pages/Reports/CTCLReport";
 import APOverview from "../../pages/Employee/Overview";
 import { MenuItems } from "../../types";
+import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -684,9 +685,9 @@ const SideBar = () => {
     "Client Pledge Request": <PledgeRequest activeSubItem={activeSubItem} />,
   };
 
-  // const rmsSubItems: Record<string, JSX.Element> = {
-  //   "RMS Allocation": <InsertUnlistedShares activeSubItem={activeSubItem} />,
-  // };
+  const rmsSubItems: Record<string, JSX.Element> = {
+    "Upload SLBM Holding": <SLBMHoldings activeSubItem={activeSubItem} />,
+  };
   const tpdSubItems: Record<string, JSX.Element> = {
     "Unlisted Shares Entry": (
       <ShowUnlistedRecords activeSubItem={activeSubItem} />
@@ -733,6 +734,7 @@ const SideBar = () => {
       4: () => getSubItemComponent(reportsSubItems),
       5: () => <RegOverview />,
       6: () => getSubItemComponent(revenueDetailsSubItems),
+      7: () => getSubItemComponent(rmsSubItems),
       8: () => getSubItemComponent(complianceSubItems),
       9: () => getSubItemComponent(kycSubItems),
       10: () => <StockStudy />,

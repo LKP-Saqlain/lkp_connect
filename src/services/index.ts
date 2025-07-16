@@ -517,4 +517,7 @@ export const apiServices = {
       payload
     );
   },
+  SLBMHoldingsUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.SLBMHoldingsUpload, payload);
+  },
 };
