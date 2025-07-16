@@ -381,7 +381,7 @@ const CustomModal = ({
 
   const renderConfirmationButtons = () => (
     <div className="hstack gap-2 pt-2 justify-content-center">
-      {expiredtime || activeSubItem === "UCCCode MATCH" ? (
+      {expiredtime ? (
         <Button
           className="btn"
           style={{
