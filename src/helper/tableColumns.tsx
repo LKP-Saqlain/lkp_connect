@@ -1449,11 +1449,18 @@ export const spipSubscriptionColumns: GridColDef[] = [
     field: "Amount",
     headerName: "Amount",
     // flex: 1.5,
-    width: 80,
+    width: 100,
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) => `₹${params}`, // Format as currency
+    // valueFormatter: (params: any) => `₹${params}`, // Format as currency
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
 ];
 
