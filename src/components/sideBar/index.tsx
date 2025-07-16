@@ -80,6 +80,7 @@ import Retrival from "../../pages/Reports/ComplianceReport";
 import ClientTradingReport from "../../pages/Reports/ClientTradingPatternReport";
 import CTCLReport from "../../pages/Reports/CTCLReport";
 import APOverview from "../../pages/Employee/Overview";
+import ExclusionList from "../../pages/ExclusionList/";
 import { MenuItems } from "../../types";
 import "./style.css";
 
@@ -625,6 +626,7 @@ const SideBar = () => {
   const revenueDetailsSubItems: Record<string, JSX.Element> = {
     "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
+    "Menu Master": <ExclusionList activeSubItem={activeSubItem} />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {

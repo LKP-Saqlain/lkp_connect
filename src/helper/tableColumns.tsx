@@ -3319,6 +3319,10 @@ export const TypeOfDepartment = [
   { value: "Account", label: "Account" },
   { value: "RMS", label: "RMS" },
 ];
+export const TypeOfExclusionClient = [
+  { value: "Branch", label: "Branch" },
+  { value: "Client", label: "Client" },
+];
 
 export const InfoCapsules = [
   {
@@ -6557,5 +6561,78 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+  },
+];
+export const ClientExclusionColumns: GridColDef[] = [
+  {
+    field: "type",
+    headerName: "Type",
+    minWidth: 80,
+    flex: 0.7,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "code",
+    headerName: "Client Code",
+    minWidth: 150,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  // {
+  //   field: "excludeFrom",
+  //   headerName: "Exclude From",
+  //   minWidth: 140,
+  //   flex: 1,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  // },
+  {
+    field: "remarks",
+    headerName: "Remarks",
+    minWidth: 200,
+    flex: 2.5,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "createdBy",
+    headerName: "Created By",
+    minWidth: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "createdOn",
+    headerName: "Created On",
+    minWidth: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    // Optional: Uncomment to format date
+    // valueFormatter: (params) =>
+    //   new Date(params.value).toLocaleString("en-IN", {
+    //     dateStyle: "medium",
+    //     timeStyle: "short",
+    //   }),
+  },
+  {
+    field: "action",
+    headerName: "Action",
+    minWidth: 80,
+    flex: 0.5,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    sortable: false,
+    filterable: false,
   },
 ];

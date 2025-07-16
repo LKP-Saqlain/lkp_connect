@@ -46,6 +46,7 @@ import {
   APContestAchievedClients,
   EmpBrokerageAchieved,
   EmpNonBrokerageAchieved,
+  ClientExclusionColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1464,6 +1465,50 @@ const DataTable = ({
       return EmpNonBrokerageAchieved.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Menu Master") {
+      return ClientExclusionColumns.map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted;
+
+              const handleDelete = () => {
+                if (!isDeleted) {
+                  handleDeleteEntry?.(params.row);
+                  setSelectedRow(params.row);
+                  tog_center();
+                }
+              };
+
+              return (
+                <>
+                  <Tooltip
+                    title={isDeleted ? "Already deleted" : "Delete"}
+                    arrow
+                    placement="top"
+                  >
+                    <span>
+                      <IconButton
+                        sx={{ p: 0, ml: 1 }}
+                        color="primary"
+                        onClick={handleDelete}
+                        disabled={isDeleted}
+                      >
+                        <DeleteIcon
+                          fontSize="small"
+                          sx={{ color: isDeleted ? "red" : "#11395C" }}
+                        />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                </>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }

@@ -19,7 +19,10 @@ import * as Yup from "yup";
 import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
-import { TypeOfDepartment } from "../../../helper/tableColumns.tsx";
+import {
+  TypeOfDepartment,
+  TypeOfExclusionClient,
+} from "../../../helper/tableColumns.tsx";
 import ShowToast from "../../../utils/toastUtils";
 import FileUploadField from "../fileUploadField/index.tsx";
 import { regEx } from "../../../helper/method.ts";
@@ -43,15 +46,17 @@ const ModalComponent = ({
   isRegulatoryContent = false,
   isMarketingMaterial = false,
   isUnlistedContent = false,
+  isClientExclusion = false,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
   onSubmit?: (data: any, apiStatus?: any, fileBase64?: any) => void;
   editData?: any;
-  editUserCheck: boolean;
+  editUserCheck?: boolean;
   isRegulatoryContent?: any;
   isMarketingMaterial?: boolean;
   isUnlistedContent?: boolean;
+  isClientExclusion?: boolean;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedFileM, setUploadedFileM] = useState<File | null>(null);
@@ -847,6 +852,120 @@ const ModalComponent = ({
                   }}
                   accept=".pdf,.ppt,.pptx"
                 />
+              </>
+            )}
+            {isClientExclusion && (
+              <>
+                <Col lg={12}>
+                  <FormControl
+                    fullWidth
+                    error={
+                      formik.touched.TypeOfDepartment &&
+                      Boolean(formik.errors.TypeOfDepartment)
+                    }
+                  >
+                    <InputLabel id="type-of-department-label">
+                      Select Branch/Client Type
+                    </InputLabel>
+                    <Select
+                      size="small"
+                      labelId="type-of-department-label"
+                      id="TypeOfDepartment"
+                      name="TypeOfDepartment"
+                      value={formik.values.TypeOfDepartment}
+                      label="Select Branch/Client Type"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      sx={{ width: "100%", minHeight: "40px" }}
+                    >
+                      {TypeOfExclusionClient.map((docType) => (
+                        <MenuItem key={docType.value} value={docType.value}>
+                          {docType.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {formik.touched.TypeOfDepartment &&
+                      formik.errors.TypeOfDepartment && (
+                        <p className="text-error">
+                          {formik.errors.TypeOfDepartment}
+                        </p>
+                      )}
+                  </FormControl>
+                </Col>
+
+                <Col lg={12}>
+                  <TextField
+                    fullWidth
+                    id="SubjectType"
+                    name="SubjectType"
+                    label="Enter Branch/Client Code"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.SubjectType}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.SubjectType &&
+                      Boolean(formik.errors.SubjectType)
+                    }
+                    helperText={
+                      formik.touched.SubjectType && formik.errors.SubjectType
+                    }
+                  />
+                </Col>
+
+                {/* <Col lg={12}>
+                <FormControl
+                  fullWidth
+                  error={
+                    formik.touched.ExclusionTarget &&
+                    Boolean(formik.errors.ExclusionTarget)
+                  }
+                >
+                  <InputLabel id="exclusion-target-label">Exclude From</InputLabel>
+                  <Select
+                    size="small"
+                    labelId="exclusion-target-label"
+                    id="ExclusionTarget"
+                    name="ExclusionTarget"
+                    value={formik.values.ExclusionTarget}
+                    label="Exclude From"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    sx={{ width: "100%", minHeight: "40px" }}
+                  >
+                    {TypeOfExclusionClient.map((docType) => (
+                      <MenuItem key={docType.value} value={docType.value}>
+                        {docType.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {formik.touched.ExclusionTarget && formik.errors.ExclusionTarget && (
+                    <p className="text-error">{formik.errors.ExclusionTarget}</p>
+                  )}
+                </FormControl>
+              </Col> */}
+
+                <Col lg={12}>
+                  <TextField
+                    fullWidth
+                    id="LkpComments"
+                    name="LkpComments"
+                    label="Enter Remark"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.LkpComments}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.LkpComments &&
+                      Boolean(formik.errors.LkpComments)
+                    }
+                    helperText={
+                      formik.touched.LkpComments && formik.errors.LkpComments
+                    }
+                  />
+                </Col>
               </>
             )}
             {isUnlistedContent && (

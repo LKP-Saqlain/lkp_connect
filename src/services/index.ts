@@ -517,4 +517,10 @@ export const apiServices = {
       payload
     );
   },
+  GetExcludeOptions: async (payload: any) => {
+    return await apiService("POST", endpoints.GetExcludeOptions, payload);
+  },
+  GetClientExclusionList: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientExclusionList, payload);
+  },
 };
