@@ -6565,6 +6565,15 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
 ];
 export const ClientExclusionColumns: GridColDef[] = [
   {
+    field: "zone",
+    headerName: "Zone",
+    minWidth: 80,
+    flex: 0.7,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
     field: "type",
     headerName: "Type",
     minWidth: 80,
@@ -6617,12 +6626,15 @@ export const ClientExclusionColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
-    // Optional: Uncomment to format date
-    // valueFormatter: (params) =>
-    //   new Date(params.value).toLocaleString("en-IN", {
-    //     dateStyle: "medium",
-    //     timeStyle: "short",
-    //   }),
+
+    valueGetter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params, "DD-MMM-YY").toDate();
+    },
+    valueFormatter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
+    },
   },
   {
     field: "action",

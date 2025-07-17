@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
+import ShowToast from "../../utils/toastUtils";
 
 type SelectOption = {
   value: string;
@@ -38,6 +39,7 @@ const Index = ({ activeSubItem }: any) => {
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+  const toggleModal = () => setmodal_grid(!modal_grid);
 
   useEffect(() => {
     dispatch(showLoader("Please wait, we are processing your request..."));
@@ -49,7 +51,7 @@ const Index = ({ activeSubItem }: any) => {
             value: item.valueItem,
             label: item.displayItem,
           }));
-          setExcludeOptions(formatted); // ✅ correct
+          setExcludeOptions(formatted);
           console.log("Formatted Zone Options:", formatted);
         }
       })
@@ -58,9 +60,13 @@ const Index = ({ activeSubItem }: any) => {
   }, [dispatch, user_id]);
 
   const handleView = () => {
+    if (!selectedApiOption) {
+      ShowToast("error", "Please select a value for Exclude From");
+      return;
+    }
     const payload = {
       user_id: user_id,
-      excludeFrom: selectedApiOption?.value || "1",
+      excludeFrom: selectedApiOption?.value,
       entryType: selectedType?.value || "ALL",
       code: clientCode || "ALL",
     };
@@ -69,17 +75,67 @@ const Index = ({ activeSubItem }: any) => {
       .GetClientExclusionList(payload)
       .then((response) => {
         if (response?.status === 200) {
-          console.log("view done", response?.data?.data);
           setdata(response?.data?.data);
         }
       })
       .catch(() => console.log("Error while fetching exclude options"))
       .finally(() => dispatch(hideLoader()));
-    console.log("Payload to be sent:", payload);
-    // Optionally, trigger API call or table update here
   };
 
-  const toggleModal = () => setmodal_grid(!modal_grid);
+  const handleFormSubmit = (values: any) => {
+    console.log("handleFormSubmit", values);
+    const payload = {
+      // user_id: "EMP-3699",
+      user_id: user_id,
+      entryType: values.excludeType,
+      code: values.excludeCode,
+      excludeFrom: values.excludeFrom,
+      remarks: values.excludeRemark,
+    };
+
+    dispatch(showLoader("Please wait, we are processing your request..."));
+
+    apiServices
+      .InsertClientExclusionEntry(payload)
+      .then((response) => {
+        if (response?.status === 200 && response?.data?.isSuccess) {
+          ShowToast("success", response?.data?.message);
+          setmodal_grid(false);
+        } else {
+          ShowToast("error", response?.data?.message);
+        }
+      })
+      .catch((error) => {
+        console.log("API error", error);
+        ShowToast("error", "Failed to process your request.");
+      })
+      .finally(() => dispatch(hideLoader()));
+  };
+  const handleDelete = (row: any) => {
+    console.log("Delete karu ?", row);
+    const payload = {
+      // user_id: "EMP-3699",
+      user_id: user_id,
+      rowId: row.rowId,
+    };
+
+    dispatch(showLoader("Please wait, we are processing your request..."));
+
+    apiServices
+      .DeleteClientExclusionEntry(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          ShowToast("success", response?.data?.message);
+        } else {
+          ShowToast("error", response?.data?.message);
+        }
+      })
+      .catch((error) => {
+        console.log("API error", error);
+        ShowToast("error", "Failed to process your request.");
+      })
+      .finally(() => dispatch(hideLoader()));
+  };
 
   return (
     <div className="page-content page-view">
@@ -105,6 +161,8 @@ const Index = ({ activeSubItem }: any) => {
               modal_grid={modal_grid}
               tog_grid={toggleModal}
               isClientExclusion={true}
+              ExcludeOptions={excludeOptions}
+              onSubmit={handleFormSubmit}
             />
 
             <Box>
@@ -185,7 +243,7 @@ const Index = ({ activeSubItem }: any) => {
                     inputId="api-option"
                     value={selectedApiOption}
                     onChange={setSelectedApiOption}
-                    options={excludeOptions} // ✅ correct
+                    options={excludeOptions}
                     isClearable
                     styles={{
                       control: (base) => ({ ...base, fontSize: "12px" }),
@@ -216,7 +274,11 @@ const Index = ({ activeSubItem }: any) => {
               </Row>
             </Box>
 
-            <UserInfoTable activeSubItem={activeSubItem} T6Data={data} />
+            <UserInfoTable
+              activeSubItem={activeSubItem}
+              T6Data={data}
+              getUserDetails={handleDelete}
+            />
           </CardBody>
         </Card>
       </Container>

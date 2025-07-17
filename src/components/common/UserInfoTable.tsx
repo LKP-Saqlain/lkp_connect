@@ -1465,7 +1465,7 @@ const DataTable = ({
       return EmpNonBrokerageAchieved.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Menu Master") {
+    } else if (activeSubItem === "Client Exclusion") {
       return ClientExclusionColumns.map((column) => {
         if (column.field === "action") {
           return {
@@ -1590,7 +1590,8 @@ const DataTable = ({
             : activeSubItem === "Unlisted Shares Entry"
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Entry" ||
-              activeSubItem === "Marketing Material"
+              activeSubItem === "Marketing Material" ||
+              activeSubItem === "Client Exclusion"
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Checker"
             ? `Are you sure want to ${action} this entry`
