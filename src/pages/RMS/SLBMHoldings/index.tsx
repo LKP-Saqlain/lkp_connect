@@ -6,17 +6,15 @@ import {
   Col,
   Label,
   Row,
-  Input,
   Button,
-  FormFeedback,
 } from "reactstrap";
 import { useDispatch } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import axios from "axios";
 import { endpoints } from "../../../services/endpoints";
-// import Modal from "../../../components/common/Modal";
-// import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
+import { Tooltip } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 interface SLBMHoldingsProps {
   activeSubItem: any;
@@ -27,34 +25,38 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string>("");
-  // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [inputKey, setInputKey] = useState<number>(0);
   const [uploadedFileData, setUploadedFileData] = useState<{
     name: string;
     content: string;
   } | null>(null);
 
-  // const sampleFiles = [
-  //   {
-  //     name: "Symphony_IsinHolding.xlsx",
-  //     url: import.meta.env.VITE_CLIENT_SYMPHONY_ISIN,
-  //   },
-  // ];
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleFileChange = (file: File | null) => {
     if (!file) return;
-
     const isCSV = file.name.toLowerCase().endsWith(".csv");
-
     if (!isCSV) {
       setFileError("Only .csv files are allowed.");
       setSelectedFile(null);
       return;
     }
-
     setSelectedFile(file);
     setFileError("");
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleFileChange(e.target.files?.[0] || null);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const file = e.dataTransfer.files?.[0];
+    handleFileChange(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
   };
 
   const handleFileUpload = async () => {
@@ -62,20 +64,15 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
       setFileError("Please upload a .csv file before submitting.");
       return;
     }
-
     try {
       dispatch(showLoader("Please wait, we are processing your request..."));
-
       const base64Content = await getBase64Content(selectedFile);
-
       const payload = {
         user_id: localStorage.getItem("Id"),
         file_name: selectedFile.name,
         file_content: base64Content,
       };
-
       const token = localStorage.getItem("tkn");
-
       const response = await axios.post(
         `https://middlewareapi.lkp.net.in${endpoints.SLBMHoldingsUpload}`,
         payload,
@@ -85,26 +82,12 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
           },
         }
       );
-
-      // apiServices
-      //   .SLBMHoldingsUpload(payload)
-      //   .then((response) => {
-      //     console.log("SLBMHoldingsReportResponse", response);
-      //     dispatch(hideLoader());
-      //   })
-      //   .catch((Errror) => {
-      //     console.log("Errror", Errror);
-      //   });
-
-      console.log("SLBMHoldingsReportResponse", response);
-
       if (response.status === 200) {
         ShowToast("success", response?.data);
         setUploadedFileData({
           name: selectedFile.name,
           content: base64Content,
         });
-        // setIsModalOpen(true);
         resetForm();
         console.log(uploadedFileData);
       }
@@ -133,8 +116,6 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
     setInputKey((prev) => prev + 1);
   };
 
-  // const toggleModal = () => setIsModalOpen((prev) => !prev);
-
   document.title = "LKP Securities | SLBM Holdings File Upload";
 
   return (
@@ -160,54 +141,103 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
                 <h4 className="card-title mb-0">SLBM Holdings File Upload</h4>
               </CardHeader>
               <CardBody>
-                {/* <Modal isOpen={isModalOpen} onClose={toggleModal} /> */}
                 <Row>
                   <Col lg={6}>
                     <Label htmlFor="formFile" className="form-label">
-                      Select File
+                      Upload File
                     </Label>
-                    <Input
-                      key={inputKey}
-                      className="form-control"
-                      type="file"
-                      id="formFile"
-                      accept=".csv"
-                      onChange={handleFileChange}
-                      invalid={!!fileError}
-                    />
-                    {fileError && <FormFeedback>{fileError}</FormFeedback>}
-                  </Col>
+                    <div
+                      style={{ position: "relative", width: "100%" }}
+                      onDrop={handleDrop}
+                      onDragOver={handleDragOver}
+                    >
+                      <input
+                        type="file"
+                        id="customFileUpload"
+                        key={inputKey}
+                        style={{ display: "none" }}
+                        accept=".csv"
+                        onChange={handleInputChange}
+                      />
 
-                  {/* <Col lg={6}>
-                    <h6>Sample Files:</h6>
-                    <ul className="mb-0">
-                      {sampleFiles.map((file, index) => (
-                        <li key={index}>
-                          <a href={file.url} download>
-                            {file.name}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </Col> */}
-                </Row>
-                {/* 
-                {uploadedFileData && (
-                  <Row className="mt-4">
-                    <Col lg={6}>
-                      <h6>Download Uploaded File:</h6>
-                      <a
-                        href={`data:text/csv;base64,${uploadedFileData.content}`}
-                        download={uploadedFileData.name}
+                      <Button
+                        type="button"
+                        onClick={() =>
+                          document.getElementById("customFileUpload")?.click()
+                        }
+                        style={{
+                          backgroundColor: "#f8f9fa",
+                          color: "#333",
+                          border: "1px dashed #ced4da",
+                          height: "38px",
+                          width: "80%",
+                          borderRadius: "0.25rem",
+                          fontSize: "0.9rem",
+                          textAlign: "left",
+                          paddingLeft: "12px",
+                          paddingRight: selectedFile ? "40px" : "12px",
+                          overflow: "hidden",
+                          position: "relative",
+                          display: "flex",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
                       >
-                        {uploadedFileData.name}
-                      </a>
-                    </Col>
-                  </Row>
-                )} */}
+                        {selectedFile ? (
+                          <>
+                            {selectedFile.name}
+                            <Tooltip title="Delete file" arrow>
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  right: "8px",
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  cursor: "pointer",
+                                  color: "#dc3545",
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  resetForm();
+                                }}
+                              >
+                                <CloseIcon fontSize="small" />
+                              </span>
+                            </Tooltip>
+                          </>
+                        ) : (
+                          <span>
+                            <strong>Click to upload</strong> or drag and drop
+                            your <strong>.csv</strong> file here
+                          </span>
+                        )}
+                      </Button>
+
+                      {fileError && (
+                        <div
+                          className="text-danger mt-1"
+                          style={{ fontSize: "0.85rem" }}
+                        >
+                          {fileError}
+                        </div>
+                      )}
+
+                      <div className="mt-1">
+                        <small className="text-muted d-block">
+                          • Only <strong>.csv</strong> files are accepted.
+                        </small>
+                        <small className="text-muted d-block">
+                          • Max size: <strong>20MB</strong>.
+                        </small>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
 
                 <Row>
-                  <Col lg={4} className="mt-4">
+                  <Col lg={4} className="mt-2">
                     <Button
                       onClick={handleFileUpload}
                       style={{ backgroundColor: "#11395C" }}
