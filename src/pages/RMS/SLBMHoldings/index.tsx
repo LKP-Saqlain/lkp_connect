@@ -228,9 +228,9 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
                         <small className="text-muted d-block">
                           • Only <strong>.csv</strong> files are accepted.
                         </small>
-                        <small className="text-muted d-block">
+                        {/* <small className="text-muted d-block">
                           • Max size: <strong>20MB</strong>.
-                        </small>
+                        </small> */}
                       </div>
                     </div>
                   </Col>
