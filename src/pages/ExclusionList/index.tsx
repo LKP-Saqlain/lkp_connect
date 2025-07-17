@@ -34,6 +34,7 @@ const Index = ({ activeSubItem }: any) => {
   const [selectedApiOption, setSelectedApiOption] =
     useState<SelectOption | null>(null);
   const [selectedType, setSelectedType] = useState<SelectOption | null>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
@@ -81,6 +82,11 @@ const Index = ({ activeSubItem }: any) => {
       .catch(() => console.log("Error while fetching exclude options"))
       .finally(() => dispatch(hideLoader()));
   };
+  useEffect(() => {
+    if (refreshTrigger) {
+      handleView();
+    }
+  }, [refreshTrigger]);
 
   const handleFormSubmit = (values: any) => {
     console.log("handleFormSubmit", values);
@@ -101,6 +107,7 @@ const Index = ({ activeSubItem }: any) => {
         if (response?.status === 200 && response?.data?.isSuccess) {
           ShowToast("success", response?.data?.message);
           setmodal_grid(false);
+          setRefreshTrigger((prev) => prev + 1);
         } else {
           ShowToast("error", response?.data?.message);
         }
@@ -124,8 +131,9 @@ const Index = ({ activeSubItem }: any) => {
     apiServices
       .DeleteClientExclusionEntry(payload)
       .then((response) => {
-        if (response?.status === 200) {
+        if (response?.status === 200 && response?.data?.isSuccess) {
           ShowToast("success", response?.data?.message);
+          setRefreshTrigger((prev) => prev + 1);
         } else {
           ShowToast("error", response?.data?.message);
         }
