@@ -31,14 +31,14 @@ const PerformanceReport = () => {
   const formik = useFormik({
     initialValues: {
       finYear: "",
-      clientCode: "",
+      raCode: "",
     },
     validationSchema: Yup.object({
       finYear: Yup.string().required("Please select a Financial Year"),
-      clientCode: Yup.string().required("Please enter a Client Code"),
+      raCode: Yup.string().required("Please enter RA Code"),
     }),
-    onSubmit: async ({ finYear, clientCode }) => {
-      const payload = { clientCode, year: finYear };
+    onSubmit: async ({ finYear, raCode }) => {
+      const payload = { raCode, year: finYear };
       try {
         dispatch(showLoader(""));
         const response = await apiServices.GenerateClientPerformancePdf(
@@ -54,7 +54,7 @@ const PerformanceReport = () => {
           link.href = url;
           link.setAttribute(
             "download",
-            `SPIP_PERFORMANCE_${clientCode}_${finYear}.pdf`
+            `SPIP_PERFORMANCE_${raCode}_${finYear}.pdf`
           );
           document.body.appendChild(link);
           link.click();
@@ -187,17 +187,16 @@ const PerformanceReport = () => {
                         size="small"
                         fullWidth
                         id="client-code-input"
-                        label="Client Code"
-                        name="clientCode"
-                        value={formik.values.clientCode}
+                        label="Enter RA Code"
+                        name="raCode"
+                        value={formik.values.raCode}
                         onChange={handleCustomChange}
                         onBlur={formik.handleBlur}
                         error={
-                          formik.touched.clientCode &&
-                          Boolean(formik.errors.clientCode)
+                          formik.touched.raCode && Boolean(formik.errors.raCode)
                         }
                         helperText={
-                          formik.touched.clientCode && formik.errors.clientCode
+                          formik.touched.raCode && formik.errors.raCode
                         }
                       />
                     </Col>
