@@ -5,6 +5,7 @@ import SubScriptionDetails from "./SubscriptionDetails";
 import SPIPBranchWise from "./BranchWiseReport";
 import SPIPClientWiseReport from "./ClientWiseReport";
 import ClientDetails from "./SPIPClientDetails";
+import PeroformanceReport from "./PerformanceReport";
 // import SPIPOverview from "./SPIPOverview";
 import { SubItemKeys } from "../../constants/subItemKeys";
 import Loader from "../../components/common/Loader";
@@ -52,6 +53,7 @@ const SPIP = ({
         selectedViewMore={selectedViewMore}
       />
     ),
+    [SubItemKeys.SPIP_PERFORMANCE_REPORT]: <PeroformanceReport />,
   };
 
   const isValidSubItem =

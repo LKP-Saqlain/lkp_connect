@@ -520,4 +520,11 @@ export const apiServices = {
   SLBMHoldingsUpload: async (payload: any) => {
     return await apiService("POST", endpoints.SLBMHoldingsUpload, payload);
   },
+  GenerateClientPerformancePdf: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GenerateClientPerformancePdf,
+      payload
+    );
+  },
 };

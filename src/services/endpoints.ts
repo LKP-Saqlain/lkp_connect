@@ -114,4 +114,5 @@ export const endpoints = {
   GetEmpContestAchievedClients: "api/MIS/GetEmpContestAchievedClients",
   GetEmpContestAchievedNonBrokerage:
     "api/MIS/GetEmpContestAchievedNonBrokerage",
+  GenerateClientPerformancePdf: "api/SPIP/GenerateClientPerformancePdf",
 };

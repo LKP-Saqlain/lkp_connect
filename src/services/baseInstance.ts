@@ -62,6 +62,7 @@ const pdfDownloadEndpoints = [
   endpoints.GetPNLAccountDetailsPdf,
   endpoints.ComplainceFileDownload,
   endpoints.GenerateAndDownloadInvoice,
+  endpoints.GenerateClientPerformancePdf,
 ];
 
 const multipartEndpoints = [endpoints.UploadUnlistedSharesVendorFile];
