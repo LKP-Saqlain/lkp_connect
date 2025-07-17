@@ -547,4 +547,7 @@ export const apiServices = {
       payload
     );
   },
+  GetWebPortalDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetWebPortalDetails, payload);
+  },
 };

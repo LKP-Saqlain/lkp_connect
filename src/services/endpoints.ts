@@ -119,4 +119,5 @@ export const endpoints = {
   GetClientExclusionList: "api/Master/GetClientExclusionList",
   InsertClientExclusionEntry: "api/Master/InsertClientExclusionEntry",
   DeleteClientExclusionEntry: "api/Master/DeleteClientExclusionEntry",
+  GetWebPortalDetails: "api/Common/GetWebPortalDetails",
 };

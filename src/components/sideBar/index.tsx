@@ -223,7 +223,7 @@ const SideBar = () => {
     (state: RootState) => state.UserLogin && state.UserLogin?.data?.data
   );
 
-  const { name, emailID } = useSelector(
+  const { name, emailID, authenticationValue } = useSelector(
     (state: RootState) => state.AuthUser && state.AuthUser?.data?.data
   );
   console.log("reduxStateUserName", name, user_type);
@@ -830,6 +830,33 @@ const SideBar = () => {
       });
   };
 
+  const handleWebPortalLogin = () => {
+    console.log("TestSSOLogin");
+    let payload = {
+      user_id: user_id,
+      panNo: authenticationValue,
+    };
+
+    dispatch(showLoader(""));
+    apiServices
+      .GetWebPortalDetails(payload)
+      .then((response) => {
+        console.log("WebLoginResponse", response?.data?.data?.webPortalLink);
+        dispatch(hideLoader());
+        if (response?.status === 200) {
+          const url = response?.data?.data?.webPortalLink;
+          window.open(url, "_blank", "noopener,noreferrer");
+        }
+      })
+      .catch((Error) => {
+        console.log("Errrror", Error);
+        dispatch(hideLoader());
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   return (
     <>
       <CustomModal
@@ -887,19 +914,38 @@ const SideBar = () => {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
+            <Button
+              onClick={handleWebPortalLogin}
+              variant="outlined"
+              style={{
+                height: "25px", // increased height for better readability
+                // minWidth: "220px", // ensure full text fits
+                borderRadius: "5px",
+                fontSize: "12px",
+                padding: "4px 12px",
+                fontFamily: "Public Sans",
+                borderColor: "#11395C", // outlined border color
+                color: "#11395C", // text color matches border
+                textTransform: "none",
+                marginRight: "1rem",
+              }}
+            >
+              Web Portal
+            </Button>
             {showMyPerformance && (
               <>
                 <Button
                   onClick={handleSSOLogin}
                   style={{
                     height: "25px",
-                    width: "80px",
+                    width: "90px",
                     borderRadius: "5px",
                     fontSize: "12px",
-                    padding: "0",
+                    padding: "4px 12px",
                     fontFamily: "Public Sans",
                     backgroundColor: "#11395C",
                     color: "#fff",
+                    marginRight: "8px",
                   }}
                   className="btn-sm"
                 >
