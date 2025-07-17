@@ -115,4 +115,8 @@ export const endpoints = {
   GetEmpContestAchievedNonBrokerage:
     "api/MIS/GetEmpContestAchievedNonBrokerage",
   GenerateClientPerformancePdf: "api/SPIP/GenerateClientPerformancePdf",
+  GetExcludeOptions: "api/Master/GetExcludeOptions",
+  GetClientExclusionList: "api/Master/GetClientExclusionList",
+  InsertClientExclusionEntry: "api/Master/InsertClientExclusionEntry",
+  DeleteClientExclusionEntry: "api/Master/DeleteClientExclusionEntry",
 };

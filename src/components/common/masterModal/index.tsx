@@ -19,7 +19,10 @@ import * as Yup from "yup";
 import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
-import { TypeOfDepartment } from "../../../helper/tableColumns.tsx";
+import {
+  TypeOfDepartment,
+  TypeOfExclusionClient,
+} from "../../../helper/tableColumns.tsx";
 import ShowToast from "../../../utils/toastUtils";
 import FileUploadField from "../fileUploadField/index.tsx";
 import { regEx } from "../../../helper/method.ts";
@@ -43,15 +46,19 @@ const ModalComponent = ({
   isRegulatoryContent = false,
   isMarketingMaterial = false,
   isUnlistedContent = false,
+  isClientExclusion = false,
+  ExcludeOptions,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
   onSubmit?: (data: any, apiStatus?: any, fileBase64?: any) => void;
   editData?: any;
-  editUserCheck: boolean;
+  editUserCheck?: boolean;
   isRegulatoryContent?: any;
   isMarketingMaterial?: boolean;
   isUnlistedContent?: boolean;
+  isClientExclusion?: boolean;
+  ExcludeOptions?: any;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedFileM, setUploadedFileM] = useState<File | null>(null);
@@ -114,16 +121,22 @@ const ModalComponent = ({
       }),
     });
 
+  const getClientExclusionValidationSchema = () =>
+    Yup.object().shape({
+      excludeType: Yup.string().required("Branch/Client Type is required"),
+      excludeCode: Yup.string().required("Branch/Client Code is required"),
+      excludeFrom: Yup.string().required("Exclude From selection is required"),
+      excludeRemark: Yup.string().required("Remark is required"),
+    });
+
   const getValidationSchema = (editData?: EditData) => {
     if (isRegulatoryContent) {
       return getRegulatoryValidationSchema(editData!);
     } else if (isMarketingMaterial) {
       return getMarketingMaterialValidationSchema(editData);
-    }
-    // else if (isUnlistedContent) {
-    //   // return getUnlistedSchema(editData);
-    // }
-    else {
+    } else if (isClientExclusion) {
+      return getClientExclusionValidationSchema();
+    } else {
       return Yup.object(); // fallback schema (or handle general case)
     }
   };
@@ -141,6 +154,13 @@ const ModalComponent = ({
         fileUpload: "",
         description: "",
         image: "",
+      }
+    : isClientExclusion
+    ? {
+        excludeType: "",
+        excludeCode: "",
+        excludeFrom: "",
+        excludeRemark: "",
       }
     : {
         transactionDate: null as string | null,
@@ -182,6 +202,15 @@ const ModalComponent = ({
           };
           fetchMarketingMaterialVals(marketingPayload);
           return;
+        } else if (isClientExclusion) {
+          const exclusionClientPayload = {
+            excludeType: values.excludeType,
+            excludeCode: values.excludeCode,
+            excludeFrom: values.excludeFrom,
+            excludeRemark: values.excludeRemark,
+          };
+          console.log(exclusionClientPayload, "exclusionClientPayload");
+          fetchClientExclusion(exclusionClientPayload);
         } else if (isUnlistedContent) {
           const unlistedPayload = {
             transactionDate: values.transactionDate,
@@ -213,6 +242,12 @@ const ModalComponent = ({
     onSubmit?.(values);
     formik.resetForm();
   };
+  const fetchClientExclusion = (values: any) => {
+    console.log("fetchClientExclusionValuess", values);
+    onSubmit?.(values);
+    formik.resetForm();
+  };
+
   const fetchIsRegulatoryContent = async (setTouched: any, values: any) => {
     setTouched({
       dateOfCommunication: true,
@@ -849,6 +884,133 @@ const ModalComponent = ({
                 />
               </>
             )}
+            {isClientExclusion && (
+              <>
+                {/* excludeType */}
+                <Col lg={12}>
+                  <FormControl
+                    fullWidth
+                    error={
+                      formik.touched.excludeType &&
+                      Boolean(formik.errors.excludeType)
+                    }
+                  >
+                    <InputLabel id="exclude-type-label">
+                      Select Branch/Client Type
+                    </InputLabel>
+                    <Select
+                      size="small"
+                      labelId="exclude-type-label"
+                      id="excludeType"
+                      name="excludeType"
+                      value={formik.values.excludeType}
+                      label="Select Branch/Client Type"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      sx={{ width: "100%", minHeight: "40px" }}
+                    >
+                      {TypeOfExclusionClient.map((docType) => (
+                        <MenuItem key={docType.value} value={docType.value}>
+                          {docType.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {formik.touched.excludeType &&
+                      formik.errors.excludeType && (
+                        <p className="text-error">
+                          {formik.errors.excludeType}
+                        </p>
+                      )}
+                  </FormControl>
+                </Col>
+
+                {/* excludeCode */}
+                <Col lg={12}>
+                  <TextField
+                    fullWidth
+                    id="excludeCode"
+                    name="excludeCode"
+                    label="Enter Branch/Client Code"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.excludeCode}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.excludeCode &&
+                      Boolean(formik.errors.excludeCode)
+                    }
+                    helperText={
+                      formik.touched.excludeCode && formik.errors.excludeCode
+                    }
+                  />
+                </Col>
+
+                {/* excludeFrom */}
+                <Col lg={12}>
+                  <FormControl
+                    fullWidth
+                    error={
+                      formik.touched.excludeFrom &&
+                      Boolean(formik.errors.excludeFrom)
+                    }
+                  >
+                    <InputLabel id="exclude-from-label">
+                      Exclude From
+                    </InputLabel>
+                    <Select
+                      size="small"
+                      labelId="exclude-from-label"
+                      id="excludeFrom"
+                      name="excludeFrom"
+                      value={formik.values.excludeFrom}
+                      label="Exclude From"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      sx={{ width: "100%", minHeight: "40px" }}
+                    >
+                      {ExcludeOptions.map(
+                        (docType: { value: string; label: string }) => (
+                          <MenuItem key={docType.value} value={docType.value}>
+                            {docType.label}
+                          </MenuItem>
+                        )
+                      )}
+                    </Select>
+                    {formik.touched.excludeFrom &&
+                      formik.errors.excludeFrom && (
+                        <p className="text-error">
+                          {formik.errors.excludeFrom}
+                        </p>
+                      )}
+                  </FormControl>
+                </Col>
+
+                {/* excludeRemark */}
+                <Col lg={12}>
+                  <TextField
+                    fullWidth
+                    id="excludeRemark"
+                    name="excludeRemark"
+                    label="Enter Remark"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.excludeRemark}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.excludeRemark &&
+                      Boolean(formik.errors.excludeRemark)
+                    }
+                    helperText={
+                      formik.touched.excludeRemark &&
+                      formik.errors.excludeRemark
+                    }
+                  />
+                </Col>
+              </>
+            )}
+
             {isUnlistedContent && (
               <>
                 <Col lg={6}>
