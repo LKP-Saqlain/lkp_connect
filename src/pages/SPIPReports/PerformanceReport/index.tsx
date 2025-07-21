@@ -10,7 +10,7 @@ import {
   Select,
   useMediaQuery,
 } from "@mui/material";
-import DownloadIcon from "@mui/icons-material/Download";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -18,6 +18,7 @@ import { AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import ShowToast from "../../../utils/toastUtils";
 import { apiServices } from "../../../services";
+import Tooltip from "@mui/material/Tooltip";
 
 const financialYears = [
   { value: "2024-2025", label: "2024-2025" },
@@ -150,8 +151,12 @@ const PerformanceReport = () => {
                           formik.touched.finYear &&
                           Boolean(formik.errors.finYear)
                         }
+                        sx={{ minHeight: 36 }}
                       >
-                        <InputLabel id="Department-select-label">
+                        <InputLabel
+                          id="Department-select-label"
+                          sx={{ fontSize: "0.85rem", top: -6 }}
+                        >
                           Financial Year
                         </InputLabel>
                         <Select
@@ -163,7 +168,13 @@ const PerformanceReport = () => {
                           label="Financial Year"
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
-                          sx={{ width: "100%", minHeight: "40px" }}
+                          sx={{
+                            height: 36,
+                            fontSize: "0.85rem",
+                            ".MuiSelect-select": {
+                              paddingY: "6px",
+                            },
+                          }}
                         >
                           {financialYears.map((docType) => (
                             <MenuItem key={docType.value} value={docType.value}>
@@ -207,23 +218,26 @@ const PerformanceReport = () => {
                       style={{ marginTop: isMobile ? "16px" : "0" }}
                     >
                       <Box textAlign={isMobile ? "center" : "left"}>
-                        <Button
-                          type="submit"
-                          variant="contained"
-                          sx={{
-                            backgroundColor: "#11395C",
-                            width: isMobile ? "100%" : "50%",
-                            height: 36,
-                            minHeight: "unset",
-                            padding: "6px 12px",
-                            textTransform: "none",
-                            "&:hover": { backgroundColor: "#0d2e49" },
-                          }}
-                          className="btn-font"
-                        >
-                          Download Pdf
-                          <DownloadIcon fontSize="small" />
-                        </Button>
+                        <Tooltip title={"Download PDF"} arrow placement="top">
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            sx={{
+                              backgroundColor: "#11395C",
+                              width: "10%",
+                              height: 36,
+                              minHeight: "unset",
+                              padding: "6px 12px",
+                              textTransform: "none",
+                              "&:hover": { backgroundColor: "#0d2e49" },
+                            }}
+                            className="btn-font"
+                          >
+                            <span style={{ cursor: "pointer" }}>
+                              <PictureAsPdfIcon fontSize="small" />
+                            </span>
+                          </Button>
+                        </Tooltip>
                       </Box>
                     </Col>
                   </Row>

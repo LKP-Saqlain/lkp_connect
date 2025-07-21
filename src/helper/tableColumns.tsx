@@ -6074,6 +6074,13 @@ export const unListedTradeColumns: GridColDef[] = [
     //     maximumFractionDigits: 2,
     //   }).format(value);
     // },
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "gst",
@@ -6082,13 +6089,13 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    // valueFormatter: (params: any) => {
-    //   const value = parseFloat(params); // Convert the value to a number
-    //   return new Intl.NumberFormat("en-IN", {
-    //     minimumFractionDigits: 2,
-    //     maximumFractionDigits: 2,
-    //   }).format(value);
-    // },
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "brokerageExclusiveGST",
@@ -6098,13 +6105,13 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    // valueFormatter: (params: any) => {
-    //   const value = parseFloat(params); // Convert the value to a number
-    //   return new Intl.NumberFormat("en-IN", {
-    //     minimumFractionDigits: 2,
-    //     maximumFractionDigits: 2,
-    //   }).format(value);
-    // },
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "sbRate",
@@ -6123,13 +6130,13 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    // valueFormatter: (params: any) => {
-    //   const value = parseFloat(params); // Convert the value to a number
-    //   return new Intl.NumberFormat("en-IN", {
-    //     minimumFractionDigits: 2,
-    //     maximumFractionDigits: 2,
-    //   }).format(value);
-    // },
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "sbCommission",
@@ -6139,13 +6146,13 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    // valueFormatter: (params: any) => {
-    //   const value = parseFloat(params); // Convert the value to a number
-    //   return new Intl.NumberFormat("en-IN", {
-    //     minimumFractionDigits: 2,
-    //     maximumFractionDigits: 2,
-    //   }).format(value);
-    // },
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "netBrokerage",
@@ -6155,13 +6162,13 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    // valueFormatter: (params: any) => {
-    //   const value = parseFloat(params); // Convert the value to a number
-    //   return new Intl.NumberFormat("en-IN", {
-    //     minimumFractionDigits: 2,
-    //     maximumFractionDigits: 2,
-    //   }).format(value);
-    // },
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "remarks",

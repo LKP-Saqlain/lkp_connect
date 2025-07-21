@@ -13,6 +13,7 @@ import ShowToast from "../../../utils/toastUtils";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import DownloadIcon from "@mui/icons-material/Download";
+import * as Yup from "yup";
 
 interface SPIPPeformance {
   activeSubItem: string;
@@ -32,9 +33,9 @@ const SubScriptionDetails = ({ activeSubItem }: SPIPPeformance) => {
     initialValues: {
       riaCode: "",
     },
-    // validationSchema: Yup.object({
-    //   riaCode: Yup.string().required("Please enter a RIA Code"),
-    // }),
+    validationSchema: Yup.object({
+      riaCode: Yup.string().required("Please enter a Client Code"),
+    }),
     onSubmit: (values) => {
       const { riaCode } = values;
       console.log("submitClick", riaCode);

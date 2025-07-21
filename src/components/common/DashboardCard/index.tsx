@@ -85,7 +85,13 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
               </h6>
             </div>
           ) : (
-            <h6 className="fs-14 mb-0">{title}</h6>
+            <h6
+              className={
+                title === "Fresh Cash Margin*" ? "fs-12 mb-0" : "fs-14 mb-0"
+              }
+            >
+              {title}
+            </h6>
           )}
           <div
             className={`d-flex justify-content-between align-items-center ${

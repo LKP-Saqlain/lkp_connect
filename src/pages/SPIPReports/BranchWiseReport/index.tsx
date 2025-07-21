@@ -6,15 +6,7 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Row,
-  Button,
-  Label,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Row, Button } from "reactstrap";
 // import * as Yup from "yup";
 import { AppDispatch, RootState } from "../../../redux/store";
 import DataTable from "../../../components/common/UserInfoTable";
@@ -211,12 +203,6 @@ const SPIPBranchWiseFeesReport = ({ activeSubItem }: SPIPPeformance) => {
                             Boolean(formik.errors.endDate))
                         }
                       >
-                        <Label
-                          htmlFor="date-range-picker"
-                          className="form-label text-muted label-font"
-                        >
-                          Select Date Range
-                        </Label>
                         <DateRangePicker
                           id="date-range-picker"
                           size="md"
@@ -248,7 +234,7 @@ const SPIPBranchWiseFeesReport = ({ activeSubItem }: SPIPPeformance) => {
                       </FormControl>
                     </Col>
 
-                    <Col xs={12} md={6} lg={4} style={{ marginTop: "28px" }}>
+                    <Col xs={12} md={6} lg={4}>
                       <FormControl
                         fullWidth
                         error={
@@ -279,13 +265,7 @@ const SPIPBranchWiseFeesReport = ({ activeSubItem }: SPIPPeformance) => {
                       </FormControl>
                     </Col>
 
-                    <Col
-                      xs={12}
-                      sm={6}
-                      md={3}
-                      lg={2}
-                      style={{ marginTop: "28px" }}
-                    >
+                    <Col xs={12} sm={6} md={3} lg={2}>
                       <Button
                         className="btn-font w-100"
                         style={{

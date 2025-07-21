@@ -21,6 +21,7 @@ import ShowToast from "../../../utils/toastUtils";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import DownloadIcon from "@mui/icons-material/Download";
+import * as Yup from "yup";
 
 interface SPIPPeformance {
   activeSubItem: string;
@@ -42,10 +43,10 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
       finYear: "",
       clientCode: "",
     },
-    // validationSchema: Yup.object({
-    //   finYear: Yup.string().required("Please select a Financial Year"),
-    //   clientCode: Yup.string().required("Please enter a Terminal Code"),
-    // }),
+    validationSchema: Yup.object({
+      finYear: Yup.string().required("Please select a Quarter Name"),
+      clientCode: Yup.string().required("Please enter a Trading Code"),
+    }),
     onSubmit: (values) => {
       fetchReport(values);
     },
@@ -224,10 +225,15 @@ const SPIPPerformanceDashboard = ({ activeSubItem }: SPIPPeformance) => {
                             formik.touched.finYear &&
                             Boolean(formik.errors.finYear)
                           }
+                          sx={{ minHeight: 36 }}
                         >
                           <InputLabel
                             id="financial-year-select-label"
-                            sx={{ backgroundColor: "white", px: 0.5 }}
+                            sx={{
+                              backgroundColor: "white",
+                              px: 0.5,
+                              fontSize: "0.85rem",
+                            }}
                           >
                             Quarter Name
                           </InputLabel>

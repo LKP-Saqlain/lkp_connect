@@ -587,35 +587,40 @@ const ModalComponent = ({
           : parseInt(formik.values.brokPerShare || "0");
 
       if (noOfShare > 0 && brokPerShare > 0) {
-        const inCGST = noOfShare * brokPerShare;
-        const gst = inCGST * 0.18;
-        const exclGST = inCGST - gst;
+        const inclusiveGST = Math.floor(noOfShare * brokPerShare);
+        const gst = Math.floor(inclusiveGST / 1.18);
+        const exclusiveGST = Math.floor(inclusiveGST - gst);
 
-        formik.setFieldValue("brokIncGST", formatIndianNumber(inCGST));
-        formik.setFieldValue("gst", formatIndianNumber(gst));
-        formik.setFieldValue("brokExcGST", formatIndianNumber(exclGST));
+        formik.setFieldValue("brokIncGST", formatIndianNumber(inclusiveGST));
+        formik.setFieldValue("gst", formatIndianNumber(exclusiveGST));
+        formik.setFieldValue("brokExcGST", formatIndianNumber(gst));
+
         if (formik.values.sbCode === null && formik.values.sbRate === null) {
-          formik.setFieldValue("netBrokerage", formatIndianNumber(exclGST));
+          formik.setFieldValue(
+            "netBrokerage",
+            formatIndianNumber(exclusiveGST)
+          );
         }
 
-        // Also try recalculating sbCommission and netBrokerage if sbRate is present
         const sbRate = parseFloat(formik.values.sbRate || "0");
         if (sbRate > 0) {
           const sbValue = sbRate * noOfShare;
-          const stComm = sbValue * 0.18;
-          const subBrokerCommission = sbValue - stComm;
-          const brokExcGST = exclGST;
+          const stComm = sbValue / 1.18;
+          const subBrokerCommission = Math.floor(sbValue - stComm);
+          const brokExcGST = exclusiveGST;
 
-          const netBrokerage = brokExcGST - subBrokerCommission;
+          const netBrokerage = Math.floor(brokExcGST - subBrokerCommission);
 
           formik.setFieldValue("sbCommision", subBrokerCommission);
           formik.setFieldValue("netBrokerage", netBrokerage);
         } else {
           formik.setFieldValue("sbCommision", "");
           if (!formik.values.sbCode && !formik.values.sbRate) {
-            formik.setFieldValue("netBrokerage", formatIndianNumber(exclGST));
+            formik.setFieldValue(
+              "netBrokerage",
+              formatIndianNumber(exclusiveGST)
+            );
           }
-          // formik.setFieldValue("netBrokerage", "");
         }
       } else {
         resetBrokerageFields();
@@ -629,18 +634,30 @@ const ModalComponent = ({
         const sbRate = parseFloat(value);
 
         if (noOfShare > 0 && !isNaN(sbRate)) {
-          const sbValue = sbRate * noOfShare;
-          const stComm = sbValue * 0.18;
-          const subBrokerCommission = sbValue - stComm;
+          const subBrokerValue = sbRate * noOfShare; //1600
+          const subBrokerCommission = Math.floor(subBrokerValue / 1.18);
+          console.log("sbCoMMISSION", subBrokerCommission);
 
-          const brokExcGST = parseFloat(
-            (formik.values.brokExcGST ?? "0").toString().replace(/,/g, "")
+          // const subBrokerCommission = Math.floor(subBrokerValue - stComm);
+
+          const brokExcGST = Math.floor(
+            parseFloat(
+              (formik.values.brokExcGST ?? "0").toString().replace(/,/g, "")
+            )
           );
 
-          const netBrokerage = brokExcGST - subBrokerCommission;
+          const netBrokerage = Math.floor(
+            Math.abs(brokExcGST - subBrokerCommission)
+          );
 
-          formik.setFieldValue("sbCommision", subBrokerCommission);
-          formik.setFieldValue("netBrokerage", netBrokerage);
+          formik.setFieldValue(
+            "sbCommision",
+            formatIndianNumber(subBrokerCommission)
+          );
+          formik.setFieldValue(
+            "netBrokerage",
+            formatIndianNumber(netBrokerage)
+          );
         } else {
           formik.setFieldValue("sbCommision", "");
           formik.setFieldValue("netBrokerage", "");

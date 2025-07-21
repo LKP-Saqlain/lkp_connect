@@ -13,6 +13,7 @@ import ShowToast from "../../../utils/toastUtils";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import DownloadIcon from "@mui/icons-material/Download";
+import * as Yup from "yup";
 
 interface SPIPPeformance {
   activeSubItem: string;
@@ -32,9 +33,9 @@ const SPIPPerformanceSummary = ({ activeSubItem }: SPIPPeformance) => {
     initialValues: {
       clientCode: "",
     },
-    // validationSchema: Yup.object({
-    //   clientCode: Yup.string().required("Please enter a Client Code"),
-    // }),
+    validationSchema: Yup.object({
+      clientCode: Yup.string().required("Please enter a Client Code"),
+    }),
     onSubmit: (values) => {
       const { clientCode } = values;
       console.log("submitClick", clientCode);
