@@ -88,7 +88,7 @@ const AchieveCard = () => {
       timeFrame: "(July-Sept)",
     },
     {
-      title: "New Clients Achieved",
+      title: "New Clients Achieved ",
       dataKey: "client",
       menu: "Employee Clients Achieved",
       timeFrame: "(July-Sept)",
