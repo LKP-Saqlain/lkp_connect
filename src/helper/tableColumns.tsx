@@ -4928,14 +4928,6 @@ export const quotes = [
   //   author: "",
   // },
   {
-    text: "If something is important enough, even if the odds are against you, you should still do it.",
-    author: "Elon Musk",
-  },
-  // {
-  //   text: `Please wait, we are processing your request...`,
-  //   author: "",
-  // },
-  {
     text: "When something is important enough, you do it even if the odds are not in your favor.",
     author: "Elon Musk",
   },
