@@ -98,19 +98,19 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
   const brokerageBadges = [
     {
       type: "warning",
-      label: "total",
+      label: "Total",
       isActive: activeBrokerageBadge === "total",
       onClick: () => handleBrokerageBadgeClick("total"),
     },
     {
       type: "info",
-      label: "release",
+      label: "Release",
       isActive: activeBrokerageBadge === "release",
       onClick: () => handleBrokerageBadgeClick("release"),
     },
     {
       type: "primary",
-      label: "balance",
+      label: "Balance",
       isActive: activeBrokerageBadge === "balance",
       onClick: () => handleBrokerageBadgeClick("balance"),
     },
@@ -153,7 +153,7 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
             </Col>
             <Col xxl={4} lg={4} md={6} sm={12}>
               <DashboardCard
-                title="Unique Sub. Count*"
+                title="Unique Subscription Count*"
                 value={newSubClient}
                 animationData={ActiveClient}
                 // decimals={2}
