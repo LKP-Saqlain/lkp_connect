@@ -856,8 +856,8 @@ const ModalComponent = ({
                     marginTop: "2px ",
                   }}
                 >
-                  Please upload an image less than 512px width and 384px height
-                  (or 4:3 aspect ratio).
+                  Please upload an image 512px width and 384px height (or 4:3
+                  aspect ratio).
                 </p>
 
                 <Col lg={12}>
