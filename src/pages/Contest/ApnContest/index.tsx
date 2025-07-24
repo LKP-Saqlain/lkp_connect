@@ -233,7 +233,7 @@ const APContest = ({ activeMenu }: any) => {
               </div>
             </Col>
 
-            {/* Prizes Column */}
+            {/* Prize Column */}
             <Col xxl={4} lg={4} md={6} sm={12}>
               <div
                 style={{
@@ -243,7 +243,7 @@ const APContest = ({ activeMenu }: any) => {
                 }}
               >
                 <DashboardCard
-                  title="Prizes*"
+                  title="Prize*"
                   value={targetData?.prize}
                   customClass={true}
                   cardStyle={{ minHeight: "225px" }}
@@ -274,7 +274,7 @@ const APContest = ({ activeMenu }: any) => {
                 >
                   <h4 className="card-title mb-0">
                     AP Contest Achieved Brokerage{" "}
-                    <span style={{ fontSize: "12px" }}>(July- September)</span>
+                    <span style={{ fontSize: "12px" }}>(July- Sept)</span>
                   </h4>
                 </CardHeader>
                 <CardBody>
@@ -298,7 +298,7 @@ const APContest = ({ activeMenu }: any) => {
                 >
                   <h4 className="card-title mb-0">
                     AP Contest Achieved Clients{" "}
-                    <span style={{ fontSize: "12px" }}>(July- September)</span>
+                    <span style={{ fontSize: "12px" }}>(July- Sept)</span>
                   </h4>
                 </CardHeader>
                 <CardBody

@@ -64,8 +64,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           maxWidth: "500px",
           overflow: "hidden",
           marginBottom: "20px",
-          height: title === "Prizes*" ? "100px" : "auto",
-          minHeight: title === "Prizes*" ? "110px" : "auto",
+          height: title === "Prize*" ? "100px" : "auto",
+          minHeight: title === "Prize*" ? "110px" : "auto",
           ...cardStyle,
         }}
       >
@@ -110,7 +110,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 justifyContent: "space-between",
               }}
             >
-              {title === "Prizes*" ? (
+              {title === "Prize*" ? (
                 <div
                   style={{
                     display: "flex",
@@ -156,7 +156,12 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                       style={{
                         // width: "100%",
                         marginTop: value === "Iphone 16" ? "5rem" : "",
-                        height: value === "Iphone 16" ? "270px" : "140px",
+                        height:
+                          value === "Iphone 16"
+                            ? "270px"
+                            : value === "Ipad 11"
+                            ? "150px"
+                            : "140px",
                         objectFit: "contain",
                         marginBottom: "1rem",
                       }}
@@ -193,7 +198,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                       formattingFn={formatIndianNumber}
                     />
                   ) : (
-                    title !== "Prizes*" && <span>{value}</span>
+                    title !== "Prize*" && <span>{value}</span>
                     // <></>
                   )}
                   <small
