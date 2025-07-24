@@ -167,17 +167,18 @@ const EMPContest = () => {
     isActive: clientBadge === badge.key,
     onClick: () => handleClientBadgeClick(badge.key),
   }));
-  function formatIndianNumber(value: number): string {
-    return `₹${value.toLocaleString("en-IN")}`;
+  function formatIndianNumber(value?: number): string {
+    if (typeof value !== "number") return "₹0";
+    return `₹${value.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
   }
   return (
     <div>
       <Row style={{ marginTop: "20px" }}>
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
-            title="Revenue target*"
-            value={revenueCard[revenueBadge]}
-            formatIndianNumber={formatIndianNumber}
+            title="Revenue Target"
+            value={formatIndianNumber(revenueCard[revenueBadge])}
+            // formatIndianNumber={formatIndianNumber}
             animationData={RevenueImg}
             badges={revenueBadges}
             note={isMobile && `* Contest Period - 1st July to 30th September`}
@@ -187,7 +188,7 @@ const EMPContest = () => {
 
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
-            title="Clients target*"
+            title="Clients Target"
             value={clientCard[clientBadge]}
             animationData={ActiveClient}
             badges={clientBadges}
@@ -197,28 +198,29 @@ const EMPContest = () => {
 
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
-            title="Fresh Cash Margin*"
-            value={targetData?.freshCashMargin}
-            formatIndianNumber={formatIndianNumber}
+            title="Fresh Cash Margin Target"
+            value={formatIndianNumber(targetData?.freshCashMargin)}
+            // formatIndianNumber={formatIndianNumber}
             animationData={CoinIcon}
             customClass={true}
-            rightTitle="MF AUM Net*"
-            rightValue={targetData?.mfauM_Net}
+            rightTitle="MF AUM Target"
+            rightValue={formatIndianNumber(targetData?.mfauM_Net)}
           />
         </Col>
       </Row>
       <Row>
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
-            title="Revenue achieve*"
+            title="Revenue Achieved"
             value={
-              typeof achieveCard[revenueBadge] === "number"
-                ? achieveCard[revenueBadge]
-                : 0
+              // typeof achieveCard[revenueBadge] === "number"
+              //   ? achieveCard[revenueBadge]
+              //   : 0
+              formatIndianNumber(achieveCard[revenueBadge])
             }
             animationData={RevenueImg}
             badges={revenueBadges}
-            formatIndianNumber={formatIndianNumber}
+            // formatIndianNumber={formatIndianNumber}
             // suffix=".00"
 
             customClass={true}
@@ -227,7 +229,7 @@ const EMPContest = () => {
 
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
-            title="Clients achieve*"
+            title="Clients Achieved"
             value={achieveCard[clientBadge]}
             animationData={ActiveClient}
             activeClientsEmpty={true}
@@ -238,13 +240,17 @@ const EMPContest = () => {
 
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
-            title="Fresh Cash Margin*"
-            value={achievedData?.freshCash}
+            title="Fresh Cash Margin Achieved"
+            value={"Coming Soon"}
+            // value={
+            //   achievedData?.freshCash ? achievedData?.freshCash : "Coming Soon"
+            // }
             animationData={CoinIcon}
             customClass={true}
-            rightTitle="MF AUM Net*"
-            rightValue={achievedData?.mfaum}
-            formatIndianNumber={formatIndianNumber}
+            rightTitle="MF AUM Achieved"
+            rightValue={"Coming Soon"}
+            // rightValue={achievedData?.mfaum}
+            // formatIndianNumber={formatIndianNumber}
           />
         </Col>
       </Row>

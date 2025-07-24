@@ -72,12 +72,23 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
         <CardBody>
           {rightTitle || rightValue ? (
             <div className="d-flex justify-content-between align-items-center">
-              <h6 className="fs-14 mb-0">{title}</h6>
               <h6
-                className="fs-14 mb-0"
                 style={{
                   color: "#1B1B1B",
-                  fontSize: "17px",
+                  fontSize: title.toLowerCase().startsWith("fresh cash margin")
+                    ? "12px"
+                    : "14px",
+                  fontWeight: "bold",
+                }}
+              >
+                {title}
+              </h6>
+              <h6
+                style={{
+                  color: "#1B1B1B",
+                  fontSize: title.toLowerCase().startsWith("fresh cash margin")
+                    ? "12px"
+                    : "14px",
                   fontWeight: "bold",
                 }}
               >
@@ -220,8 +231,13 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                   style={{ width: 40, height: 40 }}
                 />
 
-                <div className="text-end">
-                  {typeof rightValue === "number" && (
+                <div
+                  className="text-end"
+                  style={{
+                    width: rightValue === "Coming Soon" ? "4rem" : undefined,
+                  }}
+                >
+                  {typeof rightValue === "number" ? (
                     <span
                       style={{
                         color: "#1B1B1B",
@@ -236,6 +252,15 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                         formattingFn={formatIndianNumber}
                       />
                     </span>
+                  ) : (
+                    <span
+                      style={{
+                        color: "#1B1B1B",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {rightValue}
+                    </span> // ✅ Fix: Wrap in a JSX element
                   )}
                 </div>
               </div>

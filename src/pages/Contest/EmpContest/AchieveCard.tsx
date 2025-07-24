@@ -85,7 +85,7 @@ const AchieveCard = () => {
       menu: "Employee Non-Brokerage Achieved",
     },
     {
-      title: "Clients Achieved (July-Sept)",
+      title: "New Clients Achieved (July-Sept)",
       dataKey: "client",
       menu: "Employee Clients Achieved",
     },
