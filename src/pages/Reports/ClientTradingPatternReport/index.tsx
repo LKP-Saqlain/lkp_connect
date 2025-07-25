@@ -362,34 +362,70 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
     // Convert data to a worksheet
     const selectedData =
       formik.values.reportType === "summarized" ? summarizedData : detailedData;
-    const worksheet = XLSX.utils.json_to_sheet(selectedData);
 
-    // Style the header row (first row, r = 0)
+    const formattedData =
+      formik.values.reportType === "summarized"
+        ? selectedData.map((item) => ({
+            Zone: item.client_Zone,
+            "Branch Code": item.client_Branch,
+            "Branch Type": item.branch_Type,
+            "Client Code": item.client_ID,
+            "Client Name": item.client_Name,
+            "Online Total Brok": item.online_Total_Brokerage,
+            "Offline Total Brok": item.offline_Total_Brokerage,
+            "CNT Total Brok": item.cnT_Total_Brokerage,
+            "Online Last Trade Date": item.online_Last_Trade_Date,
+            "Offline Last Trade Date": item.offline_Last_Trade_Date,
+            "CNT Last Trade Date": item.cnT_Last_Trade_Date,
+            "Active Status": item.activeStatus,
+          }))
+        : selectedData.map((item) => ({
+            Zone: item.client_Zone,
+            "Branch Code": item.client_Branch,
+            "Branch Type": item.branch_Type,
+            "Client Code": item.client_ID,
+            "Client Name": item.client_Name,
+            "Online CM Brok": item.online_CM_Brokerage,
+            "Offline CM Brok": item.offline_CM_Brokerage,
+            "CNT CM Brok": item.cnT_CM_Brokerage,
+            "Online Futures Brok": item.online_FUT_Brokerage,
+            "Offline Futures Brok": item.offline_FUT_Brokerage,
+            "CNT Futures Brok": item.cnT_FUT_Brokerage,
+            "Online Options Brok": item.online_OPT_Brokerage,
+            "Offline Options Brok": item.offline_OPT_Brokerage,
+            "CNT Options Brok": item.cnT_OPT_Brokerage,
+            "Online Last Trade Date": item.online_Last_Trade_Date,
+            "Offline Last Trade Date": item.offline_Last_Trade_Date,
+            "CNT Last Trade Date": item.cnT_Last_Trade_Date,
+            "Active Status": item.activeStatus,
+          }));
 
-    const headerKeys = Object.keys(selectedData[0]);
+    // 🧾 Convert to worksheet with only selected fields
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
 
-    headerKeys.forEach((key, colIndex) => {
-      console.log(key);
-      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: colIndex });
-
-      if (worksheet[cellAddress]) {
-        worksheet[cellAddress].s = {
-          fill: {
-            patternType: "solid",
-            fgColor: { rgb: "D9E1F2" },
-          },
-          font: {
-            bold: true,
-            sz: 14,
-            color: { rgb: "000000" },
-          },
-          alignment: {
-            horizontal: "center",
-            vertical: "center",
-          },
-        };
-      }
-    });
+    // 🎨 Style header row
+    const headerKeys = Object.keys(formattedData[0]);
+    // headerKeys.forEach((key, colIndex) => {
+    //   console.log(key);
+    //   const cellAddress = XLSX.utils.encode_cell({ r: 0, c: colIndex });
+    //   if (worksheet[cellAddress]) {
+    //     worksheet[cellAddress].s = {
+    //       fill: {
+    //         patternType: "solid",
+    //         fgColor: { rgb: "D9E1F2" },
+    //       },
+    //       font: {
+    //         bold: true,
+    //         sz: 14,
+    //         color: { rgb: "000000" },
+    //       },
+    //       alignment: {
+    //         horizontal: "center",
+    //         vertical: "center",
+    //       },
+    //     };
+    //   }
+    // });
 
     // Set uniform column widths
     worksheet["!cols"] = headerKeys.map(() => ({ wch: 20 }));
