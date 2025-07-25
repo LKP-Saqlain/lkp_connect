@@ -436,14 +436,12 @@ const ClientTradingReport = ({ activeSubItem }: any) => {
 
     // Generate timestamp string
     const now = new Date();
-    const timeString = now
-      .toLocaleTimeString("en-GB", { hour12: false }) // HH:MM:SS
-      .replace(/:/g, "-"); // Replace ':' with '-' for valid filename
+    const timeString = now.toLocaleTimeString("en-GB", { hour12: true }); // HH:mm:ss
 
     const filename =
       formik.values.reportType === "summarized"
-        ? `SummarizedReport${timeString}.xlsx`
-        : `DetailedReport${timeString}.xlsx`;
+        ? `SummarizedReport-${timeString}.xlsx`
+        : `DetailedReport-${timeString}.xlsx`;
 
     // Write and save file
     const excelBuffer = XLSX.write(workbook, {
