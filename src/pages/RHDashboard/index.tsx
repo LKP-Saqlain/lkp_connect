@@ -1,7 +1,8 @@
 import React, { useEffect, Suspense } from "react";
-import Overview from "./Overview";
 import { SubItemKeys } from "../../constants/subItemKeys";
 import Loader from "../../components/common/Loader";
+import Overview from "./Overview";
+// import Direct from "./Direct";
 
 interface RH {
   activeSubItem: string;
@@ -15,11 +16,12 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
 
   const componentMap: Record<string, React.ReactNode> = {
     [SubItemKeys.RH_OVERVIEW]: <Overview activeSubItem={activeSubItem} />,
+    // [SubItemKeys.RH_DIRECT]: <Direct activeSubItem={activeSubItem} />,
   };
 
   return (
     <div>
-      <Suspense fallback={<Loader />}>{componentMap[activeSubItem]}</Suspense>
+      <Suspense fallback={<Loader />}>{componentMap[activeMenu]}</Suspense>
     </div>
   );
 };

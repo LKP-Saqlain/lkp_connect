@@ -120,4 +120,13 @@ export const endpoints = {
   InsertClientExclusionEntry: "api/Master/InsertClientExclusionEntry",
   DeleteClientExclusionEntry: "api/Master/DeleteClientExclusionEntry",
   GetWebPortalDetails: "api/Common/GetWebPortalDetails",
+  GetBrokRevReport: "api/Dashboard/GetBrokRevReport",
+  GetTradedClientReport: "api/Dashboard/GetTradedClientReport",
+  GetRevenueTradedClientReport: "api/Dashboard/GetRevenueTradedClientReport",
+  GetDeliverySegmentReport: "api/Dashboard/GetDeliverySegmentReport",
+  GetIntradaySegmentReport: "api/Dashboard/GetIntradaySegmentReport",
+  GetFuturesRevenue: "api/Dashboard/GetFuturesRevenue",
+  GetOptionsRevenue: "api/Dashboard/GetOptionsRevenue",
+  GetCommodityFuturesReport: "api/Dashboard/GetCommodityFuturesReport",
+  GetCommodityOptionsReport: "api/Dashboard/GetCommodityOptionsReport",
 };

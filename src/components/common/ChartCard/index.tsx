@@ -1,144 +1,112 @@
-import { Card, CardBody, CardHeader, Col, Button } from "reactstrap";
+import React from "react";
 import ReactApexChart from "react-apexcharts";
+import { Card, CardBody, CardHeader } from "reactstrap";
+import { Button } from "@mui/material";
 
-const months = [
-  "Jan-25",
-  "Feb-25",
-  "Mar-25",
-  "Apr-25",
-  "May-25",
-  "Jun-25",
-  "Jul-25",
-  "Aug-25",
-  "Sep-25",
-  "Oct-25",
-  "Nov-25",
-  "Dec-25",
-];
-
-const colorMap = {
-  Direct: ["#008FFB"],
-  Indirect: ["#00E396"],
-  Total: ["#008FFB", "#00E396"],
+type ChartCardProps = {
+  title: string;
+  selectedView: string;
+  setSelectedView: (view: string) => void;
+  viewOptions: string[];
+  directData: number[];
+  indirectData: number[];
+  tradeDates?: any;
 };
 
-const ChartCard = ({
+const ChartCard: React.FC<ChartCardProps> = ({
   title,
   selectedView,
   setSelectedView,
+  viewOptions,
   directData,
   indirectData,
-}: {
-  title: string;
-  selectedView: "Direct" | "Indirect" | "Total";
-  setSelectedView: React.Dispatch<
-    React.SetStateAction<"Direct" | "Indirect" | "Total">
-  >;
-  directData: number[];
-  indirectData: number[];
+  tradeDates,
 }) => {
-  const getSeries = () => {
-    if (selectedView === "Direct")
-      return [{ name: "Direct", data: directData }];
-    if (selectedView === "Indirect")
-      return [{ name: "Indirect", data: indirectData }];
-    return [
-      { name: "Direct", data: directData },
-      { name: "Indirect", data: indirectData },
-    ];
+  const colorMap: Record<string, string[]> = {
+    Direct: ["#11395C"],
+    Indirect: ["#F57C00"],
+    Total: ["#11395C", "#F57C00"],
+    Daily: ["#1976d2"],
+    Weekly: ["#9c27b0"],
+    Monthly: ["#2e7d32"],
   };
 
-  const getOptions = (): ApexCharts.ApexOptions => ({
+  const computeChartData = () => {
+    const categories = tradeDates;
+    const isStackedView = ["Total", "Daily", "Weekly", "Monthly"].includes(
+      selectedView
+    );
+
+    let series: any = [];
+
+    if (selectedView === "Direct") {
+      series = [{ name: "Direct", data: directData }];
+    } else if (selectedView === "Indirect") {
+      series = [{ name: "Indirect", data: indirectData }];
+    } else if (selectedView === "Total") {
+      series = [
+        { name: "Direct", data: directData },
+        { name: "Indirect", data: indirectData },
+      ];
+    } else if (selectedView === "Daily") {
+      series = [
+        { name: "Daily", data: directData },
+        { name: "", data: indirectData },
+      ];
+    } else if (selectedView === "Weekly") {
+      series = [
+        { name: "Weekly", data: indirectData },
+        { name: "", data: directData },
+      ];
+    } else if (selectedView === "Monthly") {
+      series = [
+        { name: "Monthly Direct", data: directData },
+        { name: "Monthly Indirect", data: indirectData },
+      ];
+    }
+
+    return { series, categories, isStackedView };
+  };
+
+  const { series, categories, isStackedView } = computeChartData();
+
+  const chartOptions: ApexCharts.ApexOptions = {
     chart: {
-      type: "bar" as const,
-      height: 374,
-      stacked: true,
+      type: "bar",
+      stacked: isStackedView,
       toolbar: { show: false },
     },
+    xaxis: {
+      categories,
+    },
+    colors: colorMap[selectedView] || ["#8884d8"],
     plotOptions: {
       bar: {
-        horizontal: false,
-        columnWidth: "60%",
+        borderRadius: 4,
+        columnWidth: "45%",
       },
     },
-    xaxis: {
-      categories: months,
+    dataLabels: {
+      enabled: false,
+      formatter: function (value: number) {
+        return new Intl.NumberFormat("en-IN").format(Math.round(value)); // Format the value
+      },
     },
-    legend: {
-      position: "bottom" as const,
-    },
-    fill: {
-      opacity: 1,
-    },
-    colors: colorMap[selectedView],
     tooltip: {
       y: {
-        formatter: (val: number) => `${val} units`,
+        formatter: function (value: number) {
+          return new Intl.NumberFormat("en-IN").format(Math.round(value)); // Format the value
+        },
       },
     },
-  });
 
-  const renderButtons = () => (
-    <div className="d-flex gap-2">
-      {(["Direct", "Indirect", "Total"] as const).map((type) => {
-        const isSelected = selectedView === type;
-        const isTotal = type === "Total";
-        const gradient = `linear-gradient(135deg, ${colorMap.Direct[0]}, ${colorMap.Indirect[0]})`;
-
-        if (isSelected && isTotal) {
-          return (
-            <div
-              key={type}
-              style={{
-                background: gradient,
-                padding: "2px",
-                borderRadius: "8px",
-                display: "inline-block",
-              }}
-            >
-              <Button
-                size="sm"
-                onClick={() => setSelectedView(type)}
-                style={{
-                  background: gradient,
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "6px",
-                  fontWeight: 500,
-                  width: "80px",
-                }}
-              >
-                {type}
-              </Button>
-            </div>
-          );
-        }
-
-        return (
-          <Button
-            key={type}
-            color={isSelected ? "primary" : "light"}
-            size="sm"
-            onClick={() => setSelectedView(type)}
-            style={{
-              borderRadius: "6px",
-              fontWeight: 500,
-              width: "80px",
-              background:
-                isSelected && !isTotal ? colorMap[type][0] : undefined,
-              color: isSelected ? "#fff" : undefined,
-              border:
-                isSelected && !isTotal
-                  ? `1px solid ${colorMap[type][0]}`
-                  : undefined,
-            }}
-          >
-            {type}
-          </Button>
-        );
-      })}
-    </div>
-  );
+    legend: {
+      show: false,
+    },
+    yaxis: {
+      show: false,
+    },
+  };
 
   return (
     <Card
@@ -158,18 +126,33 @@ const ChartCard = ({
         <h4 className="card-title mb-2 mb-md-0 flex-grow-1 text-md-start text-center">
           {title}
         </h4>
-        {renderButtons()}
+        {viewOptions.map((view) => (
+          <Button
+            key={view}
+            size="small"
+            onClick={() => setSelectedView(view)}
+            style={{
+              borderRadius: "6px",
+              fontWeight: 500,
+              minWidth: 80,
+              margin: "0px 2px 0px 2px",
+              backgroundColor:
+                selectedView === view ? colorMap[view][0] : undefined,
+              color: selectedView === view ? "#fff" : undefined,
+            }}
+            variant={selectedView === view ? "contained" : "outlined"}
+          >
+            {view}
+          </Button>
+        ))}
       </CardHeader>
       <CardBody>
-        <Col>
-          <ReactApexChart
-            options={getOptions()}
-            series={getSeries()}
-            type="bar"
-            height={374}
-            className="apex-charts"
-          />
-        </Col>
+        <ReactApexChart
+          options={chartOptions}
+          series={series}
+          type="bar"
+          height={280}
+        />
       </CardBody>
     </Card>
   );

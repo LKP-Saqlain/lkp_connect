@@ -6655,3 +6655,59 @@ export const ClientExclusionColumns: GridColDef[] = [
     filterable: false,
   },
 ];
+
+export const RHTopClientsColumns: GridColDef[] = [
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    minWidth: 100,
+    flex: 0.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "revenue",
+    headerName: "Revenue",
+    minWidth: 100,
+    flex: 0.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    // valueFormatter: (params) =>
+    //   params.value?.toLocaleString("en-IN", {
+    //     style: "currency",
+    //     currency: "INR",
+    //     minimumFractionDigits: 2,
+    //   }),
+  },
+  {
+    field: "lastTradeDate",
+    headerName: "Last Trade Date",
+    minWidth: 130,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    // valueFormatter: (params) =>
+    //   params.value ? new Date(params.value).toLocaleDateString("en-GB") : "-",
+  },
+  {
+    field: "rmName",
+    headerName: "RM Name",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+];
