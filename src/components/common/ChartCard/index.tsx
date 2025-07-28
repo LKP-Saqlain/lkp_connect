@@ -80,28 +80,99 @@ const ChartCard: React.FC<ChartCardProps> = ({
       categories,
     },
     colors: colorMap[selectedView] || ["#8884d8"],
+    dataLabels: {
+      enabled: true,
+      formatter: function (val: number, opts: any) {
+        if (isStackedView && selectedView === "Total") {
+          const seriesIndex = opts.seriesIndex;
+          const lastSeriesIndex = opts.w.config.series.length - 1;
+          if (seriesIndex === lastSeriesIndex) {
+            const totals = opts.w.globals.stackedSeriesTotals;
+            return Math.floor(totals[opts.dataPointIndex]).toLocaleString(
+              "en-IN"
+            );
+          }
+          return "";
+        }
+        return Math.floor(val).toLocaleString("en-IN");
+      },
+      style: {
+        fontSize: "10px",
+        fontWeight: "bold",
+        colors: ["#000"],
+        // top: "10px",
+      },
+    },
     plotOptions: {
       bar: {
         borderRadius: 4,
-        columnWidth: "45%",
-      },
-    },
-    dataLabels: {
-      enabled: false,
-      formatter: function (value: number) {
-        return new Intl.NumberFormat("en-IN").format(Math.round(value)); // Format the value
+        columnWidth: "50%",
+
+        dataLabels: {
+          position: "top",
+        },
       },
     },
     tooltip: {
-      y: {
-        formatter: function (value: number) {
-          return new Intl.NumberFormat("en-IN").format(Math.round(value)); // Format the value
-        },
+      shared: false,
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        if (selectedView === "Total") {
+          const totals = w.globals.stackedSeriesTotals;
+          const totalValue = Math.floor(totals[dataPointIndex]).toLocaleString(
+            "en-IN"
+          );
+
+          return `
+            <div style="
+              padding:6px;
+              font-size:12px;
+              background:#fff;
+              border:1px solid #ccc;
+              border-radius:4px;
+              color:#000;
+            ">
+              <span style="
+                display:inline-block;
+                width:10px;
+                height:10px;
+                margin-right:6px;
+                background:linear-gradient(90deg, #11395C, #F57C00);
+              "></span>
+              <strong>Total:</strong> ${totalValue}
+            </div>
+          `;
+        }
+
+        const value = Math.floor(
+          series[seriesIndex][dataPointIndex]
+        ).toLocaleString("en-IN");
+        const seriesName = w.config.series[seriesIndex].name;
+        const seriesColor = w.globals.colors[seriesIndex];
+
+        return `
+          <div style="
+            padding:6px;
+            font-size:12px;
+            background:#fff;
+            border:1px solid #ccc;
+            border-radius:4px;
+            color:#000;
+          ">
+            <span style="
+              display:inline-block;
+              width:10px;
+              height:10px;
+              margin-right:6px;
+              background:${seriesColor};
+            "></span>
+            <strong>${seriesName}:</strong> ${value}
+          </div>
+        `;
       },
     },
 
     legend: {
-      show: false,
+      position: "bottom",
     },
     yaxis: {
       show: false,
@@ -136,6 +207,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
               fontWeight: 500,
               minWidth: 80,
               margin: "0px 2px 0px 2px",
+              // textTransform: "none",
               backgroundColor:
                 selectedView === view ? colorMap[view][0] : undefined,
               color: selectedView === view ? "#fff" : undefined,

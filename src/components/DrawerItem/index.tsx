@@ -35,6 +35,8 @@ import AnalyticsIcon from "@mui/icons-material/Analytics";
 import { FaFileInvoice } from "react-icons/fa";
 import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import StarBurst from "../../assets/images/starburst.png";
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -157,43 +159,33 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
             fontFamily: "Public Sans",
           }}
         />
+        {subItems &&
+          subItems.length > 0 &&
+          (isMenuOpen ? (
+            <ExpandMoreIcon
+              sx={{
+                color: "black",
+                fontSize: "18px",
+                marginLeft: "auto",
+              }}
+            />
+          ) : (
+            <ChevronRightIcon
+              sx={{
+                color: "#F9F6EE",
+                fontSize: "18px",
+                marginLeft: "auto",
+              }}
+            />
+          ))}
+
+        {title === "Zone Overview" && (
+          <div className="starburst-bg">
+            <img src={StarBurst} height={"25px"} alt="" />
+          </div>
+        )}
         {/* {subItems && (isMenuOpen ? <ExpandLess /> : <ExpandMore />)} */}
       </ListItemButton>
-
-      {/* Only show sub-items if the menu is open */}
-      {/* {subItems && (
-        <Collapse in={isMenuOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            {subItems.map((subItem, index) => (
-              <ListItemButton
-                key={index}
-                sx={{
-                  pl: 4,
-                  color: activeSubItem === subItem.menu_name ? "black" : "#fff",
-                  backgroundColor:
-                    activeSubItem === subItem.menu_name
-                      ? "#708090"
-                      : "transparent",
-                  "&:hover": {
-                    backgroundColor: "#708090",
-                    color: "black",
-                  },
-                }}
-                onClick={() => handleSubItemSelection(subItem.menu_name)}
-              >
-                <ArrowRightIcon />
-                <ListItemText
-                  primary={subItem.menu_name}
-                  primaryTypographyProps={{
-                    fontSize: "12px",
-                    fontFamily: "Public Sans",
-                  }}
-                />
-              </ListItemButton>
-            ))}
-          </List>
-        </Collapse>
-      )} */}
       {subItems && (
         <Collapse in={isMenuOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
