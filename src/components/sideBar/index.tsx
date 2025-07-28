@@ -40,7 +40,7 @@ import CustomModal from "../common/DPModal";
 import OverviewComponent from "../../pages/Overview";
 import TradeDashboard from "../../pages/TradeDashboard";
 import ClientDetails from "../../pages/ClientDetails";
-import RegOverview from "../../pages/regOverView";
+// import RegOverview from "../../pages/regOverView";
 import EkycLinks from "../../pages/ekycLinks";
 import StockStudy from "../../pages/StockStudy";
 import OTDetails from "../../pages/OT";
@@ -83,6 +83,7 @@ import APOverview from "../../pages/Employee/Overview";
 import ExclusionList from "../../pages/ExclusionList/";
 import { MenuItems } from "../../types";
 import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
+import RHDashboard from "../../pages/RHDashboard";
 import "./style.css";
 
 const drawerWidth = 260;
@@ -660,6 +661,9 @@ const SideBar = () => {
   // };
 
   const complianceSubItems: Record<string, JSX.Element> = {
+    // "UCCCode MATCH": (
+    //   <RHDashboard activeSubItem={activeSubItem} activeMenu={activeMenu} />
+    // ),
     "Communication Retrival Entry": <CommEntry activeSubItem={activeSubItem} />,
     "Communication Retrival Checker": (
       <ComChecker activeSubItem={activeSubItem} />
@@ -734,7 +738,9 @@ const SideBar = () => {
           />
         ),
       4: () => getSubItemComponent(reportsSubItems),
-      5: () => <RegOverview />,
+      5: () => (
+        <RHDashboard activeSubItem={activeSubItem} activeMenu={activeMenu} />
+      ),
       6: () => getSubItemComponent(revenueDetailsSubItems),
       7: () => getSubItemComponent(rmsSubItems),
       8: () => getSubItemComponent(complianceSubItems),
