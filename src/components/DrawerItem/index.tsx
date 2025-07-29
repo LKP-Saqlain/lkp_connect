@@ -181,7 +181,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
 
         {title === "Zone Overview" && (
           <div className="starburst-bg">
-            <img src={StarBurst} height={"25px"} alt="" />
+            <img src={StarBurst} height={"30px"} alt="" />
           </div>
         )}
         {/* {subItems && (isMenuOpen ? <ExpandLess /> : <ExpandMore />)} */}
