@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ListItem,
   ListItemButton,
@@ -37,6 +37,8 @@ import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import StarBurst from "../../assets/images/starburst.png";
+import StarBurst1 from "../../assets/images/starburst1.png";
+import StarBurst2 from "../../assets/images/starburst2.png";
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -48,6 +50,7 @@ type DrawerItemProps = {
   handleClick: () => void;
   isMobile: boolean;
   handleSubItemClick: (data: any) => void;
+  visible?: boolean;
 };
 
 const DrawerItem: React.FC<DrawerItemProps> = ({
@@ -57,9 +60,22 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   handleClick,
   activeMenu,
   handleSubItemClick,
+  visible,
 }) => {
   const [activeSubItem, setActiveSubItem] = useState<string | null>(null);
   const isMenuOpen = activeMenu === title;
+  const images = [StarBurst, StarBurst1, StarBurst2];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (!visible) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, 600);
+
+    return () => clearInterval(interval);
+  }, [visible]);
 
   const iconMap: Record<string, JSX.Element> = {
     "Zone Overview": <StoreIcon />,
@@ -181,7 +197,15 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
 
         {title === "Zone Overview" && (
           <div className="starburst-bg">
+            <img
+              src={images[currentIndex]}
+              height="30px"
+              alt={`starburst-${currentIndex}`}
+              style={{ display: visible ? "inline" : "none" }}
+            />
+            {/* <div className="starburst-bg">
             <img src={StarBurst} height={"30px"} alt="" />
+          </div> */}
           </div>
         )}
         {/* {subItems && (isMenuOpen ? <ExpandLess /> : <ExpandMore />)} */}

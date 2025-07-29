@@ -216,6 +216,7 @@ const SideBar = () => {
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
   const [showMyPerformance, setShowMyPerformance] = useState<boolean>(false);
   const [activeClickCount, setActiveClickCount] = useState(0);
+  const [showStarburst, setShowStarburst] = useState(true);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -547,7 +548,11 @@ const SideBar = () => {
         setActiveSubItem("");
         return "";
       }
+      console.log("menuTitle", menuTitle, hasSubItems);
 
+      if (menuTitle === "Zone Overview") {
+        setShowStarburst(false);
+      }
       // Always reset subitem when switching to a new main menu
       setActiveSubItem("");
 
@@ -1104,6 +1109,7 @@ const SideBar = () => {
                     handleMenuClick(item.menu_name, !!item.subItems?.length)
                   }
                   handleSubItemClick={handleSubItemClick}
+                  visible={showStarburst}
                 />
               ))}
             </List>
