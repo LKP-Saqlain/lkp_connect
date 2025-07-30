@@ -47,6 +47,7 @@ const ModalComponent = ({
   isMarketingMaterial = false,
   isUnlistedContent = false,
   isClientExclusion = false,
+  isThirdPartyMaster = false,
   ExcludeOptions,
 }: {
   modal_grid: boolean;
@@ -58,6 +59,7 @@ const ModalComponent = ({
   isMarketingMaterial?: boolean;
   isUnlistedContent?: boolean;
   isClientExclusion?: boolean;
+  isThirdPartyMaster?: boolean;
   ExcludeOptions?: any;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -129,6 +131,68 @@ const ModalComponent = ({
       excludeRemark: Yup.string().required("Remark is required"),
     });
 
+  const isValidEmail = (email: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const normalizeEmailInput = (value: string) => {
+    if (!value) return "";
+
+    return value
+      .split(/[\s,|/\\;]+/) // split by space, comma, slash, pipe, semicolon
+      .filter((email) => email.trim() !== "") // remove empty entries
+      .map((email) => email.trim()) // trim each email
+      .join(";"); // rejoin with single semicolons
+  };
+
+  const getThirdPartyValidationSchema = () =>
+    Yup.object().shape({
+      ledgerCode: Yup.string().required("Ledger Code is required"),
+      companyName: Yup.string().required("Company Name is required"),
+      emailId: Yup.string()
+        .transform((value) => normalizeEmailInput(value))
+        .test(
+          "multiple-emails",
+          "One or more email addresses are invalid",
+          (value) => {
+            if (!value) return false;
+
+            const emails = value.split(";");
+            return emails.every((email) => isValidEmail(email));
+          }
+        )
+        .required("Email ID is required"),
+      emailId1: Yup.string()
+        .transform((value) => normalizeEmailInput(value))
+        .test(
+          "emailId1",
+          "One or more secondary email addresses are invalid",
+          (value) => {
+            if (!value) return true; // Skip validation if empty
+            const emails = value.split(";");
+            return emails.every((email) => isValidEmail(email));
+          }
+        ),
+
+      emailId2: Yup.string()
+        .transform((value) => normalizeEmailInput(value))
+        .test(
+          "emailId2",
+          "One or more alternate email addresses are invalid",
+          (value) => {
+            if (!value) return true; // Skip validation if empty
+            const emails = value.split(";");
+            return emails.every((email) => isValidEmail(email));
+          }
+        ),
+      sacNumber: Yup.string().required("SAC Number is required"),
+      state: Yup.string().required("State is required"),
+      gstNumber: Yup.string().required("GST Number is required"),
+      gstStateCode: Yup.string().required("GST State Code is required"),
+      pan: Yup.string().required("PAN is required"),
+      address1: Yup.string().required("Address is required"),
+      mobileNo: Yup.string().required("Mobile Number is required"),
+    });
+
   const getValidationSchema = (editData?: EditData) => {
     if (isRegulatoryContent) {
       return getRegulatoryValidationSchema(editData!);
@@ -136,6 +200,8 @@ const ModalComponent = ({
       return getMarketingMaterialValidationSchema(editData);
     } else if (isClientExclusion) {
       return getClientExclusionValidationSchema();
+    } else if (isThirdPartyMaster) {
+      return getThirdPartyValidationSchema();
     } else {
       return Yup.object(); // fallback schema (or handle general case)
     }
@@ -162,6 +228,23 @@ const ModalComponent = ({
         excludeFrom: "",
         excludeRemark: "",
       }
+    : isThirdPartyMaster
+    ? {
+        ledgerCode: "",
+        companyName: "",
+        emailId: "",
+        emailId1: "",
+        emailId2: "",
+        sacNumber: "",
+        state: "",
+        gstNumber: "",
+        gstStateCode: "",
+        pan: "",
+        address1: "",
+        address2: "",
+        address3: "",
+        mobileNo: "",
+      }
     : {
         transactionDate: null as string | null,
         clientName: "",
@@ -177,7 +260,7 @@ const ModalComponent = ({
         netBrokerage: null,
         rmCode: null,
       };
-
+  const cleanEmails = (email: any) => normalizeEmailInput(email);
   const formik = useFormik({
     initialValues,
     validationSchema: getValidationSchema(editData),
@@ -210,7 +293,8 @@ const ModalComponent = ({
             excludeRemark: values.excludeRemark,
           };
           console.log(exclusionClientPayload, "exclusionClientPayload");
-          fetchClientExclusion(exclusionClientPayload);
+          fetchSubmissionValues(exclusionClientPayload);
+          return;
         } else if (isUnlistedContent) {
           const unlistedPayload = {
             transactionDate: values.transactionDate,
@@ -218,8 +302,32 @@ const ModalComponent = ({
             securitiesName: values.securitiesName,
           };
           console.log(unlistedPayload);
-
           fetchUnlistedContent(setTouched, values);
+          return;
+        } else if (isThirdPartyMaster) {
+          const thirdPartyPayload = {
+            ledgerCode: values.ledgerCode,
+            companyName: values.companyName,
+            // emailId: values.emailId,
+            // emailId1: values.emailId1,
+            // emailId2: values.emailId2,
+            emailId: cleanEmails(values.emailId),
+            emailId1: cleanEmails(values.emailId1),
+            emailId2: cleanEmails(values.emailId2),
+            sacNumber: values.sacNumber,
+            state: values.state,
+            gstNumber: values.gstNumber,
+            gstStateCode: values.gstStateCode,
+            pan: values.pan,
+            address1: values.address1,
+            address2: values.address2,
+            address3: values.address3,
+            mobileNo: values.mobileNo,
+          };
+          console.log(thirdPartyPayload, "thirdPartyPayload");
+
+          fetchSubmissionValues(thirdPartyPayload); // <- You need to define this function
+          return;
         }
       } catch (error) {
         console.error("Submission Error", error);
@@ -242,8 +350,8 @@ const ModalComponent = ({
     onSubmit?.(values);
     formik.resetForm();
   };
-  const fetchClientExclusion = (values: any) => {
-    console.log("fetchClientExclusionValuess", values);
+  const fetchSubmissionValues = (values: any) => {
+    console.log("fetchValuessforSubmission", values);
     onSubmit?.(values);
     formik.resetForm();
   };
@@ -379,6 +487,24 @@ const ModalComponent = ({
           fileUpload: editData.UploadDocuments || "",
           description: editData.Description || "",
           image: editData.UploadImages || "",
+        });
+      }
+      if (isThirdPartyMaster) {
+        formik.setValues({
+          ledgerCode: editData.ledgerCode || "",
+          companyName: editData.companyName || "",
+          emailId: editData.emailId || "",
+          emailId1: editData.emailId1 || "",
+          emailId2: editData.emailId2 || "",
+          sacNumber: editData.sacNumber || "",
+          state: editData.state || "",
+          gstNumber: editData.gstNumber || "",
+          gstStateCode: editData.gstStateCode || "",
+          pan: editData.pan || "",
+          address1: editData.address1 || "",
+          address2: editData.address2 || "",
+          address3: editData.address3 || "",
+          mobileNo: editData.mobileNo || "",
         });
       }
       if (isUnlistedContent) {
@@ -674,7 +800,7 @@ const ModalComponent = ({
     <Modal
       style={{
         fontFamily: "Public Sans",
-        maxWidth: isUnlistedContent ? "700px" : "500px",
+        maxWidth: isUnlistedContent || isThirdPartyMaster ? "700px" : "500px",
         width: "100%",
       }}
       isOpen={modal_grid}
@@ -1326,6 +1452,277 @@ const ModalComponent = ({
                     helperText={
                       formik.touched.netBrokerage && formik.errors.netBrokerage
                     }
+                  />
+                </Col>
+              </>
+            )}
+            {isThirdPartyMaster && (
+              <>
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="ledgerCode"
+                    name="ledgerCode"
+                    label="Enter Ledger Code"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.ledgerCode}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.submitCount > 0 &&
+                      Boolean(formik.errors.ledgerCode)
+                    }
+                    helperText={
+                      formik.submitCount > 0 && formik.errors.ledgerCode
+                    }
+                  />
+                </Col>
+
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="companyName"
+                    name="companyName"
+                    label="Enter Company Name"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.companyName}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.submitCount > 0 &&
+                      Boolean(formik.errors.companyName)
+                    }
+                    helperText={
+                      formik.submitCount > 0 && formik.errors.companyName
+                    }
+                  />
+                </Col>
+
+                <Col lg={4}>
+                  <TextField
+                    fullWidth
+                    id="emailId"
+                    name="emailId"
+                    label="Primary Email"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.emailId}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.submitCount > 0 && Boolean(formik.errors.emailId)
+                    }
+                    helperText={formik.submitCount > 0 && formik.errors.emailId}
+                  />
+                </Col>
+
+                <Col lg={4}>
+                  <TextField
+                    fullWidth
+                    id="emailId1"
+                    name="emailId1"
+                    label="Secondary Email"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.emailId1}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Col>
+
+                <Col lg={4}>
+                  <TextField
+                    fullWidth
+                    id="emailId2"
+                    name="emailId2"
+                    label="Alternate Email"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.emailId2}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Col>
+                <p
+                  style={{
+                    fontSize: "12px",
+                    color: "#0c273f",
+                    marginTop: "1px",
+                  }}
+                >
+                  For multiple email addresses, use{" "}
+                  <span
+                    style={{
+                      fontWeight: 800,
+                    }}
+                  >
+                    space
+                  </span>{" "}
+                  to separate them.
+                </p>
+
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="sacNumber"
+                    name="sacNumber"
+                    label="SAC Number"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.sacNumber}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.submitCount > 0 && Boolean(formik.errors.sacNumber)
+                    }
+                    helperText={
+                      formik.submitCount > 0 && formik.errors.sacNumber
+                    }
+                  />
+                </Col>
+
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="state"
+                    name="state"
+                    label="State"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.state}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.submitCount > 0 && Boolean(formik.errors.state)
+                    }
+                    helperText={formik.submitCount > 0 && formik.errors.state}
+                  />
+                </Col>
+
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="gstNumber"
+                    name="gstNumber"
+                    label="GST Number"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.gstNumber}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.submitCount > 0 && Boolean(formik.errors.gstNumber)
+                    }
+                    helperText={
+                      formik.submitCount > 0 && formik.errors.gstNumber
+                    }
+                  />
+                </Col>
+
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="gstStateCode"
+                    name="gstStateCode"
+                    label="GST State Code"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.gstStateCode}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.submitCount > 0 &&
+                      Boolean(formik.errors.gstStateCode)
+                    }
+                    helperText={
+                      formik.submitCount > 0 && formik.errors.gstStateCode
+                    }
+                  />
+                </Col>
+
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="pan"
+                    name="pan"
+                    label="PAN"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.pan}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.submitCount > 0 && Boolean(formik.errors.pan)}
+                    helperText={formik.submitCount > 0 && formik.errors.pan}
+                  />
+                </Col>
+
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="mobileNo"
+                    name="mobileNo"
+                    label="Mobile Number"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.mobileNo}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.submitCount > 0 && Boolean(formik.errors.mobileNo)
+                    }
+                    helperText={
+                      formik.submitCount > 0 && formik.errors.mobileNo
+                    }
+                  />
+                </Col>
+
+                <Col lg={12}>
+                  <TextField
+                    fullWidth
+                    id="address1"
+                    name="address1"
+                    label="Address Line 1"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.address1}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.submitCount > 0 && Boolean(formik.errors.address1)
+                    }
+                    helperText={
+                      formik.submitCount > 0 && formik.errors.address1
+                    }
+                  />
+                </Col>
+
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="address2"
+                    name="address2"
+                    label="Address Line 2"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.address2}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Col>
+
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="address3"
+                    name="address3"
+                    label="Address Line 3"
+                    variant="outlined"
+                    size="small"
+                    value={formik.values.address3}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
                   />
                 </Col>
               </>

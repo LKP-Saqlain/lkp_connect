@@ -84,6 +84,9 @@ import ExclusionList from "../../pages/ExclusionList/";
 import { MenuItems } from "../../types";
 import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
 import "./style.css";
+import ThirdPartyMaster from "../../pages/ThirdParty/Master";
+import ThirdPartyApproval from "../../pages/ThirdParty/Approval";
+import ThirdPartyStatusReport from "../../pages/ThirdParty/Report";
 
 const drawerWidth = 260;
 
@@ -316,6 +319,7 @@ const SideBar = () => {
       activeMenu !== "DashBoard" &&
       activeMenu !== "TPD Report" &&
       activeMenu !== "Trading" &&
+      activeMenu !== "Account" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -706,7 +710,15 @@ const SideBar = () => {
 
     "Unlisted Shares File Upload": <VendorsFile />,
   };
-
+  const AccountSubItems: Record<string, JSX.Element> = {
+    "Third Party Vendor Master": (
+      <ThirdPartyMaster activeSubItem={activeSubItem} />
+    ),
+    "Third Party Vendor Approval": (
+      <ThirdPartyApproval activeSubItem={activeSubItem} />
+    ),
+    "Status Report": <ThirdPartyStatusReport activeSubItem={activeSubItem} />,
+  };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>
   ): JSX.Element | null => subItems[activeSubItem] || null;
@@ -763,6 +775,7 @@ const SideBar = () => {
       30: () => getSubItemComponent(tpdSubItems),
       31: () => <EmpContest />,
       32: () => <ApnContest activeMenu={activeMenu} />,
+      33: () => getSubItemComponent(AccountSubItems),
     };
 
     return dynamicMap[menu_order]?.() || null;

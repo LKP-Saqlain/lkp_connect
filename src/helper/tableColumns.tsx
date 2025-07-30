@@ -6647,3 +6647,121 @@ export const ClientExclusionColumns: GridColDef[] = [
     filterable: false,
   },
 ];
+
+export const ThirdParty: GridColDef[] = [
+  {
+    field: "ledgerCode",
+    headerName: "Ledger Code",
+    minWidth: 70,
+    flex: 0.4,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "companyName",
+    headerName: "Company Name",
+    minWidth: 180,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "sacNumber",
+    headerName: "SAC Number",
+    minWidth: 75,
+    flex: 0.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "state",
+    headerName: "State",
+    minWidth: 120,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "gstNumber",
+    headerName: "GST Number",
+    minWidth: 150,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "gstStateCode",
+    headerName: "GST State Code",
+    minWidth: 60,
+    flex: 0.3,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "pan",
+    headerName: "PAN Number",
+    minWidth: 120,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "emailId",
+    headerName: "Email ID",
+    minWidth: 180,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const email = params.value || ""; // Extract the email ID
+
+      // Mask the email if it exists
+      const maskedEmail = email.replace(
+        /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
+        (_: any, firstChar: any, middleChars: any, domain: any) => {
+          return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
+        }
+      );
+
+      // Return tooltip with the original email and masked email for display
+      return (
+        <Tooltip title={email} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile Number",
+    minWidth: 120,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "action",
+    headerName: "Action",
+    minWidth: 120,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+];

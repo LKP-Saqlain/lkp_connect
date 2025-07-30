@@ -19,7 +19,7 @@ import ShowToast from "../../utils/toastUtils";
 import { TextField } from "@mui/material";
 
 const Index = ({ activeSubItem }: any) => {
-  const [iframeSrc, setIframeSrc] = useState("");
+  // const [iframeSrc, setIframeSrc] = useState("");
   const [data, setData] = useState<any>();
   const [flag, setFlag] = useState<boolean>(false);
   const [zoneOptions, setZoneOptions] = useState<any[]>([]);
@@ -168,6 +168,21 @@ const Index = ({ activeSubItem }: any) => {
     // setClientCode("");
   };
 
+  // const handleClick = (row: any) => {
+  //   const encryptedCode = row?.encryptedCode;
+  //   const clientCode = row?.clientCode;
+
+  //   if (!encryptedCode || !clientCode) {
+  //     console.warn("Missing client or encrypted code");
+  //     return;
+  //   }
+  //   const url = `https://allocation.lkp.net.in:51528/Pledge/direct?UserId=${encryptedCode}`;
+  //   setCurrentClient(clientCode); // Set client code for display
+  //   setIframeSrc(url); // Update iframe URL
+  //   setFlag(true); // Trigger rendering if flag is used
+  //   console.log("Pledge Encrypted Code:", encryptedCode);
+  // };
+
   const handleClick = (row: any) => {
     const encryptedCode = row?.encryptedCode;
     const clientCode = row?.clientCode;
@@ -176,10 +191,22 @@ const Index = ({ activeSubItem }: any) => {
       console.warn("Missing client or encrypted code");
       return;
     }
+
     const url = `https://allocation.lkp.net.in:51528/Pledge/direct?UserId=${encryptedCode}`;
-    setCurrentClient(clientCode); // Set client code for display
-    setIframeSrc(url); // Update iframe URL
-    setFlag(true); // Trigger rendering if flag is used
+    setCurrentClient(clientCode); // keep this if you want to display client info somewhere
+
+    // Open popup window instead of iframe
+    const popupWidth = 900;
+    const popupHeight = 500;
+    const left = window.screenX + (window.outerWidth - popupWidth) / 2;
+    const top = window.screenY + (window.outerHeight - popupHeight) / 2;
+
+    window.open(
+      url,
+      "PledgePopup",
+      `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
+    );
+
     console.log("Pledge Encrypted Code:", encryptedCode);
   };
 
@@ -331,7 +358,7 @@ const Index = ({ activeSubItem }: any) => {
                   <span className="text-dark ">{currentClient || "N/A"}</span>
                 </div>
                 <iframe
-                  src={iframeSrc}
+                  // src={iframeSrc}
                   width="100%"
                   height="400"
                   style={{ border: "none" }}

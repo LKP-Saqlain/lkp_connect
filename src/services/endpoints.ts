@@ -120,4 +120,9 @@ export const endpoints = {
   InsertClientExclusionEntry: "api/Master/InsertClientExclusionEntry",
   DeleteClientExclusionEntry: "api/Master/DeleteClientExclusionEntry",
   GetWebPortalDetails: "api/Common/GetWebPortalDetails",
+  ViewThirdPartyMaster: "api/Account/ViewThirdPartyMaster",
+  InsertThirdPartyMasterRecord: "api/Account/InsertThirdPartyMasterRecord",
+  DeleteThirdPartyMasterRecord: "api/Account/DeleteThirdPartyMasterRecord",
+  UpdateThirdPartyMasterRecord: "api/Account/UpdateThirdPartyMasterRecord",
+  ThirdPartyApproverView: "api/Account/ThirdPartyApproverView",
 };

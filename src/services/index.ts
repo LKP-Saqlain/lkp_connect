@@ -550,4 +550,31 @@ export const apiServices = {
   GetWebPortalDetails: async (payload: any) => {
     return await apiService("POST", endpoints.GetWebPortalDetails, payload);
   },
+  ViewThirdPartyMaster: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewThirdPartyMaster, payload);
+  },
+  InsertThirdPartyMasterRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.InsertThirdPartyMasterRecord,
+      payload
+    );
+  },
+  DeleteThirdPartyMasterRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DeleteThirdPartyMasterRecord,
+      payload
+    );
+  },
+  UpdateThirdPartyMasterRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateThirdPartyMasterRecord,
+      payload
+    );
+  },
+  ThirdPartyApproverView: async (payload: any) => {
+    return await apiService("POST", endpoints.ThirdPartyApproverView, payload);
+  },
 };
