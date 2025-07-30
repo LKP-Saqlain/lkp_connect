@@ -260,7 +260,7 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
                   }}
                 >
                   <h4 className="card-title mb-0">
-                    Quarterly Payout Recovery Report - (Jan 25 - Mar 25)
+                    Quarterly Payout Recovery Report
                   </h4>
                 </CardHeader>
                 <CardBody>

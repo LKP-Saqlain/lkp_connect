@@ -1,15 +1,16 @@
 import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import DataTable from "../../../components/common/UserInfoTable";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../services";
+import ShowToast from "../../../utils/toastUtils";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
-import { apiServices } from "../../../services";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import ShowToast from "../../../utils/toastUtils";
 
-const index = ({ activeSubItem }: any) => {
+const ThirdPartyApproval = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any>();
   const [flag, setFlag] = useState<boolean>(false);
+  console.log(activeSubItem, "activeSubItemThir");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -18,15 +19,15 @@ const index = ({ activeSubItem }: any) => {
   );
 
   useEffect(() => {
-    const fetchApprover1 = () => {
+    const fetchApprover = () => {
       const payload = {
-        userID: user_id,
-        // userID: "EMP-5347",
+        user_id: user_id,
+        // user_id: "EMP-0656",
       };
       dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
-        .Approver1ViewUnlisted(payload)
+        .ThirdPartyApproverView(payload)
         .then((response) => {
           console.log("A1 Data", response?.data?.data);
           setData(response?.data?.data);
@@ -38,21 +39,20 @@ const index = ({ activeSubItem }: any) => {
           dispatch(hideLoader());
         });
     };
-    fetchApprover1();
+    fetchApprover();
   }, [dispatch, flag]);
 
   const handleApproval = (rid: number, remark: string, entryFlag: string) => {
     const payload = {
       rowID: rid,
-      userID: user_id,
-      // userID: "EMP-5347",
+      user_id: user_id,
+      // user_id: "EMP-0656",
       status: entryFlag,
       remarks: remark,
     };
     dispatch(showLoader("Approving..."));
-
     apiServices
-      .ApproverActionUnlistedShares(payload)
+      .ThirdPartyApproverAction(payload)
       .then((response) => {
         // setFlag(!flag);
         if (response?.status === 200) {
@@ -70,6 +70,7 @@ const index = ({ activeSubItem }: any) => {
         dispatch(hideLoader());
       });
   };
+
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -87,7 +88,9 @@ const index = ({ activeSubItem }: any) => {
               padding: "0.2rem 0.8rem",
             }}
           >
-            <h4 className="card-title mb-0">Unlisted Shares Approval 1</h4>
+            <h4 className="card-title mb-0">
+              Third Party Vendor Approval Master
+            </h4>
           </CardHeader>
           <CardBody>
             <DataTable
@@ -102,4 +105,4 @@ const index = ({ activeSubItem }: any) => {
   );
 };
 
-export default index;
+export default ThirdPartyApproval;

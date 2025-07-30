@@ -323,34 +323,39 @@ const CTCLReport = ({ activeSubItem }: any) => {
   };
 
   const handleExcelDownload = () => {
+    const selectedData =
+      formik.values.reportType === "summarized" ? ctclData : ctclDetailedData;
+    const formattedData =
+      formik.values.reportType === "summarized"
+        ? selectedData.map((item) => ({
+            Zone: item.zone,
+            "Branch Code": item.branchCode,
+            "Branch Type": item.branch_Type,
+            "CTCL Login ID": item.CTCLLoginID,
+            "CTCL User Name": item.CTCLUserName,
+            "Turnover (Cr.)": item.turnover,
+            "Gross Brokerage": item.grossBrokerage,
+            "Net Brokerage": item.netBrokerage,
+            "Last Trade Date": item.last_Trade_Date,
+          }))
+        : selectedData.map((item) => ({
+            Zone: item.zone,
+            "Branch Code": item.branchCode,
+            "Branch Type": item.branch_Type,
+            "CTCL Login ID": item.CTCLLoginID,
+            "CTCL User Name": item.CTCLUserName,
+            "Exchange / Segment": item.exchangeSegment,
+            "Turnover (Cr.)": item.turnover,
+            "Gross Brokerage": item.grossBrokerage,
+            "Net Brokerage": item.netBrokerage,
+            "Last Trade Date": item.last_Trade_Date,
+          }));
+
     // Convert data to a worksheet
-    const worksheet = XLSX.utils.json_to_sheet(ctclData);
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
 
     // Style the header row (first row, r = 0)
-    const headerKeys = Object.keys(ctclData[0]);
-
-    headerKeys.forEach((key, colIndex) => {
-      console.log(key);
-      const cellAddress = XLSX.utils.encode_cell({ r: 0, c: colIndex });
-
-      if (worksheet[cellAddress]) {
-        worksheet[cellAddress].s = {
-          fill: {
-            patternType: "solid",
-            fgColor: { rgb: "D9E1F2" },
-          },
-          font: {
-            bold: true,
-            sz: 14,
-            color: { rgb: "000000" },
-          },
-          alignment: {
-            horizontal: "center",
-            vertical: "center",
-          },
-        };
-      }
-    });
+    const headerKeys = Object.keys(formattedData[0]);
 
     // Set uniform column widths
     worksheet["!cols"] = headerKeys.map(() => ({ wch: 20 }));
@@ -365,11 +370,13 @@ const CTCLReport = ({ activeSubItem }: any) => {
 
     // Generate timestamp string
     const now = new Date();
-    const timeString = now
-      .toLocaleTimeString("en-GB", { hour12: false }) // HH:MM:SS
-      .replace(/:/g, "-"); // Replace ':' with '-' for valid filename
+    const timeString = now.toLocaleTimeString("en-GB", { hour12: true }); // HH:mm:ss
+    console.log(timeString);
 
-    const filename = `CtclActivityReport_${timeString}.xlsx`;
+    const filename =
+      formik.values.reportType === "summarized"
+        ? `SummarizedReport-${timeString}.xlsx`
+        : `DetailedReport-${timeString}.xlsx`;
 
     // Write and save file
     const excelBuffer = XLSX.write(workbook, {
@@ -399,6 +406,8 @@ const CTCLReport = ({ activeSubItem }: any) => {
       handleDateChange(value);
     }
   };
+  const selectedData =
+    formik.values.reportType === "summarized" ? ctclData : ctclDetailedData;
 
   return (
     <>
@@ -664,13 +673,14 @@ const CTCLReport = ({ activeSubItem }: any) => {
                             Submit
                           </Button>
 
-                          {ctclData.length > 0 && (
+                          {selectedData.length > 0 && (
                             <Button
                               className="btn-font"
                               style={{
                                 backgroundColor: "#11395C",
                                 height: "36px",
-                                width: ctclData.length > 0 ? "80px" : "90px",
+                                width:
+                                  selectedData.length > 0 ? "80px" : "90px",
                                 fontSize: "13px",
                                 padding: "4px 10px",
                                 display: "flex",

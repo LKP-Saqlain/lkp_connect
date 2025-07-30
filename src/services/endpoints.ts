@@ -134,4 +134,10 @@ export const endpoints = {
   GetTradeplaced: "api/Dashboard/GetTradeplaced",
   GetTradedClient: "api/Dashboard/GetTradedClient",
   GetRevTradedClient: "api/Dashboard/GetRevTradedClient",
+  ViewThirdPartyMaster: "api/Account/ViewThirdPartyMaster",
+  InsertThirdPartyMasterRecord: "api/Account/InsertThirdPartyMasterRecord",
+  DeleteThirdPartyMasterRecord: "api/Account/DeleteThirdPartyMasterRecord",
+  UpdateThirdPartyMasterRecord: "api/Account/UpdateThirdPartyMasterRecord",
+  ThirdPartyApproverView: "api/Account/ThirdPartyApproverView",
+  ThirdPartyApproverAction: "api/Account/ThirdPartyApproverAction",
 };

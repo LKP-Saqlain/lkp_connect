@@ -6702,5 +6702,189 @@ export const RHTopClientsColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
+export const ThirdParty: GridColDef[] = [
+  {
+    field: "ledgerCode",
+    headerName: "Ledger Code",
+    minWidth: 70,
+    flex: 0.4,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "companyName",
+    headerName: "Company Name",
+    minWidth: 180,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "sacNumber",
+    headerName: "SAC Number",
+    minWidth: 75,
+    flex: 0.5,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "state",
+    headerName: "State",
+    minWidth: 120,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "gstNumber",
+    headerName: "GST Number",
+    minWidth: 150,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "gstStateCode",
+    headerName: "GST State Code",
+    minWidth: 60,
+    flex: 0.3,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "pan",
+    headerName: "PAN Number",
+    minWidth: 120,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "emailId",
+    headerName: "Email ID",
+    minWidth: 180,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const email = params.value || ""; // Extract the email ID
+
+      // Mask the email if it exists
+      const maskedEmail = email.replace(
+        /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
+        (_: any, firstChar: any, middleChars: any, domain: any) => {
+          return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
+        }
+      );
+
+      // Return tooltip with the original email and masked email for display
+      return (
+        <Tooltip title={email} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile Number",
+    minWidth: 120,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "action",
+    headerName: "Action",
+    minWidth: 120,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+];
+
+export const ThirdPartyStatusReport: GridColDef[] = [
+  // Spread in all columns except the one with field "action"
+  ...ThirdParty.filter((col) => col.field !== "action"),
+
+  {
+    field: "approvalStatus",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    renderCell: (params: any) => {
+      const status = params.value?.toLowerCase() || "";
+
+      let backgroundColor = "#cfd8dc"; // Default neutral
+      let color = "#263238";
+      let border = "1px solid #b0bec5";
+
+      if (status.includes("approved")) {
+        backgroundColor = "#a5d6a7"; // Light green
+        color = "#1b5e20";
+        border = "1px solid #81c784";
+      } else if (status.includes("pending")) {
+        backgroundColor = "#FFF4E5"; // Soft peach / beige
+        color = "#FF9800"; // Warm orange (not too saturated)
+        border = "1px solid #FFB74D"; // Light orange border
+      } else if (status.includes("rejected") || status.includes("reject")) {
+        backgroundColor = "#ef9a9a"; // Light red
+        color = "#b71c1c";
+        border = "1px solid #e57373";
+      }
+
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+            fontFamily: "Public Sans",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor,
+              color,
+              border,
+              borderRadius: "999px",
+              padding: "3px 6px",
+              fontSize: "11px",
+              fontWeight: 600,
+              // textTransform: "capitalize",
+              whiteSpace: "nowrap",
+              display: "inline-block",
+              textAlign: "center",
+              minWidth: "160px",
+              lineHeight: "1",
+            }}
+          >
+            {params.value}
+          </div>
+        </div>
+      );
+    },
   },
 ];

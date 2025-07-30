@@ -48,6 +48,8 @@ import {
   EmpNonBrokerageAchieved,
   ClientExclusionColumns,
   RHTopClientsColumns,
+  ThirdParty,
+  ThirdPartyStatusReport,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1514,6 +1516,126 @@ const DataTable = ({
       return RHTopClientsColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Third Party Vendor Master") {
+      return ThirdParty.map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted; // Add condition based on your row data
+
+              const handleEdit = () => {
+                handleEditClick?.(params.row, true); // Call edit function for Communication Retrieval Entry
+              };
+
+              return (
+                <>
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <button
+                    onClick={() => {
+                      handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
+                      setSelectedRow(params.row); // Store the selected row for confirmation
+                      tog_center(); // Open the modal for deletion confirmation
+                    }}
+                    disabled={isDeleted}
+                    style={{
+                      color: isDeleted ? "red" : "#11395C",
+                      textDecoration: isDeleted ? "none" : "underline",
+                      background: "none",
+                      border: "none",
+                      cursor: isDeleted ? "default" : "pointer",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    {isDeleted ? (
+                      "Deleted"
+                    ) : (
+                      <Tooltip title="Delete" arrow placement="top">
+                        <IconButton
+                          sx={{ p: 0 }}
+                          color="primary"
+                          onClick={() => handleDeleteEntry?.(params.row)}
+                        >
+                          <DeleteIcon
+                            fontSize="small"
+                            sx={{ color: "#11395C" }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </button>
+                </>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "Third Party Vendor Approval") {
+      return ThirdParty.map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowId);
+                      HandleApprovalModal("approve");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      margin: "0 5px 0 5px",
+                    }}
+                  >
+                    |
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowId);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "Status Report") {
+      return ThirdPartyStatusReport.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
@@ -1596,7 +1718,8 @@ const DataTable = ({
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Entry" ||
               activeSubItem === "Marketing Material" ||
-              activeSubItem === "Client Exclusion"
+              activeSubItem === "Client Exclusion" ||
+              activeSubItem === "Third Party Vendor Master"
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Checker"
             ? `Are you sure want to ${action} this entry`
@@ -1605,7 +1728,8 @@ const DataTable = ({
             : activeSubItem === "RH Approval"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Unlisted Shares Approval 1" ||
-              activeSubItem === "Unlisted Shares Approval 2"
+              activeSubItem === "Unlisted Shares Approval 2" ||
+              activeSubItem === "Third Party Vendor Approval"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Pre Trade Approval" && !showDocument
             ? `Are you sure want to ${action} this entry`

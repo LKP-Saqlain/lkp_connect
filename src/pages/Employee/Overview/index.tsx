@@ -176,6 +176,16 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
           const month = response?.data?.Table3[0]?.FinancialQuarter;
           const APbrokerage = response?.data?.Table3[0]?.APbrokerage;
           const GrossBrokerage = response?.data?.Table3[0]?.GrossBrokerage;
+          // const allQuarters = response?.data?.Table3 || [];
+          // const totalAPBrokerage = allQuarters.reduce(
+          //   (acc, item) => acc + (item.APbrokerage || 0),
+          //   0
+          // );
+
+          // const totalGrossBrokerage = allQuarters.reduce(
+          //   (acc, item) => acc + (item.GrossBrokerage || 0),
+          //   0
+          // );
           const clients = response?.data?.Table4[0]?.NewClientCOUNTS;
           const uniqueTradedClients =
             response?.data?.Table5[0]?.TradedClientCOUNTS;
@@ -192,6 +202,11 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
             GrossBrokerage,
             total: APbrokerage + GrossBrokerage,
           });
+          // setFirstCard({
+          //   APbrokerage: totalAPBrokerage,
+          //   GrossBrokerage: totalGrossBrokerage,
+          //   total: totalAPBrokerage + totalGrossBrokerage,
+          // });
           setNewClien(clients);
           setTradedClients(uniqueTradedClients);
           // setStartMonth(month);
