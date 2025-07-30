@@ -505,7 +505,7 @@ const SideBar = () => {
     if (activeMenu === "Zone Overview") {
       setActiveSubItem("");
     }
-  }, [activeMenu, activeSubItem]);
+  }, [activeMenu]);
 
   useEffect(() => {
     if (activeMenu === "IVR" && activeSubItem === "IVR Mapping") {
