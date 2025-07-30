@@ -6702,6 +6702,8 @@ export const RHTopClientsColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
+  },
+];
 export const ThirdParty: GridColDef[] = [
   {
     field: "ledgerCode",
