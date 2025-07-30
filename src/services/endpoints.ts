@@ -125,4 +125,5 @@ export const endpoints = {
   DeleteThirdPartyMasterRecord: "api/Account/DeleteThirdPartyMasterRecord",
   UpdateThirdPartyMasterRecord: "api/Account/UpdateThirdPartyMasterRecord",
   ThirdPartyApproverView: "api/Account/ThirdPartyApproverView",
+  ThirdPartyApproverAction: "api/Account/ThirdPartyApproverAction",
 };

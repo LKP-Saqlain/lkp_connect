@@ -1573,6 +1573,59 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "Third Party Vendor Approval") {
+      return ThirdParty.map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowId);
+                      HandleApprovalModal("approve");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      margin: "0 5px 0 5px",
+                    }}
+                  >
+                    |
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowId);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }
@@ -1665,7 +1718,8 @@ const DataTable = ({
             : activeSubItem === "RH Approval"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Unlisted Shares Approval 1" ||
-              activeSubItem === "Unlisted Shares Approval 2"
+              activeSubItem === "Unlisted Shares Approval 2" ||
+              activeSubItem === "Third Party Vendor Approval"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Pre Trade Approval" && !showDocument
             ? `Are you sure want to ${action} this entry`

@@ -94,7 +94,6 @@ const index = ({ activeSubItem }: any) => {
               activeSubItem={activeSubItem}
               T6Data={data}
               handleApproval={handleApproval}
-              // handleDownload={handleDownload}
             />
           </CardBody>
         </Card>

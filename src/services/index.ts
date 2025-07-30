@@ -577,4 +577,11 @@ export const apiServices = {
   ThirdPartyApproverView: async (payload: any) => {
     return await apiService("POST", endpoints.ThirdPartyApproverView, payload);
   },
+  ThirdPartyApproverAction: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ThirdPartyApproverAction,
+      payload
+    );
+  },
 };

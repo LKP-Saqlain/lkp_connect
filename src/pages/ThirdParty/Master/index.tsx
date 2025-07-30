@@ -197,7 +197,6 @@ const ThirdPartyMaster = ({ activeSubItem }: any) => {
                 activeSubItem={activeSubItem}
                 T6Data={data}
                 handleEditClick={handleEditClick}
-                // handleDownload={handleDownload}
                 getUserDetails={getDeleteUserDetails}
               />
             </CardBody>
