@@ -113,24 +113,39 @@ const ThirdPartyMaster = ({ activeSubItem }: any) => {
   };
 
   const getDeleteUserDetails = async (row: any) => {
-    console.log("selectethirdRowwww", row);
-    dispatch(showLoader(""));
-    let payload = {
-      Rowid: row?.rowId,
-      user_id: user_id,
-    };
+    console.log("Selected Third Party Row:", row);
 
-    const response = await apiServices.DeleteThirdPartyMasterRecord(payload);
-    console.log("ResPonseee-->", response);
+    if (row.approvalStatus === "Approved") {
+      ShowToast("error", "Approved entries cannot be deleted.");
+      return;
+    }
 
-    if (response?.status === 200) {
+    try {
+      dispatch(showLoader("Deleting..."));
+
+      const payload = {
+        Rowid: row?.rowId,
+        user_id: user_id,
+      };
+
+      const response = await apiServices.DeleteThirdPartyMasterRecord(payload);
+
+      console.log("Delete Response →", response);
+
+      if (response?.status === 200) {
+        ShowToast("success", response.data?.message || "Deleted successfully.");
+        setFlag((prev) => !prev); // toggle for refresh
+      } else {
+        throw new Error(response?.data?.message || "Deletion failed.");
+      }
+    } catch (error: any) {
+      console.error("Delete Error:", error);
+      ShowToast("error", error.message || "An unexpected error occurred.");
+    } finally {
       dispatch(hideLoader());
-      ShowToast("success", response.data?.message);
-      setFlag(!flag);
-    } else {
-      throw new Error("Deletion failed.");
     }
   };
+
   const handleEditClick = (data: any, editCheck: boolean) => {
     console.log("TestModalData", data, editCheck);
 

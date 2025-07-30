@@ -6765,3 +6765,72 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
 ];
+
+export const ThirdPartyStatusReport: GridColDef[] = [
+  // Spread in all columns except the one with field "action"
+  ...ThirdParty.filter((col) => col.field !== "action"),
+
+  {
+    field: "approvalStatus",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    renderCell: (params: any) => {
+      const status = params.value?.toLowerCase() || "";
+
+      let backgroundColor = "#cfd8dc"; // Default neutral
+      let color = "#263238";
+      let border = "1px solid #b0bec5";
+
+      if (status.includes("approved")) {
+        backgroundColor = "#a5d6a7"; // Light green
+        color = "#1b5e20";
+        border = "1px solid #81c784";
+      } else if (status.includes("pending")) {
+        backgroundColor = "#FFF4E5"; // Soft peach / beige
+        color = "#FF9800"; // Warm orange (not too saturated)
+        border = "1px solid #FFB74D"; // Light orange border
+      } else if (status.includes("rejected") || status.includes("reject")) {
+        backgroundColor = "#ef9a9a"; // Light red
+        color = "#b71c1c";
+        border = "1px solid #e57373";
+      }
+
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+            fontFamily: "Public Sans",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor,
+              color,
+              border,
+              borderRadius: "999px",
+              padding: "3px 6px",
+              fontSize: "11px",
+              fontWeight: 600,
+              // textTransform: "capitalize",
+              whiteSpace: "nowrap",
+              display: "inline-block",
+              textAlign: "center",
+              minWidth: "160px",
+              lineHeight: "1",
+            }}
+          >
+            {params.value}
+          </div>
+        </div>
+      );
+    },
+  },
+];

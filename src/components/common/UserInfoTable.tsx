@@ -48,6 +48,7 @@ import {
   EmpNonBrokerageAchieved,
   ClientExclusionColumns,
   ThirdParty,
+  ThirdPartyStatusReport,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1626,6 +1627,10 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "Status Report") {
+      return ThirdPartyStatusReport.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
