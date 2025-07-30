@@ -597,4 +597,19 @@ export const apiServices = {
       payload
     );
   },
+  GetMonthlyClient: async (payload: any) => {
+    return await apiService("POST", endpoints.GetMonthlyClient, payload);
+  },
+  GetBrokRevenue: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokRevenue, payload);
+  },
+  GetTradeplaced: async (payload: any) => {
+    return await apiService("POST", endpoints.GetTradeplaced, payload);
+  },
+  GetTradedClient: async (payload: any) => {
+    return await apiService("POST", endpoints.GetTradedClient, payload);
+  },
+  GetRevTradedClient: async (payload: any) => {
+    return await apiService("POST", endpoints.GetRevTradedClient, payload);
+  },
 };

@@ -35,7 +35,7 @@ const monthDropdown = `${now.toLocaleString("en-US", {
   month: "short",
 })}-${now.getFullYear()}`;
 
-const Direct = ({ activeSubItem }: OverviewProps) => {
+const Indirect = ({ activeSubItem }: OverviewProps) => {
   const [topClientsRecords, setTopClientsRecords] = useState<any[]>([]);
   const [selectedViews, setSelectedViews] = useState<ViewType[]>(
     Array(9).fill("Daily")
@@ -158,7 +158,7 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
     setTopClientsRecords([]);
     const payload = {
       user_Id: "EMP-0238",
-      branch_Type: "direct",
+      branch_Type: "indirect",
       option_Type: "Monthly_Client",
       monthDropdown: formik.values.monthDropdown || "",
     };
@@ -216,7 +216,7 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
 
     const payload = {
       user_Id: "EMP-0238",
-      branch_Type: "direct",
+      branch_Type: "indirect",
       option_Type: "Brok_Revenue",
       monthDropdown,
     };
@@ -284,7 +284,7 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
 
     let payload = {
       user_Id: "EMP-0238",
-      branch_Type: "direct",
+      branch_Type: "indirect",
       option_Type: "Trade_placed",
       monthDropdown,
     };
@@ -345,7 +345,7 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
 
     let payload = {
       user_Id: "EMP-0238",
-      branch_Type: "direct",
+      branch_Type: "indirect",
       option_Type: "Traded_Client",
       monthDropdown,
     };
@@ -406,7 +406,7 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
 
     let payload = {
       user_Id: "EMP-0238",
-      branch_Type: "direct",
+      branch_Type: "indirect",
       option_Type: "Rev_Traded_Client",
       monthDropdown,
     };
@@ -514,6 +514,7 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
                   setSelectedView={(view: any) => handleViewChange(index, view)}
                   directData={directData}
                   tradeDates={tradeLabels}
+                  customClass={true}
                 />
               );
             })}
@@ -580,4 +581,4 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
   );
 };
 
-export default Direct;
+export default Indirect;

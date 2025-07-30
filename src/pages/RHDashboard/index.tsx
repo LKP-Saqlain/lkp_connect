@@ -2,7 +2,8 @@ import React, { useEffect, Suspense } from "react";
 import { SubItemKeys } from "../../constants/subItemKeys";
 import Loader from "../../components/common/Loader";
 import Overview from "./Overview";
-// import Direct from "./Direct";
+import Direct from "./Direct";
+import Indirect from "./Indirect";
 
 interface RH {
   activeSubItem: string;
@@ -15,15 +16,24 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
   }, [activeMenu, activeSubItem]);
 
   const componentMap: Record<string, React.ReactNode> = {
-    [SubItemKeys.RH_OVERVIEW]: <Overview activeSubItem={activeSubItem} />,
-    // [SubItemKeys.RH_DIRECT]: <Direct activeSubItem={activeSubItem} />,
+    [SubItemKeys.RH_DIRECT]: <Direct activeSubItem={activeSubItem} />,
+    [SubItemKeys.RH_INDIRECT]: <Indirect activeSubItem={activeSubItem} />,
   };
 
-  return (
-    <div>
-      <Suspense fallback={<Loader />}>{componentMap[activeMenu]}</Suspense>
-    </div>
-  );
+  const getComponent = () => {
+    if (activeMenu === "Zone Overview") {
+      if (activeSubItem === SubItemKeys.RH_DIRECT) {
+        return <Direct activeSubItem={activeSubItem} />;
+      } else if (activeSubItem === SubItemKeys.RH_INDIRECT) {
+        return <Indirect activeSubItem={activeSubItem} />;
+      } else {
+        return <Overview activeSubItem={activeSubItem} />;
+      }
+    }
+    return componentMap[activeSubItem] || null;
+  };
+
+  return <Suspense fallback={<Loader />}>{getComponent()}</Suspense>;
 };
 
 export default Index;

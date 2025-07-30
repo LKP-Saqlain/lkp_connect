@@ -318,6 +318,7 @@ const SideBar = () => {
       activeMenu !== "DashBoard" &&
       activeMenu !== "TPD Report" &&
       activeMenu !== "Trading" &&
+      activeMenu !== "Zone Overview" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -499,6 +500,12 @@ const SideBar = () => {
       handleDrawerOpen();
     }
   }, []);
+
+  useEffect(() => {
+    if (activeMenu === "Zone Overview") {
+      setActiveSubItem("");
+    }
+  }, [activeMenu, activeSubItem]);
 
   useEffect(() => {
     if (activeMenu === "IVR" && activeSubItem === "IVR Mapping") {

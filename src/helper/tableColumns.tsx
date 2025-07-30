@@ -6675,15 +6675,16 @@ export const RHTopClientsColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    // valueFormatter: (params) =>
-    //   params.value?.toLocaleString("en-IN", {
-    //     style: "currency",
-    //     currency: "INR",
-    //     minimumFractionDigits: 2,
-    //   }),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
-    field: "lastTradeDate",
+    field: "tradeDate",
     headerName: "Last Trade Date",
     minWidth: 130,
     flex: 0.8,

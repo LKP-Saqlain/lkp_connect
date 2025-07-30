@@ -129,4 +129,9 @@ export const endpoints = {
   GetOptionsRevenue: "api/Dashboard/GetOptionsRevenue",
   GetCommodityFuturesReport: "api/Dashboard/GetCommodityFuturesReport",
   GetCommodityOptionsReport: "api/Dashboard/GetCommodityOptionsReport",
+  GetMonthlyClient: "api/Dashboard/GetMonthlyClient",
+  GetBrokRevenue: "/api/Dashboard/GetBrokRevenue",
+  GetTradeplaced: "api/Dashboard/GetTradeplaced",
+  GetTradedClient: "api/Dashboard/GetTradedClient",
+  GetRevTradedClient: "api/Dashboard/GetRevTradedClient",
 };

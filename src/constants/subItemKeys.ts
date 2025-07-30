@@ -8,7 +8,8 @@ export const SubItemKeys = {
   SPIP_CLIENT_DETAILS: "Client Details Report",
   SPIP_PERFORMANCE_REPORT: "SPIP Performance Report",
   RH_OVERVIEW: "Zone Overview",
-  RH_DIRECT: "KRA PAN STATUS",
+  RH_DIRECT: "Direct Channel",
+  RH_INDIRECT: "Indirect Channel",
 } as const;
 
 export type SubItemKey = (typeof SubItemKeys)[keyof typeof SubItemKeys];

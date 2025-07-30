@@ -9,8 +9,9 @@ type ChartCardProps = {
   setSelectedView: (view: string) => void;
   viewOptions: string[];
   directData: number[];
-  indirectData: number[];
+  indirectData?: number[];
   tradeDates?: any;
+  customClass?: any;
 };
 
 const ChartCard: React.FC<ChartCardProps> = ({
@@ -21,14 +22,15 @@ const ChartCard: React.FC<ChartCardProps> = ({
   directData,
   indirectData,
   tradeDates,
+  customClass,
 }) => {
   const colorMap: Record<string, string[]> = {
     Direct: ["#11395C"],
     Indirect: ["#F57C00"],
     Total: ["#11395C", "#F57C00"],
-    Daily: ["#1976d2"],
-    Weekly: ["#9c27b0"],
-    Monthly: ["#2e7d32"],
+    Daily: customClass ? ["#F57C00"] : ["#11395C"],
+    Weekly: customClass ? ["#F57C00"] : ["#11395C"],
+    Monthly: customClass ? ["#F57C00"] : ["#11395C"],
   };
 
   const computeChartData = () => {
@@ -38,7 +40,6 @@ const ChartCard: React.FC<ChartCardProps> = ({
     );
 
     let series: any = [];
-
     if (selectedView === "Direct") {
       series = [{ name: "Direct", data: directData }];
     } else if (selectedView === "Indirect") {
@@ -49,20 +50,11 @@ const ChartCard: React.FC<ChartCardProps> = ({
         { name: "Indirect", data: indirectData },
       ];
     } else if (selectedView === "Daily") {
-      series = [
-        { name: "Daily", data: directData },
-        { name: "", data: indirectData },
-      ];
+      series = [{ name: "Daily", data: directData ?? [] }];
     } else if (selectedView === "Weekly") {
-      series = [
-        { name: "Weekly", data: indirectData },
-        { name: "", data: directData },
-      ];
+      series = [{ name: "Weekly", data: directData ?? [] }];
     } else if (selectedView === "Monthly") {
-      series = [
-        { name: "Monthly Direct", data: directData },
-        { name: "Monthly Indirect", data: indirectData },
-      ];
+      series = [{ name: "Monthly", data: directData ?? [] }];
     }
 
     return { series, categories, isStackedView };
@@ -97,16 +89,17 @@ const ChartCard: React.FC<ChartCardProps> = ({
         return Math.floor(val).toLocaleString("en-IN");
       },
       style: {
-        fontSize: "10px",
+        fontSize: "11px",
         fontWeight: "bold",
         colors: ["#000"],
         // top: "10px",
       },
+      offsetY: -15,
     },
     plotOptions: {
       bar: {
         borderRadius: 4,
-        columnWidth: "50%",
+        columnWidth: "60%",
 
         dataLabels: {
           position: "top",
