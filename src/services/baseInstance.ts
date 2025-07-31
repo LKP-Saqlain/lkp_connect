@@ -65,7 +65,10 @@ const pdfDownloadEndpoints = [
   endpoints.GenerateClientPerformancePdf,
 ];
 
-const multipartEndpoints = [endpoints.UploadUnlistedSharesVendorFile];
+const multipartEndpoints = [
+  endpoints.UploadUnlistedSharesVendorFile,
+  endpoints.TPInvoiceStaging,
+];
 
 // Utility functions
 const isEndpointMatched = (url: string | undefined, endpoints: string[]) =>

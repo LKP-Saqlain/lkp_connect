@@ -126,4 +126,7 @@ export const endpoints = {
   UpdateThirdPartyMasterRecord: "api/Account/UpdateThirdPartyMasterRecord",
   ThirdPartyApproverView: "api/Account/ThirdPartyApproverView",
   ThirdPartyApproverAction: "api/Account/ThirdPartyApproverAction",
+  TPInvoiceStaging: "/api/Account/TPInvoiceStaging",
+  UnstageTPInvoice: "/api/Account/UnstageTPInvoice",
+  TPInvoiceUpload: "/api/Account/TPInvoiceUpload",
 };

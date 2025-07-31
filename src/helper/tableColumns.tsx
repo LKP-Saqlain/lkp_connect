@@ -6834,3 +6834,149 @@ export const ThirdPartyStatusReport: GridColDef[] = [
     },
   },
 ];
+
+export const TpInvoiceColumns: GridColDef[] = [
+  {
+    field: "invoiceNumber",
+    headerName: "Invoice Number",
+    minWidth: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center", // Code → Center
+    disableColumnMenu: true,
+  },
+  {
+    field: "invoiceDate",
+    headerName: "Invoice Date",
+    minWidth: 110,
+    flex: 1,
+    headerAlign: "center",
+    align: "center", // Date → Center
+    disableColumnMenu: true,
+    valueGetter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params, "DD-MMM-YY").toDate();
+    },
+    valueFormatter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
+    },
+  },
+  {
+    field: "companyName",
+    headerName: "Company Name",
+    minWidth: 200,
+    flex: 2,
+    headerAlign: "center",
+    align: "left", // Text → Left
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "partyName",
+    headerName: "Party Name",
+    minWidth: 200,
+    flex: 2,
+    headerAlign: "center",
+    align: "left", // Text → Left
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "gstNumber",
+    headerName: "GST Number",
+    minWidth: 160,
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center", // Code → Center
+    disableColumnMenu: true,
+  },
+  {
+    field: "forMonth",
+    headerName: "For Month",
+    minWidth: 100,
+    flex: 1,
+    headerAlign: "center",
+    align: "center", // Date → Center
+    disableColumnMenu: true,
+  },
+  {
+    field: "product",
+    headerName: "Product",
+    minWidth: 150,
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left", // Text → Left
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "productCode",
+    headerName: "Product Code",
+    minWidth: 80,
+    flex: 1,
+    headerAlign: "center",
+    align: "center", // Code → Center
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "p_State",
+    headerName: "Party State",
+    minWidth: 140,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "left", // Text → Left
+    disableColumnMenu: true,
+  },
+  {
+    field: "baseAmount",
+    headerName: "Base Amount",
+    minWidth: 110,
+    flex: 1,
+    headerAlign: "center",
+    align: "right", // Number → Right
+    type: "number",
+    disableColumnMenu: true,
+  },
+  {
+    field: "sgst",
+    headerName: "SGST",
+    minWidth: 80,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "right", // Number → Right
+    type: "number",
+    disableColumnMenu: true,
+  },
+  {
+    field: "cgst",
+    headerName: "CGST",
+    minWidth: 80,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "right", // Number → Right
+    type: "number",
+    disableColumnMenu: true,
+  },
+  {
+    field: "igst",
+    headerName: "IGST",
+    minWidth: 80,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "right", // Number → Right
+    type: "number",
+    disableColumnMenu: true,
+  },
+  {
+    field: "totalAmount",
+    headerName: "Total Amount",
+    minWidth: 120,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "right", // Number → Right
+    type: "number",
+    disableColumnMenu: true,
+  },
+];

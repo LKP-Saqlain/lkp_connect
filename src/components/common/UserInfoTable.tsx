@@ -49,6 +49,7 @@ import {
   ClientExclusionColumns,
   ThirdParty,
   ThirdPartyStatusReport,
+  TpInvoiceColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1631,6 +1632,10 @@ const DataTable = ({
       return ThirdPartyStatusReport.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Third Party Invoice Upload") {
+      return TpInvoiceColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
@@ -1846,9 +1851,14 @@ const DataTable = ({
               : row.Name
           }
           // Use the correct identifier for rows
-          getRowClassName={(params) =>
-            params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"
-          }
+          getRowClassName={(params) => {
+            if (customCss) {
+              if (params.row.isDuplicate) return "duplicate-row";
+            }
+            return params.indexRelativeToCurrentPage % 2 === 0
+              ? "even-row"
+              : "odd-row";
+          }}
           getRowHeight={getRowHeight}
           sx={{
             border: 0,
@@ -1868,6 +1878,11 @@ const DataTable = ({
               color: "#000",
               border: "1px solid #D3D3D3 !important",
             },
+            ...(customCss && {
+              "& .duplicate-row": {
+                backgroundColor: "#ffadb0 !important", // light red
+              },
+            }),
           }}
           slotProps={{
             pagination: {

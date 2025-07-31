@@ -584,4 +584,13 @@ export const apiServices = {
       payload
     );
   },
+  TPInvoiceStaging: async (payload: any) => {
+    return await apiService("POST", endpoints.TPInvoiceStaging, payload);
+  },
+  UnstageTPInvoice: async (payload: any) => {
+    return await apiService("POST", endpoints.UnstageTPInvoice, payload);
+  },
+  TPInvoiceUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.TPInvoiceUpload, payload);
+  },
 };
