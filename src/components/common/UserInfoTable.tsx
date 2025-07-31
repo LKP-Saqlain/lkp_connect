@@ -49,7 +49,8 @@ import {
   ClientExclusionColumns,
   ThirdParty,
   ThirdPartyStatusReport,
-  TpInvoiceColumns,
+  TpInvoiceUploadColumns,
+  TpInvoiceVerifyColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -170,7 +171,9 @@ const DataTable = ({
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
   const [modal_center, setmodal_center] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<any>(null); // Store selected row data
-  const [action, setAction] = useState<"approve" | "reject">("approve");
+  const [action, setAction] = useState<
+    "approve" | "reject" | "delete" | undefined
+  >();
   const [customLedgerData, setCustomLedgerData] = useState([]);
   // const [screenHeight, setScreenHeight] = useState(window.innerHeight);
   const [filteredLedgerDataDropDown, setFilteredLedgerDataDropDown] = useState<
@@ -223,7 +226,7 @@ const DataTable = ({
     setmodal_center(!modal_center);
     setShowDocument(false);
   };
-  const HandleApprovalModal = (actionType: "approve" | "reject") => {
+  const HandleApprovalModal = (actionType: "approve" | "reject" | "delete") => {
     console.log("TestactionType", actionType);
 
     setAction(actionType);
@@ -237,11 +240,6 @@ const DataTable = ({
     setSelectedRow(row);
     // tog_center();
   };
-
-  // const handleDpDebitDetails = (row: any) => {
-  //   console.log(row);
-  //   // getUserDetails?.(row);
-  // };
 
   const handleDeleteEntry = (row: any) => {
     handleDeleteClick?.(row);
@@ -1633,9 +1631,105 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "Third Party Invoice Upload") {
-      return TpInvoiceColumns.map((column) => ({
+      return TpInvoiceUploadColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Third Party Invoice Verify") {
+      return TpInvoiceVerifyColumns.map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowId);
+                      HandleApprovalModal("approve");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      margin: "0 5px 0 5px",
+                    }}
+                  >
+                    |
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowId);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+        if (column.field === "delete") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted;
+
+              const handleDelete = () => {
+                if (!isDeleted) {
+                  handleDeleteEntry?.(params.row);
+                  setSelectedRow(params.row);
+                  tog_center();
+                }
+              };
+
+              return (
+                <>
+                  <Tooltip
+                    title={isDeleted ? "Already deleted" : "Delete"}
+                    arrow
+                    placement="top"
+                  >
+                    <span>
+                      <IconButton
+                        sx={{ p: 0, ml: 1 }}
+                        color="primary"
+                        onClick={() => {
+                          setAction("delete");
+                          handleDelete();
+                        }}
+                        disabled={isDeleted}
+                      >
+                        <DeleteIcon
+                          fontSize="small"
+                          sx={{ color: isDeleted ? "red" : "#11395C" }}
+                        />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                </>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }
@@ -1699,6 +1793,53 @@ const DataTable = ({
     console.log("childData", customLedgerData, selectedWidget);
   }, [customLedgerData, selectedWidget]);
 
+  let Msg = "";
+
+  const deleteItems = [
+    "Regulatory Announcement",
+    "Unlisted Shares Entry",
+    "Communication Retrival Entry",
+    "Marketing Material",
+    "Client Exclusion",
+    "Third Party Vendor Master",
+    "Third Party Invoice Verify", // delete message also for this
+  ];
+
+  const actionItems = [
+    "Communication Retrival Checker",
+    "KYC Approval",
+    "RH Approval",
+    "Unlisted Shares Approval 1",
+    "Unlisted Shares Approval 2",
+    "Third Party Vendor Approval",
+    "Third Party Invoice Verify", // approve/reject message also for this
+  ];
+
+  if (activeSubItem === "RMS Allocation") {
+    Msg = "";
+  } else if (activeSubItem === "Third Party Invoice Verify") {
+    if (action === "delete") {
+      Msg = "Are you sure want to delete this entry";
+    } else if (action === "approve" || action === "reject") {
+      Msg = `Are you sure want to ${action} this entry`;
+    } else {
+      Msg = "";
+    }
+  } else if (deleteItems.includes(activeSubItem)) {
+    Msg = "Are you sure want to delete this entry";
+  } else if (actionItems.includes(activeSubItem)) {
+    Msg = `Are you sure want to ${action} this entry`;
+  } else if (activeSubItem === "Pre Trade Approval" && !showDocument) {
+    Msg = `Are you sure want to ${action} this entry`;
+  } else if (
+    activeSubItem === "Pre Trade Proof Upload" ||
+    activeSubItem === "Pre Trade Report" ||
+    (activeSubItem === "Pre Trade Approval" && showDocument)
+  ) {
+    Msg = "";
+  } else {
+    Msg = "Are you sure you want to send the email?";
+  }
   return (
     <>
       <CustomModal
@@ -1709,38 +1850,40 @@ const DataTable = ({
         row={selectedRow} // Pass the selected row data
         action={action}
         handleApproval={handleApproval}
-        Msg={
-          activeSubItem === "RMS Allocation"
-            ? ""
-            : activeSubItem === "Regulatory Announcement"
-            ? "Are you sure want to delete this entry"
-            : activeSubItem === "Unlisted Shares Entry"
-            ? "Are you sure want to delete this entry"
-            : activeSubItem === "Communication Retrival Entry" ||
-              activeSubItem === "Marketing Material" ||
-              activeSubItem === "Client Exclusion" ||
-              activeSubItem === "Third Party Vendor Master"
-            ? "Are you sure want to delete this entry"
-            : activeSubItem === "Communication Retrival Checker"
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "KYC Approval"
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "RH Approval"
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "Unlisted Shares Approval 1" ||
-              activeSubItem === "Unlisted Shares Approval 2" ||
-              activeSubItem === "Third Party Vendor Approval"
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "Pre Trade Approval" && !showDocument
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "Pre Trade Proof Upload"
-            ? ""
-            : activeSubItem === "Pre Trade Report"
-            ? ""
-            : activeSubItem === "Pre Trade Approval" && showDocument
-            ? ""
-            : "Are you sure you want to send the email?"
-        }
+        Msg={Msg}
+        // Msg={
+        //   activeSubItem === "RMS Allocation"
+        //     ? ""
+        //     : activeSubItem === "Regulatory Announcement"
+        //     ? "Are you sure want to delete this entry"
+        //     : activeSubItem === "Unlisted Shares Entry"
+        //     ? "Are you sure want to delete this entry"
+        //     : activeSubItem === "Communication Retrival Entry" ||
+        //       activeSubItem === "Marketing Material" ||
+        //       activeSubItem === "Client Exclusion" ||
+        //       activeSubItem === "Third Party Vendor Master"
+        //     ? "Are you sure want to delete this entry"
+        //     : activeSubItem === "Communication Retrival Checker"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "KYC Approval"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "RH Approval"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "Unlisted Shares Approval 1" ||
+        //       activeSubItem === "Unlisted Shares Approval 2" ||
+        //       activeSubItem === "Third Party Vendor Approval"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "Pre Trade Approval" && !showDocument
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "Pre Trade Proof Upload"
+        //     ? ""
+        //     : activeSubItem === "Pre Trade Report"
+        //     ? ""
+        //     : activeSubItem === "Pre Trade Approval" && showDocument
+        //     ? ""
+        //     : "Are you sure you want to send the email?"
+        // }
+
         activeSubItem={activeSubItem}
         isUploadMode={activeSubItem === "Pre Trade Proof Upload" ? true : false}
         handleFileUpload={(selectedRow, file, remark) => {

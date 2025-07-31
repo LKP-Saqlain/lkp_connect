@@ -129,4 +129,7 @@ export const endpoints = {
   TPInvoiceStaging: "/api/Account/TPInvoiceStaging",
   UnstageTPInvoice: "/api/Account/UnstageTPInvoice",
   TPInvoiceUpload: "/api/Account/TPInvoiceUpload",
+  GetUnverifiedTPInvoices: "/api/Account/GetUnverifiedTPInvoices",
+  HandleTPInvoiceApproval: "/api/Account/HandleTPInvoiceApproval",
+  DeleteTPInvoiceRecord: "/api/Account/DeleteTPInvoiceRecord",
 };

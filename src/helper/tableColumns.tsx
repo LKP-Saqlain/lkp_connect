@@ -1427,10 +1427,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     align: "center",
     width: 90,
     disableColumnMenu: true,
-    valueGetter: (params: any) => {
-      if (!params) return "-";
-      return dayjs(params, "DD-MMM-YY").toDate();
-    },
+
     valueFormatter: (params: any) => {
       if (!params) return "-";
       return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
@@ -6626,10 +6623,6 @@ export const ClientExclusionColumns: GridColDef[] = [
     align: "center",
     disableColumnMenu: true,
 
-    valueGetter: (params: any) => {
-      if (!params) return "-";
-      return dayjs(params, "DD-MMM-YY").toDate();
-    },
     valueFormatter: (params: any) => {
       if (!params) return "-";
       return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
@@ -6835,7 +6828,7 @@ export const ThirdPartyStatusReport: GridColDef[] = [
   },
 ];
 
-export const TpInvoiceColumns: GridColDef[] = [
+export const TpInvoiceUploadColumns: GridColDef[] = [
   {
     field: "invoiceNumber",
     headerName: "Invoice Number",
@@ -6853,10 +6846,7 @@ export const TpInvoiceColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center", // Date → Center
     disableColumnMenu: true,
-    valueGetter: (params: any) => {
-      if (!params) return "-";
-      return dayjs(params, "DD-MMM-YY").toDate();
-    },
+
     valueFormatter: (params: any) => {
       if (!params) return "-";
       return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
@@ -6977,6 +6967,35 @@ export const TpInvoiceColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right", // Number → Right
     type: "number",
+    disableColumnMenu: true,
+  },
+];
+export const TpInvoiceVerifyColumns: GridColDef[] = [
+  ...TpInvoiceUploadColumns,
+  {
+    field: "createdOn",
+    headerName: "Created On",
+    minWidth: 160,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    type: "number",
+    disableColumnMenu: true,
+  },
+  {
+    field: "action",
+    headerName: "Action",
+    width: 100,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "delete",
+    headerName: "Delete",
+    width: 70,
+    align: "center",
+    headerAlign: "center",
     disableColumnMenu: true,
   },
 ];

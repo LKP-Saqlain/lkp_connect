@@ -34,7 +34,7 @@ interface CustomModalProps {
   handleApproval?: (value: any, remark: string, entryFlag: string) => void;
   Msg?: string;
   activeSubItem?: any;
-  action?: "approve" | "reject";
+  action?: "approve" | "reject" | "delete";
   expiredtime?: boolean;
   isAdmin?: boolean;
   isUploadMode?: boolean;
@@ -100,21 +100,28 @@ const CustomModal = ({
     setmodal_center(false);
     navigate("/");
   };
+  const shouldValidateRemark = () =>
+    [
+      "Communication Retrival Checker",
+      "KYC Approval",
+      "RH Approval",
+      "Pre Trade Approval",
+      "Unlisted Shares Approval 1",
+      "Unlisted Shares Approval 2",
+      "Third Party Vendor Approval",
+      "Third Party Invoice Verify",
+    ].includes(activeSubItem) &&
+    !isAdmin &&
+    !showDocument &&
+    action !== "delete";
 
   const formik = useFormik({
     initialValues: { remark: "", userChangeValue: "", userPanValue: "" },
     validationSchema: Yup.object({
       // Remark validation for "Communication Retrival Checker"
-      ...((activeSubItem === "Communication Retrival Checker" ||
-        activeSubItem === "KYC Approval" ||
-        activeSubItem === "RH Approval" ||
-        activeSubItem === "Unlisted Shares Approval 2" ||
-        activeSubItem === "Unlisted Shares Approval 1" ||
-        activeSubItem === "Third Party Vendor Approval" ||
-        activeSubItem === "Pre Trade Approval") &&
-        !isAdmin && {
-          remark: Yup.string().trim().required("Remark is required"),
-        }),
+      ...(shouldValidateRemark() && {
+        remark: Yup.string().trim().required("Remark is required"),
+      }),
 
       // Admin validation for userChangeValue
       ...(isAdmin && {
@@ -130,11 +137,15 @@ const CustomModal = ({
       }),
     }),
     onSubmit: (values) => {
-      if (getUserDetails && row) {
-        getUserDetails(row);
+      if (action === "delete") {
+        if (getUserDetails && row) {
+          getUserDetails(row);
+        }
+        setmodal_center(false);
+        console.log("test112121212", action, row);
+        return; // 🚨 prevent further execution
       }
-      setmodal_center(false);
-      console.log("test112121212", action, row);
+
       if (action && row) {
         // debugger;
         const entryFlag = action === "approve" ? "A" : "R";
@@ -147,12 +158,14 @@ const CustomModal = ({
             "Unlisted Shares Approval 2",
             "Unlisted Shares Approval 1",
             "Third Party Vendor Approval",
+            "Third Party Invoice Verify",
           ].includes(activeSubItem)
         ) {
           handleApproval?.(row, values.remark, entryFlag);
         }
         console.log(values.remark, "values.remark", row, entryFlag);
         formik.resetForm();
+        setmodal_center(false);
       }
     },
   });
@@ -284,6 +297,7 @@ const CustomModal = ({
   };
 
   const shouldShowRemarkField = () => {
+    console.log(action, "dsdsdsdsd");
     const remarkItems = [
       "Communication Retrival Checker",
       "KYC Approval",
@@ -292,8 +306,14 @@ const CustomModal = ({
       "Unlisted Shares Approval 1",
       "Unlisted Shares Approval 2",
       "Third Party Vendor Approval",
+      "Third Party Invoice Verify",
     ];
-    return remarkItems.includes(activeSubItem) && !showDocument && !isAdmin;
+    return (
+      remarkItems.includes(activeSubItem) &&
+      !showDocument &&
+      !isAdmin &&
+      action !== "delete"
+    );
   };
 
   const renderRemarkField = () => (

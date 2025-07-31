@@ -87,7 +87,8 @@ import "./style.css";
 import ThirdPartyMaster from "../../pages/ThirdParty/Master";
 import ThirdPartyApproval from "../../pages/ThirdParty/Approval";
 import ThirdPartyStatusReport from "../../pages/ThirdParty/Report";
-import TpUpload from "../../pages/ThirdParty/Upload";
+import InvoiceUpload from "../../pages/ThirdParty/Upload";
+import InvoiceVerify from "../../pages/ThirdParty/Verify";
 
 const drawerWidth = 260;
 
@@ -719,7 +720,12 @@ const SideBar = () => {
       <ThirdPartyApproval activeSubItem={activeSubItem} />
     ),
     "Status Report": <ThirdPartyStatusReport activeSubItem={activeSubItem} />,
-    "Third Party Invoice Upload": <TpUpload activeSubItem={activeSubItem} />,
+    "Third Party Invoice Upload": (
+      <InvoiceUpload activeSubItem={activeSubItem} />
+    ),
+    "Third Party Invoice Verify": (
+      <InvoiceVerify activeSubItem={activeSubItem} />
+    ),
   };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>

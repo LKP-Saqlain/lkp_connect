@@ -593,4 +593,13 @@ export const apiServices = {
   TPInvoiceUpload: async (payload: any) => {
     return await apiService("POST", endpoints.TPInvoiceUpload, payload);
   },
+  GetUnverifiedTPInvoices: async (payload: any) => {
+    return await apiService("POST", endpoints.GetUnverifiedTPInvoices, payload);
+  },
+  HandleTPInvoiceApproval: async (payload: any) => {
+    return await apiService("POST", endpoints.HandleTPInvoiceApproval, payload);
+  },
+  DeleteTPInvoiceRecord: async (payload: any) => {
+    return await apiService("POST", endpoints.DeleteTPInvoiceRecord, payload);
+  },
 };

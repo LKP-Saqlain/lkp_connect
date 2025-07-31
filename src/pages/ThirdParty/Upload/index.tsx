@@ -17,7 +17,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import ShowToast from "../../../utils/toastUtils";
 import { apiServices } from "../../../services";
 
-const TpUpload = ({ activeSubItem }: any) => {
+const InvoiceUpload = ({ activeSubItem }: any) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [data, setdata] = useState<any[]>([]);
@@ -49,7 +49,7 @@ const TpUpload = ({ activeSubItem }: any) => {
             id: `tp_${Date.now()}_${index}`,
           }));
           setdata(dataWithIds);
-          console.log("dataTPupload", dataWithIds);
+          console.log("dataTPpload", dataWithIds);
         } else {
           ShowToast("error", response?.data?.message);
         }
@@ -297,4 +297,4 @@ const TpUpload = ({ activeSubItem }: any) => {
   );
 };
 
-export default TpUpload;
+export default InvoiceUpload;
