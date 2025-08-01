@@ -23,6 +23,22 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
   };
 
   const getComponent = () => {
+    if (activeSubItem === "Employee Performance") {
+      return (
+        <div style={{ marginTop: "1rem", fontFamily: "Public Sans" }}>
+          Employee Performance content coming soon...
+        </div>
+      );
+    }
+
+    if (activeSubItem === "Client Summary") {
+      return (
+        <div style={{ marginTop: "1rem", fontFamily: "Public Sans" }}>
+          Client Summary content coming soon...
+        </div>
+      );
+    }
+
     if (activeMenu === "Zone Overview") {
       if (activeSubItem === SubItemKeys.RH_DIRECT) {
         return <Direct activeSubItem={activeSubItem} />;
@@ -34,6 +50,7 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
         return <Overview activeSubItem={activeSubItem} />;
       }
     }
+
     return componentMap[activeSubItem] || null;
   };
 

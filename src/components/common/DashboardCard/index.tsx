@@ -278,7 +278,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
             )}
           </div>
 
-          {activeClients && (
+          {activeClients !== undefined && activeClients !== null && (
             <div
               className="position-absolute"
               style={{
