@@ -110,10 +110,15 @@ const ChartCard: React.FC<ChartCardProps> = ({
       shared: false,
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         if (selectedView === "Total") {
-          const totals = w.globals.stackedSeriesTotals;
-          const totalValue = Math.floor(totals[dataPointIndex]).toLocaleString(
-            "en-IN"
-          );
+          const directValue = Math.floor(
+            series[0][dataPointIndex] || 0
+          ).toLocaleString("en-IN");
+          const indirectValue = Math.floor(
+            series[1][dataPointIndex] || 0
+          ).toLocaleString("en-IN");
+          const totalValue = Math.floor(
+            (series[0][dataPointIndex] || 0) + (series[1][dataPointIndex] || 0)
+          ).toLocaleString("en-IN");
 
           return `
             <div style="
@@ -124,18 +129,23 @@ const ChartCard: React.FC<ChartCardProps> = ({
               border-radius:4px;
               color:#000;
             ">
-              <span style="
-                display:inline-block;
-                width:10px;
-                height:10px;
-                margin-right:6px;
-                background:linear-gradient(90deg, #11395C, #F57C00);
-              "></span>
-              <strong>Total:</strong> ${totalValue}
+              <div style="margin-bottom:4px;">
+                <span style="display:inline-block;width:10px;height:10px;margin-right:6px;background:#11395C;"></span>
+                <strong>Direct:</strong> ${directValue}
+              </div>
+              <div style="margin-bottom:4px;">
+                <span style="display:inline-block;width:10px;height:10px;margin-right:6px;background:#F57C00;"></span>
+                <strong>Indirect:</strong> ${indirectValue}
+              </div>
+              <div>
+                <span style="display:inline-block;width:10px;height:10px;margin-right:6px;background:linear-gradient(90deg, #11395C, #F57C00);"></span>
+                <strong>Total:</strong> ${totalValue}
+              </div>
             </div>
           `;
         }
 
+        // Default single-series tooltip
         const value = Math.floor(
           series[seriesIndex][dataPointIndex]
         ).toLocaleString("en-IN");
