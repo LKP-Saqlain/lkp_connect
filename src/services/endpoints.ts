@@ -140,4 +140,5 @@ export const endpoints = {
   UpdateThirdPartyMasterRecord: "api/Account/UpdateThirdPartyMasterRecord",
   ThirdPartyApproverView: "api/Account/ThirdPartyApproverView",
   ThirdPartyApproverAction: "api/Account/ThirdPartyApproverAction",
+  VerifyBankDetails: "api/Account/VerifyBankDetails",
 };

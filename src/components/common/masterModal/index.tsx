@@ -1,14 +1,21 @@
 import { Button, Col, Modal, ModalBody, ModalHeader } from "reactstrap";
 import {
-  FormControl,
+  Box,
   InputLabel,
   MenuItem,
   Select,
   TextField,
+  Typography,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormLabel,
+  FormControl,
+  FormHelperText,
 } from "@mui/material";
 // import { InputAdornment } from "@mui/material";
-// import "./style.css";
-import { useFormik } from "formik";
+import "./style.css";
+import { useField, useFormik } from "formik";
 import { useState, useRef, useEffect } from "react";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -37,6 +44,58 @@ interface EditData {
   CommunicationProofPath?: string;
 }
 
+const selectOptions = {
+  cities: [
+    { label: "Select City", value: "" },
+    { label: "Mumbai", value: "Mumbai" },
+    { label: "Delhi", value: "Delhi" },
+    { label: "Bangalore", value: "Bangalore" },
+    { label: "Chennai", value: "Chennai" },
+    { label: "Kolkata", value: "Kolkata" },
+    { label: "Hyderabad", value: "Hyderabad" },
+    { label: "Pune", value: "Pune" },
+  ],
+  flagOptions: [
+    { label: "Select", value: "" },
+    { label: "Yes", value: "Yes" },
+    { label: "No", value: "No" },
+  ],
+  approvalLevels: [
+    { label: "Select Level", value: "" },
+    ...[0, 1, 2, 3, 4].map((level) => ({
+      label: level.toString(),
+      value: level.toString(),
+    })),
+  ],
+};
+
+const vendorFields = [
+  { name: "city", label: "City" },
+  { name: "pinCode", label: "Pin Code" },
+  { name: "state", label: "State" },
+  { name: "gstNo", label: "GST No" },
+  { name: "mobileNo", label: "Mobile No" },
+  { name: "emailId", label: "Email ID" },
+  { name: "telephoneNo", label: "Telephone No" },
+  { name: "faxNo", label: "Fax No" },
+  { name: "panNo", label: "PAN No" },
+  { name: "serviceTaxNo", label: "Service Tax No" },
+  { name: "websiteName", label: "Website Name" },
+] as const;
+
+const bankFields = [
+  {
+    name: "bankAccountNo",
+    label: "Bank A/C No",
+  },
+  {
+    name: "ifscCode",
+    label: "IFSC Code",
+  },
+];
+
+type VendorFieldName = (typeof vendorFields)[number]["name"];
+
 const ModalComponent = ({
   tog_grid,
   modal_grid,
@@ -49,6 +108,8 @@ const ModalComponent = ({
   isClientExclusion = false,
   isThirdPartyMaster = false,
   ExcludeOptions,
+  isVendorMasterContent,
+  handleVerifyDetails,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
@@ -61,6 +122,8 @@ const ModalComponent = ({
   isClientExclusion?: boolean;
   isThirdPartyMaster?: boolean;
   ExcludeOptions?: any;
+  isVendorMasterContent?: any;
+  handleVerifyDetails?: (accNo: any, ifscCode: any) => void;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedFileM, setUploadedFileM] = useState<File | null>(null);
@@ -71,6 +134,11 @@ const ModalComponent = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const fileInputRefImage = useRef<HTMLInputElement>(null);
   const fileInputRefDocument = useRef<HTMLInputElement>(null);
+
+  //Vendor Master Entry report flags
+  const [tdsFlag, setTdsFlag] = useState("No");
+  const [msmeFlag, setMsmeFlag] = useState("No");
+  const [msmeType, setMsmeType] = useState("");
 
   const allowedFormats = ["doc", "docx", "pdf", "xls", "xlsx", "jpg", "jpeg"];
 
@@ -194,6 +262,7 @@ const ModalComponent = ({
     });
 
   const getValidationSchema = (editData?: EditData) => {
+    // debugger;
     if (isRegulatoryContent) {
       return getRegulatoryValidationSchema(editData!);
     } else if (isMarketingMaterial) {
@@ -202,10 +271,65 @@ const ModalComponent = ({
       return getClientExclusionValidationSchema();
     } else if (isThirdPartyMaster) {
       return getThirdPartyValidationSchema();
+    } else if (isVendorMasterContent) {
+      return getVendorMasterValidationSchema();
     } else {
       return Yup.object(); // fallback schema (or handle general case)
     }
   };
+
+  const getVendorMasterValidationSchema = () =>
+    Yup.object().shape({
+      vendorName: Yup.string().required("Vendor Name is required"),
+      chequePrintName: Yup.string().required("Cheque Print Name is required"),
+      address1: Yup.string().required("Address 1 is required"),
+      address2: Yup.string().required("Address2 is required"),
+      address3: Yup.string().required("Address3 is required"),
+      city: Yup.string().required("City is required"),
+      pinCode: Yup.string().required("Pin Code is required"),
+      state: Yup.string().required("State is required"),
+      gstNo: Yup.string().required("GST No is required"),
+      mobileNo: Yup.string().required("Mobile No is required"),
+      emailId: Yup.string()
+        .email("Invalid email")
+        .required("Email ID is required"),
+      faxNo: Yup.string().required("FAX No is required"),
+      telephoneNo: Yup.string().required("Telephone No No is required"),
+      panNo: Yup.string().required("PAN No is required"),
+      serviceTaxNo: Yup.string().required("Service Tax No is required"),
+      websiteName: Yup.string().required("website Name is required"),
+      // tdsFlag: Yup.string().required("TDS flag is required"),
+      // tdsFile: Yup.mixed().when("tdsFlag", (tdsFlag: any, schema) =>
+      //   tdsFlag === "Yes"
+      //     ? schema.required("TDS document is required")
+      //     : schema.notRequired()
+      // ),
+      // msmeFlag: Yup.string().required("MSME flag is required"),
+      // msmeType: Yup.string().when("msmeFlag", (msmeFlag: any, schema) =>
+      //   msmeFlag === "Yes"
+      //     ? schema.required("MSME type is required")
+      //     : schema.notRequired()
+      // ),
+      // msmeFile: Yup.mixed().when("msmeFlag", (msmeFlag: any, schema) =>
+      //   msmeFlag === "Yes"
+      //     ? schema.required("MSME document is required")
+      //     : schema.notRequired()
+      // ),
+      bankName: Yup.string().required("Bank Name is required"),
+      ifscCode: Yup.string().required("IFSC Code is required"),
+      bankAccountNo: Yup.string().required("Bank A/C No is required"),
+      paymentBank: Yup.string().required("Payment Bank is required"),
+      chqPrintLocation: Yup.string().required(
+        "Cheque Print Location is required"
+      ),
+      chqPrintLocationFlag: Yup.string().required(
+        "Cheque Print Location Flag is required"
+      ),
+      chqPrintNameFlag: Yup.string().required(
+        "Cheque Print Name Flag is required"
+      ),
+      directAppLevel: Yup.string().required("Level is required"),
+    });
 
   const initialValues = isRegulatoryContent
     ? {
@@ -244,6 +368,38 @@ const ModalComponent = ({
         address2: "",
         address3: "",
         mobileNo: "",
+      }
+    : isVendorMasterContent
+    ? {
+        vendorName: "",
+        chequePrintName: "",
+        address1: "",
+        address2: "",
+        address3: "",
+        city: "",
+        pinCode: "",
+        state: "",
+        gstNo: "",
+        mobileNo: "",
+        emailId: "",
+        telephoneNo: "",
+        faxNo: "",
+        panNo: "",
+        serviceTaxNo: "",
+        websiteName: "",
+        tdsFlag: "",
+        tdsFile: null,
+        msmeFlag: "",
+        msmeType: "",
+        msmeFile: null,
+        bankName: "",
+        ifscCode: "",
+        bankAccountNo: "",
+        chqPrintNameFlag: "",
+        paymentBank: "",
+        chqPrintLocation: "",
+        chqPrintLocationFlag: "",
+        directAppLevel: "",
       }
     : {
         transactionDate: null as string | null,
@@ -304,6 +460,9 @@ const ModalComponent = ({
           console.log(unlistedPayload);
           fetchUnlistedContent(setTouched, values);
           return;
+        } else if (isVendorMasterContent) {
+          fetchVendorMastertContent(setTouched, values);
+          return;
         } else if (isThirdPartyMaster) {
           const thirdPartyPayload = {
             ledgerCode: values.ledgerCode,
@@ -334,6 +493,47 @@ const ModalComponent = ({
       }
     },
   });
+
+  const fetchVendorMastertContent = async (setTouched: any, values: any) => {
+    console.log("fetchVendorMasterValues", values);
+
+    // setTouched(
+    //   {
+    //     vendorName: true,
+    //     chequePrintName: true,
+    //     address1: true,
+    //     address2: true,
+    //     address3: true,
+    //     city: true,
+    //     pinCode: true,
+    //     state: true,
+    //     gstNo: true,
+    //     mobileNo: true,
+    //     emailId: true,
+    //     telephoneNo: true,
+    //     faxNo: true,
+    //     panNo: true,
+    //     serviceTaxNo: true,
+    //     websiteName: true,
+    //     tdsFlag: true,
+    //     tdsDocument: true,
+    //     msmeFlag: true,
+    //     msmeType: true,
+    //     msmeCertificate: true,
+    //     bankName: true,
+    //     ifscCode: true,
+    //     bankAccountNo: true,
+    //     chqPrintNameFlag: true,
+    //     paymentBank: true,
+    //     chqPrintLocation: true,
+    //     chqPrintLocationFlag: true,
+    //     directAppLevel: true,
+    //   },
+    //   true
+    // ); // `true` to validate after touching
+    onSubmit?.(values);
+    formik.resetForm();
+  };
 
   const fetchUnlistedContent = async (setTouched: any, values: any) => {
     console.log("unlistedValuess", values);
@@ -791,16 +991,43 @@ const ModalComponent = ({
       }
     } else if (name === "sbCode" || name === "rmCode") {
       setSanitizedAlphaNumeric();
+    } else if (name === "bankAccountNo") {
+      if (regEx.number.test(value)) {
+        formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
+      }
+    } else if (name === "ifscCode") {
+      const formattedValue = value.toUpperCase().replace(/\s/g, "");
+
+      // Enforce maximum length of 11 characters
+      if (formattedValue.length <= 11) {
+        formik.setFieldValue(name, formattedValue);
+
+        const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+        if (formattedValue.length === 11 && ifscRegex.test(formattedValue)) {
+          console.log("Valid IFSC Code");
+        } else {
+          console.log("Invalid IFSC Code");
+        }
+      }
     } else {
       formik.handleChange(event);
     }
   };
 
+  const handleVerifyBank = () => {
+    const { bankAccountNo, ifscCode } = formik.values;
+    handleVerifyDetails?.(bankAccountNo, ifscCode);
+  };
+
+  useEffect(() => {
+    console.log("FORMIK_VALUESS", formik.values, formik.errors);
+  }, [formik]);
+
   return (
     <Modal
       style={{
         fontFamily: "Public Sans",
-        maxWidth: isUnlistedContent || isThirdPartyMaster ? "700px" : "500px",
+        maxWidth: isUnlistedContent || isThirdPartyMaster ? "900px" : "900px",
         width: "100%",
       }}
       isOpen={modal_grid}
@@ -1725,6 +1952,448 @@ const ModalComponent = ({
                     onBlur={formik.handleBlur}
                   />
                 </Col>
+              </>
+            )}
+            {isVendorMasterContent && (
+              <>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                  <Box sx={{ flex: "1 1 45%" }}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      name="vendorName"
+                      label="Vendor Name"
+                      placeholder="Enter Vendor Name"
+                      value={formik.values.vendorName}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.vendorName &&
+                        Boolean(formik.errors.vendorName)
+                      }
+                      helperText={
+                        formik.touched.vendorName && formik.errors.vendorName
+                      }
+                    />
+                  </Box>
+                  <Box sx={{ flex: "1 1 45%" }}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      label={"Cheque Print Name"}
+                      placeholder="Enter Cheque Print Name"
+                      name="chequePrintName"
+                      value={formik.values.chequePrintName}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.chequePrintName &&
+                        Boolean(formik.errors.chequePrintName)
+                      }
+                      helperText={
+                        formik.touched.chequePrintName &&
+                        formik.errors.chequePrintName
+                      }
+                    />
+                  </Box>
+                </Box>
+
+                {/* Address Fields */}
+                <Box
+                  component="form"
+                  sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                >
+                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                    {/* Address Fields */}
+                    {["address1", "address2", "address3"].map(
+                      (field: any, idx: any) => (
+                        <Box key={field} sx={{ flex: "1 1 48%" }}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            size="small"
+                            name={field}
+                            label={`Address ${idx + 1}`}
+                            placeholder={`Please enter Address ${idx + 1}`}
+                            value={(formik.values as any)[field]}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            error={
+                              (formik.touched as any)[field] &&
+                              Boolean((formik.errors as any)[field])
+                            }
+                            helperText={
+                              (formik.touched as any)[field] &&
+                              (formik.errors as any)[field]
+                            }
+                          />
+                        </Box>
+                      )
+                    )}
+
+                    {vendorFields.map(({ name, label }) => (
+                      <Box key={name} sx={{ flex: "1 1 48%" }}>
+                        <TextField
+                          fullWidth
+                          size="small"
+                          variant="outlined"
+                          name={name}
+                          label={label}
+                          placeholder={`Please enter ${label}`}
+                          value={formik.values[name as VendorFieldName] || ""}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          error={
+                            formik.touched[name as VendorFieldName] &&
+                            Boolean(formik.errors[name as VendorFieldName])
+                          }
+                          helperText={
+                            formik.touched[name as VendorFieldName] &&
+                            formik.errors[name as VendorFieldName]
+                          }
+                        />
+                      </Box>
+                    ))}
+                  </Box>
+                  <FormControl>
+                    <FormLabel sx={{ fontSize: "12px" }}>TDS Flag</FormLabel>
+                    <RadioGroup
+                      row
+                      name="tdsFlag"
+                      value={formik.values.tdsFlag}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    >
+                      <FormControlLabel
+                        value="Yes"
+                        control={<Radio />}
+                        label="Yes"
+                      />
+                      <FormControlLabel
+                        value="No"
+                        control={<Radio />}
+                        label="No"
+                      />
+                    </RadioGroup>
+                    {formik.touched.tdsFlag && formik.errors.tdsFlag && (
+                      <FormHelperText error sx={{ ml: 1 }}>
+                        {formik.errors.tdsFlag}
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+
+                  {/* Upload if TDS Yes */}
+                  {formik.values.tdsFlag === "Yes" && (
+                    <Box>
+                      <Typography sx={{ fontSize: "12px" }}>
+                        Upload TDS Document
+                      </Typography>
+                      <Button variant="outlined" component="label" size="small">
+                        Upload
+                        <input
+                          type="file"
+                          name="tdsFile"
+                          hidden
+                          onChange={(event) =>
+                            formik.setFieldValue(
+                              "tdsFile",
+                              event.currentTarget.files?.[0]
+                            )
+                          }
+                          onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.tdsFile && formik.errors.tdsFile && (
+                          <div style={{ color: "red", marginTop: 4 }}>
+                            {formik.errors.tdsFile}
+                          </div>
+                        )}
+                      </Button>
+                      {formik.touched.tdsFile && formik.errors.tdsFile && (
+                        <FormHelperText error sx={{ ml: 1 }}>
+                          {formik.errors.tdsFile}
+                        </FormHelperText>
+                      )}
+                    </Box>
+                  )}
+
+                  {/* MSME Flag */}
+                  <FormControl>
+                    <FormLabel sx={{ fontSize: "12px" }}>MSME Flag</FormLabel>
+                    <RadioGroup
+                      row
+                      value={msmeFlag}
+                      onChange={(e) => setMsmeFlag(e.target.value)}
+                    >
+                      <FormControlLabel
+                        value="Yes"
+                        control={<Radio />}
+                        label="Yes"
+                      />
+                      <FormControlLabel
+                        value="No"
+                        control={<Radio />}
+                        label="No"
+                      />
+                    </RadioGroup>
+                  </FormControl>
+
+                  {/* If MSME is Yes, show MSME Type + Upload */}
+                  {msmeFlag === "Yes" && (
+                    <>
+                      <FormControl>
+                        <FormLabel sx={{ fontSize: "12px" }}>
+                          MSME Type
+                        </FormLabel>
+                        <RadioGroup
+                          row
+                          value={msmeType}
+                          onChange={(e) => setMsmeType(e.target.value)}
+                        >
+                          <FormControlLabel
+                            value="Micro"
+                            control={<Radio />}
+                            label="Micro"
+                          />
+                          <FormControlLabel
+                            value="Small"
+                            control={<Radio />}
+                            label="Small"
+                          />
+                          <FormControlLabel
+                            value="Medium"
+                            control={<Radio />}
+                            label="Medium"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+
+                      <Box>
+                        <Typography sx={{ fontSize: "12px" }}>
+                          Upload MSME Certificate
+                        </Typography>
+                        <Button
+                          variant="outlined"
+                          component="label"
+                          size="small"
+                        >
+                          Upload
+                          <input type="file" hidden />
+                        </Button>
+                      </Box>
+                    </>
+                  )}
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: 1.5,
+                    // alignItems: "flex-end", // aligns bottom of fields & button
+                  }}
+                >
+                  {bankFields.map(({ name, label }) => (
+                    <Box key={name} sx={{ flex: "1 1 38%" }}>
+                      <TextField
+                        fullWidth
+                        size="small"
+                        variant="outlined"
+                        name={name}
+                        label={label}
+                        placeholder={`Enter ${label}`}
+                        value={(formik.values as any)[name]}
+                        onChange={handleCustomChange}
+                        onBlur={formik.handleBlur}
+                        error={
+                          (formik.touched as any)[name] &&
+                          Boolean((formik.errors as any)[name])
+                        }
+                        helperText={
+                          (formik.touched as any)[name] &&
+                          (formik.errors as any)[name]
+                        }
+                      />
+                    </Box>
+                  ))}
+
+                  {/* Verify Button */}
+                  <Box sx={{ flex: "1 1 5%" }}>
+                    <Button
+                      type="button"
+                      variant="contained"
+                      size="small"
+                      style={{
+                        backgroundColor: "#11395C",
+                        height: "36px",
+                        width: "100px",
+                      }}
+                      onClick={handleVerifyBank} // Add your handler if needed
+                    >
+                      Verify
+                    </Button>
+                  </Box>
+                </Box>
+                <Box>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    name="bankName"
+                    label={"Bank Name"}
+                    placeholder="Please enter Bank Name"
+                    value={formik.values.bankName}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.bankName && Boolean(formik.errors.bankName)
+                    }
+                    helperText={
+                      formik.touched.bankName && formik.errors.bankName
+                    }
+                  />
+                </Box>
+
+                {/* Chq. Print Name Flag */}
+                <Box>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    label={"Chq. Print Name Flag"}
+                    placeholder="Please enter Cheque Print Name Flag"
+                    name="chqPrintNameFlag"
+                    value={formik.values.chqPrintNameFlag}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.chqPrintNameFlag &&
+                      Boolean(formik.errors.chqPrintNameFlag)
+                    }
+                    helperText={
+                      formik.touched.chqPrintNameFlag &&
+                      formik.errors.chqPrintNameFlag
+                    }
+                  />
+                </Box>
+
+                {/* Payment Bank */}
+                <Box>
+                  {/* <Typography sx={{ fontSize: "12px" }}>
+                    Payment Bank
+                  </Typography> */}
+                  <TextField
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    name="paymentBank"
+                    label={"Payment Bank"}
+                    placeholder="Please enter Payment Bank"
+                    value={formik.values.paymentBank}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.paymentBank &&
+                      Boolean(formik.errors.paymentBank)
+                    }
+                    helperText={
+                      formik.touched.paymentBank && formik.errors.paymentBank
+                    }
+                  />
+                </Box>
+
+                <Box>
+                  <Typography sx={{ fontSize: "12px" }}>
+                    Chq. Print Location
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    select
+                    size="small"
+                    variant="outlined"
+                    SelectProps={{ native: true }}
+                    name="chqPrintLocation"
+                    value={formik.values.chqPrintLocation}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.chqPrintLocation &&
+                      Boolean(formik.errors.chqPrintLocation)
+                    }
+                    helperText={
+                      formik.touched.chqPrintLocation &&
+                      formik.errors.chqPrintLocation
+                    }
+                  >
+                    {selectOptions.cities.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </TextField>
+                </Box>
+                <Box sx={{ mt: 2 }}>
+                  <Typography sx={{ fontSize: "12px" }}>
+                    Chq. Print Location Flag
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    select
+                    size="small"
+                    variant="outlined"
+                    SelectProps={{ native: true }}
+                    name="chqPrintLocationFlag"
+                    value={formik.values.chqPrintLocationFlag}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.chqPrintLocationFlag &&
+                      Boolean(formik.errors.chqPrintLocationFlag)
+                    }
+                    helperText={
+                      formik.touched.chqPrintLocationFlag &&
+                      formik.errors.chqPrintLocationFlag
+                    }
+                  >
+                    {selectOptions.flagOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </TextField>
+                </Box>
+
+                {/* Direct App. Level Dropdown */}
+                <Box sx={{ mt: 2 }}>
+                  <Typography sx={{ fontSize: "12px" }}>
+                    Direct App. Level
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    select
+                    size="small"
+                    variant="outlined"
+                    SelectProps={{ native: true }}
+                    name="directAppLevel"
+                    value={formik.values.directAppLevel}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.directAppLevel &&
+                      Boolean(formik.errors.directAppLevel)
+                    }
+                    helperText={
+                      formik.touched.directAppLevel &&
+                      formik.errors.directAppLevel
+                    }
+                  >
+                    {selectOptions.approvalLevels.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </TextField>
+                </Box>
               </>
             )}
 

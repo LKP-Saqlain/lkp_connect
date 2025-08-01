@@ -646,4 +646,7 @@ export const apiServices = {
       payload
     );
   },
+  VerifyBankDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.VerifyBankDetails, payload);
+  },
 };
