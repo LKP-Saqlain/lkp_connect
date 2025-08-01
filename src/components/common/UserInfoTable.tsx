@@ -51,6 +51,8 @@ import {
   ThirdPartyStatusReport,
   TpInvoiceUploadColumns,
   TpInvoiceVerifyColumns,
+  TpInvoiceMailsColumns,
+  TpInvoiceReportColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -122,9 +124,12 @@ interface SelectedWidgetProps {
   previewUrl?: any;
   setSetShowImg?: any;
   showDocument?: boolean;
+  checkboxSelection?: boolean;
+  disableRowSelectionOnClick?: boolean;
   setShowDocument?: any;
   fileExtension?: any;
   reportType?: string;
+  onRowSelectionModelChange?: any;
 }
 
 const DataTable = ({
@@ -163,6 +168,9 @@ const DataTable = ({
   previewUrl,
   setSetShowImg,
   showDocument,
+  checkboxSelection,
+  disableRowSelectionOnClick,
+  onRowSelectionModelChange,
   setShowDocument,
   fileExtension,
   reportType,
@@ -1730,6 +1738,36 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "Third Party Invoice Mail") {
+      return TpInvoiceMailsColumns.map((column) => {
+        if (column.field === "generate")
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              );
+            },
+          };
+        return column;
+      });
+    } else if (activeSubItem === "Third Party Invoice Report") {
+      return TpInvoiceReportColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
@@ -1940,7 +1978,9 @@ const DataTable = ({
         }}
       >
         <DataGrid
-          disableRowSelectionOnClick
+          disableRowSelectionOnClick={disableRowSelectionOnClick}
+          checkboxSelection={checkboxSelection}
+          onRowSelectionModelChange={onRowSelectionModelChange}
           rows={
             selectedWidget === "Clients With Ledger Balance"
               ? filteredLedgerDataDropDown.length > 0

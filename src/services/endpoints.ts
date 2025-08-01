@@ -132,4 +132,8 @@ export const endpoints = {
   GetUnverifiedTPInvoices: "/api/Account/GetUnverifiedTPInvoices",
   HandleTPInvoiceApproval: "/api/Account/HandleTPInvoiceApproval",
   DeleteTPInvoiceRecord: "/api/Account/DeleteTPInvoiceRecord",
+  GetReadyToSendTPInvoices: "/api/Account/GetReadyToSendTPInvoices",
+  GenerateTPInvoice: "/api/Account/GenerateTPInvoice",
+  SendTPInvoiceBulkEmail: "/api/Account/SendTPInvoiceBulkEmail",
+  GetTPInvoiceRecordList: "/api/Account/GetTPInvoiceRecordList",
 };

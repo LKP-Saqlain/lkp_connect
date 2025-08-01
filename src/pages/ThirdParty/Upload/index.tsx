@@ -251,6 +251,10 @@ const InvoiceUpload = ({ activeSubItem }: any) => {
                   >
                     Without Duplicate
                   </Button>
+                  <p>
+                    <strong>NOTE:</strong> Rows in red mean they are duplicates.
+                  </p>
+
                   <Modal
                     isOpen={showConfirmModal}
                     toggle={() => setShowConfirmModal(false)}

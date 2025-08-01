@@ -86,9 +86,11 @@ import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
 import "./style.css";
 import ThirdPartyMaster from "../../pages/ThirdParty/Master";
 import ThirdPartyApproval from "../../pages/ThirdParty/Approval";
-import ThirdPartyStatusReport from "../../pages/ThirdParty/Report";
+import ThirdPartyStatusReport from "../../pages/ThirdParty/TPReport";
 import InvoiceUpload from "../../pages/ThirdParty/Upload";
 import InvoiceVerify from "../../pages/ThirdParty/Verify";
+import InvoiceMail from "../../pages/ThirdParty/Mail";
+import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
 
 const drawerWidth = 260;
 
@@ -725,6 +727,10 @@ const SideBar = () => {
     ),
     "Third Party Invoice Verify": (
       <InvoiceVerify activeSubItem={activeSubItem} />
+    ),
+    "Third Party Invoice Mail": <InvoiceMail activeSubItem={activeSubItem} />,
+    "Third Party Invoice Report": (
+      <InvoiceStatusReport activeSubItem={activeSubItem} />
     ),
   };
   const getSubItemComponent = (

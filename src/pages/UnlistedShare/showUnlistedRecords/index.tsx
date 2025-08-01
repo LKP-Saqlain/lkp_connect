@@ -370,8 +370,6 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                   activeSubItem={activeSubItem}
                   T6Data={unlistedData}
                   handleEditClick={handleEditClick}
-                  // handleDownload={handleDownload}
-                  // getRowHeight={getRowHeight}
                   getUserDetails={getDeleteUserDetails}
                 />
               </CardBody>

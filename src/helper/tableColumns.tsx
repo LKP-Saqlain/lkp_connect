@@ -6900,16 +6900,7 @@ export const TpInvoiceUploadColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
   },
-  {
-    field: "productCode",
-    headerName: "Product Code",
-    minWidth: 80,
-    flex: 1,
-    headerAlign: "center",
-    align: "center", // Code → Center
-    disableColumnMenu: true,
-    headerClassName: "header-wrap-custom",
-  },
+
   {
     field: "p_State",
     headerName: "Party State",
@@ -6997,5 +6988,83 @@ export const TpInvoiceVerifyColumns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
+  },
+];
+export const TpInvoiceMailsColumns: GridColDef[] = [
+  ...TpInvoiceUploadColumns,
+  {
+    field: "generate",
+    headerName: "Generate Invoice",
+    width: 120,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+];
+export const TpInvoiceReportColumns: GridColDef[] = [
+  ...TpInvoiceUploadColumns,
+  {
+    field: "verificationStatus",
+    headerName: "Status",
+    minWidth: 160,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      const status = params.value?.toLowerCase() || "";
+
+      let backgroundColor = "#cfd8dc"; // Default neutral
+      let color = "#263238";
+      let border = "1px solid #b0bec5";
+
+      if (status.includes("approved")) {
+        backgroundColor = "#a5d6a7"; // Light green
+        color = "#1b5e20";
+        border = "1px solid #81c784";
+      } else if (status.includes("pending")) {
+        backgroundColor = "#FFF4E5"; // Soft peach / beige
+        color = "#FF9800"; // Warm orange (not too saturated)
+        border = "1px solid #FFB74D"; // Light orange border
+      } else if (status.includes("rejected") || status.includes("reject")) {
+        backgroundColor = "#ef9a9a"; // Light red
+        color = "#b71c1c";
+        border = "1px solid #e57373";
+      }
+
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+            fontFamily: "Public Sans",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor,
+              color,
+              border,
+              borderRadius: "999px",
+              padding: "3px 6px",
+              fontSize: "11px",
+              fontWeight: 600,
+              // textTransform: "capitalize",
+              whiteSpace: "nowrap",
+              display: "inline-block",
+              textAlign: "center",
+              minWidth: "110px",
+              lineHeight: "1",
+            }}
+          >
+            {params.value}
+          </div>
+        </div>
+      );
+    },
   },
 ];

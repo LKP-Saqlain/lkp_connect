@@ -602,4 +602,20 @@ export const apiServices = {
   DeleteTPInvoiceRecord: async (payload: any) => {
     return await apiService("POST", endpoints.DeleteTPInvoiceRecord, payload);
   },
+  GetReadyToSendTPInvoices: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetReadyToSendTPInvoices,
+      payload
+    );
+  },
+  GenerateTPInvoice: async (payload: any) => {
+    return await apiService("POST", endpoints.GenerateTPInvoice, payload);
+  },
+  SendTPInvoiceBulkEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendTPInvoiceBulkEmail, payload);
+  },
+  GetTPInvoiceRecordList: async (payload: any) => {
+    return await apiService("POST", endpoints.GetTPInvoiceRecordList, payload);
+  },
 };
