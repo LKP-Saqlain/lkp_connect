@@ -4,8 +4,9 @@ import Lottie from "react-lottie-player";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
 import IphoneImg from "../../../assets/images/iphone.png";
-import IpadImg from "../../../assets/images/Ipad.png";
-import AirPodsImg from "../../../assets/images/Airpods.png";
+// import IpadImg from "../../../assets/images/Ipad.png";
+// import AirPodsImg from "../../../assets/images/Airpods.png";
+import CoinImg from "../../../assets/images/price_coin.png";
 // import { useTheme } from "@mui/material/styles";
 // import { useMediaQuery } from "@mui/material";
 import "./style.css";
@@ -154,27 +155,15 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     }}
                   >
                     <img
-                      src={
-                        value === "Iphone 16"
-                          ? IphoneImg
-                          : value === "Ipad 11"
-                          ? IpadImg
-                          : value === "AirPod 4"
-                          ? AirPodsImg
-                          : ""
-                      }
+                      src={value === "Iphone 16" ? IphoneImg : CoinImg}
                       alt="Prize Icon"
                       style={{
                         // width: "100%",
                         marginTop: value === "Iphone 16" ? "5rem" : "",
-                        height:
-                          value === "Iphone 16"
-                            ? "270px"
-                            : value === "Ipad 11"
-                            ? "150px"
-                            : "140px",
+                        height: value === "Iphone 16" ? "270px" : "150px",
                         objectFit: "contain",
-                        marginBottom: "1rem",
+                        // marginBottom: "1rem",
+                        marginRight: value !== "Iphone 16" ? "4rem" : "0rem",
                       }}
                     />
                   </div>
