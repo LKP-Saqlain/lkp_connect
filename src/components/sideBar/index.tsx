@@ -326,7 +326,7 @@ const SideBar = () => {
       }, 3000);
       return () => clearTimeout(timeoutId);
     }
-  }, [activeMenu, activeSubItem]);
+  }, [activeMenu]);
 
   useEffect(() => {
     //this is for Employee user last date
