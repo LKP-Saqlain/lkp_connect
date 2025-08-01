@@ -53,6 +53,7 @@ import {
   TpInvoiceVerifyColumns,
   TpInvoiceMailsColumns,
   TpInvoiceReportColumns,
+  RHTopClientsColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1765,7 +1766,9 @@ const DataTable = ({
         return column;
       });
     } else if (activeSubItem === "Third Party Invoice Report") {
-      return TpInvoiceReportColumns.map((column) => ({
+      return TpInvoiceReportColumns.map((column) => ({ ...column }));
+    } else if (activeSubItem === "RHDashboardTop10Clients") {
+      return RHTopClientsColumns.map((column) => ({
         ...column,
       }));
     } else {

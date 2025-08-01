@@ -40,7 +40,7 @@ import CustomModal from "../common/DPModal";
 import OverviewComponent from "../../pages/Overview";
 import TradeDashboard from "../../pages/TradeDashboard";
 import ClientDetails from "../../pages/ClientDetails";
-import RegOverview from "../../pages/regOverView";
+// import RegOverview from "../../pages/regOverView";
 import EkycLinks from "../../pages/ekycLinks";
 import StockStudy from "../../pages/StockStudy";
 import OTDetails from "../../pages/OT";
@@ -83,6 +83,7 @@ import APOverview from "../../pages/Employee/Overview";
 import ExclusionList from "../../pages/ExclusionList/";
 import { MenuItems } from "../../types";
 import SLBMHoldings from "../../pages/RMS/SLBMHoldings";
+import RHDashboard from "../../pages/RHDashboard";
 import "./style.css";
 import ThirdPartyMaster from "../../pages/ThirdParty/Master";
 import ThirdPartyApproval from "../../pages/ThirdParty/Approval";
@@ -222,6 +223,7 @@ const SideBar = () => {
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
   const [showMyPerformance, setShowMyPerformance] = useState<boolean>(false);
   const [activeClickCount, setActiveClickCount] = useState(0);
+  const [showStarburst, setShowStarburst] = useState(true);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -324,6 +326,7 @@ const SideBar = () => {
       activeMenu !== "TPD Report" &&
       activeMenu !== "Trading" &&
       activeMenu !== "Account" &&
+      activeMenu !== "Zone Overview" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -331,7 +334,7 @@ const SideBar = () => {
       }, 3000);
       return () => clearTimeout(timeoutId);
     }
-  }, [activeMenu, activeSubItem]);
+  }, [activeMenu]);
 
   useEffect(() => {
     //this is for Employee user last date
@@ -507,6 +510,12 @@ const SideBar = () => {
   }, []);
 
   useEffect(() => {
+    if (activeMenu === "Zone Overview") {
+      setActiveSubItem("");
+    }
+  }, [activeMenu]);
+
+  useEffect(() => {
     if (activeMenu === "IVR" && activeSubItem === "IVR Mapping") {
       setActiveSubItem("");
     }
@@ -554,7 +563,11 @@ const SideBar = () => {
         setActiveSubItem("");
         return "";
       }
+      console.log("menuTitle", menuTitle, hasSubItems);
 
+      if (menuTitle === "Zone Overview") {
+        setShowStarburst(false);
+      }
       // Always reset subitem when switching to a new main menu
       setActiveSubItem("");
 
@@ -668,6 +681,9 @@ const SideBar = () => {
   // };
 
   const complianceSubItems: Record<string, JSX.Element> = {
+    // "UCCCode MATCH": (
+    //   <RHDashboard activeSubItem={activeSubItem} activeMenu={activeMenu} />
+    // ),
     "Communication Retrival Entry": <CommEntry activeSubItem={activeSubItem} />,
     "Communication Retrival Checker": (
       <ComChecker activeSubItem={activeSubItem} />
@@ -760,7 +776,9 @@ const SideBar = () => {
           />
         ),
       4: () => getSubItemComponent(reportsSubItems),
-      5: () => <RegOverview />,
+      5: () => (
+        <RHDashboard activeSubItem={activeSubItem} activeMenu={activeMenu} />
+      ),
       6: () => getSubItemComponent(revenueDetailsSubItems),
       7: () => getSubItemComponent(rmsSubItems),
       8: () => getSubItemComponent(complianceSubItems),
@@ -1125,6 +1143,7 @@ const SideBar = () => {
                     handleMenuClick(item.menu_name, !!item.subItems?.length)
                   }
                   handleSubItemClick={handleSubItemClick}
+                  visible={showStarburst}
                 />
               ))}
             </List>

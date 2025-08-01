@@ -618,4 +618,66 @@ export const apiServices = {
   GetTPInvoiceRecordList: async (payload: any) => {
     return await apiService("POST", endpoints.GetTPInvoiceRecordList, payload);
   },
+  GetBrokRevReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokRevReport, payload);
+  },
+  GetTradedClientReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetTradedClientReport, payload);
+  },
+  GetRevenueTradedClientReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetRevenueTradedClientReport,
+      payload
+    );
+  },
+  GetDeliverySegmentReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetDeliverySegmentReport,
+      payload
+    );
+  },
+  GetIntradaySegmentReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetIntradaySegmentReport,
+      payload
+    );
+  },
+  GetFuturesRevenue: async (payload: any) => {
+    return await apiService("POST", endpoints.GetFuturesRevenue, payload);
+  },
+  GetOptionsRevenue: async (payload: any) => {
+    return await apiService("POST", endpoints.GetOptionsRevenue, payload);
+  },
+  GetCommodityFuturesReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetCommodityFuturesReport,
+      payload
+    );
+  },
+  GetCommodityOptionsReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetCommodityOptionsReport,
+      payload
+    );
+  },
+  GetMonthlyClient: async (payload: any) => {
+    return await apiService("POST", endpoints.GetMonthlyClient, payload);
+  },
+  GetBrokRevenue: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokRevenue, payload);
+  },
+  GetTradeplaced: async (payload: any) => {
+    return await apiService("POST", endpoints.GetTradeplaced, payload);
+  },
+  GetTradedClient: async (payload: any) => {
+    return await apiService("POST", endpoints.GetTradedClient, payload);
+  },
+  GetRevTradedClient: async (payload: any) => {
+    return await apiService("POST", endpoints.GetRevTradedClient, payload);
+  },
 };

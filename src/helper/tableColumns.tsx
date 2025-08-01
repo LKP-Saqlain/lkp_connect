@@ -7068,3 +7068,59 @@ export const TpInvoiceReportColumns: GridColDef[] = [
     },
   },
 ];
+export const RHTopClientsColumns: GridColDef[] = [
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    minWidth: 100,
+    flex: 0.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "revenue",
+    headerName: "Revenue",
+    minWidth: 100,
+    flex: 0.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "tradeDate",
+    headerName: "Last Trade Date",
+    minWidth: 130,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    // valueFormatter: (params) =>
+    //   params.value ? new Date(params.value).toLocaleDateString("en-GB") : "-",
+  },
+  {
+    field: "rmName",
+    headerName: "RM Name",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+];
