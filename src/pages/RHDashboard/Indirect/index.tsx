@@ -170,13 +170,14 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
         if (response?.status === 200) {
           const rawData = response?.data?.data;
 
-          const formattedData = rawData.map((item: any) => {
+          const formattedData = rawData.map((item: any, index: any) => {
             const dateObj = new Date(item.tradeDate);
             const day = String(dateObj.getDate()).padStart(2, "0");
             const month = dateObj.toLocaleString("en-US", { month: "short" });
             const year = String(dateObj.getFullYear()).slice(-2);
             return {
               ...item,
+              id: index + 0,
               tradeDate: `${day}-${month}-${year}`,
             };
           });
