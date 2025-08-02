@@ -32,6 +32,7 @@ import LinkIcon from "@mui/icons-material/Link";
 import DetailsIcon from "@mui/icons-material/Details";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
+import ReceiptRoundedIcon from "@mui/icons-material/ReceiptRounded";
 import { FaFileInvoice } from "react-icons/fa";
 import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
@@ -78,6 +79,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   }, [visible]);
 
   const iconMap: Record<string, JSX.Element> = {
+    Account: <ReceiptRoundedIcon />,
     "Zone Overview": <StoreIcon />,
     "My Performance": <SupervisedUserCircleIcon />,
     Compliance: <ReceiptLongIcon />,
@@ -195,7 +197,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
             />
           ))}
 
-        {title === "Zone Overview" && (
+        {(title === "Zone Overview" || title == "Account") && (
           <div className="starburst-bg">
             <img
               src={images[currentIndex]}
