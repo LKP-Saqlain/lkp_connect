@@ -159,7 +159,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                       alt="Prize Icon"
                       style={{
                         // width: "100%",
-                        marginTop: value === "Iphone 16" ? "5rem" : "",
+                        marginTop: value === "Iphone 16" ? "5rem" : "9rem",
                         height: value === "Iphone 16" ? "270px" : "150px",
                         objectFit: "contain",
                         // marginBottom: "1rem",

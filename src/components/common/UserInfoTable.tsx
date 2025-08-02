@@ -349,6 +349,7 @@ const DataTable = ({
                   </Tooltip>
                   <button
                     onClick={() => {
+                      setAction("delete");
                       handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
                       setSelectedRow(params.row); // Store the selected row for confirmation
                       tog_center(); // Open the modal for deletion confirmation
@@ -611,6 +612,7 @@ const DataTable = ({
               };
 
               const handleDelete = () => {
+                setAction("delete");
                 handleDeleteEntry?.(params.row);
                 setSelectedRow(params.row);
                 tog_center();
@@ -721,6 +723,7 @@ const DataTable = ({
                   </Tooltip>
                   <button
                     onClick={() => {
+                      setAction("delete");
                       handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
                       setSelectedRow(params.row); // Store the selected row for confirmation
                       tog_center(); // Open the modal for deletion confirmation
@@ -1332,6 +1335,7 @@ const DataTable = ({
                     </Tooltip>
                     <button
                       onClick={() => {
+                        setAction("delete");
                         handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
                         setSelectedRow(params.row); // Store the selected row for confirmation
                         tog_center(); // Open the modal for deletion confirmation
@@ -1485,6 +1489,7 @@ const DataTable = ({
 
               const handleDelete = () => {
                 if (!isDeleted) {
+                  setAction("delete");
                   handleDeleteEntry?.(params.row);
                   setSelectedRow(params.row);
                   tog_center();
@@ -1544,6 +1549,7 @@ const DataTable = ({
                   </Tooltip>
                   <button
                     onClick={() => {
+                      setAction("delete");
                       handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
                       setSelectedRow(params.row); // Store the selected row for confirmation
                       tog_center(); // Open the modal for deletion confirmation
