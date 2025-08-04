@@ -566,7 +566,12 @@ const SideBar = () => {
       }
       console.log("menuTitle", menuTitle, hasSubItems);
 
-      if (menuTitle === "Zone Overview" || menuTitle === "Account") {
+      if (
+        menuTitle === "Zone Overview" ||
+        menuTitle === "Account" ||
+        menuTitle === "Employee Target" ||
+        menuTitle === "Partner Contest"
+      ) {
         setShowStarburst(false);
       }
       // Always reset subitem when switching to a new main menu

@@ -197,7 +197,10 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
             />
           ))}
 
-        {(title === "Zone Overview" || title == "Account") && (
+        {(title === "Zone Overview" ||
+          title === "Account" ||
+          title === "Employee Target" ||
+          title === "Partner Contest") && (
           <div className="starburst-bg">
             <img
               src={images[currentIndex]}
