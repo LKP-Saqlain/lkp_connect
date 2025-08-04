@@ -92,6 +92,7 @@ import InvoiceUpload from "../../pages/ThirdParty/Upload";
 import InvoiceVerify from "../../pages/ThirdParty/Verify";
 import InvoiceMail from "../../pages/ThirdParty/Mail";
 import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
+import PledgeHolding from "../../pages/RMS/PledgeHoldings";
 
 const drawerWidth = 260;
 
@@ -713,6 +714,9 @@ const SideBar = () => {
 
   const rmsSubItems: Record<string, JSX.Element> = {
     "Upload SLBM Holding": <SLBMHoldings activeSubItem={activeSubItem} />,
+    "Pledge Holdings Adjustment": (
+      <PledgeHolding activeSubItem={activeSubItem} />
+    ),
   };
   const tpdSubItems: Record<string, JSX.Element> = {
     "Unlisted Shares Entry": (
