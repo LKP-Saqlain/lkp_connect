@@ -150,7 +150,9 @@ const EMPContest = () => {
             // badges={clientBadges}
             subHeading="New Clients"
             customClass={true}
-            rightValue={revenueCard.reactivate}
+            rightValue={
+              revenueCard.reactivate === 0 ? "0" : revenueCard.reactivate
+            }
             rightSubHeading="Reactivate"
           />
         </Col>
