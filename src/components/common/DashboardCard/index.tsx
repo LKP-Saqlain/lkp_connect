@@ -76,7 +76,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           maxWidth: "500px",
           overflow: "hidden",
           marginBottom: "20px",
-          height: title === "Prize*" ? "100px" : "auto",
+          height: title === "Prize*" ? "100px" : "6.8rem",
           minHeight: title === "Prize*" ? "110px" : "auto",
           ...cardStyle,
         }}
