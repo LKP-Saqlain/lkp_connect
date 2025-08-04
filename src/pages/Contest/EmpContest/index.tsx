@@ -12,8 +12,6 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 import AchieveCard from "./AchieveCard";
 
-type RevenueBadge = "total" | "broking" | "nonBroking";
-type ClientBadge = "totalClient" | "newClient" | "reactivate";
 interface APContestData {
   rowId: number;
   apCode: string;
@@ -29,30 +27,19 @@ interface APContestData {
 }
 
 const EMPContest = () => {
-  const [revenueBadge, setRevenueBadge] = useState<RevenueBadge>("total");
-  const [clientBadge, setClientBadge] = useState<ClientBadge>("totalClient");
-  // const [clientCard, setClientCard] = useState({
-  //   totalClient: 0,
-  //   newClient: 0,
-  //   reactivate: 0,
-  // });
   const [revenueCard, setRevenueCard] = useState({
-    total: 0,
     broking: 0,
     nonBroking: 0,
     freeCash_Margin: 0,
     mfAUM_NET: 0,
-    totalClient: 0,
     newClient: 0,
     reactivate: 0,
   });
   const [achieveCard, setAchieveCard] = useState({
-    total: 0,
     broking: 0,
     nonBroking: 0,
     freeCash_Margin: 0,
     mfAUM_NET: 0,
-    totalClient: 0,
     newClient: 0,
     reactivate: 0,
   });
@@ -77,10 +64,8 @@ const EMPContest = () => {
           const data = GetEMPContestTargetDetails?.data?.data?.[0] || {};
 
           const {
-            totalAccountCount: totalClient = 0,
             newAccountCount: newClient = 0,
             reactivationCount: reactivate = 0,
-            totalRevnTarget: total = 0,
             brokingRevnTarget: broking = 0,
             nonBrokingRevnTarget: nonBroking = 0,
             freshCashMargin: freeCash_Margin = 0,
@@ -88,14 +73,11 @@ const EMPContest = () => {
           } = data;
 
           setTargetData(data);
-          // setClientCard({ totalClient, newClient, reactivate });
           setRevenueCard({
-            total,
             broking,
             nonBroking,
             freeCash_Margin,
             mfAUM_NET,
-            totalClient,
             newClient,
             reactivate,
           });
@@ -123,12 +105,10 @@ const EMPContest = () => {
           const reactivate = data.reactivatedClients || 0;
 
           setAchieveCard({
-            total: broking + nonbroking,
             broking,
             nonBroking: nonbroking,
             freeCash_Margin,
             mfAUM_NET,
-            totalClient: newClient + reactivate,
             newClient,
             reactivate,
           });
@@ -142,37 +122,6 @@ const EMPContest = () => {
       });
   }, []);
 
-  const handleRevenueBadgeClick = (type: RevenueBadge) => setRevenueBadge(type);
-  const handleClientBadgeClick = (type: ClientBadge) => setClientBadge(type);
-
-  const revenueBadgeTypes: {
-    type: string;
-    label: string;
-    key: RevenueBadge;
-  }[] = [
-    { type: "primary", label: "Total", key: "total" },
-    { type: "info", label: "Broking", key: "broking" },
-    { type: "warning", label: "Non-broking", key: "nonBroking" },
-  ];
-
-  const revenueBadges = revenueBadgeTypes.map((badge) => ({
-    ...badge,
-    isActive: revenueBadge === badge.key,
-    onClick: () => handleRevenueBadgeClick(badge.key),
-  }));
-
-  const clientBadgeTypes: { type: string; label: string; key: ClientBadge }[] =
-    [
-      { type: "primary", label: "Total", key: "totalClient" },
-      { type: "info", label: "NewClient", key: "newClient" },
-      { type: "warning", label: "Reactivate", key: "reactivate" },
-    ];
-
-  const clientBadges = clientBadgeTypes.map((badge) => ({
-    ...badge,
-    isActive: clientBadge === badge.key,
-    onClick: () => handleClientBadgeClick(badge.key),
-  }));
   function formatIndianNumber(value?: number): string {
     if (typeof value !== "number") return "₹0";
     return `₹${value.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
@@ -183,22 +132,26 @@ const EMPContest = () => {
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Revenue Target"
-            value={formatIndianNumber(revenueCard[revenueBadge])}
-            // formatIndianNumber={formatIndianNumber}
+            value={formatIndianNumber(revenueCard.broking)}
             animationData={RevenueImg}
-            badges={revenueBadges}
             note={isMobile && `* Contest Period - 1st July to 30th September`}
             customClass={true}
+            rightValue={formatIndianNumber(revenueCard.nonBroking)}
+            subHeading="Broking"
+            rightSubHeading="Non-Broking"
           />
         </Col>
 
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Clients Target"
-            value={revenueCard[clientBadge]}
+            value={revenueCard.newClient}
             animationData={ActiveClient}
-            badges={clientBadges}
+            // badges={clientBadges}
+            subHeading="New Clients"
             customClass={true}
+            rightValue={revenueCard.reactivate}
+            rightSubHeading="Reactivate"
           />
         </Col>
 
@@ -206,7 +159,6 @@ const EMPContest = () => {
           <DashboardCard
             title="Fresh Cash Margin Target"
             value={formatIndianNumber(targetData?.freshCashMargin)}
-            // formatIndianNumber={formatIndianNumber}
             animationData={CoinIcon}
             customClass={true}
             rightTitle="MF AUM Target"
@@ -218,29 +170,27 @@ const EMPContest = () => {
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Revenue Achieved"
-            value={
-              // typeof achieveCard[revenueBadge] === "number"
-              //   ? achieveCard[revenueBadge]
-              //   : 0
-              formatIndianNumber(achieveCard[revenueBadge])
-            }
+            value={formatIndianNumber(achieveCard.broking)}
             animationData={RevenueImg}
-            badges={revenueBadges}
-            // formatIndianNumber={formatIndianNumber}
-            // suffix=".00"
-
+            subHeading="Broking"
             customClass={true}
+            rightValue={formatIndianNumber(achieveCard.nonBroking)}
+            rightSubHeading="Non-Broking"
           />
         </Col>
 
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Clients Achieved"
-            value={achieveCard[clientBadge]}
+            value={achieveCard.newClient}
             animationData={ActiveClient}
-            activeClientsEmpty={true}
+            // badges={clientBadges}
+            subHeading="New Clients"
             customClass={true}
-            badges={clientBadges}
+            rightValue={
+              achieveCard.reactivate === 0 ? "0" : achieveCard.reactivate
+            }
+            rightSubHeading="Reactivate"
           />
         </Col>
 
@@ -248,15 +198,10 @@ const EMPContest = () => {
           <DashboardCard
             title="Fresh Cash Margin Achieved"
             value={"Coming Soon"}
-            // value={
-            //   achievedData?.freshCash ? achievedData?.freshCash : "Coming Soon"
-            // }
             animationData={CoinIcon}
             customClass={true}
             rightTitle="MF AUM Achieved"
             rightValue={"Coming Soon"}
-            // rightValue={achievedData?.mfaum}
-            // formatIndianNumber={formatIndianNumber}
           />
         </Col>
       </Row>
