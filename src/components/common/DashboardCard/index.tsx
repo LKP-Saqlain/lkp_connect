@@ -55,6 +55,13 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const goldOptions: any = [
+    "1 GM Gold Coin",
+    "2 GM Gold Coin",
+    "3 GM Gold Coin",
+    "5 GM Gold Coin",
+    "Half GM Gold Coin",
+  ];
 
   return (
     <>
@@ -155,8 +162,14 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     }}
                   >
                     <img
-                      src={value === "Iphone 16" ? IphoneImg : CoinImg}
-                      alt="Prize Icon"
+                      src={
+                        value === "Iphone 16"
+                          ? IphoneImg
+                          : goldOptions.includes(value)
+                          ? CoinImg
+                          : ""
+                      }
+                      alt=""
                       style={{
                         // width: "100%",
                         marginTop: value === "Iphone 16" ? "5rem" : "9rem",
