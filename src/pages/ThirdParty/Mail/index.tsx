@@ -147,7 +147,7 @@ const InvoiceMail = ({ activeSubItem }: any) => {
               disableRowSelectionOnClick={false}
               onRowSelectionModelChange={handleRowSelectionChange}
             />
-            <div style={{ marginTop: "1rem" }}>
+            <div style={{ marginTop: ".2rem" }}>
               <Button
                 onClick={handleSendEmail}
                 disabled={isSendEmailDisabled}
