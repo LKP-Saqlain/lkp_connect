@@ -559,12 +559,12 @@ const SideBar = () => {
 
   const handleMenuClick = (menuTitle: string, hasSubItems: any) => {
     setActiveMenu((prevActive) => {
-      if (prevActive === menuTitle && hasSubItems) {
-        // If clicking the same menu with subitems, collapse it and reset subitem
-        setActiveSubItem("");
-        return "";
-      }
-      console.log("menuTitle", menuTitle, hasSubItems);
+      // if (prevActive === menuTitle && hasSubItems) {
+      //   // If clicking the same menu with subitems, collapse it and reset subitem
+      //   setActiveSubItem("");
+      //   return "";
+      // }
+      console.log("menuTitle prevActive", menuTitle, hasSubItems, prevActive);
 
       if (
         menuTitle === "Zone Overview" ||
