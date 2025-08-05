@@ -549,15 +549,13 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
                 size="small"
                 style={{ width: "220px" }}
               >
-                <InputLabel id="month-dropdown-label">
-                  Filter Records
-                </InputLabel>
+                <InputLabel id="month-dropdown-label">Select Month</InputLabel>
                 <Select
                   labelId="month-dropdown-label"
                   id="monthDropdown"
                   name="monthDropdown"
                   value={formik.values.monthDropdown}
-                  label="Filter Recordsss"
+                  label="Select Monthsss"
                   onChange={formik.handleChange}
                 >
                   {monthYearOptions.map((month) => (

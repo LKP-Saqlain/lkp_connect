@@ -984,29 +984,29 @@ const SideBar = () => {
                 marginRight: "1rem",
               }}
             >
-              Web Portal
+              Old Web Portal
             </Button>
-            {showMyPerformance && (
-              <>
-                <Button
-                  onClick={handleSSOLogin}
-                  style={{
-                    height: "25px",
-                    width: "90px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    padding: "4px 12px",
-                    fontFamily: "Public Sans",
-                    backgroundColor: "#11395C",
-                    color: "#fff",
-                    marginRight: "8px",
-                  }}
-                  className="btn-sm"
-                >
-                  E-KYC
-                </Button>
-              </>
-            )}
+            {/* {showMyPerformance && ( */}
+            <>
+              <Button
+                onClick={handleSSOLogin}
+                style={{
+                  height: "25px",
+                  width: "90px",
+                  borderRadius: "5px",
+                  fontSize: "12px",
+                  padding: "4px 12px",
+                  fontFamily: "Public Sans",
+                  backgroundColor: "#11395C",
+                  color: "#fff",
+                  marginRight: "8px",
+                }}
+                className="btn-sm"
+              >
+                E-KYC
+              </Button>
+            </>
+            {/* )} */}
             <Box
               sx={{
                 padding: isMobile ? "0" : "10px",

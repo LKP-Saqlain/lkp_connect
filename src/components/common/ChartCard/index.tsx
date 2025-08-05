@@ -94,7 +94,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
         colors: ["#000"],
         // top: "10px",
       },
-      offsetY: -15,
+      offsetY: -18,
     },
     plotOptions: {
       bar: {
@@ -103,6 +103,7 @@ const ChartCard: React.FC<ChartCardProps> = ({
 
         dataLabels: {
           position: "top",
+          hideOverflowingLabels: false,
         },
       },
     },
@@ -176,6 +177,12 @@ const ChartCard: React.FC<ChartCardProps> = ({
 
     legend: {
       position: "bottom",
+      onItemClick: {
+        toggleDataSeries: false,
+      },
+      onItemHover: {
+        highlightDataSeries: false,
+      },
     },
     yaxis: {
       show: false,
