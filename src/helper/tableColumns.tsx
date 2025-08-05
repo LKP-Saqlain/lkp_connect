@@ -6338,14 +6338,14 @@ export const clientAPBrokerageColumns: GridColDef[] = [
     align: "left",
     disableColumnMenu: true,
   },
-  {
-    field: "monthYr",
-    headerName: "Month",
-    width: 110,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
-  },
+  // {
+  //   field: "monthYr",
+  //   headerName: "Month",
+  //   width: 110,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  // },
   {
     field: "grossBrokerage",
     headerName: "Gross Brokerage",
@@ -6361,24 +6361,39 @@ export const clientAPBrokerageColumns: GridColDef[] = [
       }).format(value);
     },
   },
+  // {
+  //   field: "sbBrokerage",
+  //   headerName: "Sub-Broker Brokerage",
+  //   width: 160,
+  //   headerAlign: "center",
+  //   align: "right",
+  //   disableColumnMenu: true,
+  //   valueFormatter: (params: any) => {
+  //     const value = parseFloat(params);
+  //     return new Intl.NumberFormat("en-IN", {
+  //       minimumFractionDigits: 2,
+  //       maximumFractionDigits: 2,
+  //     }).format(value);
+  //   },
+  // },
+  // {
+  //   field: "netBrokerage",
+  //   headerName: "Net Brokerage",
+  //   width: 140,
+  //   headerAlign: "center",
+  //   align: "right",
+  //   disableColumnMenu: true,
+  //   valueFormatter: (params: any) => {
+  //     const value = parseFloat(params);
+  //     return new Intl.NumberFormat("en-IN", {
+  //       minimumFractionDigits: 2,
+  //       maximumFractionDigits: 2,
+  //     }).format(value);
+  //   },
+  // },
   {
-    field: "sbBrokerage",
-    headerName: "Sub-Broker Brokerage",
-    width: 160,
-    headerAlign: "center",
-    align: "right",
-    disableColumnMenu: true,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
-  },
-  {
-    field: "netBrokerage",
-    headerName: "Net Brokerage",
+    field: "contribution",
+    headerName: "Contribution %",
     width: 140,
     headerAlign: "center",
     align: "right",
