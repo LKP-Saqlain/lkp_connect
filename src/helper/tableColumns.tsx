@@ -6396,14 +6396,10 @@ export const clientAPBrokerageColumns: GridColDef[] = [
     headerName: "Contribution %",
     width: 140,
     headerAlign: "center",
-    align: "right",
+    align: "center",
     disableColumnMenu: true,
     valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
+      return `${params} %`;
     },
   },
 ];
@@ -7137,5 +7133,75 @@ export const RHTopClientsColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
+  },
+];
+
+export const getAPContestReportColumns: GridColDef[] = [
+  {
+    field: "apCode",
+    headerName: "AP Code",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "apName",
+    headerName: "AP Name",
+    flex: 2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "qtarget",
+    headerName: "Revenue Target",
+    flex: 1.5,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
+        params
+      ),
+  },
+  {
+    field: "brokerageAchived",
+    headerName: "Revenue Achieved",
+    flex: 1.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
+        params
+      ),
+  },
+  {
+    field: "newClientCount",
+    headerName: " Client Target",
+    flex: 1.2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientsAchieved",
+    headerName: "Clients Achieved",
+    flex: 1.3,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "achievementPercentage",
+    headerName: "Achievement (%)",
+    flex: 1.4,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params: any) => {
+      return `${params} %`;
+    },
+    // valueGetter: (params: any) => `${params.achievementPercentage ?? 0}%`,
   },
 ];

@@ -54,6 +54,7 @@ import {
   TpInvoiceMailsColumns,
   TpInvoiceReportColumns,
   RHTopClientsColumns,
+  getAPContestReportColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1775,6 +1776,14 @@ const DataTable = ({
       return TpInvoiceReportColumns.map((column) => ({ ...column }));
     } else if (activeSubItem === "RHDashboardTop10Clients") {
       return RHTopClientsColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "RHDashboardTop10Clients") {
+      return RHTopClientsColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Partner Contest Report") {
+      return getAPContestReportColumns.map((column) => ({
         ...column,
       }));
     } else {
