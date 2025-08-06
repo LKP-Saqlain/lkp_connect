@@ -185,7 +185,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
     const {
       brokExcGST,
       brokIncGST,
-      brokPerShare,
+      brokPerShare, //is now LKP Per share
       clientName,
       gst,
       netBrokerage,
@@ -196,6 +196,8 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       sbRate,
       securitiesName,
       transactionDate,
+      clientRate,
+      vendorRate,
     } = data;
 
     const formattedDate = dayjs(transactionDate, "DD/MM/YYYY").format(
@@ -209,7 +211,9 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       clientName,
       securitiesName,
       noOfShares: unformatNumber(noOfShare),
-      brokeragePerShare: unformatNumber(brokPerShare),
+      clientRate: unformatNumber(clientRate),
+      vendorRate: unformatNumber(vendorRate),
+      lkpCommissionPerShare: unformatNumber(brokPerShare),
       brokerageInclusiveGST: unformatNumber(brokIncGST),
       gst: unformatNumber(gst),
       brokerageExclusiveGST: unformatNumber(brokExcGST),
