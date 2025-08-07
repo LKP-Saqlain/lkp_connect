@@ -7195,6 +7195,7 @@ export const getAPContestReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "apName",
@@ -7206,50 +7207,68 @@ export const getAPContestReportColumns: GridColDef[] = [
   {
     field: "qtarget",
     headerName: "Revenue Target",
-    flex: 1.5,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "right",
-    valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
-        params
-      ),
-  },
-  {
-    field: "brokerageAchived",
-    headerName: "Revenue Achieved",
-    flex: 1.7,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "right",
-    valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
-        params
-      ),
-  },
-  {
-    field: "newClientCount",
-    headerName: " Client Target",
-    flex: 1.2,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "clientsAchieved",
-    headerName: "Clients Achieved",
     flex: 1.3,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
+        params
+      ),
   },
   {
-    field: "achievementPercentage",
-    headerName: "Achievement (%)",
+    field: "brokerageAchieved",
+    headerName: "Revenue Achieved",
+    flex: 1.3,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
+        params
+      ),
+  },
+  {
+    field: "brokerageAchievedPerc",
+    headerName: "Revenue Achievement (%)",
     flex: 1.4,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      return `${params} %`;
+    },
+    // valueGetter: (params: any) => `${params.achievementPercentage ?? 0}%`,
+  },
+  {
+    field: "newClientCount",
+    headerName: " Clients Target",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "clientsAchieved",
+    headerName: "Clients Achieved",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "clientsAchievedPerc",
+    headerName: "Client Achievement (%)",
+    flex: 1.4,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) => {
       return `${params} %`;
     },

@@ -42,6 +42,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
 
   useEffect(() => {
     let payload = {
+      user_id,
       start: 0,
       pageSize: 0,
       rowId: 0,
@@ -176,6 +177,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
         await handleFileUploadAsync(file, communicationProofPath);
 
         const payload = {
+          user_id,
           rowId: row?.rowID,
           fileName: communicationProofPath,
           uploadedBy: user_id,
