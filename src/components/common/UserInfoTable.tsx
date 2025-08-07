@@ -1890,6 +1890,7 @@ const DataTable = ({
   } else if (
     activeSubItem === "Pre Trade Proof Upload" ||
     activeSubItem === "Pre Trade Report" ||
+    (activeSubItem === "Unlisted Shares Approval 1" && action === "approve") ||
     (activeSubItem === "Pre Trade Approval" && showDocument)
   ) {
     Msg = "";
@@ -1942,6 +1943,9 @@ const DataTable = ({
 
         activeSubItem={activeSubItem}
         isUploadMode={activeSubItem === "Pre Trade Proof Upload" ? true : false}
+        isDropUpload={
+          activeSubItem === "Unlisted Shares Approval 1" && action === "approve"
+        }
         handleFileUpload={(selectedRow, file, remark) => {
           console.log("Uploading file:", selectedRow, file);
           if (typeof onFileUpload === "function") {

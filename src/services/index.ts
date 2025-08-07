@@ -683,4 +683,11 @@ export const apiServices = {
   GetAPContestReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetAPContestReport, payload);
   },
+  GetUnlistedVendorDropdown: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetUnlistedVendorDropdown,
+      payload
+    );
+  },
 };

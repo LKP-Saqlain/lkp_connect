@@ -16,8 +16,8 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     const payload = {
-      //   user_id: user_id,
-      user_id: "APN-7161",
+      user_id: user_id,
+      //   user_id: "APN-7161",
     };
     dispatch(showLoader("Please wait, we are processing your request..."));
 
