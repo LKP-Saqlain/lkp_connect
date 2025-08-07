@@ -4977,6 +4977,12 @@ export const quotes = [
     author: "Henry David Thoreau",
   },
 ];
+export const simpleQuote = [
+  {
+    text: `Please wait`,
+    author: "",
+  },
+];
 
 export const spipPerformanceReportColumns: GridColDef[] = [
   {
