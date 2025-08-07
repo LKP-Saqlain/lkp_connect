@@ -50,6 +50,7 @@ import {
   RHTopClientsColumns,
   ThirdParty,
   ThirdPartyStatusReport,
+  VendorMasterColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1636,6 +1637,76 @@ const DataTable = ({
       return ThirdPartyStatusReport.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Vendor Creation") {
+      return VendorMasterColumns.map((column) => {
+        if (column.field === "actions") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted;
+
+              const handleEdit = () => {
+                setSelectedRow(params.row);
+                handleEditClick?.(params.row, true);
+                // You can open edit modal or set state for edit form here
+              };
+
+              const handleDelete = () => {
+                handleDeleteEntry?.(params.row); // Pass row to delete handler
+                setSelectedRow(params.row); // Store row for confirmation
+                tog_center(); // Open delete confirmation modal
+              };
+
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+
+                  {isDeleted ? (
+                    <span
+                      style={{
+                        color: "red",
+                        fontSize: "0.85rem",
+                        cursor: "default",
+                      }}
+                    >
+                      Deleted
+                    </span>
+                  ) : (
+                    <Tooltip title="Delete" arrow placement="top">
+                      <IconButton
+                        sx={{ p: 0 }}
+                        color="primary"
+                        onClick={handleDelete}
+                      >
+                        <DeleteIcon
+                          fontSize="small"
+                          sx={{ color: "#11395C" }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </div>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }

@@ -141,4 +141,7 @@ export const endpoints = {
   ThirdPartyApproverView: "api/Account/ThirdPartyApproverView",
   ThirdPartyApproverAction: "api/Account/ThirdPartyApproverAction",
   VerifyBankDetails: "api/Account/VerifyBankDetails",
+  FetchPinLocation: "api/Account/FetchPinLocation",
+  SaveVendorDetails: "api/Account/SaveVendorDetails",
+  ViewVendorDetails: "api/Account/ViewVendorDetails",
 };

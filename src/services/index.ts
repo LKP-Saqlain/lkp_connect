@@ -649,4 +649,13 @@ export const apiServices = {
   VerifyBankDetails: async (payload: any) => {
     return await apiService("POST", endpoints.VerifyBankDetails, payload);
   },
+  FetchPinLocation: async (payload: any) => {
+    return await apiService("POST", endpoints.FetchPinLocation, payload);
+  },
+  SaveVendorDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.SaveVendorDetails, payload);
+  },
+  ViewVendorDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewVendorDetails, payload);
+  },
 };

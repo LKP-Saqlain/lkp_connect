@@ -91,8 +91,14 @@ const CustomModal = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log("TestProps", action, row, activeSubItem);
-  }, [action, row, activeSubItem]);
+    console.log(
+      "TestProps",
+      fileExtension,
+      setSetShowImg,
+      previewUrl,
+      activeSubItem
+    );
+  }, [fileExtension, setSetShowImg, previewUrl, activeSubItem]);
 
   const handleSessionClear = () => {
     localStorage.clear();
@@ -259,6 +265,7 @@ const CustomModal = ({
         "Pre Trade Proof Upload",
         "Pre Trade Report",
         "Pre Trade Approval",
+        "Vendor Creation",
       ].includes(activeSubItem) &&
       !showDocument &&
       !isAdmin

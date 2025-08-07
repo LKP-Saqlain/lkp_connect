@@ -88,6 +88,7 @@ import "./style.css";
 import ThirdPartyMaster from "../../pages/ThirdParty/Master";
 import ThirdPartyApproval from "../../pages/ThirdParty/Approval";
 import ThirdPartyStatusReport from "../../pages/ThirdParty/Report";
+import VendorMaster from "../../pages/ThirdParty/VendorMaster";
 
 const drawerWidth = 260;
 
@@ -734,6 +735,7 @@ const SideBar = () => {
       <ThirdPartyApproval activeSubItem={activeSubItem} />
     ),
     "Status Report": <ThirdPartyStatusReport activeSubItem={activeSubItem} />,
+    "Vendor Creation": <VendorMaster activeSubItem={activeSubItem} />,
   };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>

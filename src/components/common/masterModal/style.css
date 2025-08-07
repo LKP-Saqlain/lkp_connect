@@ -15,3 +15,15 @@
     /* margin-left: 14px; */
     /* margin-right: 14px; */
 }
+
+.css-18e3kiu-MuiFormLabel-root {
+    color: rgba(0, 0, 0, 0.6);
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 0em;
+    letter-spacing: 0.00938em;
+    padding: 0;
+    position: relative;
+    font-size: 12px;
+}

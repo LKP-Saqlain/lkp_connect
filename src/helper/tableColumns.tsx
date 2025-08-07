@@ -6890,3 +6890,161 @@ export const ThirdPartyStatusReport: GridColDef[] = [
     },
   },
 ];
+
+export const VendorMasterColumns: GridColDef[] = [
+  {
+    field: "vendorId",
+    headerName: "Vendor ID",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  // {
+  //   field: "vendorCode",
+  //   headerName: "Vendor Code",
+  //   minWidth: 120,
+  //   flex: 0.7,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
+  {
+    field: "vendorName",
+    headerName: "Vendor Name",
+    minWidth: 200,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "address1",
+    headerName: "Address",
+    minWidth: 300,
+    flex: 1.2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "city",
+    headerName: "City",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "state",
+    headerName: "State",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "pincode",
+    headerName: "Pin Code",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "teleNo",
+    headerName: "Tele No",
+    minWidth: 120,
+    flex: 0.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile No",
+    minWidth: 130,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "emailID",
+    headerName: "Email ID",
+    minWidth: 180,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "panNo",
+    headerName: "PAN No",
+    minWidth: 140,
+    flex: 0.9,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "gstNo",
+    headerName: "GST No",
+    minWidth: 140,
+    flex: 0.9,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "msmeFlag",
+    headerName: "MSME Flag",
+    minWidth: 110,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    // valueFormatter: ({ value }) => (value ? "Yes" : "No"),
+  },
+  {
+    field: "msmeType",
+    headerName: "MSME Type",
+    minWidth: 130,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "actions",
+    headerName: "Actions",
+    minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+    // renderCell: (params) => (
+    //   <div>
+    //     <IconButton
+    //       onClick={() => {
+    //         console.log("Edit", params.row);
+    //       }}
+    //     >
+    //       <EditIcon fontSize="small" />
+    //     </IconButton>
+    //     <IconButton
+    //       onClick={() => {
+    //         console.log("Delete", params.row);
+    //       }}
+    //     >
+    //       <DeleteIcon fontSize="small" />
+    //     </IconButton>
+    //   </div>
+    // ),
+  },
+];
