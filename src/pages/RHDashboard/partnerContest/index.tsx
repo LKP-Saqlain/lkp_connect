@@ -58,7 +58,10 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
               padding: "0.2rem 0.8rem",
             }}
           >
-            <h4 className="card-title mb-0">Partner Contest Report</h4>
+            <h4 className="card-title mb-0">
+              Partner Contest Report{" "}
+              <span style={{ fontSize: "12px" }}> (July-September)</span>
+            </h4>
           </CardHeader>
           <CardBody>
             <DataTable activeSubItem={activeSubItem} T6Data={data} />

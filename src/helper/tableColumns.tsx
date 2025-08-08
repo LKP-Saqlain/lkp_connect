@@ -7213,7 +7213,7 @@ export const getAPContestReportColumns: GridColDef[] = [
   {
     field: "qtarget",
     headerName: "Revenue Target",
-    flex: 1.3,
+    flex: 1.2,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
@@ -7278,6 +7278,13 @@ export const getAPContestReportColumns: GridColDef[] = [
     valueFormatter: (params: any) => {
       return `${params} %`;
     },
-    // valueGetter: (params: any) => `${params.achievementPercentage ?? 0}%`,
+  },
+  {
+    field: "prize",
+    headerName: "Prize",
+    flex: 1.5,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
   },
 ];
