@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 // import ViewListIcon from "@mui/icons-material/ViewList";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CopyToClipboardCell from "./copyToClipBoardCell";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 
 interface ClientRow {
   ClientCode: string;
@@ -5892,7 +5893,7 @@ export const getApproverOneDetails: GridColDef[] = [
   },
   {
     field: "brokeragePerShare",
-    headerName: "Brokerage Per Share",
+    headerName: "Commision Per Share",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
     align: "right",
@@ -5901,7 +5902,7 @@ export const getApproverOneDetails: GridColDef[] = [
   },
   {
     field: "brokerageInclusiveGST",
-    headerName: "Brokerage Inclusive GST",
+    headerName: "Commision Inclusive GST",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
     align: "right",
@@ -5919,7 +5920,7 @@ export const getApproverOneDetails: GridColDef[] = [
   {
     field: "brokerageExclusiveGST",
     headerClassName: "header-wrap-custom",
-    headerName: "Brokerage Exclusive GST",
+    headerName: "Commision Exclusive GST",
     minWidth: 100,
     align: "right",
     disableColumnMenu: true,
@@ -5952,7 +5953,7 @@ export const getApproverOneDetails: GridColDef[] = [
   },
   {
     field: "netBrokerage",
-    headerName: "Net Brokerage",
+    headerName: "Net Commision",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
     align: "right",
@@ -5963,10 +5964,53 @@ export const getApproverOneDetails: GridColDef[] = [
 
 export const getApproverTwoDetails: GridColDef[] = [
   {
+    field: "dealSheetB64",
+    headerName: "Deal Sheet",
+    headerClassName: "header-wrap-custom",
+    minWidth: 50,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    sortable: false,
+
+    renderCell: (params) => {
+      const base64Data = params.value;
+      const today = new Date();
+
+      const dd = String(today.getDate()).padStart(2, "0");
+      const mm = String(today.getMonth() + 1).padStart(2, "0"); // January is 0!
+      const yy = String(today.getFullYear()).slice(-2);
+
+      const filename = `Deal_Sheet_${dd}-${mm}-${yy}.pdf`;
+
+      const handleDownload = () => {
+        const link = document.createElement("a");
+        link.href = `data:application/pdf;base64,${base64Data}`;
+        link.download = filename;
+        link.click();
+      };
+
+      return (
+        <button
+          onClick={handleDownload}
+          style={{
+            color: "#11395C",
+            textDecoration: "underline",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          <DownloadForOfflineIcon />
+        </button>
+      );
+    },
+  },
+  {
     field: "Action",
     headerName: "Approve | Reject",
     headerClassName: "header-wrap-custom",
-    minWidth: 140,
+    minWidth: 120,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -5986,6 +6030,13 @@ export const getApproverTwoDetails: GridColDef[] = [
     headerName: "Approver One Remarks",
     headerClassName: "header-wrap-custom",
     minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "vendorName",
+    headerName: "Vendor Name",
+    minWidth: 250,
     disableColumnMenu: true,
     headerAlign: "center",
   },
@@ -6402,14 +6453,10 @@ export const clientAPBrokerageColumns: GridColDef[] = [
     headerName: "Contribution %",
     width: 140,
     headerAlign: "center",
-    align: "right",
+    align: "center",
     disableColumnMenu: true,
     valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
+      return `${params} %`;
     },
   },
 ];
@@ -7143,5 +7190,94 @@ export const RHTopClientsColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
+  },
+];
+
+export const getAPContestReportColumns: GridColDef[] = [
+  {
+    field: "apCode",
+    headerName: "AP Code",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "apName",
+    headerName: "AP Name",
+    flex: 2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "qtarget",
+    headerName: "Revenue Target",
+    flex: 1.3,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
+        params
+      ),
+  },
+  {
+    field: "brokerageAchieved",
+    headerName: "Revenue Achieved",
+    flex: 1.3,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
+        params
+      ),
+  },
+  {
+    field: "brokerageAchievedPerc",
+    headerName: "Revenue Achievement (%)",
+    flex: 1.4,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      return `${params} %`;
+    },
+    // valueGetter: (params: any) => `${params.achievementPercentage ?? 0}%`,
+  },
+  {
+    field: "newClientCount",
+    headerName: " Clients Target",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "clientsAchieved",
+    headerName: "Clients Achieved",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "clientsAchievedPerc",
+    headerName: "Client Achievement (%)",
+    flex: 1.4,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      return `${params} %`;
+    },
+    // valueGetter: (params: any) => `${params.achievementPercentage ?? 0}%`,
   },
 ];

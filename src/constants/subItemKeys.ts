@@ -10,6 +10,7 @@ export const SubItemKeys = {
   RH_OVERVIEW: "Zone Overview",
   RH_DIRECT: "Direct Channel",
   RH_INDIRECT: "Indirect Channel",
+  RH_PARTNER: "Partner Contest Report",
 } as const;
 
 export type SubItemKey = (typeof SubItemKeys)[keyof typeof SubItemKeys];

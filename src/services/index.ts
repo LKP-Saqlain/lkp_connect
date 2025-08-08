@@ -680,4 +680,14 @@ export const apiServices = {
   GetRevTradedClient: async (payload: any) => {
     return await apiService("POST", endpoints.GetRevTradedClient, payload);
   },
+  GetAPContestReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetAPContestReport, payload);
+  },
+  GetUnlistedVendorDropdown: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetUnlistedVendorDropdown,
+      payload
+    );
+  },
 };

@@ -54,6 +54,7 @@ import {
   TpInvoiceMailsColumns,
   TpInvoiceReportColumns,
   RHTopClientsColumns,
+  getAPContestReportColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1777,6 +1778,14 @@ const DataTable = ({
       return RHTopClientsColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "RHDashboardTop10Clients") {
+      return RHTopClientsColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Partner Contest Report") {
+      return getAPContestReportColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
@@ -1881,6 +1890,7 @@ const DataTable = ({
   } else if (
     activeSubItem === "Pre Trade Proof Upload" ||
     activeSubItem === "Pre Trade Report" ||
+    (activeSubItem === "Unlisted Shares Approval 1" && action === "approve") ||
     (activeSubItem === "Pre Trade Approval" && showDocument)
   ) {
     Msg = "";
@@ -1933,6 +1943,9 @@ const DataTable = ({
 
         activeSubItem={activeSubItem}
         isUploadMode={activeSubItem === "Pre Trade Proof Upload" ? true : false}
+        isDropUpload={
+          activeSubItem === "Unlisted Shares Approval 1" && action === "approve"
+        }
         handleFileUpload={(selectedRow, file, remark) => {
           console.log("Uploading file:", selectedRow, file);
           if (typeof onFileUpload === "function") {

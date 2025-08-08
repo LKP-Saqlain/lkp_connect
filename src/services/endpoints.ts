@@ -150,4 +150,6 @@ export const endpoints = {
   GetTradeplaced: "api/Dashboard/GetTradeplaced",
   GetTradedClient: "api/Dashboard/GetTradedClient",
   GetRevTradedClient: "api/Dashboard/GetRevTradedClient",
+  GetAPContestReport: "api/MIS/GetAPContestReport",
+  GetUnlistedVendorDropdown: "api/Account/GetUnlistedVendorDropdown",
 };

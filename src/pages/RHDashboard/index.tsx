@@ -4,6 +4,7 @@ import Loader from "../../components/common/Loader";
 import Overview from "./Overview";
 import Direct from "./Direct";
 import Indirect from "./Indirect";
+import PartnerContestReport from "./partnerContest";
 
 interface RH {
   activeSubItem: string;
@@ -18,6 +19,9 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
   const componentMap: Record<string, React.ReactNode> = {
     [SubItemKeys.RH_DIRECT]: <Direct activeSubItem={activeSubItem} />,
     [SubItemKeys.RH_INDIRECT]: <Indirect activeSubItem={activeSubItem} />,
+    [SubItemKeys.RH_PARTNER]: (
+      <PartnerContestReport activeSubItem={activeSubItem} />
+    ),
   };
 
   const getComponent = () => {
@@ -42,6 +46,8 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
         return <Direct activeSubItem={activeSubItem} />;
       } else if (activeSubItem === SubItemKeys.RH_INDIRECT) {
         return <Indirect activeSubItem={activeSubItem} />;
+      } else if (activeSubItem === SubItemKeys.RH_PARTNER) {
+        return <PartnerContestReport activeSubItem={activeSubItem} />;
       } else {
         return <Overview activeSubItem={activeSubItem} />;
       }
