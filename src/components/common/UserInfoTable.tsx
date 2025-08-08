@@ -1786,6 +1786,32 @@ const DataTable = ({
       return getAPContestReportColumns.map((column) => ({
         ...column,
       }));
+      // else if (activeSubItem === "Partner Contest Report") {
+      //   return getAPContestReportColumns.map((column) => {
+      //     if (column.field === "apCode")
+      //       return {
+      //         ...column,
+      //         renderCell: (params: any) => {
+      //           return (
+      //             <button
+      //               onClick={() => {
+      //                 // handleDownload(params.row); // This will trigger the download function
+      //                 console.log(params.row.apCode, "count");
+      //               }}
+      //               style={{
+      //                 color: "#11395C",
+      //                 textDecoration: "underline",
+
+      //                 cursor: "pointer",
+      //               }}
+      //             >
+      //               {params.row.apCode}
+      //             </button>
+      //           );
+      //         },
+      //       };
+      //     return column;
+      //   });
     } else {
       return [];
     }
