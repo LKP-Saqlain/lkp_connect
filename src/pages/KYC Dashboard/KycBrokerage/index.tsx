@@ -30,6 +30,72 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       .finally(() => dispatch(hideLoader()));
   }, [flag]);
 
+  // const handleApproval = async (
+  //   fullRow: {
+  //     rowId: number;
+  //     segment: string;
+  //     clientcode: number;
+  //     moduleNo: number;
+  //   },
+  //   remark: string,
+  //   entryFlag: string
+  // ) => {
+  //   const payload = {
+  //     rowID: fullRow.rowId,
+  //     kycflag: entryFlag,
+  //     kycUserId: user_id,
+  //     kycRemark: remark,
+  //   };
+
+  //   dispatch(showLoader("Please wait..."));
+  //   // Always call KYC API
+  //   const kycPromise = await apiServices.UpdateBrokerageKycStatus(payload);
+  //   // Conditionally call second API
+  //   let techExcelPromise: Promise<any> = Promise.resolve();
+
+  //   if (entryFlag === "A") {
+  //     const now = new Date();
+  //     const day = String(now.getDate()).padStart(2, "0");
+  //     const month = String(now.getMonth() + 1).padStart(2, "0");
+  //     const year = now.getFullYear();
+  //     const formattedDate = `${day}-${month}-${year}`;
+
+  //     const secondPayload = {
+  //       segment: fullRow.segment,
+  //       clientcode: fullRow.clientcode,
+  //       startdate: formattedDate,
+  //       moduleNo: fullRow.moduleNo,
+  //     };
+
+  //     techExcelPromise = apiServices.GetTechExcelApiResponse(secondPayload);
+
+  //     console.warn(
+  //       "Approval clicked for:",
+  //       fullRow.segment,
+  //       fullRow.clientcode,
+  //       fullRow.moduleNo,
+  //       "on",
+  //       formattedDate
+  //     );
+  //   }
+
+  //   // Wait for both APIs
+  //   Promise.all([kycPromise, techExcelPromise])
+  //     .then(([kycRes]) => {
+  //       if (kycRes?.status === 200) {
+  //         setFlag((prev) => !prev);
+  //       } else {
+  //         console.error("KYC API failed", kycRes);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error("API call failed", err);
+  //     })
+  //     .finally(() => {
+  //       dispatch(hideLoader());
+  //     });
+  // };
+
   const handleApproval = async (
     fullRow: {
       rowId: number;
@@ -40,60 +106,75 @@ const KycBrokerage = ({ activeSubItem }: any) => {
     remark: string,
     entryFlag: string
   ) => {
-    const payload = {
+    const kycPayload = {
       rowID: fullRow.rowId,
       kycflag: entryFlag,
       kycUserId: user_id,
       kycRemark: remark,
     };
-
     dispatch(showLoader("Please wait..."));
-    // Always call KYC API
-    const kycPromise = await apiServices.UpdateBrokerageKycStatus(payload);
-    // Conditionally call second API
-    let techExcelPromise: Promise<any> = Promise.resolve();
 
-    if (entryFlag === "A") {
-      const now = new Date();
-      const day = String(now.getDate()).padStart(2, "0");
-      const month = String(now.getMonth() + 1).padStart(2, "0");
-      const year = now.getFullYear();
-      const formattedDate = `${day}-${month}-${year}`;
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = now.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
 
-      const secondPayload = {
-        segment: fullRow.segment,
-        clientcode: fullRow.clientcode,
-        startdate: formattedDate,
-        moduleNo: fullRow.moduleNo,
-      };
+    const secondPayload = {
+      segment: fullRow.segment,
+      clientcode: fullRow.clientcode,
+      startdate: formattedDate,
+      moduleNo: fullRow.moduleNo,
+    };
 
-      techExcelPromise = apiServices.GetTechExcelApiResponse(secondPayload);
+    try {
+      // If entryFlag is A, prioritize TechExcel API
+      if (entryFlag === "A") {
+        const techExcelRes = await apiServices.GetTechExcelApiResponse(
+          secondPayload
+        );
+        console.log(
+          "TechExcel Response:",
+          techExcelRes,
+          techExcelRes?.data?.statusCode
+        );
 
-      console.warn(
-        "Approval clicked for:",
-        fullRow.segment,
-        fullRow.clientcode,
-        fullRow.moduleNo,
-        "on",
-        formattedDate
-      );
-    }
-
-    // Wait for both APIs
-    Promise.all([kycPromise, techExcelPromise])
-      .then(([kycRes]) => {
+        if (
+          techExcelRes?.data?.statusCode === 200 ||
+          techExcelRes?.data?.isSuccess === true
+        ) {
+          // Proceed with KYC update
+          const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
+          if (kycRes?.status === 200) {
+            setFlag((prev) => !prev);
+          } else {
+            console.error("KYC API failed:", kycRes);
+            ShowToast("error", kycRes?.data?.msg || kycRes?.data?.message);
+          }
+        } else {
+          // TechExcel failed — show warning or stop
+          console.warn(
+            "TechExcel API failed or partially failed:",
+            techExcelRes
+          );
+          ShowToast("error", "Failed to update in Techexcel");
+          // Optional: show message to user
+          // toast.error("TechExcel failed: " + (techExcelRes.message || techExcelRes.data));
+        }
+      } else {
+        // Not 'A' — directly update KYC
+        const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
         if (kycRes?.status === 200) {
           setFlag((prev) => !prev);
         } else {
-          console.error("KYC API failed", kycRes);
+          console.error("KYC API failed:", kycRes);
         }
-      })
-      .catch((err) => {
-        console.error("API call failed", err);
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
+      }
+    } catch (err) {
+      console.error("Error in API call:", err);
+    } finally {
+      dispatch(hideLoader());
+    }
   };
 
   const handlePreview = async (row: any) => {
