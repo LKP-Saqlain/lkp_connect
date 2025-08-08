@@ -1,7 +1,7 @@
 import React, { useEffect, Suspense } from "react";
 import { SubItemKeys } from "../../constants/subItemKeys";
 import Loader from "../../components/common/Loader";
-import Overview from "./Overview";
+// import Overview from "./Overview";
 import Direct from "./Direct";
 import Indirect from "./Indirect";
 import PartnerContestReport from "./partnerContest";
@@ -49,7 +49,7 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
       } else if (activeSubItem === SubItemKeys.RH_PARTNER) {
         return <PartnerContestReport activeSubItem={activeSubItem} />;
       } else {
-        return <Overview activeSubItem={activeSubItem} />;
+        // return <Overview activeSubItem={activeSubItem} />;
       }
     }
 
