@@ -690,4 +690,7 @@ export const apiServices = {
       payload
     );
   },
+  GetClientAccessLink: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientAccessLink, payload);
+  },
 };

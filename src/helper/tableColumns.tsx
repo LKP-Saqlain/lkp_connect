@@ -3177,6 +3177,10 @@ export const ODCapsules = [
   { id: 1, label: "Backoffice Report" },
   { id: 2, label: "Template" },
 ];
+export const pledgeCapsules = [
+  { id: 1, label: "Pledge Request" },
+  // { id: 2, label: "Template" },
+];
 
 export const ClientInfoCapsules = [
   { id: 1, label: "Equity", status: "Active" },

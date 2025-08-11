@@ -152,4 +152,5 @@ export const endpoints = {
   GetRevTradedClient: "api/Dashboard/GetRevTradedClient",
   GetAPContestReport: "api/MIS/GetAPContestReport",
   GetUnlistedVendorDropdown: "api/Account/GetUnlistedVendorDropdown",
+  GetClientAccessLink: "api/BackOffice/GetClientAccessLink",
 };

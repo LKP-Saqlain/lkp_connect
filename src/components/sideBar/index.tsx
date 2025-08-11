@@ -713,9 +713,9 @@ const SideBar = () => {
       <KycBrokerage activeSubItem={activeSubItem} />
     ),
   };
-  const tradingSubItems: Record<string, JSX.Element> = {
-    "Client Pledge Request": <PledgeRequest activeSubItem={activeSubItem} />,
-  };
+  // const tradingSubItems: Record<string, JSX.Element> = {
+  //   "Client Pledge Request": <PledgeRequest activeSubItem={activeSubItem} />,
+  // };
 
   const rmsSubItems: Record<string, JSX.Element> = {
     "Upload SLBM Holding": <SLBMHoldings activeSubItem={activeSubItem} />,
@@ -777,13 +777,12 @@ const SideBar = () => {
           activeMenu={activeMenu}
         />
       ),
-      3: () =>
-        tradingSubItems[activeSubItem] || (
-          <TradeDashboard
-            selectedTrading={selectedViewMore}
-            showMyPerformance={showMyPerformance}
-          />
-        ),
+      3: () => (
+        <TradeDashboard
+          selectedTrading={selectedViewMore}
+          showMyPerformance={showMyPerformance}
+        />
+      ),
       4: () => getSubItemComponent(reportsSubItems),
       5: () => (
         <RHDashboard activeSubItem={activeSubItem} activeMenu={activeMenu} />
@@ -817,6 +816,7 @@ const SideBar = () => {
       31: () => <EmpContest />,
       32: () => <ApnContest activeMenu={activeMenu} />,
       33: () => getSubItemComponent(AccountSubItems),
+      34: () => <PledgeRequest activeMenu={activeMenu} />,
     };
 
     return dynamicMap[menu_order]?.() || null;

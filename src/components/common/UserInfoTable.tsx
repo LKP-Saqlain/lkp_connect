@@ -1440,7 +1440,7 @@ const DataTable = ({
           // Return other columns unchanged
           return column;
         });
-    } else if (activeSubItem === "Client Pledge Request") {
+    } else if (activeMenu === "Client Request") {
       return ClientPledgeRequest.map((column) => {
         if (column.field === "encryptedCode") {
           return {

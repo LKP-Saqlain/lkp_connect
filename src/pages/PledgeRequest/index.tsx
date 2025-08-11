@@ -17,8 +17,9 @@ import { AppDispatch, RootState } from "../../redux/store";
 import Select from "react-select";
 import ShowToast from "../../utils/toastUtils";
 import { TextField } from "@mui/material";
+import UserCapsules from "../ClientDetails/UserCapsules";
 
-const Index = ({ activeSubItem }: any) => {
+const Index = ({ activeMenu }: any) => {
   // const [iframeSrc, setIframeSrc] = useState("");
   const [data, setData] = useState<any>();
   const [flag, setFlag] = useState<boolean>(false);
@@ -28,7 +29,7 @@ const Index = ({ activeSubItem }: any) => {
   const [clientCode, setClientCode] = useState("");
   const [currentClient, setCurrentClient] = useState("");
   const [selectedBranchCode, setSelectedBranchCode] = useState<any>(null);
-
+  const [selectedCapsule, setSelectedCapsule] = useState("Pledge Request");
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -212,6 +213,10 @@ const Index = ({ activeSubItem }: any) => {
 
   return (
     <div className="page-content page-view">
+      <UserCapsules
+        selectedCapsule={selectedCapsule}
+        capsuleType="Pledge Request"
+      />
       <Container fluid>
         {/* <button onClick={handleClick}>Click to open link</button> */}
 
@@ -367,7 +372,7 @@ const Index = ({ activeSubItem }: any) => {
               </>
             ) : (
               <DataTable
-                activeSubItem={activeSubItem}
+                activeMenu={activeMenu}
                 T6Data={data}
                 handleDownload={handleClick}
               />
