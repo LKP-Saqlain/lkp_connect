@@ -7,22 +7,35 @@ import {
   Row,
   InputGroup,
 } from "reactstrap";
-import UserCapsules from "../ClientDetails/UserCapsules";
+// import UserCapsules from "../ClientDetails/UserCapsules";
 import { useState } from "react";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs from "dayjs";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+// import dayjs from "dayjs";
+import Link from "@mui/material/Link"; // ✅ Correct import
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
 
 const OTDetails = () => {
-  const [selectedCapsule, setSelectedCapsule] = useState("Backoffice Report");
+  // const [selectedCapsule, setSelectedCapsule] = useState("Backoffice Report");
   const [clientCode, setClientCode] = useState("");
-  const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
+  const [links, setLinks] = useState({
+    oldBackOffice: "",
+    statement: "",
+  });
 
-  const handleClick = (value: string) => {
-    console.log("You clicked the Chip.", value);
-    setSelectedCapsule(value);
-  };
+  // const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+  // const handleClick = (value: string) => {
+  //   console.log("You clicked the Chip.", value);
+  //   setSelectedCapsule(value);
+  // };
 
   // const handleChange = (event: any) => {
   //   console.log("eventChange", event?.target.value);
@@ -38,20 +51,35 @@ const OTDetails = () => {
       return;
     }
 
-    const formattedDate = selectedDate
-      ? selectedDate.format("MM-YYYY")
-      : "No Date Selected";
+    const payload = {
+      // userId: "EMP-4967",
+      userId: user_id,
+      clientCode: clientCode,
+    };
 
-    console.log("Selected Capsule:", selectedCapsule);
-    console.log("Client Code:", clientCode);
-    console.log("Selected Month & Year:", formattedDate);
+    dispatch(showLoader("Please wait, we are processing your request..."));
 
-    alert(
-      `Your Client Code is ${clientCode} && Your Selected Month & Year: ${formattedDate}`
-    );
+    apiServices
+      .GetClientAccessLink(payload)
+      .then((response: any) => {
+        setLinks({
+          oldBackOffice: response?.data?.data?.oldBackofficeLink || "",
+          statement: response?.data?.data?.branchReportLink || "",
+        });
+        console.log(response?.data, links, "Mapped data", response);
+      })
 
-    setClientCode("");
-    setSelectedDate(null);
+      .catch((Err: any) => {
+        const { message } = Err;
+        console.log("Error->", message);
+        dispatch(hideLoader());
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+        // setClientCode("");
+      });
+
+    // setSelectedDate(null);
   };
 
   return (
@@ -65,14 +93,14 @@ const OTDetails = () => {
               </CardHeader> */}
               {/* <CardBody> */}
               {/* </CardBody> */}
-              <UserCapsules
+              {/* <UserCapsules
                 selectedCapsule={selectedCapsule}
                 handleClick={handleClick}
                 // totalCount={totalCount}
                 // activeClient={activeClients}
                 // inactiveClient={inactiveClients}
                 capsuleType="OD"
-              />
+              /> */}
               <Card
                 style={{
                   borderRadius: "15px",
@@ -95,7 +123,7 @@ const OTDetails = () => {
                       <span
                         style={{
                           minWidth: "150px",
-                          color: "#11395C",
+                          color: "#095192",
                           fontWeight: "bold",
                           padding: "0 10px",
                         }}
@@ -110,24 +138,20 @@ const OTDetails = () => {
                           border: "none",
                           height: "100%",
                         }}
-                        onChange={(e) => setClientCode(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setClientCode(value);
+                          // Reset the links object properly
+                          setLinks({
+                            oldBackOffice: "",
+                            statement: "",
+                          });
+                        }}
                         maxLength={14}
                         placeholder="Enter Client Code"
                       />
                     </Col>
 
-                    {/* Month & Year Picker */}
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        label="Month & Year"
-                        views={["month", "year"]}
-                        value={selectedDate}
-                        onChange={(newValue) => setSelectedDate(newValue)}
-                        sx={{ width: 210, margin: "0 20px" }}
-                      />
-                    </LocalizationProvider>
-
-                    {/* Apply Button */}
                     <Button
                       style={{
                         backgroundColor: "#11395C",
@@ -137,33 +161,61 @@ const OTDetails = () => {
                       }}
                       onClick={handleApplyClick} // <-- Added onClick event
                     >
-                      Apply
+                      View
                     </Button>
                   </InputGroup>
 
-                  {/* Client Details */}
-                  <Row className="mb-4">
-                    <Col md={4}>
-                      <h6 className="fw-bold">Client Name</h6>
-                      <p>Rahul Sharma</p>
-                    </Col>
-                    <Col md={4}>
-                      <h6 className="fw-bold">Client Code</h6>
-                      <p>552145651</p>
-                    </Col>
-                    <Col md={4}>
-                      <h6 className="fw-bold">Mobile No</h6>
-                      <p>956478412</p>
-                    </Col>
-                  </Row>
+                  <Row className="my-5 d-flex align-items-center">
+                    {/* <Col md={3}>
+                      <h6 className="fw-bold">Link 2</h6>
+                    </Col> */}
+                    <Col md={9} className="d-flex justify-content-start gap-3">
+                      {links.oldBackOffice && (
+                        <Link
+                          href={links.oldBackOffice}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          underline="none"
+                          style={{
+                            display: "inline-block",
+                            padding: "10px 18px",
+                            backgroundColor: "#095192",
+                            color: "#fff",
+                            borderRadius: "8px",
+                            fontWeight: 500,
+                            fontSize: "14px",
+                            textDecoration: "none",
+                            transition: "all 0.3s ease",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+                          }}
+                        >
+                          Old Back Office
+                        </Link>
+                      )}
 
-                  {/* Buttons for P&L Report */}
-                  <Row className="mb-4 d-flex align-items-center">
-                    <Col md={3}>
-                      <h6 className="fw-bold">Text P&L Report</h6>
-                    </Col>
-                    <Col md={9} className="d-flex justify-content-between">
-                      <Button
+                      {links.statement && (
+                        <Link
+                          href={links.statement}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          underline="none"
+                          style={{
+                            display: "inline-block",
+                            padding: "10px 18px",
+                            backgroundColor: "#095192",
+                            color: "#fff",
+                            borderRadius: "8px",
+                            fontWeight: 500,
+                            fontSize: "14px",
+                            textDecoration: "none",
+                            transition: "all 0.3s ease",
+                            boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+                          }}
+                        >
+                          Client Statement and Report
+                        </Link>
+                      )}
+                      {/* <Button
                         className="w-25"
                         style={{
                           marginRight: "5px",
@@ -201,12 +253,12 @@ const OTDetails = () => {
                         }}
                       >
                         Email PDF
-                      </Button>
+                      </Button> */}
                     </Col>
                   </Row>
 
                   {/* Contract Note Section */}
-                  <Row className="align-items-center mb-3">
+                  {/* <Row className="align-items-center mb-3">
                     <Col md={2}>
                       <h6 className="fw-bold">Contract Note</h6>
                     </Col>
@@ -238,10 +290,10 @@ const OTDetails = () => {
                         Email
                       </Button>
                     </Col>
-                  </Row>
+                  </Row> */}
 
                   {/* Client Ledger Section */}
-                  <Row className="align-items-center">
+                  {/* <Row className="align-items-center">
                     <Col md={2}>
                       <h6 className="fw-bold">Client Ledger</h6>
                     </Col>
@@ -273,7 +325,7 @@ const OTDetails = () => {
                         Email
                       </Button>
                     </Col>
-                  </Row>
+                  </Row> */}
                 </CardBody>
               </Card>
             </Col>

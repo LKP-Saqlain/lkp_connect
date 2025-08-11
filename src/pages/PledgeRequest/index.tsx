@@ -29,7 +29,7 @@ const Index = ({ activeMenu }: any) => {
   const [clientCode, setClientCode] = useState("");
   const [currentClient, setCurrentClient] = useState("");
   const [selectedBranchCode, setSelectedBranchCode] = useState<any>(null);
-  const [selectedCapsule, setSelectedCapsule] = useState("Pledge Request");
+  // const [selectedCapsule, setSelectedCapsule] = useState("Pledge Request");
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -214,7 +214,7 @@ const Index = ({ activeMenu }: any) => {
   return (
     <div className="page-content page-view">
       <UserCapsules
-        selectedCapsule={selectedCapsule}
+        selectedCapsule={"Pledge Request"}
         capsuleType="Pledge Request"
       />
       <Container fluid>

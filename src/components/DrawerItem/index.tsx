@@ -21,6 +21,7 @@ import HowToRegIcon from "@mui/icons-material/HowToReg";
 import StackedBarChartIcon from "@mui/icons-material/StackedBarChart";
 import BallotIcon from "@mui/icons-material/Ballot";
 import PostAddIcon from "@mui/icons-material/PostAdd";
+import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
 import List from "@mui/material/List";
 import { MenuItems } from "../../types/index";
 import StoreIcon from "@mui/icons-material/Store";
@@ -29,7 +30,6 @@ import DvrIcon from "@mui/icons-material/Dvr";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import LinkIcon from "@mui/icons-material/Link";
-import DetailsIcon from "@mui/icons-material/Details";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import ReceiptRoundedIcon from "@mui/icons-material/ReceiptRounded";
@@ -101,13 +101,14 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     Reports: <PostAddIcon />,
     "Regulatory Announcement": <AutoStoriesIcon />,
     EKYC: <LinkIcon />,
-    "Other Details": <DetailsIcon />,
+    "Back Office Report": <HomeWorkRoundedIcon />,
     IVR: <PublishedWithChangesIcon />,
     SPIP: <AnalyticsIcon />,
     "TPD Report": <FaFileInvoice size={17} />,
     "Employee Target": <LocalPoliceIcon />,
     "Partner Contest": <LocalPoliceIcon />,
     "SPIP Dashboard": <SpaceDashboardIcon />,
+    "Client Request": <PublishedWithChangesIcon />,
   };
 
   const getIcon = (title: string) => {
@@ -200,6 +201,8 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
         {(title === "Zone Overview" ||
           title === "Account" ||
           title === "Employee Target" ||
+          title === "Client Request" ||
+          title === "Back Office Report" ||
           title === "Partner Contest") && (
           <div className="starburst-bg">
             <img
