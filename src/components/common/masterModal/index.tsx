@@ -522,7 +522,7 @@ const ModalComponent = ({
         formik.setFieldValue("noOfShare", editData?.noOfShares || null);
         formik.setFieldValue(
           "brokPerShare",
-          editData?.brokeragePerShare || null
+          editData?.lkpCommissionPerShare || null
         );
         formik.setFieldValue(
           "brokIncGST",
@@ -538,6 +538,8 @@ const ModalComponent = ({
         formik.setFieldValue("netBrokerage", editData?.netBrokerage || null);
         formik.setFieldValue("rmCode", editData?.rmCode || null);
         formik.setFieldValue("sbCommision", editData?.sbCommission || null);
+        formik.setFieldValue("clientRate", editData?.clientRate || null);
+        formik.setFieldValue("vendorRate", editData?.vendorRate || null);
       }
     }
   }, [editData, editUserCheck]);
