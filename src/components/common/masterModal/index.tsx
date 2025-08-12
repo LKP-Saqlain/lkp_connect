@@ -190,7 +190,7 @@ const ModalComponent = ({
       gstStateCode: Yup.string().required("GST State Code is required"),
       pan: Yup.string().required("PAN is required"),
       address1: Yup.string().required("Address is required"),
-      mobileNo: Yup.string().required("Mobile Number is required"),
+      // mobileNo: Yup.string().required("Mobile Number is required"),
     });
 
   const getValidationSchema = (editData?: EditData) => {

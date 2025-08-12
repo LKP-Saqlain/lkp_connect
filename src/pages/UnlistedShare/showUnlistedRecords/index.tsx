@@ -65,9 +65,9 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
           console.log("Response", response?.data?.data);
           dispatch(hideLoader());
 
-          if (response?.data?.data === null) {
-            ShowToast("error", response?.data?.message);
-          }
+          // if (response?.data?.data === null) {
+          //   ShowToast("error", response?.data?.message);
+          // }
           const filteredResponse = response?.data?.data?.map(
             (item: any, index: number) => ({
               ...item,
@@ -136,11 +136,11 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
           dispatch(hideLoader());
           setmodal_grid(false);
 
-          if (response?.data?.data === null) {
-            ShowToast("error", response?.data?.message);
-          } else {
-            ShowToast("success", response?.data?.message);
-          }
+          // if (response?.data?.data === null) {
+          //   ShowToast("error", response?.data?.message);
+          // } else {
+          //   ShowToast("success", response?.data?.message);
+          // }
           dispatch(showLoader(""));
           apiServices
             .ViewUnlistedSharesRecord(payload)
@@ -251,9 +251,9 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
               if (response?.status === 200) {
                 console.log("Response", response?.data?.data);
                 dispatch(hideLoader());
-                if (respones?.data?.data === null) {
-                  ShowToast("error", respones?.data?.message);
-                }
+                // if (respones?.data?.data === null) {
+                //   ShowToast("error", respones?.data?.message);
+                // }
                 const filteredResponse = response?.data?.data?.map(
                   (item: any, index: number) => ({
                     ...item,

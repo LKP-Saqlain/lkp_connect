@@ -83,7 +83,7 @@ const Index = ({ activeMenu }: any) => {
       })
       .catch(() => ShowToast("error", "Failed to fetch zones"))
       .finally(() => dispatch(hideLoader()));
-  }, [dispatch, user_id]);
+  }, []);
 
   // Fetch branch codes when a zone is selected
   useEffect(() => {

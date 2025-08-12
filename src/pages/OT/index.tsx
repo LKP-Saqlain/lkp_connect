@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
+import ShowToast from "../../utils/toastUtils";
 
 const OTDetails = () => {
   // const [selectedCapsule, setSelectedCapsule] = useState("Backoffice Report");
@@ -62,10 +63,14 @@ const OTDetails = () => {
     apiServices
       .GetClientAccessLink(payload)
       .then((response: any) => {
-        setLinks({
-          oldBackOffice: response?.data?.data?.oldBackofficeLink || "",
-          statement: response?.data?.data?.branchReportLink || "",
-        });
+        if (response?.data?.statusCode == 200) {
+          setLinks({
+            oldBackOffice: response?.data?.data?.oldBackofficeLink || "",
+            statement: response?.data?.data?.branchReportLink || "",
+          });
+        } else {
+          ShowToast("error", response?.data?.errorMessages);
+        }
         console.log(response?.data, links, "Mapped data", response);
       })
 
