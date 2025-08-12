@@ -144,4 +144,7 @@ export const endpoints = {
   FetchPinLocation: "api/Account/FetchPinLocation",
   SaveVendorDetails: "api/Account/SaveVendorDetails",
   ViewVendorDetails: "api/Account/ViewVendorDetails",
+  DeleteVendorDetails: "api/Account/DeleteVendorDetails",
+  UpdateVendorDetails: "api/Account/UpdateVendorDetails",
+  UpdateAccountApproval: "api/Account/UpdateAccountApproval",
 };

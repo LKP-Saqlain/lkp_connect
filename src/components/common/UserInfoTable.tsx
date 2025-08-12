@@ -51,6 +51,7 @@ import {
   ThirdParty,
   ThirdPartyStatusReport,
   VendorMasterColumns,
+  VendorMasterApprovalColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1707,6 +1708,137 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "Vendor Approval") {
+      // return VendorMasterColumns.map((column) => ({
+      //   ...column,
+      // }));
+      return VendorMasterApprovalColumns.map((column) => {
+        if (column.field === "actions") {
+          return {
+            ...column,
+            renderCell: (params: any) => (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <div
+                  onClick={() => {
+                    console.log("rowTest", params.row);
+                    setSelectedRow(params.row);
+                    // HandleApprovalModal("approve", params);
+                    HandleApprovalModal("approve");
+                    console.log(params.row.vendorId, "selectedrow approve");
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: 5,
+                  }}
+                >
+                  <Tooltip title="Approve" arrow placement="top">
+                    <CheckCircleIcon
+                      style={{ color: "green", marginLeft: 4 }}
+                    />
+                  </Tooltip>
+                </div>
+                <div style={{ fontSize: 20, color: "gray" }}>|</div>
+                <div
+                  onClick={() => {
+                    setSelectedRow(params.row);
+                    HandleApprovalModal("reject");
+                    // HandleApprovalModal("reject", params);
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: 5,
+                  }}
+                >
+                  <Tooltip title="Reject" arrow placement="top">
+                    <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  </Tooltip>
+                </div>
+              </div>
+            ),
+          };
+        }
+        if (column.field === "tdsPath") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const hasTdsPath =
+                params.row?.tdsPath && params.row.tdsPath.trim() !== "";
+
+              if (!hasTdsPath) {
+                return <span>--</span>;
+              }
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, "TDS"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "msmePath") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, "MSME"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "bankDoc") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, "BANK"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              );
+            },
+          };
+        }
+
+        return column;
+      });
     } else {
       return [];
     }
@@ -1785,7 +1917,8 @@ const DataTable = ({
             ? ""
             : activeSubItem === "Regulatory Announcement"
             ? "Are you sure want to delete this entry"
-            : activeSubItem === "Unlisted Shares Entry"
+            : activeSubItem === "Unlisted Shares Entry" ||
+              activeSubItem === "Vendor Creation"
             ? "Are you sure want to delete this entry"
             : activeSubItem === "Communication Retrival Entry" ||
               activeSubItem === "Marketing Material" ||
@@ -1797,6 +1930,8 @@ const DataTable = ({
             : activeSubItem === "KYC Approval"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "RH Approval"
+            ? `Are you sure want to ${action} this entry`
+            : activeSubItem === "Vendor Approval"
             ? `Are you sure want to ${action} this entry`
             : activeSubItem === "Unlisted Shares Approval 1" ||
               activeSubItem === "Unlisted Shares Approval 2" ||

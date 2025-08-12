@@ -117,6 +117,7 @@ const CustomModal = ({
         activeSubItem === "Unlisted Shares Approval 2" ||
         activeSubItem === "Unlisted Shares Approval 1" ||
         activeSubItem === "Third Party Vendor Approval" ||
+        activeSubItem === "Vendor Approval" ||
         activeSubItem === "Pre Trade Approval") &&
         !isAdmin && {
           remark: Yup.string().trim().required("Remark is required"),
@@ -153,6 +154,7 @@ const CustomModal = ({
             "Unlisted Shares Approval 2",
             "Unlisted Shares Approval 1",
             "Third Party Vendor Approval",
+            "Vendor Approval",
           ].includes(activeSubItem)
         ) {
           handleApproval?.(row, values.remark, entryFlag);
@@ -299,6 +301,7 @@ const CustomModal = ({
       "Unlisted Shares Approval 1",
       "Unlisted Shares Approval 2",
       "Third Party Vendor Approval",
+      "Vendor Approval",
     ];
     return remarkItems.includes(activeSubItem) && !showDocument && !isAdmin;
   };

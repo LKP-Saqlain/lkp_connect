@@ -8,19 +8,62 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import ShowToast from "../../../utils/toastUtils";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 
+export interface VendorData {
+  vendorId: number;
+  vendorName: string;
+  address1: string;
+  address2: string;
+  address3: string;
+  city: string;
+  state: string;
+  pincode: string;
+  mobileNo: string;
+  teleNo: string;
+  emailID: string;
+  websiteName: string;
+  panNo: string;
+  bankName: string;
+  bankActNo: string;
+  ifscCode: string;
+  bankDoc: string;
+  chqPrintNameFlag: string;
+  chqPrintLocCode: string;
+  chqPrintLocFlag: string;
+  createdBy: string;
+  chqPrintName: string;
+  createdDate: string; // if you want actual Date type, use Date instead
+  faxNo: string;
+  paymentBank: string;
+  gstNo: string;
+  tdsFlag: boolean;
+  tdsPath: string;
+  msmeFlag: boolean;
+  msmeType: string;
+  msmePath: string;
+  bankDocExtn: string;
+  tdsExtn: string;
+  msmseExtn: string; // spelling matches your provided data
+  id: number;
+}
+
 const VendorMaster = ({ activeSubItem }: any) => {
   const [modal_grid, setmodal_grid] = useState<boolean>(false);
-  const [editData, setEditData] = useState<[] | null>(null);
+  const [editData, setEditData] = useState<VendorData | null>(null);
   const [disableFields, setDisableFields] = useState(false);
   const [printLocations, setPrintLocations] = useState([]);
   const [showBankUpload, setShowBankUpload] = useState(false);
   const [vendorData, setVendorData] = useState<any[]>([]);
+  const [editUserCheck, setEditUserCheck] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+
+  useEffect(() => {
+    fetchVendorMasterDetails();
+  }, []);
 
   useEffect(() => {
     if (editData) {
@@ -53,8 +96,8 @@ const VendorMaster = ({ activeSubItem }: any) => {
 
   function tog_grid() {
     setmodal_grid(!modal_grid);
-    // setEditUserCheck(false);
-    // setEditData(null);
+    setEditUserCheck(false);
+    setEditData(null);
   }
 
   const handleVerifyDetails = (accNo: string, ifscCode: string) => {
@@ -98,11 +141,14 @@ const VendorMaster = ({ activeSubItem }: any) => {
     bankFileBase64: string | null,
     tdsFileExtension: string | null,
     msmeFileExtension: string | null,
-    bankFileExtension: string | null
+    bankFileExtension: string | null,
+    isEditVendorContent?: any
   ) => {
     console.log(
       "handleFormSubmitValues",
       values,
+      "EditFlag",
+      isEditVendorContent,
       "Extensions",
       tdsFileExtension,
       msmeFileExtension,
@@ -114,9 +160,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
       "bankFileBase64",
       bankFileBase64
     );
-
     setmodal_grid(false);
-
     const {
       vendorName,
       address1,
@@ -144,6 +188,64 @@ const VendorMaster = ({ activeSubItem }: any) => {
       msmeType,
       chqPrintLocationFlag,
     } = values;
+
+    if (editUserCheck) {
+      console.log("EditedData on Submit", editData);
+
+      let payload = {
+        vendorName: vendorName,
+        address1: address1,
+        address2: address2,
+        address3: address3,
+        city: city,
+        state: state,
+        pincode: pinCode,
+        teleNo: telephoneNo,
+        mobileNo: mobileNo,
+        emailID: emailId,
+        websiteName: websiteName,
+        panNo: panNo,
+        bankName: bankName,
+        bankActNo: bankAccountNo,
+        ifscCode: ifscCode,
+        bankDoc: bankFileBase64 ? bankFileBase64 : editData?.bankDoc,
+        chqPrintNameFlag: chqPrintLocationFlag === "YES" ? "Y" : "N",
+        chqPrintLocCode: chqPrintLocation?.printLocCode || "",
+        chqPrintLocFlag: chqPrintLocation?.printLocation !== "" ? "Y" : "N",
+        createdBy: user_id,
+        chqPrintName: chequePrintName,
+        faxNo: faxNo,
+        paymentBank: paymentBank,
+        // utilityFlag: "string",
+        gstNo: gstNo,
+        tdsFlag: tdsFlag === "Yes" ? true : false,
+        tdsPath: tdsFileBase64 ? tdsFileBase64 : editData?.tdsPath,
+        msmeFlag: msmeFlag === "Yes" ? true : false,
+        msmePath: msmeFileBase64 ? msmeFileBase64 : editData?.msmePath,
+        msmeType: msmeFlag === "Yes" ? msmeType : "",
+        bankDocExtn: bankFileExtension
+          ? bankFileExtension
+          : editData?.bankDocExtn,
+        tdsExtn: tdsFileExtension ? tdsFileExtension : editData?.tdsExtn,
+        msmeExtn: msmeFileExtension ? msmeFileExtension : editData?.msmseExtn,
+        vendorID: editData?.vendorId,
+      };
+      console.log("EditPayload-->", payload);
+      dispatch(showLoader(""));
+      apiServices
+        .UpdateVendorDetails(payload)
+        .then((response) => {
+          if (response?.status === 200) {
+            console.log("updateVendorDetailsResponse", response);
+            dispatch(hideLoader());
+            // fetchVendorMasterDetails();
+          }
+        })
+        .catch((error) => {
+          console.log("errrrror", error);
+          dispatch(hideLoader());
+        });
+    }
 
     const payload = {
       // Vendor Info
@@ -196,9 +298,16 @@ const VendorMaster = ({ activeSubItem }: any) => {
       .then((response) => {
         if (response?.status === 200) {
           dispatch(hideLoader());
-          console.log("Resposssne-->", response?.data);
+          console.log(
+            "Resposssne-->",
+            response?.data,
+            response?.data?.statusCode
+          );
           ShowToast("success", response?.data?.data);
-          fetchVendorMasterDetails("LKP Securities 22223232323");
+          if (response?.data?.statusCode === 500) {
+            ShowToast("error", response?.data?.message);
+          }
+          fetchVendorMasterDetails();
         }
       })
       .catch((error) => {
@@ -207,40 +316,31 @@ const VendorMaster = ({ activeSubItem }: any) => {
       });
   };
 
-  const fetchVendorMasterDetails = (vendorName: string) => {
-    const payload = { vendorName };
+  const fetchVendorMasterDetails = () => {
+    const payload = { vendorName: "ALL" };
     dispatch(showLoader(""));
+
     apiServices
       .ViewVendorDetails(payload)
       .then((response) => {
         if (response?.status === 200) {
-          const newVendor = response?.data?.data;
+          const newVendors = response?.data?.data || [];
 
+          const formattedVendors = newVendors.map(
+            (vendor: any, index: number) => ({
+              ...vendor,
+              id: index + 1, // Assign frontend index-based ID
+            })
+          );
+
+          setVendorData(formattedVendors); // Replace existing data
           dispatch(hideLoader());
 
-          const formattedNewVendor = {
-            id: vendorData.length + 1, // Assign next index as ID
-            ...newVendor,
-          };
-
-          setVendorData((prevVendorData) => {
-            // Check if this vendor already exists by vendorId
-            const isAlreadyPresent = prevVendorData.some(
-              (vendor) => vendor.vendorId === formattedNewVendor.vendorId
-            );
-
-            if (isAlreadyPresent) {
-              return prevVendorData; // Avoid duplicates
-            }
-
-            return [...prevVendorData, formattedNewVendor];
-          });
-
-          console.log("MappedVendorData", formattedNewVendor);
+          console.log("Mapped Vendor Data:", formattedVendors);
         }
       })
       .catch((error) => {
-        console.log("Errror", error);
+        console.error("Error fetching vendor details:", error);
         dispatch(hideLoader());
       });
   };
@@ -255,12 +355,30 @@ const VendorMaster = ({ activeSubItem }: any) => {
 
     setmodal_grid(true);
     setEditData(data);
-    // setEditUserCheck(editCheck);
+    setEditUserCheck(editCheck);
   };
 
-  // useEffect(() => {
-  //   fetchVendorMasterDetails("LKP Securities");
-  // }, []);
+  const getUserDetails = async (row: any) => {
+    console.log("ValueComm", typeof row);
+    // handleEmailSend(value?.BOID);
+    console.log("Delete Data", row);
+    // setDeletedRow(row);
+
+    let payload = {
+      vendorID: row?.vendorId,
+    };
+    apiServices
+      .DeleteVendorDetails(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("Response", response);
+          fetchVendorMasterDetails();
+        }
+      })
+      .catch((error) => {
+        console.log("ERROR", error);
+      });
+  };
 
   return (
     <React.Fragment>
@@ -291,7 +409,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
                     tog_grid={tog_grid}
                     editData={editData}
                     onSubmit={handleFormSubmit}
-                    // editUserCheck={editUserCheck}
+                    editUserCheck={editUserCheck}
                     isVendorMasterContent={true}
                     handleVerifyDetails={handleVerifyDetails}
                     setDisableFields={setDisableFields}
@@ -299,6 +417,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
                     printLocations={printLocations}
                     showBankUpload={showBankUpload}
                     activeSubItem={activeSubItem}
+                    setShowBankUpload={setShowBankUpload}
                   />
 
                   <Button
@@ -318,6 +437,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
                       activeSubItem={activeSubItem}
                       T6Data={vendorData}
                       handleEditClick={handleEditClick}
+                      getUserDetails={getUserDetails}
                     />
                   )}
                 </CardBody>

@@ -658,4 +658,13 @@ export const apiServices = {
   ViewVendorDetails: async (payload: any) => {
     return await apiService("POST", endpoints.ViewVendorDetails, payload);
   },
+  DeleteVendorDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.DeleteVendorDetails, payload);
+  },
+  UpdateVendorDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateVendorDetails, payload);
+  },
+  UpdateAccountApproval: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateAccountApproval, payload);
+  },
 };

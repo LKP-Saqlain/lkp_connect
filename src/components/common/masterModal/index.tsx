@@ -32,8 +32,8 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import * as Yup from "yup";
 import { apiServices } from "../../../services";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 import {
   TypeOfDepartment,
   TypeOfExclusionClient,
@@ -43,8 +43,10 @@ import FileUploadField from "../fileUploadField/index.tsx";
 import { regEx } from "../../../helper/method.ts";
 import Tooltip from "@mui/material/Tooltip";
 import CloseIcon from "@mui/icons-material/Close";
-import VisibilityIcon from "@mui/icons-material/Visibility"; // or use FontAwesome/React Icons
+// import VisibilityIcon from "@mui/icons-material/Visibility"; // or use FontAwesome/React Icons
 import CustomModal from "../../../components/common/DPModal";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import pako from "pako";
 
 interface IsMarketingMaterialEditData {
   CommunicationProofPath?: string;
@@ -119,6 +121,7 @@ const ModalComponent = ({
   showBankUpload,
   activeSubItem,
   setDisableFields,
+  setShowBankUpload,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
@@ -146,6 +149,7 @@ const ModalComponent = ({
   showBankUpload?: any;
   activeSubItem?: any;
   setDisableFields?: any;
+  setShowBankUpload?: any;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedTDSFile, setUploadedTDSFile] = useState<File | null>(null);
@@ -157,8 +161,6 @@ const ModalComponent = ({
   const [tdsFileExtension, setTdsFileExtension] = useState("");
   const [msmeFileExtension, setmsmeFileExtension] = useState("");
   const [bankFileExtension, setBankFileExtension] = useState("");
-  const [currentPreviewFileType, setCurrentPreviewFileType] = useState(""); // "tdsFile" | "msmeFile" | "bankFile"
-  // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [fileBase64, setFileBase64] = useState<string | null>(null);
   const [tdsFileBase64, setTDSFileBase64] = useState<string | null>(null);
   const [msmeFileBase64, setMsmeFileBase64] = useState<string | null>(null);
@@ -166,16 +168,15 @@ const ModalComponent = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const fileInputRefImage = useRef<HTMLInputElement>(null);
   const fileInputRefDocument = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [fileType, setFileType] = useState<string>("");
   const [setShowImg, setSetShowImg] = useState<boolean>(false);
   const [modal_center, setModalCenter] = useState(false);
 
   const allowedFormats = ["doc", "docx", "pdf", "xls", "xlsx", "jpg", "jpeg"];
 
-  // const { user_id } = useSelector(
-  //   (state: RootState) => state.UserLogin?.data?.data
-  // );
+  const { authenticationValue } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+  console.log("PAN", authenticationValue);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -329,26 +330,31 @@ const ModalComponent = ({
       panNo: Yup.string().required("PAN No is required"),
       // serviceTaxNo: Yup.string().required("Service Tax No is required"),
       websiteName: Yup.string().required("website Name is required"),
-      // tdsFlag: Yup.string().required("TDS flag is required"),
-      // tdsFile: Yup.mixed().when("tdsFlag", (tdsFlag: any, schema) =>
-      //   tdsFlag === "Yes"
-      //     ? schema.required("TDS document is required")
-      //     : schema.notRequired()
-      // ),
-      // msmeFlag: Yup.string().required("MSME flag is required"),
-      // msmeType: Yup.string().when("msmeFlag", (msmeFlag: any, schema) =>
-      //   msmeFlag === "Yes"
-      //     ? schema.required("MSME type is required")
-      //     : schema.notRequired()
-      // ),
-      // msmeFile: Yup.mixed().when("msmeFlag", (msmeFlag: any, schema) =>
-      //   msmeFlag === "Yes"
-      //     ? schema.required("MSME document is required")
-      //     : schema.notRequired()
-      // ),
+      tdsFlag: Yup.string().required("TDS flag is required"),
+      tdsFile: Yup.mixed().when("tdsFlag", {
+        is: (val: string) => val === "Yes",
+        then: (schema) => schema.required("TDS document is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+      msmeFlag: Yup.string().required("MSME flag is required"),
+      msmeType: Yup.string().when("msmeFlag", {
+        is: (val: string) => val === "Yes",
+        then: (schema) => schema.required("MSME Type is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+      msmeFile: Yup.mixed().when("msmeFlag", {
+        is: (val: string) => val === "Yes",
+        then: (schema) => schema.required("MSME document is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
       bankName: Yup.string().required("Bank Name is required"),
       ifscCode: Yup.string().required("IFSC Code is required"),
       bankAccountNo: Yup.string().required("Bank A/C No is required"),
+      bankFile: Yup.mixed().when("$showBankUpload", {
+        is: true,
+        then: (schema) => schema.required("Bank file is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
       paymentBank: Yup.string().required("Payment Bank is required"),
       // chqPrintLocation: Yup.string().required(
       //   "Cheque Print Location is required"
@@ -426,13 +432,16 @@ const ModalComponent = ({
         websiteName: "",
         tdsFlag: "",
         tdsFile: null,
+        tdsFileName: "",
         msmeFlag: "",
         msmeType: "",
         msmeFile: null,
+        msmeFileName: "",
         bankName: "",
         ifscCode: "",
         bankAccountNo: "",
         bankFile: null,
+        bankFileName: "",
         chqPrintNameFlag: "",
         paymentBank: "",
         chqPrintLocation: {
@@ -538,6 +547,25 @@ const ModalComponent = ({
   const fetchVendorMastertContent = async (setTouched: any, values: any) => {
     console.log("fetchVendorMasterValues", setTouched, values);
 
+    let hasError = false;
+
+    // Always prepare to show touched fields if they're conditionally required
+    const touchedFields: any = {};
+
+    // if (showBankUpload === true) {
+    //   touchedFields.bankFile = true;
+    //   if (!values.bankFile) {
+    //     formik.setFieldError("bankFile", "Bank File is required");
+    //     hasError = true;
+    //   }
+    // }
+
+    // Set touched fields for all relevant fields
+    setTouched(touchedFields);
+
+    if (hasError) return;
+
+    // Call the actual submit function
     onSubmit?.(
       values,
       tdsFileBase64,
@@ -547,6 +575,8 @@ const ModalComponent = ({
       msmeFileExtension,
       bankFileExtension
     );
+
+    // Reset form
     formik.resetForm();
   };
 
@@ -753,6 +783,21 @@ const ModalComponent = ({
         formik.setFieldValue("sbCommision", editData?.sbCommission || null);
       }
       if (isVendorMasterContent) {
+        if (editData?.bankActNo !== "" && editData?.ifscCode !== "") {
+          setShowBankUpload(true);
+        }
+        const matchedPrintLocation = printLocations?.find(
+          (item: any) => item.printLocCode === editData.chqPrintLocCode
+        );
+
+        const finalPrintLocation = {
+          printLocCode: editData.chqPrintLocCode || "",
+          printLocation:
+            editData.chqPrintLocation ||
+            matchedPrintLocation?.printLocation ||
+            "",
+        };
+
         formik.setValues({
           vendorName: editData.vendorName || "",
           chequePrintName: editData.chqPrintName || "",
@@ -779,14 +824,13 @@ const ModalComponent = ({
           ifscCode: editData.ifscCode || "",
           bankAccountNo: editData.bankActNo || "",
           bankFile: editData.bankDoc || null,
-          chqPrintNameFlag:
-            editData.chqPrintNameFlag || editData.chqPrintNameFlag || "",
+          chqPrintNameFlag: editData.chqPrintNameFlag === "Y" ? "Yes" : "No",
           paymentBank: editData.paymentBank || "",
-          chqPrintLocation: {
-            printLocCode: editData.chqPrintLocCode || "",
-            printLocation: editData.chqPrintLocation || "",
-          },
-          chqPrintLocationFlag: editData.chqPrintLocFlag || "",
+          chqPrintLocation: finalPrintLocation,
+          chqPrintLocationFlag: editData.chqPrintLocFlag === "Y" ? "Yes" : "No",
+          bankFileName: editData?.bankFileName,
+          tdsFileName: editData?.tdsFileName,
+          msmeFileName: editData?.msmeFileName,
           // directAppLevel: editData.directAppLevel || "",
         });
       }
@@ -816,24 +860,44 @@ const ModalComponent = ({
           const base64String = reader.result as string;
           const base64Only = base64String.split(",")[1] || base64String;
 
+          const prefix =
+            isUploadedFile === "tdsFile"
+              ? "TDS_"
+              : isUploadedFile === "msmeFile"
+              ? "MSME_"
+              : isUploadedFile === "bankFile"
+              ? "BANK_"
+              : "DOC_";
+
+          const timestamp = new Date().getTime();
+
+          const finalFileName = `${prefix}${timestamp}.${fileExt}`;
+
           if (isUploadedFile === "tdsFile") {
             // debugger;
             setUploadedTDSFile(file);
             setTDSFileBase64(base64Only);
             setTdsFileExtension(fileExt);
+            formik.setFieldValue("tdsFileName", finalFileName);
           } else if (isUploadedFile === "msmeFile") {
             setUploadedMSMEFile(file);
             setMsmeFileBase64(base64Only);
             setmsmeFileExtension(fileExt);
+            formik.setFieldValue("msmeFileName", finalFileName);
           } else if (isUploadedFile === "bankFile") {
             setUploadedBankFile(file);
             setbankFileBase64(base64Only);
             setBankFileExtension(fileExt);
+            formik.setFieldValue("bankFileName", finalFileName);
           } else {
             setUploadedFile(file);
             setFileBase64(base64Only);
             setFileExtension(fileExt);
           }
+
+          const customFileName = `${authenticationValue}_TDS.${fileExt}`;
+          console.log("filleName", customFileName);
+
           dispatch(showLoader(""));
           let payload = {
             fileName: communicationProofPath,
@@ -1173,64 +1237,32 @@ const ModalComponent = ({
     file: File | null | undefined,
     isUploadedFile?: string
   ) => {
-    console.log("previewFileData", file, isUploadedFile);
-    if (!file) return;
-    const fileExtension: string = `.${file.name
-      .split(".")
-      .pop()
-      ?.toLowerCase()}`;
-    console.log("fileExtension", fileExtension);
+    // Get the correct file from formik.values if not directly passed
+    const selectedFile =
+      isUploadedFile === "tdsFile"
+        ? formik.values.tdsFile
+        : isUploadedFile === "msmeFile"
+        ? formik.values.msmeFile
+        : isUploadedFile === "bankFile"
+        ? formik.values.bankFile
+        : file;
+    console.log("File111111", file, isUploadedFile);
 
-    setFileType(fileExtension);
-    setCurrentPreviewFileType(isUploadedFile || ""); // track currently previewed file
-
-    if (isUploadedFile === "tdsFile") {
-      setTdsFileExtension(fileExtension);
-    } else if (isUploadedFile === "msmeFile") {
-      setmsmeFileExtension(fileExtension);
-    } else if (isUploadedFile === "bankFile") {
-      setBankFileExtension(fileExtension);
+    if (!selectedFile || !selectedFile.name) {
+      ShowToast("info", "No valid file to download");
+      return;
     }
 
-    const payload = {
-      fileName: file.name,
-      filePath:
-        isUploadedFile == "tdsFile"
-          ? "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterTDS"
-          : isUploadedFile === "msmeFile"
-          ? "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterMSME"
-          : isUploadedFile === "bankFile"
-          ? "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterBank"
-          : "",
-      fileType: fileExtension || fileType || "",
-      contentType: "",
-    };
+    const fileName = selectedFile.name;
+    const url = URL.createObjectURL(selectedFile);
 
-    dispatch(showLoader("Loading Preview..."));
-
-    apiServices
-      .ComplianceDownload(payload)
-      .then((response) => {
-        if (response?.status === 200 && response?.data) {
-          const blob = new Blob([response.data]);
-          const url = URL.createObjectURL(blob);
-
-          setPreviewUrl(url);
-          setSetShowImg(false);
-          setModalCenter(true);
-          console.log("fileUrl11", url, modal_center);
-        } else {
-          ShowToast("info", "Error fetching file for preview");
-        }
-      })
-      .catch((error) => {
-        ShowToast("info", error.message || "Preview failed");
-        setPreviewUrl("");
-        setSetShowImg(false); // or setShowImg(false)
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   useEffect(() => {
@@ -1251,48 +1283,76 @@ const ModalComponent = ({
   }, [disableFields]);
 
   useEffect(() => {
-    if (editData?.bankDoc) {
-      const file = base64ToFileAuto(editData.bankDoc, "jpg"); // or "png", etc.
-      console.log("CreatedFile", file);
+    if (editData?.tdsPath) {
+      const file = base64ToFileAuto(
+        editData.tdsPath,
+        editData?.tdsExtn,
+        formik.values.tdsFileName
+      );
+      console.log("TDS Base64", editData.tdsPath.slice(0, 50));
+      if (file) formik.setFieldValue("tdsFile", file);
+    }
 
-      if (file) {
-        formik.setFieldValue("bankFile", file);
-      }
+    if (editData?.msmePath) {
+      const file = base64ToFileAuto(
+        editData.msmePath,
+        editData?.msmseExtn, // keep exact key from API
+        formik.values.msmeFileName
+      );
+      console.log("MSME Base64", editData.msmePath.slice(0, 50));
+      if (file) formik.setFieldValue("msmeFile", file);
+    }
+
+    if (editData?.bankDoc) {
+      const file = base64ToFileAuto(
+        editData.bankDoc,
+        editData?.bankDocExtn,
+        formik.values.bankFileName
+      );
+      console.log("Bank Base64", editData.bankDoc.slice(0, 50));
+      if (file) formik.setFieldValue("bankFile", file);
     }
   }, [editData]);
 
   function base64ToFileAuto(
-    base64String: string,
-    extension: string
+    base64: string,
+    extn?: string,
+    fileName?: string
   ): File | null {
-    let content = base64String;
-    let mime = `image/${extension}`;
+    if (!base64) return null;
 
-    if (base64String.startsWith("data:")) {
-      const parts = base64String.split(",");
-      if (parts.length !== 2) return null;
-      const meta = parts[0];
-      content = parts[1];
-
-      const match = meta.match(/:(.*?);/);
-      if (match) mime = match[1];
+    // Decode base64 to binary
+    const binaryString = atob(base64);
+    const binaryData = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      binaryData[i] = binaryString.charCodeAt(i);
     }
 
-    try {
-      const bstr = atob(content);
-      const u8arr = new Uint8Array(bstr.length);
-      for (let i = 0; i < bstr.length; i++) {
-        u8arr[i] = bstr.charCodeAt(i);
-      }
+    // Detect if it's GZIP (first two bytes 0x1F 0x8B)
+    const isGzip = binaryData[0] === 0x1f && binaryData[1] === 0x8b;
+    let fileBytes = binaryData;
 
-      const timestamp = Date.now();
-      const fileName = `file_${timestamp}.${extension.replace(/^\./, "")}`;
-
-      return new File([u8arr], fileName, { type: mime });
-    } catch (error) {
-      console.error("Invalid base64 content", error);
-      return null;
+    if (isGzip) {
+      // Decompress GZIP
+      fileBytes = pako.ungzip(binaryData);
     }
+
+    // Map extn to MIME
+    const mimeType =
+      extn?.toLowerCase() === ".pdf" || extn?.toLowerCase() === "pdf"
+        ? "application/pdf"
+        : extn?.toLowerCase() === ".jpg" ||
+          extn?.toLowerCase() === "jpg" ||
+          extn?.toLowerCase() === ".jpeg" ||
+          extn?.toLowerCase() === "jpeg"
+        ? "image/jpeg"
+        : extn?.toLowerCase() === ".png" || extn?.toLowerCase() === "png"
+        ? "image/png"
+        : "application/octet-stream";
+
+    return new File([fileBytes], fileName || `file${extn || ""}`, {
+      type: mimeType,
+    });
   }
 
   return (
@@ -1319,26 +1379,16 @@ const ModalComponent = ({
       >
         <form onSubmit={formik.handleSubmit}>
           <div className="row g-2">
-            {/* <CustomModal
+            <CustomModal
               activeSubItem={activeSubItem}
               tog_center={() => setModalCenter(false)}
               modal_center={modal_center}
               setmodal_center={setModalCenter}
               Msg=""
               // expiredtime={true}
-              previewUrl={previewUrl}
               setSetShowImg={setSetShowImg}
               setShowImg={true}
-              fileExtension={
-                currentPreviewFileType === "tdsFile"
-                  ? tdsFileExtension
-                  : currentPreviewFileType === "msmeFile"
-                  ? msmeFileExtension
-                  : currentPreviewFileType === "bankFile"
-                  ? bankFileExtension
-                  : ""
-              }
-            /> */}
+            />
             {isRegulatoryContent && (
               <>
                 <Col lg={12}>
@@ -2351,7 +2401,7 @@ const ModalComponent = ({
                       </Box>
                     ))}
                   </Box>
-                  <FormControl sx={{ mt: 2 }}>
+                  <FormControl sx={{ mt: 1, height: "40px" }}>
                     <FormLabel sx={{ fontSize: "12px" }}>TDS Flag</FormLabel>
                     <RadioGroup
                       row
@@ -2393,6 +2443,7 @@ const ModalComponent = ({
                           <input
                             type="file"
                             id="tdsFileUpload"
+                            name="tdsFile"
                             accept=".pdf,.docx"
                             style={{ display: "none" }}
                             onChange={async (e) => {
@@ -2443,7 +2494,15 @@ const ModalComponent = ({
                           >
                             {formik.values.tdsFile ? (
                               <>
-                                {uploadedTDSFile?.name || "No file selected"}
+                                {uploadedTDSFile?.name ||
+                                  `tds_document_file.${
+                                    editData?.tdsExtn
+                                      ?.replace(/^\./, "")
+                                      .toLowerCase() === "pdf"
+                                      ? "pdf"
+                                      : editData?.tdsExtn
+                                  }`}
+
                                 <Tooltip title="Delete file" arrow>
                                   <span
                                     style={{
@@ -2476,7 +2535,7 @@ const ModalComponent = ({
                               </span>
                             )}
                           </Button>
-
+                          {/* 
                           {formik.errors.tdsFile && (
                             <div
                               className="text-danger mt-1"
@@ -2484,7 +2543,7 @@ const ModalComponent = ({
                             >
                               {formik.errors.tdsFile}
                             </div>
-                          )}
+                          )} */}
                           <div className="mt-1">
                             <small
                               className="text-muted d-block"
@@ -2496,7 +2555,14 @@ const ModalComponent = ({
                           </div>
                         </div>
                       </Col>
-
+                      {formik.errors.tdsFile && (
+                        <div
+                          className="text-danger"
+                          style={{ fontSize: "0.85rem" }}
+                        >
+                          {formik.errors.tdsFile}
+                        </div>
+                      )}
                       <Col
                         lg={6}
                         style={{
@@ -2506,8 +2572,22 @@ const ModalComponent = ({
                         }}
                       >
                         {formik.values.tdsFile && (
-                          <Tooltip title="Preview File" arrow>
-                            <VisibilityIcon
+                          <Tooltip title="download file" arrow>
+                            {/* <VisibilityIcon
+                              onClick={() =>
+                                handlePreviewFile(
+                                  formik.values.tdsFile,
+                                  "tdsFile"
+                                )
+                              }
+                              style={{
+                                cursor: "pointer",
+                                fontSize: "30px",
+                                color: "#11395C", // Bootstrap primary color
+                                marginTop: "14px",
+                              }}
+                            /> */}
+                            <DownloadForOfflineIcon
                               onClick={() =>
                                 handlePreviewFile(
                                   formik.values.tdsFile,
@@ -2527,7 +2607,7 @@ const ModalComponent = ({
                     </Row>
                   )}
                   {/* MSME Flag */}
-                  <FormControl>
+                  <FormControl sx={{ height: "50px", mt: 2 }}>
                     <FormLabel sx={{ fontSize: "12px" }}>MSME Flag</FormLabel>
                     <RadioGroup
                       row
@@ -2555,13 +2635,18 @@ const ModalComponent = ({
                         label="No"
                       />
                     </RadioGroup>
+                    {formik.touched.msmeFlag && formik.errors.msmeFlag && (
+                      <FormHelperText error>
+                        {formik.errors.msmeFlag}
+                      </FormHelperText>
+                    )}
                   </FormControl>
 
                   {/* If MSME is Yes */}
                   {formik.values.msmeFlag === "Yes" && (
                     <>
                       {/* MSME Type Selection */}
-                      <FormControl>
+                      <FormControl sx={{ height: "40px", mt: 1, mb: 1 }}>
                         <FormLabel sx={{ fontSize: "12px" }}>
                           MSME Type
                         </FormLabel>
@@ -2589,6 +2674,11 @@ const ModalComponent = ({
                             label="Medium"
                           />
                         </RadioGroup>
+                        {formik.touched.msmeType && formik.errors.msmeType && (
+                          <FormHelperText error>
+                            {formik.errors.msmeType}
+                          </FormHelperText>
+                        )}
                       </FormControl>
 
                       {/* MSME Upload - Same UI as TDS Upload */}
@@ -2660,7 +2750,8 @@ const ModalComponent = ({
                             >
                               {formik.values.msmeFile ? (
                                 <>
-                                  {uploadedMSMEFile?.name || "No file selected"}
+                                  {uploadedMSMEFile?.name ||
+                                    `msme_document_file${editData?.msmseExtn}`}
                                   <Tooltip title="Delete file" arrow>
                                     <span
                                       style={{
@@ -2723,8 +2814,23 @@ const ModalComponent = ({
                           }}
                         >
                           {formik.values.msmeFile && (
-                            <Tooltip title="Preview File" arrow>
-                              <VisibilityIcon
+                            <Tooltip title="download File" arrow>
+                              {/* <VisibilityIcon
+                                onClick={() =>
+                                  handlePreviewFile(
+                                    formik.values.msmeFile,
+                                    "msmeFile"
+                                  )
+                                }
+                                style={{
+                                  cursor: "pointer",
+                                  fontSize: "30px",
+                                  color: "#11395C",
+                                  marginTop: "14px",
+                                }}
+                              /> */}
+
+                              <DownloadForOfflineIcon
                                 onClick={() =>
                                   handlePreviewFile(
                                     formik.values.msmeFile,
@@ -2750,6 +2856,7 @@ const ModalComponent = ({
                     display: "flex",
                     flexWrap: "wrap",
                     gap: 1.5,
+                    mt: 3,
                     // alignItems: "flex-end", // aligns bottom of fields & button
                   }}
                 >
@@ -2858,7 +2965,8 @@ const ModalComponent = ({
                         >
                           {formik.values.bankFile ? (
                             <>
-                              {uploadedBankFile?.name}
+                              {uploadedBankFile?.name ||
+                                `bank_document_file${editData?.bankDocExtn}`}
                               <Tooltip title="Delete file" arrow>
                                 <span
                                   style={{
@@ -2919,8 +3027,22 @@ const ModalComponent = ({
                       }}
                     >
                       {formik.values.bankFile && (
-                        <Tooltip title="Preview File" arrow>
-                          <VisibilityIcon
+                        <Tooltip title="download file" arrow>
+                          {/* <VisibilityIcon
+                            onClick={() =>
+                              handlePreviewFile(
+                                formik.values.bankFile,
+                                "bankFile"
+                              )
+                            }
+                            style={{
+                              cursor: "pointer",
+                              fontSize: "30px",
+                              color: "#11395C",
+                              marginTop: "14px",
+                            }}
+                          /> */}
+                          <DownloadForOfflineIcon
                             onClick={() =>
                               handlePreviewFile(
                                 formik.values.bankFile,
