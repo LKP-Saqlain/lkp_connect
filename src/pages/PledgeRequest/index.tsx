@@ -1,35 +1,38 @@
 import { useEffect, useState } from "react";
 import {
-  Button,
+  // Button,
   Card,
   CardBody,
   CardHeader,
-  Col,
+  // Col,
   Container,
-  Label,
-  Row,
+  // Label,
+  // Row,
 } from "reactstrap";
 import DataTable from "../../components/common/UserInfoTable";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import Select from "react-select";
-import ShowToast from "../../utils/toastUtils";
-import { TextField } from "@mui/material";
+// import Select from "react-select";
+// import ShowToast from "../../utils/toastUtils";
+// import { TextField } from "@mui/material";
 import UserCapsules from "../ClientDetails/UserCapsules";
+// import SearchAppBar from "../../components/common/SearchBar";
 
 const Index = ({ activeMenu }: any) => {
   // const [iframeSrc, setIframeSrc] = useState("");
   const [data, setData] = useState<any>();
   const [flag, setFlag] = useState<boolean>(false);
-  const [zoneOptions, setZoneOptions] = useState<any[]>([]);
-  const [branchCodeOptions, setBranchCodeOptions] = useState<any[]>([]); // Add if needed
-  const [selectedZone, setSelectedZone] = useState<any>(null);
-  const [clientCode, setClientCode] = useState("");
+  // const [zoneOptions, setZoneOptions] = useState<any[]>([]);
+  // const [branchCodeOptions, setBranchCodeOptions] = useState<any[]>([]); // Add if needed
+  // const [selectedZone, setSelectedZone] = useState<any>(null);
+  // const [clientCode, setClientCode] = useState("");
   const [currentClient, setCurrentClient] = useState("");
-  const [selectedBranchCode, setSelectedBranchCode] = useState<any>(null);
+  // const [selectedBranchCode, setSelectedBranchCode] = useState<any>(null);
   // const [selectedCapsule, setSelectedCapsule] = useState("Pledge Request");
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -59,115 +62,144 @@ const Index = ({ activeMenu }: any) => {
         });
     };
     GetClientPledgeDetails();
-  }, [dispatch]);
-
-  useEffect(() => {
-    const payload = {
-      user_id,
-      option: "zone",
-      userType: "EMP",
-      zone: "ALL",
-    };
-
-    dispatch(showLoader("Please wait, we are processing your request..."));
-    apiServices
-      .getDropDown(payload)
-      .then((res) => {
-        if (res?.status === 200) {
-          const formatted = res.data.map((item: any) => ({
-            label: item.itemVal,
-            value: item.itemVal,
-          }));
-          setZoneOptions(formatted);
-        }
-      })
-      .catch(() => ShowToast("error", "Failed to fetch zones"))
-      .finally(() => dispatch(hideLoader()));
   }, []);
 
+  // useEffect(() => {
+  //   const payload = {
+  //     user_id,
+  //     option: "zone",
+  //     userType: "EMP",
+  //     zone: "ALL",
+  //   };
+
+  //   dispatch(showLoader("Please wait, we are processing your request..."));
+  //   apiServices
+  //     .getDropDown(payload)
+  //     .then((res) => {
+  //       if (res?.status === 200) {
+  //         const formatted = res.data.map((item: any) => ({
+  //           label: item.itemVal,
+  //           value: item.itemVal,
+  //         }));
+  //         setZoneOptions(formatted);
+  //       }
+  //     })
+  //     .catch(() => ShowToast("error", "Failed to fetch zones"))
+  //     .finally(() => dispatch(hideLoader()));
+  // }, []);
+
   // Fetch branch codes when a zone is selected
-  useEffect(() => {
-    if (selectedZone) {
-      const str = user_id;
-      let extractUserId = null;
-      if (str) {
-        const parts = str.split("-");
-        if (parts.length > 1) {
-          extractUserId = parts[1];
-        }
-      }
-      const payload = {
-        user_id: extractUserId,
-        option: "BranchByZone",
-        userType: "EMP",
-        zone: selectedZone.value, // Use the selected zone value!
-      };
+  // useEffect(() => {
+  //   if (selectedZone) {
+  //     const str = user_id;
+  //     let extractUserId = null;
+  //     if (str) {
+  //       const parts = str.split("-");
+  //       if (parts.length > 1) {
+  //         extractUserId = parts[1];
+  //       }
+  //     }
+  //     const payload = {
+  //       user_id: extractUserId,
+  //       option: "BranchByZone",
+  //       userType: "EMP",
+  //       zone: selectedZone.value, // Use the selected zone value!
+  //     };
 
-      dispatch(showLoader("Please wait, we are processing your request..."));
+  //     dispatch(showLoader("Please wait, we are processing your request..."));
 
-      apiServices
-        .getDropDown(payload)
-        .then((res) => {
-          if (res?.status === 200) {
-            let branchDropdown = res?.data.map((item: any) => ({
-              label: item.itemVal,
-              value: item.itemVal,
-            }));
-            branchDropdown = [
-              { label: "ALL", value: "ALL" },
-              ...branchDropdown,
-            ];
-            setBranchCodeOptions(branchDropdown);
-          }
-          dispatch(hideLoader());
-        })
-        .catch((Err) => {
-          const errorMessage = Err?.response?.data?.message;
-          dispatch(hideLoader());
-          ShowToast(
-            "error",
-            errorMessage ||
-              "Sorry for the inconvenience, please try after some time."
-          );
-        });
-    } else {
-      setBranchCodeOptions([]); // Clear branch codes if no zone is selected
-    }
-  }, [selectedZone, dispatch, user_id]);
+  //     apiServices
+  //       .getDropDown(payload)
+  //       .then((res) => {
+  //         if (res?.status === 200) {
+  //           let branchDropdown = res?.data.map((item: any) => ({
+  //             label: item.itemVal,
+  //             value: item.itemVal,
+  //           }));
+  //           branchDropdown = [
+  //             { label: "ALL", value: "ALL" },
+  //             ...branchDropdown,
+  //           ];
+  //           setBranchCodeOptions(branchDropdown);
+  //         }
+  //         dispatch(hideLoader());
+  //       })
+  //       .catch((Err) => {
+  //         const errorMessage = Err?.response?.data?.message;
+  //         dispatch(hideLoader());
+  //         ShowToast(
+  //           "error",
+  //           errorMessage ||
+  //             "Sorry for the inconvenience, please try after some time."
+  //         );
+  //       });
+  //   } else {
+  //     setBranchCodeOptions([]); // Clear branch codes if no zone is selected
+  //   }
+  // }, [selectedZone, dispatch, user_id]);
 
-  const handleSubmit = () => {
-    const zone = selectedZone?.value || "ALL";
-    const branch = selectedBranchCode?.value || "ALL";
-    const client = clientCode?.trim() || "ALL";
+  const handleSearchBasedOnInput = (value: string) => {
+    console.log("handleSearchBasedOnInputValue", value);
+    const query = value;
+    setSearchQuery(query);
 
-    console.log("Form submitted with:", { zone, branch, client });
+    const lowerCaseValue = value.toLowerCase();
 
-    const payload = {
-      user_id,
-      clientCode: client,
-      zone,
-      branchCode: branch,
-    };
+    const filtered = data.filter((item: any) => {
+      const clientNameMatch = item.clientName
+        ?.toLowerCase()
+        .includes(lowerCaseValue);
+      const accountCodeMatch = item.clientCode
+        ?.toString()
+        .toLowerCase()
+        .includes(lowerCaseValue);
 
-    dispatch(showLoader("Please wait, we are processing your request..."));
+      // Optional: keep other fields also searchable
+      // const otherMatch = Object.keys(item).some((key) =>
+      //   item[key]?.toString().toLowerCase().includes(lowerCaseValue)
+      // );
 
-    apiServices
-      .GetClientPledgeDetails(payload)
-      .then((response) => {
-        setData(response?.data?.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching pledge details:", error);
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
+      return clientNameMatch || accountCodeMatch;
+      // || otherMatch;
+    });
 
-    // Optional: Reset fields
-    // setSelectedZone(null);
-    // setSelectedBranchCode(null);
-    // setClientCode("");
+    setFilteredData(filtered);
+    console.log("filteredSearch Records", filtered);
   };
+
+  // const handleSubmit = () => {
+  //   const zone = selectedZone?.value || "ALL";
+  //   const branch = selectedBranchCode?.value || "ALL";
+  //   const client = clientCode?.trim() || "ALL";
+
+  //   console.log("Form submitted with:", { zone, branch, client });
+
+  //   const payload = {
+  //     user_id,
+  //     clientCode: client,
+  //     zone,
+  //     branchCode: branch,
+  //   };
+
+  //   dispatch(showLoader("Please wait, we are processing your request..."));
+
+  //   apiServices
+  //     .GetClientPledgeDetails(payload)
+  //     .then((response) => {
+  //       setData(response?.data?.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching pledge details:", error);
+  //     })
+  //     .finally(() => {
+  //       dispatch(hideLoader());
+  //     });
+
+  //   // Optional: Reset fields
+  //   // setSelectedZone(null);
+  //   // setSelectedBranchCode(null);
+  //   // setClientCode("");
+  // };
 
   // const handleClick = (row: any) => {
   //   const encryptedCode = row?.encryptedCode;
@@ -274,7 +306,7 @@ const Index = ({ activeMenu }: any) => {
             )}
           </CardHeader>
 
-          <CardHeader>
+          {/* <CardHeader>
             {!flag && (
               <Row className="">
                 <Col md={3} sm={6} xs={12} className="mb-3">
@@ -354,7 +386,7 @@ const Index = ({ activeMenu }: any) => {
                 </Col>
               </Row>
             )}
-          </CardHeader>
+          </CardHeader> */}
           <CardBody style={flag ? { padding: 0 } : {}}>
             {flag ? (
               <>
@@ -373,8 +405,12 @@ const Index = ({ activeMenu }: any) => {
             ) : (
               <DataTable
                 activeMenu={activeMenu}
-                T6Data={data}
+                // T6Data={data}
                 handleDownload={handleClick}
+                showSearch={Array.isArray(data) && data.length > 0}
+                handleSearchBasedOnInput={handleSearchBasedOnInput}
+                searchValue={searchQuery}
+                T6Data={searchQuery ? filteredData : data}
               />
             )}
           </CardBody>

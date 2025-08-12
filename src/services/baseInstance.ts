@@ -63,6 +63,7 @@ const pdfDownloadEndpoints = [
   endpoints.ComplainceFileDownload,
   endpoints.GenerateAndDownloadInvoice,
   endpoints.GenerateClientPerformancePdf,
+  endpoints.GenerateTPInvoice,
 ];
 
 const multipartEndpoints = [

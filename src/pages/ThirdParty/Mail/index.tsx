@@ -50,7 +50,7 @@ const InvoiceMail = ({ activeSubItem }: any) => {
       .GenerateTPInvoice(payload)
       .then((response: any) => {
         // Expecting a blob response (PDF)
-        const blob = new Blob([response], { type: "application/pdf" });
+        const blob = new Blob([response?.data], { type: "application/pdf" });
 
         // Create a download URL
         const url = window.URL.createObjectURL(blob);
