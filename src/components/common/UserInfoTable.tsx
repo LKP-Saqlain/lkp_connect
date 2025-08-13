@@ -1667,6 +1667,7 @@ const DataTable = ({
               };
 
               const handleDelete = () => {
+                setAction("delete");
                 handleDeleteEntry?.(params.row); // Pass row to delete handler
                 setSelectedRow(params.row); // Store row for confirmation
                 tog_center(); // Open delete confirmation modal
@@ -1999,7 +2000,6 @@ const DataTable = ({
       return getAPContestReportColumns.map((column) => ({
         ...column,
       }));
-      // else if (activeSubItem === "Partner Contest Report") {
       //   return getAPContestReportColumns.map((column) => {
       //     if (column.field === "apCode")
       //       return {

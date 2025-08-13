@@ -245,6 +245,9 @@ const VendorMaster = ({ activeSubItem }: any) => {
           console.log("errrrror", error);
           dispatch(hideLoader());
         });
+      setEditUserCheck(false);
+      // fetchVendorMasterDetails();
+      // return;
     }
 
     const payload = {
