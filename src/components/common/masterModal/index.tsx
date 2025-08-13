@@ -710,7 +710,13 @@ const ModalComponent = ({
   };
 
   useEffect(() => {
-    console.log("editInfoData", editData, editUserCheck, fileExtension);
+    console.log(
+      "editInfoData",
+      editData,
+      editUserCheck,
+      fileExtension,
+      setShowImg
+    );
     // debugger;
     if (editData?.RowId > 0) {
       console.log("editInfoData not zero");
@@ -860,18 +866,24 @@ const ModalComponent = ({
           const base64String = reader.result as string;
           const base64Only = base64String.split(",")[1] || base64String;
 
-          const prefix =
-            isUploadedFile === "tdsFile"
-              ? "TDS_"
-              : isUploadedFile === "msmeFile"
-              ? "MSME_"
-              : isUploadedFile === "bankFile"
-              ? "BANK_"
-              : "DOC_";
+          // const prefix =
+          //   isUploadedFile === "tdsFile"
+          //     ? "TDS_"
+          //     : isUploadedFile === "msmeFile"
+          //     ? "MSME_"
+          //     : isUploadedFile === "bankFile"
+          //     ? "BANK_"
+          //     : "DOC_";
 
-          const timestamp = new Date().getTime();
+          // Determine document type from isUploadedFile
+          let docType = "DOC";
+          if (isUploadedFile === "tdsFile") docType = "TDS";
+          else if (isUploadedFile === "msmeFile") docType = "MSME";
+          else if (isUploadedFile === "bankFile") docType = "BANK";
 
-          const finalFileName = `${prefix}${timestamp}.${fileExt}`;
+          // Final file name: authenticationValue_<DOC_TYPE>.<extension>
+          const finalFileName = `${authenticationValue}_${docType}.${fileExt}`;
+          console.log("customFileName", finalFileName);
 
           if (isUploadedFile === "tdsFile") {
             // debugger;
@@ -900,7 +912,8 @@ const ModalComponent = ({
 
           dispatch(showLoader(""));
           let payload = {
-            fileName: communicationProofPath,
+            fileName:
+              isUploadedFile !== "" ? finalFileName : communicationProofPath,
             filePath:
               isUploadedFile == "tdsFile"
                 ? "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterTDS"

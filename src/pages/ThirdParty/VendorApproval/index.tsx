@@ -12,7 +12,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { user_id } = useSelector(
+  const { user_id, authenticationValue } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
 
@@ -52,17 +52,16 @@ const VendorApproval = ({ activeSubItem }: any) => {
   const handleApproval = (row: any, remark: string, entryFlag: string) => {
     console.log("Dataaa", row, remark, entryFlag);
 
-    const tdsFileName = row?.tdsExtn
-      ? `${row.vendorId}_TDS_${row.tdsExtn.toLowerCase()}`
-      : null;
+    const ensureDot = (ext: any) => {
+      if (!ext) return "";
+      return ext.startsWith(".") ? ext : `.${ext}`;
+    };
 
-    const msmeFileName = row?.msmseExtn
-      ? `${row.vendorId}_MSME_${row.msmseExtn.toLowerCase()}`
-      : null;
+    const tdsFileName = `${authenticationValue}_TDS${ensureDot(row.tdsExtn)}`;
+    const msmeFileName = `${authenticationValue}_MSME${ensureDot(
+      row.msmseExtn
+    )}`;
 
-    const bankFileName = row?.bankDocExtn
-      ? `${row.vendorId}_BANK_.${row.bankDocExtn.toLowerCase()}`
-      : null;
     console.log("Testtss", tdsFileName, msmeFileName);
 
     const payload = {

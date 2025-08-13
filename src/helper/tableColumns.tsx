@@ -7086,7 +7086,7 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
   {
     field: "address1",
     headerName: "Address",
-    minWidth: 300,
+    minWidth: 400,
     flex: 1.2,
     disableColumnMenu: true,
     headerAlign: "center",
@@ -7127,7 +7127,7 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
   },
   {
     field: "teleNo",
-    headerName: "Tele No",
+    headerName: "Telephone No",
     minWidth: 120,
     flex: 0.7,
     disableColumnMenu: true,

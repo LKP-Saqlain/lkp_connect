@@ -1784,7 +1784,9 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  <DownloadForOfflineIcon />
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
                 </button>
               );
             },
@@ -1807,7 +1809,9 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  <DownloadForOfflineIcon />
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
                 </button>
               );
             },
@@ -1830,7 +1834,9 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  <DownloadForOfflineIcon />
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
                 </button>
               );
             },
