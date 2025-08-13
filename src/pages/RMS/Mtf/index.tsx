@@ -254,7 +254,7 @@ const MTF = ({ activeSubItem }: any) => {
               padding: "0.2rem 0.8rem",
             }}
           >
-            <h4 className="card-title mb-0">Third Party Invoice Upload</h4>
+            <h4 className="card-title mb-0">MTF File Merge</h4>
           </CardHeader>
           <CardBody>
             <form onSubmit={formik.handleSubmit}>
