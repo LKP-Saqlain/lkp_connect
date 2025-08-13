@@ -140,7 +140,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
     >
       {/* Search Bar */}
       {/* {selectedWidget && ( */}
-      <Search sx={{ border: "1px solid #11395C" }}>
+      <Search sx={{ border: "1px solid #11395C", minWidth: "20rem" }}>
         <SearchIconWrapper>
           <SearchIcon />
         </SearchIconWrapper>

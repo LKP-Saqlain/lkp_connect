@@ -47,11 +47,16 @@ import {
   EmpBrokerageAchieved,
   EmpNonBrokerageAchieved,
   ClientExclusionColumns,
-  RHTopClientsColumns,
   ThirdParty,
-  ThirdPartyStatusReport,
   VendorMasterColumns,
   VendorMasterApprovalColumns,
+  ThirdPartyStatusReport,
+  TpInvoiceUploadColumns,
+  TpInvoiceVerifyColumns,
+  TpInvoiceMailsColumns,
+  TpInvoiceReportColumns,
+  RHTopClientsColumns,
+  getAPContestReportColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -123,9 +128,12 @@ interface SelectedWidgetProps {
   previewUrl?: any;
   setSetShowImg?: any;
   showDocument?: boolean;
+  checkboxSelection?: boolean;
+  disableRowSelectionOnClick?: boolean;
   setShowDocument?: any;
   fileExtension?: any;
   reportType?: string;
+  onRowSelectionModelChange?: any;
 }
 
 const DataTable = ({
@@ -164,6 +172,9 @@ const DataTable = ({
   previewUrl,
   setSetShowImg,
   showDocument,
+  checkboxSelection,
+  disableRowSelectionOnClick,
+  onRowSelectionModelChange,
   setShowDocument,
   fileExtension,
   reportType,
@@ -172,7 +183,9 @@ const DataTable = ({
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
   const [modal_center, setmodal_center] = useState<boolean>(false);
   const [selectedRow, setSelectedRow] = useState<any>(null); // Store selected row data
-  const [action, setAction] = useState<"approve" | "reject">("approve");
+  const [action, setAction] = useState<
+    "approve" | "reject" | "delete" | undefined
+  >();
   const [customLedgerData, setCustomLedgerData] = useState([]);
   // const [screenHeight, setScreenHeight] = useState(window.innerHeight);
   const [filteredLedgerDataDropDown, setFilteredLedgerDataDropDown] = useState<
@@ -225,7 +238,7 @@ const DataTable = ({
     setmodal_center(!modal_center);
     setShowDocument(false);
   };
-  const HandleApprovalModal = (actionType: "approve" | "reject") => {
+  const HandleApprovalModal = (actionType: "approve" | "reject" | "delete") => {
     console.log("TestactionType", actionType);
 
     setAction(actionType);
@@ -239,11 +252,6 @@ const DataTable = ({
     setSelectedRow(row);
     // tog_center();
   };
-
-  // const handleDpDebitDetails = (row: any) => {
-  //   console.log(row);
-  //   // getUserDetails?.(row);
-  // };
 
   const handleDeleteEntry = (row: any) => {
     handleDeleteClick?.(row);
@@ -344,6 +352,7 @@ const DataTable = ({
                   </Tooltip>
                   <button
                     onClick={() => {
+                      setAction("delete");
                       handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
                       setSelectedRow(params.row); // Store the selected row for confirmation
                       tog_center(); // Open the modal for deletion confirmation
@@ -606,6 +615,7 @@ const DataTable = ({
               };
 
               const handleDelete = () => {
+                setAction("delete");
                 handleDeleteEntry?.(params.row);
                 setSelectedRow(params.row);
                 tog_center();
@@ -716,6 +726,7 @@ const DataTable = ({
                   </Tooltip>
                   <button
                     onClick={() => {
+                      setAction("delete");
                       handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
                       setSelectedRow(params.row); // Store the selected row for confirmation
                       tog_center(); // Open the modal for deletion confirmation
@@ -1327,6 +1338,7 @@ const DataTable = ({
                     </Tooltip>
                     <button
                       onClick={() => {
+                        setAction("delete");
                         handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
                         setSelectedRow(params.row); // Store the selected row for confirmation
                         tog_center(); // Open the modal for deletion confirmation
@@ -1430,7 +1442,7 @@ const DataTable = ({
           // Return other columns unchanged
           return column;
         });
-    } else if (activeSubItem === "Client Pledge Request") {
+    } else if (activeMenu === "Client Request") {
       return ClientPledgeRequest.map((column) => {
         if (column.field === "encryptedCode") {
           return {
@@ -1480,6 +1492,7 @@ const DataTable = ({
 
               const handleDelete = () => {
                 if (!isDeleted) {
+                  setAction("delete");
                   handleDeleteEntry?.(params.row);
                   setSelectedRow(params.row);
                   tog_center();
@@ -1543,6 +1556,7 @@ const DataTable = ({
                   </Tooltip>
                   <button
                     onClick={() => {
+                      setAction("delete");
                       handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
                       setSelectedRow(params.row); // Store the selected row for confirmation
                       tog_center(); // Open the modal for deletion confirmation
@@ -1845,6 +1859,172 @@ const DataTable = ({
 
         return column;
       });
+    } else if (activeSubItem === "Third Party Invoice Upload") {
+      return TpInvoiceUploadColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Third Party Invoice Verify") {
+      return TpInvoiceVerifyColumns.map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowId);
+                      HandleApprovalModal("approve");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      margin: "0 5px 0 5px",
+                    }}
+                  >
+                    |
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.rowId);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+        if (column.field === "delete") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted;
+
+              const handleDelete = () => {
+                if (!isDeleted) {
+                  handleDeleteEntry?.(params.row);
+                  setSelectedRow(params.row);
+                  tog_center();
+                }
+              };
+
+              return (
+                <>
+                  <Tooltip
+                    title={isDeleted ? "Already deleted" : "Delete"}
+                    arrow
+                    placement="top"
+                  >
+                    <span>
+                      <IconButton
+                        sx={{ p: 0, ml: 1 }}
+                        color="primary"
+                        onClick={() => {
+                          setAction("delete");
+                          handleDelete();
+                        }}
+                        disabled={isDeleted}
+                      >
+                        <DeleteIcon
+                          fontSize="small"
+                          sx={{ color: isDeleted ? "red" : "#11395C" }}
+                        />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+                </>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "Third Party Invoice Mail") {
+      return TpInvoiceMailsColumns.map((column) => {
+        if (column.field === "generate")
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownloadForOfflineIcon />
+                </button>
+              );
+            },
+          };
+        return column;
+      });
+    } else if (activeSubItem === "Third Party Invoice Report") {
+      return TpInvoiceReportColumns.map((column) => ({ ...column }));
+    } else if (activeSubItem === "RHDashboardTop10Clients") {
+      return RHTopClientsColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "RHDashboardTop10Clients") {
+      return RHTopClientsColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Partner Contest Report") {
+      return getAPContestReportColumns.map((column) => ({
+        ...column,
+      }));
+      // else if (activeSubItem === "Partner Contest Report") {
+      //   return getAPContestReportColumns.map((column) => {
+      //     if (column.field === "apCode")
+      //       return {
+      //         ...column,
+      //         renderCell: (params: any) => {
+      //           return (
+      //             <button
+      //               onClick={() => {
+      //                 // handleDownload(params.row); // This will trigger the download function
+      //                 console.log(params.row.apCode, "count");
+      //               }}
+      //               style={{
+      //                 color: "#11395C",
+      //                 textDecoration: "underline",
+
+      //                 cursor: "pointer",
+      //               }}
+      //             >
+      //               {params.row.apCode}
+      //             </button>
+      //           );
+      //         },
+      //       };
+      //     return column;
+      //   });
     } else {
       return [];
     }
@@ -1908,6 +2088,56 @@ const DataTable = ({
     console.log("childData", customLedgerData, selectedWidget);
   }, [customLedgerData, selectedWidget]);
 
+  let Msg = "";
+
+  const deleteItems = [
+    "Regulatory Announcement",
+    "Unlisted Shares Entry",
+    "Communication Retrival Entry",
+    "Marketing Material",
+    "Client Exclusion",
+    "Third Party Vendor Master",
+    "Third Party Invoice Verify", // delete message also for this
+    "Vendor Creation",
+  ];
+
+  const actionItems = [
+    "Communication Retrival Checker",
+    "KYC Approval",
+    "RH Approval",
+    "Unlisted Shares Approval 1",
+    "Unlisted Shares Approval 2",
+    "Third Party Vendor Approval",
+    "Third Party Invoice Verify", // approve/reject message also for this
+    "Vendor Approval",
+  ];
+
+  if (activeSubItem === "RMS Allocation") {
+    Msg = "";
+  } else if (activeSubItem === "Third Party Invoice Verify") {
+    if (action === "delete") {
+      Msg = "Are you sure want to delete this entry";
+    } else if (action === "approve" || action === "reject") {
+      Msg = `Are you sure want to ${action} this entry`;
+    } else {
+      Msg = "";
+    }
+  } else if (deleteItems.includes(activeSubItem)) {
+    Msg = "Are you sure want to delete this entry";
+  } else if (actionItems.includes(activeSubItem)) {
+    Msg = `Are you sure want to ${action} this entry`;
+  } else if (activeSubItem === "Pre Trade Approval" && !showDocument) {
+    Msg = `Are you sure want to ${action} this entry`;
+  } else if (
+    activeSubItem === "Pre Trade Proof Upload" ||
+    activeSubItem === "Pre Trade Report" ||
+    (activeSubItem === "Unlisted Shares Approval 1" && action === "approve") ||
+    (activeSubItem === "Pre Trade Approval" && showDocument)
+  ) {
+    Msg = "";
+  } else {
+    Msg = "Are you sure you want to send the email?";
+  }
   return (
     <>
       <CustomModal
@@ -1918,43 +2148,45 @@ const DataTable = ({
         row={selectedRow} // Pass the selected row data
         action={action}
         handleApproval={handleApproval}
-        Msg={
-          activeSubItem === "RMS Allocation"
-            ? ""
-            : activeSubItem === "Regulatory Announcement"
-            ? "Are you sure want to delete this entry"
-            : activeSubItem === "Unlisted Shares Entry" ||
-              activeSubItem === "Vendor Creation"
-            ? "Are you sure want to delete this entry"
-            : activeSubItem === "Communication Retrival Entry" ||
-              activeSubItem === "Marketing Material" ||
-              activeSubItem === "Client Exclusion" ||
-              activeSubItem === "Third Party Vendor Master"
-            ? "Are you sure want to delete this entry"
-            : activeSubItem === "Communication Retrival Checker"
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "KYC Approval"
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "RH Approval"
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "Vendor Approval"
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "Unlisted Shares Approval 1" ||
-              activeSubItem === "Unlisted Shares Approval 2" ||
-              activeSubItem === "Third Party Vendor Approval"
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "Pre Trade Approval" && !showDocument
-            ? `Are you sure want to ${action} this entry`
-            : activeSubItem === "Pre Trade Proof Upload"
-            ? ""
-            : activeSubItem === "Pre Trade Report"
-            ? ""
-            : activeSubItem === "Pre Trade Approval" && showDocument
-            ? ""
-            : "Are you sure you want to send the email?"
-        }
+        Msg={Msg}
+        // Msg={
+        //   activeSubItem === "RMS Allocation"
+        //     ? ""
+        //     : activeSubItem === "Regulatory Announcement"
+        //     ? "Are you sure want to delete this entry"
+        //     : activeSubItem === "Unlisted Shares Entry"
+        //     ? "Are you sure want to delete this entry"
+        //     : activeSubItem === "Communication Retrival Entry" ||
+        //       activeSubItem === "Marketing Material" ||
+        //       activeSubItem === "Client Exclusion" ||
+        //       activeSubItem === "Third Party Vendor Master"
+        //     ? "Are you sure want to delete this entry"
+        //     : activeSubItem === "Communication Retrival Checker"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "KYC Approval"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "RH Approval"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "Unlisted Shares Approval 1" ||
+        //       activeSubItem === "Unlisted Shares Approval 2" ||
+        //       activeSubItem === "Third Party Vendor Approval"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "Pre Trade Approval" && !showDocument
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "Pre Trade Proof Upload"
+        //     ? ""
+        //     : activeSubItem === "Pre Trade Report"
+        //     ? ""
+        //     : activeSubItem === "Pre Trade Approval" && showDocument
+        //     ? ""
+        //     : "Are you sure you want to send the email?"
+        // }
+
         activeSubItem={activeSubItem}
         isUploadMode={activeSubItem === "Pre Trade Proof Upload" ? true : false}
+        isDropUpload={
+          activeSubItem === "Unlisted Shares Approval 1" && action === "approve"
+        }
         handleFileUpload={(selectedRow, file, remark) => {
           console.log("Uploading file:", selectedRow, file);
           if (typeof onFileUpload === "function") {
@@ -2009,7 +2241,9 @@ const DataTable = ({
         }}
       >
         <DataGrid
-          disableRowSelectionOnClick
+          disableRowSelectionOnClick={disableRowSelectionOnClick}
+          checkboxSelection={checkboxSelection}
+          onRowSelectionModelChange={onRowSelectionModelChange}
           rows={
             selectedWidget === "Clients With Ledger Balance"
               ? filteredLedgerDataDropDown.length > 0
@@ -2063,9 +2297,14 @@ const DataTable = ({
               : row.Name
           }
           // Use the correct identifier for rows
-          getRowClassName={(params) =>
-            params.indexRelativeToCurrentPage % 2 === 0 ? "even-row" : "odd-row"
-          }
+          getRowClassName={(params) => {
+            if (customCss) {
+              if (params.row.isDuplicate) return "duplicate-row";
+            }
+            return params.indexRelativeToCurrentPage % 2 === 0
+              ? "even-row"
+              : "odd-row";
+          }}
           getRowHeight={getRowHeight}
           sx={{
             border: 0,
@@ -2085,6 +2324,11 @@ const DataTable = ({
               color: "#000",
               border: "1px solid #D3D3D3 !important",
             },
+            ...(customCss && {
+              "& .duplicate-row": {
+                backgroundColor: "#ffadb0 !important", // light red
+              },
+            }),
           }}
           slotProps={{
             pagination: {

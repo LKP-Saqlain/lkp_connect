@@ -248,7 +248,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
       // zone: formik.values.selectedZone?.value,
       // startDate: startDate,
       // endDate: endDate,
-
+      user_id,
       start: 0,
       pageSize: 0,
       rowId: 0,
@@ -392,6 +392,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
       // rHflag: entryFlag,
       // rhUserId: user_id,
       // rhRemark: remark,
+      user_id,
       rowId: rid,
       statusFlag: entryFlag,
       statusRemarks: remark,

@@ -4,8 +4,9 @@ import Lottie from "react-lottie-player";
 import CountUp from "react-countup";
 import { Link } from "react-router-dom";
 import IphoneImg from "../../../assets/images/iphone.png";
-import IpadImg from "../../../assets/images/Ipad.png";
-import AirPodsImg from "../../../assets/images/Airpods.png";
+// import IpadImg from "../../../assets/images/Ipad.png";
+// import AirPodsImg from "../../../assets/images/Airpods.png";
+import CoinImg from "../../../assets/images/price_coin.png";
 // import { useTheme } from "@mui/material/styles";
 // import { useMediaQuery } from "@mui/material";
 import "./style.css";
@@ -20,6 +21,7 @@ interface Badge {
 interface DashboardCardProps {
   title: string;
   value?: number | string;
+  subHeading?: string;
   animationData?: any;
   prefix?: string;
   suffix?: string;
@@ -32,6 +34,7 @@ interface DashboardCardProps {
   activeClientsEmpty?: any;
   rightTitle?: string;
   rightValue?: number | string;
+  rightSubHeading?: string;
   cardStyle?: any;
 }
 
@@ -51,9 +54,18 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   rightTitle,
   rightValue,
   cardStyle,
+  subHeading,
+  rightSubHeading,
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const goldOptions: any = [
+    "1 GM Gold Coin",
+    "2 GM Gold Coin",
+    "3 GM Gold Coin",
+    "5 GM Gold Coin",
+    "Half GM Gold Coin",
+  ];
 
   return (
     <>
@@ -64,7 +76,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           maxWidth: "500px",
           overflow: "hidden",
           marginBottom: "20px",
-          height: title === "Prize*" ? "100px" : "auto",
+          height: title === "Prize*" ? "100px" : "6.8rem",
           minHeight: title === "Prize*" ? "110px" : "auto",
           ...cardStyle,
         }}
@@ -105,175 +117,267 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
             </h6>
           )}
           <div
-            className={`d-flex justify-content-between align-items-center ${
-              rightTitle || rightValue ? "flex-row" : ""
+            className={`d-grid ${
+              rightTitle || rightValue ? "grid-template-columns" : ""
             }`}
             style={{
+              display: "grid",
+              gridTemplateColumns:
+                rightTitle || rightValue ? "1fr auto 1fr" : "1fr",
+              alignItems: "center",
               marginTop: !customClass ? "1.5rem" : "0rem",
               marginBottom: customClass ? "1rem" : "0rem",
             }}
           >
             {/* Left Side */}
             <div
-              className="d-flex align-items-center gap-2"
               style={{
-                flex: rightTitle || rightValue ? 0 : 1,
-                justifyContent: "space-between",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
               }}
             >
-              {title === "Prize*" ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
-                  }}
-                >
-                  {/* Left: Value */}
+              <div
+                className="d-flex align-items-center gap-2"
+                style={{
+                  justifyContent: "space-between",
+                }}
+              >
+                {title === "Prize*" ? (
                   <div
                     style={{
-                      fontWeight: "bold",
-                      fontSize: "18px",
-                      color: "#1B1B1B",
-                      textAlign: "left",
-                      maxWidth: "60%",
-                      wordBreak: "break-word",
-                    }}
-                  >
-                    {value}
-                  </div>
-
-                  <div
-                    style={{
-                      width: 100,
-                      height: 40,
                       display: "flex",
-                      justifyContent: "center",
+                      justifyContent: "space-between",
                       alignItems: "center",
+                      width: "100%",
                     }}
                   >
-                    <img
-                      src={
-                        value === "Iphone 16"
-                          ? IphoneImg
-                          : value === "Ipad 11"
-                          ? IpadImg
-                          : value === "AirPod 4"
-                          ? AirPodsImg
-                          : ""
-                      }
-                      alt="Prize Icon"
+                    {/* Left: Value */}
+                    <div
                       style={{
-                        // width: "100%",
-                        marginTop: value === "Iphone 16" ? "5rem" : "",
-                        height:
-                          value === "Iphone 16"
-                            ? "270px"
-                            : value === "Ipad 11"
-                            ? "150px"
-                            : "140px",
-                        objectFit: "contain",
-                        marginBottom: "1rem",
+                        fontWeight: "bold",
+                        fontSize: "18px",
+                        color: "#1B1B1B",
+                        textAlign: "left",
+                        maxWidth: "60%",
+                        wordBreak: "break-word",
                       }}
-                    />
+                    >
+                      {value}
+                    </div>
+                    <div
+                      style={{
+                        width: 100,
+                        height: 40,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        src={
+                          value === "Iphone 16"
+                            ? IphoneImg
+                            : goldOptions.includes(value)
+                            ? CoinImg
+                            : ""
+                        }
+                        alt=""
+                        style={{
+                          // width: "100%",
+                          marginTop: value === "Iphone 16" ? "5rem" : "9rem",
+                          height: value === "Iphone 16" ? "270px" : "150px",
+                          objectFit: "contain",
+                          // marginBottom: "1rem",
+                          marginRight: value !== "Iphone 16" ? "4rem" : "0rem",
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <Lottie
-                  loop
-                  play
-                  animationData={animationData}
-                  style={{ width: 40, height: 40 }}
-                />
-              )}
+                ) : (
+                  <Lottie
+                    loop
+                    play
+                    animationData={animationData}
+                    style={{ width: 40, height: 40 }}
+                  />
+                )}
 
-              <div>
-                <h5
-                  className="mb-0"
-                  style={{
-                    color: "#1B1B1B",
-                    fontSize: "17px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {prefix}
-                  {typeof value === "number" ? (
-                    <CountUp
-                      start={0}
-                      end={value ?? 0}
-                      separator=","
-                      decimals={decimals}
-                      prefix=""
-                      duration={1}
-                      formattingFn={formatIndianNumber}
-                    />
-                  ) : (
-                    title !== "Prize*" && <span>{value}</span>
-                    // <></>
-                  )}
-                  <small
-                    className="fs-12"
+                {/* {title === "Prize*" ? (
+                  <div
                     style={{
-                      fontWeight: "bold",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
                     }}
                   >
-                    {suffix}
-                  </small>
-                </h5>
+                    <div
+                      style={{
+                        fontWeight: "bold",
+                        fontSize: "18px",
+                        color: "#1B1B1B",
+                        textAlign: "left",
+                        maxWidth: "60%",
+                        wordBreak: "break-word",
+                      }}
+                    >
+                      {value}
+                    </div>
+                    <div
+                      style={{
+                        width: 100,
+                        height: 40,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img
+                        src={
+                          value === "Iphone 16"
+                            ? IphoneImg
+                            : goldOptions.includes(value)
+                            ? CoinImg
+                            : ""
+                        }
+                        alt=""
+                        style={{
+                          // width: "100%",
+                          marginTop: value === "Iphone 16" ? "5rem" : "9rem",
+                          height: value === "Iphone 16" ? "270px" : "150px",
+                          objectFit: "contain",
+                          // marginBottom: "1rem",
+                          marginRight: value !== "Iphone 16" ? "4rem" : "0rem",
+                        }}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <Lottie
+                    loop
+                    play
+                    animationData={animationData}
+                    style={{ width: 40, height: 40 }}
+                  />
+                )} */}
+
+                <div>
+                  <h5
+                    className="mb-0"
+                    style={{
+                      color: "#1B1B1B",
+                      fontSize: "17px",
+                      fontWeight: "bold",
+
+                      width: rightValue === "Coming Soon" ? "6rem" : undefined,
+                    }}
+                  >
+                    {prefix}
+                    {typeof value === "number" ? (
+                      <CountUp
+                        start={0}
+                        end={value ?? 0}
+                        separator=","
+                        decimals={decimals}
+                        prefix=""
+                        duration={1}
+                        formattingFn={formatIndianNumber}
+                      />
+                    ) : (
+                      title !== "Prize*" && <span>{value}</span>
+                    )}
+                    <small
+                      className="fs-12"
+                      style={{
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {suffix}
+                    </small>
+                  </h5>
+                </div>
               </div>
+              <p
+                style={{
+                  color: "#095192",
+                  fontSize: "13px",
+                  fontWeight: "bold",
+                }}
+              >
+                {subHeading}
+              </p>
             </div>
+
+            {/* Divider */}
             {(rightTitle || rightValue) && (
               <div
                 style={{
                   width: "1px",
                   height: "40px",
-                  backgroundColor: "#DCDCDC",
+                  backgroundColor: "green",
                   margin: "0 15px",
                 }}
               />
             )}
             {(rightTitle || rightValue) && (
-              <div className="d-flex align-items-center gap-2">
-                <Lottie
-                  loop
-                  play
-                  animationData={animationData}
-                  style={{ width: 40, height: 40 }}
-                />
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
+              >
+                <div className="d-flex align-items-center gap-2">
+                  <Lottie
+                    loop
+                    play
+                    animationData={animationData}
+                    style={{ width: 40, height: 40 }}
+                  />
 
-                <div
-                  className="text-end"
+                  <div
+                    className="text-end"
+                    style={{
+                      width: rightValue === "Coming Soon" ? "4rem" : undefined,
+                    }}
+                  >
+                    {typeof rightValue === "number" ? (
+                      <span
+                        style={{
+                          color: "#1B1B1B",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        <CountUp
+                          start={0}
+                          end={rightValue ?? 0}
+                          separator=","
+                          duration={1}
+                          formattingFn={formatIndianNumber}
+                        />
+                      </span>
+                    ) : (
+                      <span
+                        style={{
+                          color: "#1B1B1B",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {rightValue}
+                      </span> // ✅ Fix: Wrap in a JSX element
+                    )}
+                  </div>
+                </div>
+                <p
                   style={{
-                    width: rightValue === "Coming Soon" ? "4rem" : undefined,
+                    color: "#ff6e00",
+                    fontSize: "13px",
+                    fontWeight: "bold",
                   }}
                 >
-                  {typeof rightValue === "number" ? (
-                    <span
-                      style={{
-                        color: "#1B1B1B",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <CountUp
-                        start={0}
-                        end={rightValue ?? 0}
-                        separator=","
-                        duration={1}
-                        formattingFn={formatIndianNumber}
-                      />
-                    </span>
-                  ) : (
-                    <span
-                      style={{
-                        color: "#1B1B1B",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {rightValue}
-                    </span> // ✅ Fix: Wrap in a JSX element
-                  )}
-                </div>
+                  {rightSubHeading}
+                </p>
               </div>
             )}
           </div>

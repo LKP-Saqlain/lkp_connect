@@ -63,6 +63,7 @@ const ModalComponent = ({
   const [allPlans, setAllPlans] = useState<any[]>([]);
   const [history, setHistory] = useState<BrokerageHistoryItem[]>([]);
   const [currentPlan, setCurrentPlan] = useState<any>(null);
+  const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [showConsent, setShowConsent] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -189,6 +190,7 @@ const ModalComponent = ({
     setSelectedValue(selectedValue);
 
     const matchedPlan = allPlans.find((plan) => plan.Type === selectedValue);
+    setSelectedPlan(matchedPlan);
     console.log("Selected Value:", selectedValue);
     console.log("Brokerage Plans:", matchedPlan);
     console.log("Current History:", currentPlan);
@@ -283,7 +285,7 @@ const ModalComponent = ({
     const payload = {
       clientcode: BrokerageTitle?.clientcode || "",
       segment: BrokerageTitle?.type || "",
-      moduleNo: latestHistory?.moduleNo || "",
+      moduleNo: selectedPlan?.ModuleNo || "",
       existingPlan: `${existingPlan} ( ${activeSince} )`,
       proposedPlan: selectedValue,
       consentfileName: uploadedFileName,

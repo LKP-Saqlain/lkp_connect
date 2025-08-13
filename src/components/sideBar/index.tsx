@@ -87,9 +87,14 @@ import RHDashboard from "../../pages/RHDashboard";
 import "./style.css";
 import ThirdPartyMaster from "../../pages/ThirdParty/Master";
 import ThirdPartyApproval from "../../pages/ThirdParty/Approval";
-import ThirdPartyStatusReport from "../../pages/ThirdParty/Report";
 import VendorMaster from "../../pages/ThirdParty/VendorMaster";
 import VendorApproval from "../../pages/ThirdParty/VendorApproval";
+import ThirdPartyStatusReport from "../../pages/ThirdParty/TPReport";
+import InvoiceUpload from "../../pages/ThirdParty/Upload";
+import InvoiceVerify from "../../pages/ThirdParty/Verify";
+import InvoiceMail from "../../pages/ThirdParty/Mail";
+import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
+import PledgeHolding from "../../pages/RMS/PledgeHoldings";
 
 const drawerWidth = 260;
 
@@ -221,7 +226,7 @@ const SideBar = () => {
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
   const [showMyPerformance, setShowMyPerformance] = useState<boolean>(false);
   const [activeClickCount, setActiveClickCount] = useState(0);
-  const [showStarburst, setShowStarburst] = useState(true);
+  // const [showStarburst, setShowStarburst] = useState(true);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -556,16 +561,21 @@ const SideBar = () => {
 
   const handleMenuClick = (menuTitle: string, hasSubItems: any) => {
     setActiveMenu((prevActive) => {
-      if (prevActive === menuTitle && hasSubItems) {
-        // If clicking the same menu with subitems, collapse it and reset subitem
-        setActiveSubItem("");
-        return "";
-      }
-      console.log("menuTitle", menuTitle, hasSubItems);
+      // if (prevActive === menuTitle && hasSubItems) {
+      //   // If clicking the same menu with subitems, collapse it and reset subitem
+      //   setActiveSubItem("");
+      //   return "";
+      // }
+      console.log("menuTitle prevActive", menuTitle, hasSubItems, prevActive);
 
-      if (menuTitle === "Zone Overview") {
-        setShowStarburst(false);
-      }
+      // if (
+      //   menuTitle === "Zone Overview" ||
+      //   menuTitle === "Account" ||
+      //   menuTitle === "Employee Target" ||
+      //   menuTitle === "Partner Contest"
+      // ) {
+      //   setShowStarburst(false);
+      // }
       // Always reset subitem when switching to a new main menu
       setActiveSubItem("");
 
@@ -705,12 +715,15 @@ const SideBar = () => {
       <KycBrokerage activeSubItem={activeSubItem} />
     ),
   };
-  const tradingSubItems: Record<string, JSX.Element> = {
-    "Client Pledge Request": <PledgeRequest activeSubItem={activeSubItem} />,
-  };
+  // const tradingSubItems: Record<string, JSX.Element> = {
+  //   "Client Pledge Request": <PledgeRequest activeSubItem={activeSubItem} />,
+  // };
 
   const rmsSubItems: Record<string, JSX.Element> = {
     "Upload SLBM Holding": <SLBMHoldings activeSubItem={activeSubItem} />,
+    "Pledge Holdings Adjustment": (
+      <PledgeHolding activeSubItem={activeSubItem} />
+    ),
   };
   const tpdSubItems: Record<string, JSX.Element> = {
     "Unlisted Shares Entry": (
@@ -738,6 +751,16 @@ const SideBar = () => {
     "Status Report": <ThirdPartyStatusReport activeSubItem={activeSubItem} />,
     "Vendor Creation": <VendorMaster activeSubItem={activeSubItem} />,
     "Vendor Approval": <VendorApproval activeSubItem={activeSubItem} />,
+    "Third Party Invoice Upload": (
+      <InvoiceUpload activeSubItem={activeSubItem} />
+    ),
+    "Third Party Invoice Verify": (
+      <InvoiceVerify activeSubItem={activeSubItem} />
+    ),
+    "Third Party Invoice Mail": <InvoiceMail activeSubItem={activeSubItem} />,
+    "Third Party Invoice Report": (
+      <InvoiceStatusReport activeSubItem={activeSubItem} />
+    ),
   };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>
@@ -758,13 +781,12 @@ const SideBar = () => {
           activeMenu={activeMenu}
         />
       ),
-      3: () =>
-        tradingSubItems[activeSubItem] || (
-          <TradeDashboard
-            selectedTrading={selectedViewMore}
-            showMyPerformance={showMyPerformance}
-          />
-        ),
+      3: () => (
+        <TradeDashboard
+          selectedTrading={selectedViewMore}
+          showMyPerformance={showMyPerformance}
+        />
+      ),
       4: () => getSubItemComponent(reportsSubItems),
       5: () => (
         <RHDashboard activeSubItem={activeSubItem} activeMenu={activeMenu} />
@@ -798,6 +820,7 @@ const SideBar = () => {
       31: () => <EmpContest />,
       32: () => <ApnContest activeMenu={activeMenu} />,
       33: () => getSubItemComponent(AccountSubItems),
+      34: () => <PledgeRequest activeMenu={activeMenu} />,
     };
 
     return dynamicMap[menu_order]?.() || null;
@@ -965,29 +988,29 @@ const SideBar = () => {
                 marginRight: "1rem",
               }}
             >
-              Web Portal
+              Old Web Portal
             </Button>
-            {showMyPerformance && (
-              <>
-                <Button
-                  onClick={handleSSOLogin}
-                  style={{
-                    height: "25px",
-                    width: "90px",
-                    borderRadius: "5px",
-                    fontSize: "12px",
-                    padding: "4px 12px",
-                    fontFamily: "Public Sans",
-                    backgroundColor: "#11395C",
-                    color: "#fff",
-                    marginRight: "8px",
-                  }}
-                  className="btn-sm"
-                >
-                  E-KYC
-                </Button>
-              </>
-            )}
+            {/* {showMyPerformance && ( */}
+            <>
+              <Button
+                onClick={handleSSOLogin}
+                style={{
+                  height: "25px",
+                  width: "90px",
+                  borderRadius: "5px",
+                  fontSize: "12px",
+                  padding: "4px 12px",
+                  fontFamily: "Public Sans",
+                  backgroundColor: "#11395C",
+                  color: "#fff",
+                  marginRight: "8px",
+                }}
+                className="btn-sm"
+              >
+                E-KYC
+              </Button>
+            </>
+            {/* )} */}
             <Box
               sx={{
                 padding: isMobile ? "0" : "10px",
@@ -1133,7 +1156,7 @@ const SideBar = () => {
                     handleMenuClick(item.menu_name, !!item.subItems?.length)
                   }
                   handleSubItemClick={handleSubItemClick}
-                  visible={showStarburst}
+                  visible={true}
                 />
               ))}
             </List>

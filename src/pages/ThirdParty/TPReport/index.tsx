@@ -14,27 +14,24 @@ const ThirdPartyStatusReport = ({ activeSubItem }: any) => {
     (state: RootState) => state.UserLogin?.data?.data
   );
   useEffect(() => {
-    const fetchApprover = () => {
-      const payload = {
-        user_id: user_id,
-        // user_id: "EMP-0656",
-      };
-      dispatch(showLoader("Please wait, we are processing your request..."));
-
-      apiServices
-        .ViewThirdPartyMaster(payload)
-        .then((response) => {
-          console.log("A1 Data", response?.data?.data);
-          setData(response?.data?.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching compliance data:", error);
-        })
-        .finally(() => {
-          dispatch(hideLoader());
-        });
+    const payload = {
+      user_id: user_id,
+      // user_id: "EMP-0656",
     };
-    fetchApprover();
+    dispatch(showLoader("Please wait, we are processing your request..."));
+
+    apiServices
+      .ViewThirdPartyMaster(payload)
+      .then((response) => {
+        console.log("A1 Data", response?.data?.data);
+        setData(response?.data?.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching compliance data:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
   }, [dispatch]);
   return (
     <div className="page-content page-view">

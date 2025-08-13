@@ -17,9 +17,12 @@ const RegionalHead = ({ activeSubItem }: any) => {
     (state: RootState) => state.UserLogin?.data?.data
   );
   useEffect(() => {
+    let payload = {
+      user_id,
+    };
     dispatch(showLoader("Please wait..."));
     apiServices
-      .GetBrokerageRHStatus({})
+      .GetBrokerageRHStatus(payload)
       .then((response) => {
         if (response?.status === 200) {
           console.log("ModStatus-data", response?.data?.data);

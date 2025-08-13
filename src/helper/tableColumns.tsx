@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 // import ViewListIcon from "@mui/icons-material/ViewList";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CopyToClipboardCell from "./copyToClipBoardCell";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 
 interface ClientRow {
   ClientCode: string;
@@ -1427,10 +1428,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     align: "center",
     width: 90,
     disableColumnMenu: true,
-    valueGetter: (params: any) => {
-      if (!params) return "-";
-      return dayjs(params, "DD-MMM-YY").toDate();
-    },
+
     valueFormatter: (params: any) => {
       if (!params) return "-";
       return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
@@ -3178,6 +3176,10 @@ export const DPDebitCapsules = [
 export const ODCapsules = [
   { id: 1, label: "Backoffice Report" },
   { id: 2, label: "Template" },
+];
+export const pledgeCapsules = [
+  { id: 1, label: "Pledge Request" },
+  // { id: 2, label: "Template" },
 ];
 
 export const ClientInfoCapsules = [
@@ -4980,6 +4982,12 @@ export const quotes = [
     author: "Henry David Thoreau",
   },
 ];
+export const simpleQuote = [
+  {
+    text: `Please wait`,
+    author: "",
+  },
+];
 
 export const spipPerformanceReportColumns: GridColDef[] = [
   {
@@ -5889,7 +5897,7 @@ export const getApproverOneDetails: GridColDef[] = [
   },
   {
     field: "brokeragePerShare",
-    headerName: "Brokerage Per Share",
+    headerName: "Commision Per Share",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
     align: "right",
@@ -5898,7 +5906,7 @@ export const getApproverOneDetails: GridColDef[] = [
   },
   {
     field: "brokerageInclusiveGST",
-    headerName: "Brokerage Inclusive GST",
+    headerName: "Commision Inclusive GST",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
     align: "right",
@@ -5916,7 +5924,7 @@ export const getApproverOneDetails: GridColDef[] = [
   {
     field: "brokerageExclusiveGST",
     headerClassName: "header-wrap-custom",
-    headerName: "Brokerage Exclusive GST",
+    headerName: "Commision Exclusive GST",
     minWidth: 100,
     align: "right",
     disableColumnMenu: true,
@@ -5949,7 +5957,7 @@ export const getApproverOneDetails: GridColDef[] = [
   },
   {
     field: "netBrokerage",
-    headerName: "Net Brokerage",
+    headerName: "Net Commision",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
     align: "right",
@@ -5960,10 +5968,53 @@ export const getApproverOneDetails: GridColDef[] = [
 
 export const getApproverTwoDetails: GridColDef[] = [
   {
+    field: "dealSheetB64",
+    headerName: "Deal Sheet",
+    headerClassName: "header-wrap-custom",
+    minWidth: 50,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    sortable: false,
+
+    renderCell: (params) => {
+      const base64Data = params.value;
+      const today = new Date();
+
+      const dd = String(today.getDate()).padStart(2, "0");
+      const mm = String(today.getMonth() + 1).padStart(2, "0"); // January is 0!
+      const yy = String(today.getFullYear()).slice(-2);
+
+      const filename = `Deal_Sheet_${dd}-${mm}-${yy}.pdf`;
+
+      const handleDownload = () => {
+        const link = document.createElement("a");
+        link.href = `data:application/pdf;base64,${base64Data}`;
+        link.download = filename;
+        link.click();
+      };
+
+      return (
+        <button
+          onClick={handleDownload}
+          style={{
+            color: "#11395C",
+            textDecoration: "underline",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          <DownloadForOfflineIcon />
+        </button>
+      );
+    },
+  },
+  {
     field: "Action",
     headerName: "Approve | Reject",
     headerClassName: "header-wrap-custom",
-    minWidth: 140,
+    minWidth: 120,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -5983,6 +6034,13 @@ export const getApproverTwoDetails: GridColDef[] = [
     headerName: "Approver One Remarks",
     headerClassName: "header-wrap-custom",
     minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "vendorName",
+    headerName: "Vendor Name",
+    minWidth: 250,
     disableColumnMenu: true,
     headerAlign: "center",
   },
@@ -6043,13 +6101,31 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "brokeragePerShare",
-    headerName: "Brokerage / Share",
+    field: "clientRate",
+    headerName: "Client Rate",
+    headerClassName: "header-wrap-custom",
+    width: 70,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+  },
+  {
+    field: "vendorRate",
+    headerName: "Vendor Rate",
+    headerClassName: "header-wrap-custom",
+    width: 70,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+  },
+  {
+    field: "lkpCommissionPerShare",
+    headerName: "LKP Commission/Share",
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
-    width: 90,
+    width: 100,
   },
   {
     field: "brokerageInclusiveGST",
@@ -6341,14 +6417,14 @@ export const clientAPBrokerageColumns: GridColDef[] = [
     align: "left",
     disableColumnMenu: true,
   },
-  {
-    field: "monthYr",
-    headerName: "Month",
-    width: 110,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
-  },
+  // {
+  //   field: "monthYr",
+  //   headerName: "Month",
+  //   width: 110,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  // },
   {
     field: "grossBrokerage",
     headerName: "Gross Brokerage",
@@ -6364,34 +6440,45 @@ export const clientAPBrokerageColumns: GridColDef[] = [
       }).format(value);
     },
   },
+  // {
+  //   field: "sbBrokerage",
+  //   headerName: "Sub-Broker Brokerage",
+  //   width: 160,
+  //   headerAlign: "center",
+  //   align: "right",
+  //   disableColumnMenu: true,
+  //   valueFormatter: (params: any) => {
+  //     const value = parseFloat(params);
+  //     return new Intl.NumberFormat("en-IN", {
+  //       minimumFractionDigits: 2,
+  //       maximumFractionDigits: 2,
+  //     }).format(value);
+  //   },
+  // },
+  // {
+  //   field: "netBrokerage",
+  //   headerName: "Net Brokerage",
+  //   width: 140,
+  //   headerAlign: "center",
+  //   align: "right",
+  //   disableColumnMenu: true,
+  //   valueFormatter: (params: any) => {
+  //     const value = parseFloat(params);
+  //     return new Intl.NumberFormat("en-IN", {
+  //       minimumFractionDigits: 2,
+  //       maximumFractionDigits: 2,
+  //     }).format(value);
+  //   },
+  // },
   {
-    field: "sbBrokerage",
-    headerName: "Sub-Broker Brokerage",
-    width: 160,
-    headerAlign: "center",
-    align: "right",
-    disableColumnMenu: true,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
-  },
-  {
-    field: "netBrokerage",
-    headerName: "Net Brokerage",
+    field: "contribution",
+    headerName: "Contribution %",
     width: 140,
     headerAlign: "center",
-    align: "right",
+    align: "center",
     disableColumnMenu: true,
     valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
+      return `${params} %`;
     },
   },
 ];
@@ -6626,10 +6713,6 @@ export const ClientExclusionColumns: GridColDef[] = [
     align: "center",
     disableColumnMenu: true,
 
-    valueGetter: (params: any) => {
-      if (!params) return "-";
-      return dayjs(params, "DD-MMM-YY").toDate();
-    },
     valueFormatter: (params: any) => {
       if (!params) return "-";
       return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
@@ -6891,6 +6974,246 @@ export const ThirdPartyStatusReport: GridColDef[] = [
   },
 ];
 
+export const TpInvoiceUploadColumns: GridColDef[] = [
+  {
+    field: "invoiceNumber",
+    headerName: "Invoice Number",
+    minWidth: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center", // Code → Center
+    disableColumnMenu: true,
+  },
+  {
+    field: "invoiceDate",
+    headerName: "Invoice Date",
+    minWidth: 110,
+    flex: 1,
+    headerAlign: "center",
+    align: "center", // Date → Center
+    disableColumnMenu: true,
+
+    valueFormatter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
+    },
+  },
+  {
+    field: "companyName",
+    headerName: "Company Name",
+    minWidth: 200,
+    flex: 2,
+    headerAlign: "center",
+    align: "left", // Text → Left
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "partyName",
+    headerName: "Party Name",
+    minWidth: 200,
+    flex: 2,
+    headerAlign: "center",
+    align: "left", // Text → Left
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "gstNumber",
+    headerName: "GST Number",
+    minWidth: 160,
+    flex: 1.5,
+    headerAlign: "center",
+    align: "center", // Code → Center
+    disableColumnMenu: true,
+  },
+  {
+    field: "forMonth",
+    headerName: "For Month",
+    minWidth: 100,
+    flex: 1,
+    headerAlign: "center",
+    align: "center", // Date → Center
+    disableColumnMenu: true,
+  },
+  {
+    field: "product",
+    headerName: "Product",
+    minWidth: 150,
+    flex: 1.5,
+    headerAlign: "center",
+    align: "left", // Text → Left
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "p_State",
+    headerName: "Party State",
+    minWidth: 140,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "left", // Text → Left
+    disableColumnMenu: true,
+  },
+  {
+    field: "baseAmount",
+    headerName: "Base Amount",
+    minWidth: 110,
+    flex: 1,
+    headerAlign: "center",
+    align: "right", // Number → Right
+    type: "number",
+    disableColumnMenu: true,
+  },
+  {
+    field: "sgst",
+    headerName: "SGST",
+    minWidth: 80,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "right", // Number → Right
+    type: "number",
+    disableColumnMenu: true,
+  },
+  {
+    field: "cgst",
+    headerName: "CGST",
+    minWidth: 80,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "right", // Number → Right
+    type: "number",
+    disableColumnMenu: true,
+  },
+  {
+    field: "igst",
+    headerName: "IGST",
+    minWidth: 80,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "right", // Number → Right
+    type: "number",
+    disableColumnMenu: true,
+  },
+  {
+    field: "totalAmount",
+    headerName: "Total Amount",
+    minWidth: 120,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "right", // Number → Right
+    type: "number",
+    disableColumnMenu: true,
+  },
+];
+export const TpInvoiceVerifyColumns: GridColDef[] = [
+  ...TpInvoiceUploadColumns,
+  {
+    field: "createdOn",
+    headerName: "Created On",
+    minWidth: 160,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    type: "number",
+    disableColumnMenu: true,
+  },
+  {
+    field: "action",
+    headerName: "Action",
+    width: 100,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "delete",
+    headerName: "Delete",
+    width: 70,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+];
+export const TpInvoiceMailsColumns: GridColDef[] = [
+  ...TpInvoiceUploadColumns,
+  {
+    field: "generate",
+    headerName: "Generate Invoice",
+    width: 120,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+];
+export const TpInvoiceReportColumns: GridColDef[] = [
+  ...TpInvoiceUploadColumns,
+  {
+    field: "verificationStatus",
+    headerName: "Status",
+    minWidth: 160,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      const status = params.value?.toLowerCase() || "";
+
+      let backgroundColor = "#cfd8dc"; // Default neutral
+      let color = "#263238";
+      let border = "1px solid #b0bec5";
+
+      if (status.includes("approved")) {
+        backgroundColor = "#a5d6a7"; // Light green
+        color = "#1b5e20";
+        border = "1px solid #81c784";
+      } else if (status.includes("pending")) {
+        backgroundColor = "#FFF4E5"; // Soft peach / beige
+        color = "#FF9800"; // Warm orange (not too saturated)
+        border = "1px solid #FFB74D"; // Light orange border
+      } else if (status.includes("rejected") || status.includes("reject")) {
+        backgroundColor = "#ef9a9a"; // Light red
+        color = "#b71c1c";
+        border = "1px solid #e57373";
+      }
+
+      return (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            width: "100%",
+            fontFamily: "Public Sans",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor,
+              color,
+              border,
+              borderRadius: "999px",
+              padding: "3px 6px",
+              fontSize: "11px",
+              fontWeight: 600,
+              // textTransform: "capitalize",
+              whiteSpace: "nowrap",
+              display: "inline-block",
+              textAlign: "center",
+              minWidth: "110px",
+              lineHeight: "1",
+            }}
+          >
+            {params.value}
+          </div>
+        </div>
+      );
+    },
+  },
+];
 export const VendorMasterColumns: GridColDef[] = [
   {
     field: "vendorId",
@@ -7147,7 +7470,7 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     field: "emailID",
     headerName: "Email ID",
     minWidth: 180,
-    flex: 1,
+    flex: 0.8,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -7226,6 +7549,103 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     flex: 0.6,
     sortable: false,
     filterable: false,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+];
+
+export const getAPContestReportColumns: GridColDef[] = [
+  {
+    field: "apCode",
+    headerName: "AP Code",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "apName",
+    headerName: "AP Name",
+    flex: 2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "qtarget",
+    headerName: "Revenue Target",
+    flex: 1.2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
+        params
+      ),
+  },
+  {
+    field: "brokerageAchieved",
+    headerName: "Revenue Achieved",
+    flex: 1.3,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
+        params
+      ),
+  },
+  {
+    field: "brokerageAchievedPerc",
+    headerName: "Revenue Achievement (%)",
+    flex: 1.4,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      return `${params} %`;
+    },
+    // valueGetter: (params: any) => `${params.achievementPercentage ?? 0}%`,
+  },
+  {
+    field: "newClientCount",
+    headerName: " Clients Target",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "clientsAchieved",
+    headerName: "Clients Achieved",
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "clientsAchievedPerc",
+    headerName: "Client Achievement (%)",
+    flex: 1.4,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      return `${params} %`;
+    },
+  },
+  {
+    field: "prize",
+    headerName: "Prize",
+    flex: 1.5,
+    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
   },

@@ -18,6 +18,7 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { AuthUser } from "../../../redux/thunk/AuthUser";
 import { updateUserId } from "../../../redux/slices/Login/login";
 import ShowToast from "../../../utils/toastUtils";
+import { useVendors } from "../../../pages/UnlistedShare/ApproverOne/VendorContext";
 import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
@@ -31,10 +32,17 @@ interface CustomModalProps {
   setmodal_center: React.Dispatch<React.SetStateAction<boolean>>;
   getUserDetails?: (value: any) => void;
   row?: any;
-  handleApproval?: (value: any, remark: string, entryFlag: string) => void;
+  handleApproval?: (
+    value: any,
+    remark: string,
+    entryFlag: string,
+    base64?: string,
+    vendorId?: string
+  ) => void;
+
   Msg?: string;
   activeSubItem?: any;
-  action?: "approve" | "reject";
+  action?: "approve" | "reject" | "delete";
   expiredtime?: boolean;
   isAdmin?: boolean;
   isUploadMode?: boolean;
@@ -44,6 +52,7 @@ interface CustomModalProps {
   setSetShowImg?: any;
   showDocument?: any;
   fileExtension?: any;
+  isDropUpload?: any;
 }
 
 const CustomModal = ({
@@ -65,6 +74,7 @@ const CustomModal = ({
   setSetShowImg,
   showDocument,
   fileExtension,
+  isDropUpload,
 }: CustomModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -73,7 +83,7 @@ const CustomModal = ({
   const [scrollPos, setScrollPos] = useState({ left: 0, top: 0 });
   const [pdfPageNumber, setPdfPageNumber] = useState(1);
   const [numPages, setNumPages] = useState(0);
-
+  const vendors = useVendors();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
@@ -106,9 +116,28 @@ const CustomModal = ({
     setmodal_center(false);
     navigate("/");
   };
+  const shouldValidateRemark = () =>
+    [
+      "Communication Retrival Checker",
+      "KYC Approval",
+      "RH Approval",
+      "Pre Trade Approval",
+      "Unlisted Shares Approval 1",
+      "Unlisted Shares Approval 2",
+      "Third Party Vendor Approval",
+      "Third Party Invoice Verify",
+    ].includes(activeSubItem) &&
+    !isAdmin &&
+    !showDocument &&
+    action !== "delete";
 
   const formik = useFormik({
-    initialValues: { remark: "", userChangeValue: "", userPanValue: "" },
+    initialValues: {
+      remark: "",
+      userChangeValue: "",
+      userPanValue: "",
+      dropdownOption: "",
+    },
     validationSchema: Yup.object({
       // Remark validation for "Communication Retrival Checker"
       ...((activeSubItem === "Communication Retrival Checker" ||
@@ -122,6 +151,9 @@ const CustomModal = ({
         !isAdmin && {
           remark: Yup.string().trim().required("Remark is required"),
         }),
+      ...(shouldValidateRemark() && {
+        remark: Yup.string().trim().required("Remark is required"),
+      }),
 
       // Admin validation for userChangeValue
       ...(isAdmin && {
@@ -135,32 +167,43 @@ const CustomModal = ({
           .matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Invalid PAN number format")
           .required("PAN number is required"),
       }),
+      ...(isDropUpload && {
+        remark: Yup.string().required("Remark is required"),
+        dropdownOption: Yup.string().required("Vendor Name is required"),
+      }),
     }),
     onSubmit: (values) => {
-      if (getUserDetails && row) {
-        getUserDetails(row);
+      if (action === "delete") {
+        if (getUserDetails && row) {
+          getUserDetails(row);
+        }
+        setmodal_center(false);
+        console.log("test112121212", action, row);
+        return; // 🚨 prevent further execution
       }
-      setmodal_center(false);
-      console.log("test112121212", action, row);
+
       if (action && row) {
         // debugger;
         const entryFlag = action === "approve" ? "A" : "R";
-        if (
-          [
-            "Communication Retrival Checker",
-            "KYC Approval",
-            "RH Approval",
-            "Pre Trade Approval",
-            "Unlisted Shares Approval 2",
-            "Unlisted Shares Approval 1",
-            "Third Party Vendor Approval",
-            "Vendor Approval",
-          ].includes(activeSubItem)
-        ) {
+        const standardItems = [
+          "Communication Retrival Checker",
+          "KYC Approval",
+          "RH Approval",
+          "Pre Trade Approval",
+          "Unlisted Shares Approval 2",
+          "Third Party Vendor Approval",
+          "Third Party Invoice Verify",
+          "Vendor Approval",
+        ];
+        const isStandardFlow = standardItems.includes(activeSubItem);
+        const isSpecialRejectCase =
+          activeSubItem === "Unlisted Shares Approval 1" && action === "reject";
+        if (isStandardFlow || isSpecialRejectCase) {
           handleApproval?.(row, values.remark, entryFlag);
         }
         console.log(values.remark, "values.remark", row, entryFlag);
         formik.resetForm();
+        setmodal_center(false);
       }
     },
   });
@@ -243,6 +286,15 @@ const CustomModal = ({
         dispatch(hideLoader());
       });
   };
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.readAsDataURL(file); // This will convert to base64 with MIME prefix
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
   const handleFileUploadClick = () => {
     if (selectedFile && handleFileUpload) {
@@ -255,6 +307,57 @@ const CustomModal = ({
     } else {
       ShowToast("error", "Please select a file to upload.");
     }
+  };
+  const handleDropUploadClick = async () => {
+    // Validate Formik fields first
+    const isValid = await formik.validateForm().then((errors) => {
+      if (Object.keys(errors).length > 0) {
+        formik.setTouched({
+          remark: true,
+          dropdownOption: true,
+        });
+        return false;
+      }
+      return true;
+    });
+
+    // Validate file input
+    if (!selectedFile) {
+      ShowToast("error", "Please select a PDF file to upload.");
+      return;
+    }
+
+    if (!isValid) {
+      ShowToast("error", "Please fill all required fields.");
+      return;
+    }
+    let base64 = "";
+    if (selectedFile) {
+      const base64String = await fileToBase64(selectedFile);
+      console.log("Base64 file:", base64String);
+      base64 = base64String;
+    }
+    // ✅ All fields are valid
+    console.log(
+      "rowCheck Base64-->",
+      row,
+      formik.values.remark,
+      "dropdwon====>",
+      formik.values.dropdownOption,
+      "base64====>",
+      base64,
+      action
+    );
+    handleApproval?.(
+      row,
+      formik.values.remark,
+      action ?? "approve",
+      formik.values.dropdownOption,
+      base64
+    );
+    setSelectedFile(null);
+    setmodal_center(false);
+    formik.resetForm(); // handleFileUpload(row, selectedFile, formik.values.remark);
   };
 
   const renderHeaderIcon = () => {
@@ -293,6 +396,7 @@ const CustomModal = ({
   };
 
   const shouldShowRemarkField = () => {
+    console.log(action, "dsdsdsdsd");
     const remarkItems = [
       "Communication Retrival Checker",
       "KYC Approval",
@@ -302,8 +406,14 @@ const CustomModal = ({
       "Unlisted Shares Approval 2",
       "Third Party Vendor Approval",
       "Vendor Approval",
+      "Third Party Invoice Verify",
     ];
-    return remarkItems.includes(activeSubItem) && !showDocument && !isAdmin;
+    return (
+      remarkItems.includes(activeSubItem) &&
+      !showDocument &&
+      !isAdmin &&
+      action !== "delete"
+    );
   };
 
   const renderRemarkField = () => (
@@ -488,6 +598,72 @@ const CustomModal = ({
       </Col>
     </>
   );
+  const renderDropUploadSection = () => {
+    console.log(row, "merumMD", action, vendors); //  Now this will run
+
+    return (
+      <>
+        <Col lg={12}>
+          <Input
+            type="select"
+            name="dropdownOption"
+            className="form-control mb-3"
+            value={formik.values.dropdownOption}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            style={{
+              width: "100%",
+              minHeight: "40px",
+              marginTop: "16px",
+              borderColor: "#C4C4C4",
+            }}
+          >
+            <option value="">-- Select Vendor Name --</option>
+            {Array.isArray(vendors) &&
+              vendors.map((vendor) => (
+                <option key={vendor.rowId} value={vendor.rowId}>
+                  {vendor.vendorName}
+                </option>
+              ))}
+          </Input>
+
+          <Input
+            name="uploadProof"
+            type="file"
+            accept=".pdf"
+            className="form-control mb-3"
+            onChange={(e) =>
+              e.target.files && setSelectedFile(e.target.files[0])
+            }
+            style={{ width: "100%", minHeight: "40px", borderColor: "#C4C4C4" }}
+          />
+
+          <div
+            style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}
+          >
+            <Button
+              className="btn"
+              style={{ backgroundColor: "#EE4B2B", borderColor: "#EE4B2B" }}
+              onClick={() => {
+                handleClose();
+                setSelectedFile(null);
+                setmodal_center(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="btn"
+              style={{ width: "80px", backgroundColor: "#11395C" }}
+              onClick={handleDropUploadClick}
+            >
+              Yes
+            </Button>
+          </div>
+        </Col>
+      </>
+    );
+  };
 
   const handleZoomIn = () => {
     setZoomLevel((prev) => Math.min(prev + 0.2, 3));
@@ -718,11 +894,12 @@ const CustomModal = ({
 
           {!isAdmin &&
             !isUploadMode &&
+            !isDropUpload &&
             !setShowImg &&
             renderConfirmationButtons()}
 
           {isUploadMode && renderUploadSection()}
-
+          {isDropUpload && renderDropUploadSection()}
           {setShowImg && renderImagePreview()}
         </form>
       </ModalBody>

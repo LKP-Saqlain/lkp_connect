@@ -550,6 +550,74 @@ export const apiServices = {
   GetWebPortalDetails: async (payload: any) => {
     return await apiService("POST", endpoints.GetWebPortalDetails, payload);
   },
+  ViewThirdPartyMaster: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewThirdPartyMaster, payload);
+  },
+  InsertThirdPartyMasterRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.InsertThirdPartyMasterRecord,
+      payload
+    );
+  },
+  DeleteThirdPartyMasterRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DeleteThirdPartyMasterRecord,
+      payload
+    );
+  },
+  UpdateThirdPartyMasterRecord: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateThirdPartyMasterRecord,
+      payload
+    );
+  },
+  ThirdPartyApproverView: async (payload: any) => {
+    return await apiService("POST", endpoints.ThirdPartyApproverView, payload);
+  },
+  ThirdPartyApproverAction: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ThirdPartyApproverAction,
+      payload
+    );
+  },
+  TPInvoiceStaging: async (payload: any) => {
+    return await apiService("POST", endpoints.TPInvoiceStaging, payload);
+  },
+  UnstageTPInvoice: async (payload: any) => {
+    return await apiService("POST", endpoints.UnstageTPInvoice, payload);
+  },
+  TPInvoiceUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.TPInvoiceUpload, payload);
+  },
+  GetUnverifiedTPInvoices: async (payload: any) => {
+    return await apiService("POST", endpoints.GetUnverifiedTPInvoices, payload);
+  },
+  HandleTPInvoiceApproval: async (payload: any) => {
+    return await apiService("POST", endpoints.HandleTPInvoiceApproval, payload);
+  },
+  DeleteTPInvoiceRecord: async (payload: any) => {
+    return await apiService("POST", endpoints.DeleteTPInvoiceRecord, payload);
+  },
+  GetReadyToSendTPInvoices: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetReadyToSendTPInvoices,
+      payload
+    );
+  },
+  GenerateTPInvoice: async (payload: any) => {
+    return await apiService("POST", endpoints.GenerateTPInvoice, payload);
+  },
+  SendTPInvoiceBulkEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendTPInvoiceBulkEmail, payload);
+  },
+  GetTPInvoiceRecordList: async (payload: any) => {
+    return await apiService("POST", endpoints.GetTPInvoiceRecordList, payload);
+  },
   GetBrokRevReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetBrokRevReport, payload);
   },
@@ -612,40 +680,7 @@ export const apiServices = {
   GetRevTradedClient: async (payload: any) => {
     return await apiService("POST", endpoints.GetRevTradedClient, payload);
   },
-  ViewThirdPartyMaster: async (payload: any) => {
-    return await apiService("POST", endpoints.ViewThirdPartyMaster, payload);
-  },
-  InsertThirdPartyMasterRecord: async (payload: any) => {
-    return await apiService(
-      "POST",
-      endpoints.InsertThirdPartyMasterRecord,
-      payload
-    );
-  },
-  DeleteThirdPartyMasterRecord: async (payload: any) => {
-    return await apiService(
-      "POST",
-      endpoints.DeleteThirdPartyMasterRecord,
-      payload
-    );
-  },
-  UpdateThirdPartyMasterRecord: async (payload: any) => {
-    return await apiService(
-      "POST",
-      endpoints.UpdateThirdPartyMasterRecord,
-      payload
-    );
-  },
-  ThirdPartyApproverView: async (payload: any) => {
-    return await apiService("POST", endpoints.ThirdPartyApproverView, payload);
-  },
-  ThirdPartyApproverAction: async (payload: any) => {
-    return await apiService(
-      "POST",
-      endpoints.ThirdPartyApproverAction,
-      payload
-    );
-  },
+
   VerifyBankDetails: async (payload: any) => {
     return await apiService("POST", endpoints.VerifyBankDetails, payload);
   },
@@ -666,5 +701,19 @@ export const apiServices = {
   },
   UpdateAccountApproval: async (payload: any) => {
     return await apiService("POST", endpoints.UpdateAccountApproval, payload);
+  },
+
+  GetAPContestReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetAPContestReport, payload);
+  },
+  GetUnlistedVendorDropdown: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetUnlistedVendorDropdown,
+      payload
+    );
+  },
+  GetClientAccessLink: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientAccessLink, payload);
   },
 };

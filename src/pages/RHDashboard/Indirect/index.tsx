@@ -30,6 +30,14 @@ const monthYearOptions = [
   "Dec-25",
 ];
 
+const getCurrentMonthYear = (): string => {
+  const now = new Date();
+  const month = now.toLocaleString("en-US", { month: "short" });
+  const year = now.getFullYear().toString().slice(-2);
+  return `${month}-${year}`;
+};
+const currentMonth = getCurrentMonthYear();
+
 const now = new Date();
 const monthDropdown = `${now.toLocaleString("en-US", {
   month: "short",
@@ -127,6 +135,7 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
     weekly: [],
     monthly: [],
   });
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
@@ -135,7 +144,7 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
 
   const formik = useFormik({
     initialValues: {
-      monthDropdown: "",
+      monthDropdown: currentMonth,
     },
     onSubmit: (values) => {
       console.log("Selected Month:", values.monthDropdown);
@@ -160,7 +169,7 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
       user_Id: "EMP-0238",
       branch_Type: "indirect",
       option_Type: "Monthly_Client",
-      monthDropdown: formik.values.monthDropdown || "",
+      monthDropdown: selectedMonth || "",
     };
 
     dispatch(showLoader(""));
@@ -170,13 +179,14 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
         if (response?.status === 200) {
           const rawData = response?.data?.data;
 
-          const formattedData = rawData.map((item: any) => {
+          const formattedData = rawData.map((item: any, index: any) => {
             const dateObj = new Date(item.tradeDate);
             const day = String(dateObj.getDate()).padStart(2, "0");
             const month = dateObj.toLocaleString("en-US", { month: "short" });
             const year = String(dateObj.getFullYear()).slice(-2);
             return {
               ...item,
+              id: index + 0,
               tradeDate: `${day}-${month}-${year}`,
             };
           });
@@ -549,16 +559,17 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
                 size="small"
                 style={{ width: "220px" }}
               >
-                <InputLabel id="month-dropdown-label">
-                  Filter Records
-                </InputLabel>
+                <InputLabel id="month-dropdown-label">Select Month</InputLabel>
                 <Select
                   labelId="month-dropdown-label"
                   id="monthDropdown"
                   name="monthDropdown"
                   value={formik.values.monthDropdown}
-                  label="Filter Recordsss"
-                  onChange={formik.handleChange}
+                  label="Select Monthss"
+                  onChange={(e) => {
+                    formik.handleChange(e);
+                    setSelectedMonth(e.target.value);
+                  }}
                 >
                   {monthYearOptions.map((month) => (
                     <MenuItem key={month} value={month}>

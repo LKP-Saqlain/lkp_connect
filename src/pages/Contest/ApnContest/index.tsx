@@ -86,7 +86,12 @@ const APContest = ({ activeMenu }: any) => {
         if (response?.status === 200) {
           console.log("ResponseAPContest", response?.data?.data);
           dispatch(hideLoader());
-          setUserData(response?.data?.data);
+          setUserData(
+            response?.data?.data?.map((item: any, index: number) => ({
+              ...item,
+              id: index,
+            }))
+          );
         }
       })
       .catch((error) => {
@@ -174,9 +179,12 @@ const APContest = ({ activeMenu }: any) => {
   //   },
   // ];
 
-  function formatIndianNumber(value: number): string {
-    return `₹${value.toLocaleString("en-IN")}`;
-  }
+  const formatIndianNumber = (number: number) => {
+    return `₹${number.toLocaleString("en-IN", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })}`;
+  };
 
   return (
     <>

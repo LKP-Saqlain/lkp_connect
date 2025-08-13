@@ -391,24 +391,26 @@ const DormantClient = ({ activeSubItem }: any) => {
       .catch((error) => {
         dispatch(hideLoader());
 
-        const errors = error?.response?.data?.errors;
+        const errors = error?.response?.data;
+        console.log("ERRORS", errors);
+        ShowToast("error", error?.response?.data?.message);
+        // if (errors) {
 
-        if (errors) {
-          // Extract error messages
-          const zoneError = errors?.Zone?.[0];
-          const branchError = errors?.BranchCode?.[0];
+        //   // Extract error messages
+        //   const zoneError = errors?.Zone?.[0];
+        //   const branchError = errors?.BranchCode?.[0];
 
-          // Display the errors in ShowToast
-          if (zoneError) {
-            ShowToast("error", zoneError);
-          }
-          if (branchError) {
-            ShowToast("error", branchError);
-          }
-        } else {
-          // Default error message for unexpected errors
-          ShowToast("error", "An unexpected error occurred. Please try again.");
-        }
+        //   // Display the errors in ShowToast
+        //   if (zoneError) {
+        //     ShowToast("error", zoneError);
+        //   }
+        //   if (branchError) {
+        //     ShowToast("error", branchError);
+        //   }
+        // } else {
+        //   // Default error message for unexpected errors
+        //   ShowToast("error", "An unexpected error occurred. Please try again.");
+        // }
       })
       .finally(() => {
         dispatch(hideLoader());

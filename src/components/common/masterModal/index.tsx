@@ -290,7 +290,7 @@ const ModalComponent = ({
       gstStateCode: Yup.string().required("GST State Code is required"),
       pan: Yup.string().required("PAN is required"),
       address1: Yup.string().required("Address is required"),
-      mobileNo: Yup.string().required("Mobile Number is required"),
+      // mobileNo: Yup.string().required("Mobile Number is required"),
     });
 
   const getValidationSchema = (editData?: EditData) => {
@@ -456,6 +456,8 @@ const ModalComponent = ({
         clientName: "",
         securitiesName: "",
         noOfShare: null,
+        clientRate: null,
+        vendorRate: null,
         brokPerShare: null,
         brokIncGST: null,
         gst: null,
@@ -771,7 +773,7 @@ const ModalComponent = ({
         formik.setFieldValue("noOfShare", editData?.noOfShares || null);
         formik.setFieldValue(
           "brokPerShare",
-          editData?.brokeragePerShare || null
+          editData?.lkpCommissionPerShare || null
         );
         formik.setFieldValue(
           "brokIncGST",
@@ -787,6 +789,8 @@ const ModalComponent = ({
         formik.setFieldValue("netBrokerage", editData?.netBrokerage || null);
         formik.setFieldValue("rmCode", editData?.rmCode || null);
         formik.setFieldValue("sbCommision", editData?.sbCommission || null);
+        formik.setFieldValue("clientRate", editData?.clientRate || null);
+        formik.setFieldValue("vendorRate", editData?.vendorRate || null);
       }
       if (isVendorMasterContent) {
         if (editData?.bankActNo !== "" && editData?.ifscCode !== "") {
@@ -1064,19 +1068,29 @@ const ModalComponent = ({
       formik.setFieldValue("netBrokerage", "");
     };
 
-    if (name === "noOfShare" || name === "brokPerShare") {
+    if (name === "clientRate" || name === "vendorRate") {
+      formik.setFieldValue(name, numericValue);
+
+      const clientRate = parseInt(
+        name === "clientRate" ? numericValue : formik.values.clientRate || "0"
+      );
+      const vendorRate = parseInt(
+        name === "vendorRate" ? numericValue : formik.values.vendorRate || "0"
+      );
+
+      if (!isNaN(clientRate) && !isNaN(vendorRate)) {
+        const brokPerShare = clientRate - vendorRate;
+        formik.setFieldValue("brokPerShare", brokPerShare.toString());
+      }
+    }
+
+    // Updated logic to trigger full business rules when only noOfShare is changed
+    else if (name === "noOfShare") {
       formik.setFieldValue(name, numericValue);
       formik.setFieldError(name, "");
 
-      const noOfShare =
-        name === "noOfShare"
-          ? parseInt(numericValue || "0")
-          : parseInt(formik.values.noOfShare || "0");
-
-      const brokPerShare =
-        name === "brokPerShare"
-          ? parseInt(numericValue || "0")
-          : parseInt(formik.values.brokPerShare || "0");
+      const noOfShare = parseInt(numericValue || "0");
+      const brokPerShare = parseInt(formik.values.brokPerShare || "0");
 
       if (noOfShare > 0 && brokPerShare > 0) {
         const inclusiveGST = Math.floor(noOfShare * brokPerShare);
@@ -1100,7 +1114,6 @@ const ModalComponent = ({
           const stComm = sbValue / 1.18;
           const subBrokerCommission = Math.floor(sbValue - stComm);
           const brokExcGST = exclusiveGST;
-
           const netBrokerage = Math.floor(brokExcGST - subBrokerCommission);
 
           formik.setFieldValue("sbCommision", subBrokerCommission);
@@ -1832,6 +1845,50 @@ const ModalComponent = ({
                 <Col lg={6}>
                   <TextField
                     fullWidth
+                    id="clientRate"
+                    name="clientRate"
+                    // type="number"
+                    label="Enter Client Rate"
+                    variant="outlined"
+                    size="small"
+                    inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                    value={formik.values.clientRate}
+                    onChange={handleCustomChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.clientRate &&
+                      Boolean(formik.errors.clientRate)
+                    }
+                    helperText={
+                      formik.touched.clientRate && formik.errors.clientRate
+                    }
+                  />
+                </Col>
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
+                    id="vendorRate"
+                    name="vendorRate"
+                    // type="number"
+                    label="Enter Vendor Rate"
+                    variant="outlined"
+                    size="small"
+                    inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                    value={formik.values.vendorRate}
+                    onChange={handleCustomChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.vendorRate &&
+                      Boolean(formik.errors.vendorRate)
+                    }
+                    helperText={
+                      formik.touched.vendorRate && formik.errors.vendorRate
+                    }
+                  />
+                </Col>
+                <Col lg={6}>
+                  <TextField
+                    fullWidth
                     id="noOfShare"
                     name="noOfShare"
                     // type="number"
@@ -1857,11 +1914,15 @@ const ModalComponent = ({
                     id="brokPerShare"
                     name="brokPerShare"
                     // type="number"
-                    label="Enter Brokerage per share"
+                    // label="LKP Commission per share"
                     variant="outlined"
+                    disabled={true}
                     size="small"
                     inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-                    value={formik.values.brokPerShare}
+                    // value={formik.values.brokPerShare}
+                    value={`${
+                      formik.values.brokPerShare || "0"
+                    }  /- LKP Commission per share`}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
                     error={

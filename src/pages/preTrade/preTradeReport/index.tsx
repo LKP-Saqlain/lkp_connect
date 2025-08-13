@@ -233,6 +233,7 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
 
   const handleViewReport = () => {
     let payload = {
+      user_id,
       clientCode: formik.values.clientCode,
       dealerID: "",
       dealerName: "",
