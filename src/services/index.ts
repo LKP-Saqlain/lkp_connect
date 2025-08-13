@@ -716,4 +716,10 @@ export const apiServices = {
   GetClientAccessLink: async (payload: any) => {
     return await apiService("POST", endpoints.GetClientAccessLink, payload);
   },
+  MergeIntoOdinFile: async (payload: any) => {
+    return await apiService("POST", endpoints.MergeIntoOdinFile, payload);
+  },
+  MergeIntoSymphonyFile: async (payload: any) => {
+    return await apiService("POST", endpoints.MergeIntoSymphonyFile, payload);
+  },
 };

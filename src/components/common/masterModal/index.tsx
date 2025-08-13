@@ -854,10 +854,14 @@ const ModalComponent = ({
   ): Promise<string> => {
     return new Promise((resolve, reject) => {
       console.log("args-->", file, communicationProofPath, isUploadedFile);
-
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
-      // debugger;
       if (allowedFormats.includes(fileExt)) {
+        if (isUploadedFile && file.size > 1024 * 1024) {
+          ShowToast("error", "File size must be less than 1MB.");
+          reject(new Error("File size exceeds 1MB"));
+          return; // stop execution
+        }
+
         const { name } = file;
         const fileName = name.substring(0, name.lastIndexOf("."));
         console.log("fileName", fileName);
@@ -870,17 +874,8 @@ const ModalComponent = ({
           const base64String = reader.result as string;
           const base64Only = base64String.split(",")[1] || base64String;
 
-          // const prefix =
-          //   isUploadedFile === "tdsFile"
-          //     ? "TDS_"
-          //     : isUploadedFile === "msmeFile"
-          //     ? "MSME_"
-          //     : isUploadedFile === "bankFile"
-          //     ? "BANK_"
-          //     : "DOC_";
-
           // Determine document type from isUploadedFile
-          let docType = "DOC";
+          let docType = "";
           if (isUploadedFile === "tdsFile") docType = "TDS";
           else if (isUploadedFile === "msmeFile") docType = "MSME";
           else if (isUploadedFile === "bankFile") docType = "BANK";
@@ -890,7 +885,6 @@ const ModalComponent = ({
           console.log("customFileName", finalFileName);
 
           if (isUploadedFile === "tdsFile") {
-            // debugger;
             setUploadedTDSFile(file);
             setTDSFileBase64(base64Only);
             setTdsFileExtension(fileExt);

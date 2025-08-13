@@ -160,4 +160,6 @@ export const endpoints = {
   GetAPContestReport: "api/MIS/GetAPContestReport",
   GetUnlistedVendorDropdown: "api/Account/GetUnlistedVendorDropdown",
   GetClientAccessLink: "api/BackOffice/GetClientAccessLink",
+  MergeIntoOdinFile: "api/RMS/MergeIntoOdinFile",
+  MergeIntoSymphonyFile: "api/RMS/MergeIntoSymphonyFile",
 };
