@@ -2148,6 +2148,39 @@ const DataTable = ({
         action={action}
         handleApproval={handleApproval}
         Msg={Msg}
+        // Msg={
+        //   activeSubItem === "RMS Allocation"
+        //     ? ""
+        //     : activeSubItem === "Regulatory Announcement"
+        //     ? "Are you sure want to delete this entry"
+        //     : activeSubItem === "Unlisted Shares Entry"
+        //     ? "Are you sure want to delete this entry"
+        //     : activeSubItem === "Communication Retrival Entry" ||
+        //       activeSubItem === "Marketing Material" ||
+        //       activeSubItem === "Client Exclusion" ||
+        //       activeSubItem === "Third Party Vendor Master"
+        //     ? "Are you sure want to delete this entry"
+        //     : activeSubItem === "Communication Retrival Checker"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "KYC Approval"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "RH Approval"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "Unlisted Shares Approval 1" ||
+        //       activeSubItem === "Unlisted Shares Approval 2" ||
+        //       activeSubItem === "Third Party Vendor Approval"
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "Pre Trade Approval" && !showDocument
+        //     ? `Are you sure want to ${action} this entry`
+        //     : activeSubItem === "Pre Trade Proof Upload"
+        //     ? ""
+        //     : activeSubItem === "Pre Trade Report"
+        //     ? ""
+        //     : activeSubItem === "Pre Trade Approval" && showDocument
+        //     ? ""
+        //     : "Are you sure you want to send the email?"
+        // }
+
         activeSubItem={activeSubItem}
         isUploadMode={activeSubItem === "Pre Trade Proof Upload" ? true : false}
         isDropUpload={
