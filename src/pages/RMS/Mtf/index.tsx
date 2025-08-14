@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Container, Card, CardHeader, CardBody } from "reactstrap";
-import { Tooltip } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { apiServices } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,11 +30,10 @@ const MTF = ({ activeSubItem }: any) => {
   });
 
   const handleGenerateClick = (type: "symphony" | "odin") => {
-    // Mark all fields as touched so validation shows
     formik.setTouched({ symphonyFile: true, odinFile: true });
 
     if (!formik.values.symphonyFile || !formik.values.odinFile) {
-      return; // Stop if files are missing
+      return;
     }
 
     if (type === "symphony") {
@@ -63,15 +62,11 @@ const MTF = ({ activeSubItem }: any) => {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", "MergedOdinFile.txt"); // file name
+        link.setAttribute("download", "MergedOdinFile.txt");
         document.body.appendChild(link);
         link.click();
-
-        // Cleanup
         link.remove();
         window.URL.revokeObjectURL(url);
-      } else {
-        console.error("No data found in API response");
       }
     } catch (error) {
       console.error("MergeIntoOdinFile Error", error);
@@ -90,19 +85,14 @@ const MTF = ({ activeSubItem }: any) => {
 
     try {
       const response = await apiServices.MergeIntoSymphonyFile(formData);
-      console.log("MergeIntoSymphonyFile Response", response);
-
       if (response?.data) {
         const blob = new Blob([response.data], { type: "text/plain" });
-
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = "MergeIntoSymphonyFile.txt"; // File name
+        link.download = "MergeSymphonyFile.txt";
         document.body.appendChild(link);
         link.click();
-
-        // Cleanup
         document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
       }
@@ -113,7 +103,6 @@ const MTF = ({ activeSubItem }: any) => {
     }
   };
 
-  // Drag and drop handling
   const handleDrop = (
     e: React.DragEvent<HTMLDivElement>,
     fieldName: string
@@ -205,31 +194,11 @@ const MTF = ({ activeSubItem }: any) => {
         </small>
       </div>
 
-      {formik.errors[fieldName] && (
+      {formik.errors[fieldName] && formik.touched[fieldName] && (
         <div className="text-danger mt-1" style={{ fontSize: "0.85rem" }}>
-          {formik.touched[fieldName] &&
-          typeof formik.errors[fieldName] === "string"
-            ? formik.errors[fieldName]
-            : null}
+          {formik.errors[fieldName] as string}
         </div>
       )}
-
-      {/* Generate button text */}
-      {/* <div
-        style={{
-          marginTop: "5px",
-          fontSize: "12px",
-          color: "#007bff",
-          textDecoration: "underline",
-          cursor: "pointer",
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-          handleGenerateClick(fieldName === "symphonyFile" ? "symphony" : "odin");
-        }}
-      >
-        Click to generate {label} file
-      </div> */}
     </div>
   );
 
@@ -258,61 +227,75 @@ const MTF = ({ activeSubItem }: any) => {
           </CardHeader>
           <CardBody>
             <form onSubmit={formik.handleSubmit}>
+              {/* Responsive Upload Sections */}
               <div
                 style={{
                   display: "flex",
                   gap: "20px",
                   marginBottom: "20px",
+                  flexWrap: "wrap",
                 }}
               >
-                <div style={{ flex: 1 }}>
+                {/* Symphony Section */}
+                <div style={{ flex: "1 1 300px", minWidth: "250px" }}>
                   <label className="form-label">Symphony Format</label>
                   {renderUploadBox("symphonyFile", formik.values.symphonyFile)}
+
+                  {/* Buttons directly below Symphony */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                      marginTop: "10px",
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        fontSize: "12px",
+                        color: "#fff",
+                        bgcolor: "#11395C",
+                        borderColor: "#11395C",
+                        textTransform: "none",
+                        padding: "4px 10px",
+                        flex: "1 1 200px",
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleGenerateClick("symphony");
+                      }}
+                    >
+                      Download Symphony file
+                    </Button>
+
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        fontSize: "12px",
+                        color: "#fff",
+                        bgcolor: "#11395C",
+                        borderColor: "#11395C",
+                        textTransform: "none",
+                        padding: "4px 10px",
+                        flex: "1 1 200px",
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleGenerateClick("odin");
+                      }}
+                    >
+                      Download ODIN file
+                    </Button>
+                  </div>
                 </div>
 
-                <div style={{ flex: 1 }}>
+                {/* ODIN Section */}
+                <div style={{ flex: "1 1 300px", minWidth: "250px" }}>
                   <label className="form-label">ODIN Format</label>
                   {renderUploadBox("odinFile", formik.values.odinFile)}
-                </div>
-              </div>
-
-              {/* External Click-to-generate section */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "8px",
-                  fontFamily: "Public Sans",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#007bff",
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleGenerateClick("symphony");
-                  }}
-                >
-                  Click to generate Symphony file
-                </div>
-
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "#007bff",
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleGenerateClick("odin");
-                  }}
-                >
-                  Click to generate ODIN file
                 </div>
               </div>
             </form>
