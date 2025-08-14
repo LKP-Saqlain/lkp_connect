@@ -36,6 +36,7 @@ interface DashboardCardProps {
   rightValue?: number | string;
   rightSubHeading?: string;
   cardStyle?: any;
+  isCustomRender?: any;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -56,6 +57,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   cardStyle,
   subHeading,
   rightSubHeading,
+  isCustomRender,
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -112,6 +114,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
               className={
                 title === "Fresh Cash Margin*" ? "fs-12 mb-0" : "fs-14 mb-0"
               }
+              style={{ textAlign: "left" }}
             >
               {title}
             </h6>
@@ -445,10 +448,22 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
             </div>
           )}
         </CardBody>
-      </Card>
+      </Card>{" "}
       {/* Note */}
       {note && (
-        <div className="movable-note">
+        <div
+          className={!isCustomRender ? "movable-note" : ""}
+          style={
+            isCustomRender
+              ? {
+                  fontSize: "12px",
+                  position: "relative",
+                  color: "#6c757d",
+                  right: "4rem",
+                }
+              : undefined
+          }
+        >
           <span style={{ fontFamily: "Public Sans" }}>{note}</span>
         </div>
       )}

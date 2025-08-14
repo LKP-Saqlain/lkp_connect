@@ -24,6 +24,7 @@ import { useTheme } from "@mui/material/styles";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 // import { isAdminAccess } from "../../../helper/commmon";
 import { pdfjs, Document, Page } from "react-pdf";
+import ApnContest from "../../../pages/Contest/ApnContest";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 interface CustomModalProps {
@@ -53,6 +54,7 @@ interface CustomModalProps {
   showDocument?: any;
   fileExtension?: any;
   isDropUpload?: any;
+  isPartnerContest?: boolean;
 }
 
 const CustomModal = ({
@@ -75,6 +77,7 @@ const CustomModal = ({
   showDocument,
   fileExtension,
   isDropUpload,
+  isPartnerContest,
 }: CustomModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -859,49 +862,97 @@ const CustomModal = ({
       centered
       backdrop={expiredtime ? "static" : undefined} // Disable clicking outside for expired token modal
       keyboard={expiredtime ? false : undefined}
-      style={{ maxWidth: setShowImg ? "700px" : "500px" }}
+      style={{
+        maxWidth: setShowImg
+          ? "700px"
+          : activeSubItem === "Partner Contest Report"
+          ? "90%"
+          : "500px",
+        borderRadius: "12px",
+        overflow: "hidden",
+      }}
     >
-      <ModalBody className="text-center p-3">
-        {!expiredtime && (
-          <i
-            className="ri-close-line"
-            onClick={() => {
-              setmodal_center(false);
-              setSelectedFile(null);
-              handleClose();
-            }}
-            style={{
-              position: "absolute",
-              top: "-6px",
-              right: "-1px",
-              fontSize: "1.5rem",
-              cursor: "pointer",
-              zIndex: 1000,
-              color: "#000",
-            }}
-          />
+      <ModalBody
+        className="text-center p-3"
+        style={
+          isPartnerContest
+            ? {
+                backgroundColor: "#E5E4E2",
+              }
+            : undefined
+        }
+      >
+        {isPartnerContest && isPartnerContest ? (
+          <>
+            {!expiredtime && (
+              <i
+                className="ri-close-line"
+                onClick={() => {
+                  setmodal_center(false);
+                  setSelectedFile(null);
+                  handleClose();
+                }}
+                style={{
+                  position: "absolute",
+                  top: "-6px",
+                  right: "-1px",
+                  fontSize: "1.5rem",
+                  cursor: "pointer",
+                  zIndex: 1000,
+                  color: "#000",
+                }}
+              />
+            )}{" "}
+            <ApnContest
+              activeMenu={"Partner Contest"}
+              isCustomRender={true}
+              row={row}
+            />
+          </>
+        ) : (
+          <>
+            {!expiredtime && (
+              <i
+                className="ri-close-line"
+                onClick={() => {
+                  setmodal_center(false);
+                  setSelectedFile(null);
+                  handleClose();
+                }}
+                style={{
+                  position: "absolute",
+                  top: "-6px",
+                  right: "-1px",
+                  fontSize: "1.5rem",
+                  cursor: "pointer",
+                  zIndex: 1000,
+                  color: "#000",
+                }}
+              />
+            )}
+            {/*  here Icons based on Conditions */}
+            {renderHeaderIcon()}
+            {/* Message Section */}
+            <div className="mt-4" style={{ fontFamily: "Public Sans" }}>
+              {renderMessage()}
+            </div>
+            {/* Main Form */}
+            <form onSubmit={formik.handleSubmit}>
+              {shouldShowRemarkField() && renderRemarkField()}
+              {isAdmin && renderAdminFields()}
+
+              {!isAdmin &&
+                !isUploadMode &&
+                !isDropUpload &&
+                !setShowImg &&
+                renderConfirmationButtons()}
+
+              {isUploadMode && renderUploadSection()}
+              {isDropUpload && renderDropUploadSection()}
+              {setShowImg && renderImagePreview()}
+            </form>
+          </>
         )}
-        {/*  here Icons based on Conditions */}
-        {renderHeaderIcon()}
-        {/* Message Section */}
-        <div className="mt-4" style={{ fontFamily: "Public Sans" }}>
-          {renderMessage()}
-        </div>
-        {/* Main Form */}
-        <form onSubmit={formik.handleSubmit}>
-          {shouldShowRemarkField() && renderRemarkField()}
-          {isAdmin && renderAdminFields()}
-
-          {!isAdmin &&
-            !isUploadMode &&
-            !isDropUpload &&
-            !setShowImg &&
-            renderConfirmationButtons()}
-
-          {isUploadMode && renderUploadSection()}
-          {isDropUpload && renderDropUploadSection()}
-          {setShowImg && renderImagePreview()}
-        </form>
       </ModalBody>
     </ReactstrapModal>
   );

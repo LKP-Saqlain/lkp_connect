@@ -1997,34 +1997,33 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "Partner Contest Report") {
-      return getAPContestReportColumns.map((column) => ({
-        ...column,
-      }));
-      //   return getAPContestReportColumns.map((column) => {
-      //     if (column.field === "apCode")
-      //       return {
-      //         ...column,
-      //         renderCell: (params: any) => {
-      //           return (
-      //             <button
-      //               onClick={() => {
-      //                 // handleDownload(params.row); // This will trigger the download function
-      //                 console.log(params.row.apCode, "count");
-      //               }}
-      //               style={{
-      //                 color: "#11395C",
-      //                 textDecoration: "underline",
+      return getAPContestReportColumns.map((column) => {
+        if (column.field === "apCode") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const handleClick = () => {
+                setSelectedRow(params.row);
+                tog_center();
+              };
 
-      //                 cursor: "pointer",
-      //               }}
-      //             >
-      //               {params.row.apCode}
-      //             </button>
-      //           );
-      //         },
-      //       };
-      //     return column;
-      //   });
+              return (
+                <span
+                  style={{
+                    color: "#1976d2",
+                    cursor: "pointer",
+                    // textDecoration: "underline",
+                  }}
+                  onClick={handleClick}
+                >
+                  {params.value}
+                </span>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }
@@ -2149,39 +2148,6 @@ const DataTable = ({
         action={action}
         handleApproval={handleApproval}
         Msg={Msg}
-        // Msg={
-        //   activeSubItem === "RMS Allocation"
-        //     ? ""
-        //     : activeSubItem === "Regulatory Announcement"
-        //     ? "Are you sure want to delete this entry"
-        //     : activeSubItem === "Unlisted Shares Entry"
-        //     ? "Are you sure want to delete this entry"
-        //     : activeSubItem === "Communication Retrival Entry" ||
-        //       activeSubItem === "Marketing Material" ||
-        //       activeSubItem === "Client Exclusion" ||
-        //       activeSubItem === "Third Party Vendor Master"
-        //     ? "Are you sure want to delete this entry"
-        //     : activeSubItem === "Communication Retrival Checker"
-        //     ? `Are you sure want to ${action} this entry`
-        //     : activeSubItem === "KYC Approval"
-        //     ? `Are you sure want to ${action} this entry`
-        //     : activeSubItem === "RH Approval"
-        //     ? `Are you sure want to ${action} this entry`
-        //     : activeSubItem === "Unlisted Shares Approval 1" ||
-        //       activeSubItem === "Unlisted Shares Approval 2" ||
-        //       activeSubItem === "Third Party Vendor Approval"
-        //     ? `Are you sure want to ${action} this entry`
-        //     : activeSubItem === "Pre Trade Approval" && !showDocument
-        //     ? `Are you sure want to ${action} this entry`
-        //     : activeSubItem === "Pre Trade Proof Upload"
-        //     ? ""
-        //     : activeSubItem === "Pre Trade Report"
-        //     ? ""
-        //     : activeSubItem === "Pre Trade Approval" && showDocument
-        //     ? ""
-        //     : "Are you sure you want to send the email?"
-        // }
-
         activeSubItem={activeSubItem}
         isUploadMode={activeSubItem === "Pre Trade Proof Upload" ? true : false}
         isDropUpload={
@@ -2206,6 +2172,9 @@ const DataTable = ({
         setSetShowImg={setSetShowImg}
         showDocument={showDocument}
         fileExtension={fileExtension}
+        isPartnerContest={
+          activeSubItem === "Partner Contest Report" ? true : false
+        }
       />
       {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown
