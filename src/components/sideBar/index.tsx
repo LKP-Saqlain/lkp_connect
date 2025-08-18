@@ -93,6 +93,7 @@ import InvoiceVerify from "../../pages/ThirdParty/Verify";
 import InvoiceMail from "../../pages/ThirdParty/Mail";
 import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
 import PledgeHolding from "../../pages/RMS/PledgeHoldings";
+import MutualFundIndex from "../../pages/MutualFund";
 
 const drawerWidth = 260;
 
@@ -687,9 +688,12 @@ const SideBar = () => {
   // };
 
   const complianceSubItems: Record<string, JSX.Element> = {
-    // "UCCCode MATCH": (
-    //   <RHDashboard activeSubItem={activeSubItem} activeMenu={activeMenu} />
-    // ),
+    "UCCCode MATCH": (
+      <MutualFundIndex
+        activeSubItem={activeSubItem}
+        // activeMenu={activeMenu}
+      />
+    ),
     "Communication Retrival Entry": <CommEntry activeSubItem={activeSubItem} />,
     "Communication Retrival Checker": (
       <ComChecker activeSubItem={activeSubItem} />
