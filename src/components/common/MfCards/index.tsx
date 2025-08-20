@@ -1,10 +1,23 @@
+import { useEffect, useState } from "react";
 import { Card, CardBody, Row, Col } from "reactstrap";
 
 const MfCards = ({ CardData }: any) => {
+  const [showMList, setShowMList] = useState("");
+
+  const handleCardClick = (item: any) => {
+    setShowMList(item.label);
+  };
+
+  useEffect(() => {
+    if (showMList) {
+      console.log("Clicked fund:", showMList);
+    }
+  }, [showMList]);
+
   return (
     <Row>
       {CardData.map((item: any) => (
-        <Col key={item.id} className="">
+        <Col key={item.id} onClick={() => handleCardClick(item)}>
           <Card
             style={{
               textAlign: "center",

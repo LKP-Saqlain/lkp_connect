@@ -1,36 +1,138 @@
 import { Col, Row } from "reactstrap";
 import SipCalculator from "./sipCalculator";
-import { mainMenuC } from "../mfTypes";
+import { mutualFundCards } from "../mfTypes";
 import BasicTabs from "../../../components/common/NavTabs";
 import MfCards from "../../../components/common/MfCards";
 import {
   MfCardRecoLabel,
   MfCardPassLabel,
 } from "../../../pages/MutualFund/mfTypes";
+import MfinfoCard from "../../../components/common/MfInfoCard";
 
 const MfDiscover = () => {
+  console.log("mutualFundCards.equity", mutualFundCards.equity);
+
   return (
     <Row>
-      {/* Left Section (8 columns total) */}
       <Col xl={8}>
         <BasicTabs heading="Our Recommendation" />
         <MfCards CardData={MfCardRecoLabel} />
-        <BasicTabs tabs={mainMenuC} heading="Asset Class" />
 
-        {/* New row inside left section to split 4 + 4 */}
+        {/* Asset Class Tabs */}
+        <BasicTabs
+          tabs={[
+            {
+              label: "Equity",
+              content: (
+                <MfinfoCard
+                  CardType="Asset Class"
+                  funds={mutualFundCards.equity}
+                />
+              ),
+            },
+            {
+              label: "Debt",
+              content: (
+                <MfinfoCard
+                  CardType="Asset Class"
+                  funds={mutualFundCards.debt}
+                />
+              ),
+            },
+            {
+              label: "Hybrid",
+              content: (
+                <MfinfoCard
+                  CardType="Asset Class"
+                  funds={mutualFundCards.hybrid}
+                />
+              ),
+            },
+            {
+              label: "Solution",
+              content: (
+                <MfinfoCard
+                  CardType="Asset Class"
+                  funds={mutualFundCards.solution}
+                />
+              ),
+            },
+            {
+              label: "Others",
+              content: (
+                <MfinfoCard
+                  CardType="Asset Class"
+                  funds={mutualFundCards.others}
+                />
+              ),
+            },
+          ]}
+          heading="Asset Class"
+        />
+
+        {/* Other sections */}
         <Row>
           <Col xl={6}>
-            <BasicTabs heading="Passive Investing" />{" "}
+            <BasicTabs heading="Passive Investing" />
             <MfCards CardData={MfCardPassLabel} />
           </Col>
           <Col xl={6}>
-            <BasicTabs heading="Product" />{" "}
+            <BasicTabs heading="Product" />
             <MfCards CardData={MfCardPassLabel} />
           </Col>
         </Row>
+        <BasicTabs
+          tabs={[
+            {
+              label: "Equity",
+              content: (
+                <MfinfoCard
+                  CardType="Popular Category"
+                  funds={mutualFundCards.equity}
+                />
+              ),
+            },
+            {
+              label: "Debt",
+              content: (
+                <MfinfoCard
+                  CardType="Popular Category"
+                  funds={mutualFundCards.debt}
+                />
+              ),
+            },
+            {
+              label: "Hybrid",
+              content: (
+                <MfinfoCard
+                  CardType="Popular Category"
+                  funds={mutualFundCards.hybrid}
+                />
+              ),
+            },
+            {
+              label: "Solution",
+              content: (
+                <MfinfoCard
+                  CardType="Popular Category"
+                  funds={mutualFundCards.solution}
+                />
+              ),
+            },
+            {
+              label: "Others",
+              content: (
+                <MfinfoCard
+                  CardType="Popular Category"
+                  funds={mutualFundCards.others}
+                />
+              ),
+            },
+          ]}
+          heading="Popular Category"
+        />
       </Col>
 
-      {/* Right Section (4 columns total) */}
       <Col xl={4}>
         <SipCalculator />
       </Col>

@@ -16,7 +16,7 @@ function CustomTabPanel({ children, value, index, ...other }: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && <Box sx={{ p: 2 }}>{children}</Box>}
     </div>
   );
 }
@@ -28,12 +28,22 @@ function a11yProps(index: number) {
   };
 }
 
-export default function BasicTabs({ tabs = [], heading }: BasicTabsProps) {
+export default function BasicTabs({
+  tabs = [],
+  heading,
+  onTabChange,
+}: BasicTabsProps & { onTabChange?: (label: string) => void }) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-    console.log(event);
+
+    if (tabs[newValue]) {
+      console.log("Selected Tab:", tabs[newValue].label, event);
+      if (onTabChange) {
+        onTabChange(tabs[newValue].label);
+      }
+    }
   };
 
   return (
