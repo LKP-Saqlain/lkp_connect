@@ -16,8 +16,8 @@ import ShowToast from "../../utils/toastUtils";
 import { apiServices } from "../../services";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
 import { regEx } from "../../helper/method";
 import UserInfoTable from "../../components/common/UserInfoTable";
 
@@ -35,9 +35,9 @@ const UnpledgeRequest = ({ activeSubItem }: Unpledge) => {
   const [unpledgeData, setUnpledgeData] = useState<[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
-  );
+  // const { user_id } = useSelector(
+  //   (state: RootState) => state.UserLogin?.data?.data
+  // );
   const { afterToday } = DateRangePicker;
   const validationSchema = Yup.object({
     // selectedZone: Yup.object().nullable().required("Zone is required"),
