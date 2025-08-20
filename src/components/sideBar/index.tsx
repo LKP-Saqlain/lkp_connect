@@ -95,6 +95,7 @@ import InvoiceVerify from "../../pages/ThirdParty/Verify";
 import InvoiceMail from "../../pages/ThirdParty/Mail";
 import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
 import MtfComponent from "../../pages/RMS/Mtf";
+import UnpledgeRequest from "../../pages/UnpledgeRequest";
 
 const drawerWidth = 260;
 
@@ -682,6 +683,7 @@ const SideBar = () => {
       <ClientTradingReport activeSubItem={activeSubItem} />
     ),
     "CTCL Wise Activity Report": <CTCLReport activeSubItem={activeSubItem} />,
+    "Unpledge Report": <UnpledgeRequest activeSubItem={activeSubItem} />,
   };
 
   // const referalSubItems: Record<string, JSX.Element> = {
@@ -689,9 +691,7 @@ const SideBar = () => {
   // };
 
   const complianceSubItems: Record<string, JSX.Element> = {
-    // "UCCCode MATCH": (
-    //   <RHDashboard activeSubItem={activeSubItem} activeMenu={activeMenu} />
-    // ),
+    // "UCCCode MATCH": <UnpledgeRequest activeSubItem={activeSubItem} />,
     "Communication Retrival Entry": <CommEntry activeSubItem={activeSubItem} />,
     "Communication Retrival Checker": (
       <ComChecker activeSubItem={activeSubItem} />

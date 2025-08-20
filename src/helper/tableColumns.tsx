@@ -7650,3 +7650,75 @@ export const getAPContestReportColumns: GridColDef[] = [
     align: "center",
   },
 ];
+
+export const clientUnpledgeReport: GridColDef[] = [
+  {
+    field: "ClientCode",
+    headerName: "Client Code",
+    width: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "ClientName",
+    headerName: "Client Name",
+    flex: 1,
+    minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "ISIN",
+    headerName: "ISIN",
+    width: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "Symbol",
+    headerName: "Scrip Name",
+    flex: 1,
+    minWidth: 200,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "Quantity",
+    headerName: "Quantity",
+    width: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+  },
+  // {
+  //   field: "RequestedBy",
+  //   headerName: "Requested By",
+  //   width: 140,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
+  {
+    field: "RequestedDate",
+    headerName: "Requested Date",
+    width: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params) => {
+      if (!params.value) return ""; // safety check
+      const date = new Date(params.value);
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
+  },
+];

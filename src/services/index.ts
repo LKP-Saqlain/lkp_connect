@@ -722,4 +722,7 @@ export const apiServices = {
   MergeIntoSymphonyFile: async (payload: any) => {
     return await apiService("POST", endpoints.MergeIntoSymphonyFile, payload);
   },
+  GetUnPledgeReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetUnPledgeReport, payload);
+  },
 };
