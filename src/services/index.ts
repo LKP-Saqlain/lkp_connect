@@ -680,6 +680,29 @@ export const apiServices = {
   GetRevTradedClient: async (payload: any) => {
     return await apiService("POST", endpoints.GetRevTradedClient, payload);
   },
+
+  VerifyBankDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.VerifyBankDetails, payload);
+  },
+  FetchPinLocation: async (payload: any) => {
+    return await apiService("POST", endpoints.FetchPinLocation, payload);
+  },
+  SaveVendorDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.SaveVendorDetails, payload);
+  },
+  ViewVendorDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewVendorDetails, payload);
+  },
+  DeleteVendorDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.DeleteVendorDetails, payload);
+  },
+  UpdateVendorDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateVendorDetails, payload);
+  },
+  UpdateAccountApproval: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateAccountApproval, payload);
+  },
+
   GetAPContestReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetAPContestReport, payload);
   },
@@ -692,5 +715,14 @@ export const apiServices = {
   },
   GetClientAccessLink: async (payload: any) => {
     return await apiService("POST", endpoints.GetClientAccessLink, payload);
+  },
+  MergeIntoOdinFile: async (payload: any) => {
+    return await apiService("POST", endpoints.MergeIntoOdinFile, payload);
+  },
+  MergeIntoSymphonyFile: async (payload: any) => {
+    return await apiService("POST", endpoints.MergeIntoSymphonyFile, payload);
+  },
+  GetUnPledgeReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetUnPledgeReport, payload);
   },
 };

@@ -28,7 +28,7 @@ interface APContestData {
 }
 // const prizeAnimations = [IphoneIcon, IpadIcon, AirPodsIcon];
 
-const APContest = ({ activeMenu }: any) => {
+const APContest = ({ activeMenu, isCustomRender, row }: any) => {
   // const [revenueBadge, setRevenueBadge] = useState<BrokerageBadge>("Target");
   // const [clientBadge, setClientBadge] = useState<BrokerageBadge>("Target");
   const [targetData, setTargetData] = useState<APContestData | null>(null);
@@ -48,7 +48,9 @@ const APContest = ({ activeMenu }: any) => {
   );
 
   useEffect(() => {
-    const payload = { user_id };
+    const payload = {
+      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+    };
 
     const fetchContestTargetDetails = async () => {
       try {
@@ -75,8 +77,8 @@ const APContest = ({ activeMenu }: any) => {
 
   const fetchAPachievedBrokerage = () => {
     let payload = {
-      // user_id: "APN-7161",
-      user_id: user_id,
+      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      // user_id: user_id,
     };
     dispatch(showLoader(""));
 
@@ -101,8 +103,8 @@ const APContest = ({ activeMenu }: any) => {
 
   const fetchAPContestAchClients = () => {
     let payload = {
-      // user_id: "APN-7161",
-      user_id: user_id,
+      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      // user_id: user_id,
     };
     dispatch(showLoader(""));
 
@@ -122,8 +124,8 @@ const APContest = ({ activeMenu }: any) => {
 
   const fetchAPContestSummary = () => {
     let payload = {
-      // user_id: "APN-7161",
-      user_id: user_id,
+      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      // user_id: user_id,
     };
     dispatch(showLoader(""));
 
@@ -203,7 +205,7 @@ const APContest = ({ activeMenu }: any) => {
                 animationData={RevenueImg}
                 customClass={true}
               />
-              <div style={{ marginTop: "8px" }}>
+              <div style={{ marginTop: "8px", marginBottom: "0px" }}>
                 <DashboardCard
                   title="Revenue Achieved*"
                   value={
@@ -215,6 +217,7 @@ const APContest = ({ activeMenu }: any) => {
                   note={
                     isMobile && `* Contest Period - 1st July to 30th September`
                   }
+                  isCustomRender={isCustomRender}
                 />
               </div>
             </Col>

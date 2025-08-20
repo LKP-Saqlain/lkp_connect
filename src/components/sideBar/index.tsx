@@ -87,13 +87,17 @@ import RHDashboard from "../../pages/RHDashboard";
 import "./style.css";
 import ThirdPartyMaster from "../../pages/ThirdParty/Master";
 import ThirdPartyApproval from "../../pages/ThirdParty/Approval";
+import VendorMaster from "../../pages/ThirdParty/VendorMaster";
+import VendorApproval from "../../pages/ThirdParty/VendorApproval";
 import ThirdPartyStatusReport from "../../pages/ThirdParty/TPReport";
 import InvoiceUpload from "../../pages/ThirdParty/Upload";
 import InvoiceVerify from "../../pages/ThirdParty/Verify";
 import InvoiceMail from "../../pages/ThirdParty/Mail";
 import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
-import PledgeHolding from "../../pages/RMS/PledgeHoldings";
+// import PledgeHolding from "../../pages/RMS/PledgeHoldings";
 import MutualFundIndex from "../../pages/MutualFund";
+import MtfComponent from "../../pages/RMS/Mtf";
+import UnpledgeRequest from "../../pages/UnpledgeRequest";
 
 const drawerWidth = 260;
 
@@ -327,8 +331,8 @@ const SideBar = () => {
       activeMenu !== "DashBoard" &&
       activeMenu !== "TPD Report" &&
       activeMenu !== "Trading" &&
-      activeMenu !== "Account" &&
       activeMenu !== "Zone Overview" &&
+      activeMenu !== "Account" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -560,11 +564,11 @@ const SideBar = () => {
 
   const handleMenuClick = (menuTitle: string, hasSubItems: any) => {
     setActiveMenu((prevActive) => {
-      // if (prevActive === menuTitle && hasSubItems) {
-      //   // If clicking the same menu with subitems, collapse it and reset subitem
-      //   setActiveSubItem("");
-      //   return "";
-      // }
+      if (prevActive === menuTitle && hasSubItems) {
+        // If clicking the same menu with subitems, collapse it and reset subitem
+        setActiveSubItem("");
+        return "";
+      }
       console.log("menuTitle prevActive", menuTitle, hasSubItems, prevActive);
 
       // if (
@@ -681,6 +685,7 @@ const SideBar = () => {
       <ClientTradingReport activeSubItem={activeSubItem} />
     ),
     "CTCL Wise Activity Report": <CTCLReport activeSubItem={activeSubItem} />,
+    "Unpledge Report": <UnpledgeRequest activeSubItem={activeSubItem} />,
   };
 
   // const referalSubItems: Record<string, JSX.Element> = {
@@ -723,9 +728,8 @@ const SideBar = () => {
 
   const rmsSubItems: Record<string, JSX.Element> = {
     "Upload SLBM Holding": <SLBMHoldings activeSubItem={activeSubItem} />,
-    "Pledge Holdings Adjustment": (
-      <PledgeHolding activeSubItem={activeSubItem} />
-    ),
+    "Pledge Holdings Adjustment": <></>,
+    "MTF File Merge": <MtfComponent activeSubItem={activeSubItem} />,
   };
   const tpdSubItems: Record<string, JSX.Element> = {
     "Unlisted Shares Entry": (
@@ -751,6 +755,8 @@ const SideBar = () => {
       <ThirdPartyApproval activeSubItem={activeSubItem} />
     ),
     "Status Report": <ThirdPartyStatusReport activeSubItem={activeSubItem} />,
+    "Vendor Creation": <VendorMaster activeSubItem={activeSubItem} />,
+    "Vendor Approval": <VendorApproval activeSubItem={activeSubItem} />,
     "Third Party Invoice Upload": (
       <InvoiceUpload activeSubItem={activeSubItem} />
     ),

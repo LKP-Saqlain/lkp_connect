@@ -6731,6 +6731,62 @@ export const ClientExclusionColumns: GridColDef[] = [
   },
 ];
 
+export const RHTopClientsColumns: GridColDef[] = [
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    minWidth: 100,
+    flex: 0.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "revenue",
+    headerName: "Revenue",
+    minWidth: 100,
+    flex: 0.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "tradeDate",
+    headerName: "Last Trade Date",
+    minWidth: 130,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    // valueFormatter: (params) =>
+    //   params.value ? new Date(params.value).toLocaleDateString("en-GB") : "-",
+  },
+  {
+    field: "rmName",
+    headerName: "RM Name",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+];
 export const ThirdParty: GridColDef[] = [
   {
     field: "ledgerCode",
@@ -6772,15 +6828,6 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "gstNumber",
-    headerName: "GST Number",
-    minWidth: 150,
-    flex: 1.2,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
-  },
-  {
     field: "gstStateCode",
     headerName: "GST State Code",
     minWidth: 60,
@@ -6790,6 +6837,16 @@ export const ThirdParty: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
   },
+  {
+    field: "gstNumber",
+    headerName: "GST Number",
+    minWidth: 150,
+    flex: 1.2,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+
   {
     field: "pan",
     headerName: "PAN Number",
@@ -6834,6 +6891,36 @@ export const ThirdParty: GridColDef[] = [
     flex: 0.8,
     headerAlign: "center",
     align: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "address1",
+    headerName: "Address 1",
+    minWidth: 180,
+    flex: 1,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "address2",
+    headerName: "Address 2",
+    minWidth: 180,
+    flex: 1,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "address3",
+    headerName: "Address 3",
+    minWidth: 180,
+    flex: 1,
+    headerAlign: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
   },
@@ -7158,60 +7245,344 @@ export const TpInvoiceReportColumns: GridColDef[] = [
     },
   },
 ];
-export const RHTopClientsColumns: GridColDef[] = [
+export const VendorMasterColumns: GridColDef[] = [
   {
-    field: "clientCode",
-    headerName: "Client Code",
+    field: "vendorId",
+    headerName: "Vendor ID",
     minWidth: 100,
-    flex: 0.7,
+    flex: 0.6,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
   },
+  // {
+  //   field: "vendorCode",
+  //   headerName: "Vendor Code",
+  //   minWidth: 120,
+  //   flex: 0.7,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
   {
-    field: "clientName",
-    headerName: "Client Name",
-    minWidth: 150,
+    field: "vendorName",
+    headerName: "Vendor Name",
+    minWidth: 200,
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
   },
   {
-    field: "revenue",
-    headerName: "Revenue",
-    minWidth: 100,
-    flex: 0.7,
+    field: "address1",
+    headerName: "Address",
+    minWidth: 300,
+    flex: 1.2,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "right",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
+    align: "center",
+    renderCell: (params: any) => {
+      const address1 = (params.row?.address1 || "").trim();
+      const address2 = (params.row?.address2 || "").trim();
+      const address3 = (params.row?.address3 || "").trim();
+      return `${address1}  ${address2} ${address3}`;
     },
   },
   {
-    field: "tradeDate",
-    headerName: "Last Trade Date",
+    field: "city",
+    headerName: "City",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "state",
+    headerName: "State",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "pincode",
+    headerName: "Pin Code",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "teleNo",
+    headerName: "Tele No",
+    minWidth: 120,
+    flex: 0.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile No",
     minWidth: 130,
     flex: 0.8,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    // valueFormatter: (params) =>
-    //   params.value ? new Date(params.value).toLocaleDateString("en-GB") : "-",
   },
   {
-    field: "rmName",
-    headerName: "RM Name",
-    minWidth: 150,
+    field: "emailID",
+    headerName: "Email ID",
+    minWidth: 180,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "panNo",
+    headerName: "PAN No",
+    minWidth: 140,
+    flex: 0.9,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "gstNo",
+    headerName: "GST No",
+    minWidth: 140,
+    flex: 0.9,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "msmeFlag",
+    headerName: "MSME Flag",
+    minWidth: 110,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    // valueFormatter: ({ value }) => (value ? "Yes" : "No"),
+  },
+  {
+    field: "msmeType",
+    headerName: "MSME Type",
+    minWidth: 130,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "actions",
+    headerName: "Actions",
+    minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+    // renderCell: (params) => (
+    //   <div>
+    //     <IconButton
+    //       onClick={() => {
+    //         console.log("Edit", params.row);
+    //       }}
+    //     >
+    //       <EditIcon fontSize="small" />
+    //     </IconButton>
+    //     <IconButton
+    //       onClick={() => {
+    //         console.log("Delete", params.row);
+    //       }}
+    //     >
+    //       <DeleteIcon fontSize="small" />
+    //     </IconButton>
+    //   </div>
+    // ),
+  },
+];
+
+export const VendorMasterApprovalColumns: GridColDef[] = [
+  {
+    field: "vendorId",
+    headerName: "Vendor ID",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  // {
+  //   field: "vendorCode",
+  //   headerName: "Vendor Code",
+  //   minWidth: 120,
+  //   flex: 0.7,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
+  {
+    field: "vendorName",
+    headerName: "Vendor Name",
+    minWidth: 200,
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
+  },
+  {
+    field: "address1",
+    headerName: "Address",
+    minWidth: 400,
+    flex: 1.2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params: any) => {
+      const address1 = (params.row?.address1 || "").trim();
+      const address2 = (params.row?.address2 || "").trim();
+      const address3 = (params.row?.address3 || "").trim();
+      return `${address1}  ${address2} ${address3}`;
+    },
+  },
+  {
+    field: "city",
+    headerName: "City",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "state",
+    headerName: "State",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "pincode",
+    headerName: "Pin Code",
+    minWidth: 100,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "teleNo",
+    headerName: "Telephone No",
+    minWidth: 120,
+    flex: 0.7,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile No",
+    minWidth: 130,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "emailID",
+    headerName: "Email ID",
+    minWidth: 180,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "panNo",
+    headerName: "PAN No",
+    minWidth: 140,
+    flex: 0.9,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "gstNo",
+    headerName: "GST No",
+    minWidth: 140,
+    flex: 0.9,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "msmeFlag",
+    headerName: "MSME Flag",
+    minWidth: 110,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    // valueFormatter: ({ value }) => (value ? "Yes" : "No"),
+  },
+  {
+    field: "msmeType",
+    headerName: "MSME Type",
+    minWidth: 130,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "tdsPath",
+    headerName: "TDS Document",
+    minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "msmePath",
+    headerName: "MSME Document",
+    minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "bankDoc",
+    headerName: "Bank Document",
+    minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "actions",
+    headerName: "Actions",
+    minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
   },
 ];
 
@@ -7308,5 +7679,77 @@ export const getAPContestReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+  },
+];
+
+export const clientUnpledgeReport: GridColDef[] = [
+  {
+    field: "ClientCode",
+    headerName: "Client Code",
+    width: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "ClientName",
+    headerName: "Client Name",
+    flex: 1,
+    minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "ISIN",
+    headerName: "ISIN",
+    width: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "Symbol",
+    headerName: "Scrip Name",
+    flex: 1,
+    minWidth: 200,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "Quantity",
+    headerName: "Quantity",
+    width: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+  },
+  // {
+  //   field: "RequestedBy",
+  //   headerName: "Requested By",
+  //   width: 140,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
+  {
+    field: "RequestedDate",
+    headerName: "Requested Date",
+    width: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params) => {
+      if (!params.value) return ""; // safety check
+      const date = new Date(params.value);
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
   },
 ];

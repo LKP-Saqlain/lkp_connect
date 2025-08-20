@@ -69,6 +69,8 @@ const pdfDownloadEndpoints = [
 const multipartEndpoints = [
   endpoints.UploadUnlistedSharesVendorFile,
   endpoints.TPInvoiceStaging,
+  endpoints.MergeIntoOdinFile,
+  endpoints.MergeIntoSymphonyFile,
 ];
 
 // Utility functions

@@ -48,6 +48,8 @@ import {
   EmpNonBrokerageAchieved,
   ClientExclusionColumns,
   ThirdParty,
+  VendorMasterColumns,
+  VendorMasterApprovalColumns,
   ThirdPartyStatusReport,
   TpInvoiceUploadColumns,
   TpInvoiceVerifyColumns,
@@ -55,6 +57,7 @@ import {
   TpInvoiceReportColumns,
   RHTopClientsColumns,
   getAPContestReportColumns,
+  clientUnpledgeReport,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1525,6 +1528,10 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "RHDashboardTop10Clients") {
+      return RHTopClientsColumns.map((column) => ({
+        ...column,
+      }));
     } else if (activeSubItem === "Third Party Vendor Master") {
       return ThirdParty.map((column) => {
         if (column.field === "action") {
@@ -1646,6 +1653,214 @@ const DataTable = ({
       return ThirdPartyStatusReport.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Vendor Creation") {
+      return VendorMasterColumns.map((column) => {
+        if (column.field === "actions") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted;
+
+              const handleEdit = () => {
+                setSelectedRow(params.row);
+                handleEditClick?.(params.row, true);
+                // You can open edit modal or set state for edit form here
+              };
+
+              const handleDelete = () => {
+                setAction("delete");
+                handleDeleteEntry?.(params.row); // Pass row to delete handler
+                setSelectedRow(params.row); // Store row for confirmation
+                tog_center(); // Open delete confirmation modal
+              };
+
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+
+                  {isDeleted ? (
+                    <span
+                      style={{
+                        color: "red",
+                        fontSize: "0.85rem",
+                        cursor: "default",
+                      }}
+                    >
+                      Deleted
+                    </span>
+                  ) : (
+                    <Tooltip title="Delete" arrow placement="top">
+                      <IconButton
+                        sx={{ p: 0 }}
+                        color="primary"
+                        onClick={handleDelete}
+                      >
+                        <DeleteIcon
+                          fontSize="small"
+                          sx={{ color: "#11395C" }}
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </div>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "Vendor Approval") {
+      // return VendorMasterColumns.map((column) => ({
+      //   ...column,
+      // }));
+      return VendorMasterApprovalColumns.map((column) => {
+        if (column.field === "actions") {
+          return {
+            ...column,
+            renderCell: (params: any) => (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <div
+                  onClick={() => {
+                    console.log("rowTest", params.row);
+                    setSelectedRow(params.row);
+                    // HandleApprovalModal("approve", params);
+                    HandleApprovalModal("approve");
+                    console.log(params.row.vendorId, "selectedrow approve");
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: 5,
+                  }}
+                >
+                  <Tooltip title="Approve" arrow placement="top">
+                    <CheckCircleIcon
+                      style={{ color: "green", marginLeft: 4 }}
+                    />
+                  </Tooltip>
+                </div>
+                <div style={{ fontSize: 20, color: "gray" }}>|</div>
+                <div
+                  onClick={() => {
+                    setSelectedRow(params.row);
+                    HandleApprovalModal("reject");
+                    // HandleApprovalModal("reject", params);
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginLeft: 5,
+                  }}
+                >
+                  <Tooltip title="Reject" arrow placement="top">
+                    <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  </Tooltip>
+                </div>
+              </div>
+            ),
+          };
+        }
+        if (column.field === "tdsPath") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const hasTdsPath =
+                params.row?.tdsPath && params.row.tdsPath.trim() !== "";
+
+              if (!hasTdsPath) {
+                return <span>--</span>;
+              }
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, "TDS"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "msmePath") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, "MSME"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "bankDoc") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, "BANK"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
+                </button>
+              );
+            },
+          };
+        }
+
+        return column;
+      });
     } else if (activeSubItem === "Third Party Invoice Upload") {
       return TpInvoiceUploadColumns.map((column) => ({
         ...column,
@@ -1783,35 +1998,37 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "Partner Contest Report") {
-      return getAPContestReportColumns.map((column) => ({
+      return getAPContestReportColumns.map((column) => {
+        if (column.field === "apCode") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const handleClick = () => {
+                setSelectedRow(params.row);
+                tog_center();
+              };
+
+              return (
+                <span
+                  style={{
+                    color: "#1976d2",
+                    cursor: "pointer",
+                    // textDecoration: "underline",
+                  }}
+                  onClick={handleClick}
+                >
+                  {params.value}
+                </span>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "Unpledge Report") {
+      return clientUnpledgeReport.map((column) => ({
         ...column,
       }));
-      // else if (activeSubItem === "Partner Contest Report") {
-      //   return getAPContestReportColumns.map((column) => {
-      //     if (column.field === "apCode")
-      //       return {
-      //         ...column,
-      //         renderCell: (params: any) => {
-      //           return (
-      //             <button
-      //               onClick={() => {
-      //                 // handleDownload(params.row); // This will trigger the download function
-      //                 console.log(params.row.apCode, "count");
-      //               }}
-      //               style={{
-      //                 color: "#11395C",
-      //                 textDecoration: "underline",
-
-      //                 cursor: "pointer",
-      //               }}
-      //             >
-      //               {params.row.apCode}
-      //             </button>
-      //           );
-      //         },
-      //       };
-      //     return column;
-      //   });
     } else {
       return [];
     }
@@ -1885,6 +2102,7 @@ const DataTable = ({
     "Client Exclusion",
     "Third Party Vendor Master",
     "Third Party Invoice Verify", // delete message also for this
+    "Vendor Creation",
   ];
 
   const actionItems = [
@@ -1895,6 +2113,7 @@ const DataTable = ({
     "Unlisted Shares Approval 2",
     "Third Party Vendor Approval",
     "Third Party Invoice Verify", // approve/reject message also for this
+    "Vendor Approval",
   ];
 
   if (activeSubItem === "RMS Allocation") {
@@ -1991,6 +2210,9 @@ const DataTable = ({
         setSetShowImg={setSetShowImg}
         showDocument={showDocument}
         fileExtension={fileExtension}
+        isPartnerContest={
+          activeSubItem === "Partner Contest Report" ? true : false
+        }
       />
       {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown

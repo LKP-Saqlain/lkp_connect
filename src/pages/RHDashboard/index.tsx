@@ -4,6 +4,7 @@ import Loader from "../../components/common/Loader";
 // import Overview from "./Overview";
 import Direct from "./Direct";
 import Indirect from "./Indirect";
+// import VendorMaster from "../ThirdParty/VendorMaster";
 import PartnerContestReport from "./partnerContest";
 
 interface RH {
@@ -19,6 +20,7 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
   const componentMap: Record<string, React.ReactNode> = {
     [SubItemKeys.RH_DIRECT]: <Direct activeSubItem={activeSubItem} />,
     [SubItemKeys.RH_INDIRECT]: <Indirect activeSubItem={activeSubItem} />,
+    // [SubItemKeys.VENDOR_MASTER]: <VendorMaster activeSubItem={activeSubItem} />,
     [SubItemKeys.RH_PARTNER]: (
       <PartnerContestReport activeSubItem={activeSubItem} />
     ),
