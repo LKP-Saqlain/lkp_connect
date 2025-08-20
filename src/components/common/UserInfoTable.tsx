@@ -57,6 +57,7 @@ import {
   TpInvoiceReportColumns,
   RHTopClientsColumns,
   getAPContestReportColumns,
+  clientUnpledgeReport,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -2024,6 +2025,10 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "Unpledge Report") {
+      return clientUnpledgeReport.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }

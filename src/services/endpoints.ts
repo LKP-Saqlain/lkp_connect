@@ -162,4 +162,5 @@ export const endpoints = {
   GetClientAccessLink: "api/BackOffice/GetClientAccessLink",
   MergeIntoOdinFile: "api/RMS/MergeIntoOdinFile",
   MergeIntoSymphonyFile: "api/RMS/MergeIntoSymphonyFile",
+  GetUnPledgeReport: "api/Dashboard/GetUnPledgeReport",
 };
