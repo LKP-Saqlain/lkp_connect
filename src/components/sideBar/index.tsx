@@ -96,6 +96,7 @@ import InvoiceMail from "../../pages/ThirdParty/Mail";
 import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
 import MtfComponent from "../../pages/RMS/Mtf";
 import UnpledgeRequest from "../../pages/UnpledgeRequest";
+import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
 
 const drawerWidth = 260;
 
@@ -721,7 +722,9 @@ const SideBar = () => {
 
   const rmsSubItems: Record<string, JSX.Element> = {
     "Upload SLBM Holding": <SLBMHoldings activeSubItem={activeSubItem} />,
-    "Pledge Holdings Adjustment": <></>,
+    "Pledge Holdings Adjustment": (
+      <RMSPledgeHolding activeSubItem={activeSubItem} />
+    ),
     "MTF File Merge": <MtfComponent activeSubItem={activeSubItem} />,
   };
   const tpdSubItems: Record<string, JSX.Element> = {

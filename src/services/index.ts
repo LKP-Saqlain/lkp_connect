@@ -725,4 +725,7 @@ export const apiServices = {
   GetUnPledgeReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetUnPledgeReport, payload);
   },
+  UploadCollateralFiles: async (payload: any) => {
+    return await apiService("POST", endpoints.UploadCollateralFiles, payload);
+  },
 };

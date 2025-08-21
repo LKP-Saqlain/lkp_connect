@@ -2478,7 +2478,7 @@ const ModalComponent = ({
                       </Box>
                     ))}
                   </Box>
-                  <FormControl sx={{ mt: 1, height: "40px" }}>
+                  <FormControl sx={{ mt: 1 }}>
                     <FormLabel sx={{ fontSize: "12px" }}>TDS Flag</FormLabel>
                     <RadioGroup
                       row
@@ -2684,7 +2684,7 @@ const ModalComponent = ({
                     </Row>
                   )}
                   {/* MSME Flag */}
-                  <FormControl sx={{ height: "50px", mt: 2 }}>
+                  <FormControl sx={{ height: "40px", mt: 1 }}>
                     <FormLabel sx={{ fontSize: "12px" }}>MSME Flag</FormLabel>
                     <RadioGroup
                       row
