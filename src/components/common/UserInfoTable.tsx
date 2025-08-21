@@ -1455,7 +1455,9 @@ const DataTable = ({
                     handleDownload(params.row);
                   }}
                 >
-                  <OpenInNewIcon />
+                  <OpenInNewIcon
+                    style={{ color: "#11395C", cursor: "pointer" }}
+                  />
                 </div>
               );
             },
