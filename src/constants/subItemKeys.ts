@@ -7,7 +7,7 @@ export const SubItemKeys = {
   SPIP_CLIENT_WISE_FEES: "Client-Wise Fees Sharing Report",
   SPIP_CLIENT_DETAILS: "Client Details Report",
   SPIP_PERFORMANCE_REPORT: "SPIP Performance Report",
-  RH_OVERVIEW: "Zone Overview",
+  RH_OVERVIEW: "Overview",
   RH_DIRECT: "Direct Channel",
   RH_INDIRECT: "Indirect Channel",
   VENDOR_MASTER: "Employee Performance",
