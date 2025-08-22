@@ -198,3 +198,24 @@ export const mutualFundCards = {
     },
   ],
 };
+
+export const banks = [
+  {
+    id: "hdfc",
+    name: "HDFC Bank",
+    account: "XXXXXXXXXXXX123",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXgiz41maa34mpQoVYhRyZ8wk8XOMZfHvIrA&s",
+  },
+  // {
+  //   id: "icici",
+  //   name: "ICICI Bank",
+  //   account: "XXXXXXXXXXXX456",
+  //   logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXgiz41maa34mpQoVYhRyZ8wk8XOMZfHvIrA&s",
+  // },
+  // {
+  //   id: "sbi",
+  //   name: "SBI Bank",
+  //   account: "XXXXXXXXXXXX789",
+  //   logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXgiz41maa34mpQoVYhRyZ8wk8XOMZfHvIrA&s",
+  // },
+];

@@ -2,6 +2,7 @@ import { Card } from "reactstrap";
 import FundDetails from "../FundDetails";
 import MfAreaChart from "../MfAreaChart";
 import MutualFundModal from "../MfModal";
+import { useState } from "react";
 
 const demoSeries: { name: string; data: [number, number][] }[] = [
   {
@@ -287,11 +288,21 @@ const demoSeries: { name: string; data: [number, number][] }[] = [
 ];
 
 const MfOverview = ({ fundName, onBack }: any) => {
-  console.log("MfOverview", fundName);
+  const [open, setOpen] = useState(false);
+  const [modalType, setModalType] = useState<"oneTime" | "sip" | null>(null);
+
+  const toggle = () => setOpen(!open);
 
   return (
     <>
-      <MutualFundModal />
+      {/* Modal */}
+      <MutualFundModal
+        isOpen={open}
+        toggle={toggle}
+        modalType={modalType}
+        title={fundName}
+      />
+
       <Card>
         <div
           style={{
@@ -301,6 +312,7 @@ const MfOverview = ({ fundName, onBack }: any) => {
             gap: "20px",
           }}
         >
+          {/* Back Button */}
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <button
               onClick={onBack}
@@ -317,6 +329,8 @@ const MfOverview = ({ fundName, onBack }: any) => {
               ← Back
             </button>
           </div>
+
+          {/* Heading + Action Buttons */}
           <div
             style={{
               display: "flex",
@@ -325,13 +339,12 @@ const MfOverview = ({ fundName, onBack }: any) => {
               marginBottom: "16px",
             }}
           >
-            {/* Heading */}
             <h3 style={{ margin: 0, fontWeight: 600, color: "#333" }}>
               {`Overview of ${fundName}`}
             </h3>
 
-            {/* Action Buttons */}
             <div style={{ display: "flex", gap: "12px" }}>
+              {/* One Time */}
               <button
                 style={{
                   backgroundColor: "#f5f5f5",
@@ -344,16 +357,15 @@ const MfOverview = ({ fundName, onBack }: any) => {
                   fontWeight: 500,
                   transition: "all 0.2s ease-in-out",
                 }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#eaeaea")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#f5f5f5")
-                }
+                onClick={() => {
+                  setModalType("oneTime");
+                  setOpen(true);
+                }}
               >
                 One Time
               </button>
 
+              {/* Start SIP */}
               <button
                 style={{
                   backgroundColor: "#004AAD",
@@ -367,25 +379,26 @@ const MfOverview = ({ fundName, onBack }: any) => {
                   boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
                   transition: "all 0.2s ease-in-out",
                 }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#003580")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#004AAD")
-                }
+                onClick={() => {
+                  setModalType("sip");
+                  setOpen(true);
+                }}
               >
                 Start SIP
               </button>
             </div>
           </div>
+
+          {/* Chart */}
           <MfAreaChart
             series={demoSeries}
-            // title={`Overview of ${fundName}`}
             defaultRange="one_year"
             height={400}
-          />{" "}
+          />
         </div>
       </Card>
+
+      {/* Fund Details */}
       <FundDetails />
     </>
   );
