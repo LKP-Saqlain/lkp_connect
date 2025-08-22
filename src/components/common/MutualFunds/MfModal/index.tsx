@@ -8,7 +8,7 @@ import {
 } from "reactstrap";
 import { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
-import { banks } from "../../../../pages/MutualFund/mfTypes";
+import { banks, paymentOptions } from "../../../../pages/MutualFund/mfTypes";
 
 interface MutualFundModalProps {
   isOpen: boolean;
@@ -24,7 +24,9 @@ const MutualFundModal = ({
   title,
 }: MutualFundModalProps) => {
   const [amount, setAmount] = useState(500);
-
+  const [selectedPaymentType, setSelectedPaymentType] = useState<string | null>(
+    null
+  );
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
 
   const handleBankSelect = (bankId: string) => {
@@ -36,6 +38,8 @@ const MutualFundModal = ({
     if (!isOpen) {
       setAmount(500); // reset amount back to default
     }
+    setSelectedBank(null);
+    setSelectedPaymentType(null);
   }, [isOpen]);
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered size="lg">
@@ -178,7 +182,79 @@ const MutualFundModal = ({
             </p> */}
           </div>
         )}
+        {/* payment section */}
+        {selectedBank && (
+          <div style={{ fontFamily: "sans-serif" }}>
+            <label
+              style={{
+                fontWeight: 600,
+                marginTop: "12px",
+                display: "block",
+              }}
+            >
+              Select Payment Type
+            </label>
 
+            <div
+              style={{
+                display: "flex",
+                gap: "16px",
+                flexWrap: "wrap",
+              }}
+            >
+              {paymentOptions.map((option) => (
+                <div
+                  key={option.id}
+                  onClick={() => setSelectedPaymentType(option.id)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    border:
+                      selectedPaymentType === option.id
+                        ? "2px solid #004AAD"
+                        : "1px solid #ccc",
+                    borderRadius: "8px",
+                    padding: "12px 16px",
+                    cursor: "pointer",
+                    minWidth: "200px",
+                    flex: "1 1 200px",
+                    transition: "border 0.2s",
+                    backgroundColor:
+                      selectedPaymentType === option.id ? "#f7faff" : "#fff",
+                  }}
+                >
+                  <img
+                    src={option.icon}
+                    alt={option.name}
+                    style={{ width: "30px", marginRight: "12px" }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600 }}>{option.name}</div>
+                    {option.description && (
+                      <div style={{ fontSize: "12px", color: "#666" }}>
+                        {option.description}
+                      </div>
+                    )}
+                  </div>
+                  <input
+                    type="radio"
+                    name="paymentType"
+                    value={option.id}
+                    checked={selectedPaymentType === option.id}
+                    onChange={() => setSelectedPaymentType(option.id)}
+                    style={{
+                      accentColor: "#004AAD",
+                      width: "16px",
+                      height: "16px",
+                      marginLeft: "8px",
+                    }}
+                    onClick={(e) => e.stopPropagation()} // Prevents parent click
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {/* Note Section */}
         <div
           style={{
