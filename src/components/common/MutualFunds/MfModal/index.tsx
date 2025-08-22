@@ -28,6 +28,7 @@ const MutualFundModal = ({
     null
   );
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
+  const [sipDate, setSipDate] = useState(1);
 
   const handleBankSelect = (bankId: string) => {
     setSelectedBank(bankId);
@@ -170,16 +171,89 @@ const MutualFundModal = ({
           </div>
         ) : (
           // ✅ SIP UI (placeholder for now, you’ll fill later)
-          <div>
-            <h6>SIP Setup Coming Soon...</h6>
-            {/* <p>
-              Here you can render SIP-specific inputs (amount, frequency, dates
-              etc.)
-            </p> */}
-            {/* <p style={{ fontSize: "12px", marginTop: "8px", color: "#666" }}>
-              Please initiate autopay setup after completion of 1st SIP payment
-              to avoid failure of future installments.
-            </p> */}
+          <div style={{ display: "flex", gap: "20px" }}>
+            {/* SIP Amount Section */}
+            <div style={{ flex: 1 }}>
+              <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
+                Enter an SIP Amount (Minimum Rs. 500)
+              </Label>
+
+              <TextField
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(Number(e.target.value))}
+                fullWidth
+                InputProps={{
+                  style: { fontSize: "20px" },
+                }}
+                sx={{
+                  mb: 2,
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "8px",
+                  },
+                }}
+              />
+
+              {/* Quick Add Buttons */}
+              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                {[100, 500, 1000, 2000].map((val) => (
+                  <Button
+                    key={val}
+                    variant="outlined"
+                    onClick={() => setAmount(amount + val)}
+                    style={{
+                      fontSize: "14px",
+                      padding: "6px 12px",
+                      borderRadius: "6px",
+                      color: "white",
+                      backgroundColor: "#22629b",
+                    }}
+                  >
+                    +{val.toLocaleString()}
+                  </Button>
+                ))}
+              </div>
+
+              <p style={{ fontSize: "12px", marginTop: "8px", color: "#666" }}>
+                Minimum gap between 2 SIP instalments: 30 days. Further
+                instalments would start only when 1st SIP payment is successful.
+                To avoid failure of future SIP instalments, enable autopay
+                mandate on this bank account.
+              </p>
+            </div>
+
+            {/* SIP Date Section */}
+            <div style={{ flex: 1 }}>
+              <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
+                SIP Date
+              </Label>
+              <select
+                value={sipDate}
+                onChange={(e) => setSipDate(Number(e.target.value))}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "8px",
+                  border: "1px solid #ccc",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                }}
+              >
+                {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
+                  <option key={day} value={day}>
+                    {`Monthly on ${day}${
+                      day === 1
+                        ? "st"
+                        : day === 2
+                        ? "nd"
+                        : day === 3
+                        ? "rd"
+                        : "th"
+                    }`}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         )}
         {/* payment section */}
