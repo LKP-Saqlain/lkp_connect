@@ -460,7 +460,7 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
       source: "brokRevenue",
     },
     {
-      title: "Total Traded Placed",
+      title: "Total Trades Placed",
       dynamic: true,
       source: "tradePlaced",
     },
