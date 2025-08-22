@@ -43,11 +43,23 @@ export const MfCardPassLabel = [
 ];
 
 export const mainMenu = [
-  { id: 1, label: "Discover", content: <Discover /> },
-  { id: 2, label: "Watchlist", content: <Watchlist /> },
-  { id: 3, label: "Portfolio", content: <Portfolio /> },
-  { id: 4, label: "Report", content: <Report /> },
-  { id: 5, label: "Order", content: <Order /> },
+  {
+    id: 1,
+    label: "Discover",
+    content: (props: any) => <Discover {...props} />,
+  },
+  {
+    id: 2,
+    label: "Watchlist",
+    content: (props: any) => <Watchlist {...props} />,
+  },
+  {
+    id: 3,
+    label: "Portfolio",
+    content: (props: any) => <Portfolio {...props} />,
+  },
+  { id: 4, label: "Report", content: (props: any) => <Report {...props} /> },
+  { id: 5, label: "Order", content: (props: any) => <Order {...props} /> },
 ];
 export const mutualFundCards = {
   equity: [

@@ -7753,3 +7753,40 @@ export const clientUnpledgeReport: GridColDef[] = [
     },
   },
 ];
+export const MutualFundList: GridColDef[] = [
+  {
+    field: "fundName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "aumCr",
+    headerName: "AUM (Cr)",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "minSIP",
+    headerName: "Min SIP (₹)",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "minLumpSum",
+    headerName: "Min Lump Sum (₹)",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+  },
+  {
+    field: "returns",
+    headerName: "Returns (%)",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 100,
+  },
+];

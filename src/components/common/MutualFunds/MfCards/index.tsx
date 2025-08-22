@@ -1,18 +1,10 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { Card, CardBody, Row, Col } from "reactstrap";
 
-const MfCards = ({ CardData }: any) => {
-  const [showMList, setShowMList] = useState("");
-
+const MfCards = ({ CardData, handleSelectedMfType }: any) => {
   const handleCardClick = (item: any) => {
-    setShowMList(item.label);
+    handleSelectedMfType(item.label);
   };
-
-  useEffect(() => {
-    if (showMList) {
-      console.log("Clicked fund:", showMList);
-    }
-  }, [showMList]);
 
   return (
     <Row>

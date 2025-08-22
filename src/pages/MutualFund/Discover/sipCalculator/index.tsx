@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
+import { Card } from "reactstrap";
 
 const SipCalculator = () => {
   const [expectedReturn, setExpectedReturn] = useState(12);
@@ -43,7 +44,13 @@ const SipCalculator = () => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow px-4 w-full max-w-xs mx-auto">
+    <Card
+      style={{
+        borderRadius: "15px",
+        marginBottom: "16px",
+        padding: "16px",
+      }}
+    >
       {/* Title */}
       <h5 className="text-sm font-semibold mb-3">SIP Calculator</h5>
 
@@ -245,7 +252,7 @@ const SipCalculator = () => {
           </p>
         </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

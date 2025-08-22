@@ -1,8 +1,9 @@
 import { Card, CardBody, Row, Col } from "reactstrap";
 
-const MfinfoCard = ({ funds, CardType }: any) => {
+const MfinfoCard = ({ funds, CardType, handleSelectedMutualFund }: any) => {
   const handleCardClick = (fund: any) => {
     console.log(fund.fundName, "Clicked fund:", fund);
+    handleSelectedMutualFund(fund.fundName);
   };
   return (
     <div
