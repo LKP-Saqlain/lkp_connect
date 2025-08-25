@@ -166,7 +166,7 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
 
     setTopClientsRecords([]);
     const payload = {
-      user_Id: "EMP-0238",
+      user_Id: user_id,
       branch_Type: "indirect",
       option_Type: "Monthly_Client",
       monthDropdown: selectedMonth || "",
@@ -225,7 +225,7 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
     };
 
     const payload = {
-      user_Id: "EMP-0238",
+      user_Id: user_id,
       branch_Type: "indirect",
       option_Type: "Brok_Revenue",
       monthDropdown,
@@ -293,7 +293,7 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
     };
 
     let payload = {
-      user_Id: "EMP-0238",
+      user_Id: user_id,
       branch_Type: "indirect",
       option_Type: "Trade_placed",
       monthDropdown,
@@ -354,7 +354,7 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
     };
 
     let payload = {
-      user_Id: "EMP-0238",
+      user_Id: user_id,
       branch_Type: "indirect",
       option_Type: "Traded_Client",
       monthDropdown,
@@ -415,7 +415,7 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
     };
 
     let payload = {
-      user_Id: "EMP-0238",
+      user_Id: user_id,
       branch_Type: "indirect",
       option_Type: "Rev_Traded_Client",
       monthDropdown,
@@ -460,7 +460,7 @@ const Indirect = ({ activeSubItem }: OverviewProps) => {
       source: "brokRevenue",
     },
     {
-      title: "Total Traded Placed",
+      title: "Total Trades Placed",
       dynamic: true,
       source: "tradePlaced",
     },

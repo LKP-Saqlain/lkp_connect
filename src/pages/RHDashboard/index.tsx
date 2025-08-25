@@ -1,7 +1,7 @@
 import React, { useEffect, Suspense } from "react";
 import { SubItemKeys } from "../../constants/subItemKeys";
 import Loader from "../../components/common/Loader";
-// import Overview from "./Overview";
+import Overview from "./Overview";
 import Direct from "./Direct";
 import Indirect from "./Indirect";
 // import VendorMaster from "../ThirdParty/VendorMaster";
@@ -20,6 +20,7 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
   const componentMap: Record<string, React.ReactNode> = {
     [SubItemKeys.RH_DIRECT]: <Direct activeSubItem={activeSubItem} />,
     [SubItemKeys.RH_INDIRECT]: <Indirect activeSubItem={activeSubItem} />,
+    [SubItemKeys.RH_OVERVIEW]: <Indirect activeSubItem={activeSubItem} />,
     // [SubItemKeys.VENDOR_MASTER]: <VendorMaster activeSubItem={activeSubItem} />,
     [SubItemKeys.RH_PARTNER]: (
       <PartnerContestReport activeSubItem={activeSubItem} />
@@ -50,6 +51,8 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
         return <Indirect activeSubItem={activeSubItem} />;
       } else if (activeSubItem === SubItemKeys.RH_PARTNER) {
         return <PartnerContestReport activeSubItem={activeSubItem} />;
+      } else if (activeSubItem === SubItemKeys.RH_OVERVIEW) {
+        return <Overview activeSubItem={activeSubItem} />;
       } else {
         // return <Overview activeSubItem={activeSubItem} />;
       }

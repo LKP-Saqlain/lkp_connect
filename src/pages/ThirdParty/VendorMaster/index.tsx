@@ -116,7 +116,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
           let data = response?.data;
           console.log("VerifyBankResponse", data);
           if (data?.statusCode === 400) {
-            ShowToast("error", "Invalid Credentials!");
+            ShowToast("error", "Invalid Bank Details!");
             setDisableFields(true);
             setShowBankUpload(false);
           } else {
@@ -307,9 +307,9 @@ const VendorMaster = ({ activeSubItem }: any) => {
             response?.data?.statusCode
           );
           ShowToast("success", response?.data?.data);
-          if (response?.data?.statusCode === 500) {
-            ShowToast("error", response?.data?.message);
-          }
+          // if (response?.data?.statusCode === 500) {
+          //   ShowToast("error", response?.data?.message);
+          // }
           fetchVendorMasterDetails();
         }
       })

@@ -171,7 +171,16 @@ const ModalComponent = ({
   const [setShowImg, setSetShowImg] = useState<boolean>(false);
   const [modal_center, setModalCenter] = useState(false);
 
-  const allowedFormats = ["doc", "docx", "pdf", "xls", "xlsx", "jpg", "jpeg"];
+  const allowedFormats = [
+    "doc",
+    "docx",
+    "pdf",
+    "xls",
+    "xlsx",
+    "jpg",
+    "jpeg",
+    "png",
+  ];
 
   const { authenticationValue } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -315,21 +324,21 @@ const ModalComponent = ({
       vendorName: Yup.string().required("Vendor Name is required"),
       chequePrintName: Yup.string().required("Cheque Print Name is required"),
       address1: Yup.string().required("Address 1 is required"),
-      address2: Yup.string().required("Address2 is required"),
-      address3: Yup.string().required("Address3 is required"),
+      // address2: Yup.string().required("Address2 is required"),
+      // address3: Yup.string().required("Address3 is required"),
       city: Yup.string().required("City is required"),
       pinCode: Yup.string().required("Pin Code is required"),
       state: Yup.string().required("State is required"),
-      gstNo: Yup.string().required("GST No is required"),
-      mobileNo: Yup.string().required("Mobile No is required"),
+      // gstNo: Yup.string().required("GST No is required"),
+      // mobileNo: Yup.string().required("Mobile No is required"),
       emailId: Yup.string()
         .email("Invalid email")
         .required("Email ID is required"),
-      faxNo: Yup.string().required("FAX No is required"),
+      // faxNo: Yup.string().required("FAX No is required"),
       telephoneNo: Yup.string().required("Telephone No No is required"),
       panNo: Yup.string().required("PAN No is required"),
       // serviceTaxNo: Yup.string().required("Service Tax No is required"),
-      websiteName: Yup.string().required("website Name is required"),
+      // websiteName: Yup.string().required("website Name is required"),
       tdsFlag: Yup.string().required("TDS flag is required"),
       tdsFile: Yup.mixed().when("tdsFlag", {
         is: (val: string) => val === "Yes",
@@ -2469,7 +2478,7 @@ const ModalComponent = ({
                       </Box>
                     ))}
                   </Box>
-                  <FormControl sx={{ mt: 1, height: "40px" }}>
+                  <FormControl sx={{ mt: 1 }}>
                     <FormLabel sx={{ fontSize: "12px" }}>TDS Flag</FormLabel>
                     <RadioGroup
                       row
@@ -2675,7 +2684,7 @@ const ModalComponent = ({
                     </Row>
                   )}
                   {/* MSME Flag */}
-                  <FormControl sx={{ height: "50px", mt: 2 }}>
+                  <FormControl sx={{ height: "40px", mt: 1 }}>
                     <FormLabel sx={{ fontSize: "12px" }}>MSME Flag</FormLabel>
                     <RadioGroup
                       row

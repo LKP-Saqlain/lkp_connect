@@ -787,7 +787,7 @@ export const slbmColumns: GridColDef[] = [
   {
     field: "rmName",
     headerName: "RM Name",
-    minWidth: 120,
+    minWidth: 260,
     flex: 1,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
@@ -795,7 +795,15 @@ export const slbmColumns: GridColDef[] = [
   {
     field: "dealerName",
     headerName: "Dealer Name",
-    minWidth: 120,
+    minWidth: 260,
+    flex: 1,
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "apName",
+    headerName: "AP Name",
+    minWidth: 260,
     flex: 1,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
@@ -6387,6 +6395,57 @@ export const ClientPledgeRequest: GridColDef[] = [
       }).format(value);
     },
   },
+  // {
+  //   field: "ledgerReport",
+  //   headerName: "Client Report with Ledger",
+  //   headerClassName: "header-wrap-custom",
+  //   minWidth: 120,
+  //   flex: 1,
+  //   align: "right",
+  //   headerAlign: "center",
+  //   disableColumnMenu: true,
+  //   // valueFormatter: (params: any) => {
+  //   //   const value = parseFloat(params);
+  //   //   return new Intl.NumberFormat("en-IN", {
+  //   //     minimumFractionDigits: 2,
+  //   //     maximumFractionDigits: 2,
+  //   //   }).format(value);
+  //   // },
+  // },
+  // {
+  //   field: "pledgeReport",
+  //   headerName: "Client Report with Pledge",
+  //   headerClassName: "header-wrap-custom",
+  //   minWidth: 120,
+  //   flex: 1,
+  //   align: "right",
+  //   headerAlign: "center",
+  //   disableColumnMenu: true,
+  //   // valueFormatter: (params: any) => {
+  //   //   const value = parseFloat(params);
+  //   //   return new Intl.NumberFormat("en-IN", {
+  //   //     minimumFractionDigits: 2,
+  //   //     maximumFractionDigits: 2,
+  //   //   }).format(value);
+  //   // },
+  // },
+  // {
+  //   field: "freeHolding Value",
+  //   headerName: "Free Holding Value",
+  //   headerClassName: "header-wrap-custom",
+  //   minWidth: 120,
+  //   flex: 1,
+  //   align: "right",
+  //   headerAlign: "center",
+  //   disableColumnMenu: true,
+  //   // valueFormatter: (params: any) => {
+  //   //   const value = parseFloat(params);
+  //   //   return new Intl.NumberFormat("en-IN", {
+  //   //     minimumFractionDigits: 2,
+  //   //     maximumFractionDigits: 2,
+  //   //   }).format(value);
+  //   // },
+  // },
   {
     field: "encryptedCode",
     headerName: "Pledge Request",

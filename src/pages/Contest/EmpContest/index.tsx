@@ -199,11 +199,11 @@ const EMPContest = () => {
         <Col xxl={4} lg={4} md={6} sm={12}>
           <DashboardCard
             title="Fresh Cash Margin Achieved"
-            value={"Coming Soon"}
+            value={achieveCard.freeCash_Margin}
             animationData={CoinIcon}
             customClass={true}
             rightTitle="MF AUM Achieved"
-            rightValue={"Coming Soon"}
+            rightValue={"0"}
           />
         </Col>
       </Row>

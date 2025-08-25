@@ -201,7 +201,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
           apiConfigs.map((config) =>
             fetchChart(
               config.apiCall,
-              { user_ID: "EMP-0238", optionType: config.optionType },
+              { user_ID: user_id, optionType: config.optionType },
               config.mapping,
               config.setter
             )
