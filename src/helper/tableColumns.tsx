@@ -794,7 +794,7 @@ export const slbmColumns: GridColDef[] = [
   },
   {
     field: "dealerName",
-    headerName: "Dealer Namess",
+    headerName: "Dealer Name",
     minWidth: 260,
     flex: 1,
     disableColumnMenu: true,
