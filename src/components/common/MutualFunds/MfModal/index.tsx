@@ -28,7 +28,8 @@ const MutualFundModal = ({
     null
   );
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
-  const [sipDate, setSipDate] = useState(1);
+  const [sipDate, setSipDate] = useState<number | null>(null);
+  const [dateSelected, setDateSelected] = useState<number | null>(null);
 
   const handleBankSelect = (bankId: string) => {
     setSelectedBank(bankId);
@@ -41,7 +42,21 @@ const MutualFundModal = ({
     }
     setSelectedBank(null);
     setSelectedPaymentType(null);
+    setSipDate(null);
+    setDateSelected(null);
   }, [isOpen]);
+
+  const handleInvestClick = () => {
+    if (modalType === "sip" && sipDate) {
+      setDateSelected(sipDate);
+    }
+    alert(
+      modalType === "oneTime"
+        ? `Invested ₹${amount.toLocaleString()} Lumpsum  selected payment method ${selectedPaymentType}`
+        : `Invested ₹${amount.toLocaleString()} SIP on date ${sipDate} selected payment method ${selectedPaymentType}`
+    );
+    // toggle();
+  };
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered size="lg">
       <ModalHeader toggle={toggle}>
@@ -214,46 +229,143 @@ const MutualFundModal = ({
                 ))}
               </div>
 
-              <p style={{ fontSize: "12px", marginTop: "8px", color: "#666" }}>
-                Minimum gap between 2 SIP instalments: 30 days. Further
-                instalments would start only when 1st SIP payment is successful.
-                To avoid failure of future SIP instalments, enable autopay
-                mandate on this bank account.
-              </p>
+              {!dateSelected && (
+                <p
+                  style={{ fontSize: "12px", marginTop: "8px", color: "#666" }}
+                >
+                  Minimum gap between 2 SIP instalments: 30 days. Further
+                  instalments would start only when 1st SIP payment is
+                  successful. To avoid failure of future SIP instalments, enable
+                  autopay mandate on this bank account.
+                </p>
+              )}
             </div>
 
             {/* SIP Date Section */}
-            <div style={{ flex: 1 }}>
-              <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
-                SIP Date
-              </Label>
-              <select
-                value={sipDate}
-                onChange={(e) => setSipDate(Number(e.target.value))}
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  borderRadius: "8px",
-                  border: "1px solid #ccc",
-                  fontSize: "16px",
-                  cursor: "pointer",
-                }}
-              >
-                {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
-                  <option key={day} value={day}>
-                    {`Monthly on ${day}${
-                      day === 1
-                        ? "st"
-                        : day === 2
-                        ? "nd"
-                        : day === 3
-                        ? "rd"
-                        : "th"
-                    }`}
-                  </option>
+            {dateSelected ? (
+              <div style={{ flex: 1 }}>
+                <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
+                  Select Bank account for payment
+                </Label>
+
+                {banks.map((bank) => (
+                  <div
+                    key={bank.id}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      border:
+                        selectedBank === bank.id
+                          ? "2px solid #004AAD"
+                          : "1px solid #ddd",
+                      borderRadius: "8px",
+                      padding: "4px 8px",
+                      cursor: "pointer",
+                      transition: "border 0.2s",
+                      marginBottom: "10px",
+                    }}
+                    onClick={() => handleBankSelect(bank.id)}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <img
+                        src={bank.logo}
+                        alt={bank.name}
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          objectFit: "contain",
+                        }}
+                      />
+                      <div style={{ display: "flex", flexDirection: "column" }}>
+                        <span style={{ fontWeight: 600, fontSize: "14px" }}>
+                          {bank.name}
+                        </span>
+                        <span style={{ fontSize: "12px", color: "#666" }}>
+                          {bank.account}
+                        </span>
+                      </div>
+                    </div>
+
+                    <input
+                      type="radio"
+                      name="bank"
+                      value={bank.id}
+                      checked={selectedBank === bank.id}
+                      onChange={() => handleBankSelect(bank.id)}
+                      style={{
+                        accentColor: "#004AAD",
+                        width: "16px",
+                        height: "16px",
+                      }}
+                      onClick={(e) => e.stopPropagation()} // Prevent triggering parent click
+                    />
+                  </div>
                 ))}
-              </select>
-            </div>
+              </div>
+            ) : (
+              <div style={{ flex: 1 }}>
+                <Label
+                  style={{
+                    fontWeight: 600,
+                    marginBottom: "8px",
+                    display: "block",
+                  }}
+                >
+                  SIP Date
+                </Label>
+
+                {/* Calendar-like grid */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(7, 1fr)", // 7 days like a week
+                    gap: "10px",
+                  }}
+                >
+                  {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
+                    <div
+                      key={day}
+                      onClick={() => setSipDate(day)}
+                      style={{
+                        padding: "3px",
+                        textAlign: "center",
+                        borderRadius: "8px",
+                        border:
+                          sipDate === day
+                            ? "2px solid #004AAD"
+                            : "1px solid #ddd",
+                        backgroundColor: sipDate === day ? "#E6F0FF" : "#fff",
+                        cursor: "pointer",
+                        fontWeight: sipDate === day ? 600 : 400,
+                        transition: "all 0.2s ease",
+                      }}
+                    >
+                      {day}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Selected date text */}
+                {sipDate && (
+                  <p
+                    style={{
+                      marginTop: "10px",
+                      fontSize: "14px",
+                      color: "#444",
+                    }}
+                  >
+                    Selected SIP Date: <b>{sipDate}</b>
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         )}
         {/* payment section */}
@@ -288,7 +400,7 @@ const MutualFundModal = ({
                         ? "2px solid #004AAD"
                         : "1px solid #ccc",
                     borderRadius: "8px",
-                    padding: "12px 16px",
+                    padding: "4px 8px",
                     cursor: "pointer",
                     minWidth: "200px",
                     flex: "1 1 200px",
@@ -363,12 +475,8 @@ const MutualFundModal = ({
         <Button
           style={{ backgroundColor: "#1c517f" }}
           onClick={() => {
-            alert(
-              modalType === "oneTime"
-                ? `Invested ₹${amount.toLocaleString()} Lumpsum`
-                : "SIP Started"
-            );
-            toggle();
+            handleInvestClick();
+            // toggle();
           }}
         >
           {modalType === "oneTime" ? "Invest Now" : "Start SIP"}
