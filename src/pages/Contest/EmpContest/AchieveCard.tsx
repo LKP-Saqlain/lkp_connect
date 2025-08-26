@@ -37,17 +37,32 @@ const AchieveCard = () => {
         ]) => {
           const broking =
             GetEmpContestAchievedBrokerage?.status === 200
-              ? GetEmpContestAchievedBrokerage?.data?.data || []
+              ? (GetEmpContestAchievedBrokerage?.data?.data || []).map(
+                  (item: any, index: number) => ({
+                    id: index + 1,
+                    ...item,
+                  })
+                )
               : [];
 
           const nonBroking =
             GetEmpContestAchievedNonBrokerage?.status === 200
-              ? GetEmpContestAchievedNonBrokerage?.data?.data || []
+              ? (GetEmpContestAchievedNonBrokerage?.data?.data || []).map(
+                  (item: any, index: number) => ({
+                    id: index + 1,
+                    ...item,
+                  })
+                )
               : [];
 
           const client =
             GetEmpContestAchievedClients?.status === 200
-              ? GetEmpContestAchievedClients?.data?.data || []
+              ? (GetEmpContestAchievedClients?.data?.data || []).map(
+                  (item: any, index: number) => ({
+                    id: index + 1,
+                    ...item,
+                  })
+                )
               : [];
 
           setAchieveData({
@@ -58,7 +73,7 @@ const AchieveCard = () => {
 
           console.log(
             { broking, nonBroking, client },
-            "Merged Achieve Card Data"
+            "Mapped Achieve Card Data with IDs"
           );
         }
       )
@@ -68,7 +83,7 @@ const AchieveCard = () => {
       .finally(() => {
         dispatch(hideLoader());
       });
-  }, []);
+  }, [dispatch, user_id]);
   const cardConfigs: {
     title: string;
     dataKey: AchieveDataKey;
