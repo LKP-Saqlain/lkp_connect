@@ -791,6 +791,13 @@ export const slbmColumns: GridColDef[] = [
     flex: 1,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return (
+        <Tooltip title={params.row?.rmMobileNo} arrow placement="top">
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "dealerName",
@@ -799,6 +806,13 @@ export const slbmColumns: GridColDef[] = [
     flex: 1,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return (
+        <Tooltip title={params.row?.dealerMobileNo} arrow placement="top">
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "apName",
@@ -807,6 +821,13 @@ export const slbmColumns: GridColDef[] = [
     flex: 1,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return (
+        <Tooltip title={params.row?.apMobileNo} arrow placement="top">
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "slbmStatus",
