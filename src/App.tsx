@@ -8,6 +8,7 @@ import "./assets/scss/themes.scss";
 import SessionExpiryHandler from "./pages/Authentication/sessionExpiryHandler";
 import "./Global.css";
 import ChangePassword from "./pages/Authentication/ChangePassword";
+import Maintenance from "./pages/Maintenance";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(
@@ -50,32 +51,9 @@ const App = () => {
   }, [serverOnline]);
 
   if (!serverOnline) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "100vh",
-          backgroundColor: "#f3f3f3",
-          textAlign: "center",
-          padding: "20px",
-        }}
-      >
-        <h1 style={{ fontSize: "2.5rem", marginBottom: "20px" }}>
-          We’ll be back soon!
-        </h1>
-        <p style={{ fontSize: "1.2rem", maxWidth: "600px" }}>
-          Sorry for the inconvenience but we’re performing some maintenance at
-          the moment. <br />
-          If you need to you can always contact us, otherwise we’ll be back
-          online shortly!
-        </p>
-        <p style={{ marginTop: "20px", fontWeight: "bold" }}>—Team WebPortal</p>
-      </div>
-    );
+    return <Maintenance />;
   }
+
   return (
     <Router>
       <ToastContainer />

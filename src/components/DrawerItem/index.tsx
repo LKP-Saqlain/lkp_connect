@@ -37,7 +37,8 @@ import { FaFileInvoice } from "react-icons/fa";
 import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import StarBurst from "../../assets/images/starburst.png";
+// import StarBurst from "../../assets/images/starburst.png";
+import SampleCoin from "../../assets/images/price_coin.png";
 // import StarBurst1 from "../../assets/images/starburst1.png";
 // import StarBurst2 from "../../assets/images/starburst2.png";
 // import "./style.css";
@@ -212,7 +213,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
               style={{ display: visible ? "inline" : "none" }}
             /> */}
             <div className="starburst-bg">
-              <img src={StarBurst} height={"30px"} alt="" />
+              <img src={SampleCoin} height={"30px"} alt="" />
             </div>
           </div>
         )}
