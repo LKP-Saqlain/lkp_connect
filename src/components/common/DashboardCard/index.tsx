@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import IphoneImg from "../../../assets/images/iphone.png";
 // import IpadImg from "../../../assets/images/Ipad.png";
 // import AirPodsImg from "../../../assets/images/Airpods.png";
-import CoinImg from "../../../assets/images/starburst.png";
+import CoinImg from "../../../assets/images/price_coin.png";
 // import { useTheme } from "@mui/material/styles";
 // import { useMediaQuery } from "@mui/material";
 import "./style.css";
