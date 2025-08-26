@@ -182,11 +182,11 @@ const MfDiscover = ({ onSelectFund }: any) => {
               <BasicTabs
                 heading="Popular Category"
                 tabs={[
-                  { label: "Equity" },
-                  { label: "Debt" },
-                  { label: "Hybrid" },
-                  { label: "Solution" },
-                  { label: "Others" },
+                  { label: "Large Cap" },
+                  { label: "ELSS" },
+                  { label: "Small Cap" },
+                  { label: "Mid Cap" },
+                  // { label: "Others" },
                 ]}
                 value={popularTab}
                 onChange={(e, newValue) => setPopularTab(newValue)}

@@ -163,6 +163,7 @@ const MfAreaChart: React.FC<ApexChartProps> = ({
             style={{
               padding: "5px 10px",
               borderRadius: "20px",
+              fontSize: "12px",
               border:
                 selection === range.key
                   ? "2px solid #007bff"

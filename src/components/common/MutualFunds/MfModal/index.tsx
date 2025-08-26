@@ -30,6 +30,7 @@ const MutualFundModal = ({
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
   const [sipDate, setSipDate] = useState<number | null>(null);
   const [dateSelected, setDateSelected] = useState<number | null>(null);
+  const [upiId, setUpiId] = useState("");
 
   const handleBankSelect = (bankId: string) => {
     setSelectedBank(bankId);
@@ -370,16 +371,28 @@ const MutualFundModal = ({
         )}
         {/* payment section */}
         {selectedBank && (
-          <div style={{ fontFamily: "sans-serif" }}>
-            <label
-              style={{
-                fontWeight: 600,
-                marginTop: "12px",
-                display: "block",
-              }}
-            >
-              Select Payment Type
-            </label>
+          <div>
+            <div>
+              <div style={{ marginTop: "12px" }}>
+                {modalType === "sip" && sipDate && (
+                  <>
+                    <div style={{ fontWeight: 500, marginBottom: "6px" }}>
+                      Selected SIP Date: <b>{sipDate}th</b>
+                    </div>
+
+                    <label
+                      style={{
+                        fontWeight: 600,
+                        marginTop: "12px",
+                        display: "block",
+                      }}
+                    >
+                      Select Payment Type
+                    </label>
+                  </>
+                )}
+              </div>
+            </div>
 
             <div
               style={{
@@ -434,13 +447,61 @@ const MutualFundModal = ({
                       height: "16px",
                       marginLeft: "8px",
                     }}
-                    onClick={(e) => e.stopPropagation()} // Prevents parent click
+                    onClick={(e) => e.stopPropagation()}
                   />
                 </div>
               ))}
             </div>
+
+            {/* ✅ Extra UPI Input Field & Verify Button */}
+            {selectedPaymentType === "upi" && (
+              <div style={{ marginTop: "16px", maxWidth: "400px" }}>
+                <Label style={{ fontWeight: 600, marginBottom: "6px" }}>
+                  Enter UPI ID
+                </Label>
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <TextField
+                    fullWidth
+                    placeholder="example@upi"
+                    value={upiId}
+                    onChange={(e) => setUpiId(e.target.value)}
+                    InputProps={{
+                      style: {
+                        padding: "6px 10px", // Optional, if needed
+                        fontSize: "14px",
+                      },
+                    }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "8px",
+                        height: "40px", // You can fix height to make it shorter
+                      },
+                    }}
+                  />
+                  <Button
+                    style={{
+                      backgroundColor: "#004AAD",
+                      color: "#fff",
+                      padding: "6px 16px",
+                      fontSize: "14px",
+                      height: "40px",
+                    }}
+                    onClick={() => {
+                      if (!upiId) {
+                        alert("Please enter a UPI ID.");
+                      } else {
+                        alert(`Verifying UPI ID: ${upiId}`);
+                      }
+                    }}
+                  >
+                    Verify
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         )}
+
         {/* Note Section */}
         <div
           style={{

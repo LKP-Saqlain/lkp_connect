@@ -339,9 +339,9 @@ const MfOverview = ({ fundName, onBack }: any) => {
               marginBottom: "16px",
             }}
           >
-            <h3 style={{ margin: 0, fontWeight: 600, color: "#333" }}>
+            <h4 style={{ margin: 0, fontWeight: 600, color: "#333" }}>
               {`Overview of ${fundName}`}
-            </h3>
+            </h4>
 
             <div style={{ display: "flex", gap: "12px" }}>
               {/* One Time */}
