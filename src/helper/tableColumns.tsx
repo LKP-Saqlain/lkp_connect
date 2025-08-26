@@ -5904,7 +5904,7 @@ export const getApproverOneDetails: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "brokeragePerShare",
+    field: "lkpCommissionPerShare",
     headerName: "Commision Per Share",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
