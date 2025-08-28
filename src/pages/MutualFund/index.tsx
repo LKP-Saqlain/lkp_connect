@@ -38,7 +38,7 @@ const MutualFundIndex = (activeSubItem: any) => {
             <BasicTabs
               tabs={mainMenu.map((m) => ({ label: m.label }))}
               value={activeTab}
-              onChange={(e, newValue) => setActiveTab(newValue)}
+              onChange={(_e, newValue) => setActiveTab(newValue)}
             />
 
             {/* Client Code Section */}

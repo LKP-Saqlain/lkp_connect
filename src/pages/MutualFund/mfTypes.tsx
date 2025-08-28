@@ -1,7 +1,7 @@
 // mfTypes.ts
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 import Discover from "./Discover";
-import Watchlist from "./Watchlist";
+// import Watchlist from "./Watchlist";
 import Portfolio from "./Portfolio";
 import Report from "./Report";
 import Order from "./Order";

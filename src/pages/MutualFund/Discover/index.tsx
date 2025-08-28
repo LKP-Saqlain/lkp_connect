@@ -79,7 +79,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
                   { label: "Others" },
                 ]}
                 value={assetTab}
-                onChange={(e, newValue) => setAssetTab(newValue)}
+                onChange={(_e, newValue) => setAssetTab(newValue)}
               />
               {/* </Card>
 
@@ -189,7 +189,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
                   // { label: "Others" },
                 ]}
                 value={popularTab}
-                onChange={(e, newValue) => setPopularTab(newValue)}
+                onChange={(_e, newValue) => setPopularTab(newValue)}
               />
 
               {popularTab === 0 && (
