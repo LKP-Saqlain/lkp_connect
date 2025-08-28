@@ -7790,3 +7790,144 @@ export const MutualFundList: GridColDef[] = [
     minWidth: 100,
   },
 ];
+export const MutualFundOrder: GridColDef[] = [
+  {
+    field: "fundName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "aumCr",
+    headerName: "Status",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "minSIP",
+    headerName: "Order Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "minLumpSum",
+    headerName: "Folio Number",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+  },
+  {
+    field: "returns",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 100,
+  },
+  {
+    field: "",
+    headerName: "Remarks",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 100,
+  },
+];
+
+export const MutualFundName: GridColDef[] = [
+  {
+    field: "fundName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+];
+export const OrderTransaction: GridColDef[] = [
+  ...MutualFundName,
+  {
+    field: "returns",
+    headerName: "Transaction Price",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "minLumpSum",
+    headerName: "Quantity",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+];
+export const OrderOngoingSip: GridColDef[] = [
+  ...MutualFundName,
+  {
+    field: "returns",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "minLumpSum",
+    headerName: "SIP Date",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+];
+export const OrderUpcomingSip: GridColDef[] = [
+  ...MutualFundName,
+  {
+    field: "returns",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "minLumpSum",
+    headerName: "Due Date",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+];
+export const MfPortfolio: GridColDef[] = [
+  ...MutualFundName,
+  {
+    field: "returns",
+    headerName: "Invested Amount",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+    renderCell: (params: any) => {
+      const value = params.value;
+      return value?.toLocaleString("en-IN");
+    },
+  },
+
+  {
+    field: "minLumpSum",
+    headerName: "Current Amount",
+    disableColumnMenu: true,
+    flex: 1, // larger space since names are long
+    minWidth: 120,
+  },
+  {
+    field: "aumCr",
+    headerName: "Returns",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 80,
+  },
+  // {
+  //   field: "action",
+  //   headerName: "Action",
+  //   disableColumnMenu: true,
+  //   flex: 2,
+  //   minWidth: 150,
+  // },
+];

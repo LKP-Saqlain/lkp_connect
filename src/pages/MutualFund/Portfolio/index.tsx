@@ -71,16 +71,16 @@ const MfPortfolio = () => {
             </Typography>
           </div>
 
-          <Button
+          {/* <Button
             variant="outlined"
             sx={{ textTransform: "none", fontWeight: 500, borderRadius: 2 }}
           >
             Portfolio Analysis
-          </Button>
+          </Button> */}
         </Stack>
       </Card>
       <Card sx={{ borderRadius: 4, p: 2 }}>
-        <MutualFundTable rows={mutualFundRows} />
+        <MutualFundTable rows={mutualFundRows} selectedLabel="MfPortfolio" />
       </Card>
     </>
   );

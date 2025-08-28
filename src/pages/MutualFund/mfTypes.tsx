@@ -23,6 +23,11 @@ export interface TabPanelProps {
   value: number;
 }
 
+export interface MutualFundProps {
+  rows?: any;
+  selectedLabel?: string;
+}
+
 export const mainMenuC = [
   { id: 1, label: "equity" },
   { id: 2, label: "debt" },
@@ -48,11 +53,11 @@ export const mainMenu = [
     label: "Discover",
     content: (props: any) => <Discover {...props} />,
   },
-  {
-    id: 2,
-    label: "Watchlist",
-    content: (props: any) => <Watchlist {...props} />,
-  },
+  // {
+  //   id: 2,
+  //   label: "Watchlist",
+  //   content: (props: any) => <Watchlist {...props} />,
+  // },
   {
     id: 3,
     label: "Portfolio",
@@ -61,6 +66,7 @@ export const mainMenu = [
   { id: 4, label: "Report", content: (props: any) => <Report {...props} /> },
   { id: 5, label: "Order", content: (props: any) => <Order {...props} /> },
 ];
+
 export const mutualFundCards = {
   equity: [
     {

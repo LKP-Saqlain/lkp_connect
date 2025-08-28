@@ -191,7 +191,7 @@ export const mutualFundRows = [
     minSIP: 100,
     minLumpSum: 5000,
     aumCr: 32000,
-    returns: 12.5,
+    returns: 143332.5,
   },
   {
     id: 2,

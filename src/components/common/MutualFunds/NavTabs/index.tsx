@@ -18,7 +18,7 @@ export default function BasicTabs({
   onChange,
 }: BasicTabsProps & {
   value: number;
-  onChange: (event: React.SyntheticEvent, newValue: number) => void;
+  onChange: (event: React.SyntheticEvent, value: number) => void;
 }) {
   return (
     <Box sx={{ width: "100%" }}>

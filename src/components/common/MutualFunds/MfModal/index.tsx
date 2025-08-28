@@ -13,7 +13,7 @@ import { banks, paymentOptions } from "../../../../pages/MutualFund/mfTypes";
 interface MutualFundModalProps {
   isOpen: boolean;
   toggle: () => void;
-  modalType: "oneTime" | "sip" | null;
+  modalType: "oneTime" | "sip" | "redeem" | null;
   title?: string;
 }
 
@@ -65,6 +65,7 @@ const MutualFundModal = ({
       </ModalHeader>
 
       <ModalBody>
+        {/* {modalType === "redeem" && <h1>redemption Arc</h1>} */}
         {modalType === "oneTime" ? (
           // ✅ Lumpsum UI
           <div style={{ display: "flex", gap: "20px" }}>
