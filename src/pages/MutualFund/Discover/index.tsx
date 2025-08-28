@@ -45,7 +45,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
             <Card
               style={{
                 borderRadius: "15px",
-                // marginBottom: "16px",
+                margin: "0",
                 padding: "16px",
               }}
             >
@@ -133,7 +133,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
                 <Card
                   style={{
                     borderRadius: "15px",
-                    // marginBottom: "16px",
+                    margin: "0",
                     padding: "16px",
                   }}
                 >
@@ -153,7 +153,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
                 <Card
                   style={{
                     borderRadius: "15px",
-                    // marginBottom: "16px",
+                    margin: "0",
                     padding: "16px",
                   }}
                 >
