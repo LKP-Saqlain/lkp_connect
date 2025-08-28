@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import PrivateRoute from "./components/PrivateRoutes";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer } from "react-toastify";
@@ -8,7 +8,7 @@ import "./assets/scss/themes.scss";
 import SessionExpiryHandler from "./pages/Authentication/sessionExpiryHandler";
 import "./Global.css";
 import ChangePassword from "./pages/Authentication/ChangePassword";
-// import "./App.css";
+import Maintenance from "./pages/Maintenance";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(
@@ -17,10 +17,43 @@ const AuthenticateUser = lazy(
 const ForgotPassword = lazy(
   () => import("./pages/Authentication/ForgotPassword")
 );
-// const UnblockUser = lazy(() => import("./pages/Authentication/UnblockUser"));
 const SideBar = lazy(() => import("./components/sideBar"));
 
 const App = () => {
+  const [serverOnline, setServerOnline] = useState(true);
+  const [wasOffline, setWasOffline] = useState(false);
+
+  useEffect(() => {
+    const checkServer = () => {
+      fetch("/favicon.png", { cache: "no-store" })
+        .then((res) => {
+          if (res.ok) {
+            if (!serverOnline) {
+              window.location.reload();
+            }
+            setServerOnline(true);
+          } else {
+            setServerOnline(false);
+            setWasOffline(true);
+          }
+        })
+        .catch(() => {
+          setServerOnline(false);
+          setWasOffline(true);
+        });
+    };
+
+    checkServer();
+    console.log("testing console", wasOffline);
+
+    const id = setInterval(checkServer, 10000);
+    return () => clearInterval(id);
+  }, [serverOnline]);
+
+  if (!serverOnline) {
+    return <Maintenance />;
+  }
+
   return (
     <Router>
       <ToastContainer />

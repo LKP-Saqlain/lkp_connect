@@ -787,18 +787,47 @@ export const slbmColumns: GridColDef[] = [
   {
     field: "rmName",
     headerName: "RM Name",
-    minWidth: 120,
+    minWidth: 260,
     flex: 1,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return (
+        <Tooltip title={params.row?.rmMobileNo} arrow placement="top">
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "dealerName",
     headerName: "Dealer Name",
-    minWidth: 120,
+    minWidth: 260,
     flex: 1,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return (
+        <Tooltip title={params.row?.dealerMobileNo} arrow placement="top">
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "apName",
+    headerName: "AP Name",
+    minWidth: 260,
+    flex: 1,
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return (
+        <Tooltip title={params.row?.apMobileNo} arrow placement="top">
+          <span>{params.value}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "slbmStatus",
@@ -5896,7 +5925,7 @@ export const getApproverOneDetails: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "brokeragePerShare",
+    field: "lkpCommissionPerShare",
     headerName: "Commision Per Share",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
@@ -6387,6 +6416,57 @@ export const ClientPledgeRequest: GridColDef[] = [
       }).format(value);
     },
   },
+  // {
+  //   field: "ledgerReport",
+  //   headerName: "Client Report with Ledger",
+  //   headerClassName: "header-wrap-custom",
+  //   minWidth: 120,
+  //   flex: 1,
+  //   align: "right",
+  //   headerAlign: "center",
+  //   disableColumnMenu: true,
+  //   // valueFormatter: (params: any) => {
+  //   //   const value = parseFloat(params);
+  //   //   return new Intl.NumberFormat("en-IN", {
+  //   //     minimumFractionDigits: 2,
+  //   //     maximumFractionDigits: 2,
+  //   //   }).format(value);
+  //   // },
+  // },
+  // {
+  //   field: "pledgeReport",
+  //   headerName: "Client Report with Pledge",
+  //   headerClassName: "header-wrap-custom",
+  //   minWidth: 120,
+  //   flex: 1,
+  //   align: "right",
+  //   headerAlign: "center",
+  //   disableColumnMenu: true,
+  //   // valueFormatter: (params: any) => {
+  //   //   const value = parseFloat(params);
+  //   //   return new Intl.NumberFormat("en-IN", {
+  //   //     minimumFractionDigits: 2,
+  //   //     maximumFractionDigits: 2,
+  //   //   }).format(value);
+  //   // },
+  // },
+  // {
+  //   field: "freeHolding Value",
+  //   headerName: "Free Holding Value",
+  //   headerClassName: "header-wrap-custom",
+  //   minWidth: 120,
+  //   flex: 1,
+  //   align: "right",
+  //   headerAlign: "center",
+  //   disableColumnMenu: true,
+  //   // valueFormatter: (params: any) => {
+  //   //   const value = parseFloat(params);
+  //   //   return new Intl.NumberFormat("en-IN", {
+  //   //     minimumFractionDigits: 2,
+  //   //     maximumFractionDigits: 2,
+  //   //   }).format(value);
+  //   // },
+  // },
   {
     field: "encryptedCode",
     headerName: "Pledge Request",
