@@ -725,4 +725,7 @@ export const apiServices = {
   GetUnPledgeReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetUnPledgeReport, payload);
   },
+  MF_SchemeDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.MF_SchemeDetails, payload);
+  },
 };

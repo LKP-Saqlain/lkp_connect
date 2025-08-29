@@ -33,11 +33,11 @@ const MfAreaChart: React.FC<ApexChartProps> = ({
       height,
       zoom: { autoScaleYaxis: true },
     },
+    colors: ["#2d8a0b"], // ✅ custom line color
     dataLabels: { enabled: false },
     markers: { size: 0 },
     xaxis: {
       type: "datetime",
-      min: new Date("01 Mar 2012").getTime(),
       tickAmount: 6,
     },
     tooltip: { x: { format: "dd MMM yyyy" } },
@@ -49,87 +49,42 @@ const MfAreaChart: React.FC<ApexChartProps> = ({
         opacityTo: 0.9,
         stops: [0, 100],
       },
+      colors: ["#2d8a0b"], // ✅ custom fill color
     },
+    stroke: {
+      curve: "smooth",
+      width: 3,
+      colors: ["#2d8a0b"], // ✅ custom stroke color
+    },
+  };
+  const getDateRange = (rangeKey: string, data: [number, number][]) => {
+    if (!data || data.length === 0) return [0, 0];
+
+    const sorted = [...data].sort((a, b) => a[0] - b[0]); // sort by timestamp
+    const end = sorted[sorted.length - 1][0]; // latest date
+    const startMap: { [key: string]: number } = {
+      one_week: end - 7 * 24 * 60 * 60 * 1000,
+      one_month: end - 30 * 24 * 60 * 60 * 1000,
+      three_months: end - 90 * 24 * 60 * 60 * 1000,
+      six_months: end - 180 * 24 * 60 * 60 * 1000,
+      one_year: end - 365 * 24 * 60 * 60 * 1000,
+      three_years: end - 3 * 365 * 24 * 60 * 60 * 1000,
+      five_years: end - 5 * 365 * 24 * 60 * 60 * 1000,
+      ytd: new Date(new Date(end).getFullYear(), 0, 1).getTime(),
+      all: sorted[0][0], // beginning of dataset
+    };
+
+    const start = startMap[rangeKey] || sorted[0][0];
+    return [start, end];
   };
 
   const updateData = (timeline: typeof defaultRange) => {
     setSelection(timeline);
 
-    switch (timeline) {
-      case "one_week":
-        ApexCharts.exec(
-          "area-datetime",
-          "zoomX",
-          new Date("20 Feb 2013").getTime(),
-          new Date("27 Feb 2013").getTime()
-        );
-        break;
-      case "one_month":
-        ApexCharts.exec(
-          "area-datetime",
-          "zoomX",
-          new Date("28 Jan 2013").getTime(),
-          new Date("27 Feb 2013").getTime()
-        );
-        break;
-      case "three_months":
-        ApexCharts.exec(
-          "area-datetime",
-          "zoomX",
-          new Date("01 Dec 2012").getTime(),
-          new Date("27 Feb 2013").getTime()
-        );
-        break;
-      case "six_months":
-        ApexCharts.exec(
-          "area-datetime",
-          "zoomX",
-          new Date("27 Sep 2012").getTime(),
-          new Date("27 Feb 2013").getTime()
-        );
-        break;
-      case "one_year":
-        ApexCharts.exec(
-          "area-datetime",
-          "zoomX",
-          new Date("27 Feb 2012").getTime(),
-          new Date("27 Feb 2013").getTime()
-        );
-        break;
-      case "three_years":
-        ApexCharts.exec(
-          "area-datetime",
-          "zoomX",
-          new Date("27 Feb 2010").getTime(),
-          new Date("27 Feb 2013").getTime()
-        );
-        break;
-      case "five_years":
-        ApexCharts.exec(
-          "area-datetime",
-          "zoomX",
-          new Date("27 Feb 2008").getTime(),
-          new Date("27 Feb 2013").getTime()
-        );
-        break;
-      case "ytd":
-        ApexCharts.exec(
-          "area-datetime",
-          "zoomX",
-          new Date("01 Jan 2013").getTime(),
-          new Date("27 Feb 2013").getTime()
-        );
-        break;
-      case "all":
-        ApexCharts.exec(
-          "area-datetime",
-          "zoomX",
-          new Date("23 Jan 2012").getTime(),
-          new Date("27 Feb 2013").getTime()
-        );
-        break;
-      default:
-    }
+    if (!series || !series[0]?.data?.length) return;
+
+    const [start, end] = getDateRange(timeline, series[0].data);
+    ApexCharts.exec("area-datetime", "zoomX", start, end);
   };
 
   const ranges = [
