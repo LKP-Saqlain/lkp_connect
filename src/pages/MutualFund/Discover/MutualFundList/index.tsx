@@ -1,17 +1,84 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import MutualFundTable from "../../../../components/common/MutualFunds/MfTable";
-import { mutualFundRows } from "../../../../helper/commmon";
 import BasicTabs from "../../../../components/common/MutualFunds/NavTabs";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../redux/store";
+import { apiServices } from "../../../../services";
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 
 interface MutualFundListProps {
   selectedMfType: string;
   onBack: () => void;
+  onSelectFund: (schemeCode: string) => void;
 }
 
-const MutualFundList = ({ selectedMfType, onBack }: MutualFundListProps) => {
+const MutualFundList = ({
+  selectedMfType,
+  onBack,
+  onSelectFund,
+}: MutualFundListProps) => {
+  const [data, setdata] = useState<any[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
-    console.log("Selected MF Type:", selectedMfType);
-  }, [selectedMfType]);
+    const fetchData = async () => {
+      dispatch(showLoader("Please wait we are processing your request"));
+
+      try {
+        let response;
+        let rawData: any[] = [];
+        if (selectedMfType === "NFO") {
+          response = await apiServices.MF_NFODetails();
+          rawData = response?.data?.data ?? [];
+        } else {
+          // Mapping of mutual fund types to ProductId
+          const productTypeMap: Record<string, number> = {
+            "High Returns": 9,
+            "Tax Savings": 20,
+            "SIP with 100": 19,
+            "SIP with 500": 17,
+          };
+
+          const productId = productTypeMap[selectedMfType];
+
+          if (!productId) {
+            dispatch(hideLoader());
+            console.warn("Unsupported MF Type:", selectedMfType);
+            return;
+          }
+
+          // Base payload reused for all MF_BasketDetialedList calls
+          const payload = {
+            ProductId: productId,
+            BrokerID: 10001662,
+            SortColumn: "",
+            SortOrder: 1,
+            RecordsPerPage: 50,
+            PageNumber: 1,
+          };
+
+          response = await apiServices.MF_BasketDetialedList(payload);
+          rawData = response?.data?.data?.returnsList ?? [];
+        }
+
+        dispatch(hideLoader());
+
+        console.log(rawData, "Selected MF Type:", selectedMfType);
+
+        const formattedData = rawData.map((item: any, index: number) => ({
+          id: index + 1,
+          ...item,
+        }));
+
+        setdata(formattedData);
+      } catch (error) {
+        dispatch(hideLoader());
+        console.error("Error fetching data for", selectedMfType, error);
+      }
+    };
+
+    fetchData();
+  }, [selectedMfType, dispatch]);
 
   return (
     <div
@@ -56,7 +123,11 @@ const MutualFundList = ({ selectedMfType, onBack }: MutualFundListProps) => {
         </button>
       </div>
       {/* Table */}
-      <MutualFundTable rows={mutualFundRows} />
+      <MutualFundTable
+        rows={data}
+        selectedLabel={selectedMfType}
+        onSelectFund={onSelectFund}
+      />
     </div>
   );
 };

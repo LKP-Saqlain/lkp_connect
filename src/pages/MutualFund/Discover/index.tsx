@@ -8,25 +8,102 @@ import {
   MfCardPassLabel,
 } from "../../../pages/MutualFund/mfTypes";
 import MfinfoCard from "../../../components/common/MutualFunds/MfInfoCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MutualFundList from "./MutualFundList";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../services";
 
 const MfDiscover = ({ onSelectFund }: any) => {
   const [assetTab, setAssetTab] = useState(0);
-  const [popularTab, setPopularTab] = useState(0);
+  const [popularTab, setPopularTab] = useState("Large Cap");
+  const [popularTabOrder, setPopularTabOrder] = useState(0);
   const [selectedMfType, setSelectedMfType] = useState("");
+  const [popularCategorydata, setPopularCategorydata] = useState<any[]>([]);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const tabList = [
+    { label: "Large Cap" },
+    { label: "ELSS" },
+    { label: "Small Cap" },
+    { label: "Mid Cap" },
+    // { label: "Others" },
+  ];
+  useEffect(() => {
+    console.log(onSelectFund, "discover onSelectFund");
+  }, []);
+
+  const productTypeMap: Record<string, number> = {
+    "Large Cap": 14,
+    ELSS: 20,
+    "Small Cap": 16,
+    "Mid Cap": 15,
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(showLoader("Please wait we are processing your request"));
+
+      const productId = productTypeMap[popularTab];
+
+      if (!productId) {
+        dispatch(hideLoader());
+        console.warn("Unsupported popularTab:", popularTab);
+        return;
+      }
+
+      try {
+        const payload = {
+          ProductId: productId,
+          BrokerID: 10001662,
+          SortColumn: "",
+          SortOrder: 1,
+          RecordsPerPage: 50,
+          PageNumber: 1,
+        };
+
+        const response = await apiServices.MF_BasketDetialedList(payload);
+        const rawData = response?.data?.data?.returnsList ?? [];
+
+        const formattedData = rawData.map((item: any, index: number) => ({
+          id: index + 1,
+          ...item,
+        }));
+
+        setPopularCategorydata(formattedData);
+        console.log(formattedData, "popularCategorydata");
+      } catch (error) {
+        console.error("Error fetching data for", popularTab, error);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+
+    if (popularTab) {
+      fetchData();
+    }
+  }, [dispatch, popularTab]);
 
   const handleSelectedMfType = (MfType: string) => {
     setSelectedMfType(MfType);
     console.log("selectedMfType", MfType);
   };
-  const handleSelectedMutualFund = (MfName: string) => {
-    console.log("selectedMutualFund", MfName);
-    onSelectFund(MfName);
+  const handleSelectedMutualFund = (schemeCode: string) => {
+    console.log("selectedMutualFund", schemeCode);
+    onSelectFund(schemeCode);
   };
   const handleBack = () => {
     setSelectedMfType("");
   };
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    const label = tabList[newValue]?.label;
+    setPopularTab(label);
+    setPopularTabOrder(newValue);
+    console.log("Selected Tab:", label, "Index:", newValue);
+  };
+
   return (
     <Card
       style={{
@@ -36,7 +113,11 @@ const MfDiscover = ({ onSelectFund }: any) => {
       }}
     >
       {selectedMfType ? (
-        <MutualFundList selectedMfType={selectedMfType} onBack={handleBack} />
+        <MutualFundList
+          selectedMfType={selectedMfType}
+          onBack={handleBack}
+          onSelectFund={onSelectFund}
+        />
       ) : (
         // <MfOverview />
         <Row>
@@ -129,7 +210,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
 
             {/* Passive & Product Cards */}
             <Row>
-              <Col xl={6}>
+              {/* <Col xl={6}>
                 <Card
                   style={{
                     borderRadius: "15px",
@@ -148,7 +229,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
                     handleSelectedMfType={handleSelectedMfType}
                   />
                 </Card>
-              </Col>
+              </Col> */}
               <Col xl={6}>
                 <Card
                   style={{
@@ -181,49 +262,14 @@ const MfDiscover = ({ onSelectFund }: any) => {
             >
               <BasicTabs
                 heading="Popular Category"
-                tabs={[
-                  { label: "Large Cap" },
-                  { label: "ELSS" },
-                  { label: "Small Cap" },
-                  { label: "Mid Cap" },
-                  // { label: "Others" },
-                ]}
-                value={popularTab}
-                onChange={(_e, newValue) => setPopularTab(newValue)}
+                tabs={tabList}
+                value={popularTabOrder}
+                onChange={handleTabChange}
               />
-
-              {popularTab === 0 && (
+              {popularCategorydata.length > 0 && (
                 <MfinfoCard
                   CardType="Popular Category"
-                  funds={mutualFundCards.equity}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {popularTab === 1 && (
-                <MfinfoCard
-                  CardType="Popular Category"
-                  funds={mutualFundCards.debt}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {popularTab === 2 && (
-                <MfinfoCard
-                  CardType="Popular Category"
-                  funds={mutualFundCards.hybrid}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {popularTab === 3 && (
-                <MfinfoCard
-                  CardType="Popular Category"
-                  funds={mutualFundCards.solution}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {popularTab === 4 && (
-                <MfinfoCard
-                  CardType="Popular Category"
-                  funds={mutualFundCards.others}
+                  funds={popularCategorydata}
                   handleSelectedMutualFund={handleSelectedMutualFund}
                 />
               )}

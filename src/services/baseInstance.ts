@@ -82,7 +82,11 @@ const multipartEndpoints = [
   endpoints.MergeIntoSymphonyFile,
 ];
 
-const mutualFundEndpoints = [endpoints.MF_SchemeDetails];
+const mutualFundEndpoints = [
+  endpoints.MF_SchemeDetails,
+  endpoints.MF_NFODetails,
+  endpoints.MF_BasketDetialedList,
+];
 
 // Utility functions
 const isEndpointMatched = (url: string | undefined, endpoints: string[]) =>

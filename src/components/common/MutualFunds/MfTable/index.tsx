@@ -1,24 +1,42 @@
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import {
-  MutualFundOrder,
   OrderTransaction,
   OrderOngoingSip,
   OrderUpcomingSip,
   MfPortfolio,
+  RecommendationList,
+  NFOList,
 } from "../../../../helper/tableColumns";
 import { MutualFundProps } from "../../../../pages/MutualFund/mfTypes";
 import { Button } from "@mui/material";
 import MutualFundModal from "../MfModal";
 import { useState } from "react";
 
-const MutualFundTable = ({ rows, selectedLabel }: MutualFundProps) => {
+const MutualFundTable = ({
+  rows,
+  selectedLabel,
+  onSelectFund,
+}: MutualFundProps) => {
   const [open, setOpen] = useState(false);
 
   const toggle = () => setOpen(!open);
 
+  const handleRowClick = (params: any) => {
+    if (onSelectFund) {
+      onSelectFund(params.row.schemeCode.toString());
+    }
+    console.log(params.row.schemeCode, "params.row.schemeCode");
+  };
+
   const getColumns = () => {
     // You can customize columns based on selectedLabel here
+    const recommendationTypes = [
+      "High Returns",
+      "Tax Savings",
+      "SIP with 100",
+      "SIP with 500",
+    ];
     if (selectedLabel === "MfPortfolio") {
       return MfPortfolio.map((column) => {
         if (column.field === "action") {
@@ -78,8 +96,12 @@ const MutualFundTable = ({ rows, selectedLabel }: MutualFundProps) => {
       return OrderUpcomingSip.map((column) => ({
         ...column,
       }));
-    } else if (selectedLabel === "MutualFundOrder") {
-      return MutualFundOrder.map((column) => ({
+    } else if (selectedLabel === "NFO") {
+      return NFOList.map((column) => ({
+        ...column,
+      }));
+    } else if (selectedLabel && recommendationTypes.includes(selectedLabel)) {
+      return RecommendationList.map((column) => ({
         ...column,
       }));
     } else if (selectedLabel === "Transaction") {
@@ -107,6 +129,7 @@ const MutualFundTable = ({ rows, selectedLabel }: MutualFundProps) => {
           columns={columns}
           // pageSizeOptions={[5]}
           disableRowSelectionOnClick
+          onRowClick={handleRowClick}
           rowHeight={40}
           localeText={{ noRowsLabel: "No Records!" }}
           sx={{
@@ -117,6 +140,9 @@ const MutualFundTable = ({ rows, selectedLabel }: MutualFundProps) => {
               fontSize: "12px",
               display: "flex",
               alignItems: "center",
+            },
+            "& .MuiDataGrid-row": {
+              cursor: "pointer",
             },
           }}
         />
