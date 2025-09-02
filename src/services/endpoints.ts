@@ -171,4 +171,5 @@ export const endpoints = {
   BSEStar_SinglePayment: "/api/MF/BSEStar_SinglePayment",
   BSEStar_MfOrderEntry: "/api/MF/BSEStar_MfOrderEntry",
   BSEStar_XSIPOrderEntry: "/api/MF/BSEStar_XSIPOrderEntry",
+  MF_FundOverView: "/api/MF/MF_FundOverView",
 };

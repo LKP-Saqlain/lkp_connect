@@ -35,6 +35,7 @@ export interface MutualFundModalProps {
   toggle: () => void;
   modalType: "oneTime" | "sip" | "redeem" | null;
   title?: string;
+  bseSchemeCode?: string;
 }
 
 export interface BankDetail {

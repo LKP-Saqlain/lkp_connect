@@ -12,6 +12,7 @@ const MfOverview = ({ schemeCode, onBack }: any) => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<any>(null);
   const [modalType, setModalType] = useState<"oneTime" | "sip" | null>(null);
+  const [bseSchemeCode, setBseSchemeCode] = useState<any>("");
 
   const dispatch = useDispatch<AppDispatch>();
   const toggle = () => setOpen(!open);
@@ -21,42 +22,52 @@ const MfOverview = ({ schemeCode, onBack }: any) => {
   >([]);
 
   useEffect(() => {
-    const fetchBrokerage = async () => {
-      const payload = {
-        schemeCode: schemeCode,
-      };
+    const fetchData = async () => {
       dispatch(showLoader("Please wait, we are processing your request..."));
 
-      apiServices
-        .MF_SchemeDetails(payload)
-        .then((response: any) => {
-          const fundOverviewData = response?.data?.data;
-          setData(fundOverviewData);
-          console.log(fundOverviewData, "fundOverviewData");
+      try {
+        // run both in parallel
+        const [schemeRes, bseRes] = await Promise.all([
+          apiServices.MF_SchemeDetails({ schemeCode }),
+          apiServices.MF_FundOverView({
+            pageNumber: 1,
+            pageSize: 1,
+            searchKey: "",
+            schemeCode,
+            sipMinimum: "",
+            lumpsumMinimum: "",
+            riskCategory: "",
+            assetClass: "",
+            schemeCategory: "",
+            encryptionKey: "",
+          }),
+        ]);
 
-          // Transform historicalNAVDetails to chart series format
-          const historicalData = fundOverviewData?.historicalNAVDetails || [];
-          const formattedSeries = [
-            {
-              name: data?.schemeName || "Fund Growth",
-              data: historicalData.map((entry: any) => [
-                new Date(entry.navDate).getTime(),
-                Number(entry.nav),
-              ]),
-            },
-          ];
-          setChartSeries(formattedSeries);
-        })
-        .catch((Err: any) => {
-          console.log("Error->", Err.message);
-          dispatch(hideLoader());
-        })
-        .finally(() => {
-          dispatch(hideLoader());
-        });
+        // handle SchemeDetails response
+        const fundOverviewData = schemeRes?.data?.data;
+        setData(fundOverviewData);
+
+        const historicalData = fundOverviewData?.historicalNAVDetails || [];
+        setChartSeries([
+          {
+            name: fundOverviewData?.schemeName || "Fund Growth",
+            data: historicalData.map((entry: any) => [
+              new Date(entry.navDate).getTime(),
+              Number(entry.nav),
+            ]),
+          },
+        ]);
+
+        // handle FundOverView response
+        setBseSchemeCode(bseRes?.data?.data[0]?.bseSchemeCode ?? "");
+      } catch (err: any) {
+        console.error("Error->", err.message);
+      } finally {
+        dispatch(hideLoader());
+      }
     };
 
-    fetchBrokerage();
+    fetchData();
   }, [dispatch, schemeCode]);
 
   return (
@@ -67,6 +78,7 @@ const MfOverview = ({ schemeCode, onBack }: any) => {
         toggle={toggle}
         modalType={modalType}
         title={data?.schemeName ?? ""}
+        bseSchemeCode={bseSchemeCode}
       />
 
       <Card>

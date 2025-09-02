@@ -88,6 +88,7 @@ const mutualFundEndpoints = [
   endpoints.ClientProfile,
   endpoints.MF_BasketDetialedList,
   endpoints.VerifyUpi,
+  endpoints.MF_FundOverView,
   endpoints.BSEStar_SinglePayment,
   endpoints.BSEStar_MfOrderEntry,
   endpoints.BSEStar_XSIPOrderEntry,

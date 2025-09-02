@@ -749,4 +749,7 @@ export const apiServices = {
   BSEStar_XSIPOrderEntry: async (payload: any) => {
     return await apiService("POST", endpoints.BSEStar_XSIPOrderEntry, payload);
   },
+  MF_FundOverView: async (payload: any) => {
+    return await apiService("POST", endpoints.MF_FundOverView, payload);
+  },
 };

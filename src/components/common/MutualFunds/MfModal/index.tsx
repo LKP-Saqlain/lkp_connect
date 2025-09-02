@@ -23,6 +23,7 @@ const MutualFundModal = ({
   toggle,
   modalType,
   title,
+  bseSchemeCode,
 }: MutualFundModalProps) => {
   const [amount, setAmount] = useState(500);
   const [selectedPaymentType, setSelectedPaymentType] = useState<string | null>(
@@ -34,6 +35,9 @@ const MutualFundModal = ({
   const [dateSelected, setDateSelected] = useState<number | null>(null);
   const [upiId, setUpiId] = useState("");
   const [upiVerified, setUpiVerified] = useState(false);
+  const [email, setEmail] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+  const [ClientNo, setClientNo] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -59,10 +63,76 @@ const MutualFundModal = ({
       setUpiId("");
       setUpiVerified(false);
     }
+    console.log(bseSchemeCode, "bseSchemeCode");
   }, [isOpen]);
 
-  const generateInternalRefNo = () => {};
-  const createLumpsumOrder = () => {};
+  const extractOrderNumber = (responseData: string): string | null => {
+    const match = responseData.match(/ORDER NO: (\d+)/);
+    return match ? match[1] : null;
+  };
+
+  const createLumpsumOrder = async () => {
+    const payload = {
+      transCode: "NEW",
+      orderId: "",
+      clientCode: ClientNo,
+      schemeCd: bseSchemeCode,
+      buySell: "P",
+      buySellType: "FRESH",
+      orderVal: amount.toString(),
+      qty: "",
+      allRedeem: "N",
+      folioNo: "",
+      remarks: "test",
+      dpc: "Y",
+      euinVal: "Y",
+      kycStatus: "Y",
+      refNo: "",
+      subBrCode: "",
+      minRedeem: "",
+      dpTxn: "C",
+      ipAdd: "",
+      mobileNo: mobileNo,
+      emailID: email,
+      mandateID: "",
+      param1: "",
+      param2: "",
+      param3: "",
+      filler1: "",
+      filler2: "",
+      filler3: "",
+      filler4: "",
+      filler5: "",
+      filler6: "",
+    };
+
+    dispatch(showLoader("Placing Lumpsum Order..."));
+
+    try {
+      const response = await apiServices.BSEStar_MfOrderEntry(payload);
+
+      if (response?.status === 200) {
+        const rawData = response?.data?.data;
+        console.log("Order Entry Response:", rawData);
+
+        const orderNumber = extractOrderNumber(rawData);
+        console.log("orderNo orderNumber is", orderNumber);
+        if (!orderNumber) {
+          throw new Error("Could not extract order number from response");
+        }
+
+        return orderNumber;
+      } else {
+        throw new Error("Lumpsum order API failed");
+      }
+    } catch (err) {
+      console.error("Error placing lumpsum order:", err);
+      return null;
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
   const createSipOrder = () => {};
 
   const handleInvestClick = async () => {
@@ -91,7 +161,6 @@ const MutualFundModal = ({
 
     try {
       let orderNumber = null;
-      const internalRef = generateInternalRefNo();
 
       if (modalType === "sip") {
         orderNumber = await createSipOrder();
@@ -112,11 +181,11 @@ const MutualFundModal = ({
         ifsc: selectedBank?.ifsc ?? "",
         ordernumber: orderNumber,
         totalamount: amount.toString(),
-        internalrefno: internalRef,
+        internalrefno: "",
         nefTreference: isUpi ? "" : "1",
         mandateid: "",
         vpaid: isUpi ? upiId : "",
-        loopbackURL: "https://lkp.net.in/MF_Response.aspx",
+        loopbackURL: "https://lkpconnect.net.in/dashboard",
         allowloopBack: "Y",
         filler1: "",
         filler2: "",
@@ -153,8 +222,21 @@ const MutualFundModal = ({
 
     try {
       const response = await apiServices.ClientProfile();
-      const rawData = response?.data?.data?.bankDetails ?? [];
+      const clientData = response?.data?.data;
 
+      // Store mobile and email
+      setMobileNo(clientData?.mobileNo || "");
+      setEmail(clientData?.email || "");
+      setClientNo(clientData?.clientCode || "");
+      console.log(
+        clientData?.mobileNo,
+        clientData?.email,
+        "check",
+        clientData?.clientCode
+      );
+
+      // Process bank details
+      const rawData = clientData?.bankDetails ?? [];
       const formattedData: BankDetail[] = rawData.map(
         (item: any, index: number) => ({
           id: index + 1,
