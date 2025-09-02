@@ -30,6 +30,21 @@ export interface MutualFundProps {
   onSelectFund?: (schemeCode: string) => void;
 }
 
+export interface MutualFundModalProps {
+  isOpen: boolean;
+  toggle: () => void;
+  modalType: "oneTime" | "sip" | "redeem" | null;
+  title?: string;
+}
+
+export interface BankDetail {
+  id: number;
+  name: string;
+  account: string;
+  ifsc: string;
+  code: string;
+  logo?: string | null;
+}
 export const mainMenuC = [
   { id: 1, label: "equity" },
   { id: 2, label: "debt" },

@@ -8,14 +8,15 @@ import {
 } from "reactstrap";
 import { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
-import { banks, paymentOptions } from "../../../../pages/MutualFund/mfTypes";
-
-interface MutualFundModalProps {
-  isOpen: boolean;
-  toggle: () => void;
-  modalType: "oneTime" | "sip" | "redeem" | null;
-  title?: string;
-}
+import {
+  paymentOptions,
+  MutualFundModalProps,
+  BankDetail,
+} from "../../../../pages/MutualFund/mfTypes";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../redux/store";
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../../services";
 
 const MutualFundModal = ({
   isOpen,
@@ -27,37 +28,181 @@ const MutualFundModal = ({
   const [selectedPaymentType, setSelectedPaymentType] = useState<string | null>(
     null
   );
-  const [selectedBank, setSelectedBank] = useState<string | null>(null);
+  const [banks, setBanks] = useState<BankDetail[]>([]);
+  const [selectedBank, setSelectedBank] = useState<BankDetail | null>(null);
   const [sipDate, setSipDate] = useState<number | null>(null);
   const [dateSelected, setDateSelected] = useState<number | null>(null);
   const [upiId, setUpiId] = useState("");
+  const [upiVerified, setUpiVerified] = useState(false);
 
-  const handleBankSelect = (bankId: string) => {
-    setSelectedBank(bankId);
-    console.log("Selected Bank:", bankId);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleBankSelect = (bankId: number) => {
+    const selected = banks.find((bank) => bank.id === bankId);
+    if (selected) {
+      setSelectedBank(selected);
+      console.log("Selected Bank:", {
+        code: selected.code,
+        account: selected.account,
+        ifsc: selected.ifsc,
+      });
+    }
   };
 
   useEffect(() => {
     if (!isOpen) {
-      setAmount(500); // reset amount back to default
+      setAmount(500);
+      setSelectedBank(null);
+      setSelectedPaymentType(null);
+      setSipDate(null);
+      setDateSelected(null);
+      setUpiId("");
+      setUpiVerified(false);
     }
-    setSelectedBank(null);
-    setSelectedPaymentType(null);
-    setSipDate(null);
-    setDateSelected(null);
   }, [isOpen]);
 
-  const handleInvestClick = () => {
-    if (modalType === "sip" && sipDate) {
+  const generateInternalRefNo = () => {};
+  const createLumpsumOrder = () => {};
+  const createSipOrder = () => {};
+
+  const handleInvestClick = async () => {
+    // First interaction (for SIP) is to confirm SIP date
+    if (modalType === "sip" && sipDate && !dateSelected) {
       setDateSelected(sipDate);
+      return;
     }
-    alert(
-      modalType === "oneTime"
-        ? `Invested ₹${amount.toLocaleString()} Lumpsum  selected payment method ${selectedPaymentType}`
-        : `Invested ₹${amount.toLocaleString()} SIP on date ${sipDate} selected payment method ${selectedPaymentType}`
-    );
-    // toggle();
+
+    if (!selectedBank) {
+      alert("Please select a bank");
+      return;
+    }
+
+    if (!selectedPaymentType) {
+      alert("Please select a payment method");
+      return;
+    }
+
+    if (selectedPaymentType === "upi" && (!upiId || !upiVerified)) {
+      alert("Please verify your UPI ID first.");
+      return;
+    }
+
+    dispatch(showLoader("Placing Order..."));
+
+    try {
+      let orderNumber = null;
+      const internalRef = generateInternalRefNo();
+
+      if (modalType === "sip") {
+        orderNumber = await createSipOrder();
+      } else {
+        orderNumber = await createLumpsumOrder();
+      }
+
+      if (!orderNumber) {
+        throw new Error("Failed to generate order number");
+      }
+
+      const isUpi = selectedPaymentType === "upi";
+
+      const paymentPayload = {
+        modeofpayment: isUpi ? "UPI" : "DIRECT",
+        bankid: selectedBank?.code ?? "",
+        accountnumber: selectedBank?.account ?? "",
+        ifsc: selectedBank?.ifsc ?? "",
+        ordernumber: orderNumber,
+        totalamount: amount.toString(),
+        internalrefno: internalRef,
+        nefTreference: isUpi ? "" : "1",
+        mandateid: "",
+        vpaid: isUpi ? upiId : "",
+        loopbackURL: "https://lkp.net.in/MF_Response.aspx",
+        allowloopBack: "Y",
+        filler1: "",
+        filler2: "",
+        filler3: "",
+        filler4: "",
+        filler5: "",
+      };
+
+      const paymentResponse = await apiServices.BSEStar_SinglePayment(
+        paymentPayload
+      );
+
+      // Alert based on investment type
+      if (modalType === "sip") {
+        alert(
+          `✅ SIP of ₹${amount.toLocaleString()} scheduled on ${dateSelected}th`
+        );
+      } else {
+        alert(`✅ Lumpsum of ₹${amount.toLocaleString()} successful`);
+      }
+
+      toggle(); // close modal
+    } catch (err) {
+      console.error("Investment failed", err);
+      alert("Something went wrong. Please try again.");
+      setUpiVerified(false);
+    } finally {
+      dispatch(hideLoader());
+    }
   };
+
+  const clientBankDetails = async () => {
+    dispatch(showLoader("Please wait we are processing your request"));
+
+    try {
+      const response = await apiServices.ClientProfile();
+      const rawData = response?.data?.data?.bankDetails ?? [];
+
+      const formattedData: BankDetail[] = rawData.map(
+        (item: any, index: number) => ({
+          id: index + 1,
+          name: item.bankName,
+          account: item.bankAccountNumber,
+          ifsc: item.ifsc,
+          code: item.bankCode,
+        })
+      );
+
+      setBanks(formattedData);
+    } catch (error) {
+      console.error("Error fetching bank details:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const verifyUpi = async () => {
+    if (!upiId) {
+      return;
+    }
+
+    const payload = { upi: upiId };
+    dispatch(showLoader("Verifying UPI..."));
+
+    try {
+      const response = await apiServices.VerifyUpi(payload);
+      const isValid = response?.data?.isUpiValid;
+
+      if (isValid) {
+        setUpiVerified(true); // Disable input & change button
+      } else {
+        setUpiVerified(false);
+      }
+    } catch (error) {
+      console.error("Error verifying UPI ID:", error);
+
+      setUpiVerified(false);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  useEffect(() => {
+    clientBankDetails();
+  }, []);
+
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered size="lg">
       <ModalHeader toggle={toggle}>
@@ -132,7 +277,7 @@ const MutualFundModal = ({
                     justifyContent: "space-between",
                     alignItems: "center",
                     border:
-                      selectedBank === bank.id
+                      selectedBank === bank
                         ? "2px solid #004AAD"
                         : "1px solid #ddd",
                     borderRadius: "8px",
@@ -150,21 +295,42 @@ const MutualFundModal = ({
                       gap: "12px",
                     }}
                   >
-                    <img
-                      src={bank.logo}
-                      alt={bank.name}
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        objectFit: "contain",
-                      }}
-                    />
+                    {/* Only show logo if available */}
+                    {bank.logo ? (
+                      <img
+                        src={bank.logo}
+                        alt={bank.name}
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          objectFit: "contain",
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          width: "40px",
+                          height: "40px",
+                          backgroundColor: "#eee",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: "4px",
+                          fontSize: "12px",
+                          color: "#888",
+                        }}
+                      >
+                        {bank.code}
+                      </div>
+                    )}
+
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       <span style={{ fontWeight: 600, fontSize: "14px" }}>
                         {bank.name}
                       </span>
                       <span style={{ fontSize: "12px", color: "#666" }}>
-                        {bank.account}
+                        {/* {bank.account} */}
+                        xxxxxxxxxx{bank.account.slice(-4)}
                       </span>
                     </div>
                   </div>
@@ -173,7 +339,7 @@ const MutualFundModal = ({
                     type="radio"
                     name="bank"
                     value={bank.id}
-                    checked={selectedBank === bank.id}
+                    checked={selectedBank?.id === bank.id}
                     onChange={() => handleBankSelect(bank.id)}
                     style={{
                       accentColor: "#004AAD",
@@ -258,7 +424,7 @@ const MutualFundModal = ({
                       justifyContent: "space-between",
                       alignItems: "center",
                       border:
-                        selectedBank === bank.id
+                        selectedBank?.id === bank.id
                           ? "2px solid #004AAD"
                           : "1px solid #ddd",
                       borderRadius: "8px",
@@ -276,7 +442,7 @@ const MutualFundModal = ({
                         gap: "12px",
                       }}
                     >
-                      <img
+                      {/* <img
                         src={bank.logo}
                         alt={bank.name}
                         style={{
@@ -284,13 +450,13 @@ const MutualFundModal = ({
                           height: "40px",
                           objectFit: "contain",
                         }}
-                      />
+                      /> */}
                       <div style={{ display: "flex", flexDirection: "column" }}>
                         <span style={{ fontWeight: 600, fontSize: "14px" }}>
                           {bank.name}
                         </span>
                         <span style={{ fontSize: "12px", color: "#666" }}>
-                          {bank.account}
+                          xxxxxxxxxx{bank.account.slice(-4)}
                         </span>
                       </div>
                     </div>
@@ -299,7 +465,7 @@ const MutualFundModal = ({
                       type="radio"
                       name="bank"
                       value={bank.id}
-                      checked={selectedBank === bank.id}
+                      checked={selectedBank?.id === bank.id}
                       onChange={() => handleBankSelect(bank.id)}
                       style={{
                         accentColor: "#004AAD",
@@ -466,36 +632,35 @@ const MutualFundModal = ({
                     placeholder="example@upi"
                     value={upiId}
                     onChange={(e) => setUpiId(e.target.value)}
+                    disabled={upiVerified}
                     InputProps={{
                       style: {
-                        padding: "6px 10px", // Optional, if needed
+                        padding: "6px 10px",
                         fontSize: "14px",
+                        backgroundColor: upiVerified ? "#f5f5f5" : "#fff", // light grey if disabled
                       },
                     }}
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         borderRadius: "8px",
-                        height: "40px", // You can fix height to make it shorter
+                        height: "40px",
                       },
                     }}
                   />
+
                   <Button
                     style={{
-                      backgroundColor: "#004AAD",
+                      backgroundColor: upiVerified ? "#2E7D32" : "#004AAD", // green if verified
                       color: "#fff",
                       padding: "6px 16px",
                       fontSize: "14px",
                       height: "40px",
+                      cursor: upiVerified ? "default" : "pointer",
                     }}
-                    onClick={() => {
-                      if (!upiId) {
-                        alert("Please enter a UPI ID.");
-                      } else {
-                        alert(`Verifying UPI ID: ${upiId}`);
-                      }
-                    }}
+                    disabled={upiVerified}
+                    onClick={verifyUpi}
                   >
-                    Verify
+                    {upiVerified ? "Verified" : "Verify"}
                   </Button>
                 </div>
               </div>
@@ -535,13 +700,14 @@ const MutualFundModal = ({
           Cancel
         </Button>
         <Button
+          onClick={handleInvestClick}
           style={{ backgroundColor: "#1c517f" }}
-          onClick={() => {
-            handleInvestClick();
-            // toggle();
-          }}
         >
-          {modalType === "oneTime" ? "Invest Now" : "Start SIP"}
+          {modalType === "oneTime"
+            ? "Invest Now"
+            : !dateSelected
+            ? "Continue"
+            : "Start SIP"}
         </Button>
       </ModalFooter>
     </Modal>

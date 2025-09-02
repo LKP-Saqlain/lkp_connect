@@ -728,10 +728,25 @@ export const apiServices = {
   MF_NFODetails: async () => {
     return await apiService("GET", endpoints.MF_NFODetails);
   },
+  ClientProfile: async () => {
+    return await apiService("GET", endpoints.ClientProfile);
+  },
   MF_SchemeDetails: async (payload: any) => {
     return await apiService("POST", endpoints.MF_SchemeDetails, payload);
   },
   MF_BasketDetialedList: async (payload: any) => {
     return await apiService("POST", endpoints.MF_BasketDetialedList, payload);
+  },
+  VerifyUpi: async (payload: any) => {
+    return await apiService("POST", endpoints.VerifyUpi, payload);
+  },
+  BSEStar_SinglePayment: async (payload: any) => {
+    return await apiService("POST", endpoints.BSEStar_SinglePayment, payload);
+  },
+  BSEStar_MfOrderEntry: async (payload: any) => {
+    return await apiService("POST", endpoints.BSEStar_MfOrderEntry, payload);
+  },
+  BSEStar_XSIPOrderEntry: async (payload: any) => {
+    return await apiService("POST", endpoints.BSEStar_XSIPOrderEntry, payload);
   },
 };

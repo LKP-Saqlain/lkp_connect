@@ -119,8 +119,28 @@ const MfDiscover = ({ onSelectFund }: any) => {
           onSelectFund={onSelectFund}
         />
       ) : (
-        // <MfOverview />
         <Row>
+          <Card
+            style={{
+              borderRadius: "15px",
+              // marginBottom: "16px",
+              padding: "16px",
+            }}
+          >
+            <BasicTabs
+              heading="Popular Category"
+              tabs={tabList}
+              value={popularTabOrder}
+              onChange={handleTabChange}
+            />
+            {popularCategorydata.length > 0 && (
+              <MfinfoCard
+                CardType="Popular Category"
+                funds={popularCategorydata}
+                handleSelectedMutualFund={handleSelectedMutualFund}
+              />
+            )}
+          </Card>
           <Col xl={8}>
             {/* Recommendation Section */}
             <Card
@@ -162,15 +182,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
                 value={assetTab}
                 onChange={(_e, newValue) => setAssetTab(newValue)}
               />
-              {/* </Card>
 
-        <Card
-          style={{
-            borderRadius: "15px",
-            marginBottom: "16px",
-            padding: "16px",
-          }}
-        > */}
               {assetTab === 0 && (
                 <MfinfoCard
                   CardType="Asset Class"
@@ -210,26 +222,6 @@ const MfDiscover = ({ onSelectFund }: any) => {
 
             {/* Passive & Product Cards */}
             <Row>
-              {/* <Col xl={6}>
-                <Card
-                  style={{
-                    borderRadius: "15px",
-                    margin: "0",
-                    padding: "16px",
-                  }}
-                >
-                  <BasicTabs
-                    heading="Passive Investing"
-                    tabs={[]}
-                    value={0}
-                    onChange={() => {}}
-                  />
-                  <MfCards
-                    CardData={MfCardPassLabel}
-                    handleSelectedMfType={handleSelectedMfType}
-                  />
-                </Card>
-              </Col> */}
               <Col xl={6}>
                 <Card
                   style={{
@@ -253,27 +245,6 @@ const MfDiscover = ({ onSelectFund }: any) => {
             </Row>
 
             {/* Popular Category Section */}
-            <Card
-              style={{
-                borderRadius: "15px",
-                // marginBottom: "16px",
-                padding: "16px",
-              }}
-            >
-              <BasicTabs
-                heading="Popular Category"
-                tabs={tabList}
-                value={popularTabOrder}
-                onChange={handleTabChange}
-              />
-              {popularCategorydata.length > 0 && (
-                <MfinfoCard
-                  CardType="Popular Category"
-                  funds={popularCategorydata}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-            </Card>
           </Col>
 
           {/* Right Section */}

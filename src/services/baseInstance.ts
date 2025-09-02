@@ -85,7 +85,12 @@ const multipartEndpoints = [
 const mutualFundEndpoints = [
   endpoints.MF_SchemeDetails,
   endpoints.MF_NFODetails,
+  endpoints.ClientProfile,
   endpoints.MF_BasketDetialedList,
+  endpoints.VerifyUpi,
+  endpoints.BSEStar_SinglePayment,
+  endpoints.BSEStar_MfOrderEntry,
+  endpoints.BSEStar_XSIPOrderEntry,
 ];
 
 // Utility functions
@@ -97,7 +102,7 @@ baseInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("tkn");
     const mfToken =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyX3R5cGUiOiJWZW5kb3IiLCJMb2dpbmlkIjoibWlsbGljZW50IiwiU2VjcmV0S2V5IjoibXRpdnNtJkdEeTYkNDA5Z3U2N0AzaGRZbWIiLCJFbmNyeXB0aW9uS2V5IjoibWlsbHNtQEdEeTYkNDA5Z3U2NyYzaGRZIiwiQ2xpZW50Q29kZSI6Ijk4OTAzIiwiZXhwIjoxNzU2NTI4NzcwLCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTk0IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzE5NCJ9.OfzFh641E3DbwelCqBOLcXZttDpwF9VgzZM1fjQSv9I";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyX3R5cGUiOiJWZW5kb3IiLCJMb2dpbmlkIjoibWlsbGljZW50IiwiU2VjcmV0S2V5IjoibXRpdnNtJkdEeTYkNDA5Z3U2N0AzaGRZbWIiLCJFbmNyeXB0aW9uS2V5IjoibWlsbHNtQEdEeTYkNDA5Z3U2NyYzaGRZIiwiQ2xpZW50Q29kZSI6Ijk4OTAzIiwiZXhwIjoxNzU2ODcyOTU3LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTk0IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzE5NCJ9.L3rYhDz8TVIonJcjHJOxeDkS_0wHgh1T7wSVworJSkA";
     const url = config.url;
 
     const isFundamental = isEndpointMatched(url, fundamentalEndpoints);

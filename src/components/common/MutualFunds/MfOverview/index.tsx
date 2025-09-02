@@ -66,7 +66,7 @@ const MfOverview = ({ schemeCode, onBack }: any) => {
         isOpen={open}
         toggle={toggle}
         modalType={modalType}
-        title={schemeCode}
+        title={data?.schemeName ?? ""}
       />
 
       <Card>

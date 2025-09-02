@@ -104,7 +104,7 @@ const MfinfoCard = ({ funds, CardType, handleSelectedMutualFund }: any) => {
                     style={{
                       fontWeight: "600",
                       fontSize: "14px",
-                      color: fund.oneWeekReturn >= 0 ? "green" : "red",
+                      color: fund.threeYear >= 0 ? "green" : "red",
                     }}
                   >
                     {fund.threeYear}%
