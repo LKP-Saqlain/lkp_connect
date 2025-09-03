@@ -752,4 +752,13 @@ export const apiServices = {
   MF_FundOverView: async (payload: any) => {
     return await apiService("POST", endpoints.MF_FundOverView, payload);
   },
+  BSEStar_MfMandateStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.BSEStar_MfMandateStatus, payload);
+  },
+  BSEStar_MfMandateEntry: async (payload: any) => {
+    return await apiService("POST", endpoints.BSEStar_MfMandateEntry, payload);
+  },
+  BSEStar_MfMandateENACH: async (payload: any) => {
+    return await apiService("POST", endpoints.BSEStar_MfMandateENACH, payload);
+  },
 };

@@ -172,4 +172,7 @@ export const endpoints = {
   BSEStar_MfOrderEntry: "/api/MF/BSEStar_MfOrderEntry",
   BSEStar_XSIPOrderEntry: "/api/MF/BSEStar_XSIPOrderEntry",
   MF_FundOverView: "/api/MF/MF_FundOverView",
+  BSEStar_MfMandateStatus: "/api/MF/BSEStar_MfMandateStatus",
+  BSEStar_MfMandateEntry: "/api/MF/BSEStar_MfMandateEntry",
+  BSEStar_MfMandateENACH: "/api/MF/BSEStar_MfMandateENACH",
 };
