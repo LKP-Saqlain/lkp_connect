@@ -58,6 +58,7 @@ const NestedModal = ({
   const [orderNo, setOrderNo] = useState<any>(null); // for selection
   const [secondsLeft, setSecondsLeft] = useState(30);
   const [timerPage, setTimerPage] = useState(false);
+  const [stopEnach, setStopEnach] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   // Handler for bank selection
@@ -113,14 +114,18 @@ const NestedModal = ({
       setSelectedMandateId(null);
       setSecondsLeft(60);
       setTimerPage(false);
+      setStopEnach(false);
     }
   }, [isOpen]);
 
   useEffect(() => {
+    if (!timerPage) return; // don't start timer unless on waiting screen
+
     if (secondsLeft === 0) {
       toggle(); // close the modal
-      setTimerPage(false); // hide the timer page if needed
+      setTimerPage(false);
       handleSinglepayment();
+      return;
     }
 
     const timer = setInterval(() => {
@@ -128,11 +133,7 @@ const NestedModal = ({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [secondsLeft]);
-
-  useEffect(() => {
-    console.log(banks, orderNo, "count");
-  }, [banks, orderNo]);
+  }, [secondsLeft, timerPage]);
 
   const formatTime = (totalSeconds: number) => {
     const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
@@ -148,25 +149,21 @@ const NestedModal = ({
   const handleFinalConfirm = () => {
     const selected =
       mandateDetails.find((m) => m.mandateId === selectedMandateId) || null;
+
     if (onConfirm) onConfirm(selected);
-    console.log("cehcke from props", typeof amount, selectedPaymentType);
+
     setSelectedMandateId(selected?.mandateId ?? null);
-    console.log(
-      selectedMandateId,
-      "SelectedMandateIdSelectedMandateIdSelectedMandateId"
-    );
     setTimerPage(true);
+
+    handleXsip();
+
     if (selectedPaymentType === "netbanking") {
-      setSecondsLeft(80);
-
-      handleXsip();
-      setInterval(() => {
-        handleENach();
-      }, 8000);
+      setSecondsLeft(20);
+      if (!stopEnach) {
+        triggerENachLoop(); // Only call if stopEnach is false
+      } // Start the recursive loop
     } else {
-      setSecondsLeft(60);
-
-      handleXsip();
+      setSecondsLeft(20);
     }
   };
 
@@ -227,13 +224,13 @@ const NestedModal = ({
       dispatch(hideLoader());
     }
   };
-  const handleENach = async () => {
+  const triggerENachLoop = async () => {
     const payload = {
       clientCode: clientNo,
       mandateID: selectedMandateId,
       loopbackurl: "http://uat.lkpconnect.net.in/dashboard",
     };
-    console.log("handleENach", selectedMandateId);
+
     dispatch(showLoader("Handling Enach..."));
 
     try {
@@ -241,11 +238,21 @@ const NestedModal = ({
       const message = response?.data;
 
       console.log(message, "eNach url");
+
+      if (message?.code === 200 && message?.message) {
+        const url = message.message;
+        window.open(url, "_blank");
+        dispatch(hideLoader());
+        return; // ✅ Exit loop on success
+      }
     } catch (error) {
       console.error("Error fetching mandate status", error);
-    } finally {
-      dispatch(hideLoader());
     }
+
+    dispatch(hideLoader());
+
+    // ⏳ Retry after 4 seconds
+    setTimeout(triggerENachLoop, 4000);
   };
   const handleSinglepayment = async () => {
     dispatch(showLoader("Processing payment..."));
@@ -277,11 +284,15 @@ const NestedModal = ({
       if (response?.data?.statusCode === 417) {
         ShowToast("error", response?.data?.data);
       }
-      const newWindow = window.open("", "_blank");
-      if (newWindow) {
-        newWindow.document.open();
-        newWindow.document.write(htmlContent); // browser interprets it fine
-        newWindow.document.close();
+      if (selectedPaymentType === "upi") {
+        ShowToast("info", htmlContent);
+      } else {
+        const newWindow = window.open("", "_blank");
+        if (newWindow) {
+          newWindow.document.open();
+          newWindow.document.write(htmlContent); // browser interprets it fine
+          newWindow.document.close();
+        }
       }
 
       // Success alert (customize by modalType if needed)
@@ -336,7 +347,9 @@ const NestedModal = ({
               <p style={{ fontSize: "14px", color: "#333" }}>
                 {selectedPaymentType === "upi"
                   ? "Check your UPI app"
-                  : "Redirecting you to the E-Nach setup."}
+                  : stopEnach === false
+                  ? "Redirecting you to the E-Nach setup."
+                  : ""}
               </p>
 
               <div
@@ -384,7 +397,11 @@ const NestedModal = ({
                 {mandateDetails.map((mandate) => (
                   <div
                     key={mandate.mandateId}
-                    onClick={() => setSelectedMandateId(mandate.mandateId)}
+                    onClick={() => {
+                      setSelectedMandateId(mandate.mandateId);
+                      setStopEnach(true);
+                      console.log("setStopEnach", stopEnach);
+                    }}
                     style={{
                       border:
                         selectedMandateId === mandate.mandateId
@@ -447,6 +464,7 @@ const NestedModal = ({
                 onClick={() => {
                   setShowCreateMandateModal(true);
                   setSelectedMandateId(null);
+                  setStopEnach(false);
                 }}
               >
                 Create New Mandate

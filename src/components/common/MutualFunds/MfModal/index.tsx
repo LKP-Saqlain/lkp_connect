@@ -42,7 +42,7 @@ const MutualFundModal = ({
   const [mobileNo, setMobileNo] = useState("");
   const [clientNo, setClientNo] = useState("");
   const [isNestedModalOpen, setNestedModalOpen] = useState(false);
-  const toggleNestedModal = () => setNestedModalOpen(isNestedModalOpen);
+  const toggleNestedModal = () => setNestedModalOpen((prev) => !prev);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -217,15 +217,17 @@ const MutualFundModal = ({
 
       const response = await apiServices.BSEStar_SinglePayment(paymentPayload);
 
-      const htmlContent = response?.data?.data; // even with \r\n\t inside
-
-      const newWindow = window.open("", "_blank");
-      if (newWindow) {
-        newWindow.document.open();
-        newWindow.document.write(htmlContent); // browser interprets it fine
-        newWindow.document.close();
+      const htmlContent = response?.data?.data;
+      if (selectedPaymentType === "upi") {
+        ShowToast("info", htmlContent);
+      } else {
+        const newWindow = window.open("", "_blank");
+        if (newWindow) {
+          newWindow.document.open();
+          newWindow.document.write(htmlContent); // browser interprets it fine
+          newWindow.document.close();
+        }
       }
-
       toggle(); // close modal
     } catch (err) {
       console.error("Investment failed", err);
@@ -739,16 +741,16 @@ const MutualFundModal = ({
         </ModalBody>
 
         <ModalFooter>
-          {modalType === "sip" && (
+          {/* {modalType === "sip" && (
             <div style={{ flex: 1, fontSize: "13px", color: "#666" }}>
               <div>
                 1st Payment: <b>Today</b>
               </div>
               <div>
-                Next Payment: <b>28th May, 2025</b>
+                Next Payment: <b>28th May, 2025 (hardcore)</b>
               </div>
             </div>
-          )}
+          )} */}
 
           <Button color="secondary" onClick={toggle}>
             Cancel

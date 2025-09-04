@@ -9,7 +9,7 @@ import {
   Input,
 } from "reactstrap";
 import BankCard from "../../../BankRadio";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../../redux/store";
 import { apiServices } from "../../../../../services";
@@ -33,6 +33,10 @@ const CreateMandateModal = ({
   const [amount, setAmount] = useState("");
   const [newMandateId, setNewMandateId] = useState("");
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    setAmount("");
+  }, [toggle]);
 
   const createMandates = async () => {
     if (!selectedBank || !amount) return;
@@ -62,9 +66,9 @@ const CreateMandateModal = ({
       const response = await apiServices.BSEStar_MfMandateEntry(payload);
       const MandateNumber = response?.data?.data;
       setNewMandateId(MandateNumber);
-      console.log(MandateNumber);
+      console.log(MandateNumber, newMandateId);
 
-      ShowToast("default", response?.data?.message);
+      ShowToast("info", response?.data?.message);
 
       if (mandate) {
         mandate(MandateNumber);
@@ -90,6 +94,7 @@ const CreateMandateModal = ({
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(today.getDate() + 1);
+
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered size="sm">
       <ModalHeader toggle={toggle}>Create New Mandate</ModalHeader>
