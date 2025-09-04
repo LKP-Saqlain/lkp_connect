@@ -164,4 +164,5 @@ export const endpoints = {
   MergeIntoSymphonyFile: "api/RMS/MergeIntoSymphonyFile",
   GetUnPledgeReport: "api/Dashboard/GetUnPledgeReport",
   UploadCollateralFiles: "/api/RMS/UploadCollateralFiles",
+  GetEmpContestReport: "/api/MIS/GetEmpContestReport",
 };

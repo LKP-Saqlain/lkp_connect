@@ -728,4 +728,7 @@ export const apiServices = {
   UploadCollateralFiles: async (payload: any) => {
     return await apiService("POST", endpoints.UploadCollateralFiles, payload);
   },
+  GetEmpContestReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetEmpContestReport, payload);
+  },
 };
