@@ -22,7 +22,7 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
     [SubItemKeys.RH_DIRECT]: <Direct activeSubItem={activeSubItem} />,
     [SubItemKeys.RH_INDIRECT]: <Indirect activeSubItem={activeSubItem} />,
     [SubItemKeys.RH_OVERVIEW]: <Indirect activeSubItem={activeSubItem} />,
-    [SubItemKeys.EMPLOYEE_PERFORMANCE]: (
+    [SubItemKeys.EMPLOYEE_TARGET_REPORT]: (
       <EmployeeTargetReport activeSubItem={activeSubItem} />
     ),
     [SubItemKeys.RH_PARTNER]: (
@@ -38,6 +38,13 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
         </div>
       );
     }
+    if (activeSubItem === "Employee Performance") {
+      return (
+        <div style={{ marginTop: "1rem", fontFamily: "Public Sans" }}>
+          Employee Performance content coming soon...
+        </div>
+      );
+    }
 
     if (activeMenu === "Zone Overview") {
       if (activeSubItem === SubItemKeys.RH_DIRECT) {
@@ -48,8 +55,8 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
         return <PartnerContestReport activeSubItem={activeSubItem} />;
       } else if (activeSubItem === SubItemKeys.RH_OVERVIEW) {
         return <Overview activeSubItem={activeSubItem} />;
-      } else if (activeSubItem === SubItemKeys.RH_OVERVIEW) {
-        return <Overview activeSubItem={activeSubItem} />;
+      } else if (activeSubItem === SubItemKeys.EMPLOYEE_TARGET_REPORT) {
+        return <EmployeeTargetReport activeSubItem={activeSubItem} />;
       } else {
         // return <Overview activeSubItem={activeSubItem} />;
       }

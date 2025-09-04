@@ -1992,7 +1992,7 @@ const DataTable = ({
       });
     } else if (activeSubItem === "Third Party Invoice Report") {
       return TpInvoiceReportColumns.map((column) => ({ ...column }));
-    } else if (activeSubItem === "Employee Performance") {
+    } else if (activeSubItem === "Employee Target Report") {
       return EmployeeTargetReport.map((column) => ({ ...column }));
     } else if (activeSubItem === "RHDashboardTop10Clients") {
       return RHTopClientsColumns.map((column) => ({

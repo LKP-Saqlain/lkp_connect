@@ -7838,7 +7838,8 @@ export const EmployeeTargetReport: GridColDef[] = [
   {
     field: "empCode",
     headerName: "Emp Code",
-    width: 120,
+    minWidth: 100,
+    flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -7846,7 +7847,8 @@ export const EmployeeTargetReport: GridColDef[] = [
   {
     field: "empName",
     headerName: "Emp Name",
-    width: 150,
+    minWidth: 130,
+    flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -7854,93 +7856,149 @@ export const EmployeeTargetReport: GridColDef[] = [
   {
     field: "brokingRevnTarget",
     headerName: "Broking Revenue Target",
-    width: 180,
+    minWidth: 120,
+    flex: 1,
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "brokingRevnAchieved",
     headerName: "Broking Revenue Achieved",
-    width: 200,
-    disableColumnMenu: true,
+    minWidth: 120,
+    flex: 1,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "nonBrokingRevnTarget",
     headerName: "Non-Broking Revenue Target",
-    width: 200,
-    disableColumnMenu: true,
+    minWidth: 120,
+    flex: 1,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "nonBrokingRevnAchieved",
     headerName: "Non-Broking Revenue Achieved",
-    width: 220,
-    disableColumnMenu: true,
+    minWidth: 120,
+    flex: 1,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "totalRevnTarget",
     headerName: "Total Revenue Target",
-    width: 180,
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "totalRevnAchieved",
     headerName: "Total Revenue Achieved",
-    width: 200,
-    disableColumnMenu: true,
+    minWidth: 120,
+    flex: 1,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "targetMF",
     headerName: "Target MF AUM",
-    width: 120,
+    minWidth: 110,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "achievedMF",
     headerName: "Achieved MF AUM",
-    width: 140,
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "freshCashTarget",
     headerName: "Fresh Cash Margin Target",
-    width: 180,
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "freshCashAchieved",
     headerName: "Fresh Cash Margin Achieved",
-    width: 200,
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "newAccountCount",
     headerName: "New Account Target",
-    width: 170,
+    minWidth: 80,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -7948,7 +8006,9 @@ export const EmployeeTargetReport: GridColDef[] = [
   {
     field: "newClientsAchieved",
     headerName: "New Clients Achieved",
-    width: 190,
+    minWidth: 80,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -7956,7 +8016,9 @@ export const EmployeeTargetReport: GridColDef[] = [
   {
     field: "reactivationCount",
     headerName: "Reactivation Target",
-    width: 170,
+    minWidth: 80,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -7964,10 +8026,11 @@ export const EmployeeTargetReport: GridColDef[] = [
   {
     field: "reactivatedClientsAchieved",
     headerName: "Reactivated Clients Achieved",
-    width: 230,
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    headerClassName: "header-wrap-custom",
   },
 ];

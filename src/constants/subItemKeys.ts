@@ -10,7 +10,7 @@ export const SubItemKeys = {
   RH_OVERVIEW: "Overview",
   RH_DIRECT: "Direct Channel",
   RH_INDIRECT: "Indirect Channel",
-  EMPLOYEE_PERFORMANCE: "Employee Performance",
+  EMPLOYEE_TARGET_REPORT: "Employee Target Report",
   RH_PARTNER: "Partner Contest Report",
 } as const;
 
