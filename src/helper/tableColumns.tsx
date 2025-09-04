@@ -7877,9 +7877,10 @@ export const EmployeeTargetReport: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
-      ),
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }).format(params),
   },
   {
     field: "nonBrokingRevnTarget",
@@ -7905,9 +7906,10 @@ export const EmployeeTargetReport: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
-      ),
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }).format(params),
   },
   {
     field: "totalRevnTarget",
@@ -7933,9 +7935,10 @@ export const EmployeeTargetReport: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
-      ),
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }).format(params),
   },
   {
     field: "targetMF",
@@ -7961,9 +7964,10 @@ export const EmployeeTargetReport: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
-      ),
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }).format(params),
   },
   {
     field: "freshCashTarget",
@@ -7989,9 +7993,10 @@ export const EmployeeTargetReport: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
-      ),
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }).format(params),
   },
   {
     field: "newAccountCount",

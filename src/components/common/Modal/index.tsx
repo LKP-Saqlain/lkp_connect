@@ -300,7 +300,7 @@ const ModalComponent = ({
       .then((response) => {
         if (response?.status === 200) {
           console.log(response?.data?.data);
-          ShowToast("success", response?.data?.data);
+          ShowToast("success", response?.data?.message);
         } else {
           console.warn("Failed to update brokerage plan", response);
         }
