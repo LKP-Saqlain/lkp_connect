@@ -38,7 +38,10 @@ const MutualFundIndex = (activeSubItem: any) => {
             <BasicTabs
               tabs={mainMenu.map((m) => ({ label: m.label }))}
               value={activeTab}
-              onChange={(_e, newValue) => setActiveTab(newValue)}
+              onChange={(_e, newValue) => {
+                setActiveTab(newValue);
+                setSelectedMutualFund(""); // Main NavTabs will have more priority over overview
+              }}
             />
 
             {/* Client Code Section */}
