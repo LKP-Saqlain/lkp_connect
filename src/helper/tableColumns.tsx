@@ -7925,16 +7925,29 @@ export const MutualFundName: GridColDef[] = [
   },
 ];
 export const OrderTransaction: GridColDef[] = [
-  ...MutualFundName,
   {
-    field: "returns",
+    field: "security",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "transactionPrice",
     headerName: "Transaction Price",
     disableColumnMenu: true,
     flex: 2, // larger space since names are long
     minWidth: 200,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
-    field: "minLumpSum",
+    field: "quantity",
     headerName: "Quantity",
     disableColumnMenu: true,
     flex: 2, // larger space since names are long
@@ -7942,16 +7955,22 @@ export const OrderTransaction: GridColDef[] = [
   },
 ];
 export const OrderOngoingSip: GridColDef[] = [
-  ...MutualFundName,
   {
-    field: "returns",
+    field: "reedosName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "amount",
     headerName: "Amount",
     disableColumnMenu: true,
     flex: 2, // larger space since names are long
     minWidth: 200,
   },
   {
-    field: "minLumpSum",
+    field: "startDate",
     headerName: "SIP Date",
     disableColumnMenu: true,
     flex: 2, // larger space since names are long
@@ -7959,16 +7978,22 @@ export const OrderOngoingSip: GridColDef[] = [
   },
 ];
 export const OrderUpcomingSip: GridColDef[] = [
-  ...MutualFundName,
   {
-    field: "returns",
+    field: "reedosName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "amount",
     headerName: "Amount",
     disableColumnMenu: true,
     flex: 2, // larger space since names are long
     minWidth: 200,
   },
   {
-    field: "minLumpSum",
+    field: "startDate",
     headerName: "Due Date",
     disableColumnMenu: true,
     flex: 2, // larger space since names are long
@@ -8010,4 +8035,155 @@ export const MfPortfolio: GridColDef[] = [
   //   flex: 2,
   //   minWidth: 150,
   // },
+];
+
+export const MandateColumns: GridColDef[] = [
+  {
+    field: "mandateId",
+    headerName: "Mandate ID",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "Amount",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "right",
+    // valueFormatter: (params: any) => {
+    //   const value = parseFloat(params); // Convert the value to a number
+    //   return new Intl.NumberFormat("en-IN", {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2,
+    //   }).format(value);
+    // },
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 280,
+    headerAlign: "center",
+  },
+  {
+    field: "mandateType",
+    headerName: "Mandate Type",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "collectionType",
+    headerName: "Collection Type",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "bankName",
+    headerName: "Bank Name",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "bankAccNo",
+    headerName: "Bank A/C No",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "bankBranch",
+    headerName: "Bank Branch",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 250,
+    headerAlign: "center",
+  },
+  {
+    field: "umrnNo",
+    headerName: "UMRN No",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 220,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "regnDate",
+    headerName: "Regn Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "approvedDate",
+    headerName: "Approved Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "uploadDate",
+    headerName: "Upload Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "remarks",
+    headerName: "Remarks",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "memberCode",
+    headerName: "Member Code",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
 ];

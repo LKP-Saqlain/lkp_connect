@@ -728,4 +728,26 @@ export const apiServices = {
   UploadCollateralFiles: async (payload: any) => {
     return await apiService("POST", endpoints.UploadCollateralFiles, payload);
   },
+  MF_SchemeDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.MF_SchemeDetails, payload);
+  },
+  MFLogin: async (payload: any) => {
+    return await apiService("POST", endpoints.MFLogin, payload);
+  },
+  BSEStar_MfMandateStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.BSEStar_MfMandateStatus, payload);
+  },
+  MF_OngoingSIP: async (payload: any) => {
+    return await apiService("POST", endpoints.MF_OngoingSIP, payload);
+  },
+  MF_PortfolioStatementReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.MF_PortfolioStatementReport,
+      payload
+    );
+  },
+  MF_TransactionReport: async (payload: any) => {
+    return await apiService("POST", endpoints.MF_TransactionReport, payload);
+  },
 };

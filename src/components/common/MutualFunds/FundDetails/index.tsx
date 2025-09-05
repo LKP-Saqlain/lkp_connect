@@ -1,13 +1,73 @@
-import React from "react";
 import { Card, Row, Col } from "reactstrap";
 import { FaUserTie } from "react-icons/fa";
 import { MdOutlineScience } from "react-icons/md";
 import { HiOutlineDocumentText } from "react-icons/hi";
 
-const FundDetails: React.FC = () => {
+const FundDetails = ({ data }: any) => {
+  console.log("data", data);
+
+  // Format launch date
+  const formattedLaunchDate = data.launchDate
+    ? new Date(data.launchDate).toLocaleDateString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "N/A";
+
   return (
     <div style={{ marginTop: "20px" }}>
       <Row>
+        <Col md={12}>
+          {/* Fund Metrics Summary */}
+          <Card
+            style={{
+              borderRadius: "12px",
+              padding: "16px 24px",
+              marginBottom: "20px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.08)",
+            }}
+          >
+            <Row className="text-center">
+              <Col md={2}>
+                <strong style={{ fontSize: "13px", color: "#777" }}>NAV</strong>
+                <div>{data.nav ? Number(data.nav).toFixed(2) : "N/A"}</div>
+              </Col>
+              <Col md={2}>
+                <strong style={{ fontSize: "13px", color: "#777" }}>AUM</strong>
+                <div>
+                  {data.aum ? `${parseFloat(data.aum).toFixed(0)} Cr` : "N/A"}
+                </div>
+              </Col>
+              <Col md={2}>
+                <strong style={{ fontSize: "13px", color: "#777" }}>
+                  Min. SIP
+                </strong>
+                <div>{data.sipMinimum ? `₹${data.sipMinimum}` : "N/A"}</div>
+              </Col>
+              <Col md={2}>
+                <strong style={{ fontSize: "13px", color: "#777" }}>
+                  Min. Lump
+                </strong>
+                <div>
+                  {data.lumpsumMinimum ? `₹${data.lumpsumMinimum}` : "N/A"}
+                </div>
+              </Col>
+              <Col md={2}>
+                <strong style={{ fontSize: "13px", color: "#777" }}>
+                  Risk Category
+                </strong>
+                <div>{data.riskCategory || "N/A"}</div>
+              </Col>
+              <Col md={2}>
+                <div style={{ fontSize: "13px", color: "#777" }}>
+                  Scheme Category
+                </div>
+                <div>{data.schemeCategory || "N/A"}</div>
+              </Col>
+            </Row>
+          </Card>
+        </Col>
         {/* Fund Manager */}
         <Col md={6}>
           <Card
@@ -28,27 +88,19 @@ const FundDetails: React.FC = () => {
             >
               <FaUserTie style={{ marginRight: "8px" }} /> Fund Manager
             </h6>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "8px 0",
-                borderBottom: "1px solid #f0f0f0",
-              }}
-            >
-              <span>Bhavik Dave</span>
-              <span style={{ color: "#666" }}>Aug 2024 - Present</span>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "8px 0",
-              }}
-            >
-              <span>Shailesh Raj Bhan</span>
-              <span style={{ color: "#666" }}>Jan 2013 - Present</span>
-            </div>
+            {data.fundManager ? (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: "8px 0",
+                }}
+              >
+                <span>{data.fundManager}</span>
+              </div>
+            ) : (
+              <div>No Fund Manager Info</div>
+            )}
           </Card>
         </Col>
 
@@ -74,9 +126,7 @@ const FundDetails: React.FC = () => {
               Objective
             </h6>
             <p style={{ fontSize: "14px", color: "#444", lineHeight: "1.6" }}>
-              The Fund seeks to provide long-term capital appreciation by
-              investing predominantly in small cap companies. Lorem ipsum, dolor
-              sit eligendi eum?
+              {data.investmentObjective || "No objective provided."}
             </p>
           </Card>
         </Col>
@@ -107,13 +157,13 @@ const FundDetails: React.FC = () => {
               <strong style={{ fontSize: "13px", color: "#777" }}>
                 Launch Date
               </strong>
-              <div>17 Apr 2025</div>
+              <div>{formattedLaunchDate}</div>
             </div>
           </Col>
           <Col md={2}>
             <div>
               <strong style={{ fontSize: "13px", color: "#777" }}>ISIN</strong>
-              <div>INF109K01AB2</div>
+              <div>{data.isin || "N/A"}</div>
             </div>
           </Col>
           <Col md={2}>
@@ -121,7 +171,7 @@ const FundDetails: React.FC = () => {
               <strong style={{ fontSize: "13px", color: "#777" }}>
                 Expense Ratio
               </strong>
-              <div>1.25%</div>
+              <div>{data.expenseRatio ? `${data.expenseRatio}%` : "N/A"}</div>
             </div>
           </Col>
           <Col md={2}>
@@ -129,13 +179,13 @@ const FundDetails: React.FC = () => {
               <strong style={{ fontSize: "13px", color: "#777" }}>
                 Sharpe Ratio
               </strong>
-              <div>1.10%</div>
+              <div>{data.sharpeRatio ?? "N/A"}</div>
             </div>
           </Col>
           <Col md={2}>
             <div>
               <strong style={{ fontSize: "13px", color: "#777" }}>Beta</strong>
-              <div>0.95</div>
+              <div>{data.beta ?? "N/A"}</div>
             </div>
           </Col>
           <Col md={2}>
@@ -143,7 +193,7 @@ const FundDetails: React.FC = () => {
               <strong style={{ fontSize: "13px", color: "#777" }}>
                 Lock in
               </strong>
-              <div>3Y</div>
+              <div>{data.lockIn || "N/A"}</div>
             </div>
           </Col>
         </Row>

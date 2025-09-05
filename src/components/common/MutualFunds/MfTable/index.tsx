@@ -6,6 +6,7 @@ import {
   OrderOngoingSip,
   OrderUpcomingSip,
   MfPortfolio,
+  MandateColumns,
 } from "../../../../helper/tableColumns";
 import { MutualFundProps } from "../../../../pages/MutualFund/mfTypes";
 import { Button } from "@mui/material";
@@ -88,6 +89,10 @@ const MutualFundTable = ({ rows, selectedLabel }: MutualFundProps) => {
       }));
     } else if (selectedLabel === "Ongoing SIP") {
       return OrderOngoingSip.map((column) => ({
+        ...column,
+      }));
+    } else if (selectedLabel === "Mandates") {
+      return MandateColumns.map((column) => ({
         ...column,
       }));
     } else {
