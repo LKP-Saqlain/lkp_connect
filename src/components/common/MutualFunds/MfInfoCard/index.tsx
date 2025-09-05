@@ -117,7 +117,11 @@ const MfinfoCard = ({ funds, CardType, handleSelectedMutualFund }: any) => {
                       color: fund.threeYear >= 0 ? "green" : "red",
                     }}
                   >
-                    {fund.threeYear}%
+                    {new Intl.NumberFormat("en-IN", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    }).format(fund.threeYear)}
+                    %
                   </div>
                 </Col>
               </Row>
