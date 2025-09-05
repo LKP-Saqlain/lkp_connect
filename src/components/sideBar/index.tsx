@@ -282,11 +282,11 @@ const SideBar = () => {
           console.log("Error->", message);
           dispatch(hideLoader());
           // formik.setFieldError("password", message);
-          ShowToast(
-            "error",
-            message ||
-              "Sorry for the inconvenience, please try after some time."
-          );
+          // ShowToast(
+          //   "error",
+          //   message ||
+          //     "Sorry for the inconvenience, please try after some time."
+          // );
         })
         .finally(() => {
           dispatch(hideLoader());
@@ -694,12 +694,12 @@ const SideBar = () => {
   // };
 
   const complianceSubItems: Record<string, JSX.Element> = {
-    "UCCCode MATCH": (
-      <MutualFundIndex
-        activeSubItem={activeSubItem}
-        // activeMenu={activeMenu}
-      />
-    ),
+    // "UCCCode MATCH": (
+    //   <MutualFundIndex
+    //     activeSubItem={activeSubItem}
+    //     // activeMenu={activeMenu}
+    //   />
+    // ),
     "Communication Retrival Entry": <CommEntry activeSubItem={activeSubItem} />,
     "Communication Retrival Checker": (
       <ComChecker activeSubItem={activeSubItem} />
@@ -806,6 +806,12 @@ const SideBar = () => {
       8: () => getSubItemComponent(complianceSubItems),
       9: () => getSubItemComponent(kycSubItems),
       10: () => <StockStudy />,
+      14: () => (
+        <MutualFundIndex
+          activeSubItem={activeSubItem}
+          // activeMenu={activeMenu}
+        />
+      ),
       21: () => <RegulatorAnnouncement activeMenu={activeMenu} />,
       22: () => <MarketingMaterial />,
       23: () => <EkycLinks />,

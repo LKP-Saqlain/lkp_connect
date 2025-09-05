@@ -60,9 +60,9 @@ const FundDetails = ({ data }: any) => {
                 <div>{data.riskCategory || "N/A"}</div>
               </Col>
               <Col md={2}>
-                <div style={{ fontSize: "13px", color: "#777" }}>
+                <strong style={{ fontSize: "13px", color: "#777" }}>
                   Scheme Category
-                </div>
+                </strong>
                 <div>{data.schemeCategory || "N/A"}</div>
               </Col>
             </Row>

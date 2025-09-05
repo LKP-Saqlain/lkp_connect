@@ -89,6 +89,17 @@ const mutualFundEndpoints = [
   endpoints.MF_OngoingSIP,
   endpoints.MF_PortfolioStatementReport,
   endpoints.MF_TransactionReport,
+  endpoints.MF_NFODetails,
+  endpoints.ClientProfile,
+  endpoints.MF_BasketDetialedList,
+  endpoints.VerifyUpi,
+  endpoints.MF_FundOverView,
+  endpoints.BSEStar_SinglePayment,
+  endpoints.BSEStar_MfOrderEntry,
+  endpoints.BSEStar_XSIPOrderEntry,
+  endpoints.BSEStar_MfMandateStatus,
+  endpoints.BSEStar_MfMandateEntry,
+  endpoints.MF_TodayOrders,
 ];
 
 // Utility functions

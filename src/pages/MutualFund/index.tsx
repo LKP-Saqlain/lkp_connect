@@ -113,7 +113,7 @@ const MutualFundIndex = (activeSubItem: any) => {
           </Box>
         </Card>
         {selectedMutualFund ? (
-          <MfOverview fundName={selectedMutualFund} onBack={handleBack} />
+          <MfOverview schemeCode={selectedMutualFund} onBack={handleBack} />
         ) : (
           mainMenu[activeTab]?.content({ onSelectFund: setSelectedMutualFund })
         )}

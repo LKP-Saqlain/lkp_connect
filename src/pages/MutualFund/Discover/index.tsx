@@ -1,32 +1,150 @@
 import { Col, Row, Card } from "reactstrap";
 import SipCalculator from "./sipCalculator";
-import { mutualFundCards } from "../mfTypes";
 import BasicTabs from "../../../components/common/MutualFunds/NavTabs";
 import MfCards from "../../../components/common/MutualFunds/MfCards";
 import {
   MfCardRecoLabel,
   MfCardPassLabel,
+  popularTabList,
+  assetClassTabList,
 } from "../../../pages/MutualFund/mfTypes";
 import MfinfoCard from "../../../components/common/MutualFunds/MfInfoCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MutualFundList from "./MutualFundList";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../services";
 
 const MfDiscover = ({ onSelectFund }: any) => {
-  const [assetTab, setAssetTab] = useState(0);
-  const [popularTab, setPopularTab] = useState(0);
+  const [popularTab, setPopularTab] = useState("Large Cap");
+  const [popularTabOrder, setPopularTabOrder] = useState(0);
   const [selectedMfType, setSelectedMfType] = useState("");
+  const [popularCategorydata, setPopularCategorydata] = useState<any[]>([]);
+  const [assetTab, setAssetTab] = useState("Equity");
+  const [assetTabOrder, setAssetTabOrder] = useState(0);
+  const [assetClassData, setAssetClassData] = useState<any[]>([]);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    console.log(onSelectFund, "discover onSelectFund");
+  }, []);
+
+  const productTypeMap: Record<string, any> = {
+    "Large Cap": 14,
+    ELSS: 20,
+    "Small Cap": 16,
+    "Mid Cap": 15,
+    Equity: "Equity Schemes",
+    Debt: "Debt Schemes",
+    Hybrid: "Hybrid Schemes",
+    Solution: "Solution-Oriented Schemes",
+    Others: "Others Schemes",
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(showLoader("Please wait we are processing your request"));
+
+      const productId = productTypeMap[popularTab];
+
+      if (!productId) {
+        dispatch(hideLoader());
+        console.warn("Unsupported popularTab:", popularTab);
+        return;
+      }
+
+      try {
+        const payload = {
+          ProductId: productId,
+          BrokerID: 10001662,
+          SortColumn: "",
+          SortOrder: 1,
+          RecordsPerPage: 50,
+          PageNumber: 1,
+        };
+
+        const response = await apiServices.MF_BasketDetialedList(payload);
+        const rawData = response?.data?.data?.returnsList ?? [];
+
+        const formattedData = rawData.map((item: any, index: number) => ({
+          id: index + 1,
+          ...item,
+        }));
+
+        setPopularCategorydata(formattedData);
+        console.log(formattedData, "popularCategorydata");
+      } catch (error) {
+        console.error("Error fetching data for", popularTab, error);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+
+    if (popularTab) {
+      fetchData();
+    }
+  }, [dispatch, popularTab]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(showLoader("Please wait, we are processing your request..."));
+      const assetName = productTypeMap[assetTab];
+      try {
+        const response = await apiServices.MF_FundOverView({
+          pageNumber: 1,
+          pageSize: 5,
+          searchKey: "",
+          schemeCode: 0,
+          sipMinimum: "",
+          lumpsumMinimum: "",
+          riskCategory: "",
+          assetClass: assetName,
+          schemeCategory: "",
+          encryptionKey: "",
+        });
+
+        const fundOverviewData = response?.data?.data;
+        setAssetClassData(fundOverviewData || []);
+        console.log(fundOverviewData, "fundOverviewData AssetClass");
+      } catch (err: any) {
+        console.error("Error fetching fund overview:", err.message);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+
+    fetchData();
+  }, [dispatch, assetTab]);
 
   const handleSelectedMfType = (MfType: string) => {
     setSelectedMfType(MfType);
     console.log("selectedMfType", MfType);
   };
-  const handleSelectedMutualFund = (MfName: string) => {
-    console.log("selectedMutualFund", MfName);
-    onSelectFund(MfName);
+  const handleSelectedMutualFund = (schemeCode: string) => {
+    console.log("selectedMutualFund", schemeCode);
+    onSelectFund(schemeCode);
   };
   const handleBack = () => {
     setSelectedMfType("");
   };
+
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    const label = popularTabList[newValue]?.label;
+    setPopularTab(label);
+    setPopularTabOrder(newValue);
+    console.log("Selected Tab:", label, "Index:", newValue);
+  };
+  const handleAssetTabChange = (
+    _event: React.SyntheticEvent,
+    newValue: number
+  ) => {
+    const label = assetClassTabList[newValue]?.label;
+    setAssetTab(label);
+    setAssetTabOrder(newValue);
+  };
+
   return (
     <Card
       style={{
@@ -36,10 +154,34 @@ const MfDiscover = ({ onSelectFund }: any) => {
       }}
     >
       {selectedMfType ? (
-        <MutualFundList selectedMfType={selectedMfType} onBack={handleBack} />
+        <MutualFundList
+          selectedMfType={selectedMfType}
+          onBack={handleBack}
+          onSelectFund={onSelectFund}
+        />
       ) : (
-        // <MfOverview />
         <Row>
+          <Card
+            style={{
+              borderRadius: "15px",
+              // marginBottom: "16px",
+              padding: "16px",
+            }}
+          >
+            <BasicTabs
+              heading="Popular Category"
+              tabs={popularTabList}
+              value={popularTabOrder}
+              onChange={handleTabChange}
+            />
+            {popularCategorydata.length > 0 && (
+              <MfinfoCard
+                CardType="Popular Category"
+                funds={popularCategorydata}
+                handleSelectedMutualFund={handleSelectedMutualFund}
+              />
+            )}
+          </Card>
           <Col xl={8}>
             {/* Recommendation Section */}
             <Card
@@ -71,26 +213,18 @@ const MfDiscover = ({ onSelectFund }: any) => {
             >
               <BasicTabs
                 heading="Asset Class"
-                tabs={[
-                  { label: "Equity" },
-                  { label: "Debt" },
-                  { label: "Hybrid" },
-                  { label: "Solution" },
-                  { label: "Others" },
-                ]}
-                value={assetTab}
-                onChange={(_e, newValue) => setAssetTab(newValue)}
+                tabs={assetClassTabList}
+                value={assetTabOrder}
+                onChange={handleAssetTabChange}
               />
-              {/* </Card>
-
-        <Card
-          style={{
-            borderRadius: "15px",
-            marginBottom: "16px",
-            padding: "16px",
-          }}
-        > */}
-              {assetTab === 0 && (
+              {assetClassData.length > 0 && (
+                <MfinfoCard
+                  CardType="Asset Class"
+                  funds={assetClassData}
+                  handleSelectedMutualFund={handleSelectedMutualFund}
+                />
+              )}
+              {/* {assetTab === 0 && (
                 <MfinfoCard
                   CardType="Asset Class"
                   funds={mutualFundCards.equity}
@@ -104,6 +238,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
                   handleSelectedMutualFund={handleSelectedMutualFund}
                 />
               )}
+
               {assetTab === 2 && (
                 <MfinfoCard
                   CardType="Asset Class"
@@ -124,31 +259,11 @@ const MfDiscover = ({ onSelectFund }: any) => {
                   funds={mutualFundCards.others}
                   handleSelectedMutualFund={handleSelectedMutualFund}
                 />
-              )}
+              )} */}
             </Card>
 
             {/* Passive & Product Cards */}
             <Row>
-              <Col xl={6}>
-                <Card
-                  style={{
-                    borderRadius: "15px",
-                    margin: "0",
-                    padding: "16px",
-                  }}
-                >
-                  <BasicTabs
-                    heading="Passive Investing"
-                    tabs={[]}
-                    value={0}
-                    onChange={() => {}}
-                  />
-                  <MfCards
-                    CardData={MfCardPassLabel}
-                    handleSelectedMfType={handleSelectedMfType}
-                  />
-                </Card>
-              </Col>
               <Col xl={6}>
                 <Card
                   style={{
@@ -172,62 +287,6 @@ const MfDiscover = ({ onSelectFund }: any) => {
             </Row>
 
             {/* Popular Category Section */}
-            <Card
-              style={{
-                borderRadius: "15px",
-                // marginBottom: "16px",
-                padding: "16px",
-              }}
-            >
-              <BasicTabs
-                heading="Popular Category"
-                tabs={[
-                  { label: "Large Cap" },
-                  { label: "ELSS" },
-                  { label: "Small Cap" },
-                  { label: "Mid Cap" },
-                  // { label: "Others" },
-                ]}
-                value={popularTab}
-                onChange={(_e, newValue) => setPopularTab(newValue)}
-              />
-
-              {popularTab === 0 && (
-                <MfinfoCard
-                  CardType="Popular Category"
-                  funds={mutualFundCards.equity}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {popularTab === 1 && (
-                <MfinfoCard
-                  CardType="Popular Category"
-                  funds={mutualFundCards.debt}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {popularTab === 2 && (
-                <MfinfoCard
-                  CardType="Popular Category"
-                  funds={mutualFundCards.hybrid}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {popularTab === 3 && (
-                <MfinfoCard
-                  CardType="Popular Category"
-                  funds={mutualFundCards.solution}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {popularTab === 4 && (
-                <MfinfoCard
-                  CardType="Popular Category"
-                  funds={mutualFundCards.others}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-            </Card>
           </Col>
 
           {/* Right Section */}
