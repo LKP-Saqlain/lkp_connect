@@ -17,12 +17,15 @@ const MutualFundIndex = (activeSubItem: any) => {
   const [selectedMutualFund, setSelectedMutualFund] = useState<string>("");
   const [clientCode, setClientCode] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(true);
+  const [hasToken, sethasToken] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
   const handleBack = () => setSelectedMutualFund("");
 
   const handleSubmit = async () => {
+    // setClientCode("");
+    sethasToken(false);
     if (!clientCode.trim()) return;
     try {
       const payload = {
@@ -35,7 +38,12 @@ const MutualFundIndex = (activeSubItem: any) => {
       const res = await apiServices.MFLogin(payload);
       if (res?.status === 200) {
         dispatch(hideLoader());
-        console.log("mfLogin response->", res?.data);
+        console.log("mfLogin response->", res?.data?.statusCode);
+        if (res?.data?.statusCode) {
+          sethasToken(true);
+        } else {
+          sethasToken(false);
+        }
         // localStorage.setItem("mfToken", res?.data?.data);
         setEncryptedValue("mfToken", res?.data?.data);
 
@@ -118,6 +126,7 @@ const MutualFundIndex = (activeSubItem: any) => {
           mainMenu[activeTab]?.content({
             onSelectFund: setSelectedMutualFund,
             clientCode,
+            hasToken,
           })
         )}
 

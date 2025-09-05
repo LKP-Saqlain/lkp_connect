@@ -107,7 +107,7 @@ const MfReport = (props: any) => {
           dispatch(hideLoader());
         });
     }
-  }, [dispatch, selectedLabel, props.clientCode]);
+  }, [dispatch, selectedLabel, props.clientCode, props.hasToken]);
 
   useEffect(() => {
     if (selectedLabel === "Ongoing SIP" || selectedLabel === "Upcoming SIP") {
@@ -194,7 +194,7 @@ const MfReport = (props: any) => {
           dispatch(hideLoader());
         });
     }
-  }, [dispatch, selectedLabel]);
+  }, [dispatch, selectedLabel, props.hasToken]);
 
   useEffect(() => {
     if (selectedLabel === "Transaction") {
@@ -252,7 +252,7 @@ const MfReport = (props: any) => {
           dispatch(hideLoader());
         });
     }
-  }, [selectedLabel, dispatch]);
+  }, [selectedLabel, dispatch, props.hasToken]);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setReportTab(newValue);

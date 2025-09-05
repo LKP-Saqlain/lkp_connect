@@ -52,7 +52,7 @@ interface PortfolioSummary {
   totalXIRR: string;
 }
 
-const MfPortfolio = () => {
+const MfPortfolio = ({ hasToken }: any) => {
   const [portfolioData, setPortfolioData] = useState<PortfolioRecord[]>([]);
   const [portfolioSummary, setPortfolioSummary] =
     useState<PortfolioSummary | null>(null);
@@ -117,7 +117,7 @@ const MfPortfolio = () => {
       .catch((error) => {
         console.log("ERROR", error);
       });
-  }, [dispatch]);
+  }, [dispatch, hasToken]);
 
   return (
     <>
