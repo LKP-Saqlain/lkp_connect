@@ -737,4 +737,14 @@ export const apiServices = {
   MF_OngoingSIP: async (payload: any) => {
     return await apiService("POST", endpoints.MF_OngoingSIP, payload);
   },
+  MF_PortfolioStatementReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.MF_PortfolioStatementReport,
+      payload
+    );
+  },
+  MF_TransactionReport: async (payload: any) => {
+    return await apiService("POST", endpoints.MF_TransactionReport, payload);
+  },
 };

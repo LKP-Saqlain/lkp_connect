@@ -1,6 +1,11 @@
 import { Card, Stack, Typography } from "@mui/material";
 import MutualFundTable from "../../../components/common/MutualFunds/MfTable";
 import { mutualFundRows } from "../../../helper/commmon";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../services";
 
 const MfPortfolio = () => {
   const investedAmount = 54435;
@@ -8,6 +13,55 @@ const MfPortfolio = () => {
   const totalReturns = 367565;
   const oneDayReturns = 566;
   const xirr = 58.3;
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    let payload = {
+      loginUserMasterID: 0,
+      clientMasterID: 0,
+      fromDate: "",
+      toDate: "",
+      assetClassID: 86,
+      assetClassIDs: "",
+      asOnDateTime: "2024-08-08",
+      fromDateTime: "2000-01-01",
+      toDateTime: "2025-09-01",
+      asOnDate: "2025-09-01",
+      reportID: 0,
+      portfolioID: 1,
+      withIndexation: false,
+      type: "",
+      isHtml: false,
+      securityName: "",
+      securityType: "",
+      isin: "",
+      panGroup: 0,
+      foliowise: true,
+      arnFilter: "",
+      sumid: "",
+      configAssetClassID: 0,
+      configTableID: "3,9,10,11",
+      reportName: "",
+      configPageID: 0,
+      displayAsOnDate: true,
+      displayFromDate: false,
+      displayToDate: false,
+    };
+
+    dispatch(showLoader(""));
+    apiServices
+      .MF_PortfolioStatementReport(payload)
+      .then((res) => {
+        if (res?.status === 200) {
+          dispatch(hideLoader());
+          console.log("testt", res?.data);
+        }
+      })
+      .catch((error) => {
+        console.log("ERROR", error);
+      });
+  }, [dispatch]);
 
   return (
     <>

@@ -167,4 +167,6 @@ export const endpoints = {
   MFLogin: "api/Login/Login/MFLogin",
   BSEStar_MfMandateStatus: "api/MF/BSEStar_MfMandateStatus",
   MF_OngoingSIP: "api/Dashboard/MF_OngoingSIP",
+  MF_PortfolioStatementReport: "api/Dashboard/MF_PortfolioStatementReport",
+  MF_TransactionReport: "api/Dashboard/MF_TransactionReport",
 };
