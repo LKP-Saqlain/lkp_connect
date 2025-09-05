@@ -2,8 +2,8 @@ import { Card, CardBody, Row, Col } from "reactstrap";
 
 const MfinfoCard = ({ funds, CardType, handleSelectedMutualFund }: any) => {
   const handleCardClick = (fund: any) => {
-    console.log(fund.fundName, "Clicked fund:", fund);
-    handleSelectedMutualFund(fund.fundName);
+    console.log(fund.schemeCode, "Clicked fund:", fund);
+    handleSelectedMutualFund(fund.schemeCode.toString());
   };
   return (
     <div
@@ -31,17 +31,18 @@ const MfinfoCard = ({ funds, CardType, handleSelectedMutualFund }: any) => {
             <Row className="align-items-center mb-2">
               <Col xs="auto">
                 <img
-                  src={fund.logo}
-                  alt={fund.fundName}
+                  src={fund.amcIcon}
+                  alt={"AMC logo"}
                   style={{ width: "40px", height: "40px", borderRadius: "8px" }}
                 />
               </Col>
               <Col>
                 <div style={{ fontWeight: "600", fontSize: "14px" }}>
-                  {fund.fundName}
+                  {fund.schemeName}
                 </div>
                 <div style={{ fontSize: "12px", color: "#666" }}>
-                  {fund.category} &nbsp; {fund.subCategory}
+                  {fund.category}
+                  {/* &nbsp; {fund.subCategory} */}
                 </div>
               </Col>
             </Row>
@@ -103,10 +104,10 @@ const MfinfoCard = ({ funds, CardType, handleSelectedMutualFund }: any) => {
                     style={{
                       fontWeight: "600",
                       fontSize: "14px",
-                      color: fund.oneWeekReturn >= 0 ? "green" : "red",
+                      color: fund.threeYear >= 0 ? "green" : "red",
                     }}
                   >
-                    {fund.oneWeekReturn}%
+                    {fund.threeYear}%
                   </div>
                 </Col>
               </Row>

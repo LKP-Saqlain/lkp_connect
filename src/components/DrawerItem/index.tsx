@@ -40,6 +40,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import StarBurst from "../../assets/images/starburst.png";
 import StarBurst1 from "../../assets/images/starburst1.png";
 import StarBurst2 from "../../assets/images/starburst2.png";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -109,6 +110,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "Partner Contest": <LocalPoliceIcon />,
     "SPIP Dashboard": <SpaceDashboardIcon />,
     "Client Request": <PublishedWithChangesIcon />,
+    "Mutual Fund": <AttachMoneyIcon />,
   };
 
   const getIcon = (title: string) => {
@@ -203,6 +205,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           title === "Employee Target" ||
           title === "Client Request" ||
           title === "Back Office Report" ||
+          title === "Mutual Fund" ||
           title === "Partner Contest") && (
           <div className="starburst-bg">
             <img

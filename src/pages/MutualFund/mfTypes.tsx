@@ -1,5 +1,6 @@
 // mfTypes.ts
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
+import CampaignIcon from "@mui/icons-material/Campaign";
 import Discover from "./Discover";
 // import Watchlist from "./Watchlist";
 import Portfolio from "./Portfolio";
@@ -26,8 +27,25 @@ export interface TabPanelProps {
 export interface MutualFundProps {
   rows?: any;
   selectedLabel?: string;
+  onSelectFund?: (schemeCode: string) => void;
 }
 
+export interface MutualFundModalProps {
+  isOpen: boolean;
+  toggle: () => void;
+  modalType: "oneTime" | "sip" | "redeem" | null;
+  title?: string;
+  bseSchemeCode?: string;
+}
+
+export interface BankDetail {
+  id: number;
+  name: string;
+  account: string;
+  ifsc: string;
+  code: string;
+  logo?: string | null;
+}
 export const mainMenuC = [
   { id: 1, label: "equity" },
   { id: 2, label: "debt" },
@@ -37,14 +55,18 @@ export const mainMenuC = [
 ];
 
 export const MfCardRecoLabel = [
-  { id: "1", label: "High Returns", icon: <PaidRoundedIcon /> },
-  { id: "2", label: "Tax Savings", icon: <PaidRoundedIcon /> },
-  { id: "3", label: "SIP with 100", icon: <PaidRoundedIcon /> },
-  { id: "4", label: "SIP with 500", icon: <PaidRoundedIcon /> },
+  { id: "1", label: "High Returns", icon: <PaidRoundedIcon />, ProductId: 9 },
+  { id: "2", label: "Tax Savings", icon: <PaidRoundedIcon />, ProductId: 20 },
+  { id: "3", label: "SIP with 100", icon: <PaidRoundedIcon />, ProductId: 19 },
+  { id: "4", label: "SIP with 500", icon: <PaidRoundedIcon />, ProductId: 17 },
 ];
 export const MfCardPassLabel = [
-  { id: "1", label: "High Returns", icon: <PaidRoundedIcon /> },
-  { id: "2", label: "Tax Savings", icon: <PaidRoundedIcon /> },
+  {
+    id: "1",
+    label: "NFO",
+    icon: <CampaignIcon sx={{ color: "#11395c", fontSize: "32px" }} />,
+  },
+  // { id: "2", label: "Tax Savings", icon: <PaidRoundedIcon /> },
 ];
 
 export const mainMenu = [

@@ -8,243 +8,365 @@ import {
 } from "reactstrap";
 import { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
-import { banks, paymentOptions } from "../../../../pages/MutualFund/mfTypes";
-
-interface MutualFundModalProps {
-  isOpen: boolean;
-  toggle: () => void;
-  modalType: "oneTime" | "sip" | "redeem" | null;
-  title?: string;
-}
+import {
+  paymentOptions,
+  MutualFundModalProps,
+  BankDetail,
+} from "../../../../pages/MutualFund/mfTypes";
+import NestedModal from "./NestedModal/index";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../redux/store";
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../../services";
+import BankCard from "../../BankRadio";
+import ShowToast from "../../../../utils/toastUtils";
 
 const MutualFundModal = ({
   isOpen,
   toggle,
   modalType,
   title,
+  bseSchemeCode,
 }: MutualFundModalProps) => {
   const [amount, setAmount] = useState(500);
   const [selectedPaymentType, setSelectedPaymentType] = useState<string | null>(
     null
   );
-  const [selectedBank, setSelectedBank] = useState<string | null>(null);
+  const [banks, setBanks] = useState<BankDetail[]>([]);
+  const [selectedBank, setSelectedBank] = useState<BankDetail | null>(null);
   const [sipDate, setSipDate] = useState<number | null>(null);
   const [dateSelected, setDateSelected] = useState<number | null>(null);
   const [upiId, setUpiId] = useState("");
+  const [upiVerified, setUpiVerified] = useState(false);
+  const [email, setEmail] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+  const [clientNo, setClientNo] = useState("");
+  const [isNestedModalOpen, setNestedModalOpen] = useState(false);
+  const toggleNestedModal = () => setNestedModalOpen((prev) => !prev);
 
-  const handleBankSelect = (bankId: string) => {
-    setSelectedBank(bankId);
-    console.log("Selected Bank:", bankId);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleBankSelect = (bankId: number) => {
+    const selected = banks.find((bank) => bank.id === bankId);
+    if (selected) {
+      setSelectedBank(selected);
+      console.log("Selected Bank:", {
+        code: selected.code,
+        account: selected.account,
+        ifsc: selected.ifsc,
+      });
+    }
   };
 
   useEffect(() => {
     if (!isOpen) {
-      setAmount(500); // reset amount back to default
+      setAmount(500);
+      setSelectedBank(null);
+      setSelectedPaymentType(null);
+      setSipDate(null);
+      setDateSelected(null);
+      setUpiId("");
+      setUpiVerified(false);
     }
-    setSelectedBank(null);
-    setSelectedPaymentType(null);
-    setSipDate(null);
-    setDateSelected(null);
+    console.log(bseSchemeCode, "bseSchemeCode");
   }, [isOpen]);
 
-  const handleInvestClick = () => {
-    if (modalType === "sip" && sipDate) {
-      setDateSelected(sipDate);
-    }
-    alert(
-      modalType === "oneTime"
-        ? `Invested ₹${amount.toLocaleString()} Lumpsum  selected payment method ${selectedPaymentType}`
-        : `Invested ₹${amount.toLocaleString()} SIP on date ${sipDate} selected payment method ${selectedPaymentType}`
-    );
-    // toggle();
+  const extractOrderNumber = (responseData: string): string | null => {
+    const match = responseData.match(/ORDER NO: (\d+)/);
+    return match ? match[1] : null;
   };
+
+  const createLumpsumOrder = async () => {
+    const payload = {
+      transCode: "NEW",
+      orderId: "",
+      clientCode: clientNo,
+      schemeCd: bseSchemeCode,
+      buySell: "P",
+      buySellType: "FRESH",
+      orderVal: amount.toString(),
+      qty: "",
+      allRedeem: "N",
+      folioNo: "",
+      remarks: "test",
+      dpc: "Y",
+      euinVal: "Y",
+      kycStatus: "Y",
+      refNo: "",
+      subBrCode: "",
+      minRedeem: "",
+      dpTxn: "C",
+      ipAdd: "",
+      mobileNo: mobileNo,
+      emailID: email,
+      mandateID: "",
+      param1: "",
+      param2: "",
+      param3: "",
+      filler1: "",
+      filler2: "",
+      filler3: "",
+      filler4: "",
+      filler5: "",
+      filler6: "",
+    };
+
+    dispatch(showLoader("Placing Lumpsum Order..."));
+
+    try {
+      const response = await apiServices.BSEStar_MfOrderEntry(payload);
+
+      if (response?.status === 200) {
+        const rawData = response?.data?.data;
+        console.log("Order Entry Response:", rawData);
+
+        const orderNumber = extractOrderNumber(rawData);
+        console.log("orderNo orderNumber is", orderNumber);
+
+        if (response?.data?.statusCode === 417) {
+          ShowToast("error", response?.data?.data);
+          console.log("Order Entry Response:", rawData);
+        }
+        if (!orderNumber) {
+          throw new Error("Could not extract order number from response");
+        }
+        return orderNumber;
+      } else {
+        throw new Error("Lumpsum order API failed");
+      }
+    } catch (err) {
+      console.error("Error placing lumpsum order:", err);
+      return null;
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const createSipOrder = () => {};
+
+  const handleInvestClick = async () => {
+    // First interaction (for SIP) is to confirm SIP date
+    if (modalType === "sip" && sipDate && !dateSelected) {
+      setDateSelected(sipDate);
+      return;
+    }
+
+    if (!selectedBank) {
+      alert("Please select a bank");
+      return;
+    }
+
+    if (!selectedPaymentType) {
+      alert("Please select a payment method");
+      return;
+    }
+
+    if (selectedPaymentType === "upi" && (!upiId || !upiVerified)) {
+      alert("Please verify your UPI ID first.");
+      return;
+    }
+
+    if (
+      modalType === "sip" &&
+      dateSelected &&
+      selectedBank &&
+      selectedPaymentType
+    ) {
+      setNestedModalOpen(true);
+      return; // Stop here until user confirms in child modal
+    }
+    dispatch(showLoader("Placing Order..."));
+
+    try {
+      let orderNumber = null;
+
+      if (modalType === "sip") {
+        orderNumber = await createSipOrder();
+      } else {
+        orderNumber = await createLumpsumOrder();
+      }
+
+      if (!orderNumber) {
+        throw new Error("Failed to generate order number");
+      }
+
+      const isUpi = selectedPaymentType === "upi";
+
+      const paymentPayload = {
+        modeofpayment: isUpi ? "UPI" : "DIRECT",
+        // bankid: selectedBank?.code ?? "",
+        bankid: "HDF",
+        accountnumber: selectedBank?.account ?? "",
+        // accountnumber: "008291800000871",
+        ifsc: selectedBank?.ifsc ?? "",
+        // ifsc: "YESB0000082",
+        ordernumber: orderNumber,
+        totalamount: amount.toString(),
+        internalrefno: "",
+        nefTreference: isUpi ? "" : "1",
+        mandateid: "",
+        vpaid: isUpi ? upiId : "",
+        loopbackURL: "http://uat.lkpconnect.net.in/dashboard",
+        allowloopBack: "Y",
+        filler1: "",
+        filler2: "",
+        filler3: "",
+        filler4: "",
+        filler5: "",
+      };
+
+      const response = await apiServices.BSEStar_SinglePayment(paymentPayload);
+
+      const htmlContent = response?.data?.data;
+      if (selectedPaymentType === "upi") {
+        ShowToast("info", htmlContent);
+      } else {
+        const newWindow = window.open("", "_blank");
+        if (newWindow) {
+          newWindow.document.open();
+          newWindow.document.write(htmlContent); // browser interprets it fine
+          newWindow.document.close();
+        }
+      }
+      toggle(); // close modal
+    } catch (err) {
+      console.error("Investment failed", err);
+
+      setUpiVerified(false);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const clientBankDetails = async () => {
+    dispatch(showLoader("Please wait we are processing your request"));
+
+    try {
+      const response = await apiServices.ClientProfile();
+      const clientData = response?.data?.data;
+
+      // Store mobile and email
+      setMobileNo(clientData?.mobileNo || "");
+      setEmail(clientData?.email || "");
+      setClientNo(clientData?.clientCode || "");
+      console.log(
+        clientData?.mobileNo,
+        clientData?.email,
+        "check",
+        clientData?.clientCode
+      );
+
+      // Process bank details
+      const rawData = clientData?.bankDetails ?? [];
+      const formattedData: BankDetail[] = rawData.map(
+        (item: any, index: number) => ({
+          id: index + 1,
+          name: item.bankName,
+          account: item.bankAccountNumber,
+          ifsc: item.ifsc,
+          code: item.bankCode,
+        })
+      );
+
+      setBanks(formattedData);
+    } catch (error) {
+      console.error("Error fetching bank details:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const verifyUpi = async () => {
+    if (!upiId) {
+      return;
+    }
+
+    const payload = { upi: upiId };
+    dispatch(showLoader("Verifying UPI..."));
+
+    try {
+      const response = await apiServices.VerifyUpi(payload);
+      const isValid = response?.data?.isUpiValid;
+
+      if (isValid) {
+        setUpiVerified(true); // Disable input & change button
+      } else {
+        setUpiVerified(false);
+      }
+    } catch (error) {
+      console.error("Error verifying UPI ID:", error);
+
+      setUpiVerified(false);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  useEffect(() => {
+    clientBankDetails();
+  }, []);
+
   return (
-    <Modal isOpen={isOpen} toggle={toggle} centered size="lg">
-      <ModalHeader toggle={toggle}>
-        {title} - {modalType === "oneTime" ? "Lumpsum Investment" : "Start SIP"}
-      </ModalHeader>
+    <>
+      <Modal isOpen={isOpen} toggle={toggle} centered size="lg">
+        <ModalHeader toggle={toggle}>
+          {title} -{" "}
+          {modalType === "oneTime" ? "Lumpsum Investment" : "Start SIP"}
+        </ModalHeader>
 
-      <ModalBody>
-        {/* {modalType === "redeem" && <h1>redemption Arc</h1>} */}
-        {modalType === "oneTime" ? (
-          // ✅ Lumpsum UI
-          <div style={{ display: "flex", gap: "20px" }}>
-            {/* Left - Amount */}
-            <div style={{ flex: 1 }}>
-              <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
-                {/* Select Bank account for payment
-              </Label> */}
-                Enter a Lumpsum Amount
-              </Label>
+        <ModalBody>
+          {/* {modalType === "redeem" && <h1>redemption Arc</h1>} */}
+          {modalType === "oneTime" ? (
+            // ✅ Lumpsum UI
+            <div style={{ display: "flex", gap: "20px" }}>
+              {/* Left - Amount */}
+              <div style={{ flex: 1 }}>
+                <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
+                  Enter a Lumpsum Amount
+                </Label>
 
-              <TextField
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                fullWidth
-                InputProps={{
-                  style: {
-                    fontSize: "20px", // bigger text inside
-                    // fontWeight: 600,
-                    // padding: "12px 14px", // increases box height
-                  },
-                }}
-                sx={{
-                  mb: 2,
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px", // rounded edges
-                  },
-                }}
-              />
-
-              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                {[100, 500, 1000, 5000, 10000].map((val) => (
-                  <Button
-                    key={val}
-                    variant="outlined"
-                    onClick={() => setAmount(amount + val)}
-                    style={{
-                      //   fontWeight: 600,
-                      fontSize: "14px",
-                      padding: "6px 8px",
-                      borderRadius: "6px",
-                      color: "white",
-                      backgroundColor: "#22629b",
-                    }}
-                  >
-                    +{val.toLocaleString()}
-                  </Button>
-                ))}
-              </div>
-            </div>
-
-            {/* Right - Bank Account */}
-            <div style={{ flex: 1 }}>
-              <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
-                Select Bank account for payment
-              </Label>
-
-              {banks.map((bank) => (
-                <div
-                  key={bank.id}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    border:
-                      selectedBank === bank.id
-                        ? "2px solid #004AAD"
-                        : "1px solid #ddd",
-                    borderRadius: "8px",
-                    padding: "4px 8px",
-                    cursor: "pointer",
-                    transition: "border 0.2s",
-                    marginBottom: "10px",
+                <TextField
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(Number(e.target.value))}
+                  fullWidth
+                  InputProps={{
+                    style: {
+                      fontSize: "20px", // bigger text inside
+                      // fontWeight: 600,
+                      // padding: "12px 14px", // increases box height
+                    },
                   }}
-                  onClick={() => handleBankSelect(bank.id)}
-                >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                    }}
-                  >
-                    <img
-                      src={bank.logo}
-                      alt={bank.name}
+                  sx={{
+                    mb: 2,
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "8px", // rounded edges
+                    },
+                  }}
+                />
+
+                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                  {[100, 500, 1000, 5000, 10000].map((val) => (
+                    <Button
+                      key={val}
+                      variant="outlined"
+                      onClick={() => setAmount(amount + val)}
                       style={{
-                        width: "40px",
-                        height: "40px",
-                        objectFit: "contain",
+                        //   fontWeight: 600,
+                        fontSize: "14px",
+                        padding: "6px 8px",
+                        borderRadius: "6px",
+                        color: "white",
+                        backgroundColor: "#22629b",
                       }}
-                    />
-                    <div style={{ display: "flex", flexDirection: "column" }}>
-                      <span style={{ fontWeight: 600, fontSize: "14px" }}>
-                        {bank.name}
-                      </span>
-                      <span style={{ fontSize: "12px", color: "#666" }}>
-                        {bank.account}
-                      </span>
-                    </div>
-                  </div>
-
-                  <input
-                    type="radio"
-                    name="bank"
-                    value={bank.id}
-                    checked={selectedBank === bank.id}
-                    onChange={() => handleBankSelect(bank.id)}
-                    style={{
-                      accentColor: "#004AAD",
-                      width: "16px",
-                      height: "16px",
-                    }}
-                    onClick={(e) => e.stopPropagation()} // Prevent triggering parent click
-                  />
+                    >
+                      +{val.toLocaleString()}
+                    </Button>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          // ✅ SIP UI (placeholder for now, you’ll fill later)
-          <div style={{ display: "flex", gap: "20px" }}>
-            {/* SIP Amount Section */}
-            <div style={{ flex: 1 }}>
-              <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
-                Enter an SIP Amount (Minimum Rs. 500)
-              </Label>
-
-              <TextField
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                fullWidth
-                InputProps={{
-                  style: { fontSize: "20px" },
-                }}
-                sx={{
-                  mb: 2,
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "8px",
-                  },
-                }}
-              />
-
-              {/* Quick Add Buttons */}
-              <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-                {[100, 500, 1000, 2000].map((val) => (
-                  <Button
-                    key={val}
-                    variant="outlined"
-                    onClick={() => setAmount(amount + val)}
-                    style={{
-                      fontSize: "14px",
-                      padding: "6px 12px",
-                      borderRadius: "6px",
-                      color: "white",
-                      backgroundColor: "#22629b",
-                    }}
-                  >
-                    +{val.toLocaleString()}
-                  </Button>
-                ))}
               </div>
 
-              {!dateSelected && (
-                <p
-                  style={{ fontSize: "12px", marginTop: "8px", color: "#666" }}
-                >
-                  Minimum gap between 2 SIP instalments: 30 days. Further
-                  instalments would start only when 1st SIP payment is
-                  successful. To avoid failure of future SIP instalments, enable
-                  autopay mandate on this bank account.
-                </p>
-              )}
-            </div>
-
-            {/* SIP Date Section */}
-            {dateSelected ? (
+              {/* Right - Bank Account */}
               <div style={{ flex: 1 }}>
                 <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
                   Select Bank account for payment
@@ -258,7 +380,7 @@ const MutualFundModal = ({
                       justifyContent: "space-between",
                       alignItems: "center",
                       border:
-                        selectedBank === bank.id
+                        selectedBank === bank
                           ? "2px solid #004AAD"
                           : "1px solid #ddd",
                       borderRadius: "8px",
@@ -276,21 +398,42 @@ const MutualFundModal = ({
                         gap: "12px",
                       }}
                     >
-                      <img
-                        src={bank.logo}
-                        alt={bank.name}
-                        style={{
-                          width: "40px",
-                          height: "40px",
-                          objectFit: "contain",
-                        }}
-                      />
+                      {/* Only show logo if available */}
+                      {bank.logo ? (
+                        <img
+                          src={bank.logo}
+                          alt={bank.name}
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            objectFit: "contain",
+                          }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            backgroundColor: "#eee",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: "4px",
+                            fontSize: "12px",
+                            color: "#888",
+                          }}
+                        >
+                          {bank.code}
+                        </div>
+                      )}
+
                       <div style={{ display: "flex", flexDirection: "column" }}>
                         <span style={{ fontWeight: 600, fontSize: "14px" }}>
                           {bank.name}
                         </span>
                         <span style={{ fontSize: "12px", color: "#666" }}>
-                          {bank.account}
+                          {/* {bank.account} */}
+                          xxxxxxxxxx{bank.account.slice(-4)}
                         </span>
                       </div>
                     </div>
@@ -299,7 +442,7 @@ const MutualFundModal = ({
                       type="radio"
                       name="bank"
                       value={bank.id}
-                      checked={selectedBank === bank.id}
+                      checked={selectedBank?.id === bank.id}
                       onChange={() => handleBankSelect(bank.id)}
                       style={{
                         accentColor: "#004AAD",
@@ -311,240 +454,336 @@ const MutualFundModal = ({
                   </div>
                 ))}
               </div>
-            ) : (
+            </div>
+          ) : (
+            // ✅ SIP UI (placeholder for now, you’ll fill later)
+            <div style={{ display: "flex", gap: "20px" }}>
+              {/* SIP Amount Section */}
               <div style={{ flex: 1 }}>
-                <Label
-                  style={{
-                    fontWeight: 600,
-                    marginBottom: "8px",
-                    display: "block",
-                  }}
-                >
-                  SIP Date
+                <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
+                  Enter an SIP Amount (Minimum Rs. 500)
                 </Label>
 
-                {/* Calendar-like grid */}
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(7, 1fr)", // 7 days like a week
-                    gap: "10px",
+                <TextField
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(Number(e.target.value))}
+                  fullWidth
+                  InputProps={{
+                    style: { fontSize: "20px" },
                   }}
-                >
-                  {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
-                    <div
-                      key={day}
-                      onClick={() => setSipDate(day)}
+                  sx={{
+                    mb: 2,
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "8px",
+                    },
+                  }}
+                />
+
+                {/* Quick Add Buttons */}
+                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+                  {[100, 500, 1000, 2000].map((val) => (
+                    <Button
+                      key={val}
+                      variant="outlined"
+                      onClick={() => setAmount(amount + val)}
                       style={{
-                        padding: "3px",
-                        textAlign: "center",
-                        borderRadius: "8px",
-                        border:
-                          sipDate === day
-                            ? "2px solid #004AAD"
-                            : "1px solid #ddd",
-                        backgroundColor: sipDate === day ? "#E6F0FF" : "#fff",
-                        cursor: "pointer",
-                        fontWeight: sipDate === day ? 600 : 400,
-                        transition: "all 0.2s ease",
+                        fontSize: "14px",
+                        padding: "6px 12px",
+                        borderRadius: "6px",
+                        color: "white",
+                        backgroundColor: "#22629b",
                       }}
                     >
-                      {day}
-                    </div>
+                      +{val.toLocaleString()}
+                    </Button>
                   ))}
                 </div>
 
-                {/* Selected date text */}
-                {sipDate && (
+                {!dateSelected && (
                   <p
                     style={{
-                      marginTop: "10px",
-                      fontSize: "14px",
-                      color: "#444",
+                      fontSize: "12px",
+                      marginTop: "8px",
+                      color: "#666",
                     }}
                   >
-                    Selected SIP Date: <b>{sipDate}</b>
+                    Minimum gap between 2 SIP instalments: 30 days. Further
+                    instalments would start only when 1st SIP payment is
+                    successful. To avoid failure of future SIP instalments,
+                    enable autopay mandate on this bank account.
                   </p>
                 )}
               </div>
-            )}
-          </div>
-        )}
-        {/* payment section */}
-        {selectedBank && (
-          <div>
-            <div>
-              <div style={{ marginTop: "12px" }}>
-                {modalType === "sip" && sipDate && (
-                  <>
-                    <div style={{ fontWeight: 500, marginBottom: "6px" }}>
-                      Selected SIP Date: <b>{sipDate}th</b>
-                    </div>
 
-                    <label
-                      style={{
-                        fontWeight: 600,
-                        marginTop: "12px",
-                        display: "block",
-                      }}
-                    >
-                      Select Payment Type
-                    </label>
-                  </>
-                )}
-              </div>
-            </div>
+              {/* SIP Date Section */}
+              {dateSelected ? (
+                <div style={{ flex: 1 }}>
+                  <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
+                    Select Bank account for payment
+                  </Label>
 
-            <div
-              style={{
-                display: "flex",
-                gap: "16px",
-                flexWrap: "wrap",
-              }}
-            >
-              {paymentOptions.map((option) => (
-                <div
-                  key={option.id}
-                  onClick={() => setSelectedPaymentType(option.id)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    border:
-                      selectedPaymentType === option.id
-                        ? "2px solid #004AAD"
-                        : "1px solid #ccc",
-                    borderRadius: "8px",
-                    padding: "4px 8px",
-                    cursor: "pointer",
-                    minWidth: "200px",
-                    flex: "1 1 200px",
-                    transition: "border 0.2s",
-                    backgroundColor:
-                      selectedPaymentType === option.id ? "#f7faff" : "#fff",
-                  }}
-                >
-                  <img
-                    src={option.icon}
-                    alt={option.name}
-                    style={{ width: "30px", marginRight: "12px" }}
-                  />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 600 }}>{option.name}</div>
-                    {option.description && (
-                      <div style={{ fontSize: "12px", color: "#666" }}>
-                        {option.description}
-                      </div>
-                    )}
-                  </div>
-                  <input
-                    type="radio"
-                    name="paymentType"
-                    value={option.id}
-                    checked={selectedPaymentType === option.id}
-                    onChange={() => setSelectedPaymentType(option.id)}
-                    style={{
-                      accentColor: "#004AAD",
-                      width: "16px",
-                      height: "16px",
-                      marginLeft: "8px",
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                  />
+                  {banks.map((bank) => (
+                    <BankCard
+                      key={bank.id}
+                      bank={bank}
+                      selected={selectedBank?.id === bank.id}
+                      onSelect={handleBankSelect}
+                    />
+                  ))}
                 </div>
-              ))}
-            </div>
-
-            {/* ✅ Extra UPI Input Field & Verify Button */}
-            {selectedPaymentType === "upi" && (
-              <div style={{ marginTop: "16px", maxWidth: "400px" }}>
-                <Label style={{ fontWeight: 600, marginBottom: "6px" }}>
-                  Enter UPI ID
-                </Label>
-                <div style={{ display: "flex", gap: "10px" }}>
-                  <TextField
-                    fullWidth
-                    placeholder="example@upi"
-                    value={upiId}
-                    onChange={(e) => setUpiId(e.target.value)}
-                    InputProps={{
-                      style: {
-                        padding: "6px 10px", // Optional, if needed
-                        fontSize: "14px",
-                      },
-                    }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "8px",
-                        height: "40px", // You can fix height to make it shorter
-                      },
-                    }}
-                  />
-                  <Button
+              ) : (
+                <div style={{ flex: 1 }}>
+                  <Label
                     style={{
-                      backgroundColor: "#004AAD",
-                      color: "#fff",
-                      padding: "6px 16px",
-                      fontSize: "14px",
-                      height: "40px",
-                    }}
-                    onClick={() => {
-                      if (!upiId) {
-                        alert("Please enter a UPI ID.");
-                      } else {
-                        alert(`Verifying UPI ID: ${upiId}`);
-                      }
+                      fontWeight: 600,
+                      marginBottom: "8px",
+                      display: "block",
                     }}
                   >
-                    Verify
-                  </Button>
+                    SIP Date
+                  </Label>
+
+                  {/* Calendar-like grid */}
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(7, 1fr)", // 7 days like a week
+                      gap: "10px",
+                    }}
+                  >
+                    {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
+                      <div
+                        key={day}
+                        onClick={() => setSipDate(day)}
+                        style={{
+                          padding: "3px",
+                          textAlign: "center",
+                          borderRadius: "8px",
+                          border:
+                            sipDate === day
+                              ? "2px solid #004AAD"
+                              : "1px solid #ddd",
+                          backgroundColor: sipDate === day ? "#E6F0FF" : "#fff",
+                          cursor: "pointer",
+                          fontWeight: sipDate === day ? 600 : 400,
+                          transition: "all 0.2s ease",
+                        }}
+                      >
+                        {day}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Selected date text */}
+                  {sipDate && (
+                    <p
+                      style={{
+                        marginTop: "10px",
+                        fontSize: "14px",
+                        color: "#444",
+                      }}
+                    >
+                      Selected SIP Date: <b>{sipDate}</b>
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+          {/* payment section */}
+          {selectedBank && (
+            <div>
+              <div>
+                <div style={{ marginTop: "12px" }}>
+                  {modalType === "sip" && sipDate && (
+                    <>
+                      <div style={{ fontWeight: 500, marginBottom: "6px" }}>
+                        Selected SIP Date: <b>{sipDate}th</b>
+                      </div>
+
+                      <label
+                        style={{
+                          fontWeight: 600,
+                          marginTop: "12px",
+                          display: "block",
+                        }}
+                      >
+                        Select Payment Type
+                      </label>
+                    </>
+                  )}
                 </div>
               </div>
-            )}
-          </div>
-        )}
 
-        {/* Note Section */}
-        <div
-          style={{
-            marginTop: "16px",
-            padding: "10px",
-            fontSize: "12px",
-            color: "#2e7d32",
-            background: "#e8f5e9",
-            borderRadius: "6px",
-          }}
-        >
-          For orders after <b>2:30 PM</b>, NAV would be applicable for the next
-          business day. Max limit may vary depending upon the account type.
-        </div>
-      </ModalBody>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "16px",
+                  flexWrap: "wrap",
+                }}
+              >
+                {paymentOptions.map((option) => (
+                  <div
+                    key={option.id}
+                    onClick={() => setSelectedPaymentType(option.id)}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      border:
+                        selectedPaymentType === option.id
+                          ? "2px solid #004AAD"
+                          : "1px solid #ccc",
+                      borderRadius: "8px",
+                      padding: "4px 8px",
+                      cursor: "pointer",
+                      minWidth: "200px",
+                      flex: "1 1 200px",
+                      transition: "border 0.2s",
+                      backgroundColor:
+                        selectedPaymentType === option.id ? "#f7faff" : "#fff",
+                    }}
+                  >
+                    <img
+                      src={option.icon}
+                      alt={option.name}
+                      style={{ width: "30px", marginRight: "12px" }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600 }}>{option.name}</div>
+                      {option.description && (
+                        <div style={{ fontSize: "12px", color: "#666" }}>
+                          {option.description}
+                        </div>
+                      )}
+                    </div>
+                    <input
+                      type="radio"
+                      name="paymentType"
+                      value={option.id}
+                      checked={selectedPaymentType === option.id}
+                      onChange={() => setSelectedPaymentType(option.id)}
+                      style={{
+                        accentColor: "#004AAD",
+                        width: "16px",
+                        height: "16px",
+                        marginLeft: "8px",
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  </div>
+                ))}
+              </div>
 
-      <ModalFooter>
-        {modalType === "sip" && (
-          <div style={{ flex: 1, fontSize: "13px", color: "#666" }}>
-            <div>
-              1st Payment: <b>Today</b>
+              {/* ✅ Extra UPI Input Field & Verify Button */}
+              {selectedPaymentType === "upi" && (
+                <div style={{ marginTop: "16px", maxWidth: "400px" }}>
+                  <Label style={{ fontWeight: 600, marginBottom: "6px" }}>
+                    Enter UPI ID
+                  </Label>
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <TextField
+                      fullWidth
+                      placeholder="example@upi"
+                      value={upiId}
+                      onChange={(e) => setUpiId(e.target.value)}
+                      disabled={upiVerified}
+                      InputProps={{
+                        style: {
+                          padding: "6px 10px",
+                          fontSize: "14px",
+                          backgroundColor: upiVerified ? "#f5f5f5" : "#fff", // light grey if disabled
+                        },
+                      }}
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "8px",
+                          height: "40px",
+                        },
+                      }}
+                    />
+
+                    <Button
+                      style={{
+                        backgroundColor: upiVerified ? "#2E7D32" : "#004AAD", // green if verified
+                        color: "#fff",
+                        padding: "6px 16px",
+                        fontSize: "14px",
+                        height: "40px",
+                        cursor: upiVerified ? "default" : "pointer",
+                      }}
+                      disabled={upiVerified}
+                      onClick={verifyUpi}
+                    >
+                      {upiVerified ? "Verified" : "Verify"}
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
-            <div>
-              Next Payment: <b>28th May, 2025</b>
-            </div>
-          </div>
-        )}
+          )}
 
-        <Button color="secondary" onClick={toggle}>
-          Cancel
-        </Button>
-        <Button
-          style={{ backgroundColor: "#1c517f" }}
-          onClick={() => {
-            handleInvestClick();
-            // toggle();
-          }}
-        >
-          {modalType === "oneTime" ? "Invest Now" : "Start SIP"}
-        </Button>
-      </ModalFooter>
-    </Modal>
+          {/* Note Section */}
+          <div
+            style={{
+              marginTop: "16px",
+              padding: "10px",
+              fontSize: "12px",
+              color: "#2e7d32",
+              background: "#e8f5e9",
+              borderRadius: "6px",
+            }}
+          >
+            For orders after <b>2:30 PM</b>, NAV would be applicable for the
+            next business day. Max limit may vary depending upon the account
+            type.
+          </div>
+        </ModalBody>
+
+        <ModalFooter>
+          {/* {modalType === "sip" && (
+            <div style={{ flex: 1, fontSize: "13px", color: "#666" }}>
+              <div>
+                1st Payment: <b>Today</b>
+              </div>
+              <div>
+                Next Payment: <b>28th May, 2025 (hardcore)</b>
+              </div>
+            </div>
+          )} */}
+
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleInvestClick}
+            style={{ backgroundColor: "#1c517f" }}
+          >
+            {modalType === "oneTime"
+              ? "Invest Now"
+              : !dateSelected
+              ? "Continue"
+              : "Start SIP"}
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <NestedModal
+        isOpen={isNestedModalOpen}
+        toggle={toggleNestedModal}
+        // onConfirm={(selected) => {
+        //   console.log("Selected mandate:", selected);
+        //   finalConfirm(selected)
+        // }}
+        clientNo={clientNo}
+        banks={banks}
+        selectedPaymentType={selectedPaymentType}
+        upiId={upiId}
+        bseSchemeCode={bseSchemeCode}
+        dateSelected={dateSelected}
+        amount={amount}
+      />
+    </>
   );
 };
 
