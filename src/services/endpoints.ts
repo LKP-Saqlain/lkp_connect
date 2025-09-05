@@ -163,14 +163,11 @@ export const endpoints = {
   MergeIntoOdinFile: "api/RMS/MergeIntoOdinFile",
   MergeIntoSymphonyFile: "api/RMS/MergeIntoSymphonyFile",
   GetUnPledgeReport: "api/Dashboard/GetUnPledgeReport",
-<<<<<<< HEAD
   UploadCollateralFiles: "/api/RMS/UploadCollateralFiles",
-=======
   MF_SchemeDetails: "api/MF/MF_SchemeDetails",
   MFLogin: "api/Login/Login/MFLogin",
   BSEStar_MfMandateStatus: "api/MF/BSEStar_MfMandateStatus",
   MF_OngoingSIP: "api/Dashboard/MF_OngoingSIP",
   MF_PortfolioStatementReport: "api/Dashboard/MF_PortfolioStatementReport",
   MF_TransactionReport: "api/Dashboard/MF_TransactionReport",
->>>>>>> feature/mfApiIntegration
 };
