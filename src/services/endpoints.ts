@@ -164,4 +164,7 @@ export const endpoints = {
   MergeIntoSymphonyFile: "api/RMS/MergeIntoSymphonyFile",
   GetUnPledgeReport: "api/Dashboard/GetUnPledgeReport",
   MF_SchemeDetails: "api/MF/MF_SchemeDetails",
+  MFLogin: "api/Login/Login/MFLogin",
+  BSEStar_MfMandateStatus: "api/MF/BSEStar_MfMandateStatus",
+  MF_OngoingSIP: "api/Dashboard/MF_OngoingSIP",
 };

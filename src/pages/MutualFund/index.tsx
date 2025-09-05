@@ -5,6 +5,11 @@ import { Card, Container } from "reactstrap";
 import MfOverview from "../../components/common/MutualFunds/MfOverview";
 import { TextField, Typography, IconButton, Box, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
+import { setEncryptedValue } from "../../utils/loocalEncrypt";
 
 const MutualFundIndex = (activeSubItem: any) => {
   console.log(activeSubItem);
@@ -13,7 +18,36 @@ const MutualFundIndex = (activeSubItem: any) => {
   const [clientCode, setClientCode] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(true);
 
+  const dispatch = useDispatch<AppDispatch>();
+
   const handleBack = () => setSelectedMutualFund("");
+
+  const handleSubmit = async () => {
+    if (!clientCode.trim()) return;
+    try {
+      const payload = {
+        clientcode: clientCode,
+        userName: "millicent",
+        password: "M1i@l3l$c5e^n7t*",
+        secretKey: "mtivsm&GDy6$409gu67@3hdYmb",
+      };
+      dispatch(showLoader(""));
+      const res = await apiServices.MFLogin(payload);
+      if (res?.status === 200) {
+        dispatch(hideLoader());
+        console.log("mfLogin response->", res?.data);
+        // localStorage.setItem("mfToken", res?.data?.data);
+        setEncryptedValue("mfToken", res?.data?.data);
+
+        setIsEditing(false);
+      }
+    } catch (error) {
+      console.error("mfLogin error:", error);
+      dispatch(hideLoader());
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
 
   return (
     <div className="page-content page-view">
@@ -56,9 +90,7 @@ const MutualFundIndex = (activeSubItem: any) => {
                   variant="contained"
                   color="primary"
                   size="small"
-                  onClick={() => {
-                    if (clientCode.trim()) setIsEditing(false);
-                  }}
+                  onClick={handleSubmit}
                 >
                   Submit
                 </Button>
@@ -80,16 +112,6 @@ const MutualFundIndex = (activeSubItem: any) => {
             )}
           </Box>
         </Card>
-
-        {/* Card for Content */}
-        {/* <Card
-          style={{
-            borderRadius: "15px",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
-            padding: "16px",
-          }}
-        > */}
-        {/* {false ? <MfOverview /> : mainMenu[activeTab]?.content} */}
         {selectedMutualFund ? (
           <MfOverview fundName={selectedMutualFund} onBack={handleBack} />
         ) : (
