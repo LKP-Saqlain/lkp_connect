@@ -7921,9 +7921,15 @@ export const OrderUpcomingSip: GridColDef[] = [
   },
 ];
 export const MfPortfolio: GridColDef[] = [
-  ...MutualFundName,
   {
-    field: "returns",
+    field: "reedosName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "investedAmount",
     headerName: "Invested Amount",
     disableColumnMenu: true,
     flex: 1,
@@ -7935,15 +7941,19 @@ export const MfPortfolio: GridColDef[] = [
   },
 
   {
-    field: "minLumpSum",
+    field: "currentValue",
     headerName: "Current Amount",
     disableColumnMenu: true,
     flex: 1, // larger space since names are long
     minWidth: 120,
+    renderCell: (params: any) => {
+      const value = params.value;
+      return value?.toLocaleString("en-IN");
+    },
   },
   {
-    field: "aumCr",
-    headerName: "Returns",
+    field: "xirr",
+    headerName: " XIRR Returns",
     disableColumnMenu: true,
     flex: 1,
     minWidth: 80,
@@ -7986,19 +7996,20 @@ export const MandateColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "Amount",
+    field: "amount",
     headerName: "Amount",
     disableColumnMenu: true,
     flex: 1,
     minWidth: 120,
     headerAlign: "right",
-    // valueFormatter: (params: any) => {
-    //   const value = parseFloat(params); // Convert the value to a number
-    //   return new Intl.NumberFormat("en-IN", {
-    //     minimumFractionDigits: 2,
-    //     maximumFractionDigits: 2,
-    //   }).format(value);
-    // },
+    align: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "status",

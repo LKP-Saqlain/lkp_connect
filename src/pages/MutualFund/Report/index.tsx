@@ -51,7 +51,7 @@ interface TransactionRecord {
   // add more fields as per your response if required
 }
 
-const MfReport = () => {
+const MfReport = (props: any) => {
   const [reportTab, setReportTab] = useState(0);
   const [selectedLabel, setSelectedLabel] = useState<string>(tabList[0].label);
   const [mandateData, setMandateData] = useState<[]>([]);
@@ -67,9 +67,14 @@ const MfReport = () => {
   // );
 
   useEffect(() => {
+    console.log("propppps", props);
+  }, [props]);
+
+  useEffect(() => {
+    const { clientCode } = props;
     if (selectedLabel === "Mandates") {
       const payload = {
-        clientCodeField: "MT0600508",
+        clientCodeField: clientCode, // "MT0600508"
         fromDateField: "01/01/2000",
         mandateIdField: "",
         toDateField: "01/09/2025",
@@ -102,7 +107,7 @@ const MfReport = () => {
           dispatch(hideLoader());
         });
     }
-  }, [dispatch, selectedLabel]);
+  }, [dispatch, selectedLabel, props.clientCode]);
 
   useEffect(() => {
     if (selectedLabel === "Ongoing SIP" || selectedLabel === "Upcoming SIP") {
@@ -115,7 +120,7 @@ const MfReport = () => {
         assetClassIDs: null,
         asOnDateTime: "2024-02-15T17:41:00.673+05:30",
         fromDateTime: "2023-02-15T17:41:00.674+05:30",
-        toDateTime: "2024-02-15T17:41:00.673+05:30",
+        toDateTime: "2025-09-01T17:41:00.673+05:30",
         asOnDate: "2024-02-15",
         reportID: 0,
         portfolioID: 1,
@@ -159,7 +164,6 @@ const MfReport = () => {
                     })
                   );
 
-                // ✅ Filter based on endDate (only future SIPs)
                 const today = new Date();
                 const filtered = sipRecords.filter((record) => {
                   if (!record.endDate) return false;
@@ -203,7 +207,7 @@ const MfReport = () => {
         assetClassIDs: null,
         asOnDateTime: "2024-02-07T10:54:05.584+05:30",
         fromDateTime: "2020-02-07T00:00:00",
-        toDateTime: "2024-02-07T10:54:05.584+05:30",
+        toDateTime: "2025-09-02T10:54:05.584+05:30",
         asOnDate: null,
         reportID: 0,
         portfolioID: 1,
@@ -231,8 +235,6 @@ const MfReport = () => {
         .then((response) => {
           console.log("Response", response);
           dispatch(hideLoader());
-
-          // ✅ Assuming response.data contains array of transactions
           if (response?.data?.isSuccess) {
             const records: TransactionRecord[] =
               response.data.data?.map((item: any, index: number) => ({
