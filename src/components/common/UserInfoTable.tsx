@@ -58,6 +58,7 @@ import {
   RHTopClientsColumns,
   getAPContestReportColumns,
   clientUnpledgeReport,
+  EmployeeTargetReport,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1991,6 +1992,8 @@ const DataTable = ({
       });
     } else if (activeSubItem === "Third Party Invoice Report") {
       return TpInvoiceReportColumns.map((column) => ({ ...column }));
+    } else if (activeSubItem === "Employee Target Report") {
+      return EmployeeTargetReport.map((column) => ({ ...column }));
     } else if (activeSubItem === "RHDashboardTop10Clients") {
       return RHTopClientsColumns.map((column) => ({
         ...column,

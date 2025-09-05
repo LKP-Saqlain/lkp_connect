@@ -6,6 +6,7 @@ import Direct from "./Direct";
 import Indirect from "./Indirect";
 // import VendorMaster from "../ThirdParty/VendorMaster";
 import PartnerContestReport from "./partnerContest";
+import EmployeeTargetReport from "./EmployeeTarget";
 
 interface RH {
   activeSubItem: string;
@@ -21,25 +22,26 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
     [SubItemKeys.RH_DIRECT]: <Direct activeSubItem={activeSubItem} />,
     [SubItemKeys.RH_INDIRECT]: <Indirect activeSubItem={activeSubItem} />,
     [SubItemKeys.RH_OVERVIEW]: <Indirect activeSubItem={activeSubItem} />,
-    // [SubItemKeys.VENDOR_MASTER]: <VendorMaster activeSubItem={activeSubItem} />,
+    [SubItemKeys.EMPLOYEE_TARGET_REPORT]: (
+      <EmployeeTargetReport activeSubItem={activeSubItem} />
+    ),
     [SubItemKeys.RH_PARTNER]: (
       <PartnerContestReport activeSubItem={activeSubItem} />
     ),
   };
 
   const getComponent = () => {
-    if (activeSubItem === "Employee Performance") {
-      return (
-        <div style={{ marginTop: "1rem", fontFamily: "Public Sans" }}>
-          Employee Performance content coming soon...
-        </div>
-      );
-    }
-
     if (activeSubItem === "Client Summary") {
       return (
         <div style={{ marginTop: "1rem", fontFamily: "Public Sans" }}>
           Client Summary content coming soon...
+        </div>
+      );
+    }
+    if (activeSubItem === "Employee Performance") {
+      return (
+        <div style={{ marginTop: "1rem", fontFamily: "Public Sans" }}>
+          Employee Performance content coming soon...
         </div>
       );
     }
@@ -53,6 +55,8 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
         return <PartnerContestReport activeSubItem={activeSubItem} />;
       } else if (activeSubItem === SubItemKeys.RH_OVERVIEW) {
         return <Overview activeSubItem={activeSubItem} />;
+      } else if (activeSubItem === SubItemKeys.EMPLOYEE_TARGET_REPORT) {
+        return <EmployeeTargetReport activeSubItem={activeSubItem} />;
       } else {
         // return <Overview activeSubItem={activeSubItem} />;
       }

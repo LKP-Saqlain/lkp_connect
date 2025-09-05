@@ -16,7 +16,7 @@ import { AppDispatch } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 
-const MfDiscover = ({ onSelectFund }: any) => {
+const MfDiscover = ({ onSelectFund, hasToken }: any) => {
   const [popularTab, setPopularTab] = useState("Large Cap");
   const [popularTabOrder, setPopularTabOrder] = useState(0);
   const [selectedMfType, setSelectedMfType] = useState("");
@@ -30,6 +30,10 @@ const MfDiscover = ({ onSelectFund }: any) => {
   useEffect(() => {
     console.log(onSelectFund, "discover onSelectFund");
   }, []);
+
+  useEffect(() => {
+    console.log("propssss", hasToken);
+  }, [hasToken]);
 
   const productTypeMap: Record<string, any> = {
     "Large Cap": 14,
@@ -85,7 +89,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
     if (popularTab) {
       fetchData();
     }
-  }, [dispatch, popularTab]);
+  }, [dispatch, popularTab, hasToken]);
 
   useEffect(() => {
     const fetchData = async () => {

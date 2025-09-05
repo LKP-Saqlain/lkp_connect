@@ -7833,6 +7833,211 @@ export const clientUnpledgeReport: GridColDef[] = [
     },
   },
 ];
+export const EmployeeTargetReport: GridColDef[] = [
+  {
+    field: "empCode",
+    headerName: "Emp Code",
+    minWidth: 100,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "empName",
+    headerName: "Emp Name",
+    minWidth: 130,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "brokingRevnTarget",
+    headerName: "Broking Revenue Target",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
+  },
+  {
+    field: "brokingRevnAchieved",
+    headerName: "Broking Revenue Achieved",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }).format(params),
+  },
+  {
+    field: "nonBrokingRevnTarget",
+    headerName: "Non-Broking Revenue Target",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
+  },
+  {
+    field: "nonBrokingRevnAchieved",
+    headerName: "Non-Broking Revenue Achieved",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }).format(params),
+  },
+  {
+    field: "totalRevnTarget",
+    headerName: "Total Revenue Target",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
+  },
+  {
+    field: "totalRevnAchieved",
+    headerName: "Total Revenue Achieved",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }).format(params),
+  },
+  {
+    field: "targetMF",
+    headerName: "Target MF AUM",
+    minWidth: 110,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
+  },
+  {
+    field: "achievedMF",
+    headerName: "Achieved MF AUM",
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }).format(params),
+  },
+  {
+    field: "freshCashTarget",
+    headerName: "Fresh Cash Margin Target",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
+  },
+  {
+    field: "freshCashAchieved",
+    headerName: "Fresh Cash Margin Achieved",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2,
+      }).format(params),
+  },
+  {
+    field: "newAccountCount",
+    headerName: "New Account Target",
+    minWidth: 80,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "newClientsAchieved",
+    headerName: "New Clients Achieved",
+    minWidth: 80,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "reactivationCount",
+    headerName: "Reactivation Target",
+    minWidth: 80,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "reactivatedClientsAchieved",
+    headerName: "Reactivated Clients Achieved",
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+];
 export const MutualFundList: GridColDef[] = [
   {
     field: "fundName",
@@ -8001,9 +8206,15 @@ export const OrderUpcomingSip: GridColDef[] = [
   },
 ];
 export const MfPortfolio: GridColDef[] = [
-  ...MutualFundName,
   {
-    field: "returns",
+    field: "reedosName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "investedAmount",
     headerName: "Invested Amount",
     disableColumnMenu: true,
     flex: 1,
@@ -8015,15 +8226,19 @@ export const MfPortfolio: GridColDef[] = [
   },
 
   {
-    field: "minLumpSum",
+    field: "currentValue",
     headerName: "Current Amount",
     disableColumnMenu: true,
     flex: 1, // larger space since names are long
     minWidth: 120,
+    renderCell: (params: any) => {
+      const value = params.value;
+      return value?.toLocaleString("en-IN");
+    },
   },
   {
-    field: "aumCr",
-    headerName: "Returns",
+    field: "xirr",
+    headerName: " XIRR Returns",
     disableColumnMenu: true,
     flex: 1,
     minWidth: 80,
@@ -8035,6 +8250,140 @@ export const MfPortfolio: GridColDef[] = [
   //   flex: 2,
   //   minWidth: 150,
   // },
+];
+
+export const MandateColumns: GridColDef[] = [
+  {
+    field: "mandateId",
+    headerName: "Mandate ID",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "right",
+    align: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 280,
+    headerAlign: "center",
+  },
+  {
+    field: "mandateType",
+    headerName: "Mandate Type",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "collectionType",
+    headerName: "Collection Type",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "bankName",
+    headerName: "Bank Name",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "bankAccNo",
+    headerName: "Bank A/C No",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "bankBranch",
+    headerName: "Bank Branch",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 250,
+    headerAlign: "center",
+  },
+  {
+    field: "umrnNo",
+    headerName: "UMRN No",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 220,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "regnDate",
+    headerName: "Regn Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "approvedDate",
+    headerName: "Approved Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "uploadDate",
+    headerName: "Upload Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
 ];
 
 export const NFOList: GridColDef[] = [
@@ -8198,115 +8547,19 @@ export const MutualFundOrderColumns: GridColDef[] = [
     flex: 1.5,
     minWidth: 180,
   },
-  {
-    field: "clientCode",
-    headerName: "Folio Number",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 150,
-  },
+  // {
+  //   field: "clientCode",
+  //   headerName: "Folio Number",
+  //   disableColumnMenu: true,
+  //   flex: 1,
+  //   minWidth: 150,
+  // },
   {
     field: "amount",
     headerName: "Amount",
     disableColumnMenu: true,
     flex: 1,
     minWidth: 120,
-    headerAlign: "right",
-    // valueFormatter: (params: any) => {
-    //   const value = parseFloat(params); // Convert the value to a number
-    //   return new Intl.NumberFormat("en-IN", {
-    //     minimumFractionDigits: 2,
-    //     maximumFractionDigits: 2,
-    //   }).format(value);
-    // },
-  },
-  {
-    field: "status",
-    headerName: "Status",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 280,
-    headerAlign: "center",
-  },
-  {
-    field: "mandateType",
-    headerName: "Mandate Type",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 150,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "collectionType",
-    headerName: "Collection Type",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 150,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "bankName",
-    headerName: "Bank Name",
-    disableColumnMenu: true,
-    flex: 2,
-    minWidth: 200,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "bankAccNo",
-    headerName: "Bank A/C No",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 180,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "bankBranch",
-    headerName: "Bank Branch",
-    disableColumnMenu: true,
-    flex: 2,
-    minWidth: 250,
-    headerAlign: "center",
-  },
-  {
-    field: "umrnNo",
-    headerName: "UMRN No",
-    disableColumnMenu: true,
-    flex: 2,
-    minWidth: 220,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "regnDate",
-    headerName: "Regn Date",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 180,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "approvedDate",
-    headerName: "Approved Date",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 180,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "uploadDate",
-    headerName: "Upload Date",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 180,
-    headerAlign: "center",
-    align: "center",
   },
   {
     field: "remarks",
@@ -8325,42 +8578,5 @@ export const MutualFundOrderColumns: GridColDef[] = [
     minWidth: 150,
     headerAlign: "center",
     align: "center",
-  },
-];
-export const MandateColumns: GridColDef[] = [
-  {
-    field: "mandateId",
-    headerName: "Mandate ID",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 150,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "clientName",
-    headerName: "Client Name",
-    disableColumnMenu: true,
-    flex: 2,
-    minWidth: 200,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "clientCode",
-    headerName: "Client Code",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 150,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "Amount",
-    headerName: "Amount",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 120,
-    headerAlign: "right",
   },
 ];
