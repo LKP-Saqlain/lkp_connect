@@ -7833,7 +7833,6 @@ export const clientUnpledgeReport: GridColDef[] = [
     },
   },
 ];
-
 export const EmployeeTargetReport: GridColDef[] = [
   {
     field: "empCode",
@@ -8035,6 +8034,548 @@ export const EmployeeTargetReport: GridColDef[] = [
     flex: 1,
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+];
+export const MutualFundList: GridColDef[] = [
+  {
+    field: "fundName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "aumCr",
+    headerName: "AUM (Cr)",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "minSIP",
+    headerName: "Min SIP (₹)",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "minLumpSum",
+    headerName: "Min Lump Sum (₹)",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+  },
+  {
+    field: "returns",
+    headerName: "Returns (%)",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 100,
+  },
+];
+export const MutualFundOrder: GridColDef[] = [
+  {
+    field: "fundName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "aumCr",
+    headerName: "Status",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "minSIP",
+    headerName: "Order Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "minLumpSum",
+    headerName: "Folio Number",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+  },
+  {
+    field: "returns",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 100,
+  },
+  {
+    field: "",
+    headerName: "Remarks",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 100,
+  },
+];
+
+export const MutualFundName: GridColDef[] = [
+  {
+    field: "fundName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+];
+export const OrderTransaction: GridColDef[] = [
+  {
+    field: "security",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "transactionPrice",
+    headerName: "Transaction Price",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "quantity",
+    headerName: "Quantity",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+];
+export const OrderOngoingSip: GridColDef[] = [
+  {
+    field: "reedosName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "startDate",
+    headerName: "SIP Date",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+];
+export const OrderUpcomingSip: GridColDef[] = [
+  {
+    field: "reedosName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "startDate",
+    headerName: "Due Date",
+    disableColumnMenu: true,
+    flex: 2, // larger space since names are long
+    minWidth: 200,
+  },
+];
+export const MfPortfolio: GridColDef[] = [
+  {
+    field: "reedosName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3, // larger space since names are long
+    minWidth: 200,
+  },
+  {
+    field: "investedAmount",
+    headerName: "Invested Amount",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+    renderCell: (params: any) => {
+      const value = params.value;
+      return value?.toLocaleString("en-IN");
+    },
+  },
+
+  {
+    field: "currentValue",
+    headerName: "Current Amount",
+    disableColumnMenu: true,
+    flex: 1, // larger space since names are long
+    minWidth: 120,
+    renderCell: (params: any) => {
+      const value = params.value;
+      return value?.toLocaleString("en-IN");
+    },
+  },
+  {
+    field: "xirr",
+    headerName: " XIRR Returns",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 80,
+  },
+  // {
+  //   field: "action",
+  //   headerName: "Action",
+  //   disableColumnMenu: true,
+  //   flex: 2,
+  //   minWidth: 150,
+  // },
+];
+
+export const MandateColumns: GridColDef[] = [
+  {
+    field: "mandateId",
+    headerName: "Mandate ID",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "right",
+    align: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 280,
+    headerAlign: "center",
+  },
+  {
+    field: "mandateType",
+    headerName: "Mandate Type",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "collectionType",
+    headerName: "Collection Type",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "bankName",
+    headerName: "Bank Name",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "bankAccNo",
+    headerName: "Bank A/C No",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "bankBranch",
+    headerName: "Bank Branch",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 250,
+    headerAlign: "center",
+  },
+  {
+    field: "umrnNo",
+    headerName: "UMRN No",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 220,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "regnDate",
+    headerName: "Regn Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "approvedDate",
+    headerName: "Approved Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "uploadDate",
+    headerName: "Upload Date",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+  },
+];
+
+export const NFOList: GridColDef[] = [
+  {
+    field: "schemeName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 4,
+    minWidth: 250,
+    renderCell: (params) => (
+      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <img
+          src={params.row.amcIcon}
+          alt={params.row.amcName}
+          style={{ width: "32px", height: "32px", objectFit: "contain" }}
+        />
+        <div style={{ fontWeight: 500 }}>{params.row.schemeName}</div>
+      </div>
+    ),
+  },
+  {
+    field: "nfoFaceValue",
+    headerName: "NAV",
+    disableColumnMenu: true,
+    flex: 0.5,
+    minWidth: 70,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params) => (
+      <div>₹{Number(params.row.nfoFaceValue).toFixed(2)}</div>
+    ),
+  },
+  {
+    field: "launchDate",
+    headerName: "Launch Date",
+    disableColumnMenu: true,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    minWidth: 80,
+    valueFormatter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
+    },
+  },
+  {
+    field: "closingDate",
+    headerName: "Closing Date",
+    disableColumnMenu: true,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    minWidth: 80,
+    valueFormatter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
+    },
+  },
+];
+
+export const RecommendationList: GridColDef[] = [
+  {
+    field: "schemeName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 3,
+    minWidth: 250,
+    renderCell: (params) => (
+      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <img
+          src={params.row.amcIcon}
+          alt="AMC"
+          style={{ width: "32px", height: "32px", objectFit: "contain" }}
+        />
+        <div style={{ fontWeight: 500 }}>{params.row.schemeName}</div>
+      </div>
+    ),
+  },
+  {
+    field: "category",
+    headerName: "Category",
+    flex: 1.5,
+    minWidth: 160,
+    renderCell: (params) => (
+      <span style={{ fontSize: "13px" }}>
+        {params.row.category?.split("|")[1]?.trim() || "-"}
+      </span>
+    ),
+  },
+  {
+    field: "sipMinimum",
+    headerName: "Min. SIP",
+    align: "center",
+    headerAlign: "center",
+    flex: 1,
+    minWidth: 100,
+    renderCell: (params) => (
+      <span>₹{Number(params.row.sipMinimum || 0).toLocaleString()}</span>
+    ),
+  },
+  {
+    field: "aum",
+    headerName: "AUM (Cr)",
+    align: "center",
+    headerAlign: "center",
+    flex: 1,
+    minWidth: 100,
+    renderCell: (params) => (
+      <span>₹{Number(params.row.aum || 0).toLocaleString()}</span>
+    ),
+  },
+  {
+    field: "investmentAmount",
+    headerName: "Min. Lump",
+    align: "center",
+    headerAlign: "center",
+    flex: 1,
+    minWidth: 120,
+    renderCell: (params) => (
+      <span>₹{Number(params.row.investmentAmount || 0).toLocaleString()}</span>
+    ),
+  },
+  {
+    field: "oneWeek",
+    headerName: "1W Returns",
+    align: "center",
+    headerAlign: "center",
+    flex: 1,
+    minWidth: 100,
+    renderCell: (params) => {
+      const val = parseFloat(params.row.oneWeek);
+      const isNegative = val < 0;
+      return (
+        <span style={{ color: isNegative ? "red" : "green" }}>
+          {val.toFixed(2)}%
+        </span>
+      );
+    },
+  },
+];
+
+export const MutualFundOrderColumns: GridColDef[] = [
+  {
+    field: "schemeName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 200,
+  },
+  {
+    field: "successFlag",
+    headerName: "Status",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "startDate",
+    headerName: "Order Date",
+    disableColumnMenu: true,
+    flex: 1.5,
+    minWidth: 180,
+  },
+  // {
+  //   field: "clientCode",
+  //   headerName: "Folio Number",
+  //   disableColumnMenu: true,
+  //   flex: 1,
+  //   minWidth: 150,
+  // },
+  {
+    field: "amount",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "remarks",
+    headerName: "Remarks",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "memberCode",
+    headerName: "Member Code",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
     headerAlign: "center",
     align: "center",
   },

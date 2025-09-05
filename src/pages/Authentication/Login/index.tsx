@@ -54,6 +54,7 @@ const LoginPage = () => {
     localStorage.removeItem("activeSubItem");
     localStorage.removeItem("userName");
     localStorage.removeItem("AdminId");
+    localStorage.removeItem("mfToken");
     localStorage.removeItem("persist:root");
     localStorage.clear();
     sessionStorage.clear();

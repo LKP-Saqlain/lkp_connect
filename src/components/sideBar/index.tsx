@@ -94,6 +94,8 @@ import InvoiceUpload from "../../pages/ThirdParty/Upload";
 import InvoiceVerify from "../../pages/ThirdParty/Verify";
 import InvoiceMail from "../../pages/ThirdParty/Mail";
 import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
+// import PledgeHolding from "../../pages/RMS/PledgeHoldings";
+import MutualFundIndex from "../../pages/MutualFund";
 import MtfComponent from "../../pages/RMS/Mtf";
 import UnpledgeRequest from "../../pages/UnpledgeRequest";
 // import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
@@ -692,7 +694,12 @@ const SideBar = () => {
   // };
 
   const complianceSubItems: Record<string, JSX.Element> = {
-    // "UCCCode MATCH": <UnpledgeRequest activeSubItem={activeSubItem} />,
+    // "UCCCode MATCH": (
+    //   <MutualFundIndex
+    //     activeSubItem={activeSubItem}
+    //     // activeMenu={activeMenu}
+    //   />
+    // ),
     "Communication Retrival Entry": <CommEntry activeSubItem={activeSubItem} />,
     "Communication Retrival Checker": (
       <ComChecker activeSubItem={activeSubItem} />
@@ -799,6 +806,12 @@ const SideBar = () => {
       8: () => getSubItemComponent(complianceSubItems),
       9: () => getSubItemComponent(kycSubItems),
       10: () => <StockStudy />,
+      14: () => (
+        <MutualFundIndex
+          activeSubItem={activeSubItem}
+          // activeMenu={activeMenu}
+        />
+      ),
       21: () => <RegulatorAnnouncement activeMenu={activeMenu} />,
       22: () => <MarketingMaterial />,
       23: () => <EkycLinks />,

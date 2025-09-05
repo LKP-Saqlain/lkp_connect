@@ -1,6 +1,7 @@
 // /src/services/baseInstance.ts
 import axios from "axios";
 import { endpoints } from "./endpoints";
+import { getDecryptedValue } from "../utils/loocalEncrypt";
 
 // Load environment variables
 const {
@@ -10,6 +11,9 @@ const {
   VITE_BASIC_AUTH_PASSOWORD,
   VITE_FUNDAMENTAL_USERNAME,
   VITE_FUNDAMENTAL_PASSWORD,
+  // VITE_MF_USERNAME,
+  // VITE_MF_PASSWORD,
+  // VITE_MF_SECRETKEY,
 } = import.meta.env;
 
 // Axios instance
@@ -33,6 +37,12 @@ const privateAuthHeader = createBasicAuthHeader(
   VITE_FUNDAMENTAL_USERNAME,
   VITE_FUNDAMENTAL_PASSWORD
 );
+
+// const mfAuthHeader = createBasicAuthHeader(
+//   VITE_MF_USERNAME,
+//   VITE_MF_PASSWORD
+//   // VITE_MF_SECRETKEY
+// );
 
 // Lists of endpoints
 const publicEndpoints = [
@@ -73,6 +83,25 @@ const multipartEndpoints = [
   endpoints.MergeIntoSymphonyFile,
 ];
 
+const mutualFundEndpoints = [
+  endpoints.MF_SchemeDetails,
+  endpoints.BSEStar_MfMandateStatus,
+  endpoints.MF_OngoingSIP,
+  endpoints.MF_PortfolioStatementReport,
+  endpoints.MF_TransactionReport,
+  endpoints.MF_NFODetails,
+  endpoints.ClientProfile,
+  endpoints.MF_BasketDetialedList,
+  endpoints.VerifyUpi,
+  endpoints.MF_FundOverView,
+  endpoints.BSEStar_SinglePayment,
+  endpoints.BSEStar_MfOrderEntry,
+  endpoints.BSEStar_XSIPOrderEntry,
+  endpoints.BSEStar_MfMandateStatus,
+  endpoints.BSEStar_MfMandateEntry,
+  endpoints.MF_TodayOrders,
+];
+
 // Utility functions
 const isEndpointMatched = (url: string | undefined, endpoints: string[]) =>
   !!url && endpoints.some((ep) => url.includes(ep));
@@ -81,17 +110,24 @@ const isEndpointMatched = (url: string | undefined, endpoints: string[]) =>
 baseInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("tkn");
+    const mfToken = getDecryptedValue("mfToken");
+    // const mfToken = localStorage.getItem("mfToken");
+    // const mfToken =
+    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyX3R5cGUiOiJWZW5kb3IiLCJMb2dpbmlkIjoibWlsbGljZW50IiwiU2VjcmV0S2V5IjoibXRpdnNtJkdEeTYkNDA5Z3U2N0AzaGRZbWIiLCJFbmNyeXB0aW9uS2V5IjoibWlsbHNtQEdEeTYkNDA5Z3U2NyYzaGRZIiwiQ2xpZW50Q29kZSI6Ijk4OTAzIiwiZXhwIjoxNzU3MDY5MDI3LCJpc3MiOiJodHRwczovL2xvY2FsaG9zdDo3MTk0IiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NzE5NCJ9.X5sTEa5BpL5P1qgjON917rB7VK3TRst40ZHCKMPlVxs";
     const url = config.url;
 
     const isFundamental = isEndpointMatched(url, fundamentalEndpoints);
     const isPublic = isEndpointMatched(url, publicEndpoints);
     const isPdfRequest = isEndpointMatched(url, pdfDownloadEndpoints);
     const isMultipart = isEndpointMatched(url, multipartEndpoints);
+    const isMutualFund = isEndpointMatched(url, mutualFundEndpoints);
 
     // Set baseURL and authorization
     config.baseURL = isFundamental ? VITE_FUNDAMENTAL_URL : VITE_BASE_URL;
     config.headers.Authorization = isFundamental
       ? privateAuthHeader
+      : isMutualFund
+      ? `Bearer ${mfToken}`
       : isPublic || !token
       ? publicAuthHeader
       : `Bearer ${token}`;
