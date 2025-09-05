@@ -731,6 +731,9 @@ export const apiServices = {
   ClientProfile: async () => {
     return await apiService("GET", endpoints.ClientProfile);
   },
+  MF_TodayOrders: async () => {
+    return await apiService("GET", endpoints.MF_TodayOrders);
+  },
   MF_SchemeDetails: async (payload: any) => {
     return await apiService("POST", endpoints.MF_SchemeDetails, payload);
   },

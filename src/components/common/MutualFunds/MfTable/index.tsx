@@ -7,6 +7,7 @@ import {
   MfPortfolio,
   RecommendationList,
   NFOList,
+  MutualFundOrderColumns,
 } from "../../../../helper/tableColumns";
 import { MutualFundProps } from "../../../../pages/MutualFund/mfTypes";
 import { Button } from "@mui/material";
@@ -110,6 +111,13 @@ const MutualFundTable = ({
       }));
     } else if (selectedLabel === "Ongoing SIP") {
       return OrderOngoingSip.map((column) => ({
+        ...column,
+      }));
+    } else if (
+      selectedLabel &&
+      ["Completed", "In Process", "Failed"].includes(selectedLabel)
+    ) {
+      return MutualFundOrderColumns.map((column) => ({
         ...column,
       }));
     } else {

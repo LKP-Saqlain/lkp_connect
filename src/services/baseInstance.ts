@@ -94,6 +94,7 @@ const mutualFundEndpoints = [
   endpoints.BSEStar_XSIPOrderEntry,
   endpoints.BSEStar_MfMandateStatus,
   endpoints.BSEStar_MfMandateEntry,
+  endpoints.MF_TodayOrders,
 ];
 
 // Utility functions

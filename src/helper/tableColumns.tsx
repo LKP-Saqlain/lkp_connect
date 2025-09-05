@@ -8070,3 +8070,48 @@ export const RecommendationList: GridColDef[] = [
     },
   },
 ];
+
+export const MutualFundOrderColumns: GridColDef[] = [
+  {
+    field: "schemeName",
+    headerName: "Fund Name",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 200,
+  },
+  {
+    field: "successFlag",
+    headerName: "Status",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "startDate",
+    headerName: "Order Date",
+    disableColumnMenu: true,
+    flex: 1.5,
+    minWidth: 180,
+  },
+  {
+    field: "clientCode",
+    headerName: "Folio Number",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+  },
+  {
+    field: "remarks",
+    headerName: "Remarks",
+    disableColumnMenu: true,
+    flex: 3,
+    minWidth: 300,
+  },
+];
