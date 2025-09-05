@@ -57,7 +57,7 @@ const MfinfoCard = ({ funds, CardType, handleSelectedMutualFund }: any) => {
                     Min. SIP
                   </div>
                   <div style={{ fontWeight: "600", fontSize: "14px" }}>
-                    {fund.minSIP}
+                    {fund.sipMinimum}
                   </div>
                 </Col>
                 <Col>
@@ -65,7 +65,7 @@ const MfinfoCard = ({ funds, CardType, handleSelectedMutualFund }: any) => {
                     AUM (Cr)
                   </div>
                   <div style={{ fontWeight: "600", fontSize: "14px" }}>
-                    {fund.aumCr.toLocaleString()}
+                    {fund.aum}
                   </div>
                 </Col>
                 <Col>
@@ -73,21 +73,31 @@ const MfinfoCard = ({ funds, CardType, handleSelectedMutualFund }: any) => {
                     Min Lump
                   </div>
                   <div style={{ fontWeight: "600", fontSize: "14px" }}>
-                    {fund.minLumpSum.toLocaleString()}
+                    {fund.lumpsumMinimum || "N.A."}
                   </div>
                 </Col>
                 <Col>
                   <div style={{ fontSize: "12px", color: "#777" }}>
-                    1W Returns
+                    1Y Returns
                   </div>
                   <div
                     style={{
                       fontWeight: "600",
-                      color: fund.oneWeekReturn >= 0 ? "green" : "red",
+                      color:
+                        fund.oneYear == null
+                          ? ""
+                          : fund.oneYear > 0
+                          ? "green"
+                          : "red",
                       fontSize: "14px",
                     }}
                   >
-                    {fund.oneWeekReturn}%
+                    {fund.oneYear != null
+                      ? `${new Intl.NumberFormat("en-IN", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }).format(fund.oneYear)}%`
+                      : "N.A."}
                   </div>
                 </Col>
               </Row>

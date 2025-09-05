@@ -1,11 +1,12 @@
 import { Col, Row, Card } from "reactstrap";
 import SipCalculator from "./sipCalculator";
-import { mutualFundCards } from "../mfTypes";
 import BasicTabs from "../../../components/common/MutualFunds/NavTabs";
 import MfCards from "../../../components/common/MutualFunds/MfCards";
 import {
   MfCardRecoLabel,
   MfCardPassLabel,
+  popularTabList,
+  assetClassTabList,
 } from "../../../pages/MutualFund/mfTypes";
 import MfinfoCard from "../../../components/common/MutualFunds/MfInfoCard";
 import { useEffect, useState } from "react";
@@ -16,29 +17,30 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 
 const MfDiscover = ({ onSelectFund }: any) => {
-  const [assetTab, setAssetTab] = useState(0);
   const [popularTab, setPopularTab] = useState("Large Cap");
   const [popularTabOrder, setPopularTabOrder] = useState(0);
   const [selectedMfType, setSelectedMfType] = useState("");
   const [popularCategorydata, setPopularCategorydata] = useState<any[]>([]);
+  const [assetTab, setAssetTab] = useState("Equity");
+  const [assetTabOrder, setAssetTabOrder] = useState(0);
+  const [assetClassData, setAssetClassData] = useState<any[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
-  const tabList = [
-    { label: "Large Cap" },
-    { label: "ELSS" },
-    { label: "Small Cap" },
-    { label: "Mid Cap" },
-    // { label: "Others" },
-  ];
+
   useEffect(() => {
     console.log(onSelectFund, "discover onSelectFund");
   }, []);
 
-  const productTypeMap: Record<string, number> = {
+  const productTypeMap: Record<string, any> = {
     "Large Cap": 14,
     ELSS: 20,
     "Small Cap": 16,
     "Mid Cap": 15,
+    Equity: "Equity Schemes",
+    Debt: "Debt Schemes",
+    Hybrid: "Hybrid Schemes",
+    Solution: "Solution-Oriented Schemes",
+    Others: "Others Schemes",
   };
 
   useEffect(() => {
@@ -85,6 +87,37 @@ const MfDiscover = ({ onSelectFund }: any) => {
     }
   }, [dispatch, popularTab]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(showLoader("Please wait, we are processing your request..."));
+      const assetName = productTypeMap[assetTab];
+      try {
+        const response = await apiServices.MF_FundOverView({
+          pageNumber: 1,
+          pageSize: 5,
+          searchKey: "",
+          schemeCode: 0,
+          sipMinimum: "",
+          lumpsumMinimum: "",
+          riskCategory: "",
+          assetClass: assetName,
+          schemeCategory: "",
+          encryptionKey: "",
+        });
+
+        const fundOverviewData = response?.data?.data;
+        setAssetClassData(fundOverviewData || []);
+        console.log(fundOverviewData, "fundOverviewData AssetClass");
+      } catch (err: any) {
+        console.error("Error fetching fund overview:", err.message);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+
+    fetchData();
+  }, [dispatch, assetTab]);
+
   const handleSelectedMfType = (MfType: string) => {
     setSelectedMfType(MfType);
     console.log("selectedMfType", MfType);
@@ -98,10 +131,18 @@ const MfDiscover = ({ onSelectFund }: any) => {
   };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    const label = tabList[newValue]?.label;
+    const label = popularTabList[newValue]?.label;
     setPopularTab(label);
     setPopularTabOrder(newValue);
     console.log("Selected Tab:", label, "Index:", newValue);
+  };
+  const handleAssetTabChange = (
+    _event: React.SyntheticEvent,
+    newValue: number
+  ) => {
+    const label = assetClassTabList[newValue]?.label;
+    setAssetTab(label);
+    setAssetTabOrder(newValue);
   };
 
   return (
@@ -129,7 +170,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
           >
             <BasicTabs
               heading="Popular Category"
-              tabs={tabList}
+              tabs={popularTabList}
               value={popularTabOrder}
               onChange={handleTabChange}
             />
@@ -172,18 +213,18 @@ const MfDiscover = ({ onSelectFund }: any) => {
             >
               <BasicTabs
                 heading="Asset Class"
-                tabs={[
-                  { label: "Equity" },
-                  { label: "Debt" },
-                  { label: "Hybrid" },
-                  { label: "Solution" },
-                  { label: "Others" },
-                ]}
-                value={assetTab}
-                onChange={(_e, newValue) => setAssetTab(newValue)}
+                tabs={assetClassTabList}
+                value={assetTabOrder}
+                onChange={handleAssetTabChange}
               />
-
-              {assetTab === 0 && (
+              {assetClassData.length > 0 && (
+                <MfinfoCard
+                  CardType="Asset Class"
+                  funds={assetClassData}
+                  handleSelectedMutualFund={handleSelectedMutualFund}
+                />
+              )}
+              {/* {assetTab === 0 && (
                 <MfinfoCard
                   CardType="Asset Class"
                   funds={mutualFundCards.equity}
@@ -197,6 +238,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
                   handleSelectedMutualFund={handleSelectedMutualFund}
                 />
               )}
+
               {assetTab === 2 && (
                 <MfinfoCard
                   CardType="Asset Class"
@@ -217,7 +259,7 @@ const MfDiscover = ({ onSelectFund }: any) => {
                   funds={mutualFundCards.others}
                   handleSelectedMutualFund={handleSelectedMutualFund}
                 />
-              )}
+              )} */}
             </Card>
 
             {/* Passive & Product Cards */}

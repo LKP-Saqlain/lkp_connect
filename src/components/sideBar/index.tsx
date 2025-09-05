@@ -281,11 +281,11 @@ const SideBar = () => {
           console.log("Error->", message);
           dispatch(hideLoader());
           // formik.setFieldError("password", message);
-          ShowToast(
-            "error",
-            message ||
-              "Sorry for the inconvenience, please try after some time."
-          );
+          // ShowToast(
+          //   "error",
+          //   message ||
+          //     "Sorry for the inconvenience, please try after some time."
+          // );
         })
         .finally(() => {
           dispatch(hideLoader());

@@ -68,6 +68,21 @@ export const MfCardPassLabel = [
   },
   // { id: "2", label: "Tax Savings", icon: <PaidRoundedIcon /> },
 ];
+export const popularTabList = [
+  { label: "Large Cap" },
+  { label: "ELSS" },
+  { label: "Small Cap" },
+  { label: "Mid Cap" },
+  // { label: "Others" },
+];
+
+export const assetClassTabList = [
+  { label: "Equity" },
+  { label: "Debt" },
+  { label: "Hybrid" },
+  { label: "Solution" },
+  { label: "Others" },
+];
 
 export const mainMenu = [
   {
