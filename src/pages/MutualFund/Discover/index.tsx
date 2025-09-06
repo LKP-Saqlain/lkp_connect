@@ -120,7 +120,7 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
     };
 
     fetchData();
-  }, [dispatch, assetTab]);
+  }, [dispatch, assetTab, hasToken]);
 
   const handleSelectedMfType = (MfType: string) => {
     setSelectedMfType(MfType);

@@ -8570,13 +8570,13 @@ export const MutualFundOrderColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
-  {
-    field: "memberCode",
-    headerName: "Member Code",
-    disableColumnMenu: true,
-    flex: 1,
-    minWidth: 150,
-    headerAlign: "center",
-    align: "center",
-  },
+  // {
+  //   field: "memberCode",
+  //   headerName: "Member Code",
+  //   disableColumnMenu: true,
+  //   flex: 1,
+  //   minWidth: 150,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
 ];

@@ -37,7 +37,7 @@ const MutualFundModal = ({
   const [sipDate, setSipDate] = useState<number | null>(null);
   const [dateSelected, setDateSelected] = useState<number | null>(null);
   const [upiId, setUpiId] = useState("");
-  const [upiVerified, setUpiVerified] = useState(false);
+  const [upiVerified, setUpiVerified] = useState<boolean>();
   const [email, setEmail] = useState("");
   const [mobileNo, setMobileNo] = useState("");
   const [clientNo, setClientNo] = useState("");
@@ -66,7 +66,7 @@ const MutualFundModal = ({
       setSipDate(null);
       setDateSelected(null);
       setUpiId("");
-      setUpiVerified(false);
+      setUpiVerified(undefined);
     }
     console.log(bseSchemeCode, "bseSchemeCode");
   }, [isOpen]);
@@ -232,7 +232,7 @@ const MutualFundModal = ({
     } catch (err) {
       console.error("Investment failed", err);
 
-      setUpiVerified(false);
+      setUpiVerified(undefined);
     } finally {
       dispatch(hideLoader());
     }
@@ -296,7 +296,7 @@ const MutualFundModal = ({
     } catch (error) {
       console.error("Error verifying UPI ID:", error);
 
-      setUpiVerified(false);
+      setUpiVerified(undefined);
     } finally {
       dispatch(hideLoader());
     }
@@ -693,6 +693,7 @@ const MutualFundModal = ({
                           padding: "6px 10px",
                           fontSize: "14px",
                           backgroundColor: upiVerified ? "#f5f5f5" : "#fff", // light grey if disabled
+                          border: upiVerified === false ? "1px solid red" : "",
                         },
                       }}
                       sx={{

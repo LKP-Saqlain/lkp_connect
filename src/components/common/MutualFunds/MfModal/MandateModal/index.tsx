@@ -30,12 +30,12 @@ const CreateMandateModal = ({
   upiId,
   mandate,
 }: any) => {
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(0);
   const [newMandateId, setNewMandateId] = useState("");
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    setAmount("");
+    setAmount(0);
   }, [toggle]);
 
   const createMandates = async () => {
@@ -44,7 +44,7 @@ const CreateMandateModal = ({
     const payload: any = {
       flag: selectedPaymentType === "upi" ? "19" : "06",
       clientCode: clientNo,
-      amount: amount,
+      amount: amount.toString(),
       mandateType: "N",
       accountNo: selectedBank.account,
       accountType: "SB",
@@ -120,9 +120,19 @@ const CreateMandateModal = ({
             type="number"
             id="amountInput"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              const maxLimit = selectedPaymentType === "UPI" ? 15000 : 100000;
+              if (val <= maxLimit) {
+                setAmount(val);
+              } else {
+                // optionally ignore or set to maxLimit
+                setAmount(maxLimit);
+              }
+            }}
             placeholder="Enter amount"
             style={{ marginBottom: "12px", maxWidth: "200px" }}
+            min={5000}
           />
         </FormGroup>
       </ModalBody>

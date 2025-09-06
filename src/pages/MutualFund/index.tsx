@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BasicTabs from "../../components/common/MutualFunds/NavTabs";
 import { mainMenu } from "../../pages/MutualFund/mfTypes";
 import { Card, Container } from "reactstrap";
@@ -22,6 +22,12 @@ const MutualFundIndex = (activeSubItem: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleBack = () => setSelectedMutualFund("");
+
+  const mfToken = "mfToken";
+  useEffect(() => {
+    console.log("everry time hit");
+    localStorage.removeItem(mfToken);
+  }, []);
 
   const handleSubmit = async () => {
     // setClientCode("");
