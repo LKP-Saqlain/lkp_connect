@@ -30,12 +30,15 @@ const CreateMandateModal = ({
   upiId,
   mandate,
 }: any) => {
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(
+    // selectedPaymentType === "upi" ? 15000 : 100000
+    0
+  );
   const [newMandateId, setNewMandateId] = useState("");
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    setAmount(0);
+    setAmount(selectedPaymentType === "upi" ? 15000 : 100000);
   }, [toggle]);
 
   const createMandates = async () => {
@@ -122,7 +125,7 @@ const CreateMandateModal = ({
             value={amount}
             onChange={(e) => {
               const val = Number(e.target.value);
-              const maxLimit = selectedPaymentType === "UPI" ? 15000 : 100000;
+              const maxLimit = selectedPaymentType === "upi" ? 15000 : 100000;
               if (val <= maxLimit) {
                 setAmount(val);
               } else {

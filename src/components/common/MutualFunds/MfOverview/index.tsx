@@ -176,7 +176,7 @@ const MfOverview = ({ schemeCode, onBack }: any) => {
                     setOpen(true);
                   }}
                 >
-                  One Time
+                  Lumpsum
                 </button>
 
                 {/* Start SIP */}

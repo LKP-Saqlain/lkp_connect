@@ -346,3 +346,33 @@ export const mutualFundRows = [
     returns: 15.2,
   },
 ];
+export const getNextPaymentDateString = (day: string | number) => {
+  const today = new Date();
+  const selectedDay = Number(day);
+
+  // Move to next month
+  const nextMonth = new Date(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    selectedDay
+  );
+
+  const month = nextMonth.toLocaleString("default", { month: "long" }); // e.g., "October"
+  const year = nextMonth.getFullYear();
+
+  return `${selectedDay}${getDaySuffix(selectedDay)} ${month}, ${year} `;
+};
+
+const getDaySuffix = (day: number) => {
+  if (day >= 11 && day <= 13) return "th";
+  switch (day % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
+  }
+};

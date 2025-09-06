@@ -31,7 +31,10 @@ const MfAreaChart: React.FC<ApexChartProps> = ({
       id: "area-datetime",
       type: "area",
       height,
-      zoom: { autoScaleYaxis: true },
+      zoom: {
+        enabled: false, // 🔒 disable zoom including scroll
+        // autoScaleYaxis: true,
+      },
     },
     colors: ["#2d8a0b"], // ✅ custom line color
     dataLabels: { enabled: false },

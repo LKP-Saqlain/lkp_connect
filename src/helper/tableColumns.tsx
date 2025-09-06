@@ -8238,7 +8238,7 @@ export const MfPortfolio: GridColDef[] = [
   },
   {
     field: "xirr",
-    headerName: " XIRR Returns",
+    headerName: "XIRR Returns",
     disableColumnMenu: true,
     flex: 1,
     minWidth: 80,

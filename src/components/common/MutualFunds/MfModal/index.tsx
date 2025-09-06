@@ -20,6 +20,7 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import BankCard from "../../BankRadio";
 import ShowToast from "../../../../utils/toastUtils";
+import { getNextPaymentDateString } from "../../../../helper/commmon";
 
 const MutualFundModal = ({
   isOpen,
@@ -310,8 +311,7 @@ const MutualFundModal = ({
     <>
       <Modal isOpen={isOpen} toggle={toggle} centered size="lg">
         <ModalHeader toggle={toggle}>
-          {title} -{" "}
-          {modalType === "oneTime" ? "Lumpsum Investment" : "Start SIP"}
+          {title} - {modalType === "oneTime" ? "Lumpsum " : " SIP"}
         </ModalHeader>
 
         <ModalBody>
@@ -461,7 +461,7 @@ const MutualFundModal = ({
               {/* SIP Amount Section */}
               <div style={{ flex: 1 }}>
                 <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
-                  Enter an SIP Amount (Minimum Rs. 500)
+                  Enter an SIP Amount
                 </Label>
 
                 <TextField
@@ -742,16 +742,16 @@ const MutualFundModal = ({
         </ModalBody>
 
         <ModalFooter>
-          {/* {modalType === "sip" && (
+          {modalType === "sip" && dateSelected && (
             <div style={{ flex: 1, fontSize: "13px", color: "#666" }}>
               <div>
                 1st Payment: <b>Today</b>
               </div>
               <div>
-                Next Payment: <b>28th May, 2025 (hardcore)</b>
+                Next Payment: <b>{getNextPaymentDateString(dateSelected)}</b>
               </div>
             </div>
-          )} */}
+          )}
 
           <Button color="secondary" onClick={toggle}>
             Cancel

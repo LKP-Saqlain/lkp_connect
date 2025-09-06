@@ -60,45 +60,45 @@ const MfPortfolio = ({ hasToken }: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    let payload = {
-      loginUserMasterID: 0,
-      clientMasterID: 0,
-      fromDate: "",
-      toDate: "",
-      assetClassID: 86,
-      assetClassIDs: "",
-      asOnDateTime: "2024-08-08",
-      fromDateTime: "2000-01-01",
-      toDateTime: "2025-09-01",
-      asOnDate: "2025-09-01",
-      reportID: 0,
-      portfolioID: 1,
-      withIndexation: false,
-      type: "",
-      isHtml: false,
-      securityName: "",
-      securityType: "",
-      isin: "",
-      panGroup: 0,
-      foliowise: true,
-      arnFilter: "",
-      sumid: "",
-      configAssetClassID: 0,
-      configTableID: "3,9,10,11",
-      reportName: "",
-      configPageID: 0,
-      displayAsOnDate: true,
-      displayFromDate: false,
-      displayToDate: false,
-    };
+    const fetchPortfolioData = async () => {
+      dispatch(showLoader("Please wait!!..."));
 
-    dispatch(showLoader(""));
-    apiServices
-      .MF_PortfolioStatementReport(payload)
-      .then((res) => {
+      const payload = {
+        loginUserMasterID: 0,
+        clientMasterID: 0,
+        fromDate: "",
+        toDate: "",
+        assetClassID: 86,
+        assetClassIDs: "",
+        asOnDateTime: "2024-08-08",
+        fromDateTime: "2000-01-01",
+        toDateTime: "2025-09-01",
+        asOnDate: "2025-09-01",
+        reportID: 0,
+        portfolioID: 1,
+        withIndexation: false,
+        type: "",
+        isHtml: false,
+        securityName: "",
+        securityType: "",
+        isin: "",
+        panGroup: 0,
+        foliowise: true,
+        arnFilter: "",
+        sumid: "",
+        configAssetClassID: 0,
+        configTableID: "3,9,10,11",
+        reportName: "",
+        configPageID: 0,
+        displayAsOnDate: true,
+        displayFromDate: false,
+        displayToDate: false,
+      };
+
+      try {
+        const res = await apiServices.MF_PortfolioStatementReport(payload);
+
         if (res?.status === 200) {
-          dispatch(hideLoader());
-          console.log("testt", res?.data?.data?.dataBucket?.r3);
           const records =
             res?.data?.data?.dataBucket?.r3?.map(
               (item: any, index: number) => ({
@@ -109,14 +109,18 @@ const MfPortfolio = ({ hasToken }: any) => {
 
           const r1 = res?.data?.data?.dataBucket?.r1?.[0] || null; // ✅ take first r1 record
           setPortfolioSummary(r1);
-
           setPortfolioData(records);
-          dispatch(hideLoader());
         }
-      })
-      .catch((error) => {
-        console.log("ERROR", error);
-      });
+      } catch (error) {
+        console.error("ERROR", error);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+
+    if (hasToken) {
+      fetchPortfolioData();
+    }
   }, [dispatch, hasToken]);
 
   return (
