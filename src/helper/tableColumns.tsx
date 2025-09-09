@@ -7877,8 +7877,8 @@ export const EmployeeTargetReport: GridColDef[] = [
     align: "right",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2,
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       }).format(params),
   },
   {
@@ -7906,8 +7906,8 @@ export const EmployeeTargetReport: GridColDef[] = [
     align: "right",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2,
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       }).format(params),
   },
   {
@@ -7920,7 +7920,7 @@ export const EmployeeTargetReport: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
         params
       ),
   },
@@ -7933,6 +7933,38 @@ export const EmployeeTargetReport: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).format(params),
+  },
+  {
+    field: "perRevAch",
+    headerName: " % Revenue Achieved ",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    renderCell: (params: any) => {
+      const value1 = params.row?.totalRevnAchieved || 0;
+      const value2 = params.row?.totalRevnTarget || 0;
+
+      // Convert to numbers
+      const num1 = parseFloat(value1) || 0;
+      const num2 = parseFloat(value2) || 0;
+
+      // Calculate percentage safely (avoid division by zero)
+      const percentage = num2 !== 0 ? (num1 / num2) * 100 : 0;
+
+      // Optionally round to 2 decimals
+      const percentageRounded = Math.round(percentage * 100) / 100;
+
+      console.log("percentageRounded", percentageRounded);
+      return `${percentageRounded}%`;
+    },
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
         maximumFractionDigits: 2,
@@ -7993,8 +8025,8 @@ export const EmployeeTargetReport: GridColDef[] = [
     align: "right",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2,
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       }).format(params),
   },
   {
