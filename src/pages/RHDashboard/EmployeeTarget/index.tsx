@@ -13,7 +13,7 @@ import {
   Row,
 } from "reactstrap";
 import DataTable from "../../../components/common/UserInfoTable";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { useFormik } from "formik";
 import ShowToast from "../../../utils/toastUtils";
 import Select from "react-select";
@@ -26,6 +26,10 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
     (state: RootState) => state.UserLogin?.data?.data
   );
 
+  const { accessType } = useSelector(
+    (state: RootState) => state.AuthUser?.data?.data
+  );
+
   interface OptionType {
     value: string;
     label: string;
@@ -36,15 +40,15 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
     selectedZone: OptionType | null;
   }
 
-  const validationSchema = Yup.object({
-    selectedZone: Yup.object().nullable().required("Zone is required"),
-  });
+  // const validationSchema = Yup.object({
+  //   selectedZone: Yup.object().nullable().required("Zone is required"),
+  // });
 
   const formik = useFormik<FormValues>({
     initialValues: {
       selectedZone: null,
     },
-    validationSchema,
+    // validationSchema,
     onSubmit: (values) => {
       // Only called if no validation errors
       console.log("values1-->", values);
@@ -173,56 +177,58 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
           <CardBody>
             <form onSubmit={formik.handleSubmit}>
               <div>
-                <Row>
-                  <Col xl={3}>
-                    <div className="mb-3" style={{ maxWidth: "300px" }}>
-                      <Label
-                        htmlFor="zone-select"
-                        className="form-label text-muted label-font"
-                      >
-                        Zone
-                      </Label>
-                      <Select
-                        value={formik.values.selectedZone}
-                        onChange={(option: any) =>
-                          formik.setFieldValue("selectedZone", option)
-                        }
-                        onBlur={formik.handleBlur}
-                        options={noSortingGroup}
-                        isClearable
-                        className="placeholder-font"
-                        id="zone-select"
-                        styles={{
-                          control: (base: any) => ({
-                            ...base,
-                            cursor: "pointer",
-                            borderColor:
-                              formik.touched.selectedZone &&
-                              formik.errors.selectedZone
-                                ? "#DC4535"
-                                : base.borderColor,
-                            "&:hover": {
+                {accessType === "ALL" && (
+                  <Row>
+                    <Col xl={3}>
+                      <div className="mb-3" style={{ maxWidth: "300px" }}>
+                        <Label
+                          htmlFor="zone-select"
+                          className="form-label text-muted label-font"
+                        >
+                          Zone
+                        </Label>
+                        <Select
+                          value={formik.values.selectedZone}
+                          onChange={(option: any) =>
+                            formik.setFieldValue("selectedZone", option)
+                          }
+                          onBlur={formik.handleBlur}
+                          options={noSortingGroup}
+                          isClearable
+                          className="placeholder-font"
+                          id="zone-select"
+                          styles={{
+                            control: (base: any) => ({
+                              ...base,
+                              cursor: "pointer",
                               borderColor:
                                 formik.touched.selectedZone &&
                                 formik.errors.selectedZone
                                   ? "#DC4535"
                                   : base.borderColor,
-                            },
-                          }),
-                        }}
-                      />
-                      {formik.touched.selectedZone &&
-                        formik.errors.selectedZone && (
-                          <div
-                            className="text-danger"
-                            style={{ fontSize: "12px" }}
-                          >
-                            {formik.errors.selectedZone}
-                          </div>
-                        )}
-                    </div>
-                  </Col>
-                </Row>
+                              "&:hover": {
+                                borderColor:
+                                  formik.touched.selectedZone &&
+                                  formik.errors.selectedZone
+                                    ? "#DC4535"
+                                    : base.borderColor,
+                              },
+                            }),
+                          }}
+                        />
+                        {formik.touched.selectedZone &&
+                          formik.errors.selectedZone && (
+                            <div
+                              className="text-danger"
+                              style={{ fontSize: "12px" }}
+                            >
+                              {formik.errors.selectedZone}
+                            </div>
+                          )}
+                      </div>
+                    </Col>
+                  </Row>
+                )}
               </div>
             </form>
             <DataTable activeSubItem={activeSubItem} T6Data={data} />
