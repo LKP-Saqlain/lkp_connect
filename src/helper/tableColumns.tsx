@@ -7833,7 +7833,7 @@ export const clientUnpledgeReport: GridColDef[] = [
     },
   },
 ];
-export const EmployeeTargetReport: GridColDef[] = [
+export const EmployeeTargetReportColumns: GridColDef[] = [
   {
     field: "empCode",
     headerName: "Emp Code",

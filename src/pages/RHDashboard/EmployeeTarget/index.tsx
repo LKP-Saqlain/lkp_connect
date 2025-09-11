@@ -21,6 +21,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { Button } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
+import { EmployeeTargetReportColumns } from "../../../helper/tableColumns";
 
 const EmployeeTargetReport = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any>();
@@ -126,22 +127,35 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     const payload = {
-      //   user_id: "EMP-0238",
       user_id: user_id,
       zone: formik.values.selectedZone?.value,
     };
+
     dispatch(showLoader("Please wait, we are processing your request..."));
 
     apiServices
       .GetEmpContestReport(payload)
       .then((response) => {
         const result = response?.data?.data || [];
+
         console.log("A1 GEmployee Performance", result);
+
         setData(
-          result.map((item: any, index: any) => ({
-            ...item,
-            id: index + 1,
-          }))
+          result.map((item: any, index: number) => {
+            const totalAchieved = parseFloat(item.totalRevnAchieved) || 0;
+            const totalTarget = parseFloat(item.totalRevnTarget) || 0;
+
+            const percentage =
+              totalTarget !== 0 ? (totalAchieved / totalTarget) * 100 : 0;
+
+            const percentageRounded = Math.round(percentage * 100) / 100;
+
+            return {
+              ...item,
+              id: index + 1,
+              perRevAch: percentageRounded,
+            };
+          })
         );
       })
       .catch((error) => {
@@ -153,20 +167,21 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
   }, [dispatch, formik.values.selectedZone]);
 
   const exportToExcel = (data: any[], fileName: string) => {
-    // Convert JSON array to worksheet
-    const worksheet = XLSX.utils.json_to_sheet(data);
+    const orderedData = data.map((row) => {
+      const orderedRow: any = {};
+      EmployeeTargetReportColumns.forEach((col: any) => {
+        orderedRow[col.headerName as string] = row[col.field as string];
+      });
+      return orderedRow;
+    });
 
-    // Create a workbook with the worksheet
+    const worksheet = XLSX.utils.json_to_sheet(orderedData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Employee Report");
-
-    // Generate Excel file buffer
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
-
-    // Create blob and trigger download
     const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
     saveAs(blob, `${fileName}.xlsx`);
   };
