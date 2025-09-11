@@ -141,7 +141,7 @@ const AppBar = styled(MuiAppBar, {
   const leftMargin = open ? drawerWidth : collapsedDrawerWidth;
 
   return {
-    backgroundColor: "#FAF9F6",
+    backgroundColor: "#FFFFFF",
     borderRadius: "15px",
     margin: "15px",
     boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.2)",

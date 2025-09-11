@@ -17,6 +17,10 @@ import DataTable from "../../../components/common/UserInfoTable";
 import { useFormik } from "formik";
 import ShowToast from "../../../utils/toastUtils";
 import Select from "react-select";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import { Button } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const EmployeeTargetReport = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any>();
@@ -148,6 +152,25 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
       });
   }, [dispatch, formik.values.selectedZone]);
 
+  const exportToExcel = (data: any[], fileName: string) => {
+    // Convert JSON array to worksheet
+    const worksheet = XLSX.utils.json_to_sheet(data);
+
+    // Create a workbook with the worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Employee Report");
+
+    // Generate Excel file buffer
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    // Create blob and trigger download
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
+
   useEffect(() => {
     console.log("testsad", formik.values);
   }, [formik.values]);
@@ -176,61 +199,80 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
           </CardHeader>
           <CardBody>
             <form onSubmit={formik.handleSubmit}>
-              <div>
-                {accessType === "ALL" && (
-                  <Row>
-                    <Col xl={3}>
-                      <div className="mb-3" style={{ maxWidth: "300px" }}>
-                        <Label
-                          htmlFor="zone-select"
-                          className="form-label text-muted label-font"
-                        >
-                          Zone
-                        </Label>
-                        <Select
-                          value={formik.values.selectedZone}
-                          onChange={(option: any) =>
-                            formik.setFieldValue("selectedZone", option)
-                          }
-                          onBlur={formik.handleBlur}
-                          options={noSortingGroup}
-                          isClearable
-                          className="placeholder-font"
-                          id="zone-select"
-                          styles={{
-                            control: (base: any) => ({
-                              ...base,
-                              cursor: "pointer",
+              {accessType === "ALL" && (
+                <Row className="align-items-end">
+                  {/* Zone Dropdown */}
+                  <Col xl={3} lg={4} md={6} sm={12}>
+                    <div className="mb-3" style={{ maxWidth: "300px" }}>
+                      <Label
+                        htmlFor="zone-select"
+                        className="form-label text-muted label-font"
+                      >
+                        Zone
+                      </Label>
+                      <Select
+                        value={formik.values.selectedZone}
+                        onChange={(option: any) =>
+                          formik.setFieldValue("selectedZone", option)
+                        }
+                        onBlur={formik.handleBlur}
+                        options={noSortingGroup}
+                        isClearable
+                        className="placeholder-font"
+                        id="zone-select"
+                        styles={{
+                          control: (base: any) => ({
+                            ...base,
+                            cursor: "pointer",
+                            borderColor:
+                              formik.touched.selectedZone &&
+                              formik.errors.selectedZone
+                                ? "#DC4535"
+                                : base.borderColor,
+                            "&:hover": {
                               borderColor:
                                 formik.touched.selectedZone &&
                                 formik.errors.selectedZone
                                   ? "#DC4535"
                                   : base.borderColor,
-                              "&:hover": {
-                                borderColor:
-                                  formik.touched.selectedZone &&
-                                  formik.errors.selectedZone
-                                    ? "#DC4535"
-                                    : base.borderColor,
-                              },
-                            }),
-                          }}
-                        />
-                        {formik.touched.selectedZone &&
-                          formik.errors.selectedZone && (
-                            <div
-                              className="text-danger"
-                              style={{ fontSize: "12px" }}
-                            >
-                              {formik.errors.selectedZone}
-                            </div>
-                          )}
-                      </div>
-                    </Col>
-                  </Row>
-                )}
-              </div>
+                            },
+                          }),
+                        }}
+                      />
+                      {formik.touched.selectedZone &&
+                        formik.errors.selectedZone && (
+                          <div
+                            className="text-danger"
+                            style={{ fontSize: "12px" }}
+                          >
+                            {formik.errors.selectedZone}
+                          </div>
+                        )}
+                    </div>
+                  </Col>
+                  <Col xl="auto" lg="auto" md="auto" sm="auto">
+                    {Array.isArray(data) && data.length > 0 && (
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          textTransform: "none",
+                          backgroundColor: "#11395C",
+                          color: "#FFF",
+                          marginBottom: "1rem",
+                        }}
+                        onClick={() =>
+                          exportToExcel(data, "Employee_Performance_Report")
+                        }
+                      >
+                        Excel <DownloadIcon />
+                      </Button>
+                    )}
+                  </Col>
+                </Row>
+              )}
             </form>
+
+            {/* Table */}
             <DataTable activeSubItem={activeSubItem} T6Data={data} />
           </CardBody>
         </Card>
