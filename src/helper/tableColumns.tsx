@@ -7994,11 +7994,15 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    // valueFormatter: (params: any) =>
+    //   new Intl.NumberFormat("en-IN", {
+    //     maximumFractionDigits: 2,
+    //     minimumFractionDigits: 2,
+    //   }).format(params),
     valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", {
-        maximumFractionDigits: 2,
-        minimumFractionDigits: 2,
-      }).format(params),
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
   },
   {
     field: "freshCashTarget",
