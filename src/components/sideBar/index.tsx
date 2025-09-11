@@ -23,8 +23,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { SlSizeFullscreen } from "react-icons/sl";
-import { BsFullscreen } from "react-icons/bs";
+// import { SlSizeFullscreen } from "react-icons/sl";
+// import { BsFullscreen } from "react-icons/bs";
 import Logo from "../../assets/logo.png";
 import Logo1 from "../../assets/images/logo1.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -98,6 +98,7 @@ import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
 // import MutualFundIndex from "../../pages/MutualFund";
 import MtfComponent from "../../pages/RMS/Mtf";
 import UnpledgeRequest from "../../pages/UnpledgeRequest";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 // import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
 
 const drawerWidth = 260;
@@ -213,7 +214,7 @@ const SideBar = () => {
   const [selectedViewMore, setSelectedViewMore] = useState<string>("");
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+  // const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
   const [apiStatus, setApiStatus] = useState<boolean>(false);
   const [dataStatus, setDataStatus] = useState("");
 
@@ -231,6 +232,7 @@ const SideBar = () => {
   const [showMyPerformance, setShowMyPerformance] = useState<boolean>(false);
   const [activeClickCount, setActiveClickCount] = useState(0);
   // const [showStarburst, setShowStarburst] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -411,26 +413,26 @@ const SideBar = () => {
   const username = localStorage.getItem("userName");
   const firstLetter = username ? username.charAt(0).toUpperCase() : "";
 
-  useEffect(() => {
-    const handleFullScreenChange = () => {
-      setIsFullScreen(!!document.fullscreenElement);
-    };
+  // useEffect(() => {
+  //   const handleFullScreenChange = () => {
+  //     setIsFullScreen(!!document.fullscreenElement);
+  //   };
 
-    document.addEventListener("fullscreenchange", handleFullScreenChange);
+  //   document.addEventListener("fullscreenchange", handleFullScreenChange);
 
-    return () => {
-      document.removeEventListener("fullscreenchange", handleFullScreenChange);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("fullscreenchange", handleFullScreenChange);
+  //   };
+  // }, []);
 
-  const openFullScreen = () => {
-    const elem = document.documentElement;
-    elem.requestFullscreen?.();
-  };
+  // const openFullScreen = () => {
+  //   const elem = document.documentElement;
+  //   elem.requestFullscreen?.();
+  // };
 
-  const closeFullScreen = () => {
-    document.exitFullscreen?.();
-  };
+  // const closeFullScreen = () => {
+  //   document.exitFullscreen?.();
+  // };
   useEffect(() => {
     if (activeMenu === "Client Details") {
       setApiStatus(true);
@@ -647,7 +649,13 @@ const SideBar = () => {
       setSelectedViewMore(value);
     }
   };
-
+  const handleCopy = () => {
+    navigator.clipboard.writeText(
+      "https://rekyc.lkponline.com/v1/company/lkpsec/modification/login"
+    );
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500); // Reset after 1.5 seconds
+  };
   const handleMobileDrawerClose = () => {
     handleDrawerClose();
     // handleMenuClick("");
@@ -1025,9 +1033,46 @@ const SideBar = () => {
               >
                 E-KYC
               </Button>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  height: "25px",
+                  padding: "4px 12px",
+                  borderRadius: "5px",
+                  fontSize: "12px",
+                  fontFamily: "Public Sans, sans-serif",
+                  border: "1px solid #11395C",
+                  color: "#11395C",
+                  cursor: "pointer",
+                  gap: "6px",
+                  marginRight: "1rem",
+                }}
+              >
+                <a
+                  href="https://rekyc.lkponline.com/v1/company/lkpsec/modification/login"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: "#11395C",
+                    fontSize: "12px",
+                  }}
+                >
+                  ReKYC
+                </a>
+
+                <Tooltip title={copied ? "Copied !" : "Copy link"} arrow>
+                  <ContentCopyIcon
+                    fontSize="small"
+                    onClick={handleCopy}
+                    style={{ cursor: "pointer" }}
+                  />
+                </Tooltip>
+              </div>
             </>
             {/* )} */}
-            <Box
+            {/* <Box
               sx={{
                 padding: isMobile ? "0" : "10px",
               }}
@@ -1048,7 +1093,7 @@ const SideBar = () => {
                   </IconButton>
                 </div>
               ) : null}
-            </Box>
+            </Box> */}
             {showMyPerformance && (
               <MenuItem>
                 <IconButton
