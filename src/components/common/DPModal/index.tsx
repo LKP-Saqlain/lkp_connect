@@ -176,7 +176,7 @@ const CustomModal = ({
       }),
     }),
     onSubmit: (values) => {
-      if (action === "delete") {
+      if (action === "delete" || activeSubItem === "DP Debit Recovery") {
         if (getUserDetails && row) {
           getUserDetails(row);
         }
