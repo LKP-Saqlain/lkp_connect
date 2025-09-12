@@ -786,4 +786,7 @@ export const apiServices = {
   BSEStar_MfMandateENACH: async (payload: any) => {
     return await apiService("POST", endpoints.BSEStar_MfMandateENACH, payload);
   },
+  ResearchCallData: async (payload: any) => {
+    return await apiService("POST", endpoints.ResearchCallData, payload);
+  },
 };
