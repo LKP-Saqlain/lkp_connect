@@ -2027,7 +2027,7 @@ export const DPDebitRecovery: GridColDef[] = [
   },
   {
     field: "Ledger_DebitAmt",
-    headerName: "Ledger Debit",
+    headerName: "Total DP Debit",
     headerClassName: "header-wrap-custom",
     minWidth: 110,
     flex: 1,

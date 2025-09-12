@@ -56,6 +56,7 @@ const MutualFundModal = ({
         code: selected.code,
         account: selected.account,
         ifsc: selected.ifsc,
+        api_paymentMode: selected.paymentMode,
       });
     }
   };
@@ -196,9 +197,9 @@ const MutualFundModal = ({
       const isUpi = selectedPaymentType === "upi";
 
       const paymentPayload = {
-        modeofpayment: isUpi ? "UPI" : "DIRECT",
-        // bankid: selectedBank?.code ?? "",
-        bankid: "HDF",
+        modeofpayment: isUpi ? "UPI" : selectedBank?.paymentMode ?? "DIRECT",
+        bankid: selectedBank?.code ?? "",
+        // bankid: "HDF",
         accountnumber: selectedBank?.account ?? "",
         // accountnumber: "008291800000871",
         ifsc: selectedBank?.ifsc ?? "",
@@ -209,7 +210,7 @@ const MutualFundModal = ({
         nefTreference: isUpi ? "" : "1",
         mandateid: "",
         vpaid: isUpi ? upiId : "",
-        loopbackURL: "http://uat.lkpconnect.net.in/dashboard",
+        loopbackURL: "https://lkpconnect.net.in/dashboard",
         allowloopBack: "Y",
         filler1: "",
         filler2: "",
@@ -268,6 +269,7 @@ const MutualFundModal = ({
           account: item.bankAccountNumber,
           ifsc: item.ifsc,
           code: item.bankCode,
+          paymentMode: item.payMode,
         })
       );
 
@@ -793,6 +795,7 @@ const MutualFundModal = ({
         bseSchemeCode={bseSchemeCode}
         dateSelected={dateSelected}
         amount={amount}
+        selectedBank={selectedBank}
       />
     </>
   );

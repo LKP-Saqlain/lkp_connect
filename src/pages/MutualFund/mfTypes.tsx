@@ -48,6 +48,7 @@ export interface BankDetail {
   ifsc: string;
   code: string;
   logo?: string | null;
+  paymentMode: string;
 }
 export const mainMenuC = [
   { id: 1, label: "equity" },

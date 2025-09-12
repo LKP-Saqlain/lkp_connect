@@ -103,7 +103,8 @@ const CreateMandateModal = ({
       <ModalHeader toggle={toggle}>Create New Mandate</ModalHeader>
       <ModalBody>
         <Label style={{ fontWeight: 600, marginBottom: "8px" }}>
-          Select Bank account for payment
+          {/* Select Bank account for payment */}
+          Selected Bank Account
         </Label>
 
         {banks.map((bank: any) => (
