@@ -176,7 +176,7 @@ const CustomModal = ({
       }),
     }),
     onSubmit: (values) => {
-      if (action === "delete") {
+      if (action === "delete" || activeSubItem === "DP Debit Recovery") {
         if (getUserDetails && row) {
           getUserDetails(row);
         }
@@ -399,7 +399,7 @@ const CustomModal = ({
   };
 
   const shouldShowRemarkField = () => {
-    console.log(action, "dsdsdsdsd");
+    console.log(action, "dsdsdsdsd", activeSubItem);
     const remarkItems = [
       "Communication Retrival Checker",
       "KYC Approval",
@@ -539,6 +539,9 @@ const CustomModal = ({
             className="btn"
             type="submit"
             style={{ width: "80px", backgroundColor: "#11395C" }}
+            onClick={() => {
+              console.log(activeSubItem, "dpMKodal");
+            }}
           >
             Yes
           </Button>

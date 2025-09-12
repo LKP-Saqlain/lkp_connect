@@ -44,6 +44,7 @@ const MutualFundModal = ({
   const [clientNo, setClientNo] = useState("");
   const [isNestedModalOpen, setNestedModalOpen] = useState(false);
   const toggleNestedModal = () => setNestedModalOpen((prev) => !prev);
+  const [upiName, setUpiName] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -68,6 +69,7 @@ const MutualFundModal = ({
       setDateSelected(null);
       setUpiId("");
       setUpiVerified(undefined);
+      setUpiName("");
     }
     console.log(bseSchemeCode, "bseSchemeCode");
   }, [isOpen]);
@@ -218,7 +220,7 @@ const MutualFundModal = ({
 
       const response = await apiServices.BSEStar_SinglePayment(paymentPayload);
 
-      const htmlContent = response?.data?.data;
+      const htmlContent = response?.data?.data?.responsestring;
       if (selectedPaymentType === "upi") {
         ShowToast("info", htmlContent);
       } else {
@@ -287,12 +289,14 @@ const MutualFundModal = ({
 
     try {
       const response = await apiServices.VerifyUpi(payload);
-      const isValid = response?.data?.isUpiValid;
-
+      // const isValid = response?.data?.isUpiValid;
+      const isValid = response?.data?.message?.includes("True");
       if (isValid) {
-        setUpiVerified(true); // Disable input & change button
+        setUpiVerified(true);
+        setUpiName(response?.data?.data || ""); // Save the name for display
       } else {
         setUpiVerified(false);
+        setUpiName(""); // Clear on failure
       }
     } catch (error) {
       console.error("Error verifying UPI ID:", error);
@@ -688,12 +692,13 @@ const MutualFundModal = ({
                       value={upiId}
                       onChange={(e) => setUpiId(e.target.value)}
                       disabled={upiVerified}
+                      error={upiVerified === false}
                       InputProps={{
                         style: {
                           padding: "6px 10px",
                           fontSize: "14px",
                           backgroundColor: upiVerified ? "#f5f5f5" : "#fff", // light grey if disabled
-                          border: upiVerified === false ? "1px solid red" : "",
+                          // border: upiVerified === false ? "1px solid red" : "",
                         },
                       }}
                       sx={{
@@ -719,6 +724,11 @@ const MutualFundModal = ({
                       {upiVerified ? "Verified" : "Verify"}
                     </Button>
                   </div>
+                  {upiVerified === true
+                    ? `Verified: ${upiName}` // You'll need to store `upiName` in state
+                    : upiVerified === false
+                    ? "Invalid UPI ID"
+                    : ""}
                 </div>
               )}
             </div>
