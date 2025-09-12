@@ -32,6 +32,7 @@ interface NestedModalProps {
   upiId?: string;
   dateSelected: number | null;
   bseSchemeCode: string | undefined;
+  selectedBank: any;
 }
 
 const NestedModal = ({
@@ -48,13 +49,14 @@ const NestedModal = ({
   bseSchemeCode,
   dateSelected,
   amount,
+  selectedBank,
 }: NestedModalProps) => {
   const [mandateDetails, setMandateDetails] = useState<MandateDetail[]>([]);
   const [selectedMandateId, setSelectedMandateId] = useState<string | null>(
     null
   );
   const [showCreateMandateModal, setShowCreateMandateModal] = useState(false);
-  const [selectedBank, setSelectedBank] = useState<any>(null); // for selection
+  // const [selectedBank, setSelectedBank] = useState<any>(null); // for selection
   const [orderNo, setOrderNo] = useState<any>(null); // for selection
   const [secondsLeft, setSecondsLeft] = useState(30);
   const [timerPage, setTimerPage] = useState(false);
@@ -68,11 +70,19 @@ const NestedModal = ({
   if (dateSelected !== null) {
     const today = new Date();
     const day = String(dateSelected).padStart(2, "0");
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const year = today.getFullYear();
-
-    startDate = `${day}/${month}/${year}`; // Example: "03/09/2025"
+    const nextMonthDate = new Date(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      1
+    );
+    const month = String(nextMonthDate.getMonth() + 1).padStart(2, "0");
+    const year = nextMonthDate.getFullYear();
+    startDate = `${day}/${month}/${year}`; // e.g., "11/10/2025"
   }
+
+  useEffect(() => {
+    console.log(selectedBank, "selectedBank came from mfmodal");
+  }, [selectedBank]);
 
   useEffect(() => {
     const fetchMandates = async () => {
@@ -144,6 +154,20 @@ const NestedModal = ({
   const handleNewMandateCreated = (mandateId: string) => {
     console.log("Returned Mandate ID:", mandateId);
     setSelectedMandateId(mandateId);
+    setTimerPage(true);
+    setTimeout(() => {
+      console.log(selectedMandateId, " selectedMandateId;");
+      handleXsip(mandateId);
+
+      if (selectedPaymentType === "netbanking") {
+        setSecondsLeft(20);
+        if (!stopEnach) {
+          triggerENachLoop(mandateId); // Only call if stopEnach is false
+        } // Start the recursive loop
+      } else {
+        setSecondsLeft(20);
+      }
+    }, 2000);
   };
 
   const handleFinalConfirm = () => {
@@ -172,7 +196,7 @@ const NestedModal = ({
     return match ? match[1] : null;
   };
 
-  const handleXsip = async () => {
+  const handleXsip = async (mandateId?: any) => {
     const payload = {
       transactionCode: "NEW",
       schemeCode: bseSchemeCode, //
@@ -184,7 +208,7 @@ const NestedModal = ({
       remarks: "test",
       firstOrderFlag: "Y",
       brokerage: "",
-      mandateId: selectedMandateId, //
+      mandateId: mandateId || selectedMandateId, //
       ipAdd: "",
       transMode: "D",
       dpTxnMode: "C",
@@ -224,13 +248,16 @@ const NestedModal = ({
       dispatch(hideLoader());
     }
   };
-  const triggerENachLoop = async () => {
+  const triggerENachLoop = async (mandateId?: any) => {
     const payload = {
       clientCode: clientNo,
-      mandateID: selectedMandateId,
-      loopbackurl: "http://uat.lkpconnect.net.in/dashboard",
+      mandateID: mandateId || selectedMandateId,
+      loopbackurl: "https://lkpconnect.net.in/dashboard",
     };
-
+    if (!payload.clientCode || !payload.mandateID || !payload.loopbackurl) {
+      console.warn("cechke payload cechke console", payload);
+      return; // ⛔ Stop execution
+    }
     dispatch(showLoader("Handling Enach..."));
 
     try {
@@ -259,17 +286,24 @@ const NestedModal = ({
 
     try {
       const Payload = {
-        modeofpayment: selectedPaymentType === "upi" ? "UPI" : "DIRECT",
-        bankid: "HDF", // hardcoded for now, or use selectedBank?.code
-        accountnumber: banks[0]?.account ?? "",
-        ifsc: banks[0]?.ifsc ?? "",
+        modeofpayment:
+          selectedPaymentType === "upi"
+            ? "UPI"
+            : selectedBank?.paymentMode ?? "DIRECT",
+
+        bankid: selectedBank.code,
+        // bankid: "HDF",
+        accountnumber: selectedBank?.account ?? "",
+        // accountnumber: "008291800000871",
+        ifsc: selectedBank?.ifsc ?? "",
+        // ifsc: "YESB0000082",
         ordernumber: orderNo,
         totalamount: amount.toString(),
         internalrefno: "",
         nefTreference: selectedPaymentType === "upi" ? "" : "1",
         mandateid: "",
         vpaid: selectedPaymentType === "upi" ? upiId : "",
-        loopbackURL: "http://uat.lkpconnect.net.in/dashboard",
+        loopbackURL: "https://lkpconnect.net.in/dashboard",
         allowloopBack: "Y",
         filler1: "",
         filler2: "",
@@ -277,12 +311,17 @@ const NestedModal = ({
         filler4: "",
         filler5: "",
       };
+      console.log("payload of singlepayment netsed", Payload);
 
       // Call API
       const response = await apiServices.BSEStar_SinglePayment(Payload);
-      const htmlContent = response?.data?.data; // even with \r\n\t inside
-      if (response?.data?.statusCode === 417) {
-        ShowToast("error", response?.data?.data);
+      const htmlContent = response?.data?.data?.responsestring; // even with \r\n\t inside
+      if (
+        response?.data?.data?.statuscode == 417 ||
+        response?.data?.data?.statuscode == 101
+      ) {
+        ShowToast("error", response?.data?.data?.responsestring);
+        return;
       }
       if (selectedPaymentType === "upi") {
         ShowToast("info", htmlContent);
@@ -304,10 +343,11 @@ const NestedModal = ({
     }
   };
 
-  const handleBankSelect = (bankId: string) => {
-    const selected = banks.find((b: any) => b.id === bankId);
-    setSelectedBank(selected);
-  };
+  // const handleBankSelect = (bankId: string) => {
+  //   const selected = banks.find((b: any) => b.id === bankId);
+  //   // setSelectedBank(selected);
+  //   console.log("handleBankSelect from nested modal", selected);
+  // };
 
   return (
     <>
@@ -491,7 +531,7 @@ const NestedModal = ({
         toggle={() => setShowCreateMandateModal(false)}
         banks={banks}
         selectedBank={selectedBank}
-        onBankSelect={handleBankSelect}
+        // onBankSelect={handleBankSelect}
         selectedPaymentType={selectedPaymentType}
         clientNo={clientNo}
         upiId={upiId}

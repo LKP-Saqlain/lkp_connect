@@ -128,7 +128,7 @@ const SipCalculator = () => {
       </div>
 
       {/* Year Selector */}
-      <div
+      {/* <div
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -152,6 +152,22 @@ const SipCalculator = () => {
             {y}Y
           </button>
         ))}
+      </div> */}
+      <div style={{ marginTop: "12px" }}>
+        <label
+          style={{ fontSize: "14px", marginBottom: "6px", display: "block" }}
+        >
+          {years} Year
+        </label>
+        <input
+          type="range"
+          min={1}
+          max={15}
+          step={1}
+          value={years}
+          onChange={(e) => setYears(Number(e.target.value))}
+          style={{ width: "100%" }}
+        />
       </div>
 
       {/* Bottom Stats */}
