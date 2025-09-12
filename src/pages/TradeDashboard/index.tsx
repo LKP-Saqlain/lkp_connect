@@ -439,7 +439,28 @@ const DashboardCrypto = ({
                         />
                       ))
                     ) : (
-                      <div>No Records Found</div>
+                      <>
+                        <Card
+                          style={{
+                            borderRadius: "8px",
+                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+                            border: "1px solid #e0e0e0",
+                            backgroundColor: "#f9f9f9",
+                            textAlign: "center",
+                          }}
+                        >
+                          <CardBody
+                            style={{
+                              // padding: "40px 20px",
+                              fontSize: "16px",
+                              fontWeight: 500,
+                              color: "#666",
+                            }}
+                          >
+                            No Records Found!
+                          </CardBody>
+                        </Card>
+                      </>
                     )}
                   </div>
                 </CardBody>
