@@ -1867,7 +1867,10 @@ const ModalComponent = ({
                     label="Enter Client Rate"
                     variant="outlined"
                     size="small"
-                    inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                    inputProps={{
+                      inputMode: "decimal",
+                      pattern: "^[0-9]*\\.?[0-9]+$",
+                    }}
                     value={formik.values.clientRate}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
@@ -1889,7 +1892,10 @@ const ModalComponent = ({
                     label="Enter Vendor Rate"
                     variant="outlined"
                     size="small"
-                    inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                    inputProps={{
+                      inputMode: "decimal",
+                      pattern: "^[0-9]*\\.?[0-9]+$",
+                    }}
                     value={formik.values.vendorRate}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
