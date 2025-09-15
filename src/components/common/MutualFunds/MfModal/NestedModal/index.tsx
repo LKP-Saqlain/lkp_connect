@@ -51,18 +51,17 @@ const NestedModal = ({
   amount,
   selectedBank,
 }: NestedModalProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [mandateDetails, setMandateDetails] = useState<MandateDetail[]>([]);
   const [selectedMandateId, setSelectedMandateId] = useState<string | null>(
     null
   );
   const [showCreateMandateModal, setShowCreateMandateModal] = useState(false);
-  // const [selectedBank, setSelectedBank] = useState<any>(null); // for selection
   const [orderNo, setOrderNo] = useState<any>(null); // for selection
   const [secondsLeft, setSecondsLeft] = useState(30);
   const [timerPage, setTimerPage] = useState(false);
   const [stopEnach, setStopEnach] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
   // Handler for bank selection
 
   let startDate = "";
@@ -160,12 +159,12 @@ const NestedModal = ({
       handleXsip(mandateId);
 
       if (selectedPaymentType === "netbanking") {
-        setSecondsLeft(20);
+        setSecondsLeft(10);
         if (!stopEnach) {
           triggerENachLoop(mandateId); // Only call if stopEnach is false
         } // Start the recursive loop
       } else {
-        setSecondsLeft(20);
+        setSecondsLeft(10);
       }
     }, 2000);
   };
@@ -266,38 +265,77 @@ const NestedModal = ({
 
       console.log(message, "eNach url");
 
+      // ✅ success: open URL and send email
       if (message?.code === 200 && message?.message) {
-        const url = message.message;
-        window.open(url, "_blank");
-        dispatch(hideLoader());
-        return; // ✅ Exit loop on success
+        const url: string = message.message;
+        // window.open(url, "_blank");
+
+        await sendEmail({
+          url,
+          mandateId: mandateId || selectedMandateId,
+          orderNo: orderNo ?? "",
+          type: "ENACH",
+        });
+
+        return; // stop retrying
       }
     } catch (error) {
-      console.error("Error fetching mandate status", error);
+      console.error("Error fetching ENach URL", error);
+    } finally {
+      dispatch(hideLoader());
     }
-
     dispatch(hideLoader());
-
     // ⏳ Retry after 4 seconds
     setTimeout(triggerENachLoop, 4000);
   };
+
+  const sendEmail = async ({
+    url,
+    mandateId,
+    orderNo,
+    type = "ENACH", // or "SINGLE"
+  }: {
+    url: string;
+    mandateId: string;
+    orderNo: string;
+    type?: "ENACH" | "SINGLE";
+  }) => {
+    const payload = {
+      link: url,
+      clientCode: clientNo,
+      orderNo,
+      mandateId,
+      schemeCode: bseSchemeCode,
+      option: type === "ENACH" ? "ENACH" : "",
+    };
+
+    try {
+      const response =
+        type === "ENACH"
+          ? await apiServices.EnachEmailToClient(payload)
+          : await apiServices.SinglePaymentEmail(payload);
+
+      console.log(response, "Email response");
+    } catch (error) {
+      console.error("Error sending email", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
   const handleSinglepayment = async () => {
     dispatch(showLoader("Processing payment..."));
 
     try {
-      const Payload = {
+      const payload = {
         modeofpayment:
           selectedPaymentType === "upi"
             ? "UPI"
             : selectedBank?.paymentMode ?? "DIRECT",
-
-        bankid: selectedBank.code,
-        // bankid: "HDF",
+        bankid: selectedBank?.code ?? "",
         accountnumber: selectedBank?.account ?? "",
-        // accountnumber: "008291800000871",
         ifsc: selectedBank?.ifsc ?? "",
-        // ifsc: "YESB0000082",
-        ordernumber: orderNo,
+        ordernumber: orderNo ?? "",
         totalamount: amount.toString(),
         internalrefno: "",
         nefTreference: selectedPaymentType === "upi" ? "" : "1",
@@ -311,33 +349,30 @@ const NestedModal = ({
         filler4: "",
         filler5: "",
       };
-      console.log("payload of singlepayment netsed", Payload);
+      console.log("payload of singlepayment nested", payload);
 
-      // Call API
-      const response = await apiServices.BSEStar_SinglePayment(Payload);
-      const htmlContent = response?.data?.data?.responsestring; // even with \r\n\t inside
-      if (
-        response?.data?.data?.statuscode == 417 ||
-        response?.data?.data?.statuscode == 101
-      ) {
-        ShowToast("error", response?.data?.data?.responsestring);
+      const response = await apiServices.BSEStar_SinglePayment(payload);
+      const htmlContent = response?.data?.data?.responsestring;
+      const statusCode = response?.data?.data?.statuscode;
+
+      if (statusCode === 417 || statusCode === 101) {
+        ShowToast("error", htmlContent);
         return;
       }
+
       if (selectedPaymentType === "upi") {
         ShowToast("info", htmlContent);
       } else {
-        const newWindow = window.open("", "_blank");
-        if (newWindow) {
-          newWindow.document.open();
-          newWindow.document.write(htmlContent); // browser interprets it fine
-          newWindow.document.close();
-        }
+        await sendEmail({
+          url: htmlContent || "",
+          mandateId: selectedMandateId ?? "",
+          orderNo: orderNo ?? "",
+          type: "SINGLE",
+        });
       }
-
-      // Success alert (customize by modalType if needed)
     } catch (err: any) {
       console.error("Investment failed", err);
-      alert("Something went wrong. Please try again.");
+      ShowToast("error", "Something went wrong. Please try again.");
     } finally {
       dispatch(hideLoader());
     }

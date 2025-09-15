@@ -182,4 +182,6 @@ export const endpoints = {
   BSEStar_MfMandateEntry: "/api/MF/BSEStar_MfMandateEntry",
   BSEStar_MfMandateENACH: "/api/MF/BSEStar_MfMandateENACH",
   MF_TodayOrders: "/api/Dashboard/MF_TodayOrders",
+  EnachEmailToClient: "/api/MF/EnachEmailToClient",
+  SinglePaymentEmail: "/api/MF/SinglePaymentEmail",
 };
