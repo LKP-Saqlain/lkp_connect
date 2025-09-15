@@ -182,7 +182,7 @@ const ModalComponent = ({
     "png",
   ];
 
-  const { authenticationValue } = useSelector(
+  const { authenticationValue, user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
   console.log("PAN", authenticationValue);
@@ -1072,18 +1072,23 @@ const ModalComponent = ({
     };
 
     if (name === "clientRate" || name === "vendorRate") {
-      formik.setFieldValue(name, numericValue);
+      // allow only digits and a single dot
+      const decimalValue = value
+        .replace(/[^0-9.]/g, "")
+        .replace(/(\..*)\./g, "$1");
 
-      const clientRate = parseInt(
-        name === "clientRate" ? numericValue : formik.values.clientRate || "0"
+      formik.setFieldValue(name, decimalValue);
+
+      const clientRate = parseFloat(
+        name === "clientRate" ? decimalValue : formik.values.clientRate || "0"
       );
-      const vendorRate = parseInt(
-        name === "vendorRate" ? numericValue : formik.values.vendorRate || "0"
+      const vendorRate = parseFloat(
+        name === "vendorRate" ? decimalValue : formik.values.vendorRate || "0"
       );
 
       if (!isNaN(clientRate) && !isNaN(vendorRate)) {
         const brokPerShare = clientRate - vendorRate;
-        formik.setFieldValue("brokPerShare", brokPerShare.toString());
+        formik.setFieldValue("brokPerShare", brokPerShare.toFixed(2)); // keep decimals
       }
     }
 
@@ -1383,6 +1388,13 @@ const ModalComponent = ({
       type: mimeType,
     });
   }
+
+  useEffect(() => {
+    if (user_id) {
+      const rmCode = user_id.split("-")[1] || "";
+      formik.setFieldValue("rmCode", rmCode);
+    }
+  }, [user_id]);
 
   return (
     <Modal
@@ -1762,6 +1774,7 @@ const ModalComponent = ({
                     label="Enter RM Code"
                     variant="outlined"
                     size="small"
+                    disabled={true}
                     value={formik.values.rmCode}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}

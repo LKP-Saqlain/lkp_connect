@@ -792,4 +792,7 @@ export const apiServices = {
   SinglePaymentEmail: async (payload: any) => {
     return await apiService("POST", endpoints.SinglePaymentEmail, payload);
   },
+  ResearchCallData: async (payload: any) => {
+    return await apiService("POST", endpoints.ResearchCallData, payload);
+  },
 };

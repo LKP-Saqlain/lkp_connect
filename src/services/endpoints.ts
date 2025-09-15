@@ -184,4 +184,5 @@ export const endpoints = {
   MF_TodayOrders: "/api/Dashboard/MF_TodayOrders",
   EnachEmailToClient: "/api/MF/EnachEmailToClient",
   SinglePaymentEmail: "/api/MF/SinglePaymentEmail",
+  ResearchCallData: "/api/Notification/ResearchCallData",
 };
