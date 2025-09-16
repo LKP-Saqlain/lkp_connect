@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import BasicTabs from "../../../components/common/MutualFunds/NavTabs";
-import { Card } from "@mui/material";
+import { Card, Typography } from "@mui/material";
 import MutualFundTable from "../../../components/common/MutualFunds/MfTable";
 // import { mutualFundRows } from "../../../helper/commmon";
 import { apiServices } from "../../../services";
 import { useDispatch } from "react-redux";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { AppDispatch } from "../../../redux/store";
+import TradeCard from "../../../components/common/tradeCard";
 
 const tabList = [
   { label: "Mandates" },
@@ -48,13 +49,20 @@ interface TransactionRecord {
   tranId: number;
   accountID: number;
   cumulativeQuantity: number;
+  clientName: string;
+  status: any;
+  bankName: string;
+  bankAccNo: any;
+  mandateId: number;
+  regnDate: string;
+
   // add more fields as per your response if required
 }
 
 const MfReport = (props: any) => {
   const [reportTab, setReportTab] = useState(0);
   const [selectedLabel, setSelectedLabel] = useState<string>(tabList[0].label);
-  const [mandateData, setMandateData] = useState<[]>([]);
+  const [mandateData, setMandateData] = useState<TransactionRecord[]>([]);
   const [allSIPs, setAllSIPs] = useState<upComingSIP[]>([]);
   const [filteredSIPs, setFilteredSIPs] = useState<upComingSIP[]>([]);
   const [ongoingSIP, setOngoingSIP] = useState<upComingSIP[]>([]);
@@ -86,7 +94,7 @@ const MfReport = (props: any) => {
           if (response?.status === 200) {
             dispatch(hideLoader());
 
-            console.log("response", response?.data?.data);
+            console.log("responseMandate", response?.data?.data);
             // const parsedData = JSON.parse(response?.data?.data);
             // console.log("parseData", parsedData);
 
@@ -273,20 +281,38 @@ const MfReport = (props: any) => {
         />
       </Card>
       <Card sx={{ borderRadius: 4, p: 2 }}>
-        <MutualFundTable
-          rows={
-            selectedLabel === "Mandates"
-              ? mandateData
-              : selectedLabel === "Upcoming SIP"
-              ? filteredSIPs
-              : selectedLabel === "Ongoing SIP"
-              ? ongoingSIP
-              : selectedLabel === "Transaction"
-              ? transactions
-              : []
-          }
-          selectedLabel={selectedLabel}
-        />
+        {selectedLabel === "Mandates" ? (
+          mandateData.length > 0 ? (
+            mandateData.map((item, index) => (
+              <TradeCard
+                key={index}
+                type="Mandate"
+                clientName={item.clientName}
+                status={item.status}
+                bankName={item.bankName}
+                bankAccNumber={item.bankAccNo}
+                mandateId={item.mandateId}
+                regnDate={item.regnDate}
+                amount={item.amount}
+              />
+            ))
+          ) : (
+            <Typography>No mandates found</Typography>
+          )
+        ) : (
+          <MutualFundTable
+            rows={
+              selectedLabel === "Upcoming SIP"
+                ? filteredSIPs
+                : selectedLabel === "Ongoing SIP"
+                ? ongoingSIP
+                : selectedLabel === "Transaction"
+                ? transactions
+                : []
+            }
+            selectedLabel={selectedLabel}
+          />
+        )}
       </Card>
     </>
   );

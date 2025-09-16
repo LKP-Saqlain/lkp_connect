@@ -436,6 +436,7 @@ const DashboardCrypto = ({
                           dateTime={item.validity}
                           partialProfitText={item.statusDescreption}
                           buySell={item.buySell}
+                          type="ResearchCall"
                         />
                       ))
                     ) : (

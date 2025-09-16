@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import BasicTabs from "../../components/common/MutualFunds/NavTabs";
 import { mainMenu } from "../../pages/MutualFund/mfTypes";
-import { Card, Container } from "reactstrap";
+import {
+  Card,
+  Container,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+} from "reactstrap";
 import MfOverview from "../../components/common/MutualFunds/MfOverview";
 import { TextField, Typography, IconButton, Box, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -11,13 +18,14 @@ import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { setEncryptedValue } from "../../utils/loocalEncrypt";
 
-const MutualFundIndex = (activeSubItem: any) => {
-  console.log(activeSubItem);
+const MutualFundIndex = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedMutualFund, setSelectedMutualFund] = useState<string>("");
   const [clientCode, setClientCode] = useState<string>("");
-  const [isEditing, setIsEditing] = useState<boolean>(true);
-  const [hasToken, sethasToken] = useState(false);
+  const [hasToken, setHasToken] = useState(false);
+
+  // 🚨 New state for modal
+  const [showClientCodeModal, setShowClientCodeModal] = useState(true);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -25,13 +33,13 @@ const MutualFundIndex = (activeSubItem: any) => {
 
   const mfToken = "mfToken";
   useEffect(() => {
-    console.log("everry time hit");
+    // Always reset token when page opens
     localStorage.removeItem(mfToken);
   }, []);
 
   const handleSubmit = async () => {
     // setClientCode("");
-    sethasToken(false);
+    setHasToken(false);
     if (!clientCode.trim()) return;
     try {
       const payload = {
@@ -40,24 +48,23 @@ const MutualFundIndex = (activeSubItem: any) => {
         password: "M1i@l3l$c5e^n7t*",
         secretKey: "mtivsm&GDy6$409gu67@3hdYmb",
       };
-      dispatch(showLoader(""));
+      dispatch(showLoader("Authenticating..."));
       const res = await apiServices.MFLogin(payload);
       if (res?.status === 200) {
         dispatch(hideLoader());
         console.log("mfLogin response->", res?.data?.statusCode);
         if (res?.data?.statusCode) {
-          sethasToken(true);
+          setHasToken(true);
         } else {
-          sethasToken(false);
+          setHasToken(false);
         }
         // localStorage.setItem("mfToken", res?.data?.data);
         setEncryptedValue("mfToken", res?.data?.data);
-
-        setIsEditing(false);
+        // ✅ Close modal only on success
+        setShowClientCodeModal(false);
       }
     } catch (error) {
       console.error("mfLogin error:", error);
-      dispatch(hideLoader());
     } finally {
       dispatch(hideLoader());
     }
@@ -66,53 +73,100 @@ const MutualFundIndex = (activeSubItem: any) => {
   return (
     <div className="page-content page-view">
       <Container fluid>
-        {/* Card for Tabs */}
+        {/* 🔒 Modal for client code entry */}
+        <Modal
+          isOpen={showClientCodeModal}
+          backdrop="static"
+          keyboard={false}
+          centered
+          style={{
+            maxWidth: "420px", // compact width
+            margin: "auto", // ensure horizontal center
+          }}
+        >
+          <ModalHeader
+            style={{
+              borderBottom: "none",
+              textAlign: "center",
+              fontWeight: 600,
+              fontSize: "1.25rem",
+              // paddingBottom: "0.5rem",
+            }}
+          >
+            Enter Client Code
+          </ModalHeader>
+
+          <ModalBody
+            style={{
+              // padding: "1.5rem",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <TextField
+              fullWidth
+              label="Client Code"
+              value={clientCode}
+              onChange={(e) => setClientCode(e.target.value)}
+              autoFocus
+              variant="outlined"
+              size="small"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: "10px",
+                },
+              }}
+            />
+          </ModalBody>
+
+          <ModalFooter
+            style={{
+              borderTop: "none",
+              justifyContent: "center",
+              // paddingBottom: "1.5rem",
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSubmit}
+              disabled={!clientCode.trim()}
+              style={{
+                padding: "0.6rem 2rem",
+                borderRadius: "8px",
+                fontWeight: 500,
+                textTransform: "none",
+                boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+              }}
+            >
+              Submit
+            </Button>
+          </ModalFooter>
+        </Modal>
+
+        {/* The rest of the UI (tabs, etc.) */}
         <Card
           style={{
             borderRadius: "15px",
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
             padding: "3px",
             marginBottom: "16px",
+            opacity: showClientCodeModal ? 0.4 : 1, // dim if modal open
+            pointerEvents: showClientCodeModal ? "none" : "auto", // disable interaction
           }}
         >
-          <Box
-            display="flex"
-            // flexDirection={{ xs: "column", md: "row" }}
-            // alignItems={{ xs: "flex-start", md: "center" }}
-            justifyContent="space-between"
-            gap={2}
-          >
-            {/* Tabs */}
+          <Box display="flex" justifyContent="space-between" gap={2}>
             <BasicTabs
               tabs={mainMenu.map((m) => ({ label: m.label }))}
               value={activeTab}
               onChange={(_e, newValue) => {
                 setActiveTab(newValue);
-                setSelectedMutualFund(""); // Main NavTabs will have more priority over overview
+                setSelectedMutualFund("");
               }}
             />
-
-            {/* Client Code Section */}
-            {isEditing ? (
-              <Box display="flex" alignItems="center" gap={1}>
-                <TextField
-                  label="Enter Client Code"
-                  variant="outlined"
-                  value={clientCode}
-                  onChange={(e) => setClientCode(e.target.value)}
-                  size="small"
-                  sx={{ width: "200px" }}
-                />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </Button>
-              </Box>
-            ) : (
+            {!showClientCodeModal && (
               <Box
                 display="flex"
                 alignItems="center"
@@ -122,7 +176,10 @@ const MutualFundIndex = (activeSubItem: any) => {
                 <Typography fontWeight={500}>
                   Client Code: <b>{clientCode}</b>
                 </Typography>
-                <IconButton size="small" onClick={() => setIsEditing(true)}>
+                <IconButton
+                  size="small"
+                  onClick={() => setShowClientCodeModal(true)}
+                >
                   <EditIcon fontSize="small" />
                 </IconButton>
               </Box>
@@ -138,8 +195,6 @@ const MutualFundIndex = (activeSubItem: any) => {
             hasToken,
           })
         )}
-
-        {/* </Card> */}
       </Container>
     </div>
   );

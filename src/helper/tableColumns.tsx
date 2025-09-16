@@ -8255,6 +8255,8 @@ export const MfPortfolio: GridColDef[] = [
     disableColumnMenu: true,
     flex: 1,
     minWidth: 120,
+    align: "right",
+    headerAlign: "right",
     renderCell: (params: any) => {
       const value = params.value;
       return value?.toLocaleString("en-IN");
@@ -8267,6 +8269,8 @@ export const MfPortfolio: GridColDef[] = [
     disableColumnMenu: true,
     flex: 1, // larger space since names are long
     minWidth: 120,
+    align: "right",
+    headerAlign: "right",
     renderCell: (params: any) => {
       const value = params.value;
       return value?.toLocaleString("en-IN");
@@ -8278,6 +8282,8 @@ export const MfPortfolio: GridColDef[] = [
     disableColumnMenu: true,
     flex: 1,
     minWidth: 80,
+    align: "right",
+    headerAlign: "right",
   },
   // {
   //   field: "action",
@@ -8568,20 +8574,32 @@ export const MutualFundOrderColumns: GridColDef[] = [
     disableColumnMenu: true,
     flex: 2,
     minWidth: 200,
+    renderCell: (params) => (
+      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <img
+          src={params.row.logo}
+          alt={params.row.logo}
+          style={{ width: "32px", height: "32px", objectFit: "contain" }}
+        />
+        <div style={{ fontWeight: 500 }}>{params.row.schemeName}</div>
+      </div>
+    ),
   },
   {
     field: "successFlag",
     headerName: "Status",
     disableColumnMenu: true,
-    flex: 1,
-    minWidth: 120,
+    flex: 0.7,
+    minWidth: 60,
   },
   {
     field: "startDate",
     headerName: "Order Date",
     disableColumnMenu: true,
-    flex: 1.5,
-    minWidth: 180,
+    flex: 1,
+    minWidth: 90,
+    align: "center",
+    headerAlign: "center",
   },
   // {
   //   field: "clientCode",
@@ -8596,6 +8614,9 @@ export const MutualFundOrderColumns: GridColDef[] = [
     disableColumnMenu: true,
     flex: 1,
     minWidth: 120,
+
+    headerAlign: "center",
+    align: "left",
   },
   {
     field: "remarks",
@@ -8604,7 +8625,7 @@ export const MutualFundOrderColumns: GridColDef[] = [
     flex: 2,
     minWidth: 200,
     headerAlign: "center",
-    align: "center",
+    align: "left",
   },
   // {
   //   field: "memberCode",

@@ -816,8 +816,8 @@ const SideBar = () => {
       10: () => <StockStudy />,
       14: () => (
         <MutualFundIndex
-          activeSubItem={activeSubItem}
-          // activeMenu={activeMenu}
+        // activeSubItem={activeSubItem}
+        // activeMenu={activeMenu}
         />
       ),
       21: () => <RegulatorAnnouncement activeMenu={activeMenu} />,
