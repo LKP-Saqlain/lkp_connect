@@ -16,7 +16,7 @@ const MfinfoCard = ({ funds, CardType, handleSelectedMutualFund }: any) => {
     >
       {funds.map((fund: any) => (
         <Card
-          key={fund.id}
+          key={CardType === "Popular Category" ? fund.id : fund.bseSchemeCode}
           onClick={() => handleCardClick(fund)}
           style={{
             flex: CardType !== "Popular Category" ? "0 0 450px" : "0 0 300px", // fixed width for card

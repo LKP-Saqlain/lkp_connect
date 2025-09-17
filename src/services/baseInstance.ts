@@ -100,6 +100,8 @@ const mutualFundEndpoints = [
   endpoints.BSEStar_MfMandateStatus,
   endpoints.BSEStar_MfMandateEntry,
   endpoints.MF_TodayOrders,
+  endpoints.EnachEmailToClient,
+  endpoints.SinglePaymentEmail,
 ];
 
 // Utility functions

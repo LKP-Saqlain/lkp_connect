@@ -22,12 +22,18 @@ const MfCards = ({ CardData, handleSelectedMfType }: any) => {
             <CardBody>
               <div
                 style={{
-                  color: "green",
-                  fontSize: "28px",
                   marginBottom: "8px",
                 }}
               >
-                {item.icon}
+                <img
+                  src={item.icon}
+                  alt={item.label}
+                  style={{
+                    width: "40px",
+                    height: "40px",
+                    objectFit: "contain",
+                  }}
+                />
               </div>
               <div style={{ fontSize: "14px", fontWeight: 500 }}>
                 {item.label}

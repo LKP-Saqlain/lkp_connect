@@ -32,6 +32,7 @@ interface NestedModalProps {
   upiId?: string;
   dateSelected: number | null;
   bseSchemeCode: string | undefined;
+  selectedBank: any;
 }
 
 const NestedModal = ({
@@ -48,19 +49,19 @@ const NestedModal = ({
   bseSchemeCode,
   dateSelected,
   amount,
+  selectedBank,
 }: NestedModalProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [mandateDetails, setMandateDetails] = useState<MandateDetail[]>([]);
   const [selectedMandateId, setSelectedMandateId] = useState<string | null>(
     null
   );
   const [showCreateMandateModal, setShowCreateMandateModal] = useState(false);
-  const [selectedBank, setSelectedBank] = useState<any>(null); // for selection
   const [orderNo, setOrderNo] = useState<any>(null); // for selection
   const [secondsLeft, setSecondsLeft] = useState(30);
   const [timerPage, setTimerPage] = useState(false);
   const [stopEnach, setStopEnach] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
   // Handler for bank selection
 
   let startDate = "";
@@ -68,11 +69,19 @@ const NestedModal = ({
   if (dateSelected !== null) {
     const today = new Date();
     const day = String(dateSelected).padStart(2, "0");
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const year = today.getFullYear();
-
-    startDate = `${day}/${month}/${year}`; // Example: "03/09/2025"
+    const nextMonthDate = new Date(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      1
+    );
+    const month = String(nextMonthDate.getMonth() + 1).padStart(2, "0");
+    const year = nextMonthDate.getFullYear();
+    startDate = `${day}/${month}/${year}`; // e.g., "11/10/2025"
   }
+
+  useEffect(() => {
+    console.log(selectedBank, "selectedBank came from mfmodal");
+  }, [selectedBank]);
 
   useEffect(() => {
     const fetchMandates = async () => {
@@ -124,7 +133,7 @@ const NestedModal = ({
     if (secondsLeft === 0) {
       toggle(); // close the modal
       setTimerPage(false);
-      handleSinglepayment();
+      // handleSinglepayment();
       return;
     }
 
@@ -144,6 +153,20 @@ const NestedModal = ({
   const handleNewMandateCreated = (mandateId: string) => {
     console.log("Returned Mandate ID:", mandateId);
     setSelectedMandateId(mandateId);
+    setTimerPage(true);
+    setTimeout(() => {
+      console.log(selectedMandateId, " selectedMandateId;");
+      handleXsip(mandateId);
+
+      if (selectedPaymentType === "netbanking") {
+        setSecondsLeft(180);
+        if (!stopEnach) {
+          triggerENachLoop(mandateId); // Only call if stopEnach is false
+        } // Start the recursive loop
+      } else {
+        setSecondsLeft(60);
+      }
+    }, 2000);
   };
 
   const handleFinalConfirm = () => {
@@ -158,21 +181,21 @@ const NestedModal = ({
     handleXsip();
 
     if (selectedPaymentType === "netbanking") {
-      setSecondsLeft(20);
+      setSecondsLeft(180);
       if (!stopEnach) {
         triggerENachLoop(); // Only call if stopEnach is false
       } // Start the recursive loop
     } else {
-      setSecondsLeft(20);
+      setSecondsLeft(60);
     }
   };
 
-  const extractOrderNumber = (responseData: string): string | null => {
-    const match = responseData.match(/REG NO IS\s*:\s*(\d+)/);
-    return match ? match[1] : null;
-  };
+  // const extractOrderNumber = (responseData: string): string | null => {
+  //   const match = responseData.match(/REG NO IS\s*:\s*(\d+)/);
+  //   return match ? match[1] : null;
+  // };
 
-  const handleXsip = async () => {
+  const handleXsip = async (mandateId?: any) => {
     const payload = {
       transactionCode: "NEW",
       schemeCode: bseSchemeCode, //
@@ -184,7 +207,7 @@ const NestedModal = ({
       remarks: "test",
       firstOrderFlag: "Y",
       brokerage: "",
-      mandateId: selectedMandateId, //
+      mandateId: mandateId || selectedMandateId, //
       ipAdd: "",
       transMode: "D",
       dpTxnMode: "C",
@@ -209,10 +232,15 @@ const NestedModal = ({
 
     try {
       const response = await apiServices.BSEStar_XSIPOrderEntry(payload);
-      const message = response?.data?.data;
-      const orderNumber = extractOrderNumber(message);
-      setOrderNo(orderNumber);
-      console.log(orderNumber, "extractOrderNumber");
+      const orderNumber = response?.data?.data?.firstOrderTodayOrderNo;
+      if (orderNumber) {
+        setOrderNo(orderNumber);
+        console.log(orderNumber, "Received Order Number");
+        // ✅ Now call handleSinglepayment
+        setTimeout(() => {
+          handleSinglepayment();
+        }, 5000);
+      }
       if (response?.data?.statusCode === 417) {
         ShowToast("error", response?.data?.data);
         toggle();
@@ -224,13 +252,23 @@ const NestedModal = ({
       dispatch(hideLoader());
     }
   };
-  const triggerENachLoop = async () => {
+
+  const triggerENachLoop = async (mandateId?: any, retryCount = 0) => {
+    if (retryCount > 8) {
+      console.warn("triggerENachLoop Max retry limit reached.");
+      return;
+    }
+    // debugger;
+    let mandu = mandateId || selectedMandateId;
     const payload = {
       clientCode: clientNo,
-      mandateID: selectedMandateId,
-      loopbackurl: "http://uat.lkpconnect.net.in/dashboard",
+      mandateID: mandu,
+      loopbackurl: "https://lkpconnect.net.in/dashboard",
     };
-
+    if (!payload.clientCode || !payload.mandateID || !payload.loopbackurl) {
+      console.warn("cechke payload cechke console", payload);
+      return; // ⛔ Stop execution
+    }
     dispatch(showLoader("Handling Enach..."));
 
     try {
@@ -239,37 +277,83 @@ const NestedModal = ({
 
       console.log(message, "eNach url");
 
+      // ✅ success: open URL and send email
       if (message?.code === 200 && message?.message) {
-        const url = message.message;
-        window.open(url, "_blank");
-        dispatch(hideLoader());
-        return; // ✅ Exit loop on success
+        const url: string = message.message;
+        // window.open(url, "_blank");
+
+        await sendEmail({
+          url,
+          mandateId: mandateId || selectedMandateId,
+          orderNo: orderNo ?? "",
+          type: "ENACH",
+        });
+
+        return; // stop retrying
       }
     } catch (error) {
-      console.error("Error fetching mandate status", error);
+      console.error("Error fetching ENach URL", error);
+    } finally {
+      dispatch(hideLoader());
     }
-
     dispatch(hideLoader());
-
     // ⏳ Retry after 4 seconds
-    setTimeout(triggerENachLoop, 4000);
+    setTimeout(() => triggerENachLoop(mandu, retryCount + 1), 6000);
   };
+
+  const sendEmail = async ({
+    url,
+    mandateId,
+    orderNo,
+    type = "ENACH", // or "SINGLE"
+  }: {
+    url: string;
+    mandateId: string;
+    orderNo: string;
+    type?: "ENACH" | "SINGLE";
+  }) => {
+    const payload = {
+      link: url,
+      clientCode: clientNo,
+      orderNo,
+      mandateId,
+      schemeCode: bseSchemeCode,
+      option: type === "ENACH" ? "ENACH" : "",
+    };
+
+    try {
+      const response =
+        type === "ENACH"
+          ? await apiServices.EnachEmailToClient(payload)
+          : await apiServices.SinglePaymentEmail(payload);
+
+      console.log(response, "Email response");
+    } catch (error) {
+      console.error("Error sending email", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
   const handleSinglepayment = async () => {
     dispatch(showLoader("Processing payment..."));
 
     try {
-      const Payload = {
-        modeofpayment: selectedPaymentType === "upi" ? "UPI" : "DIRECT",
-        bankid: "HDF", // hardcoded for now, or use selectedBank?.code
-        accountnumber: banks[0]?.account ?? "",
-        ifsc: banks[0]?.ifsc ?? "",
-        ordernumber: orderNo,
+      const payload = {
+        modeofpayment:
+          selectedPaymentType === "upi"
+            ? "UPI"
+            : selectedBank?.paymentMode ?? "DIRECT",
+        bankid: selectedBank?.code ?? "",
+        accountnumber: selectedBank?.account ?? "",
+        ifsc: selectedBank?.ifsc ?? "",
+        ordernumber: orderNo ?? "",
         totalamount: amount.toString(),
         internalrefno: "",
         nefTreference: selectedPaymentType === "upi" ? "" : "1",
         mandateid: "",
         vpaid: selectedPaymentType === "upi" ? upiId : "",
-        loopbackURL: "http://uat.lkpconnect.net.in/dashboard",
+        loopbackURL: "https://lkpconnect.net.in/dashboard",
         allowloopBack: "Y",
         filler1: "",
         filler2: "",
@@ -277,37 +361,42 @@ const NestedModal = ({
         filler4: "",
         filler5: "",
       };
+      console.log("payload of singlepayment nested", payload);
 
-      // Call API
-      const response = await apiServices.BSEStar_SinglePayment(Payload);
-      const htmlContent = response?.data?.data; // even with \r\n\t inside
-      if (response?.data?.statusCode === 417) {
-        ShowToast("error", response?.data?.data);
+      const response = await apiServices.BSEStar_SinglePayment(payload);
+      const htmlContent = response?.data?.data?.responsestring;
+      const statusCode = response?.data?.data?.statuscode;
+
+      if (statusCode === 417 || statusCode === 101) {
+        ShowToast("error", htmlContent);
+        return;
       }
+
       if (selectedPaymentType === "upi") {
         ShowToast("info", htmlContent);
       } else {
-        const newWindow = window.open("", "_blank");
-        if (newWindow) {
-          newWindow.document.open();
-          newWindow.document.write(htmlContent); // browser interprets it fine
-          newWindow.document.close();
-        }
+        // 🔐 Now safely encode
+        const encodedHtml = btoa(htmlContent);
+        await sendEmail({
+          url: encodedHtml,
+          mandateId: selectedMandateId ?? "",
+          orderNo: orderNo ?? "",
+          type: "SINGLE",
+        });
       }
-
-      // Success alert (customize by modalType if needed)
     } catch (err: any) {
       console.error("Investment failed", err);
-      alert("Something went wrong. Please try again.");
+      ShowToast("error", "Something went wrong. Please try again.");
     } finally {
       dispatch(hideLoader());
     }
   };
 
-  const handleBankSelect = (bankId: string) => {
-    const selected = banks.find((b: any) => b.id === bankId);
-    setSelectedBank(selected);
-  };
+  // const handleBankSelect = (bankId: string) => {
+  //   const selected = banks.find((b: any) => b.id === bankId);
+  //   // setSelectedBank(selected);
+  //   console.log("handleBankSelect from nested modal", selected);
+  // };
 
   return (
     <>
@@ -491,7 +580,7 @@ const NestedModal = ({
         toggle={() => setShowCreateMandateModal(false)}
         banks={banks}
         selectedBank={selectedBank}
-        onBankSelect={handleBankSelect}
+        // onBankSelect={handleBankSelect}
         selectedPaymentType={selectedPaymentType}
         clientNo={clientNo}
         upiId={upiId}

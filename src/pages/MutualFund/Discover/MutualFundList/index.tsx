@@ -90,7 +90,7 @@ const MutualFundList = ({
       }}
     >
       <BasicTabs
-        heading="Our Recommendation"
+        heading="Mutual Fund List"
         tabs={[]}
         value={0}
         onChange={() => {}}
@@ -123,6 +123,7 @@ const MutualFundList = ({
         </button>
       </div>
       {/* Table */}
+      {/* <div>slected time line</div> */}
       <MutualFundTable
         rows={data}
         selectedLabel={selectedMfType}

@@ -1,7 +1,10 @@
 // mfTypes.ts
-import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
-import CampaignIcon from "@mui/icons-material/Campaign";
 import Discover from "./Discover";
+import highReturnsImg from "../../assets/images/MF/high_returns.png";
+import TaxSavingImg from "../../assets/images/MF/Tax_saving.png";
+import sip100Img from "../../assets/images/MF/SIP With 101.png";
+import sip500Img from "../../assets/images/MF/SIP With 501.png";
+import nfoImg from "../../assets/images/MF/NFO.png";
 // import Watchlist from "./Watchlist";
 import Portfolio from "./Portfolio";
 import Report from "./Report";
@@ -36,6 +39,7 @@ export interface MutualFundModalProps {
   modalType: "oneTime" | "sip" | "redeem" | null;
   title?: string;
   bseSchemeCode?: string;
+  hasToken: string;
 }
 
 export interface BankDetail {
@@ -45,6 +49,7 @@ export interface BankDetail {
   ifsc: string;
   code: string;
   logo?: string | null;
+  paymentMode: string;
 }
 export const mainMenuC = [
   { id: 1, label: "equity" },
@@ -55,16 +60,16 @@ export const mainMenuC = [
 ];
 
 export const MfCardRecoLabel = [
-  { id: "1", label: "High Returns", icon: <PaidRoundedIcon />, ProductId: 9 },
-  { id: "2", label: "Tax Savings", icon: <PaidRoundedIcon />, ProductId: 20 },
-  { id: "3", label: "SIP with 100", icon: <PaidRoundedIcon />, ProductId: 19 },
-  { id: "4", label: "SIP with 500", icon: <PaidRoundedIcon />, ProductId: 17 },
+  { id: "1", label: "High Returns", icon: highReturnsImg, ProductId: 9 },
+  { id: "2", label: "Tax Savings", icon: TaxSavingImg, ProductId: 20 },
+  { id: "3", label: "SIP with 100", icon: sip100Img, ProductId: 19 },
+  { id: "4", label: "SIP with 500", icon: sip500Img, ProductId: 17 },
 ];
 export const MfCardPassLabel = [
   {
     id: "1",
     label: "NFO",
-    icon: <CampaignIcon sx={{ color: "#11395c", fontSize: "32px" }} />,
+    icon: nfoImg,
   },
   // { id: "2", label: "Tax Savings", icon: <PaidRoundedIcon /> },
 ];

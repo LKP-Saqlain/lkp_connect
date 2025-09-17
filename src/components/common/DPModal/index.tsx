@@ -465,7 +465,7 @@ const CustomModal = ({
   };
 
   const shouldShowRemarkField = () => {
-    console.log(action, "dsdsdsdsd");
+    console.log(action, "dsdsdsdsd", activeSubItem);
     const remarkItems = [
       "Communication Retrival Checker",
       "KYC Approval",
@@ -830,6 +830,9 @@ const CustomModal = ({
             className="btn"
             type="submit"
             style={{ width: "80px", backgroundColor: "#11395C" }}
+            onClick={() => {
+              console.log(activeSubItem, "dpMKodal");
+            }}
           >
             Yes
           </Button>

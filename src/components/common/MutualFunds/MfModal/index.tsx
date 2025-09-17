@@ -28,6 +28,7 @@ const MutualFundModal = ({
   modalType,
   title,
   bseSchemeCode,
+  hasToken,
 }: MutualFundModalProps) => {
   const [amount, setAmount] = useState(500);
   const [selectedPaymentType, setSelectedPaymentType] = useState<string | null>(
@@ -44,6 +45,7 @@ const MutualFundModal = ({
   const [clientNo, setClientNo] = useState("");
   const [isNestedModalOpen, setNestedModalOpen] = useState(false);
   const toggleNestedModal = () => setNestedModalOpen((prev) => !prev);
+  const [upiName, setUpiName] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -55,6 +57,7 @@ const MutualFundModal = ({
         code: selected.code,
         account: selected.account,
         ifsc: selected.ifsc,
+        api_paymentMode: selected.paymentMode,
       });
     }
   };
@@ -68,6 +71,7 @@ const MutualFundModal = ({
       setDateSelected(null);
       setUpiId("");
       setUpiVerified(undefined);
+      setUpiName("");
     }
     console.log(bseSchemeCode, "bseSchemeCode");
   }, [isOpen]);
@@ -194,9 +198,9 @@ const MutualFundModal = ({
       const isUpi = selectedPaymentType === "upi";
 
       const paymentPayload = {
-        modeofpayment: isUpi ? "UPI" : "DIRECT",
-        // bankid: selectedBank?.code ?? "",
-        bankid: "HDF",
+        modeofpayment: isUpi ? "UPI" : selectedBank?.paymentMode ?? "DIRECT",
+        bankid: selectedBank?.code ?? "",
+        // bankid: "HDF",
         accountnumber: selectedBank?.account ?? "",
         // accountnumber: "008291800000871",
         ifsc: selectedBank?.ifsc ?? "",
@@ -207,7 +211,7 @@ const MutualFundModal = ({
         nefTreference: isUpi ? "" : "1",
         mandateid: "",
         vpaid: isUpi ? upiId : "",
-        loopbackURL: "http://uat.lkpconnect.net.in/dashboard",
+        loopbackURL: "https://lkpconnect.net.in/dashboard",
         allowloopBack: "Y",
         filler1: "",
         filler2: "",
@@ -218,22 +222,61 @@ const MutualFundModal = ({
 
       const response = await apiServices.BSEStar_SinglePayment(paymentPayload);
 
-      const htmlContent = response?.data?.data;
+      const htmlContent = response?.data?.data?.responsestring;
       if (selectedPaymentType === "upi") {
         ShowToast("info", htmlContent);
       } else {
-        const newWindow = window.open("", "_blank");
-        if (newWindow) {
-          newWindow.document.open();
-          newWindow.document.write(htmlContent); // browser interprets it fine
-          newWindow.document.close();
-        }
+        // const newWindow = window.open("", "_blank");
+        // if (newWindow) {
+        //   newWindow.document.open();
+        //   newWindow.document.write(htmlContent); // browser interprets it fine
+        //   newWindow.document.close();
+        // }
+
+        const encodedHtml = btoa(htmlContent);
+        await sendEmail({
+          url: encodedHtml,
+          mandateId: "",
+          orderNo: orderNumber,
+          type: "SINGLE",
+        });
       }
       toggle(); // close modal
     } catch (err) {
       console.error("Investment failed", err);
 
       setUpiVerified(undefined);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const sendEmail = async ({
+    url,
+    mandateId,
+    orderNo,
+    type = "ENACH", // or "SINGLE"
+  }: {
+    url: string;
+    mandateId: string;
+    orderNo: string;
+    type?: "ENACH" | "SINGLE";
+  }) => {
+    const payload = {
+      link: url,
+      clientCode: clientNo,
+      orderNo,
+      mandateId,
+      schemeCode: bseSchemeCode,
+      option: type === "ENACH" ? "ENACH" : "",
+    };
+
+    try {
+      const response = await apiServices.SinglePaymentEmail(payload);
+
+      console.log(response, "Email response");
+    } catch (error) {
+      console.error("Error sending email", error);
     } finally {
       dispatch(hideLoader());
     }
@@ -266,6 +309,7 @@ const MutualFundModal = ({
           account: item.bankAccountNumber,
           ifsc: item.ifsc,
           code: item.bankCode,
+          paymentMode: item.payMode,
         })
       );
 
@@ -287,12 +331,14 @@ const MutualFundModal = ({
 
     try {
       const response = await apiServices.VerifyUpi(payload);
-      const isValid = response?.data?.isUpiValid;
-
+      // const isValid = response?.data?.isUpiValid;
+      const isValid = response?.data?.message?.includes("True");
       if (isValid) {
-        setUpiVerified(true); // Disable input & change button
+        setUpiVerified(true);
+        setUpiName(response?.data?.data || ""); // Save the name for display
       } else {
         setUpiVerified(false);
+        setUpiName(""); // Clear on failure
       }
     } catch (error) {
       console.error("Error verifying UPI ID:", error);
@@ -305,7 +351,7 @@ const MutualFundModal = ({
 
   useEffect(() => {
     clientBankDetails();
-  }, []);
+  }, [hasToken]);
 
   return (
     <>
@@ -389,7 +435,11 @@ const MutualFundModal = ({
                       transition: "border 0.2s",
                       marginBottom: "10px",
                     }}
-                    onClick={() => handleBankSelect(bank.id)}
+                    onClick={() => {
+                      handleBankSelect(bank.id);
+                      setUpiId("");
+                      setUpiVerified(undefined);
+                    }}
                   >
                     <div
                       style={{
@@ -626,7 +676,11 @@ const MutualFundModal = ({
                 {paymentOptions.map((option) => (
                   <div
                     key={option.id}
-                    onClick={() => setSelectedPaymentType(option.id)}
+                    onClick={() => {
+                      setSelectedPaymentType(option.id);
+                      setUpiId("");
+                      setUpiVerified(undefined);
+                    }}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -688,12 +742,13 @@ const MutualFundModal = ({
                       value={upiId}
                       onChange={(e) => setUpiId(e.target.value)}
                       disabled={upiVerified}
+                      error={upiVerified === false}
                       InputProps={{
                         style: {
                           padding: "6px 10px",
                           fontSize: "14px",
                           backgroundColor: upiVerified ? "#f5f5f5" : "#fff", // light grey if disabled
-                          border: upiVerified === false ? "1px solid red" : "",
+                          // border: upiVerified === false ? "1px solid red" : "",
                         },
                       }}
                       sx={{
@@ -718,7 +773,35 @@ const MutualFundModal = ({
                     >
                       {upiVerified ? "Verified" : "Verify"}
                     </Button>
+                    {upiVerified && (
+                      <Button
+                        style={{
+                          minWidth: "40px",
+                          height: "40px",
+                          padding: "6px",
+                          fontSize: "20px",
+                          lineHeight: "20px",
+                          color: "red",
+                          backgroundColor: "#eee",
+                          borderRadius: "8px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          setUpiId("");
+                          setUpiVerified(undefined); // or false, depending on your state init
+                          setUpiName(""); // reset name as well if you have
+                        }}
+                        aria-label="Cancel UPI Verification"
+                      >
+                        x
+                      </Button>
+                    )}
                   </div>
+                  {upiVerified === true
+                    ? `Verified: ${upiName}` // You'll need to store `upiName` in state
+                    : upiVerified === false
+                    ? "Invalid UPI ID"
+                    : ""}
                 </div>
               )}
             </div>
@@ -783,6 +866,7 @@ const MutualFundModal = ({
         bseSchemeCode={bseSchemeCode}
         dateSelected={dateSelected}
         amount={amount}
+        selectedBank={selectedBank}
       />
     </>
   );

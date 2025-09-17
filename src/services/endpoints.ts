@@ -174,7 +174,7 @@ export const endpoints = {
   MF_NFODetails: "api/MF/MF_NFODetails",
   MF_BasketDetialedList: "api/MF/MF_BasketDetialedList",
   ClientProfile: "api/Login/ClientProfile",
-  VerifyUpi: "api/IPO/VerifyUpi",
+  VerifyUpi: "api/MF/VerifyUpi",
   BSEStar_SinglePayment: "/api/MF/BSEStar_SinglePayment",
   BSEStar_MfOrderEntry: "/api/MF/BSEStar_MfOrderEntry",
   BSEStar_XSIPOrderEntry: "/api/MF/BSEStar_XSIPOrderEntry",
@@ -182,6 +182,8 @@ export const endpoints = {
   BSEStar_MfMandateEntry: "/api/MF/BSEStar_MfMandateEntry",
   BSEStar_MfMandateENACH: "/api/MF/BSEStar_MfMandateENACH",
   MF_TodayOrders: "/api/Dashboard/MF_TodayOrders",
+  EnachEmailToClient: "/api/MF/EnachEmailToClient",
+  SinglePaymentEmail: "/api/MF/SinglePaymentEmail",
   ResearchCallData: "/api/Notification/ResearchCallData",
   UploadTdsfile: "/api/Account/UploadTdsfile",
 };
