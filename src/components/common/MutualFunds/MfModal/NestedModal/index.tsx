@@ -238,7 +238,7 @@ const NestedModal = ({
         console.log(orderNumber, "Received Order Number");
         // ✅ Now call handleSinglepayment
         setTimeout(() => {
-          handleSinglepayment();
+          handleSinglepayment(orderNumber);
         }, 5000);
       }
       if (response?.data?.statusCode === 417) {
@@ -335,7 +335,7 @@ const NestedModal = ({
     }
   };
 
-  const handleSinglepayment = async () => {
+  const handleSinglepayment = async (orderNumber: any) => {
     dispatch(showLoader("Processing payment..."));
 
     try {
@@ -347,7 +347,7 @@ const NestedModal = ({
         bankid: selectedBank?.code ?? "",
         accountnumber: selectedBank?.account ?? "",
         ifsc: selectedBank?.ifsc ?? "",
-        ordernumber: orderNo ?? "",
+        ordernumber: orderNumber ?? "",
         totalamount: amount.toString(),
         internalrefno: "",
         nefTreference: selectedPaymentType === "upi" ? "" : "1",
@@ -380,7 +380,7 @@ const NestedModal = ({
         await sendEmail({
           url: encodedHtml,
           mandateId: selectedMandateId ?? "",
-          orderNo: orderNo ?? "",
+          orderNo: orderNumber ?? "",
           type: "SINGLE",
         });
       }
