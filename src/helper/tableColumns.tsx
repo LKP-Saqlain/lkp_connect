@@ -8591,6 +8591,8 @@ export const MutualFundOrderColumns: GridColDef[] = [
     disableColumnMenu: true,
     flex: 0.7,
     minWidth: 60,
+    align: "center",
+    headerAlign: "center",
   },
   {
     field: "startDate",
@@ -8616,7 +8618,7 @@ export const MutualFundOrderColumns: GridColDef[] = [
     minWidth: 120,
 
     headerAlign: "center",
-    align: "left",
+    align: "center",
   },
   {
     field: "remarks",

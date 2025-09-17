@@ -282,7 +282,7 @@ const MfReport = (props: any) => {
       </Card>
       <Card sx={{ borderRadius: 4, p: 2 }}>
         {selectedLabel === "Mandates" ? (
-          mandateData.length > 0 ? (
+          mandateData?.length > 0 ? (
             mandateData.map((item, index) => (
               <TradeCard
                 key={index}

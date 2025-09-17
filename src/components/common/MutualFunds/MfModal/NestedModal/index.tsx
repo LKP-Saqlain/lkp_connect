@@ -133,7 +133,7 @@ const NestedModal = ({
     if (secondsLeft === 0) {
       toggle(); // close the modal
       setTimerPage(false);
-      handleSinglepayment();
+      // handleSinglepayment();
       return;
     }
 
@@ -159,12 +159,12 @@ const NestedModal = ({
       handleXsip(mandateId);
 
       if (selectedPaymentType === "netbanking") {
-        setSecondsLeft(10);
+        setSecondsLeft(180);
         if (!stopEnach) {
           triggerENachLoop(mandateId); // Only call if stopEnach is false
         } // Start the recursive loop
       } else {
-        setSecondsLeft(10);
+        setSecondsLeft(60);
       }
     }, 2000);
   };
@@ -181,19 +181,19 @@ const NestedModal = ({
     handleXsip();
 
     if (selectedPaymentType === "netbanking") {
-      setSecondsLeft(20);
+      setSecondsLeft(180);
       if (!stopEnach) {
         triggerENachLoop(); // Only call if stopEnach is false
       } // Start the recursive loop
     } else {
-      setSecondsLeft(20);
+      setSecondsLeft(60);
     }
   };
 
-  const extractOrderNumber = (responseData: string): string | null => {
-    const match = responseData.match(/REG NO IS\s*:\s*(\d+)/);
-    return match ? match[1] : null;
-  };
+  // const extractOrderNumber = (responseData: string): string | null => {
+  //   const match = responseData.match(/REG NO IS\s*:\s*(\d+)/);
+  //   return match ? match[1] : null;
+  // };
 
   const handleXsip = async (mandateId?: any) => {
     const payload = {
@@ -232,10 +232,15 @@ const NestedModal = ({
 
     try {
       const response = await apiServices.BSEStar_XSIPOrderEntry(payload);
-      const message = response?.data?.data;
-      const orderNumber = extractOrderNumber(message);
-      setOrderNo(orderNumber);
-      console.log(orderNumber, "extractOrderNumber");
+      const orderNumber = response?.data?.data?.firstOrderTodayOrderNo;
+      if (orderNumber) {
+        setOrderNo(orderNumber);
+        console.log(orderNumber, "Received Order Number");
+        // ✅ Now call handleSinglepayment
+        setTimeout(() => {
+          handleSinglepayment();
+        }, 5000);
+      }
       if (response?.data?.statusCode === 417) {
         ShowToast("error", response?.data?.data);
         toggle();
@@ -247,10 +252,17 @@ const NestedModal = ({
       dispatch(hideLoader());
     }
   };
-  const triggerENachLoop = async (mandateId?: any) => {
+
+  const triggerENachLoop = async (mandateId?: any, retryCount = 0) => {
+    if (retryCount > 8) {
+      console.warn("triggerENachLoop Max retry limit reached.");
+      return;
+    }
+    // debugger;
+    let mandu = mandateId || selectedMandateId;
     const payload = {
       clientCode: clientNo,
-      mandateID: mandateId || selectedMandateId,
+      mandateID: mandu,
       loopbackurl: "https://lkpconnect.net.in/dashboard",
     };
     if (!payload.clientCode || !payload.mandateID || !payload.loopbackurl) {
@@ -286,7 +298,7 @@ const NestedModal = ({
     }
     dispatch(hideLoader());
     // ⏳ Retry after 4 seconds
-    setTimeout(triggerENachLoop, 4000);
+    setTimeout(() => triggerENachLoop(mandu, retryCount + 1), 6000);
   };
 
   const sendEmail = async ({
@@ -363,8 +375,10 @@ const NestedModal = ({
       if (selectedPaymentType === "upi") {
         ShowToast("info", htmlContent);
       } else {
+        // 🔐 Now safely encode
+        const encodedHtml = btoa(htmlContent);
         await sendEmail({
-          url: htmlContent || "",
+          url: encodedHtml,
           mandateId: selectedMandateId ?? "",
           orderNo: orderNo ?? "",
           type: "SINGLE",
