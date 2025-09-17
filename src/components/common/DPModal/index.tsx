@@ -7,7 +7,17 @@ import {
   Row,
   Input,
 } from "reactstrap";
-import { TextField } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -55,6 +65,9 @@ interface CustomModalProps {
   fileExtension?: any;
   isDropUpload?: any;
   isPartnerContest?: boolean;
+  handleVerifyDetails?: (accNo: any, ifscCode: any) => void;
+  isBankVerified?: any;
+  setIsBankVerified?: any;
 }
 
 const CustomModal = ({
@@ -78,6 +91,9 @@ const CustomModal = ({
   fileExtension,
   isDropUpload,
   isPartnerContest,
+  handleVerifyDetails,
+  isBankVerified,
+  setIsBankVerified,
 }: CustomModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -109,9 +125,23 @@ const CustomModal = ({
       fileExtension,
       setSetShowImg,
       previewUrl,
-      activeSubItem
+      activeSubItem,
+      "row",
+      row,
+      "accctionnnn"
     );
-  }, [fileExtension, setSetShowImg, previewUrl, activeSubItem]);
+  }, [fileExtension, setSetShowImg, previewUrl, activeSubItem, row]);
+
+  useEffect(() => {
+    console.log("Actionnn", action);
+  }, [action]);
+
+  useEffect(() => {
+    if (activeSubItem === "Vendor Approval" && selectedFile) {
+      alert("upload call from this");
+      handleFileUpload?.(row, selectedFile, formik.values.tdsFlag);
+    }
+  }, [activeSubItem, selectedFile]);
 
   const handleSessionClear = () => {
     localStorage.clear();
@@ -140,8 +170,36 @@ const CustomModal = ({
       userChangeValue: "",
       userPanValue: "",
       dropdownOption: "",
+      tdsFlag: "Yes",
+      uploadProof: null,
     },
     validationSchema: Yup.object({
+      // For Vendor Approval
+      ...(activeSubItem === "Vendor Approval" &&
+        action === "approve" && {
+          remark: Yup.string().trim().required("Remark is required"),
+          tdsFlag: Yup.string().required("TDS Flag is required"),
+          uploadProof: Yup.mixed<File>()
+            .nullable()
+            .when("tdsFlag", {
+              is: "Yes", // only validate when Yes
+              then: (schema) =>
+                schema
+                  .required("TDS Document is required")
+                  .test("fileSize", "File too large", (value) =>
+                    value instanceof File ? value.size <= 5 * 1024 * 1024 : true
+                  )
+                  .test("fileType", "Unsupported file format", (value) =>
+                    value instanceof File
+                      ? ["application/pdf", "image/jpeg", "image/png"].includes(
+                          value.type
+                        )
+                      : true
+                  ),
+              otherwise: (schema) => schema.notRequired(),
+            }),
+        }),
+
       // Remark validation for "Communication Retrival Checker"
       ...((activeSubItem === "Communication Retrival Checker" ||
         activeSubItem === "KYC Approval" ||
@@ -202,6 +260,7 @@ const CustomModal = ({
         const isSpecialRejectCase =
           activeSubItem === "Unlisted Shares Approval 1" && action === "reject";
         if (isStandardFlow || isSpecialRejectCase) {
+          alert("call from this");
           handleApproval?.(row, values.remark, entryFlag);
         }
         console.log(values.remark, "values.remark", row, entryFlag);
@@ -214,6 +273,8 @@ const CustomModal = ({
   const handleClose = () => {
     setmodal_center(false);
     formik.resetForm();
+    setSelectedFile(null);
+    setIsBankVerified(false);
     setZoomLevel(1);
     setIsDragging(false);
     setScrollPos({ left: 0, top: 0 });
@@ -363,6 +424,11 @@ const CustomModal = ({
     formik.resetForm(); // handleFileUpload(row, selectedFile, formik.values.remark);
   };
 
+  const handleVerifyBank = () => {
+    const { bankActNo, ifscCode } = row;
+    handleVerifyDetails?.(bankActNo, ifscCode);
+  };
+
   const renderHeaderIcon = () => {
     if (isAdmin) {
       return <ChangeCircleIcon sx={{ color: "#11395C", fontSize: "3.5rem" }} />;
@@ -419,6 +485,229 @@ const CustomModal = ({
     );
   };
 
+  const renderVendorFields = () => (
+    <>
+      <TextField
+        label="Bank Acc No"
+        variant="outlined"
+        fullWidth
+        size="small"
+        value={row?.bankActNo}
+        disabled={true}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        name="accNo"
+        sx={{ mt: 2 }}
+      />
+      <TextField
+        label="IFSC No"
+        variant="outlined"
+        fullWidth
+        size="small"
+        value={row?.ifscCode}
+        disabled={true}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        name="accNo"
+        sx={{ mt: 2 }}
+      />
+      <Button
+        style={{
+          position: "relative",
+          right: isBankVerified ? -200 : -170, //-170
+          fontSize: "10px",
+          minWidth: "37px",
+          padding: "1px 10px",
+          // lineHeight: 1.2,
+          borderRadius: "6px",
+          marginTop: "10px",
+          color: "#fff",
+          backgroundColor: "#11395C",
+          borderColor: "#11395C",
+          cursor: isBankVerified ? "not-allowed" : "pointer",
+        }}
+        disabled={isBankVerified}
+        onClick={handleVerifyBank}
+      >
+        {isBankVerified ? "Verified!" : " Verify Bank Account?"}
+      </Button>
+      {/* TDS Flag Section */}
+      <FormControl sx={{ width: "100%", mt: 2 }}>
+        <FormLabel
+          sx={{
+            fontSize: "13px",
+            fontWeight: 600,
+            textAlign: "left",
+            color: "#11395C",
+            // mb: 1,
+          }}
+        >
+          TDS Flag
+        </FormLabel>
+
+        <RadioGroup
+          row
+          name="tdsFlag"
+          value={formik.values.tdsFlag}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          // sx={{ gap: 2 }}
+        >
+          <FormControlLabel
+            value="Yes"
+            control={
+              <Radio
+                sx={{
+                  color: "#11395C",
+                  "&.Mui-checked": { color: "#11395C" },
+                }}
+              />
+            }
+            label="Yes"
+            sx={{ "& .MuiFormControlLabel-label": { fontSize: "13px" } }}
+          />
+
+          <FormControlLabel
+            value="No"
+            control={
+              <Radio
+                sx={{
+                  color: "#11395C",
+                  "&.Mui-checked": { color: "#11395C" },
+                }}
+              />
+            }
+            label="No"
+            sx={{ "& .MuiFormControlLabel-label": { fontSize: "13px" } }}
+          />
+        </RadioGroup>
+
+        {formik.touched.tdsFlag && formik.errors.tdsFlag && (
+          <FormHelperText error>{formik.errors.tdsFlag}</FormHelperText>
+        )}
+      </FormControl>
+
+      {/* Upload Proof Section - Shown Only When Yes */}
+      {formik.values.tdsFlag === "Yes" && (
+        <Box>
+          <FormLabel
+            sx={{
+              display: "block",
+              fontSize: "13px",
+              fontWeight: 600,
+              textAlign: "left",
+              color: "#11395C",
+            }}
+          >
+            Upload TDS Document
+          </FormLabel>
+
+          {/* If no file uploaded → show Upload Area */}
+          {!selectedFile && (
+            <>
+              {/* Hidden file input */}
+              <input
+                id="uploadProof"
+                name="uploadProof"
+                type="file"
+                accept=".jpg,.jpeg,.png,.pdf"
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+                    formik.setFieldValue("uploadProof", file);
+                    setSelectedFile(file);
+                  }
+                }}
+              />
+
+              {/* Styled Upload Area */}
+              <label htmlFor="uploadProof">
+                <Box
+                  sx={{
+                    border: "1px dashed #11395C",
+                    minWidth: "29rem",
+                    borderRadius: "6px",
+                    textAlign: "center",
+                    cursor: "pointer",
+                    backgroundColor: "#f9fafb",
+                    transition: "0.3s",
+                    "&:hover": { backgroundColor: "#eef6fb" },
+                    // p: 2,
+                  }}
+                >
+                  <Typography
+                    variant="caption"
+                    sx={{ display: "block", color: "gray" }}
+                  >
+                    <i
+                      className="ri-upload-2-line"
+                      style={{
+                        fontSize: "20px",
+                        color: "#11395C",
+                        marginRight: "5px",
+                      }}
+                    />{" "}
+                    (Accepted: JPG, JPEG, PNG, PDF)
+                  </Typography>
+                </Box>
+              </label>
+            </>
+          )}
+
+          {/* If file uploaded → show only selected file section */}
+          {selectedFile && (
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                // mt: 1,
+                p: 0.5,
+                border: "1px solid #ddd",
+                borderRadius: "6px",
+                backgroundColor: "#f5f5f5",
+                minWidth: "29rem",
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontStyle: "italic",
+                  color: "#333",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  maxWidth: "90%",
+                }}
+              >
+                {selectedFile.name}
+              </Typography>
+
+              <i
+                className="ri-close-line"
+                style={{
+                  fontSize: "18px",
+                  color: "red",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  setSelectedFile(null);
+                  formik.setFieldValue("uploadProof", null); // clear Formik value too
+                }}
+              />
+            </Box>
+          )}
+
+          {/* Formik error */}
+          {formik.touched.uploadProof && formik.errors.uploadProof && (
+            <FormHelperText error>{formik.errors.uploadProof}</FormHelperText>
+          )}
+        </Box>
+      )}
+    </>
+  );
+
   const renderRemarkField = () => (
     <TextField
       label="Enter Remark *"
@@ -431,8 +720,10 @@ const CustomModal = ({
       name="remark"
       error={formik.touched.remark && Boolean(formik.errors.remark)}
       helperText={formik.touched.remark && formik.errors.remark}
+      // sx={{ mb: activeSubItem === "Vendor Approval" ? 2 : 0 }}
     />
   );
+
   const renderAdminFields = () => (
     <Row style={{ gap: isMobile ? "1rem" : "0", fontFamily: "Public Sans" }}>
       <Col xs={12}>
@@ -858,13 +1149,17 @@ const CustomModal = ({
       </div>
     );
   };
+
+  useEffect(() => {
+    console.log("formikValues", formik.values);
+  }, [formik.values]);
   return (
     <ReactstrapModal
       isOpen={modal_center}
       toggle={tog_center}
       centered
-      backdrop={expiredtime ? "static" : undefined} // Disable clicking outside for expired token modal
-      keyboard={expiredtime ? false : undefined}
+      backdrop="static"
+      keyboard={false}
       style={{
         maxWidth: setShowImg
           ? "700px"
@@ -942,6 +1237,9 @@ const CustomModal = ({
             {/* Main Form */}
             <form onSubmit={formik.handleSubmit}>
               {shouldShowRemarkField() && renderRemarkField()}
+              {activeSubItem === "Vendor Approval" &&
+                action === "approve" &&
+                renderVendorFields()}
               {isAdmin && renderAdminFields()}
 
               {!isAdmin &&

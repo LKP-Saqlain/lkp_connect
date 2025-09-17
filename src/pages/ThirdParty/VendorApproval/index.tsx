@@ -6,10 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import pako from "pako";
+import ShowToast from "../../../utils/toastUtils";
+import dayjs from "dayjs";
+
+const allowedFormats = ["pdf", "png", "jpg", "jpeg"];
 
 const VendorApproval = ({ activeSubItem }: any) => {
   const [vendorData, setVendorData] = useState<any[]>([]);
-
+  const [isBankVerified, setIsBankVerified] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [fileExtension, setFileExtension] = useState("");
+  // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [fileBase64, setFileBase64] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id, authenticationValue } = useSelector(
@@ -69,9 +77,11 @@ const VendorApproval = ({ activeSubItem }: any) => {
       accApproval: entryFlag,
       accUserId: user_id,
       accRemark: remark,
-      tdsPath: tdsFileName,
+      tdsPath: uploadedFile?.name ? uploadedFile?.name : "",
       msmsePath: msmeFileName,
     };
+    console.log("approvalPayload", payload, uploadedFile?.name);
+
     dispatch(showLoader(""));
     apiServices
       .UpdateAccountApproval(payload)
@@ -87,11 +97,61 @@ const VendorApproval = ({ activeSubItem }: any) => {
       .finally(() => dispatch(hideLoader()));
   };
 
-  const handleDownload = (row: any, docType: "TDS" | "MSME" | "BANK") => {
+  const handleDownload = (
+    row: any,
+    docType: "TDS" | "MSME" | "BANK" | "PAN"
+  ) => {
     let base64Data = "";
     let fileExt = "";
     let fileName = "";
+    console.log("row", docType, row);
 
+    if (docType === "PAN") {
+      const fileExtension =
+        row && row.panDoc
+          ? `.${row.panDoc.split(".").pop()?.toLowerCase()}`
+          : "";
+
+      const payload = {
+        fileName: row.panDoc,
+        filePath:
+          "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterMSME",
+        fileType: fileExtension,
+        contentType: "",
+      };
+
+      dispatch(showLoader("Loading Preview..."));
+
+      apiServices
+        .ComplianceDownload(payload)
+        .then((response) => {
+          if (response?.status === 200 && response?.data) {
+            const fileBlob = new Blob([response.data], {
+              type:
+                response.headers["content-type"] || "application/octet-stream",
+            });
+
+            const url = URL.createObjectURL(fileBlob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = row.panDoc || `PAN_Document${fileExtension}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          } else {
+            ShowToast("info", "Error fetching file for preview");
+          }
+        })
+        .catch((error) => {
+          ShowToast("info", error.message || "Preview failed");
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+
+      return;
+    }
     switch (docType) {
       case "TDS":
         base64Data = row.tdsPath;
@@ -161,6 +221,160 @@ const VendorApproval = ({ activeSubItem }: any) => {
     URL.revokeObjectURL(url); // Cleanup
   };
 
+  const handleVerifyDetails = (accNo: string, ifscCode: string) => {
+    console.log("BankValues", accNo, ifscCode);
+
+    let payload = {
+      bankAccNo: accNo,
+      ifscCode: ifscCode,
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .VerifyBankDetails(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          let data = response?.data;
+          console.log("VerifyBankResponse", data);
+          if (data?.statusCode === 400) {
+            ShowToast("error", "Invalid Bank Details!");
+
+            setIsBankVerified(false);
+          } else {
+            if (data?.isSuccess) {
+              setIsBankVerified(true);
+            }
+            ShowToast("success", data?.message);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("eRRROR", error);
+        dispatch(hideLoader());
+      });
+  };
+  const handleFileUploadAsync = (
+    file: any,
+    communicationProofPath: string,
+    tdsFlag: any,
+    row: any
+  ): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
+      // debugger;
+      if (allowedFormats.includes(fileExt)) {
+        const { name } = file;
+        const fileName = name.substring(0, name.lastIndexOf("."));
+        console.log("fileName", fileName);
+
+        const reader = new FileReader();
+
+        reader.readAsDataURL(file);
+
+        reader.onload = () => {
+          const base64String = reader.result as string;
+          const base64Only = base64String.split(",")[1] || base64String;
+
+          setUploadedFile(file);
+          setFileBase64(base64Only); // Store base64
+          setFileExtension(fileExt);
+          console.log(
+            "tpConsole",
+            fileExtension,
+            fileBase64,
+            communicationProofPath
+          );
+
+          dispatch(showLoader("Uploading file..."));
+
+          let payload = {
+            vendorId: row?.vendorId,
+            accUserId: user_id,
+            tdsFlag: tdsFlag === "Yes" ? true : false,
+            tdsPath: base64Only,
+            tdsExtn: fileExt,
+          };
+
+          apiServices
+            .UploadTdsfile(payload)
+            .then((response) => {
+              dispatch(hideLoader());
+              if (response?.status === 200) {
+                console.log("response", response?.data?.data);
+
+                ShowToast("success", response?.data?.data);
+                resolve(fileExt); // Resolve the promise on success
+              } else {
+                reject(new Error("File upload failed"));
+              }
+            })
+            .catch((error) => {
+              dispatch(hideLoader());
+              console.error("ERROR-->", error);
+              reject(error); // Reject the promise on error
+            });
+        };
+
+        reader.onerror = (error) => {
+          console.error("Error reading file:", error);
+          dispatch(hideLoader());
+          reject(error); // Reject the promise on error
+        };
+      } else {
+        alert("Invalid file format! Allowed: DOC, PDF, XLS, XLSX, JPG, JPEG");
+        reject(new Error("Invalid file format"));
+      }
+    });
+  };
+
+  const handleFileUpload = async (row: any, file: File, tdsFlag: string) => {
+    console.log("Uploading file for", row, file, tdsFlag);
+    const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
+    const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
+
+    if (!allowedExtensions.includes(fileExt)) {
+      ShowToast(
+        "error",
+        "Please upload a file in JPG, JPEG, PNG, or PDF format."
+      );
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      const base64WithPrefix = reader.result as string;
+      const base64Data = base64WithPrefix.split(",")[1];
+
+      if (!base64Data) {
+        ShowToast("error", "Failed to process the file.");
+        return;
+      }
+      // const fileNameWithoutExtension = file.name.substring(
+      //   0,
+      //   file.name.lastIndexOf(".")
+      // );
+      const fullFileNameWithExtension = file.name;
+      const currentTime = dayjs().format("DD/MM/YYYY_hh:mmA");
+
+      const communicationProofPath = `${currentTime}_${fullFileNameWithExtension}`;
+      console.log("communicationProofPath", communicationProofPath);
+
+      try {
+        await handleFileUploadAsync(file, communicationProofPath, tdsFlag, row);
+      } catch (error) {
+        console.error("Compliance Upload Failed:", error);
+        ShowToast("error", "Compliance upload failed.");
+      }
+    };
+
+    reader.onerror = (error) => {
+      console.error("Error reading file:", error);
+      ShowToast("error", "Error reading the file.");
+    };
+
+    reader.readAsDataURL(file);
+  };
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -191,8 +405,10 @@ const VendorApproval = ({ activeSubItem }: any) => {
                     T6Data={vendorData}
                     handleApproval={handleApproval}
                     handleDownload={handleDownload}
-                    // handleEditClick={handleEditClick}
-                    // getUserDetails={getUserDetails}
+                    handleVerifyDetails={handleVerifyDetails}
+                    isBankVerified={isBankVerified}
+                    onFileUpload={handleFileUpload}
+                    setIsBankVerified={setIsBankVerified}
                   />
                 </CardBody>
               </Card>

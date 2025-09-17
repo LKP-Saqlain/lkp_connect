@@ -13,6 +13,7 @@ import ShowToast from "../../utils/toastUtils";
 import Nudge from "../../components/common/Nudge";
 import TradeCard from "../../components/common/tradeCard";
 import ResearchTabs from "../../components/common/CustomCards";
+// import { Pagination } from "@mui/material";
 
 interface T6Selling {
   ClientCode: string;
@@ -67,7 +68,28 @@ const DashboardCrypto = ({
   const [commodityCalls, setCommodityCalls] = useState<any[]>([]);
   const [currencyCalls, setCurrencyCalls] = useState<any[]>([]);
   const [filteredCalls, setFilteredCalls] = useState<any[]>([]);
+  //pagination logic
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const recordsPerPage = 10;
 
+  // const indexOfLastRecord = currentPage * recordsPerPage;
+  // const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  // const currentRecords = filteredCalls.slice(
+  //   indexOfFirstRecord,
+  //   indexOfLastRecord
+  // );
+
+  // const totalPages = Math.ceil(filteredCalls.length / recordsPerPage);
+
+  // const handlePageChange = (
+  //   event: React.ChangeEvent<unknown>,
+  //   value: number
+  // ) => {
+  //   console.log(event);
+
+  //   setCurrentPage(value);
+  // };
+  //ends here
   const dispatch = useDispatch<AppDispatch>();
   const sessionExpired = useSelector(
     (state: RootState) => state.sessionExpired.data.session
@@ -343,6 +365,8 @@ const DashboardCrypto = ({
             setCommodityCalls(
               data.filter((item: any) => item.category === "Commodity")
             );
+            console.log("commodityRecords", commodityCalls);
+
             setCurrencyCalls(
               data.filter((item: any) => item.category === "Currency")
             );
@@ -418,6 +442,7 @@ const DashboardCrypto = ({
                   <ResearchTabs TabClick={handleTabClick} />
                   <div>
                     {filteredCalls.length > 0 ? (
+                      // currentRecords.map((item, index) => (  //Only for pagination
                       filteredCalls.map((item, index) => (
                         <TradeCard
                           key={index}
@@ -428,8 +453,6 @@ const DashboardCrypto = ({
                           stopLoss={parseFloat(item.stopLoss)}
                           recPrice={parseFloat(item.price)}
                           targetPrice={parseFloat(item.targetPrice)}
-                          // profitPotential={20}
-                          // potentialLeft={15}
                           status={item.status}
                           category={item.category}
                           tag={item.subCategory}
@@ -440,8 +463,60 @@ const DashboardCrypto = ({
                         />
                       ))
                     ) : (
-                      <div>No Records Found</div>
+                      <>
+                        <Card
+                          style={{
+                            borderRadius: "8px",
+                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+                            border: "1px solid #e0e0e0",
+                            backgroundColor: "#f9f9f9",
+                            textAlign: "center",
+                          }}
+                        >
+                          <CardBody
+                            style={{
+                              // padding: "40px 20px",
+                              fontSize: "16px",
+                              fontWeight: 500,
+                              color: "#666",
+                            }}
+                          >
+                            No Records Found!
+                          </CardBody>
+                        </Card>
+                      </>
                     )}
+                    {/* Below is only for pagination */}
+                    {/* {filteredCalls.length > recordsPerPage && (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          // marginTop: "20px",
+                        }}
+                      >
+                        <Pagination
+                          count={totalPages}
+                          page={currentPage}
+                          onChange={handlePageChange}
+                          // color="primary"
+                          shape="circular"
+                          size="medium"
+                          sx={{
+                            "& .MuiPaginationItem-root": {
+                              color: "#11395C", // text color
+                            },
+                            "& .Mui-selected": {
+                              backgroundColor: "#11395C", // active page background
+                              color: "white", // active text color
+                            },
+                            "& .MuiPaginationItem-root:hover": {
+                              backgroundColor: "rgba(17,57,92,0.1)", // hover effect
+                            },
+                          }}
+                        />
+                      </div>
+                    )} */}
                   </div>
                 </CardBody>
               </Card>

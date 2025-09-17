@@ -30,17 +30,16 @@ const CustomTabs = ({ TabClick }: customTabs) => {
             fontWeight: 500,
             color: "#666",
             borderRadius: "6px",
-            // marginRight: "8px",
-            marginBottom: "2rem",
+            // marginBottom: "2rem",
             padding: "6px 12px",
+            backgroundColor: "#e0e0e0",
+            marginRight: "8px",
+
             "&.Mui-selected": {
               backgroundColor: "#11395C",
               color: "#fff",
               fontWeight: 600,
             },
-            // "&:hover": {
-            //   backgroundColor: "rgba(17, 57, 92, 0.1)",
-            // },
           },
         }}
       >

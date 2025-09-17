@@ -185,4 +185,5 @@ export const endpoints = {
   EnachEmailToClient: "/api/MF/EnachEmailToClient",
   SinglePaymentEmail: "/api/MF/SinglePaymentEmail",
   ResearchCallData: "/api/Notification/ResearchCallData",
+  UploadTdsfile: "/api/Account/UploadTdsfile",
 };
