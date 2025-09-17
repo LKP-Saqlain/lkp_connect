@@ -13,7 +13,6 @@ import {
   MenuItem,
   Select,
   TextField,
-  Typography,
   Radio,
   RadioGroup,
   FormControlLabel,
@@ -58,24 +57,6 @@ interface EditData {
   CommunicationProofPath?: string;
 }
 
-const selectOptions = {
-  cities: [
-    { label: "Select City", value: "" },
-    { label: "Mumbai", value: "Mumbai" },
-    { label: "Delhi", value: "Delhi" },
-    { label: "Bangalore", value: "Bangalore" },
-    { label: "Chennai", value: "Chennai" },
-    { label: "Kolkata", value: "Kolkata" },
-    { label: "Hyderabad", value: "Hyderabad" },
-    { label: "Pune", value: "Pune" },
-  ],
-  flagOptions: [
-    { label: "Select", value: "" },
-    { label: "Yes", value: "Yes" },
-    { label: "No", value: "No" },
-  ],
-};
-
 const vendorFields = [
   { name: "city", label: "City" },
   { name: "pinCode", label: "Pin Code" },
@@ -85,8 +66,8 @@ const vendorFields = [
   { name: "emailId", label: "Email ID" },
   { name: "telephoneNo", label: "Telephone No" },
   { name: "faxNo", label: "Fax No" },
-  { name: "panNo", label: "PAN No" },
   { name: "websiteName", label: "Website Name" },
+  { name: "panNo", label: "PAN No" },
 ] as const;
 
 const bankFields = [
@@ -115,13 +96,8 @@ const ModalComponent = ({
   isThirdPartyMaster = false,
   ExcludeOptions,
   isVendorMasterContent,
-  handleVerifyDetails,
-  disableFields,
-  printLocations,
-  showBankUpload,
   activeSubItem,
   setDisableFields,
-  setShowBankUpload,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
@@ -143,26 +119,22 @@ const ModalComponent = ({
   isThirdPartyMaster?: boolean;
   ExcludeOptions?: any;
   isVendorMasterContent?: any;
-  handleVerifyDetails?: (accNo: any, ifscCode: any) => void;
-  disableFields?: boolean;
-  printLocations?: any;
-  showBankUpload?: any;
   activeSubItem?: any;
   setDisableFields?: any;
   setShowBankUpload?: any;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [uploadedTDSFile, setUploadedTDSFile] = useState<File | null>(null);
+  const [uploadedPanFile, setUploadedPanFile] = useState<File | null>(null);
   const [uploadedMSMEFile, setUploadedMSMEFile] = useState<File | null>(null);
   const [uploadedBankFile, setUploadedBankFile] = useState<File | null>(null);
   const [uploadedFileM, setUploadedFileM] = useState<File | null>(null);
   const [uploadedImageM, setUploadedImageM] = useState<File | null>(null);
   const [fileExtension, setFileExtension] = useState("");
-  const [tdsFileExtension, setTdsFileExtension] = useState("");
+  const [panFileExtension, setPanFileExtension] = useState("");
   const [msmeFileExtension, setmsmeFileExtension] = useState("");
   const [bankFileExtension, setBankFileExtension] = useState("");
   const [fileBase64, setFileBase64] = useState<string | null>(null);
-  const [tdsFileBase64, setTDSFileBase64] = useState<string | null>(null);
+  const [panFileBase64, setPanFileBase64] = useState<string | null>(null);
   const [msmeFileBase64, setMsmeFileBase64] = useState<string | null>(null);
   const [bankFileBase64, setbankFileBase64] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -322,7 +294,9 @@ const ModalComponent = ({
   const getVendorMasterValidationSchema = () =>
     Yup.object().shape({
       vendorName: Yup.string().required("Vendor Name is required"),
-      chequePrintName: Yup.string().required("Cheque Print Name is required"),
+      chequePrintName: Yup.string().required(
+        "Bank Beneficiary Name is required"
+      ),
       address1: Yup.string().required("Address 1 is required"),
       // address2: Yup.string().required("Address2 is required"),
       // address3: Yup.string().required("Address3 is required"),
@@ -330,21 +304,21 @@ const ModalComponent = ({
       pinCode: Yup.string().required("Pin Code is required"),
       state: Yup.string().required("State is required"),
       // gstNo: Yup.string().required("GST No is required"),
-      // mobileNo: Yup.string().required("Mobile No is required"),
+      mobileNo: Yup.string().required("Mobile No is required"),
       emailId: Yup.string()
         .email("Invalid email")
         .required("Email ID is required"),
       // faxNo: Yup.string().required("FAX No is required"),
-      telephoneNo: Yup.string().required("Telephone No No is required"),
+      // telephoneNo: Yup.string().required("Telephone No No is required"),
       panNo: Yup.string().required("PAN No is required"),
       // serviceTaxNo: Yup.string().required("Service Tax No is required"),
       // websiteName: Yup.string().required("website Name is required"),
-      tdsFlag: Yup.string().required("TDS flag is required"),
-      tdsFile: Yup.mixed().when("tdsFlag", {
-        is: (val: string) => val === "Yes",
-        then: (schema) => schema.required("TDS document is required"),
-        otherwise: (schema) => schema.notRequired(),
-      }),
+      // tdsFlag: Yup.string().required("TDS flag is required"),
+      // tdsFile: Yup.mixed().when("tdsFlag", {
+      //   is: (val: string) => val === "Yes",
+      //   then: (schema) => schema.required("TDS document is required"),
+      //   otherwise: (schema) => schema.notRequired(),
+      // }),
       msmeFlag: Yup.string().required("MSME flag is required"),
       msmeType: Yup.string().when("msmeFlag", {
         is: (val: string) => val === "Yes",
@@ -356,31 +330,15 @@ const ModalComponent = ({
         then: (schema) => schema.required("MSME document is required"),
         otherwise: (schema) => schema.notRequired(),
       }),
-      bankName: Yup.string().required("Bank Name is required"),
+      panFile: Yup.mixed().nullable().required("PAN document is required"),
       ifscCode: Yup.string().required("IFSC Code is required"),
       bankAccountNo: Yup.string().required("Bank A/C No is required"),
-      bankFile: Yup.mixed().when("$showBankUpload", {
-        is: true,
-        then: (schema) => schema.required("Bank file is required"),
-        otherwise: (schema) => schema.notRequired(),
-      }),
-      paymentBank: Yup.string().required("Payment Bank is required"),
-      // chqPrintLocation: Yup.string().required(
-      //   "Cheque Print Location is required"
-      // ),
-      chqPrintLocation: Yup.object().shape({
-        // printLocCode: Yup.string().required("Print Location Code is required"),
-        printLocation: Yup.string().required(
-          "Cheque Print Location is required"
-        ),
-      }),
-      chqPrintLocationFlag: Yup.string().required(
-        "Cheque Print Location Flag is required"
-      ),
-      chqPrintNameFlag: Yup.string().required(
-        "Cheque Print Name Flag is required"
-      ),
-      // directAppLevel: Yup.string().required("Level is required"),
+      // bankFile: Yup.mixed().when("$showBankUpload", {
+      //   is: true,
+      //   then: (schema) => schema.required("Bank file is required"),
+      //   otherwise: (schema) => schema.notRequired(),
+      // }),
+      bankFile: Yup.mixed().nullable().required("Bank document is required"),
     });
 
   const initialValues = isRegulatoryContent
@@ -437,27 +395,22 @@ const ModalComponent = ({
         telephoneNo: "",
         faxNo: "",
         panNo: "",
+        panFile: null,
+        panExtension: "",
+        panDoc: "",
         serviceTaxNo: "",
         websiteName: "",
-        tdsFlag: "",
-        tdsFile: null,
+        // tdsFlag: "",
+        // tdsFile: null,
         tdsFileName: "",
         msmeFlag: "",
         msmeType: "",
         msmeFile: null,
         msmeFileName: "",
-        bankName: "",
         ifscCode: "",
         bankAccountNo: "",
         bankFile: null,
         bankFileName: "",
-        chqPrintNameFlag: "",
-        paymentBank: "",
-        chqPrintLocation: {
-          printLocCode: "",
-          printLocation: "",
-        },
-        chqPrintLocationFlag: "",
         // directAppLevel: "",
       }
     : {
@@ -579,10 +532,10 @@ const ModalComponent = ({
     // Call the actual submit function
     onSubmit?.(
       values,
-      tdsFileBase64,
+      panFileBase64,
       msmeFileBase64,
       bankFileBase64,
-      tdsFileExtension,
+      panFileExtension,
       msmeFileExtension,
       bankFileExtension
     );
@@ -802,20 +755,9 @@ const ModalComponent = ({
         formik.setFieldValue("vendorRate", editData?.vendorRate || null);
       }
       if (isVendorMasterContent) {
-        if (editData?.bankActNo !== "" && editData?.ifscCode !== "") {
-          setShowBankUpload(true);
-        }
-        const matchedPrintLocation = printLocations?.find(
-          (item: any) => item.printLocCode === editData.chqPrintLocCode
-        );
-
-        const finalPrintLocation = {
-          printLocCode: editData.chqPrintLocCode || "",
-          printLocation:
-            editData.chqPrintLocation ||
-            matchedPrintLocation?.printLocation ||
-            "",
-        };
+        // if (editData?.bankActNo !== "" && editData?.ifscCode !== "") {
+        //   setShowBankUpload(true);
+        // }
 
         formik.setValues({
           vendorName: editData.vendorName || "",
@@ -832,21 +774,19 @@ const ModalComponent = ({
           telephoneNo: editData.teleNo || "",
           faxNo: editData.faxNo || "",
           panNo: editData.panNo || editData.pan || "",
+          panDoc: editData.panDoc || editData.panDoc || "",
           serviceTaxNo: editData.serviceTaxNo || "",
           websiteName: editData.websiteName || "",
-          tdsFlag: editData.tdsFlag ? "Yes" : "No",
-          tdsFile: editData.tdsPath || null,
+          panFile: editData.panFile || null,
+          panExtension: "",
+          // tdsFlag: editData.tdsFlag ? "Yes" : "No",
+          // tdsFile: editData.tdsPath || null,
           msmeFlag: editData.msmeFlag ? "Yes" : "No",
           msmeType: editData.msmeType || "",
           msmeFile: editData.msmePath || null,
-          bankName: editData.bankName || "",
           ifscCode: editData.ifscCode || "",
           bankAccountNo: editData.bankActNo || "",
           bankFile: editData.bankDoc || null,
-          chqPrintNameFlag: editData.chqPrintNameFlag === "Y" ? "Yes" : "No",
-          paymentBank: editData.paymentBank || "",
-          chqPrintLocation: finalPrintLocation,
-          chqPrintLocationFlag: editData.chqPrintLocFlag === "Y" ? "Yes" : "No",
           bankFileName: editData?.bankFileName,
           tdsFileName: editData?.tdsFileName,
           msmeFileName: editData?.msmeFileName,
@@ -885,19 +825,19 @@ const ModalComponent = ({
 
           // Determine document type from isUploadedFile
           let docType = "";
-          if (isUploadedFile === "tdsFile") docType = "TDS";
-          else if (isUploadedFile === "msmeFile") docType = "MSME";
+          if (isUploadedFile === "msmeFile") docType = "MSME";
+          if (isUploadedFile === "panFile") docType = "PAN";
           else if (isUploadedFile === "bankFile") docType = "BANK";
 
           // Final file name: authenticationValue_<DOC_TYPE>.<extension>
           const finalFileName = `${authenticationValue}_${docType}.${fileExt}`;
           console.log("customFileName", finalFileName);
 
-          if (isUploadedFile === "tdsFile") {
-            setUploadedTDSFile(file);
-            setTDSFileBase64(base64Only);
-            setTdsFileExtension(fileExt);
-            formik.setFieldValue("tdsFileName", finalFileName);
+          if (isUploadedFile === "panFile") {
+            setUploadedPanFile(file);
+            setPanFileBase64(base64Only);
+            setPanFileExtension(fileExt);
+            formik.setFieldValue("panDoc", finalFileName);
           } else if (isUploadedFile === "msmeFile") {
             setUploadedMSMEFile(file);
             setMsmeFileBase64(base64Only);
@@ -922,26 +862,14 @@ const ModalComponent = ({
             fileName:
               isUploadedFile !== "" ? finalFileName : communicationProofPath,
             filePath:
-              isUploadedFile == "tdsFile"
-                ? "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterTDS"
-                : isUploadedFile === "msmeFile"
+              isUploadedFile === "msmeFile" || isUploadedFile === "panFile"
                 ? "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterMSME"
-                : isUploadedFile === "bankFile"
-                ? "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterBank"
                 : "D:\\FileUpload\\Compliance",
             // filePath: `D:\\FileUpload\\Compliance\\${communicationProofPath}
             fileType:
-              isUploadedFile === "tdsFile"
-                ? `.${fileExt}`
-                : isUploadedFile === "msmeFile"
-                ? `.${fileExt}`
-                : `.${fileExt}`,
+              isUploadedFile === "msmeFile" ? `.${fileExt}` : `.${fileExt}`,
             contentType:
-              isUploadedFile === "tdsFile"
-                ? `${base64Only}`
-                : isUploadedFile === "msmeFile"
-                ? `${base64Only}`
-                : `${base64Only}`,
+              isUploadedFile === "msmeFile" ? `${base64Only}` : `${base64Only}`,
           };
           console.log("payload-->", payload);
 
@@ -1200,14 +1128,6 @@ const ModalComponent = ({
       if (regEx.alphaNumeric.test(value)) {
         formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
       }
-    } else if (name === "chqPrintNameFlag") {
-      if (regEx.alphaNumeric.test(value)) {
-        formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
-      }
-    } else if (name === "paymentBank") {
-      if (regEx.alphaNumeric.test(value)) {
-        formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
-      }
     } else if (name === "pinCode") {
       const digitsOnly = value.replace(/\D/g, ""); // Remove non-numeric
       if (digitsOnly.length <= 6) {
@@ -1234,11 +1154,6 @@ const ModalComponent = ({
     }
   };
 
-  const handleVerifyBank = () => {
-    const { bankAccountNo, ifscCode } = formik.values;
-    handleVerifyDetails?.(bankAccountNo, ifscCode);
-  };
-
   useEffect(() => {
     console.log("FORMIK_VALUESS", formik.values, formik.errors);
   }, [formik]);
@@ -1250,7 +1165,7 @@ const ModalComponent = ({
 
   const handleDrop = (
     e: React.DragEvent<HTMLDivElement>,
-    fieldName: "bankFile" | "tdsFile" | "msmeFile"
+    fieldName: "bankFile" | "msmeFile" | "panFile"
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -1273,8 +1188,8 @@ const ModalComponent = ({
   ) => {
     // Get the correct file from formik.values if not directly passed
     const selectedFile =
-      isUploadedFile === "tdsFile"
-        ? formik.values.tdsFile
+      isUploadedFile === "panFile"
+        ? formik.values.panFile
         : isUploadedFile === "msmeFile"
         ? formik.values.msmeFile
         : isUploadedFile === "bankFile"
@@ -1300,33 +1215,6 @@ const ModalComponent = ({
   };
 
   useEffect(() => {
-    if (disableFields) {
-      const fieldsToClear = [
-        // "directAppLevel",
-        "bankName",
-        "chqPrintNameFlag",
-        "paymentBank",
-        "chqPrintLocation",
-        "chqPrintLocationFlag",
-      ];
-      // formik.setFieldError("directAppLevel", "");
-      fieldsToClear.forEach((field) => {
-        formik.setFieldValue(field, "");
-      });
-    }
-  }, [disableFields]);
-
-  useEffect(() => {
-    if (editData?.tdsPath) {
-      const file = base64ToFileAuto(
-        editData.tdsPath,
-        editData?.tdsExtn,
-        formik.values.tdsFileName
-      );
-      console.log("TDS Base64", editData.tdsPath.slice(0, 50));
-      if (file) formik.setFieldValue("tdsFile", file);
-    }
-
     if (editData?.msmePath) {
       const file = base64ToFileAuto(
         editData.msmePath,
@@ -1396,6 +1284,53 @@ const ModalComponent = ({
     }
   }, [user_id]);
 
+  useEffect(() => {
+    if (editUserCheck) {
+      const fileExtension =
+        editData && editData.panDoc
+          ? `.${editData.panDoc.split(".").pop()?.toLowerCase()}`
+          : "";
+      formik.setFieldValue("panExtension", fileExtension);
+      const payload = {
+        fileName: editData.panDoc,
+        filePath:
+          "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterMSME",
+        fileType: fileExtension,
+        contentType: "",
+      };
+
+      console.log("approvalExtension", payload);
+
+      dispatch(showLoader("Loading Preview..."));
+
+      apiServices
+        .ComplianceDownload(payload)
+        .then((response) => {
+          if (response?.status === 200 && response?.data) {
+            const fileBlob = new Blob([response.data], {
+              type:
+                response.headers["content-type"] || "application/octet-stream",
+            });
+
+            const file = new File([fileBlob], editData.panDoc, {
+              type:
+                response.headers["content-type"] || "application/octet-stream",
+            });
+
+            formik.setFieldValue("panFile", file);
+          } else {
+            ShowToast("info", "Error fetching file for preview");
+          }
+        })
+        .catch((error) => {
+          ShowToast("info", error.message || "Preview failed");
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+    }
+  }, [editUserCheck, editData, dispatch]);
+
   return (
     <Modal
       style={{
@@ -1405,6 +1340,8 @@ const ModalComponent = ({
       }}
       isOpen={modal_grid}
       toggle={toggle}
+      backdrop="static"
+      keyboard={false}
       centered
     >
       <ModalHeader
@@ -2420,8 +2357,8 @@ const ModalComponent = ({
                       fullWidth
                       size="small"
                       variant="outlined"
-                      label={"Cheque Print Name"}
-                      placeholder="Enter Cheque Print Name"
+                      label={"Bank Beneficiary Name"}
+                      placeholder="Enter Bank Beneficiary Name"
                       name="chequePrintName"
                       value={formik.values.chequePrintName}
                       onChange={formik.handleChange}
@@ -2447,7 +2384,7 @@ const ModalComponent = ({
                     {/* Address Fields */}
                     {["address1", "address2", "address3"].map(
                       (field: any, idx: any) => (
-                        <Box key={field} sx={{ flex: "1 1 48%" }}>
+                        <Box key={field} sx={{ flex: "1 1 45%" }}>
                           <TextField
                             fullWidth
                             variant="outlined"
@@ -2472,236 +2409,189 @@ const ModalComponent = ({
                     )}
 
                     {vendorFields.map(({ name, label }) => (
-                      <Box key={name} sx={{ flex: "1 1 48%" }}>
-                        {
-                          <TextField
-                            fullWidth
-                            size="small"
-                            variant="outlined"
-                            name={name}
-                            label={label}
-                            placeholder={`Please enter ${label}`}
-                            value={formik.values[name as VendorFieldName] || ""}
-                            onChange={handleCustomChange}
-                            onBlur={formik.handleBlur}
-                            error={
-                              formik.touched[name as VendorFieldName] &&
-                              Boolean(formik.errors[name as VendorFieldName])
-                            }
-                            helperText={
-                              formik.touched[name as VendorFieldName] &&
-                              formik.errors[name as VendorFieldName]
-                            }
-                          />
-                        }
+                      <Box key={name} sx={{ flex: "1 1 45%" }}>
+                        <TextField
+                          fullWidth
+                          size="small"
+                          variant="outlined"
+                          name={name}
+                          label={label}
+                          placeholder={`Please enter ${label}`}
+                          value={formik.values[name as VendorFieldName] || ""}
+                          onChange={handleCustomChange}
+                          onBlur={formik.handleBlur}
+                          error={
+                            formik.touched[name as VendorFieldName] &&
+                            Boolean(formik.errors[name as VendorFieldName])
+                          }
+                          helperText={
+                            formik.touched[name as VendorFieldName] &&
+                            formik.errors[name as VendorFieldName]
+                          }
+                        />
                       </Box>
                     ))}
                   </Box>
-                  <FormControl sx={{ mt: 1 }}>
-                    <FormLabel sx={{ fontSize: "12px" }}>TDS Flag</FormLabel>
-                    <RadioGroup
-                      row
-                      name="tdsFlag"
-                      value={formik.values.tdsFlag}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    >
-                      <FormControlLabel
-                        value="Yes"
-                        control={<Radio />}
-                        label="Yes"
-                      />
-                      <FormControlLabel
-                        value="No"
-                        control={<Radio />}
-                        label="No"
-                      />
-                    </RadioGroup>
-                    {formik.touched.tdsFlag && formik.errors.tdsFlag && (
-                      <FormHelperText error>
-                        {formik.errors.tdsFlag}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-
-                  {/* Upload if TDS Yes */}
-                  {formik.values.tdsFlag === "Yes" && (
-                    <Row>
-                      <Col lg={6}>
-                        <Label htmlFor="tdsFileUpload" className="form-label">
-                          Upload TDS Document
-                        </Label>
-                        <div
-                          style={{ position: "relative", width: "127%" }}
-                          onDrop={(e) => handleDrop(e, "tdsFile")}
-                          onDragOver={handleDragOver}
-                        >
-                          <input
-                            type="file"
-                            id="tdsFileUpload"
-                            name="tdsFile"
-                            accept=".pdf,.docx"
-                            style={{ display: "none" }}
-                            onChange={async (e) => {
-                              const file = e.currentTarget.files?.[0];
-                              if (file) {
-                                try {
-                                  await handleFileUploadAsync(
-                                    file,
-                                    file.name,
-                                    "tdsFile"
-                                  );
-                                  formik.setFieldValue("tdsFile", file);
-                                } catch (error) {
-                                  formik.setFieldError(
-                                    "tdsFile",
-                                    "Failed to upload file."
-                                  );
-                                }
+                  <Row>
+                    <Col lg={6}>
+                      <Label htmlFor="panFileUpload" className="form-label">
+                        Upload PAN Document
+                      </Label>
+                      <div
+                        style={{ position: "relative", width: "127%" }}
+                        onDrop={(e) => handleDrop(e, "panFile")}
+                        onDragOver={handleDragOver}
+                      >
+                        <input
+                          type="file"
+                          id="panFileUpload"
+                          accept=".pdf,.jpg,.jpeg,.png"
+                          style={{ display: "none" }}
+                          onChange={async (e) => {
+                            const file = e.currentTarget.files?.[0];
+                            if (file) {
+                              try {
+                                await handleFileUploadAsync(
+                                  file,
+                                  file.name,
+                                  "panFile"
+                                );
+                                formik.setFieldValue("panFile", file);
+                              } catch (error) {
+                                formik.setFieldError(
+                                  "panFile",
+                                  "Failed to upload file."
+                                );
                               }
-                              e.target.value = ""; // <--- Add this line
-                            }}
-                          />
+                            }
+                            e.target.value = "";
+                          }}
+                        />
 
-                          <Button
-                            type="button"
+                        <Button
+                          type="button"
+                          onClick={() =>
+                            document.getElementById("panFileUpload")?.click()
+                          }
+                          style={{
+                            backgroundColor: "#f8f9fa",
+                            color: "#333",
+                            border: "1px dashed #ced4da",
+                            height: "38px",
+                            width: "80%",
+                            borderRadius: "0.25rem",
+                            fontSize: "0.9rem",
+                            textAlign: "left",
+                            paddingLeft: "12px",
+                            paddingRight: formik.values.panFile
+                              ? "40px"
+                              : "12px",
+                            overflow: "hidden",
+                            position: "relative",
+                            display: "flex",
+                            alignItems: "center",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {formik.values.panFile ? (
+                            <>
+                              {uploadedPanFile?.name || `pan_document_file`}
+                              <Tooltip title="Delete file" arrow>
+                                <span
+                                  style={{
+                                    position: "absolute",
+                                    right: "8px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    cursor: "pointer",
+                                    color: "#dc3545",
+                                    display: "flex",
+                                    alignItems: "center",
+                                  }}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    formik.setFieldValue("panFile", null);
+                                    setUploadedPanFile(null);
+                                    setPanFileExtension("");
+                                    setPanFileBase64(null);
+                                  }}
+                                >
+                                  <CloseIcon fontSize="small" />
+                                </span>
+                              </Tooltip>
+                            </>
+                          ) : (
+                            <span style={{ fontSize: "13px" }}>
+                              <strong>Click to upload</strong> or drag and drop
+                              your <strong>.pdf, .docx</strong> file here
+                            </span>
+                          )}
+                        </Button>
+
+                        {formik.errors.panFile && (
+                          <div
+                            className="text-danger mt-1"
+                            style={{ fontSize: "0.85rem" }}
+                          >
+                            {formik.errors.panFile}
+                          </div>
+                        )}
+
+                        <div className="mt-1">
+                          <small
+                            className="text-muted d-block"
+                            style={{ fontSize: "12px" }}
+                          >
+                            • Only <strong>.pdf</strong>, <strong>.docx</strong>{" "}
+                            files are accepted.
+                          </small>
+                        </div>
+                      </div>
+                    </Col>
+                    <Col
+                      lg={6}
+                      style={{
+                        // border: "1px solid blue",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {formik.values.panFile && (
+                        <Tooltip title="download File" arrow>
+                          {/* <VisibilityIcon
+                                onClick={() =>
+                                  handlePreviewFile(
+                                    formik.values.msmeFile,
+                                    "msmeFile"
+                                  )
+                                }
+                                style={{
+                                  cursor: "pointer",
+                                  fontSize: "30px",
+                                  color: "#11395C",
+                                  marginTop: "14px",
+                                }}
+                              /> */}
+
+                          <DownloadForOfflineIcon
                             onClick={() =>
-                              document.getElementById("tdsFileUpload")?.click()
+                              handlePreviewFile(
+                                formik.values.panFile,
+                                "panFile"
+                              )
                             }
                             style={{
-                              backgroundColor: "#f8f9fa",
-                              color: "#333",
-                              border: "1px dashed #ced4da",
-                              height: "38px",
-                              width: "80%",
-                              borderRadius: "0.25rem",
-                              fontSize: "0.9rem",
-                              textAlign: "left",
-                              paddingLeft: "12px",
-                              paddingRight: formik.values.tdsFile
-                                ? "40px"
-                                : "12px",
-                              overflow: "hidden",
-                              position: "relative",
-                              display: "flex",
-                              alignItems: "center",
                               cursor: "pointer",
+                              fontSize: "30px",
+                              color: "#11395C",
+                              marginTop: "14px",
                             }}
-                          >
-                            {formik.values.tdsFile ? (
-                              <>
-                                {uploadedTDSFile?.name ||
-                                  `tds_document_file.${
-                                    editData?.tdsExtn
-                                      ?.replace(/^\./, "")
-                                      .toLowerCase() === "pdf"
-                                      ? "pdf"
-                                      : editData?.tdsExtn
-                                  }`}
-
-                                <Tooltip title="Delete file" arrow>
-                                  <span
-                                    style={{
-                                      position: "absolute",
-                                      right: "8px",
-                                      top: "50%",
-                                      transform: "translateY(-50%)",
-                                      cursor: "pointer",
-                                      color: "#dc3545",
-                                      display: "flex",
-                                      alignItems: "center",
-                                    }}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      formik.setFieldValue("tdsFile", null);
-                                      setUploadedTDSFile(null);
-                                      setTdsFileExtension("");
-                                      setTDSFileBase64(null);
-                                    }}
-                                  >
-                                    <CloseIcon fontSize="small" />
-                                  </span>
-                                </Tooltip>
-                              </>
-                            ) : (
-                              <span style={{ fontSize: "13px" }}>
-                                <strong>Click to upload</strong> or drag and
-                                drop your <strong>.pdf or .docx</strong> file
-                                here
-                              </span>
-                            )}
-                          </Button>
-                          {/* 
-                          {formik.errors.tdsFile && (
-                            <div
-                              className="text-danger mt-1"
-                              style={{ fontSize: "0.85rem" }}
-                            >
-                              {formik.errors.tdsFile}
-                            </div>
-                          )} */}
-                          <div className="mt-1">
-                            <small
-                              className="text-muted d-block"
-                              style={{ fontSize: "12px" }}
-                            >
-                              • Only <strong>.pdf</strong>,{" "}
-                              <strong>.docx</strong> files are accepted.
-                            </small>
-                          </div>
-                        </div>
-                      </Col>
-                      {formik.errors.tdsFile && (
-                        <div
-                          className="text-danger"
-                          style={{ fontSize: "0.85rem" }}
-                        >
-                          {formik.errors.tdsFile}
-                        </div>
+                          />
+                        </Tooltip>
                       )}
-                      <Col
-                        lg={6}
-                        style={{
-                          // border: "1px solid blue",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        {formik.values.tdsFile && (
-                          <Tooltip title="download file" arrow>
-                            {/* <VisibilityIcon
-                              onClick={() =>
-                                handlePreviewFile(
-                                  formik.values.tdsFile,
-                                  "tdsFile"
-                                )
-                              }
-                              style={{
-                                cursor: "pointer",
-                                fontSize: "30px",
-                                color: "#11395C", // Bootstrap primary color
-                                marginTop: "14px",
-                              }}
-                            /> */}
-                            <DownloadForOfflineIcon
-                              onClick={() =>
-                                handlePreviewFile(
-                                  formik.values.tdsFile,
-                                  "tdsFile"
-                                )
-                              }
-                              style={{
-                                cursor: "pointer",
-                                fontSize: "30px",
-                                color: "#11395C", // Bootstrap primary color
-                                marginTop: "14px",
-                              }}
-                            />
-                          </Tooltip>
-                        )}
-                      </Col>
-                    </Row>
-                  )}
+                    </Col>
+                  </Row>
+
                   {/* MSME Flag */}
                   <FormControl sx={{ height: "40px", mt: 1 }}>
                     <FormLabel sx={{ fontSize: "12px" }}>MSME Flag</FormLabel>
@@ -2953,7 +2843,6 @@ const ModalComponent = ({
                     flexWrap: "wrap",
                     gap: 1.5,
                     mt: 3,
-                    // alignItems: "flex-end", // aligns bottom of fields & button
                   }}
                 >
                   {bankFields.map(({ name, label }) => (
@@ -2980,8 +2869,7 @@ const ModalComponent = ({
                     </Box>
                   ))}
 
-                  {/* Verify Button */}
-                  <Box sx={{ flex: "1 1 5%" }}>
+                  {/* <Box sx={{ flex: "1 1 5%" }}>
                     <Button
                       type="button"
                       variant="contained"
@@ -2991,358 +2879,156 @@ const ModalComponent = ({
                         height: "36px",
                         width: "100px",
                       }}
-                      onClick={handleVerifyBank} // Add your handler if needed
+                      onClick={handleVerifyBank}
                     >
                       Verify
                     </Button>
-                  </Box>
+                  </Box> */}
                 </Box>
-                {showBankUpload && (
-                  <Row className="mt-1">
-                    <Col lg={6}>
-                      <Label htmlFor="bankFileUpload" className="form-label">
-                        Upload Bank Document
-                      </Label>
-                      <div
-                        style={{ position: "relative", width: "125%" }}
-                        onDrop={(e) => handleDrop(e, "bankFile")}
-                        onDragOver={handleDragOver}
-                      >
-                        <input
-                          type="file"
-                          id="bankFileUpload"
-                          accept=".jpeg,.jpg,.png,.pdf"
-                          style={{ display: "none" }}
-                          onChange={async (e) => {
-                            const file = e.currentTarget.files?.[0];
-                            if (file) {
-                              try {
-                                await handleFileUploadAsync(
-                                  file,
-                                  file.name,
-                                  "bankFile"
-                                );
-                                formik.setFieldValue("bankFile", file);
-                              } catch (error) {
-                                formik.setFieldError(
-                                  "bankFile",
-                                  "Failed to upload file."
-                                );
-                              }
+                <Row className="mt-1">
+                  <Col lg={6}>
+                    <Label htmlFor="bankFileUpload" className="form-label">
+                      Upload Bank Document
+                    </Label>
+                    <div
+                      style={{ position: "relative", width: "125%" }}
+                      onDrop={(e) => handleDrop(e, "bankFile")}
+                      onDragOver={handleDragOver}
+                    >
+                      <input
+                        type="file"
+                        id="bankFileUpload"
+                        accept=".jpeg,.jpg,.png,.pdf"
+                        style={{ display: "none" }}
+                        onChange={async (e) => {
+                          const file = e.currentTarget.files?.[0];
+                          if (file) {
+                            try {
+                              await handleFileUploadAsync(
+                                file,
+                                file.name,
+                                "bankFile"
+                              );
+                              formik.setFieldValue("bankFile", file);
+                            } catch (error) {
+                              formik.setFieldError(
+                                "bankFile",
+                                "Failed to upload file."
+                              );
                             }
-                            e.target.value = "";
-                          }}
-                        />
+                          }
+                          e.target.value = "";
+                        }}
+                      />
 
-                        <Button
-                          type="button"
+                      <Button
+                        type="button"
+                        onClick={() =>
+                          document.getElementById("bankFileUpload")?.click()
+                        }
+                        style={{
+                          backgroundColor: "#f8f9fa",
+                          color: "#333",
+                          border: "1px dashed #ced4da",
+                          height: "38px",
+                          width: "80%",
+                          borderRadius: "0.25rem",
+                          fontSize: "0.9rem",
+                          textAlign: "left",
+                          paddingLeft: "12px",
+                          paddingRight: formik.values.bankFile
+                            ? "40px"
+                            : "12px",
+                          overflow: "hidden",
+                          position: "relative",
+                          display: "flex",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {formik.values.bankFile ? (
+                          <>
+                            {uploadedBankFile?.name ||
+                              `bank_document_file${editData?.bankDocExtn}`}
+                            <Tooltip title="Delete file" arrow>
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  right: "8px",
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  cursor: "pointer",
+                                  color: "#dc3545",
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  formik.setFieldValue("bankFile", null);
+                                  setUploadedBankFile?.(null);
+                                  setBankFileExtension("");
+                                  setbankFileBase64(null);
+                                }}
+                              >
+                                <CloseIcon fontSize="small" />
+                              </span>
+                            </Tooltip>
+                          </>
+                        ) : (
+                          <span style={{ fontSize: "12px" }}>
+                            <strong>Upload</strong> or drag and drop your{" "}
+                            <strong>.jpeg, .jpg, .png, .pdf</strong> file here
+                          </span>
+                        )}
+                      </Button>
+
+                      {formik.errors.bankFile && (
+                        <div
+                          className="text-danger mt-1"
+                          style={{ fontSize: "0.85rem" }}
+                        >
+                          {formik.errors.bankFile}
+                        </div>
+                      )}
+
+                      <div className="mt-1">
+                        <small
+                          className="text-muted d-block"
+                          style={{ fontSize: "12px" }}
+                        >
+                          • Only <strong>.jpeg</strong>, <strong>.png</strong>,{" "}
+                          <strong>.pdf</strong> files are accepted.
+                        </small>
+                      </div>
+                    </div>
+                  </Col>
+                  <Col
+                    lg={6}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    {formik.values.bankFile && (
+                      <Tooltip title="download file" arrow>
+                        <DownloadForOfflineIcon
                           onClick={() =>
-                            document.getElementById("bankFileUpload")?.click()
+                            handlePreviewFile(
+                              formik.values.bankFile,
+                              "bankFile"
+                            )
                           }
                           style={{
-                            backgroundColor: "#f8f9fa",
-                            color: "#333",
-                            border: "1px dashed #ced4da",
-                            height: "38px",
-                            width: "80%",
-                            borderRadius: "0.25rem",
-                            fontSize: "0.9rem",
-                            textAlign: "left",
-                            paddingLeft: "12px",
-                            paddingRight: formik.values.bankFile
-                              ? "40px"
-                              : "12px",
-                            overflow: "hidden",
-                            position: "relative",
-                            display: "flex",
-                            alignItems: "center",
                             cursor: "pointer",
+                            fontSize: "30px",
+                            color: "#11395C",
+                            marginTop: "14px",
                           }}
-                        >
-                          {formik.values.bankFile ? (
-                            <>
-                              {uploadedBankFile?.name ||
-                                `bank_document_file${editData?.bankDocExtn}`}
-                              <Tooltip title="Delete file" arrow>
-                                <span
-                                  style={{
-                                    position: "absolute",
-                                    right: "8px",
-                                    top: "50%",
-                                    transform: "translateY(-50%)",
-                                    cursor: "pointer",
-                                    color: "#dc3545",
-                                    display: "flex",
-                                    alignItems: "center",
-                                  }}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    formik.setFieldValue("bankFile", null);
-                                    setUploadedBankFile?.(null);
-                                    setBankFileExtension("");
-                                    setbankFileBase64(null);
-                                  }}
-                                >
-                                  <CloseIcon fontSize="small" />
-                                </span>
-                              </Tooltip>
-                            </>
-                          ) : (
-                            <span style={{ fontSize: "12px" }}>
-                              <strong>Upload</strong> or drag and drop your{" "}
-                              <strong>.jpeg, .jpg, .png, .pdf</strong> file here
-                            </span>
-                          )}
-                        </Button>
-
-                        {formik.errors.bankFile && (
-                          <div
-                            className="text-danger mt-1"
-                            style={{ fontSize: "0.85rem" }}
-                          >
-                            {formik.errors.bankFile}
-                          </div>
-                        )}
-
-                        <div className="mt-1">
-                          <small
-                            className="text-muted d-block"
-                            style={{ fontSize: "12px" }}
-                          >
-                            • Only <strong>.jpeg</strong>, <strong>.png</strong>
-                            , <strong>.pdf</strong> files are accepted.
-                          </small>
-                        </div>
-                      </div>
-                    </Col>
-                    <Col
-                      lg={6}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      {formik.values.bankFile && (
-                        <Tooltip title="download file" arrow>
-                          {/* <VisibilityIcon
-                            onClick={() =>
-                              handlePreviewFile(
-                                formik.values.bankFile,
-                                "bankFile"
-                              )
-                            }
-                            style={{
-                              cursor: "pointer",
-                              fontSize: "30px",
-                              color: "#11395C",
-                              marginTop: "14px",
-                            }}
-                          /> */}
-                          <DownloadForOfflineIcon
-                            onClick={() =>
-                              handlePreviewFile(
-                                formik.values.bankFile,
-                                "bankFile"
-                              )
-                            }
-                            style={{
-                              cursor: "pointer",
-                              fontSize: "30px",
-                              color: "#11395C",
-                              marginTop: "14px",
-                            }}
-                          />
-                        </Tooltip>
-                      )}
-                    </Col>
-                  </Row>
-                )}
-                <Box>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    variant="outlined"
-                    name="bankName"
-                    label={"Bank Name"}
-                    disabled={disableFields}
-                    placeholder="Please enter Bank Name"
-                    value={formik.values.bankName}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.bankName && Boolean(formik.errors.bankName)
-                    }
-                    helperText={
-                      formik.touched.bankName && formik.errors.bankName
-                    }
-                  />
-                </Box>
-
-                {/* Chq. Print Name Flag */}
-                {/* <Box>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    variant="outlined"
-                    label={"Chq. Print Name Flag"}
-                    placeholder="Please enter Cheque Print Name Flag"
-                    name="chqPrintNameFlag"
-                    disabled={disableFields}
-                    value={formik.values.chqPrintNameFlag}
-                    onChange={handleCustomChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.chqPrintNameFlag &&
-                      Boolean(formik.errors.chqPrintNameFlag)
-                    }
-                    helperText={
-                      formik.touched.chqPrintNameFlag &&
-                      formik.errors.chqPrintNameFlag
-                    }
-                  />
-                </Box> */}
-                <Box sx={{ mt: 2 }}>
-                  <Typography sx={{ fontSize: "12px" }}>
-                    Chq. Print Name Flag
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    select
-                    size="small"
-                    variant="outlined"
-                    name="chqPrintNameFlag"
-                    disabled={disableFields}
-                    SelectProps={{ native: true }}
-                    value={formik.values.chqPrintNameFlag}
-                    onChange={formik.handleChange} // Or `handleCustomChange` if required
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.chqPrintNameFlag &&
-                      Boolean(formik.errors.chqPrintNameFlag)
-                    }
-                    helperText={
-                      formik.touched.chqPrintNameFlag &&
-                      formik.errors.chqPrintNameFlag
-                    }
-                    sx={{ cursor: disableFields ? "not-allowed" : "pointer" }}
-                  >
-                    {selectOptions.flagOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </TextField>
-                </Box>
-
-                {/* Payment Bank */}
-                <Box>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    variant="outlined"
-                    name="paymentBank"
-                    label={"Payment Bank"}
-                    disabled={disableFields}
-                    placeholder="Please enter Payment Bank"
-                    value={formik.values.paymentBank}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.paymentBank &&
-                      Boolean(formik.errors.paymentBank)
-                    }
-                    helperText={
-                      formik.touched.paymentBank && formik.errors.paymentBank
-                    }
-                  />
-                </Box>
-
-                <Box>
-                  <Typography sx={{ fontSize: "12px" }}>
-                    Chq. Print Location
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    select
-                    size="small"
-                    variant="outlined"
-                    disabled={disableFields}
-                    SelectProps={{ native: true }}
-                    name="chqPrintLocation"
-                    value={formik.values.chqPrintLocation?.printLocCode}
-                    onChange={(e) => {
-                      const selectedLoc = printLocations.find(
-                        (loc: any) => loc.printLocCode === e.target.value
-                      );
-                      if (selectedLoc) {
-                        formik.setFieldValue("chqPrintLocation", {
-                          printLocCode: selectedLoc.printLocCode,
-                          printLocation: selectedLoc.printLocation.trim(),
-                        });
-                      }
-                    }}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.chqPrintLocation &&
-                      Boolean(
-                        typeof formik.errors.chqPrintLocation === "string"
-                          ? formik.errors.chqPrintLocation
-                          : formik.errors.chqPrintLocation?.printLocCode ||
-                              formik.errors.chqPrintLocation?.printLocation
-                      )
-                    }
-                    helperText={
-                      formik.touched.chqPrintLocation &&
-                      (typeof formik.errors.chqPrintLocation === "string"
-                        ? formik.errors.chqPrintLocation
-                        : formik.errors.chqPrintLocation?.printLocation)
-                    }
-                    sx={{ cursor: disableFields ? "not-allowed" : "pointer" }}
-                  >
-                    <option value="">Please select city</option>
-                    {printLocations.map((option: any) => (
-                      <option
-                        key={option.printLocCode}
-                        value={option.printLocCode}
-                      >
-                        {option.printLocation.trim()}
-                      </option>
-                    ))}
-                  </TextField>
-                </Box>
-
-                <Box sx={{ mt: 2 }}>
-                  <Typography sx={{ fontSize: "12px" }}>
-                    Chq. Print Location Flag
-                  </Typography>
-                  <TextField
-                    fullWidth
-                    select
-                    size="small"
-                    variant="outlined"
-                    disabled={disableFields}
-                    SelectProps={{ native: true }}
-                    name="chqPrintLocationFlag"
-                    value={formik.values.chqPrintLocationFlag}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.chqPrintLocationFlag &&
-                      Boolean(formik.errors.chqPrintLocationFlag)
-                    }
-                    helperText={
-                      formik.touched.chqPrintLocationFlag &&
-                      formik.errors.chqPrintLocationFlag
-                    }
-                    sx={{ cursor: disableFields ? "not-allowed" : "pointer" }}
-                  >
-                    {selectOptions.flagOptions.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </TextField>
-                </Box>
+                        />
+                      </Tooltip>
+                    )}
+                  </Col>
+                </Row>
               </>
             )}
 

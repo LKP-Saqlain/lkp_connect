@@ -789,4 +789,7 @@ export const apiServices = {
   ResearchCallData: async (payload: any) => {
     return await apiService("POST", endpoints.ResearchCallData, payload);
   },
+  UploadTdsfile: async (payload: any) => {
+    return await apiService("POST", endpoints.UploadTdsfile, payload);
+  },
 };
