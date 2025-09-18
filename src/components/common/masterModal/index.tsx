@@ -158,7 +158,8 @@ const ModalComponent = ({
     (state: RootState) => state.UserLogin?.data?.data
   );
   console.log("PAN", authenticationValue);
-
+  const rmCode = user_id.split("-")[1] || "";
+  // formik.setFieldValue("rmCode", rmCode);
   const dispatch = useDispatch<AppDispatch>();
 
   const getMarketingMaterialValidationSchema = (
@@ -428,7 +429,7 @@ const ModalComponent = ({
         sbRate: null,
         sbCommision: null,
         netBrokerage: null,
-        rmCode: null,
+        rmCode: rmCode,
       };
   const cleanEmails = (email: any) => normalizeEmailInput(email);
   const formik = useFormik({
@@ -1718,7 +1719,7 @@ const ModalComponent = ({
                     error={
                       formik.touched.rmCode && Boolean(formik.errors.rmCode)
                     }
-                    helperText={formik.touched.rmCode && formik.errors.rmCode}
+                    // helperText={formik.touched.rmCode && formik.errors.rmCode}
                   />
                 </Col>
                 <Col lg={6}>
