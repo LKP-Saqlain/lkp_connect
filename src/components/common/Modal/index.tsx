@@ -217,13 +217,11 @@ const ModalComponent = ({
         // setShowConsent(true);
         break;
       }
-
       // --- 2️⃣ strictly lower → skip
       if (value < currentPlan.brokeragePerc) {
         console.log(`${key} is smaller than brokeragePerc → no consent`);
         continue;
       }
-
       // --- 3️⃣ equal → need further checks
       const isIntradayOrDelivery =
         key === "EquityIntradayPer" || key === "EquityDeliveryPer";
@@ -243,6 +241,7 @@ const ModalComponent = ({
             `${minKey} (${newMin}) > brokeragePercMin (${currMin}) → show consent`
           );
           consentNeeded = true;
+          // setShowConsent(true);
           break;
         } else {
           console.log(`${minKey} is lesser or equal → no consent`);
