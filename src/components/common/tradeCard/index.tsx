@@ -95,7 +95,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
     strike = result.strike;
   }
   return (
-    <Card className="trade-card">
+    <Card className={type != "Mandate" ? "trade-card" : ""}>
       {type === "Mandate" ? (
         <CardBody style={{ padding: "12px 20px" }}>
           <div>
