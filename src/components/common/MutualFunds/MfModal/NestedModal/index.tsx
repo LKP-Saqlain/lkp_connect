@@ -10,6 +10,7 @@ import {
 import { apiServices } from "../../../../../services";
 import { AppDispatch } from "../../../../../redux/store";
 import ShowToast from "../../../../../utils/toastUtils";
+import TimerModal from "../../../TimerModal";
 
 interface MandateDetail {
   amount: string;
@@ -403,72 +404,23 @@ const NestedModal = ({
       <Modal isOpen={isOpen} toggle={toggle} centered size="md">
         <ModalHeader toggle={toggle}>
           {timerPage ? "Waiting For confirmation" : "Confirmation"}
-          {/* {title} */}
         </ModalHeader>
         <ModalBody>
           {timerPage ? (
-            <div
-              style={{
-                textAlign: "center",
-                padding: "24px 16px",
-                fontFamily: "sans-serif",
-              }}
-            >
-              <div
-                style={{
-                  width: "80px",
-                  height: "80px",
-                  margin: "0 auto 16px",
-                  borderRadius: "50%",
-                  border: "4px solid #4CAF50",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                  color: "#4CAF50",
-                }}
-              >
-                {formatTime(secondsLeft)}
-              </div>
-
-              <h4 style={{ marginBottom: "10px" }}>Don't close this page!</h4>
-              <p style={{ fontSize: "14px", color: "#333" }}>
-                {selectedPaymentType === "upi"
-                  ? "Check your UPI app"
-                  : stopEnach === false
-                  ? "Redirecting you to the E-Nach setup."
-                  : ""}
-              </p>
-
-              <div
-                style={{
-                  backgroundColor: "#f8f8f8",
-                  padding: "12px",
-                  borderRadius: "8px",
-                  marginTop: "16px",
-                  fontSize: "13px",
-                  color: "#444",
-                }}
-              >
-                Your SIPs will not get registered if you don't complete this
-                process.
-              </div>
-
-              <p
-                style={{
-                  fontSize: "13px",
-                  color: "#555",
-                  marginTop: "20px",
-                  lineHeight: "1.5",
-                }}
-              >
-                This is a one-time activity in a single step.
-                <br />
-                {selectedPaymentType === "netbanking" &&
-                  "Enter Debit card / Netbanking / Aadhaar details to authenticate and proceed."}
-              </p>
-            </div>
+            // ✅ Replace this block with your dynamic TimerModal component
+            <TimerModal
+              isOpen={isOpen}
+              toggle={toggle}
+              timerPage={true}
+              secondsLeft={secondsLeft}
+              formatTime={formatTime}
+              selectedPaymentType={selectedPaymentType ?? undefined}
+              selectedMandateId={selectedMandateId ?? undefined}
+              stopEnach={stopEnach}
+              cancelLabel={cancelLabel}
+              confirmLabel={confirmLabel}
+              handleFinalConfirm={handleFinalConfirm}
+            />
           ) : mandateDetails.length === 0 ? (
             <p>No mandates available.</p>
           ) : (
@@ -562,18 +514,20 @@ const NestedModal = ({
           )}
         </ModalBody>
 
-        <ModalFooter>
-          <Button color="secondary" onClick={toggle}>
-            {cancelLabel}
-          </Button>
-          <Button
-            color="primary"
-            onClick={handleFinalConfirm}
-            disabled={!selectedMandateId}
-          >
-            {confirmLabel}
-          </Button>
-        </ModalFooter>
+        {!timerPage && (
+          <ModalFooter>
+            <Button color="secondary" onClick={toggle}>
+              {cancelLabel}
+            </Button>
+            <Button
+              color="primary"
+              onClick={handleFinalConfirm}
+              disabled={!selectedMandateId}
+            >
+              {confirmLabel}
+            </Button>
+          </ModalFooter>
+        )}
       </Modal>
       <CreateMandateModal
         isOpen={showCreateMandateModal}
