@@ -30,7 +30,7 @@ const MutualFundModal = ({
   bseSchemeCode,
   hasToken,
 }: MutualFundModalProps) => {
-  const [amount, setAmount] = useState(500);
+  const [amount, setAmount] = useState<string>("500");
   const [selectedPaymentType, setSelectedPaymentType] = useState<string | null>(
     null
   );
@@ -64,7 +64,7 @@ const MutualFundModal = ({
 
   useEffect(() => {
     if (!isOpen) {
-      setAmount(500);
+      setAmount("500");
       setSelectedBank(null);
       setSelectedPaymentType(null);
       setSipDate(null);
@@ -89,7 +89,7 @@ const MutualFundModal = ({
       schemeCd: bseSchemeCode,
       buySell: "P",
       buySellType: "FRESH",
-      orderVal: amount.toString(),
+      orderVal: amount,
       qty: "",
       allRedeem: "N",
       folioNo: "",
@@ -374,7 +374,18 @@ const MutualFundModal = ({
                 <TextField
                   type="number"
                   value={amount}
-                  onChange={(e) => setAmount(Number(e.target.value))}
+                  onChange={(e) => {
+                    // Accept only digits (or empty) so user can backspace fully
+                    const val = e.target.value;
+                    if (val === "" || /^\d+$/.test(val)) {
+                      setAmount(val);
+                    }
+                  }}
+                  onBlur={() => {
+                    if (!amount.trim()) {
+                      setAmount("500");
+                    }
+                  }}
                   fullWidth
                   InputProps={{
                     style: {
@@ -396,7 +407,11 @@ const MutualFundModal = ({
                     <Button
                       key={val}
                       variant="outlined"
-                      onClick={() => setAmount(amount + val)}
+                      onClick={() =>
+                        setAmount(
+                          String((parseInt(amount || "0", 10) || 0) + val)
+                        )
+                      }
                       style={{
                         //   fontWeight: 600,
                         fontSize: "14px",
@@ -517,7 +532,18 @@ const MutualFundModal = ({
                 <TextField
                   type="number"
                   value={amount}
-                  onChange={(e) => setAmount(Number(e.target.value))}
+                  onChange={(e) => {
+                    // Accept only digits (or empty) so user can backspace fully
+                    const val = e.target.value;
+                    if (val === "" || /^\d+$/.test(val)) {
+                      setAmount(val);
+                    }
+                  }}
+                  onBlur={() => {
+                    if (!amount.trim()) {
+                      setAmount("500");
+                    }
+                  }}
                   fullWidth
                   InputProps={{
                     style: { fontSize: "20px" },
@@ -536,7 +562,11 @@ const MutualFundModal = ({
                     <Button
                       key={val}
                       variant="outlined"
-                      onClick={() => setAmount(amount + val)}
+                      onClick={() =>
+                        setAmount(
+                          String((parseInt(amount || "0", 10) || 0) + val)
+                        )
+                      }
                       style={{
                         fontSize: "14px",
                         padding: "6px 12px",

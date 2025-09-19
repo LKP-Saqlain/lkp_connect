@@ -130,7 +130,7 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
   useEffect(() => {
     const payload = {
       user_id: user_id,
-      zone: formik.values.selectedZone?.value,
+      zone: formik.values.selectedZone?.value || "ALL",
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
