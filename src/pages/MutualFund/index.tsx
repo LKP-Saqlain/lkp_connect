@@ -23,6 +23,7 @@ const MutualFundIndex = () => {
   const [selectedMutualFund, setSelectedMutualFund] = useState<string>("");
   const [clientCode, setClientCode] = useState<string>("");
   const [hasToken, setHasToken] = useState(false);
+  const [autoReopen, setAutoReopen] = useState(false);
 
   // 🚨 New state for modal
   const [showClientCodeModal, setShowClientCodeModal] = useState(true);
@@ -70,9 +71,40 @@ const MutualFundIndex = () => {
     }
   };
 
+  const handleTemporaryClose = () => {
+    setShowClientCodeModal(false);
+    setAutoReopen(true);
+  };
+
+  // watch for auto-reopen trigger
+  useEffect(() => {
+    if (autoReopen) {
+      const timer = setTimeout(() => {
+        setShowClientCodeModal(true);
+        setAutoReopen(false);
+      }, 3000); // 5 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [autoReopen]);
+
   return (
     <div className="page-content page-view">
       <Container fluid>
+        {!hasToken && !showClientCodeModal && (
+          <Box
+            sx={{
+              position: "absolute", // absolute inside Container
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0,0,0,0)", // transparent
+              zIndex: 1, // lower than modal but higher than content
+              pointerEvents: "auto",
+            }}
+          />
+        )}
+
         {/* 🔒 Modal for client code entry */}
         <Modal
           isOpen={showClientCodeModal}
@@ -80,8 +112,8 @@ const MutualFundIndex = () => {
           keyboard={false}
           centered
           style={{
-            maxWidth: "420px", // compact width
-            margin: "auto", // ensure horizontal center
+            maxWidth: "400px",
+            margin: "auto",
           }}
         >
           <ModalHeader
@@ -90,15 +122,15 @@ const MutualFundIndex = () => {
               textAlign: "center",
               fontWeight: 600,
               fontSize: "1.25rem",
-              // paddingBottom: "0.5rem",
+              position: "relative",
             }}
+            toggle={handleTemporaryClose}
           >
             Enter Client Code
           </ModalHeader>
 
           <ModalBody
             style={{
-              // padding: "1.5rem",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -125,20 +157,32 @@ const MutualFundIndex = () => {
             style={{
               borderTop: "none",
               justifyContent: "center",
-              // paddingBottom: "1.5rem",
+              gap: "1rem",
             }}
           >
+            {/* Cancel button hides modal for 5 seconds */}
             <Button
-              variant="contained"
-              color="primary"
+              style={{
+                backgroundColor: "#ee4b2b",
+                fontSize: "11px",
+                minHeight: "35px",
+                width: "80px",
+                color: "white",
+              }}
+              onClick={handleTemporaryClose}
+            >
+              Cancel
+            </Button>
+
+            <Button
               onClick={handleSubmit}
               disabled={!clientCode.trim()}
               style={{
-                padding: "0.6rem 2rem",
-                borderRadius: "8px",
-                fontWeight: 500,
-                textTransform: "none",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.15)",
+                backgroundColor: "#11395C",
+                fontSize: "11px",
+                minHeight: "35px",
+                width: "80px",
+                color: "white",
               }}
             >
               Submit
@@ -166,7 +210,7 @@ const MutualFundIndex = () => {
                 setSelectedMutualFund("");
               }}
             />
-            {!showClientCodeModal && (
+            {hasToken && !showClientCodeModal && (
               <Box
                 display="flex"
                 alignItems="center"
