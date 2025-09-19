@@ -99,6 +99,7 @@ import MutualFundIndex from "../../pages/MutualFund";
 import MtfComponent from "../../pages/RMS/Mtf";
 import UnpledgeRequest from "../../pages/UnpledgeRequest";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import MandateCall from "../../pages/Masters/MandateCall";
 // import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
 
 const drawerWidth = 260;
@@ -669,6 +670,7 @@ const SideBar = () => {
     "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
     "Client Exclusion": <ExclusionList activeSubItem={activeSubItem} />,
+    "Menu Master": <MandateCall />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {
