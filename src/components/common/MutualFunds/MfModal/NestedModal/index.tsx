@@ -11,6 +11,7 @@ import { apiServices } from "../../../../../services";
 import { AppDispatch } from "../../../../../redux/store";
 import ShowToast from "../../../../../utils/toastUtils";
 import TimerModal from "../../../TimerModal";
+import { formatTime } from "../../../../../helper/commmon";
 
 interface MandateDetail {
   amount: string;
@@ -144,12 +145,6 @@ const NestedModal = ({
 
     return () => clearInterval(timer);
   }, [secondsLeft, timerPage]);
-
-  const formatTime = (totalSeconds: number) => {
-    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
-    const seconds = String(totalSeconds % 60).padStart(2, "0");
-    return `${minutes}:${seconds}`;
-  };
 
   const handleNewMandateCreated = (mandateId: string) => {
     console.log("Returned Mandate ID:", mandateId);

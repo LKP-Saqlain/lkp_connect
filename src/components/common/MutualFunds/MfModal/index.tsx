@@ -21,6 +21,7 @@ import { apiServices } from "../../../../services";
 import BankCard from "../../BankRadio";
 import ShowToast from "../../../../utils/toastUtils";
 import { getNextPaymentDateString } from "../../../../helper/commmon";
+import TimerModal from "../../TimerModal";
 
 const MutualFundModal = ({
   isOpen,
@@ -147,7 +148,7 @@ const MutualFundModal = ({
     }
   };
 
-  const createSipOrder = () => {};
+  // const createSipOrder = () => {};
 
   const handleInvestClick = async () => {
     // First interaction (for SIP) is to confirm SIP date
@@ -185,11 +186,11 @@ const MutualFundModal = ({
     try {
       let orderNumber = null;
 
-      if (modalType === "sip") {
-        orderNumber = await createSipOrder();
-      } else {
-        orderNumber = await createLumpsumOrder();
-      }
+      // if (modalType === "sip") {
+      //   orderNumber = await createSipOrder();
+      // } else {
+      orderNumber = await createLumpsumOrder();
+      // }
 
       if (!orderNumber) {
         throw new Error("Failed to generate order number");
