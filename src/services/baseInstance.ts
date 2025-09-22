@@ -102,6 +102,7 @@ const mutualFundEndpoints = [
   endpoints.MF_TodayOrders,
   endpoints.EnachEmailToClient,
   endpoints.SinglePaymentEmail,
+  endpoints.VerifyClientCode,
 ];
 
 // Utility functions

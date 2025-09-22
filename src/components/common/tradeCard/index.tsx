@@ -2,6 +2,8 @@ import { Divider } from "@mui/material";
 import React from "react";
 import { Card, CardBody, Button } from "reactstrap";
 import "./TradeCard.css";
+import dayjs from "dayjs";
+import { capitalizeEachWord } from "../../../utils";
 
 interface TradeCardProps {
   stockName?: any;
@@ -24,8 +26,8 @@ interface TradeCardProps {
   mandateId?: number;
   clientName?: string;
   bankName?: string;
-  bankAccNumber?: string;
-  regnDate?: string;
+  bankAccNumber?: any;
+  regnDate?: any;
   amount?: number;
 }
 
@@ -65,6 +67,11 @@ const TradeCard: React.FC<TradeCardProps> = ({
   };
   const { bg, color, border } = getStatusColor();
 
+  const cleanedDate = regnDate
+    ?.replace(/\s+/g, " ")
+    .replace(/(\d)(AM|PM)$/i, "$1 $2")
+    .trim();
+
   const splitScripName = (scrip: string) => {
     const parts = scrip.split(" ");
     const dateIndex = parts.findIndex(
@@ -97,7 +104,14 @@ const TradeCard: React.FC<TradeCardProps> = ({
   return (
     <Card className={type != "Mandate" ? "trade-card" : ""}>
       {type === "Mandate" ? (
-        <CardBody style={{ padding: "12px 20px" }}>
+        <CardBody
+          style={{
+            padding: "12px 20px",
+            // border: "1px solid grey",
+            borderRadius: "2px",
+            boxShadow: "4px rgba(0, 0, 0, 0.06)", // subtle shadow
+          }}
+        >
           <div>
             {/* Top row: Client Name & Status */}
             <div
@@ -111,7 +125,9 @@ const TradeCard: React.FC<TradeCardProps> = ({
               <div style={{ fontWeight: 600, fontSize: "14px" }}>
                 {clientName}
               </div>
-              <div style={{ fontSize: "14px", color: "#666" }}>{status}</div>
+              <div style={{ fontSize: "14px", color: "#666" }}>
+                {capitalizeEachWord(status)}
+              </div>
             </div>
             {/* Detail Grid: Bank Info, Mandate ID, Regn Date, Amount */}
             <div
@@ -136,7 +152,8 @@ const TradeCard: React.FC<TradeCardProps> = ({
                   {bankName}
                 </div>
                 <div style={{ fontSize: "13px", color: "#333" }}>
-                  {bankAccNumber}
+                  {/* {bankAccNumber} */}
+                  xxxxxxxxxx{bankAccNumber.slice(-4)}
                 </div>
               </div>
               {/* Mandate ID */}
@@ -166,7 +183,9 @@ const TradeCard: React.FC<TradeCardProps> = ({
                   Registration Date
                 </div>
                 <div style={{ fontSize: "13px", color: "#333" }}>
-                  {regnDate}
+                  {dayjs(cleanedDate).isValid()
+                    ? dayjs(cleanedDate).format("DD-MMM-YYYY")
+                    : "Invalid Date"}
                 </div>
               </div>
               {/* Amount */}
@@ -182,9 +201,9 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 </div>
                 <div style={{ fontSize: "13px", color: "#333" }}>
                   ₹
-                  {amount?.toLocaleString("en-IN", {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
+                  {Number(amount)?.toLocaleString("en-IN", {
+                    maximumFractionDigits: 0,
+                    minimumFractionDigits: 0,
                   })}
                 </div>
               </div>

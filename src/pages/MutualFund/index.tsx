@@ -17,6 +17,7 @@ import { AppDispatch } from "../../redux/store";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { setEncryptedValue } from "../../utils/loocalEncrypt";
+import ShowToast from "../../utils/toastUtils";
 
 const MutualFundIndex = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -24,8 +25,6 @@ const MutualFundIndex = () => {
   const [clientCode, setClientCode] = useState<string>("");
   const [hasToken, setHasToken] = useState(false);
   const [autoReopen, setAutoReopen] = useState(false);
-
-  // 🚨 New state for modal
   const [showClientCodeModal, setShowClientCodeModal] = useState(true);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -37,6 +36,35 @@ const MutualFundIndex = () => {
     // Always reset token when page opens
     localStorage.removeItem(mfToken);
   }, []);
+
+  const verifyClientCode = async (clientCode: any) => {
+    // if (!clientCode?.trim()) return;
+    console.log(clientCode, "uatme");
+
+    try {
+      dispatch(showLoader("Verifying Client Code..."));
+      const response = await fetch(
+        `http://uatmiddlewareapi.lkp.net.in/api/Client/VerifyClientCode?ClientCode=${clientCode}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      dispatch(hideLoader());
+      if (data?.data === true) {
+        handleSubmit();
+      } else {
+        ShowToast("error", data?.message);
+      }
+    } catch (error) {
+      console.error("mfLogin error:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
 
   const handleSubmit = async () => {
     // setClientCode("");
@@ -63,6 +91,7 @@ const MutualFundIndex = () => {
         setEncryptedValue("mfToken", res?.data?.data);
         // ✅ Close modal only on success
         setShowClientCodeModal(false);
+        setSelectedMutualFund("");
       }
     } catch (error) {
       console.error("mfLogin error:", error);
@@ -80,6 +109,7 @@ const MutualFundIndex = () => {
   useEffect(() => {
     if (autoReopen) {
       const timer = setTimeout(() => {
+        setClientCode("");
         setShowClientCodeModal(true);
         setAutoReopen(false);
       }, 3000); // 5 seconds
@@ -175,7 +205,7 @@ const MutualFundIndex = () => {
             </Button>
 
             <Button
-              onClick={handleSubmit}
+              onClick={() => verifyClientCode(clientCode)}
               disabled={!clientCode.trim()}
               style={{
                 backgroundColor: "#11395C",

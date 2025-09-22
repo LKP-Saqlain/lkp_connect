@@ -798,4 +798,7 @@ export const apiServices = {
   UploadTdsfile: async (payload: any) => {
     return await apiService("POST", endpoints.UploadTdsfile, payload);
   },
+  VerifyClientCode: async (payload: any) => {
+    return await apiService("POST", endpoints.VerifyClientCode, payload);
+  },
 };

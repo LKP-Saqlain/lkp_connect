@@ -3,6 +3,7 @@ import { GridColDef } from "@mui/x-data-grid";
 // import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 // import { Button } from "@mui/material";
 // import PersonAddIcon from "@mui/icons-material/PersonAdd";
 // import { FaUserPen } from "react-icons/fa6";
@@ -10,6 +11,7 @@ import dayjs from "dayjs";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CopyToClipboardCell from "./copyToClipBoardCell";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { capitalizeEachWord } from "../utils";
 
 interface ClientRow {
   ClientCode: string;
@@ -17,7 +19,7 @@ interface ClientRow {
   LastTradeDate: string;
   ClientStatus: string;
 }
-
+dayjs.extend(customParseFormat);
 export const getClientActivityStatusColumns = (
   handleViewDetails: (row: ClientRow) => void,
   user_type: string // Added user_type parameter
@@ -8604,6 +8606,7 @@ export const MutualFundOrderColumns: GridColDef[] = [
     minWidth: 60,
     align: "center",
     headerAlign: "center",
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "startDate",
@@ -8613,6 +8616,28 @@ export const MutualFundOrderColumns: GridColDef[] = [
     minWidth: 90,
     align: "center",
     headerAlign: "center",
+    renderCell: (params) => {
+      const rawDate = params.value;
+
+      if (params.row.transType === "LUMPSUMP") {
+        // Fix common formatting issues
+        const cleanedDate = rawDate
+          ?.replace(/\s+/g, " ") // normalize spaces
+          .replace(/(\d)(AM|PM)$/i, "$1 $2") // add space before AM/PM if missing
+          .trim();
+
+        return dayjs(cleanedDate, "MMM D YYYY h:mma").isValid()
+          ? dayjs(cleanedDate, "MMM D YYYY h:mma").format("DD-MMM-YYYY")
+          : "Invalid Date";
+      } else if (params.row.transType === "XSIP") {
+        const parsed = dayjs(rawDate, "DD/MM/YYYY", true); // strict parsing
+        const formattedDate = parsed.isValid()
+          ? parsed.format("DD-MMM-YYYY")
+          : "Invalid Date";
+
+        return formattedDate;
+      }
+    },
   },
   // {
   //   field: "clientCode",
@@ -8639,6 +8664,7 @@ export const MutualFundOrderColumns: GridColDef[] = [
     minWidth: 200,
     headerAlign: "center",
     align: "left",
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
   // {
   //   field: "memberCode",

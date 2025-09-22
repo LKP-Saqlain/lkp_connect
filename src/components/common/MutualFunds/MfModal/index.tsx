@@ -807,15 +807,16 @@ const MutualFundModal = ({
                     {upiVerified && (
                       <Button
                         style={{
-                          minWidth: "40px",
+                          minWidth: "60px",
                           height: "40px",
                           padding: "6px",
-                          fontSize: "20px",
+                          fontSize: "14px",
                           lineHeight: "20px",
-                          color: "red",
-                          backgroundColor: "#eee",
+                          color: "white",
+                          backgroundColor: "#ee4b2b",
                           borderRadius: "8px",
                           cursor: "pointer",
+                          border: "1px solid #ee4b2b",
                         }}
                         onClick={() => {
                           setUpiId("");
@@ -824,12 +825,12 @@ const MutualFundModal = ({
                         }}
                         aria-label="Cancel UPI Verification"
                       >
-                        x
+                        Clear
                       </Button>
                     )}
                   </div>
                   {upiVerified === true
-                    ? `Verified: ${upiName}` // You'll need to store `upiName` in state
+                    ? upiName // You'll need to store `upiName` in state
                     : upiVerified === false
                     ? "Invalid UPI ID"
                     : ""}
