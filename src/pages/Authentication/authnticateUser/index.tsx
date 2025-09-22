@@ -48,6 +48,7 @@ const AuthenticateUser = () => {
   const { verifyPassword } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+  const IdType = localStorage.getItem("uIdType");
 
   const authenticationValidationSchema = Yup.object({
     authentication: Yup.string().when("authenticationButtonGroup", {
@@ -182,10 +183,15 @@ const AuthenticateUser = () => {
 
   useEffect(() => {
     console.log("formikValls", formik.values);
+    // console.log("formik.values.loginButtonGroup", values);
     if (formik.values.authenticationButtonGroup !== "Date of Birth") {
       formik.setFieldValue("DateOfBirth", "");
     }
-  }, [formik.values, formik.values.authenticationButtonGroup]);
+  }, [
+    formik.values,
+    formik.values.authenticationButtonGroup,
+    formik.values.loginButtonGroup,
+  ]);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -288,19 +294,21 @@ const AuthenticateUser = () => {
                 }
                 label="PAN"
               />
-              <FormControlLabel
-                value="Date of Birth"
-                control={
-                  <Radio
-                    sx={{
-                      "&.Mui-checked": {
-                        color: "#11395C",
-                      },
-                    }}
-                  />
-                }
-                label="Date of Birth"
-              />
+              {IdType !== "Partner" && (
+                <FormControlLabel
+                  value="Date of Birth"
+                  control={
+                    <Radio
+                      sx={{
+                        "&.Mui-checked": {
+                          color: "#11395C",
+                        },
+                      }}
+                    />
+                  }
+                  label="Date of Birth"
+                />
+              )}
             </RadioGroup>
           </FormControl>
           {formik.values.authenticationButtonGroup === "Pan" ? (

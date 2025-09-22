@@ -4,13 +4,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import Widgets from "./Widgets";
-import TradeCapsule from "./TradeCapsules";
+// import TradeCapsule from "./TradeCapsules";
 import TradeInfo from "../../components/common/UserInfoTable";
 import { apiServices } from "../../services";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import ShowToast from "../../utils/toastUtils";
 import Nudge from "../../components/common/Nudge";
+import TradeCard from "../../components/common/tradeCard";
+import ResearchTabs from "../../components/common/CustomCards";
+// import { Pagination } from "@mui/material";
 
 interface T6Selling {
   ClientCode: string;
@@ -58,7 +61,35 @@ const DashboardCrypto = ({
   const [searchValue, setSearchValue] = useState("");
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [filteredtradeCWCBData, setFilteredtradeCWCBData] = useState<any[]>([]);
+  const [researchCalls, setResearchCalls] = useState<any[]>([]);
+  const [allCalls, setAllCalls] = useState<any[]>([]);
+  const [equityCalls, setEquityCalls] = useState<any[]>([]);
+  const [foCalls, setFoCalls] = useState<any[]>([]);
+  const [commodityCalls, setCommodityCalls] = useState<any[]>([]);
+  const [currencyCalls, setCurrencyCalls] = useState<any[]>([]);
+  const [filteredCalls, setFilteredCalls] = useState<any[]>([]);
+  //pagination logic
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const recordsPerPage = 10;
 
+  // const indexOfLastRecord = currentPage * recordsPerPage;
+  // const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  // const currentRecords = filteredCalls.slice(
+  //   indexOfFirstRecord,
+  //   indexOfLastRecord
+  // );
+
+  // const totalPages = Math.ceil(filteredCalls.length / recordsPerPage);
+
+  // const handlePageChange = (
+  //   event: React.ChangeEvent<unknown>,
+  //   value: number
+  // ) => {
+  //   console.log(event);
+
+  //   setCurrentPage(value);
+  // };
+  //ends here
   const dispatch = useDispatch<AppDispatch>();
   const sessionExpired = useSelector(
     (state: RootState) => state.sessionExpired.data.session
@@ -295,9 +326,62 @@ const DashboardCrypto = ({
     setmodal_animationZoom((prev) => !prev);
   }
 
+  const handleTabClick = (value: any) => {
+    console.log("tabClickValue", value);
+    if (value === 0) setFilteredCalls(allCalls);
+    if (value === 1) setFilteredCalls(equityCalls);
+    if (value === 2) setFilteredCalls(foCalls);
+    if (value === 3) setFilteredCalls(commodityCalls);
+    if (value === 4) setFilteredCalls(currencyCalls);
+  };
+
   useEffect(() => {
     tog_animationZoom();
   }, []);
+
+  useEffect(() => {
+    if (selectedItem === "Reasearch Calls") {
+      let payload = {
+        user_id: user_id,
+        groupName: "GSG",
+        activeCallFlag: 1,
+      };
+      dispatch(showLoader(""));
+      apiServices
+        .ResearchCallData(payload)
+        .then((response) => {
+          if (response?.status === 200) {
+            console.log("API_RESPONSE", response?.data?.data);
+
+            setResearchCalls(response?.data?.data || []);
+            const data = response?.data?.data || [];
+            console.log(researchCalls);
+
+            setAllCalls(data);
+            setEquityCalls(
+              data.filter((item: any) => item.category === "Equity")
+            );
+            setFoCalls(data.filter((item: any) => item.category === "F&O"));
+            setCommodityCalls(
+              data.filter((item: any) => item.category === "Commodity")
+            );
+            console.log("commodityRecords", commodityCalls);
+
+            setCurrencyCalls(
+              data.filter((item: any) => item.category === "Currency")
+            );
+
+            // default: show all
+            setFilteredCalls(data);
+          }
+          dispatch(hideLoader());
+        })
+        .catch((error) => {
+          console.log("Errrrror", error);
+          dispatch(hideLoader());
+        });
+    }
+  }, [dispatch, selectedItem]);
 
   document.title = document.title = "LKP Securities | Trading";
   return (
@@ -318,30 +402,126 @@ const DashboardCrypto = ({
               selectedWidget={selectedItem}
               handleItemClick={handleItemClick}
             />
-            {selectedItem === "Reasearch Calls" && <TradeCapsule />}
+            {/* {selectedItem === "Reasearch Calls" && <TradeCapsule />} */}
             {/* {selectedItem === "Clients With Ledger Balance" && <DropDown />} */}
           </Row>
-          <Card
-            style={{
-              borderRadius: "15px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            <CardBody>
-              <TradeInfo
-                T6Data={filteredData.length > 0 ? filteredData : t6Data}
-                tradeCWCBData={
-                  filteredtradeCWCBData.length > 0
-                    ? filteredtradeCWCBData
-                    : tradeCWCBData
-                }
-                selectedWidget={selectedItem}
-                handleExcel={handleExcel}
-                showSearch={responseStatus}
-                handleSearchBasedOnInput={handleSearchBasedOnInput}
-              />
-            </CardBody>
-          </Card>
+          {selectedItem === "Clients With Ledger Balance" ||
+          selectedItem === "Clients Ageing Report" ? (
+            <Card
+              style={{
+                borderRadius: "15px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <CardBody>
+                <TradeInfo
+                  T6Data={filteredData.length > 0 ? filteredData : t6Data}
+                  tradeCWCBData={
+                    filteredtradeCWCBData.length > 0
+                      ? filteredtradeCWCBData
+                      : tradeCWCBData
+                  }
+                  selectedWidget={selectedItem}
+                  handleExcel={handleExcel}
+                  showSearch={responseStatus}
+                  handleSearchBasedOnInput={handleSearchBasedOnInput}
+                />
+              </CardBody>
+            </Card>
+          ) : (
+            <>
+              {" "}
+              <Card
+                style={{
+                  borderRadius: "15px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                  // padding: "14px",
+                }}
+              >
+                <CardBody>
+                  <ResearchTabs TabClick={handleTabClick} />
+                  <div>
+                    {filteredCalls.length > 0 ? (
+                      // currentRecords.map((item, index) => (  //Only for pagination
+                      filteredCalls.map((item, index) => (
+                        <TradeCard
+                          key={index}
+                          stockName={item.scripName}
+                          exchange={`${item.exchange}`}
+                          ltp={parseFloat(item.lastTradedPrice)}
+                          ltpChange={0}
+                          stopLoss={parseFloat(item.stopLoss)}
+                          recPrice={parseFloat(item.price)}
+                          targetPrice={parseFloat(item.targetPrice)}
+                          status={item.status}
+                          category={item.category}
+                          tag={item.subCategory}
+                          dateTime={item.validity}
+                          partialProfitText={item.statusDescreption}
+                          buySell={item.buySell}
+                          type="ResearchCall"
+                        />
+                      ))
+                    ) : (
+                      <>
+                        <Card
+                          style={{
+                            borderRadius: "8px",
+                            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+                            border: "1px solid #e0e0e0",
+                            backgroundColor: "#f9f9f9",
+                            textAlign: "center",
+                          }}
+                        >
+                          <CardBody
+                            style={{
+                              // padding: "40px 20px",
+                              fontSize: "16px",
+                              fontWeight: 500,
+                              color: "#666",
+                            }}
+                          >
+                            No Records Found!
+                          </CardBody>
+                        </Card>
+                      </>
+                    )}
+                    {/* Below is only for pagination */}
+                    {/* {filteredCalls.length > recordsPerPage && (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          // marginTop: "20px",
+                        }}
+                      >
+                        <Pagination
+                          count={totalPages}
+                          page={currentPage}
+                          onChange={handlePageChange}
+                          // color="primary"
+                          shape="circular"
+                          size="medium"
+                          sx={{
+                            "& .MuiPaginationItem-root": {
+                              color: "#11395C", // text color
+                            },
+                            "& .Mui-selected": {
+                              backgroundColor: "#11395C", // active page background
+                              color: "white", // active text color
+                            },
+                            "& .MuiPaginationItem-root:hover": {
+                              backgroundColor: "rgba(17,57,92,0.1)", // hover effect
+                            },
+                          }}
+                        />
+                      </div>
+                    )} */}
+                  </div>
+                </CardBody>
+              </Card>
+            </>
+          )}
           {/* </Col> */}
           {/* </Row> */}
         </Container>

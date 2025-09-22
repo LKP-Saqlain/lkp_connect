@@ -233,9 +233,11 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       .then((respones) => {
         if (respones?.status === 200) {
           console.log("InsertResponse", respones?.status);
-          ShowToast("success", respones?.data?.message);
+
           if (respones?.data?.data === null) {
             ShowToast("error", respones?.data?.message);
+          } else {
+            ShowToast("success", respones?.data?.message);
           }
           dispatch(hideLoader());
           setmodal_grid(false);

@@ -786,4 +786,16 @@ export const apiServices = {
   BSEStar_MfMandateENACH: async (payload: any) => {
     return await apiService("POST", endpoints.BSEStar_MfMandateENACH, payload);
   },
+  EnachEmailToClient: async (payload: any) => {
+    return await apiService("POST", endpoints.EnachEmailToClient, payload);
+  },
+  SinglePaymentEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SinglePaymentEmail, payload);
+  },
+  ResearchCallData: async (payload: any) => {
+    return await apiService("POST", endpoints.ResearchCallData, payload);
+  },
+  UploadTdsfile: async (payload: any) => {
+    return await apiService("POST", endpoints.UploadTdsfile, payload);
+  },
 };

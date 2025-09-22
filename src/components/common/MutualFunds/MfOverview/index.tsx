@@ -8,7 +8,7 @@ import { AppDispatch } from "../../../../redux/store";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 
-const MfOverview = ({ schemeCode, onBack }: any) => {
+const MfOverview = ({ schemeCode, onBack, hasToken }: any) => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<any>(null);
   const [modalType, setModalType] = useState<"oneTime" | "sip" | null>(null);
@@ -68,7 +68,7 @@ const MfOverview = ({ schemeCode, onBack }: any) => {
     };
 
     fetchData();
-  }, [dispatch, schemeCode]);
+  }, [dispatch, schemeCode, hasToken]);
 
   return (
     <>
@@ -79,6 +79,7 @@ const MfOverview = ({ schemeCode, onBack }: any) => {
         modalType={modalType}
         title={data?.schemeName ?? ""}
         bseSchemeCode={bseSchemeCode}
+        hasToken={hasToken}
       />
 
       <Card>

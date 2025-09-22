@@ -49,9 +49,6 @@ export interface VendorData {
 const VendorMaster = ({ activeSubItem }: any) => {
   const [modal_grid, setmodal_grid] = useState<boolean>(false);
   const [editData, setEditData] = useState<VendorData | null>(null);
-  const [disableFields, setDisableFields] = useState(false);
-  const [printLocations, setPrintLocations] = useState([]);
-  const [showBankUpload, setShowBankUpload] = useState(false);
   const [vendorData, setVendorData] = useState<any[]>([]);
   const [editUserCheck, setEditUserCheck] = useState(false);
 
@@ -81,9 +78,8 @@ const VendorMaster = ({ activeSubItem }: any) => {
         .then((response) => {
           if (response?.status === 200) {
             console.log("Response-->", response?.data?.data);
-            const data = response?.data?.data || [];
+            // const data = response?.data?.data || [];
             dispatch(hideLoader());
-            setPrintLocations(data);
           }
         })
         .catch((error) => {
@@ -100,65 +96,23 @@ const VendorMaster = ({ activeSubItem }: any) => {
     setEditData(null);
   }
 
-  const handleVerifyDetails = (accNo: string, ifscCode: string) => {
-    console.log("BankValues", accNo, ifscCode);
-
-    let payload = {
-      bankAccNo: accNo,
-      ifscCode: ifscCode,
-    };
-    dispatch(showLoader(""));
-    apiServices
-      .VerifyBankDetails(payload)
-      .then((response) => {
-        if (response?.status === 200) {
-          dispatch(hideLoader());
-          let data = response?.data;
-          console.log("VerifyBankResponse", data);
-          if (data?.statusCode === 400) {
-            ShowToast("error", "Invalid Bank Details!");
-            setDisableFields(true);
-            setShowBankUpload(false);
-          } else {
-            if (data?.isSuccess) {
-              setShowBankUpload(true);
-            }
-            ShowToast("success", data?.message);
-            setDisableFields(false);
-          }
-        }
-      })
-      .catch((error) => {
-        console.log("eRRROR", error);
-        dispatch(hideLoader());
-      });
-  };
-
   const handleFormSubmit = (
     values: any,
-    tdsFileBase64: string | null,
+    panFileBase64: string | null,
     msmeFileBase64: string | null,
     bankFileBase64: string | null,
-    tdsFileExtension: string | null,
+    panFileExtension: string | null,
     msmeFileExtension: string | null,
-    bankFileExtension: string | null,
-    isEditVendorContent?: any
+    bankFileExtension: string | null
+    // isEditVendorContent?: any
   ) => {
     console.log(
       "handleFormSubmitValues",
       values,
-      "EditFlag",
-      isEditVendorContent,
-      "Extensions",
-      tdsFileExtension,
-      msmeFileExtension,
-      bankFileExtension,
-      "TDSBase64",
-      tdsFileBase64,
-      "MSMEBase64",
-      msmeFileBase64,
-      "bankFileBase64",
-      bankFileBase64
+      "panFileBase64-->",
+      panFileBase64,
+      "panFileExtension-->",
+      panFileExtension
     );
     setmodal_grid(false);
     const {
@@ -174,7 +128,8 @@ const VendorMaster = ({ activeSubItem }: any) => {
       emailId,
       websiteName,
       panNo,
-      bankName,
+      panDoc,
+      // bankName,
       bankAccountNo,
       ifscCode,
       chequePrintName,
@@ -183,7 +138,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
       faxNo,
       paymentBank,
       gstNo,
-      tdsFlag,
+      // tdsFlag,
       msmeFlag,
       msmeType,
       chqPrintLocationFlag,
@@ -205,7 +160,8 @@ const VendorMaster = ({ activeSubItem }: any) => {
         emailID: emailId,
         websiteName: websiteName,
         panNo: panNo,
-        bankName: bankName,
+        panDoc,
+        bankName: chequePrintName ? chequePrintName : "",
         bankActNo: bankAccountNo,
         ifscCode: ifscCode,
         bankDoc: bankFileBase64 ? bankFileBase64 : editData?.bankDoc,
@@ -215,18 +171,18 @@ const VendorMaster = ({ activeSubItem }: any) => {
         createdBy: user_id,
         chqPrintName: chequePrintName,
         faxNo: faxNo,
-        paymentBank: paymentBank,
+        paymentBank: paymentBank ? paymentBank : "",
         // utilityFlag: "string",
         gstNo: gstNo,
-        tdsFlag: tdsFlag === "Yes" ? true : false,
-        tdsPath: tdsFileBase64 ? tdsFileBase64 : editData?.tdsPath,
+        // tdsFlag: tdsFlag === "Yes" ? true : false,
+        // tdsPath: tdsFileBase64 ? tdsFileBase64 : editData?.tdsPath,
         msmeFlag: msmeFlag === "Yes" ? true : false,
         msmePath: msmeFileBase64 ? msmeFileBase64 : editData?.msmePath,
         msmeType: msmeFlag === "Yes" ? msmeType : "",
         bankDocExtn: bankFileExtension
           ? bankFileExtension
           : editData?.bankDocExtn,
-        tdsExtn: tdsFileExtension ? tdsFileExtension : editData?.tdsExtn,
+        // tdsExtn: tdsFileExtension ? tdsFileExtension : editData?.tdsExtn,
         msmeExtn: msmeFileExtension ? msmeFileExtension : editData?.msmseExtn,
         vendorID: editData?.vendorId,
       };
@@ -264,13 +220,14 @@ const VendorMaster = ({ activeSubItem }: any) => {
       emailID: emailId,
       websiteName,
       panNo,
+      panDoc,
       gstNo,
 
       // Bank Info
-      bankName,
+      bankName: chequePrintName ? chequePrintName : "",
       bankActNo: bankAccountNo,
       ifscCode,
-      paymentBank,
+      paymentBank: paymentBank ? paymentBank : "",
       bankDoc: bankFileBase64 || "",
       bankDocExtn: `.${bankFileExtension}`,
 
@@ -286,9 +243,6 @@ const VendorMaster = ({ activeSubItem }: any) => {
       createdBy: user_id,
 
       // TDS & MSME
-      tdsFlag: tdsFlag === "Yes" ? true : false,
-      tdsPath: tdsFileBase64 || "",
-      tdsExtn: `.${tdsFileExtension}`,
       msmeFlag: msmeFlag === "Yes" ? true : false,
       msmePath: msmeFileBase64 || "",
       msmeType: msmeFlag === "Yes" ? msmeType : "",
@@ -414,13 +368,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
                     onSubmit={handleFormSubmit}
                     editUserCheck={editUserCheck}
                     isVendorMasterContent={true}
-                    handleVerifyDetails={handleVerifyDetails}
-                    setDisableFields={setDisableFields}
-                    disableFields={disableFields}
-                    printLocations={printLocations}
-                    showBankUpload={showBankUpload}
                     activeSubItem={activeSubItem}
-                    setShowBankUpload={setShowBankUpload}
                   />
 
                   <Button

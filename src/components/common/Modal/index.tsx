@@ -210,49 +210,63 @@ const ModalComponent = ({
 
       console.log(`${key}:`, value);
 
+      // --- 1️⃣ strictly higher than current brokerage %
       if (value > currentPlan.brokeragePerc) {
         console.log(`${key} is greater than brokeragePerc → show consent`);
         consentNeeded = true;
         // setShowConsent(true);
         break;
-      } else if (value < currentPlan.brokeragePerc) {
+      }
+      // --- 2️⃣ strictly lower → skip
+      if (value < currentPlan.brokeragePerc) {
         console.log(`${key} is smaller than brokeragePerc → no consent`);
         continue;
-      } else {
-        // Equal values – further checks needed
-        const isIntradayOrDelivery =
-          key === "EquityIntradayPer" || key === "EquityDeliveryPer";
+      }
+      // --- 3️⃣ equal → need further checks
+      const isIntradayOrDelivery =
+        key === "EquityIntradayPer" || key === "EquityDeliveryPer";
 
-        if (isIntradayOrDelivery) {
-          const minKey =
-            key === "EquityIntradayPer"
-              ? "EquityIntradayMin"
-              : "EquityDeliveryMin";
+      if (isIntradayOrDelivery) {
+        // For Intraday/Delivery: compare matching Min vs current min
+        const minKey =
+          key === "EquityIntradayPer"
+            ? "EquityIntradayMin"
+            : "EquityDeliveryMin";
 
-          const minValue = matchedPlan[minKey];
+        const newMin = matchedPlan[minKey];
+        const currMin = currentPlan.brokeragePercMin;
 
-          if (minValue > currentPlan.brokeragePercMin) {
-            console.log(
-              `${minKey} (${minValue}) > brokeragePercMin (${currentPlan.brokeragePercMin}) → show consent`
-            );
-            consentNeeded = true;
-            // setShowConsent(true);
-            break;
-          } else {
-            console.log(`${minKey} is lesser or equal → no consent`);
-          }
+        if (newMin !== undefined && currMin !== undefined && newMin > currMin) {
+          console.log(
+            `${minKey} (${newMin}) > brokeragePercMin (${currMin}) → show consent`
+          );
+          consentNeeded = true;
+          // setShowConsent(true);
+          break;
         } else {
-          // ✅ NEW CONDITION: other keys (not Intraday/Delivery)
-          const min = currentPlan.brokeragePercMin;
+          console.log(`${minKey} is lesser or equal → no consent`);
+        }
+      } else {
+        // ✅ NEW CONDITION: other keys (not Intraday/Delivery)
+        // If there is a segment-specific Min, compare it
+        const minKey = key.replace("Per", "Min"); // e.g. EquityFuturesPer -> EquityFuturesMin
+        const newMin = matchedPlan[minKey];
+        const currMin = currentPlan.brokeragePercMin;
 
-          if (min !== undefined && min > 0) {
-            console.log(
-              `${key} equals brokeragePerc, but brokeragePercMin (${min}) > 0 → show consent`
-            );
-            consentNeeded = true;
-            // setShowConsent(true);
-            break;
-          }
+        if (
+          newMin !== undefined &&
+          currMin !== undefined &&
+          newMin > currMin // strictly higher than current min
+        ) {
+          console.log(
+            `${key} equals brokeragePerc, and ${minKey} (${newMin}) > brokeragePercMin (${currMin}) → show consent`
+          );
+          consentNeeded = true;
+          break;
+        } else {
+          console.log(
+            `${key} equals brokeragePerc, but no higher minimum → no consent`
+          );
         }
       }
     }

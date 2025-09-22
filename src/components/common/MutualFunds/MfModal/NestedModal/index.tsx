@@ -10,6 +10,8 @@ import {
 import { apiServices } from "../../../../../services";
 import { AppDispatch } from "../../../../../redux/store";
 import ShowToast from "../../../../../utils/toastUtils";
+import TimerModal from "../../../TimerModal";
+import { formatTime } from "../../../../../helper/commmon";
 
 interface MandateDetail {
   amount: string;
@@ -51,18 +53,17 @@ const NestedModal = ({
   amount,
   selectedBank,
 }: NestedModalProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const [mandateDetails, setMandateDetails] = useState<MandateDetail[]>([]);
   const [selectedMandateId, setSelectedMandateId] = useState<string | null>(
     null
   );
   const [showCreateMandateModal, setShowCreateMandateModal] = useState(false);
-  // const [selectedBank, setSelectedBank] = useState<any>(null); // for selection
   const [orderNo, setOrderNo] = useState<any>(null); // for selection
   const [secondsLeft, setSecondsLeft] = useState(30);
   const [timerPage, setTimerPage] = useState(false);
   const [stopEnach, setStopEnach] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
   // Handler for bank selection
 
   let startDate = "";
@@ -134,7 +135,7 @@ const NestedModal = ({
     if (secondsLeft === 0) {
       toggle(); // close the modal
       setTimerPage(false);
-      handleSinglepayment();
+      // handleSinglepayment();
       return;
     }
 
@@ -145,12 +146,6 @@ const NestedModal = ({
     return () => clearInterval(timer);
   }, [secondsLeft, timerPage]);
 
-  const formatTime = (totalSeconds: number) => {
-    const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
-    const seconds = String(totalSeconds % 60).padStart(2, "0");
-    return `${minutes}:${seconds}`;
-  };
-
   const handleNewMandateCreated = (mandateId: string) => {
     console.log("Returned Mandate ID:", mandateId);
     setSelectedMandateId(mandateId);
@@ -160,12 +155,12 @@ const NestedModal = ({
       handleXsip(mandateId);
 
       if (selectedPaymentType === "netbanking") {
-        setSecondsLeft(20);
+        setSecondsLeft(180);
         if (!stopEnach) {
           triggerENachLoop(mandateId); // Only call if stopEnach is false
         } // Start the recursive loop
       } else {
-        setSecondsLeft(20);
+        setSecondsLeft(60);
       }
     }, 2000);
   };
@@ -182,19 +177,19 @@ const NestedModal = ({
     handleXsip();
 
     if (selectedPaymentType === "netbanking") {
-      setSecondsLeft(20);
+      setSecondsLeft(180);
       if (!stopEnach) {
         triggerENachLoop(); // Only call if stopEnach is false
       } // Start the recursive loop
     } else {
-      setSecondsLeft(20);
+      setSecondsLeft(60);
     }
   };
 
-  const extractOrderNumber = (responseData: string): string | null => {
-    const match = responseData.match(/REG NO IS\s*:\s*(\d+)/);
-    return match ? match[1] : null;
-  };
+  // const extractOrderNumber = (responseData: string): string | null => {
+  //   const match = responseData.match(/REG NO IS\s*:\s*(\d+)/);
+  //   return match ? match[1] : null;
+  // };
 
   const handleXsip = async (mandateId?: any) => {
     const payload = {
@@ -233,10 +228,15 @@ const NestedModal = ({
 
     try {
       const response = await apiServices.BSEStar_XSIPOrderEntry(payload);
-      const message = response?.data?.data;
-      const orderNumber = extractOrderNumber(message);
-      setOrderNo(orderNumber);
-      console.log(orderNumber, "extractOrderNumber");
+      const orderNumber = response?.data?.data?.firstOrderTodayOrderNo;
+      if (orderNumber) {
+        setOrderNo(orderNumber);
+        console.log(orderNumber, "Received Order Number");
+        // ✅ Now call handleSinglepayment
+        setTimeout(() => {
+          handleSinglepayment(orderNumber);
+        }, 5000);
+      }
       if (response?.data?.statusCode === 417) {
         ShowToast("error", response?.data?.data);
         toggle();
@@ -248,10 +248,17 @@ const NestedModal = ({
       dispatch(hideLoader());
     }
   };
-  const triggerENachLoop = async (mandateId?: any) => {
+
+  const triggerENachLoop = async (mandateId?: any, retryCount = 0) => {
+    if (retryCount > 8) {
+      console.warn("triggerENachLoop Max retry limit reached.");
+      return;
+    }
+    // debugger;
+    let mandu = mandateId || selectedMandateId;
     const payload = {
       clientCode: clientNo,
-      mandateID: mandateId || selectedMandateId,
+      mandateID: mandu,
       loopbackurl: "https://lkpconnect.net.in/dashboard",
     };
     if (!payload.clientCode || !payload.mandateID || !payload.loopbackurl) {
@@ -266,38 +273,77 @@ const NestedModal = ({
 
       console.log(message, "eNach url");
 
+      // ✅ success: open URL and send email
       if (message?.code === 200 && message?.message) {
-        const url = message.message;
-        window.open(url, "_blank");
-        dispatch(hideLoader());
-        return; // ✅ Exit loop on success
+        const url: string = message.message;
+        // window.open(url, "_blank");
+
+        await sendEmail({
+          url,
+          mandateId: mandateId || selectedMandateId,
+          orderNo: orderNo ?? "",
+          type: "ENACH",
+        });
+
+        return; // stop retrying
       }
     } catch (error) {
-      console.error("Error fetching mandate status", error);
+      console.error("Error fetching ENach URL", error);
+    } finally {
+      dispatch(hideLoader());
     }
-
     dispatch(hideLoader());
-
     // ⏳ Retry after 4 seconds
-    setTimeout(triggerENachLoop, 4000);
+    setTimeout(() => triggerENachLoop(mandu, retryCount + 1), 6000);
   };
-  const handleSinglepayment = async () => {
+
+  const sendEmail = async ({
+    url,
+    mandateId,
+    orderNo,
+    type = "ENACH", // or "SINGLE"
+  }: {
+    url: string;
+    mandateId: string;
+    orderNo: string;
+    type?: "ENACH" | "SINGLE";
+  }) => {
+    const payload = {
+      link: url,
+      clientCode: clientNo,
+      orderNo,
+      mandateId,
+      schemeCode: bseSchemeCode,
+      option: type === "ENACH" ? "ENACH" : "",
+    };
+
+    try {
+      const response =
+        type === "ENACH"
+          ? await apiServices.EnachEmailToClient(payload)
+          : await apiServices.SinglePaymentEmail(payload);
+
+      console.log(response, "Email response");
+    } catch (error) {
+      console.error("Error sending email", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const handleSinglepayment = async (orderNumber: any) => {
     dispatch(showLoader("Processing payment..."));
 
     try {
-      const Payload = {
+      const payload = {
         modeofpayment:
           selectedPaymentType === "upi"
             ? "UPI"
             : selectedBank?.paymentMode ?? "DIRECT",
-
-        bankid: selectedBank.code,
-        // bankid: "HDF",
+        bankid: selectedBank?.code ?? "",
         accountnumber: selectedBank?.account ?? "",
-        // accountnumber: "008291800000871",
         ifsc: selectedBank?.ifsc ?? "",
-        // ifsc: "YESB0000082",
-        ordernumber: orderNo,
+        ordernumber: orderNumber ?? "",
         totalamount: amount.toString(),
         internalrefno: "",
         nefTreference: selectedPaymentType === "upi" ? "" : "1",
@@ -311,33 +357,32 @@ const NestedModal = ({
         filler4: "",
         filler5: "",
       };
-      console.log("payload of singlepayment netsed", Payload);
+      console.log("payload of singlepayment nested", payload);
 
-      // Call API
-      const response = await apiServices.BSEStar_SinglePayment(Payload);
-      const htmlContent = response?.data?.data?.responsestring; // even with \r\n\t inside
-      if (
-        response?.data?.data?.statuscode == 417 ||
-        response?.data?.data?.statuscode == 101
-      ) {
-        ShowToast("error", response?.data?.data?.responsestring);
+      const response = await apiServices.BSEStar_SinglePayment(payload);
+      const htmlContent = response?.data?.data?.responsestring;
+      const statusCode = response?.data?.data?.statuscode;
+
+      if (statusCode === 417 || statusCode === 101) {
+        ShowToast("error", htmlContent);
         return;
       }
+
       if (selectedPaymentType === "upi") {
         ShowToast("info", htmlContent);
       } else {
-        const newWindow = window.open("", "_blank");
-        if (newWindow) {
-          newWindow.document.open();
-          newWindow.document.write(htmlContent); // browser interprets it fine
-          newWindow.document.close();
-        }
+        // 🔐 Now safely encode
+        const encodedHtml = btoa(htmlContent);
+        await sendEmail({
+          url: encodedHtml,
+          mandateId: selectedMandateId ?? "",
+          orderNo: orderNumber ?? "",
+          type: "SINGLE",
+        });
       }
-
-      // Success alert (customize by modalType if needed)
     } catch (err: any) {
       console.error("Investment failed", err);
-      alert("Something went wrong. Please try again.");
+      ShowToast("error", "Something went wrong. Please try again.");
     } finally {
       dispatch(hideLoader());
     }
@@ -354,72 +399,23 @@ const NestedModal = ({
       <Modal isOpen={isOpen} toggle={toggle} centered size="md">
         <ModalHeader toggle={toggle}>
           {timerPage ? "Waiting For confirmation" : "Confirmation"}
-          {/* {title} */}
         </ModalHeader>
         <ModalBody>
           {timerPage ? (
-            <div
-              style={{
-                textAlign: "center",
-                padding: "24px 16px",
-                fontFamily: "sans-serif",
-              }}
-            >
-              <div
-                style={{
-                  width: "80px",
-                  height: "80px",
-                  margin: "0 auto 16px",
-                  borderRadius: "50%",
-                  border: "4px solid #4CAF50",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                  color: "#4CAF50",
-                }}
-              >
-                {formatTime(secondsLeft)}
-              </div>
-
-              <h4 style={{ marginBottom: "10px" }}>Don't close this page!</h4>
-              <p style={{ fontSize: "14px", color: "#333" }}>
-                {selectedPaymentType === "upi"
-                  ? "Check your UPI app"
-                  : stopEnach === false
-                  ? "Redirecting you to the E-Nach setup."
-                  : ""}
-              </p>
-
-              <div
-                style={{
-                  backgroundColor: "#f8f8f8",
-                  padding: "12px",
-                  borderRadius: "8px",
-                  marginTop: "16px",
-                  fontSize: "13px",
-                  color: "#444",
-                }}
-              >
-                Your SIPs will not get registered if you don't complete this
-                process.
-              </div>
-
-              <p
-                style={{
-                  fontSize: "13px",
-                  color: "#555",
-                  marginTop: "20px",
-                  lineHeight: "1.5",
-                }}
-              >
-                This is a one-time activity in a single step.
-                <br />
-                {selectedPaymentType === "netbanking" &&
-                  "Enter Debit card / Netbanking / Aadhaar details to authenticate and proceed."}
-              </p>
-            </div>
+            // ✅ Replace this block with your dynamic TimerModal component
+            <TimerModal
+              isOpen={isOpen}
+              toggle={toggle}
+              timerPage={true}
+              secondsLeft={secondsLeft}
+              formatTime={formatTime}
+              selectedPaymentType={selectedPaymentType ?? undefined}
+              selectedMandateId={selectedMandateId ?? undefined}
+              stopEnach={stopEnach}
+              cancelLabel={cancelLabel}
+              confirmLabel={confirmLabel}
+              handleFinalConfirm={handleFinalConfirm}
+            />
           ) : mandateDetails.length === 0 ? (
             <p>No mandates available.</p>
           ) : (
@@ -513,18 +509,20 @@ const NestedModal = ({
           )}
         </ModalBody>
 
-        <ModalFooter>
-          <Button color="secondary" onClick={toggle}>
-            {cancelLabel}
-          </Button>
-          <Button
-            color="primary"
-            onClick={handleFinalConfirm}
-            disabled={!selectedMandateId}
-          >
-            {confirmLabel}
-          </Button>
-        </ModalFooter>
+        {!timerPage && (
+          <ModalFooter>
+            <Button color="secondary" onClick={toggle}>
+              {cancelLabel}
+            </Button>
+            <Button
+              color="primary"
+              onClick={handleFinalConfirm}
+              disabled={!selectedMandateId}
+            >
+              {confirmLabel}
+            </Button>
+          </ModalFooter>
+        )}
       </Modal>
       <CreateMandateModal
         isOpen={showCreateMandateModal}

@@ -228,42 +228,6 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
                   handleSelectedMutualFund={handleSelectedMutualFund}
                 />
               )}
-              {/* {assetTab === 0 && (
-                <MfinfoCard
-                  CardType="Asset Class"
-                  funds={mutualFundCards.equity}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {assetTab === 1 && (
-                <MfinfoCard
-                  CardType="Asset Class"
-                  funds={mutualFundCards.debt}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-
-              {assetTab === 2 && (
-                <MfinfoCard
-                  CardType="Asset Class"
-                  funds={mutualFundCards.hybrid}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {assetTab === 3 && (
-                <MfinfoCard
-                  CardType="Asset Class"
-                  funds={mutualFundCards.solution}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )}
-              {assetTab === 4 && (
-                <MfinfoCard
-                  CardType="Asset Class"
-                  funds={mutualFundCards.others}
-                  handleSelectedMutualFund={handleSelectedMutualFund}
-                />
-              )} */}
             </Card>
 
             {/* Passive & Product Cards */}

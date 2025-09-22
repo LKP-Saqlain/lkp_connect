@@ -136,6 +136,9 @@ interface SelectedWidgetProps {
   fileExtension?: any;
   reportType?: string;
   onRowSelectionModelChange?: any;
+  handleVerifyDetails?: any;
+  isBankVerified?: any;
+  setIsBankVerified?: any;
 }
 
 const DataTable = ({
@@ -180,6 +183,9 @@ const DataTable = ({
   setShowDocument,
   fileExtension,
   reportType,
+  handleVerifyDetails,
+  isBankVerified,
+  setIsBankVerified,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -1861,6 +1867,31 @@ const DataTable = ({
             },
           };
         }
+        if (column.field === "panDocument") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, "PAN"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
+                </button>
+              );
+            },
+          };
+        }
 
         return column;
       });
@@ -2158,39 +2189,6 @@ const DataTable = ({
         action={action}
         handleApproval={handleApproval}
         Msg={Msg}
-        // Msg={
-        //   activeSubItem === "RMS Allocation"
-        //     ? ""
-        //     : activeSubItem === "Regulatory Announcement"
-        //     ? "Are you sure want to delete this entry"
-        //     : activeSubItem === "Unlisted Shares Entry"
-        //     ? "Are you sure want to delete this entry"
-        //     : activeSubItem === "Communication Retrival Entry" ||
-        //       activeSubItem === "Marketing Material" ||
-        //       activeSubItem === "Client Exclusion" ||
-        //       activeSubItem === "Third Party Vendor Master"
-        //     ? "Are you sure want to delete this entry"
-        //     : activeSubItem === "Communication Retrival Checker"
-        //     ? `Are you sure want to ${action} this entry`
-        //     : activeSubItem === "KYC Approval"
-        //     ? `Are you sure want to ${action} this entry`
-        //     : activeSubItem === "RH Approval"
-        //     ? `Are you sure want to ${action} this entry`
-        //     : activeSubItem === "Unlisted Shares Approval 1" ||
-        //       activeSubItem === "Unlisted Shares Approval 2" ||
-        //       activeSubItem === "Third Party Vendor Approval"
-        //     ? `Are you sure want to ${action} this entry`
-        //     : activeSubItem === "Pre Trade Approval" && !showDocument
-        //     ? `Are you sure want to ${action} this entry`
-        //     : activeSubItem === "Pre Trade Proof Upload"
-        //     ? ""
-        //     : activeSubItem === "Pre Trade Report"
-        //     ? ""
-        //     : activeSubItem === "Pre Trade Approval" && showDocument
-        //     ? ""
-        //     : "Are you sure you want to send the email?"
-        // }
-
         activeSubItem={activeSubItem}
         isUploadMode={activeSubItem === "Pre Trade Proof Upload" ? true : false}
         isDropUpload={
@@ -2218,6 +2216,9 @@ const DataTable = ({
         isPartnerContest={
           activeSubItem === "Partner Contest Report" ? true : false
         }
+        handleVerifyDetails={handleVerifyDetails}
+        isBankVerified={isBankVerified}
+        setIsBankVerified={setIsBankVerified}
       />
       {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown
