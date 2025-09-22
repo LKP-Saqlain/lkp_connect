@@ -21,7 +21,7 @@ import { apiServices } from "../../../../services";
 import BankCard from "../../BankRadio";
 import ShowToast from "../../../../utils/toastUtils";
 import { getNextPaymentDateString } from "../../../../helper/commmon";
-import TimerModal from "../../TimerModal";
+// import TimerModal from "../../TimerModal";
 
 const MutualFundModal = ({
   isOpen,
