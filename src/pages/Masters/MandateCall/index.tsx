@@ -1,0 +1,270 @@
+import React, { useEffect, useState } from "react";
+import { Card, CardBody, CardHeader, Col, Row, Table } from "reactstrap";
+import { apiServices } from "../../../services";
+import { TextField, Button, Grid, Box } from "@mui/material";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import ShowToast from "../../../utils/toastUtils";
+// import { encryptAES } from "../../../utils/encryptDecrypt";
+import { useNavigate, useParams } from "react-router-dom";
+import Logo from "../../../assets/logo.png";
+
+const MandateCall = () => {
+  const [data, setData] = useState<any>(null);
+  const [upiId, setUpiId] = useState("");
+  const [isMandateEnabled, setIsMandateEnabled] = useState(false);
+  const [amount, setAmount] = useState("5000");
+  const [successMsg, setSuccessMsg] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+
+  const { encryptedCode } = useParams<{ encryptedCode: string }>();
+
+  useEffect(() => {
+    if (!encryptedCode) return;
+
+    dispatch(showLoader(""));
+
+    apiServices
+      .GetDpClientDetails({ clientcode: encryptedCode })
+      .then((response) => {
+        if (response?.status === 200) {
+          setData(response.data.data);
+        }
+      })
+      .catch((err) => console.error("Error", err))
+      .finally(() => {
+        dispatch(hideLoader());
+        navigate("/DPMandate", { replace: true });
+      });
+  }, [encryptedCode, dispatch, navigate]);
+
+  const HandleVerifyUpi = () => {
+    let payload = {
+      requestInfo: {
+        pgMerchantId: "HDFC000010010275",
+        pspRefNo: "",
+      },
+      payeeType: {
+        virtualAddress: "abhishek88@hdfcbank",
+      },
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .checkUpi(JSON.stringify(payload))
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("UPI Verified", response?.data);
+          setIsMandateEnabled(true); // enable mandate button
+          ShowToast("success", response?.data?.message);
+        }
+        dispatch(hideLoader());
+      })
+      .catch((error) => {
+        console.log("error", error);
+        setIsMandateEnabled(false);
+        dispatch(hideLoader());
+      });
+  };
+
+  const HandleMandate = () => {
+    let payload = {
+      clientcode: data?.clientcode,
+      user_id: user_id,
+      dpCode: data?.dpcode,
+      dpid: data?.dpid,
+      amount: amount,
+      upiID: "abhishek88@hdfcbank",
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .CreateUpiMandate(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("mandateResponse-->", response?.data);
+          setIsMandateEnabled(true); // enable mandate button
+          setSuccessMsg(response?.data?.message);
+          ShowToast("success", response?.data?.message);
+        }
+        dispatch(hideLoader());
+      })
+      .catch((error) => {
+        console.log("error", error);
+        dispatch(hideLoader());
+      });
+  };
+
+  const formatIndianNumber = (value: string) => {
+    if (!value) return "";
+    return new Intl.NumberFormat("en-IN").format(Number(value));
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/,/g, "");
+
+    if (rawValue === "" || /^[0-9]+$/.test(rawValue)) {
+      setAmount(rawValue);
+    }
+  };
+  const handleAmountBlur = () => {
+    const numericValue = Number(amount);
+
+    if (numericValue < 5000) {
+      ShowToast("error", "Amount must be at least ₹5,000");
+      setAmount("5000");
+    }
+  };
+
+  return (
+    <React.Fragment>
+      <div className="page-content page-view">
+        <div className="container-fluid">
+          <Row className="row-font">
+            <Col lg={12}>
+              <Card
+                style={{
+                  minHeight: "80vh",
+                  borderRadius: "6px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                  margin: "20px auto",
+                  minWidth: "1000px",
+                  width: "100%",
+                }}
+              >
+                <CardHeader
+                  style={{
+                    borderRadius: "6px 6px 0 0",
+                    boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                    backgroundColor: "rgb(238, 238, 238)",
+                    padding: "0.5rem 1rem",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "1rem",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box>
+                    <img src={Logo} alt="Logo" style={{ height: "40px" }} />
+                  </Box>
+                  <h4 className="card-title mb-0">DP Mandate Call</h4>
+                </CardHeader>
+
+                <CardBody>
+                  {data ? (
+                    <Table bordered hover responsive>
+                      <thead style={{ textAlign: "center" }}>
+                        <tr>
+                          <th>Field</th>
+                          <th>Value</th>
+                        </tr>
+                      </thead>
+                      <tbody style={{ textAlign: "center" }}>
+                        <tr>
+                          <td>DP Code</td>
+                          <td>{data.dpcode}</td>
+                        </tr>
+                        <tr>
+                          <td>DP ID</td>
+                          <td>{data.dpid}</td>
+                        </tr>
+                        <tr>
+                          <td>Client Code</td>
+                          <td>{data.clientcode}</td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  ) : (
+                    <p>Loading...</p>
+                  )}
+
+                  <Grid
+                    container
+                    spacing={2}
+                    alignItems="center"
+                    style={{ marginTop: "20px" }}
+                  >
+                    {/* Amount Field */}
+                    <Grid item xs={12} sm={6} md={4}>
+                      <TextField
+                        size="small"
+                        label="Please Enter Amount"
+                        variant="outlined"
+                        fullWidth
+                        onBlur={handleAmountBlur}
+                        value={formatIndianNumber(amount)}
+                        onChange={handleAmountChange}
+                      />
+                    </Grid>
+
+                    {/* UPI Field */}
+                    <Grid item xs={12} sm={6} md={4}>
+                      <TextField
+                        size="small"
+                        label="Enter UPI ID"
+                        variant="outlined"
+                        fullWidth
+                        value={upiId}
+                        onChange={(e) => {
+                          setUpiId(e.target.value);
+                          setIsMandateEnabled(false);
+                        }}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={2}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        onClick={HandleVerifyUpi}
+                      >
+                        Verify UPI
+                      </Button>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={2}>
+                      <Button
+                        variant="contained"
+                        color="success"
+                        fullWidth
+                        disabled={!isMandateEnabled}
+                        onClick={HandleMandate}
+                      >
+                        Mandate
+                      </Button>
+                    </Grid>
+                  </Grid>
+
+                  {successMsg && (
+                    <div
+                      style={{
+                        fontSize: "13px",
+                        marginTop: "15px",
+                        padding: "10px 15px",
+                        backgroundColor: "#d4edda",
+                        color: "#155724",
+                        borderRadius: "6px",
+                        fontWeight: 500,
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                        width: "100%",
+                        maxWidth: "400px",
+                      }}
+                    >
+                      {`${successMsg}! Mandate Initiated, waiting for confirmation.`}
+                    </div>
+                  )}
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+};
+
+export default MandateCall;
