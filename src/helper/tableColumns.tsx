@@ -1996,31 +1996,7 @@ export const DPDebitRecovery: GridColDef[] = [
         return <span>No Link Available</span>;
 
       const fullLink = `${Payment_link}${EnCAccountCode}`;
-      return <CopyToClipboardCell fullLink={fullLink} field={"payment"} />;
-    },
-  },
-  {
-    field: "dpMandate_Link",
-    headerName: "Mandate\nLink",
-    headerClassName: "header-wrap-custom",
-    minWidth: 75,
-    flex: 0.3,
-    align: "center",
-    headerAlign: "center",
-    disableColumnMenu: true,
-    renderCell: (params: any) => {
-      const { Payment_link, EnCAccountCode } = params.row;
-      if (!Payment_link || !EnCAccountCode)
-        return <span>No Link Available</span>;
-
-      const fullLink = `${Payment_link}${EnCAccountCode}`;
-      return (
-        <CopyToClipboardCell
-          fullLink={fullLink}
-          field={"dpMandate"}
-          selectedRow={params?.row}
-        />
-      );
+      return <CopyToClipboardCell fullLink={fullLink} />;
     },
   },
   {

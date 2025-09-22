@@ -20,18 +20,20 @@ const SessionExpiryHandler = () => {
   );
   const tokenExpiryTime = data?.data?.tokenExpiryTime;
 
-  const excludedPaths = ["/", "/authorization", "/DPMandate"];
+  const excludedPaths = ["/", "/authorization"];
 
   useEffect(() => {
     const currentPath = location.pathname;
-    const isExcluded = excludedPaths.includes(currentPath);
 
-    const cameFromExcludedPath =
-      excludedPaths.includes(prevPathRef.current || "") ||
-      (prevPathRef.current || "").startsWith("/DPMandate");
-    console.log("excluededPaths", isExcluded);
+    const cameFromExcludedPath = excludedPaths.includes(
+      prevPathRef.current || ""
+    );
 
-    if (isNewUser || isExcluded || cameFromExcludedPath) {
+    if (
+      isNewUser ||
+      excludedPaths.includes(currentPath) ||
+      cameFromExcludedPath
+    ) {
       prevPathRef.current = currentPath;
       return;
     }
@@ -39,7 +41,7 @@ const SessionExpiryHandler = () => {
     if (data?.data?.token && tokenExpiryTime) {
       const expiryDate = new Date(tokenExpiryTime);
       const now = new Date();
-
+      console.log("CurrentTime", now, "ExpiryTime", expiryDate);
       if (now > expiryDate) {
         setIsTokenExpired(true);
         setModalCenter(true);
@@ -48,6 +50,7 @@ const SessionExpiryHandler = () => {
       }
 
       const timeUntilExpiry = expiryDate.getTime() - now.getTime();
+      console.log("Testtest", timeUntilExpiry);
 
       const timer = setTimeout(() => {
         setIsTokenExpired(true);
@@ -67,12 +70,9 @@ const SessionExpiryHandler = () => {
     isNewUser,
   ]);
 
-  const isOnMandate = location.pathname.startsWith("/DPMandate");
-
   const shouldShowModal =
     !isNewUser &&
     isTokenExpired &&
-    !isOnMandate &&
     !excludedPaths.includes(location.pathname) &&
     !excludedPaths.includes(prevPathRef.current || "");
 

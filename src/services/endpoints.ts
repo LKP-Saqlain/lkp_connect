@@ -186,7 +186,4 @@ export const endpoints = {
   SinglePaymentEmail: "/api/MF/SinglePaymentEmail",
   ResearchCallData: "/api/Notification/ResearchCallData",
   UploadTdsfile: "/api/Account/UploadTdsfile",
-  GetDpClientDetails: "/api/Mandate/GetDpClientDetails",
-  checkUpi: "/api/Mandate/checkUpi",
-  CreateUpiMandate: "/api/Mandate/CreateUpiMandate",
 };

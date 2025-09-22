@@ -1,20 +1,12 @@
 import React, { useState } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { encryptAES } from "../utils/encryptDecrypt";
 
 interface Props {
   fullLink: string;
-  field?: string;
-  selectedRow?: any;
 }
 
-const CopyToClipboardCell: React.FC<Props> = ({
-  fullLink,
-  field,
-  selectedRow,
-}) => {
+const CopyToClipboardCell: React.FC<Props> = ({ fullLink }) => {
   const [copied, setCopied] = useState(false);
-  const [mandateLink, setMandateLink] = useState("");
 
   const fallbackCopyTextToClipboard = (text: string) => {
     const textarea = document.createElement("textarea");
@@ -44,33 +36,22 @@ const CopyToClipboardCell: React.FC<Props> = ({
   };
 
   const handleCopy = () => {
-    console.log("testsad", field, selectedRow);
-    let textToCopy = field !== "dpMandate" ? fullLink : mandateLink;
-    if (field === "dpMandate") {
-      console.log("clientCode", selectedRow.ClientCode);
-
-      const encryptedCode = encryptAES(selectedRow.ClientCode);
-      textToCopy = `${window.location.origin}/DPMandate/${encryptedCode}`;
-      setMandateLink(textToCopy);
-      console.log("customLink", textToCopy);
-    }
-
     if (navigator.clipboard && window.isSecureContext) {
       navigator.clipboard
-        .writeText(textToCopy)
+        .writeText(fullLink)
         .then(() => {
           setCopied(true);
           setTimeout(() => setCopied(false), 3000);
         })
         .catch((err) => {
           console.warn("Clipboard API failed, using fallback:", err);
-          fallbackCopyTextToClipboard(textToCopy);
+          fallbackCopyTextToClipboard(fullLink);
           setCopied(true);
           setTimeout(() => setCopied(false), 3000);
         });
     } else {
       // Non-secure context or unsupported browser
-      fallbackCopyTextToClipboard(textToCopy);
+      fallbackCopyTextToClipboard(fullLink);
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);
     }
