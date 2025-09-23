@@ -138,7 +138,6 @@ const CustomModal = ({
 
   useEffect(() => {
     if (activeSubItem === "Vendor Approval" && selectedFile) {
-      alert("upload call from this");
       handleFileUpload?.(row, selectedFile, formik.values.tdsFlag);
     }
   }, [activeSubItem, selectedFile]);
@@ -260,7 +259,6 @@ const CustomModal = ({
         const isSpecialRejectCase =
           activeSubItem === "Unlisted Shares Approval 1" && action === "reject";
         if (isStandardFlow || isSpecialRejectCase) {
-          alert("call from this");
           handleApproval?.(row, values.remark, entryFlag);
         }
         console.log(values.remark, "values.remark", row, entryFlag);
