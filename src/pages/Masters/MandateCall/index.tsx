@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Card, CardBody, CardHeader, Col, Row, Table } from "reactstrap";
 import { apiServices } from "../../../services";
 import { TextField, Button, Grid, Box } from "@mui/material";
@@ -9,9 +9,14 @@ import ShowToast from "../../../utils/toastUtils";
 // import { encryptAES } from "../../../utils/encryptDecrypt";
 import { useNavigate, useParams } from "react-router-dom";
 import Logo from "../../../assets/logo.png";
+import UserInfoTable from "../../../components/common/UserInfoTable";
+// import IconButton from "@mui/material/IconButton";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { decryptAES } from "../../../utils/encryptDecrypt";
 
 const MandateCall = () => {
   const [data, setData] = useState<any>(null);
+  const [mandateCallBackData, setMandateCallbackData] = useState<any>(null);
   const [upiId, setUpiId] = useState("");
   const [isMandateEnabled, setIsMandateEnabled] = useState(false);
   const [amount, setAmount] = useState("5000");
@@ -23,7 +28,7 @@ const MandateCall = () => {
   );
 
   const { encryptedCode } = useParams<{ encryptedCode: string }>();
-
+  const decryptCode = encryptedCode ? decryptAES(encryptedCode) : "";
   useEffect(() => {
     if (!encryptedCode) return;
 
@@ -39,9 +44,31 @@ const MandateCall = () => {
       .catch((err) => console.error("Error", err))
       .finally(() => {
         dispatch(hideLoader());
-        navigate("/DPMandate", { replace: true });
+        navigate(`/DPMandate/${encryptedCode}`);
       });
   }, [encryptedCode, dispatch, navigate]);
+
+  const fetchMandateData = useCallback(() => {
+    if (!decryptCode) return;
+    dispatch(showLoader(""));
+    apiServices
+      .GetMandateCallBackDetails({ clientcode: decryptCode })
+      .then((response) => {
+        if (response?.status === 200) {
+          const formattedData = response.data.data.map(
+            (item: any, index: number) => ({
+              id: index + 1,
+              ...item,
+            })
+          );
+          setMandateCallbackData(formattedData);
+        }
+      })
+      .catch((err) => console.error("Error", err))
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  }, [decryptCode, dispatch]);
 
   const HandleVerifyUpi = () => {
     let payload = {
@@ -119,6 +146,85 @@ const MandateCall = () => {
     }
   };
 
+  const handleUpdate = (data: any) => {
+    console.log("data", data);
+
+    let payload = {
+      requestInfo: {
+        pgMerchantId: "HDFC000010010275",
+        pspRefNo: "",
+      },
+      mandate: {
+        txn_id: "",
+        amount: amount,
+        amt_rule: "MAX",
+        recurrence: {
+          pattern: "MONTHLY",
+          ruleType: "ON",
+          ruleValue: data?.ruleValue?.toString() ?? "",
+          startDate: data?.startdate,
+          endDate: data?.Enddate,
+        },
+        action_type: "UPDATE",
+        onBehalf_Of: "PAYEE",
+        expiryTime: "180",
+        umn: data?.umn,
+      },
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .UpdateUpiMandate(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("response1", response?.data);
+          dispatch(hideLoader());
+        }
+      })
+      .catch((errror) => {
+        console.log("error", errror);
+        dispatch(hideLoader());
+      });
+  };
+
+  const getRevokeDetails = (value: any) => {
+    console.log("Vallues", value);
+
+    let payload = {
+      requestInfo: {
+        pgMerchantId: "HDFC000010010275",
+        pspRefNo: "",
+      },
+      mandate: {
+        amount: value?.amount.toString(),
+        action_type: "REVOKE",
+        onBehalf_Of: "PAYEE",
+        UMN: value?.umn,
+      },
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .RevokeUpiMandate(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("respinsesse", response?.data);
+          if (response?.data?.statusCode === 200) {
+            ShowToast("success", response?.data?.data?.statusDesc);
+          } else {
+            ShowToast("error", response?.data?.data?.statusDesc);
+          }
+          dispatch(hideLoader());
+        }
+      })
+      .catch((error) => {
+        console.log("Errrror", error);
+        dispatch(hideLoader());
+      });
+  };
+
+  useEffect(() => {
+    fetchMandateData();
+  }, [fetchMandateData]);
+
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -153,16 +259,51 @@ const MandateCall = () => {
                   <h4 className="card-title mb-0">DP Mandate Call</h4>
                 </CardHeader>
 
-                <CardBody>
+                <CardBody
+                  style={{
+                    backgroundColor: "#F8F8F8",
+                  }}
+                >
                   {data ? (
                     <Table bordered hover responsive>
                       <thead style={{ textAlign: "center" }}>
                         <tr>
-                          <th>Field</th>
-                          <th>Value</th>
+                          <th
+                            style={{
+                              backgroundColor: "#11395C",
+                              color: "#FFF",
+                              border: "1px solid #11395C",
+                            }}
+                          >
+                            {" "}
+                            Field
+                          </th>
+                          <th
+                            style={{
+                              backgroundColor: "#11395C",
+                              color: "#FFF",
+                              border: "1px solid #11395C",
+                            }}
+                          >
+                            Value
+                          </th>
                         </tr>
                       </thead>
-                      <tbody style={{ textAlign: "center" }}>
+                      <tbody
+                        style={{
+                          textAlign: "center",
+                          border: "1px solid #11395C",
+                        }}
+                      >
+                        <tr>
+                          <td>Client Name</td>
+                          <td>{data.clientName}</td>
+                        </tr>
+                        <tr></tr>
+                        <tr>
+                          <td>Client Code</td>
+                          <td>{data.clientcode}</td>
+                        </tr>
                         <tr>
                           <td>DP Code</td>
                           <td>{data.dpcode}</td>
@@ -170,10 +311,6 @@ const MandateCall = () => {
                         <tr>
                           <td>DP ID</td>
                           <td>{data.dpid}</td>
-                        </tr>
-                        <tr>
-                          <td>Client Code</td>
-                          <td>{data.clientcode}</td>
                         </tr>
                       </tbody>
                     </Table>
@@ -218,7 +355,8 @@ const MandateCall = () => {
                     <Grid item xs={12} sm={6} md={2}>
                       <Button
                         variant="contained"
-                        color="primary"
+                        // color="primary"
+                        sx={{ backgroundColor: "#11395C" }}
                         fullWidth
                         onClick={HandleVerifyUpi}
                       >
@@ -257,6 +395,40 @@ const MandateCall = () => {
                       {`${successMsg}! Mandate Initiated, waiting for confirmation.`}
                     </div>
                   )}
+                  <Card style={{ marginTop: "10px" }}>
+                    <CardHeader
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span>Mandate Status</span>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        sx={{
+                          textTransform: "none",
+                          borderRadius: "16px",
+                          fontSize: "0.8rem",
+                          padding: "2px 8px",
+                          color: "#11395C",
+                        }}
+                        onClick={fetchMandateData}
+                      >
+                        Refresh {<RefreshIcon sx={{ fontSize: "1.1rem" }} />}
+                      </Button>
+                    </CardHeader>
+
+                    <CardBody>
+                      <UserInfoTable
+                        activeSubItem={"mandateCall"}
+                        T6Data={mandateCallBackData}
+                        handleUpdate={handleUpdate}
+                        getUserDetails={getRevokeDetails}
+                      />
+                    </CardBody>
+                  </Card>
                 </CardBody>
               </Card>
             </Col>

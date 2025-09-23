@@ -189,4 +189,7 @@ export const endpoints = {
   GetDpClientDetails: "/api/Mandate/GetDpClientDetails",
   checkUpi: "/api/Mandate/checkUpi",
   CreateUpiMandate: "/api/Mandate/CreateUpiMandate",
+  GetMandateCallBackDetails: "/api/Mandate/GetMandateCallBackDetails",
+  UpdateUpiMandate: "/api/Mandate/UpdateUpiMandate",
+  RevokeUpiMandate: "/api/Mandate/RevokeUpiMandate",
 };

@@ -807,4 +807,17 @@ export const apiServices = {
   CreateUpiMandate: async (payload: any) => {
     return await apiService("POST", endpoints.CreateUpiMandate, payload);
   },
+  GetMandateCallBackDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetMandateCallBackDetails,
+      payload
+    );
+  },
+  UpdateUpiMandate: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateUpiMandate, payload);
+  },
+  RevokeUpiMandate: async (payload: any) => {
+    return await apiService("POST", endpoints.RevokeUpiMandate, payload);
+  },
 };

@@ -234,7 +234,11 @@ const CustomModal = ({
       }),
     }),
     onSubmit: (values) => {
-      if (action === "delete" || activeSubItem === "DP Debit Recovery") {
+      if (
+        action === "delete" ||
+        activeSubItem === "DP Debit Recovery" ||
+        activeSubItem === "mandateCall"
+      ) {
         if (getUserDetails && row) {
           getUserDetails(row);
         }
@@ -255,6 +259,7 @@ const CustomModal = ({
           "Third Party Vendor Approval",
           "Third Party Invoice Verify",
           "Vendor Approval",
+          "mandateCall",
         ];
         const isStandardFlow = standardItems.includes(activeSubItem);
         const isSpecialRejectCase =

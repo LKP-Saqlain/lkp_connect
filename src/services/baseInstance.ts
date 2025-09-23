@@ -54,6 +54,9 @@ const publicEndpoints = [
   endpoints.GetDpClientDetails,
   endpoints.checkUpi,
   endpoints.CreateUpiMandate,
+  endpoints.GetMandateCallBackDetails,
+  endpoints.UpdateUpiMandate,
+  endpoints.RevokeUpiMandate,
 ];
 
 const fundamentalEndpoints = [
