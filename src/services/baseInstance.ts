@@ -51,6 +51,12 @@ const publicEndpoints = [
   endpoints.TwoFactorAuthentication,
   endpoints.forgetPassword,
   endpoints.UnblockUser,
+  endpoints.GetDpClientDetails,
+  endpoints.checkUpi,
+  endpoints.CreateUpiMandate,
+  endpoints.GetMandateCallBackDetails,
+  endpoints.UpdateUpiMandate,
+  endpoints.RevokeUpiMandate,
 ];
 
 const fundamentalEndpoints = [

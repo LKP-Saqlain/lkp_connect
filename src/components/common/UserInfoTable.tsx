@@ -59,6 +59,7 @@ import {
   getAPContestReportColumns,
   clientUnpledgeReport,
   EmployeeTargetReportColumns,
+  dpDebitMandateColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -139,6 +140,7 @@ interface SelectedWidgetProps {
   handleVerifyDetails?: any;
   isBankVerified?: any;
   setIsBankVerified?: any;
+  handleUpdate?: (data: any) => void;
 }
 
 const DataTable = ({
@@ -186,6 +188,7 @@ const DataTable = ({
   handleVerifyDetails,
   isBankVerified,
   setIsBankVerified,
+  handleUpdate,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -244,7 +247,7 @@ const DataTable = ({
 
   const tog_center = () => {
     setmodal_center(!modal_center);
-    setShowDocument(false);
+    setShowDocument?.(false);
   };
   const HandleApprovalModal = (actionType: "approve" | "reject" | "delete") => {
     console.log("TestactionType", actionType);
@@ -2065,6 +2068,60 @@ const DataTable = ({
       return clientUnpledgeReport.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "mandateCall") {
+      return dpDebitMandateColumns.map((column) => {
+        if (column.field === "Action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <div style={{ display: "flex", gap: "6px" }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      borderRadius: "8px",
+                      textTransform: "none",
+                      fontSize: "10px",
+                      height: "18px",
+                      padding: "2px 4px",
+                      marginTop: "4px",
+                    }}
+                    onClick={() => {
+                      console.log("Update clicked", params.row);
+                      handleUpdate?.(params.row);
+                    }}
+                  >
+                    Update
+                  </Button>
+
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    sx={{
+                      borderRadius: "8px",
+                      textTransform: "none",
+                      fontSize: "10px",
+                      height: "19px",
+                      padding: "2px 4px",
+                      marginTop: "4px",
+                    }}
+                    onClick={() => {
+                      console.log("Revoke clicked", params.row);
+                      setSelectedRow(params.row);
+                      tog_center();
+                    }}
+                  >
+                    Revoke
+                  </Button>
+                </div>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }
@@ -2168,6 +2225,8 @@ const DataTable = ({
     Msg = `Are you sure want to ${action} this entry`;
   } else if (activeSubItem === "Pre Trade Approval" && !showDocument) {
     Msg = `Are you sure want to ${action} this entry`;
+  } else if (activeSubItem === "mandateCall") {
+    Msg = "Are you sure want to Revoke?";
   } else if (
     activeSubItem === "Pre Trade Proof Upload" ||
     activeSubItem === "Pre Trade Report" ||

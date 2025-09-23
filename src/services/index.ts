@@ -798,7 +798,26 @@ export const apiServices = {
   UploadTdsfile: async (payload: any) => {
     return await apiService("POST", endpoints.UploadTdsfile, payload);
   },
-  VerifyClientCode: async (payload: any) => {
-    return await apiService("POST", endpoints.VerifyClientCode, payload);
+  GetDpClientDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetDpClientDetails, payload);
+  },
+  checkUpi: async (payload: any) => {
+    return await apiService("POST", endpoints.checkUpi, payload);
+  },
+  CreateUpiMandate: async (payload: any) => {
+    return await apiService("POST", endpoints.CreateUpiMandate, payload);
+  },
+  GetMandateCallBackDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetMandateCallBackDetails,
+      payload
+    );
+  },
+  UpdateUpiMandate: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateUpiMandate, payload);
+  },
+  RevokeUpiMandate: async (payload: any) => {
+    return await apiService("POST", endpoints.RevokeUpiMandate, payload);
   },
 };
