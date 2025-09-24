@@ -1027,7 +1027,7 @@ const ModalComponent = ({
       formik.setFieldError(name, "");
 
       const noOfShare = parseInt(numericValue || "0");
-      const brokPerShare = parseInt(formik.values.brokPerShare || "0");
+      const brokPerShare = parseFloat(formik.values.brokPerShare || "0");
 
       if (noOfShare > 0 && brokPerShare > 0) {
         const inclusiveGST = Math.floor(noOfShare * brokPerShare);
