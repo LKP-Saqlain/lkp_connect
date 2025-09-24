@@ -148,11 +148,14 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
   }, [dispatch, accessType]);
 
   useEffect(() => {
+    const selectedZone = formik.values.selectedZone?.value || "ALL";
     const payload = {
       user_id: user_id,
-      //   user_id: "APN-7161",
+      // user_id: "APN-7161",
+      zone: selectedZone,
     };
     dispatch(showLoader("Please wait, we are processing your request..."));
+    console.log("GetAPContestReport", payload);
 
     apiServices
       .GetAPContestReport(payload)
@@ -172,7 +175,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
       .finally(() => {
         dispatch(hideLoader());
       });
-  }, [dispatch]);
+  }, [dispatch, formik.values.selectedZone]);
 
   return (
     <div className="page-content page-view">
