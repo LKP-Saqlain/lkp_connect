@@ -25,6 +25,8 @@ const App = () => {
 
   useEffect(() => {
     const checkServer = () => {
+      console.log("add all");
+
       fetch("/favicon.png", { cache: "no-store" })
         .then((res) => {
           if (res.ok) {
