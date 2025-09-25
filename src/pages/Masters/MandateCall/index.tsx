@@ -28,7 +28,10 @@ const MandateCall = () => {
   );
 
   const { encryptedCode } = useParams<{ encryptedCode: string }>();
-  const decryptCode = encryptedCode ? decryptAES(encryptedCode) : "";
+  const decryptCode = encryptedCode
+    ? decryptAES(decodeURIComponent(encryptedCode))
+    : "";
+
   useEffect(() => {
     if (!encryptedCode) return;
 
@@ -55,13 +58,18 @@ const MandateCall = () => {
       .GetMandateCallBackDetails({ clientcode: decryptCode })
       .then((response) => {
         if (response?.status === 200) {
-          const formattedData = response.data.data.map(
-            (item: any, index: number) => ({
+          const rawData = response?.data?.data;
+
+          if (Array.isArray(rawData)) {
+            const formattedData = rawData.map((item: any, index: number) => ({
               id: index + 1,
               ...item,
-            })
-          );
-          setMandateCallbackData(formattedData);
+            }));
+            setMandateCallbackData(formattedData);
+          } else {
+            console.warn("Unexpected response format:", rawData);
+            setMandateCallbackData([]); // fallback to empty
+          }
         }
       })
       .catch((err) => console.error("Error", err))

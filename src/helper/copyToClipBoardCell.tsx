@@ -50,7 +50,8 @@ const CopyToClipboardCell: React.FC<Props> = ({
       console.log("clientCode", selectedRow.ClientCode);
 
       const encryptedCode = encryptAES(selectedRow.ClientCode);
-      textToCopy = `${window.location.origin}/DPMandate/${encryptedCode}`;
+      const safeCode = encodeURIComponent(encryptedCode); // URL-safe
+      textToCopy = `${window.location.origin}/DPMandate/${safeCode}`;
       setMandateLink(textToCopy);
       console.log("customLink", textToCopy);
     }
