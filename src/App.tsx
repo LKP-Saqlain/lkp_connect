@@ -19,6 +19,8 @@ const ForgotPassword = lazy(
 );
 const SideBar = lazy(() => import("./components/sideBar"));
 
+const DpMandate = lazy(() => import("./pages/Masters/MandateCall"));
+
 const App = () => {
   const [serverOnline, setServerOnline] = useState(true);
   const [wasOffline, setWasOffline] = useState(false);
@@ -77,6 +79,18 @@ const App = () => {
             path="/dashboard"
             element={
               <PrivateRoute customLogin={false} dashElement={<SideBar />} />
+            }
+          />
+          <Route
+            path="/DPMandate"
+            element={
+              <PrivateRoute customLogin={false} dashElement={<DpMandate />} />
+            }
+          />
+          <Route
+            path="/DPMandate/:encryptedCode"
+            element={
+              <PrivateRoute customLogin={false} dashElement={<DpMandate />} />
             }
           />
         </Routes>
