@@ -154,6 +154,12 @@ const MandateCall = () => {
     }
   };
 
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    return `${day}${month}${year}`; // DDMMYYYY
+  };
+
   const handleUpdate = (data: any) => {
     console.log("data", data);
 
@@ -170,8 +176,8 @@ const MandateCall = () => {
           pattern: "MONTHLY",
           ruleType: "ON",
           ruleValue: data?.ruleValue?.toString() ?? "",
-          startDate: data?.startdate,
-          endDate: data?.Enddate,
+          startDate: formatDate(data?.startdate),
+          endDate: formatDate(data?.Enddate),
         },
         action_type: "UPDATE",
         onBehalf_Of: "PAYEE",
