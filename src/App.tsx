@@ -46,7 +46,7 @@ const App = () => {
     };
 
     checkServer();
-    console.log("testing console", wasOffline);
+    console.log("new commented code all", wasOffline);
 
     const id = setInterval(checkServer, 10000);
     return () => clearInterval(id);
