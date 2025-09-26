@@ -297,7 +297,7 @@ const MutualFundModal = ({
       console.log(
         clientData?.mobileNo,
         clientData?.email,
-        "check",
+        "check Cleintdetails",
         clientData?.clientCode
       );
 

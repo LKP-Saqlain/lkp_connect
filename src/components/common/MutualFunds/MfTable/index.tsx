@@ -13,11 +13,13 @@ import {
 import { MutualFundProps } from "../../../../pages/MutualFund/mfTypes";
 import MutualFundModal from "../MfModal";
 import { useState } from "react";
+import { Button } from "@mui/material";
 
 const MutualFundTable = ({
   rows,
   selectedLabel,
   onSelectFund,
+  onRedeemClick,
 }: MutualFundProps) => {
   const [open, setOpen] = useState(false);
 
@@ -40,56 +42,63 @@ const MutualFundTable = ({
     ];
     if (selectedLabel === "MfPortfolio") {
       return MfPortfolio.map((column) => {
-        // if (column.field === "action") {
-        //   return {
-        //     ...column, // <- important to preserve other column props like `field`, `headerName`, etc.
-        //     renderCell: (_params: any) => (
-        //       <Box
-        //         sx={{
-        //           display: "flex",
-        //           justifyContent: "center",
-        //           alignItems: "center",
-        //           gap: 1.5, // spacing between buttons
-        //           width: "100%", // ensure it uses the full cell
-        //           height: "100%",
-        //         }}
-        //       >
-        //         <Button
-        //           variant="outlined"
-        //           size="small"
-        //           sx={{
-        //             color: "#0d47a1",
-        //             borderColor: "#0d47a1",
-        //             textTransform: "none",
-        //             fontWeight: 500,
-        //             borderRadius: 5,
-        //             minWidth: "90px", // optional for consistent button width
-        //           }}
-        //           onClick={toggle}
-        //         >
-        //           Redeem
-        //         </Button>
+        if (column.field === "action") {
+          return {
+            ...column, // <- important to preserve other column props like `field`, `headerName`, etc.
+            renderCell: (_params: any) => (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 1.5, // spacing between buttons
+                  width: "100%", // ensure it uses the full cell
+                  height: "100%",
+                }}
+              >
+                <Button
+                  variant="outlined"
+                  size="small"
+                  sx={{
+                    color: "#0d47a1",
+                    borderColor: "#0d47a1",
+                    textTransform: "none",
+                    fontWeight: 500,
+                    borderRadius: 5,
+                    minWidth: "90px", // optional for consistent button width
+                  }}
+                  // onClick={toggle}
+                  onClick={() => {
+                    if (onRedeemClick) {
+                      onRedeemClick(_params.row); // ✅ send row to parent
+                      // handleRedeem(_params);
+                    }
+                  }}
+                >
+                  Redeem
+                </Button>
 
-        //         <Button
-        //           variant="contained"
-        //           size="small"
-        //           sx={{
-        //             backgroundColor: "#11395C",
-        //             textTransform: "none",
-        //             fontWeight: 500,
-        //             borderRadius: 5,
-        //             minWidth: "90px", // optional for consistent button width
-        //             "&:hover": {
-        //               backgroundColor: "#08306b",
-        //             },
-        //           }}
-        //         >
-        //           Invest More
-        //         </Button>
-        //       </Box>
-        //     ),
-        //   };
-        // }
+                {/* <Button
+                  variant="contained"
+                  size="small"
+                  sx={{
+                    backgroundColor: "#11395C",
+                    textTransform: "none",
+                    fontWeight: 500,
+                    borderRadius: 5,
+                    minWidth: "90px", // optional for consistent button width
+                    "&:hover": {
+                      backgroundColor: "#08306b",
+                    },
+                  }}
+                  onClick={(e) => handleInvestMoreClick(_params, e)}
+                >
+                  Invest More
+                </Button> */}
+              </Box>
+            ),
+          };
+        }
         return column;
       });
     } else if (selectedLabel === "Upcoming SIP") {

@@ -8192,6 +8192,8 @@ export const OrderTransaction: GridColDef[] = [
     disableColumnMenu: true,
     flex: 2, // larger space since names are long
     minWidth: 200,
+    headerAlign: "right",
+    align: "right",
     valueFormatter: (params: any) => {
       const value = parseFloat(params); // Convert the value to a number
       return new Intl.NumberFormat("en-IN", {
@@ -8206,6 +8208,8 @@ export const OrderTransaction: GridColDef[] = [
     disableColumnMenu: true,
     flex: 2, // larger space since names are long
     minWidth: 200,
+    headerAlign: "right",
+    align: "right",
   },
 ];
 export const OrderOngoingSip: GridColDef[] = [
@@ -8298,13 +8302,15 @@ export const MfPortfolio: GridColDef[] = [
     align: "right",
     headerAlign: "right",
   },
-  // {
-  //   field: "action",
-  //   headerName: "Action",
-  //   disableColumnMenu: true,
-  //   flex: 2,
-  //   minWidth: 150,
-  // },
+  {
+    field: "action",
+    headerName: "Action",
+    disableColumnMenu: true,
+    flex: 2,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+  },
 ];
 
 export const MandateColumns: GridColDef[] = [
@@ -8586,7 +8592,7 @@ export const MutualFundOrderColumns: GridColDef[] = [
     headerName: "Fund Name",
     disableColumnMenu: true,
     flex: 2,
-    minWidth: 200,
+    minWidth: 230,
     renderCell: (params) => (
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
         <img
@@ -8612,8 +8618,8 @@ export const MutualFundOrderColumns: GridColDef[] = [
     field: "startDate",
     headerName: "Order Date",
     disableColumnMenu: true,
-    flex: 1,
-    minWidth: 90,
+    flex: 0.7,
+    minWidth: 60,
     align: "center",
     headerAlign: "center",
     renderCell: (params) => {
@@ -8650,8 +8656,8 @@ export const MutualFundOrderColumns: GridColDef[] = [
     field: "amount",
     headerName: "Amount",
     disableColumnMenu: true,
-    flex: 1,
-    minWidth: 120,
+    flex: 0.7,
+    minWidth: 80,
 
     headerAlign: "center",
     align: "center",
@@ -8661,7 +8667,7 @@ export const MutualFundOrderColumns: GridColDef[] = [
     headerName: "Remarks",
     disableColumnMenu: true,
     flex: 2,
-    minWidth: 200,
+    minWidth: 210,
     headerAlign: "center",
     align: "left",
     renderCell: (params) => capitalizeEachWord(params.value),
