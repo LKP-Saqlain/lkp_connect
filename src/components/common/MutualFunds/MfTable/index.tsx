@@ -20,6 +20,7 @@ const MutualFundTable = ({
   selectedLabel,
   onSelectFund,
   onRedeemClick,
+  onInvestMoreClick,
 }: MutualFundProps) => {
   const [open, setOpen] = useState(false);
 
@@ -78,7 +79,7 @@ const MutualFundTable = ({
                   Redeem
                 </Button>
 
-                {/* <Button
+                <Button
                   variant="contained"
                   size="small"
                   sx={{
@@ -91,10 +92,10 @@ const MutualFundTable = ({
                       backgroundColor: "#08306b",
                     },
                   }}
-                  onClick={(e) => handleInvestMoreClick(_params, e)}
+                  onClick={() => onInvestMoreClick?.(_params.row)}
                 >
                   Invest More
-                </Button> */}
+                </Button>
               </Box>
             ),
           };

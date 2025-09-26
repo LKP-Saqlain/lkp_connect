@@ -32,6 +32,7 @@ export interface MutualFundProps {
   selectedLabel?: string;
   onSelectFund?: (schemeCode: string) => void;
   onRedeemClick?: (row: any) => void;
+  onInvestMoreClick?: (row: any) => void;
 }
 
 export interface MutualFundModalProps {
@@ -57,6 +58,7 @@ export interface PortfolioRecord {
   id: number;
   userMasterID: number;
   reedosName: string;
+  reedosCode: string;
   accountId: number;
   folioNumber: string;
   assetClassId: number;

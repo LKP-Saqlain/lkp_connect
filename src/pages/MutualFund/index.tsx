@@ -37,6 +37,17 @@ const MutualFundIndex = () => {
     localStorage.removeItem(mfToken);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const token = localStorage.getItem("mfToken");
+      if (!token) {
+        setShowClientCodeModal(true);
+      }
+    }, 5000); // check every second
+
+    return () => clearInterval(interval);
+  }, []);
+
   const verifyClientCode = async (clientCode: any) => {
     // if (!clientCode?.trim()) return;
     console.log(clientCode, "uatme");

@@ -16,8 +16,9 @@ import { apiServices } from "../../../services";
 import StatBoxComponent from "../../../components/common/MfStatBox";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { BankDetail, PortfolioRecord, PortfolioSummary } from "../mfTypes";
+// import ShowToast from "../../../utils/toastUtils";
 
-const MfPortfolio = ({ hasToken }: any) => {
+const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
   const [portfolioData, setPortfolioData] = useState<PortfolioRecord[]>([]);
   const [portfolioSummary, setPortfolioSummary] =
     useState<PortfolioSummary | null>(null);
@@ -26,6 +27,11 @@ const MfPortfolio = ({ hasToken }: any) => {
   // const [banks, setBanks] = useState<BankDetail[]>([]);
   const [selectedRow, setSelectedRow] = useState<PortfolioRecord | null>(null);
   const [selectedBank, setSelectedBank] = useState<BankDetail | null>(null);
+  const [clientCode, setClientCode] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
+  const [bseSchemeCode, setBseSchemeCode] = useState<any>("");
+
   const [redeemUnits, setRedeemUnits] = useState<number | string>(
     selectedRow?.balanceQuantity || ""
   );
@@ -119,7 +125,10 @@ const MfPortfolio = ({ hasToken }: any) => {
     try {
       const response = await apiServices.ClientProfile();
       const clientData = response?.data?.data;
-      console.log(clientData, "count: %d");
+      console.log(clientData, "Client Info");
+      setClientCode(clientData?.clientCode || "");
+      setMobile(clientData?.mobileNo || "");
+      setEmail(clientData?.email || "");
 
       const rawData = clientData?.bankDetails ?? [];
       const formattedData: BankDetail[] = rawData.map(
@@ -148,73 +157,104 @@ const MfPortfolio = ({ hasToken }: any) => {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(showLoader("Please wait, we are processing your request..."));
+
+      try {
+        const schemeRes = await apiServices.MF_FundOverView({
+          pageNumber: 1,
+          pageSize: 1,
+          searchKey: "",
+          schemeCode: selectedRow?.reedosCode,
+          sipMinimum: "",
+          lumpsumMinimum: "",
+          riskCategory: "",
+          assetClass: "",
+          schemeCategory: "",
+          encryptionKey: "",
+        });
+
+        const schemeData = schemeRes?.data?.data;
+
+        console.log("Fund overview:", schemeData);
+
+        // Example of setting state
+        setBseSchemeCode(schemeData?.[0]?.bseSchemeCode ?? "");
+      } catch (err: any) {
+        console.error("Error fetching fund overview:", err.message);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+
+    if (confirmation) {
+      fetchData();
+    }
+  }, [confirmation, dispatch, selectedRow]);
+
   const redeemApiCall = async () => {
-    console.log("Confirmed!");
-    SetConfirmation(false);
+    console.log("Confirmed!", bseSchemeCode);
+    const payload = {
+      transCode: "NEW",
+      orderId: "",
+      clientCode: clientCode,
+      schemeCd: bseSchemeCode,
+      buySell: "R",
+      buySellType: "FRESH",
+      orderVal: "",
+      qty: redeemUnits.toLocaleString(),
+      allRedeem: "N",
+      folioNo: "",
+      remarks: "test",
+      dpc: "Y",
+      euinVal: "Y",
+      kycStatus: "Y",
+      refNo: "",
+      subBrCode: "",
+      minRedeem: "",
+      dpTxn: "C",
+      ipAdd: "",
+      mobileNo: mobile,
+      emailID: email,
+      mandateID: "",
+      param1: "",
+      param2: "",
+      param3: selectedBank?.account,
+      filler1: "",
+      filler2: "",
+      filler3: "",
+      filler4: "",
+      filler5: "",
+      filler6: "",
+    };
 
-    // const payload = {
-    //   transCode: "NEW",
-    //   orderId: "",
-    //   clientCode: clientNo,
-    //   schemeCd: bseSchemeCode,
-    //   buySell: "P",
-    //   buySellType: "FRESH",
-    //   orderVal: amount,
-    //   qty: "",
-    //   allRedeem: "N",
-    //   folioNo: "",
-    //   remarks: "test",
-    //   dpc: "Y",
-    //   euinVal: "Y",
-    //   kycStatus: "Y",
-    //   refNo: "",
-    //   subBrCode: "",
-    //   minRedeem: "",
-    //   dpTxn: "C",
-    //   ipAdd: "",
-    //   mobileNo: mobileNo,
-    //   emailID: email,
-    //   mandateID: "",
-    //   param1: "",
-    //   param2: "",
-    //   param3: "",
-    //   filler1: "",
-    //   filler2: "",
-    //   filler3: "",
-    //   filler4: "",
-    //   filler5: "",
-    //   filler6: "",
-    // };
+    dispatch(showLoader("Placing Lumpsum Order..."));
 
-    // dispatch(showLoader("Placing Lumpsum Order..."));
+    try {
+      const response = await apiServices.BSEStar_MfOrderEntry(payload);
 
-    // try {
-    //   const response = await apiServices.BSEStar_MfOrderEntry(payload);
+      if (response?.status === 200) {
+        const rawData = response?.data?.data;
+        console.log("Order Entry Response:", rawData);
+        handleModalToggle();
+        // ShowToast("info","h")
+      } else {
+        throw new Error("Lumpsum order API failed");
+      }
+    } catch (err) {
+      console.error("Error placing lumpsum order:", err);
+      return null;
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
 
-    //   if (response?.status === 200) {
-    //     const rawData = response?.data?.data;
-    //     console.log("Order Entry Response:", rawData);
-
-    //     const orderNumber = extractOrderNumber(rawData);
-    //     console.log("orderNo orderNumber is", orderNumber);
-
-    //     if (response?.data?.statusCode === 417) {
-    //       ShowToast("error", response?.data?.data);
-    //       console.log("Order Entry Response:", rawData);
-    //     }
-    //     if (!orderNumber) {
-    //       throw new Error("Could not extract order number from response");
-    //     }
-    //     return orderNumber;
-    //   } else {
-    //     throw new Error("Lumpsum order API failed");
-    //   }
-    // } catch (err) {
-    //   console.error("Error placing lumpsum order:", err);
-    //   return null;
-    // } finally {
-    //   dispatch(hideLoader());
-    // }
+  const handleInvestMore = (row: PortfolioRecord) => {
+    console.log("Invest More clicked for", row);
+    if (onSelectFund) {
+      onSelectFund(row.reedosCode.toString());
+    }
   };
 
   const handleRedeemUnitsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -356,7 +396,7 @@ const MfPortfolio = ({ hasToken }: any) => {
                 Units to redeem
               </Typography>
               <TextField
-                label="Units to Redeem"
+                // label="Units to Redeem"
                 type="number"
                 inputProps={{
                   min: 0,
@@ -427,13 +467,9 @@ const MfPortfolio = ({ hasToken }: any) => {
           </Box>
 
           <Button
-            variant="contained"
             fullWidth
-            sx={{
-              backgroundColor: "#0b5ed7",
-              textTransform: "none",
-              fontWeight: 600,
-              py: 1.2,
+            style={{
+              backgroundColor: "#11395C",
             }}
             onClick={() => SetConfirmation(true)}
           >
@@ -485,6 +521,8 @@ const MfPortfolio = ({ hasToken }: any) => {
           rows={portfolioData}
           selectedLabel="MfPortfolio"
           onRedeemClick={handleRedeemClick}
+          // onSelectFund={onSelectFund}
+          onInvestMoreClick={handleInvestMore}
         />
       </Card>
 
@@ -496,202 +534,6 @@ const MfPortfolio = ({ hasToken }: any) => {
       >
         {renderModalContent()}
       </Modal>
-
-      {/*  <Modal
-        isOpen={redeemModalOpen}
-        toggle={handleModalToggle}
-        centered
-        size="md"
-      >
-        {confirmation ? (
-          <>
-            <ModalHeader>GTT Order Cancel Confirmation</ModalHeader>
-            <ModalBody style={{ padding: "1.5rem" }}>
-              <Box
-                display="grid"
-                gridTemplateColumns="100px 1fr"
-                rowGap={2}
-                columnGap={3}
-                sx={{ fontSize: 14 }}
-              >
-                <Typography color="text.secondary">Fund</Typography>
-                <Typography fontWeight={600}>
-                  Axis HardCore confirmation Small Cap Fund R G
-                </Typography>
-
-                <Typography color="text.secondary">Folio</Typography>
-                <Typography fontWeight={600}>910200439803</Typography>
-
-                <Typography color="text.secondary">Units</Typography>
-                <Typography fontWeight={600}>1.0240</Typography>
-
-                <Typography color="text.secondary">Bank Account</Typography>
-                <Typography fontWeight={600}>HDFC Bank XXXX6727</Typography>
-              </Box>
-            </ModalBody>
-          </>
-        ) : selectedRow ? (
-          <>
-            <ModalHeader toggle={handleModalToggle}>
-              <Box display="flex" alignItems="center">
-                <Box>
-                  <Typography fontWeight={600}>
-                    {selectedRow.reedosName}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Equity&nbsp;&nbsp;Large Cap Fund
-                  </Typography>
-                </Box>
-              </Box>
-            </ModalHeader>
-
-            <ModalBody sx={{ p: "1.5rem" }}>
-          
-              <Box
-                display="grid"
-                gridTemplateColumns="repeat(4,1fr)"
-                gap={2}
-                mb={3}
-                sx={{ textAlign: "center" }}
-              >
-                <Box>
-                  <Typography fontSize={12} color="text.secondary">
-                    Folio Number
-                  </Typography>
-                  <Typography fontWeight={600}>
-                    {" "}
-                    {selectedRow.folioNumber}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography fontSize={12} color="text.secondary">
-                    Current NAV
-                  </Typography>
-                  <Typography fontWeight={600}> {selectedRow.ltp}</Typography>
-                </Box>
-                <Box>
-                  <Typography fontSize={12} color="text.secondary">
-                    Available Units
-                  </Typography>
-                  <Typography fontWeight={600}>
-                    {" "}
-                    {selectedRow.balanceQuantity}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography fontSize={12} color="text.secondary">
-                    Current Value
-                  </Typography>
-                  <Typography fontWeight={600}>
-                    {" "}
-                    {selectedRow.currentValue.toLocaleString("en-IN")}
-                  </Typography>
-                </Box>
-              </Box>
-
- 
-              <Box display="grid" gridTemplateColumns="1fr 1fr" gap={3} mb={3}>
-                <Box>
-                  <Typography fontSize={12} color="text.secondary" mb={1}>
-                    Units to redeem
-                  </Typography>
-                  <TextField
-                    label="Units to Redeem"
-                    type="number"
-                    inputProps={{
-                      min: 0,
-                      max: selectedRow!.balanceQuantity,
-
-                      step: "any", // optional, if decimal units allowed
-                    }}
-                    value={redeemUnits}
-                    onChange={handleRedeemUnitsChange}
-                    fullWidth
-                  />
-                  <Box mt={1} display="flex" alignItems="center">
-                    <Checkbox
-                      checked={redeemUnits === selectedRow?.balanceQuantity}
-                      onChange={(e) =>
-                        setRedeemUnits(
-                          e.target.checked
-                            ? selectedRow?.balanceQuantity ?? ""
-                            : ""
-                        )
-                      }
-                      size="small"
-                    />
-                    <Typography variant="body2">Full Redemption</Typography>
-                  </Box>
-                </Box>
-
-                <Box>
-                  <Typography fontSize={12} color="text.secondary" mb={1}>
-                    Bank Account for Credit
-                  </Typography>
-                  {selectedBank ? (
-                    <div>
-                      <div style={{ fontWeight: 600, fontSize: "14px" }}>
-                        {selectedBank.name}
-                      </div>
-                      <div style={{ fontSize: "12px", color: "#666" }}>
-                        xxxxxxxxxx{selectedBank.account.slice(-4)}
-                      </div>
-                    </div>
-                  ) : (
-                    <Typography color="error" fontSize={12}>
-                      No bank details found.
-                    </Typography>
-                  )}
-                </Box>
-              </Box>
-
-     
-              <Box
-                sx={{
-                  backgroundColor: "#f6f7fb",
-                  borderRadius: "8px",
-                  p: 2,
-                  fontSize: 13,
-                  color: "text.secondary",
-                  mb: 3,
-                }}
-              >
-                <ul style={{ paddingLeft: "1.2rem", margin: 0 }}>
-                  <li>
-                    Redemption proceeds will be credited within 3–4 working days
-                    for normal redemption.
-                  </li>
-                  <li>
-                    Exit load (if any) and applicable taxes will be deducted.
-                  </li>
-                  <li>
-                    For ELSS funds, ensure 3 years have passed since investment.
-                  </li>
-                </ul>
-              </Box>
-
-              <Button
-                variant="contained"
-                fullWidth
-                sx={{
-                  backgroundColor: "#0b5ed7",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  py: 1.2,
-                }}
-                onClick={() => SetConfirmation(true)}
-              >
-                Redeem Funds
-              </Button>
-            </ModalBody>
-          </>
-        ) : (
-          <ModalBody>
-            <p>No data found.</p>
-          </ModalBody>
-        )}
-        {confirmation && <ModalHeader>confirmation</ModalHeader>}
-      </Modal> */}
     </>
   );
 };
