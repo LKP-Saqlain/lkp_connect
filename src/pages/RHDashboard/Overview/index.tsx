@@ -164,7 +164,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
       dispatch(showLoader(""));
 
       const payload = {
-        userId: "EMP-0238",
+        userId: user_id,
         option: "",
         branchType: "All",
         monthDropdown: "",
@@ -353,7 +353,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
             fetchChart(
               config.apiCall,
               {
-                user_ID: "EMP-0238",
+                user_ID: user_id,
                 optionType: config.optionType,
                 zoneCode: selectedZoneValue,
               },
