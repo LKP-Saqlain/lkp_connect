@@ -820,4 +820,75 @@ export const apiServices = {
   RevokeUpiMandate: async (payload: any) => {
     return await apiService("POST", endpoints.RevokeUpiMandate, payload);
   },
+  GetOverviewBrokRevReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetOverviewBrokRevReport,
+      payload
+    );
+  },
+  GetOverviewUniqueTradedClients: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetOverviewUniqueTradedClients,
+      payload
+    );
+  },
+  GetNewAccountAddedOverview: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetNewAccountAddedOverview,
+      payload
+    );
+  },
+  GetDeliverySegmentOverview: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetDeliverySegmentOverview,
+      payload
+    );
+  },
+  GetFuturesRevenueOverview: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetFuturesRevenueOverview,
+      payload
+    );
+  },
+  GetOptionsRevenueOverview: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetOptionsRevenueOverview,
+      payload
+    );
+  },
+  GetCommodity_FuturesOverview: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetCommodity_FuturesOverview,
+      payload
+    );
+  },
+  GetCommodity_OptionsOverview: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetCommodity_OptionsOverview,
+      payload
+    );
+  },
+  GetslbmOverview: async (payload: any) => {
+    return await apiService("POST", endpoints.GetslbmOverview, payload);
+  },
+  GetNewAccountAdded: async (payload: any) => {
+    return await apiService("POST", endpoints.GetNewAccountAdded, payload);
+  },
+  UpcomingDormantAccount: async (payload: any) => {
+    return await apiService("POST", endpoints.UpcomingDormantAccount, payload);
+  },
+  GetUniqueTradedClient: async (payload: any) => {
+    return await apiService("POST", endpoints.GetUniqueTradedClient, payload);
+  },
+  GetActiveClients: async (payload: any) => {
+    return await apiService("POST", endpoints.GetActiveClients, payload);
+  },
 };
