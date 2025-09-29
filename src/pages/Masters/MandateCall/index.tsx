@@ -47,7 +47,7 @@ const MandateCall = () => {
       .catch((err) => console.error("Error", err))
       .finally(() => {
         dispatch(hideLoader());
-        navigate(`/DPMandate/${encryptedCode}`);
+        // navigate(`/DPMandate/${encryptedCode}`);
       });
   }, [encryptedCode, dispatch, navigate]);
 
