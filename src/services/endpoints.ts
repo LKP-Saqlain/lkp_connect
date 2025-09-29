@@ -193,4 +193,18 @@ export const endpoints = {
   GetMandateCallBackDetails: "/api/Mandate/GetMandateCallBackDetails",
   UpdateUpiMandate: "/api/Mandate/UpdateUpiMandate",
   RevokeUpiMandate: "/api/Mandate/RevokeUpiMandate",
+  GetOverviewBrokRevReport: "/api/Dashboard/GetOverviewBrokRevReport",
+  GetOverviewUniqueTradedClients:
+    "/api/Dashboard/GetOverviewUniqueTradedClients",
+  GetNewAccountAddedOverview: "/api/Dashboard/GetNewAccountAddedOverview",
+  GetDeliverySegmentOverview: "/api/Dashboard/GetDeliverySegmentOverview",
+  GetFuturesRevenueOverview: "/api/Dashboard/GetFuturesRevenueOverview",
+  GetOptionsRevenueOverview: "/api/Dashboard/GetOptionsRevenueOverview",
+  GetCommodity_FuturesOverview: "/api/Dashboard/GetCommodity_FuturesOverview",
+  GetCommodity_OptionsOverview: "/api/Dashboard/GetCommodity_OptionsOverview",
+  GetslbmOverview: "/api/Dashboard/GetslbmOverview",
+  GetNewAccountAdded: "/api/Dashboard/GetNewAccountAdded",
+  UpcomingDormantAccount: "/api/Dashboard/UpcomingDormantAccount",
+  GetUniqueTradedClient: "/api/Dashboard/GetUniqueTradedClient",
+  GetActiveClients: "/api/Dashboard/GetActiveClients",
 };

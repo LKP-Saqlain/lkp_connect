@@ -1,7 +1,8 @@
 import React, { useEffect, Suspense } from "react";
 import { SubItemKeys } from "../../constants/subItemKeys";
 import Loader from "../../components/common/Loader";
-import Overview from "./Overview";
+// import Overview from "./Overview/oldIndex";
+import Overview from "./Overview/index";
 import Direct from "./Direct";
 import Indirect from "./Indirect";
 // import VendorMaster from "../ThirdParty/VendorMaster";
