@@ -14,6 +14,7 @@ import "./style.css";
 interface Badge {
   type: string;
   label: string;
+  value: any;
   isActive: boolean;
   onClick: () => void;
 }
@@ -43,12 +44,12 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   title,
   value,
   animationData,
-  prefix = "",
-  suffix = "",
+  // prefix = "",
+  // suffix = "",
   badges,
   note,
   formatIndianNumber,
-  decimals,
+  // decimals,
   customClass,
   activeClients,
   activeClientsEmpty,
@@ -68,6 +69,24 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
     "5 GM Gold Coin",
     "Half GM Gold Coin",
   ];
+
+  const activeClientss = { total: 39011, direct: 15351, indirect: 23660 };
+  const uniqueTradedClients = { total: 0, direct: 0, indirect: 0 };
+  const newAccDatas = { total: 0, direct: 0, indirect: 0 };
+  const upcomingDormantAccountDatas = {
+    total: 395,
+    direct: 228,
+    indirect: 167,
+  };
+
+  const allDataSets = [
+    { title: "Active Clients", data: activeClientss },
+    { title: "Unique Traded Clients", data: uniqueTradedClients },
+    { title: "New Accounts", data: newAccDatas },
+    { title: "Upcoming Dormant Accounts", data: upcomingDormantAccountDatas },
+  ].filter((item) => item.data);
+
+  console.log("testsrta", allDataSets);
 
   return (
     <>
@@ -264,42 +283,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     style={{ width: 40, height: 40 }}
                   />
                 )} */}
-
-                <div>
-                  <h5
-                    className="mb-0"
-                    style={{
-                      color: "#1B1B1B",
-                      fontSize: "17px",
-                      fontWeight: "bold",
-
-                      width: rightValue === "Coming Soon" ? "6rem" : undefined,
-                    }}
-                  >
-                    {prefix}
-                    {typeof value === "number" ? (
-                      <CountUp
-                        start={0}
-                        end={value ?? 0}
-                        separator=","
-                        decimals={decimals}
-                        prefix=""
-                        duration={1}
-                        formattingFn={formatIndianNumber}
-                      />
-                    ) : (
-                      title !== "Prize*" && <span>{value}</span>
-                    )}
-                    <small
-                      className="fs-12"
-                      style={{
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {suffix}
-                    </small>
-                  </h5>
-                </div>
               </div>
               <p
                 style={{
@@ -420,31 +403,76 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           {/* Badges */}
           {badges && (
             <div
-              className="position-absolute"
+              className={`position-absolute ${
+                customClass
+                  ? "d-flex justify-content-center align-items-start"
+                  : ""
+              }`}
               style={{
                 bottom: "10px",
-                // left: "10px",
                 zIndex: 1,
                 fontFamily: "Public Sans",
               }}
             >
-              {badges.map((badge, index) => (
-                <React.Fragment key={badge.type}>
-                  <Link
-                    to="#"
-                    className={`badge ${
-                      badge.isActive
-                        ? `bg-${badge.type} text-white`
-                        : `bg-${badge.type}-subtle text-${badge.type}`
-                    } badge-border small px-2 py-1`}
-                    onClick={badge.onClick}
-                  >
-                    {badge.label}
-                  </Link>
-                  {/* Add &nbsp; except after the last badge */}
-                  {index < badges.length - 1 && <span>&nbsp;</span>}
-                </React.Fragment>
-              ))}
+              <div className="d-flex">
+                {badges.map((badge, index) => (
+                  <React.Fragment key={badge.label}>
+                    <div
+                      className={
+                        customClass
+                          ? "d-flex flex-column align-items-center"
+                          : ""
+                      }
+                    >
+                      {/* Badge Value */}
+                      {badge.value !== undefined && (
+                        <h5
+                          style={{
+                            fontSize: "12px",
+                            fontWeight: "bold",
+                            marginBottom: "2px",
+                          }}
+                        >
+                          {typeof badge.value === "number" ? (
+                            <CountUp
+                              start={0}
+                              end={badge.value as number}
+                              separator=","
+                              duration={1}
+                            />
+                          ) : (
+                            badge.value
+                          )}
+                        </h5>
+                      )}
+
+                      {/* Badge */}
+                      <span
+                        className={`badge ${
+                          badge.isActive
+                            ? `bg-${badge.type} text-white`
+                            : `bg-${badge.type}-subtle text-${badge.type}`
+                        } badge-border small px-2 py-1`}
+                        onClick={badge.onClick}
+                      >
+                        {badge.label}
+                      </span>
+                    </div>
+
+                    {/* Divider */}
+                    {customClass && index < badges.length - 1 && (
+                      <div
+                        style={{
+                          width: "1px",
+                          height: "40px",
+                          backgroundColor: "#ccc",
+                          margin: "0 10px",
+                        }}
+                      />
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           )}
         </CardBody>

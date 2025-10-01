@@ -147,6 +147,71 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
     }
   };
 
+  useEffect(() => {
+    if (accessType === "ALL") {
+      const str = user_id;
+      const userType = localStorage.getItem("uIdType");
+      let extractUserId: string | null = null;
+
+      if (str) {
+        const parts = str.split("-");
+        if (parts.length > 1) {
+          extractUserId = parts[1];
+        }
+      }
+      let payload = {
+        user_id: str === "APN-7161" ? "5376" : extractUserId,
+        option: "zone",
+        userType:
+          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+        zone: "ALL",
+      };
+
+      const username = "admin";
+      const password = "admin";
+      const credentials = `${username}:${password}`;
+      const encodedCredentials = btoa(credentials); // Base64 encode
+      const LoginauthHeader = `Basic ${encodedCredentials}`;
+
+      const customHeaders = {
+        Authorization: LoginauthHeader, // Use LoginauthHeader for this request
+      };
+
+      dispatch(showLoader("Please wait, we are processing your request..."));
+      apiServices
+        .getDropDown(payload, customHeaders)
+        .then((res) => {
+          console.log("Response-->", res);
+          if (res?.status === 200) {
+            let zoneDropdown = res?.data.map((item: any) => ({
+              label: item.itemVal, // This will be displayed in the dropdown
+              value: item.itemVal, // This will be the actual value
+            }));
+            console.log("dropdown value", zoneDropdown);
+            setNoSortingGroup(zoneDropdown);
+            if (zoneDropdown.length > 0) {
+              formik.setFieldValue("selectedZone", zoneDropdown[0]);
+            }
+            // setSelectedNoSortingGroup(selectedNoSortingGroup);
+          }
+        })
+        .catch((Err) => {
+          const { message } = Err.response.data;
+          console.log("Error->", message);
+          dispatch(hideLoader());
+          // formik.setFieldError("password", message);
+          const errorMessage = Err.response.data.message;
+          ShowToast(
+            "error",
+            errorMessage ||
+              "Sorry for the inconvenience, please try after some time."
+          );
+        });
+
+      dispatch(hideLoader());
+    }
+  }, [dispatch, accessType]);
+
   const formik = useFormik<FormValues>({
     initialValues: {
       selectedZone: null,
@@ -168,6 +233,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         option: "",
         branchType: "All",
         monthDropdown: "",
+        zoneCode: formik.values.selectedZone?.value || "ALL",
       };
 
       const [activeClientsRes, tradedClientsRes, newAccountsRes, dormantRes] =
@@ -232,10 +298,6 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
       dispatch(hideLoader());
     }
   };
-
-  useEffect(() => {
-    fetchDashboardMetrics();
-  }, [dispatch, user_id]);
 
   useEffect(() => {
     // Chart-related API configs and call
@@ -383,15 +445,23 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
     });
   };
 
-  const getMetricValue = (index: number): number => {
-    const badge = activeBadges[index];
-    const dataArray = [
-      activeClientsData,
-      uniqueTradedClientsData,
-      newAccountsData,
-      upcomingDormantAccountsData,
-    ];
-    return dataArray[index][badge as keyof MetricData] || 0;
+  // const getMetricValue = (index: number): number => {
+  //   const badge = activeBadges[index];
+  //   const dataArray = [
+  //     activeClientsData,
+  //     uniqueTradedClientsData,
+  //     newAccountsData,
+  //     upcomingDormantAccountsData,
+  //   ];
+  //   console.log("badgeValue", badge, dataArray);
+
+  //   return dataArray[index][badge as keyof MetricData] || 0;
+  // };
+
+  const getMetricValue = (index: number) => {
+    const badge = activeBadges[index]; // here im getting all badgessss
+    const data = metrics[index].data;
+    return data[badge as keyof MetricData] || 0;
   };
 
   const chartConfigs: ChartConfig[] = [
@@ -434,69 +504,20 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
   // });
 
   useEffect(() => {
-    if (accessType === "ALL") {
-      const str = user_id;
-      const userType = localStorage.getItem("uIdType");
-      let extractUserId: string | null = null;
+    console.log("test1121", formik.values);
+  }, [formik.values]);
 
-      if (str) {
-        const parts = str.split("-");
-        if (parts.length > 1) {
-          extractUserId = parts[1];
-        }
-      }
-      let payload = {
-        user_id: str === "APN-7161" ? "5376" : extractUserId,
-        option: "zone",
-        userType:
-          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
-        zone: "ALL",
-      };
+  useEffect(() => {
+    fetchDashboardMetrics();
+  }, [dispatch, user_id, formik.values.selectedZone?.value]);
 
-      const username = "admin";
-      const password = "admin";
-      const credentials = `${username}:${password}`;
-      const encodedCredentials = btoa(credentials); // Base64 encode
-      const LoginauthHeader = `Basic ${encodedCredentials}`;
+  const metrics = [
+    { title: "Active Clients", data: activeClientsData },
+    { title: "Unique Traded Clients", data: uniqueTradedClientsData },
+    { title: "New Accounts Added", data: newAccountsData },
+    { title: "Upcoming Dormant Account", data: upcomingDormantAccountsData },
+  ];
 
-      const customHeaders = {
-        Authorization: LoginauthHeader, // Use LoginauthHeader for this request
-      };
-
-      dispatch(showLoader("Please wait, we are processing your request..."));
-      apiServices
-        .getDropDown(payload, customHeaders)
-        .then((res) => {
-          console.log("Response-->", res);
-          if (res?.status === 200) {
-            let zoneDropdown = res?.data.map((item: any) => ({
-              label: item.itemVal, // This will be displayed in the dropdown
-              value: item.itemVal, // This will be the actual value
-            }));
-            console.log("dropdown value", zoneDropdown);
-            setNoSortingGroup(zoneDropdown);
-            if (zoneDropdown.length > 0) {
-              formik.setFieldValue("selectedZone", zoneDropdown[0]);
-            }
-            // setSelectedNoSortingGroup(selectedNoSortingGroup);
-          }
-        })
-        .catch((Err) => {
-          const { message } = Err.response.data;
-          console.log("Error->", message);
-          dispatch(hideLoader());
-          // formik.setFieldError("password", message);
-          const errorMessage = Err.response.data.message;
-          ShowToast(
-            "error",
-            errorMessage ||
-              "Sorry for the inconvenience, please try after some time."
-          );
-        });
-
-      dispatch(hideLoader());
-    }
-  }, [dispatch, accessType]);
   return (
     <div className="page-content">
       <Container fluid>
@@ -565,28 +586,26 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
           )}
         </form>
         <Row style={{ marginTop: "20px" }}>
-          {[
-            "Active Clients",
-            "Unique Traded Clients",
-            "New Accounts Added",
-            "Upcoming Dormant Account",
-          ].map((title, index) => {
+          {metrics.map((metric, index) => {
             const badges = [
               {
                 type: "warning",
                 label: "Total",
+                value: metric.data.total,
                 isActive: activeBadges[index] === "total",
                 onClick: () => handleBadgeClick(index, "total"),
               },
               {
                 type: "info",
                 label: "Direct",
+                value: metric.data.direct,
                 isActive: activeBadges[index] === "direct",
                 onClick: () => handleBadgeClick(index, "direct"),
               },
               {
                 type: "primary",
                 label: "Indirect",
+                value: metric.data.indirect,
                 isActive: activeBadges[index] === "indirect",
                 onClick: () => handleBadgeClick(index, "indirect"),
               },
@@ -595,7 +614,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
             return (
               <Col key={index} xxl={3} lg={3} md={6} sm={12}>
                 <DashboardCard
-                  title={title}
+                  title={metric.title}
                   value={getMetricValue(index)}
                   badges={badges}
                   customClass={true}
