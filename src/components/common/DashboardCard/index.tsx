@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, CardBody } from "reactstrap";
 import Lottie from "react-lottie-player";
 import CountUp from "react-countup";
@@ -14,9 +14,15 @@ import "./style.css";
 interface Badge {
   type: string;
   label: string;
-  value: any;
+  value?: any;
   isActive: boolean;
   onClick: () => void;
+}
+
+interface ClientData {
+  total: number;
+  direct: number;
+  indirect: number;
 }
 
 interface DashboardCardProps {
@@ -38,6 +44,10 @@ interface DashboardCardProps {
   rightSubHeading?: string;
   cardStyle?: any;
   isCustomRender?: any;
+  activeClient?: ClientData;
+  uniqueTradedClient?: ClientData;
+  newAccData?: ClientData;
+  upcomingDormantAccountData?: ClientData;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -59,6 +69,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   subHeading,
   rightSubHeading,
   isCustomRender,
+  activeClient,
+  uniqueTradedClient,
+  newAccData,
+  upcomingDormantAccountData,
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -84,9 +98,26 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
     { title: "Unique Traded Clients", data: uniqueTradedClients },
     { title: "New Accounts", data: newAccDatas },
     { title: "Upcoming Dormant Accounts", data: upcomingDormantAccountDatas },
-  ].filter((item) => item.data);
+  ].filter((item) => item.data); // only keep ones with data
 
   console.log("testsrta", allDataSets);
+
+  useEffect(() => {
+    console.log(
+      "TesttestTest",
+      activeClient?.total,
+      activeClient?.direct,
+      activeClient?.indirect
+      // uniqueTradedClient,
+      // newAccData,
+      // upcomingDormantAccountData
+    );
+  }, [
+    activeClient,
+    uniqueTradedClient,
+    newAccData,
+    upcomingDormantAccountData,
+  ]);
 
   return (
     <>
