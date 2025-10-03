@@ -143,7 +143,13 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
     },
     plotOptions: {
       bar: {
-        horizontal: false,
+        borderRadius: 4,
+        columnWidth: "60%",
+
+        dataLabels: {
+          position: "top",
+          hideOverflowingLabels: false,
+        },
       },
     },
     colors: barColors,
@@ -340,8 +346,13 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
     },
     plotOptions: {
       bar: {
-        horizontal: false, // Keep bars vertical
-        columnWidth: "50%", // Adjust the width of bars
+        borderRadius: 4,
+        columnWidth: "60%",
+
+        dataLabels: {
+          position: "top",
+          hideOverflowingLabels: false,
+        },
       },
     },
     xaxis: {
@@ -547,8 +558,13 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
     },
     plotOptions: {
       bar: {
-        horizontal: false,
-        columnWidth: "50%",
+        borderRadius: 4,
+        columnWidth: "60%",
+
+        dataLabels: {
+          position: "top",
+          hideOverflowingLabels: false,
+        },
       },
     },
     xaxis: {

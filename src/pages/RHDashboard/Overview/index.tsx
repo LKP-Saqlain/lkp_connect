@@ -22,6 +22,7 @@ interface ChartData {
   indirect: number[];
   total: number[];
   dates: string[];
+  startDate?: string[];
 }
 
 interface MetricData {
@@ -118,6 +119,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
     indirect: resData.map((item) => item[mapping.indirect] ?? 0),
     total: resData.map((item) => item[mapping.total] ?? 0),
     dates: resData.map((item) => dayjs(item.tradeDate).format("DD-MMM-YY")),
+    startDate: resData.map((item) => dayjs(item.startDate).format("DD-MMM-YY")),
   });
 
   interface FormValues {
@@ -348,9 +350,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         apiCall: apiServices.GetNewAccountAddedOverview,
         optionType: "New_Account_Added",
         mapping: {
-          direct: "newClientCount",
-          indirect: "indirect_New_Accounts",
-          total: "total_New_Accounts",
+          direct: "direct_NewAccount",
+          indirect: "indirect_NewAccount",
+          total: "total_NewAccount",
         },
         setter: setNewAccounts,
       },
