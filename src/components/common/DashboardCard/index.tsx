@@ -10,6 +10,7 @@ import CoinImg from "../../../assets/images/price_coin.png";
 // import { useTheme } from "@mui/material/styles";
 // import { useMediaQuery } from "@mui/material";
 import "./style.css";
+import { Button } from "@mui/material";
 
 interface Badge {
   type: string;
@@ -24,6 +25,24 @@ interface ClientData {
   direct: number;
   indirect: number;
 }
+
+const selectedStyle = {
+  bgcolor: "#11395C",
+  color: "#fff",
+  // borderRadius: "7px",
+  fontFamily: "Poppins",
+  borderColor: "#ABC4DA",
+  // fontSize: "5px",
+};
+
+const nonSelectedStyle = {
+  bgcolor: "#ABC4DA",
+  color: "#11395C",
+  // borderRadius: "7px",
+  fontFamily: "Poppins",
+  borderColor: "#ABC4DA",
+  // fontSize: "10px",
+};
 
 interface DashboardCardProps {
   title: string;
@@ -48,18 +67,21 @@ interface DashboardCardProps {
   uniqueTradedClient?: ClientData;
   newAccData?: ClientData;
   upcomingDormantAccountData?: ClientData;
+  selectedButton?: any;
+  setSelectedButton?: any;
+  mainCustomClass?: any;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
   title,
   value,
   animationData,
-  // prefix = "",
-  // suffix = "",
+  prefix = "",
+  suffix = "",
   badges,
   note,
   formatIndianNumber,
-  // decimals,
+  decimals,
   customClass,
   activeClients,
   activeClientsEmpty,
@@ -73,6 +95,9 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   uniqueTradedClient,
   newAccData,
   upcomingDormantAccountData,
+  selectedButton,
+  setSelectedButton,
+  mainCustomClass,
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -160,14 +185,61 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
               </h6>
             </div>
           ) : (
-            <h6
-              className={
-                title === "Fresh Cash Margin*" ? "fs-12 mb-0" : "fs-14 mb-0"
-              }
-              style={{ textAlign: "left" }}
-            >
-              {title}
-            </h6>
+            <div className="d-flex justify-content-between align-items-center">
+              {/* Left side heading */}
+              <h6
+                className={
+                  title === "Fresh Cash Margin*" ? "fs-12 mb-0" : "fs-12 mb-0"
+                }
+                style={{
+                  textAlign: "left",
+                  color: "#1B1B1B",
+                  fontWeight: "bold",
+                }}
+              >
+                {title}
+              </h6>
+
+              {/* Right side tabs */}
+              {customClass &&
+                (title === "Unique Traded Clients" ||
+                  title === "New Accounts Added") && (
+                  <div className="d-flex gap-2">
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => setSelectedButton("MTD")}
+                      sx={{
+                        minWidth: "15px",
+                        height: "16px",
+                        fontSize: "10px",
+                        padding: "0 6px",
+                        ...(selectedButton === "MTD"
+                          ? selectedStyle
+                          : nonSelectedStyle),
+                      }}
+                    >
+                      MTD
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => setSelectedButton("YTD")}
+                      sx={{
+                        minWidth: "15px",
+                        height: "16px",
+                        fontSize: "10px",
+                        padding: "0 6px",
+                        ...(selectedButton === "YTD"
+                          ? selectedStyle
+                          : nonSelectedStyle),
+                      }}
+                    >
+                      YTD
+                    </Button>
+                  </div>
+                )}
+            </div>
           )}
           <div
             className={`d-grid ${
@@ -314,6 +386,44 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     style={{ width: 40, height: 40 }}
                   />
                 )} */}
+                {!mainCustomClass && (
+                  <div>
+                    <h5
+                      className="mb-0"
+                      style={{
+                        color: "#1B1B1B",
+                        fontSize: "17px",
+                        fontWeight: "bold",
+
+                        width:
+                          rightValue === "Coming Soon" ? "6rem" : undefined,
+                      }}
+                    >
+                      {prefix}
+                      {typeof value === "number" ? (
+                        <CountUp
+                          start={0}
+                          end={value ?? 0}
+                          separator=","
+                          decimals={decimals}
+                          prefix=""
+                          duration={1}
+                          formattingFn={formatIndianNumber}
+                        />
+                      ) : (
+                        title !== "Prize*" && <span>{value}</span>
+                      )}
+                      <small
+                        className="fs-12"
+                        style={{
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {suffix}
+                      </small>
+                    </h5>
+                  </div>
+                )}
               </div>
               <p
                 style={{
@@ -433,52 +543,89 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
 
           {/* Badges */}
           {badges && (
-            <div
-              className={`position-absolute ${
-                customClass
-                  ? "d-flex justify-content-center align-items-start"
-                  : ""
-              }`}
-              style={{
-                bottom: "10px",
-                zIndex: 1,
-                fontFamily: "Public Sans",
-              }}
-            >
-              <div className="d-flex">
-                {badges.map((badge, index) => (
-                  <React.Fragment key={badge.label}>
-                    <div
-                      className={
-                        customClass
-                          ? "d-flex flex-column align-items-center"
-                          : ""
-                      }
-                    >
-                      {/* Badge Value */}
-                      {badge.value !== undefined && (
-                        <h5
-                          style={{
-                            fontSize: "12px",
-                            fontWeight: "bold",
-                            marginBottom: "2px",
-                          }}
+            <>
+              {mainCustomClass ? (
+                <div
+                  className={`position-absolute ${
+                    customClass
+                      ? "d-flex justify-content-center align-items-start"
+                      : ""
+                  }`}
+                  style={{
+                    bottom: "10px",
+                    zIndex: 1,
+                    fontFamily: "Public Sans",
+                  }}
+                >
+                  <div className="d-flex">
+                    {badges.map((badge, index) => (
+                      <React.Fragment key={badge.label}>
+                        <div
+                          className={
+                            customClass
+                              ? "d-flex flex-column align-items-center"
+                              : ""
+                          }
                         >
-                          {typeof badge.value === "number" ? (
-                            <CountUp
-                              start={0}
-                              end={badge.value as number}
-                              separator=","
-                              duration={1}
-                            />
-                          ) : (
-                            badge.value
+                          {/* Badge Value */}
+                          {badge.value !== undefined && (
+                            <h5
+                              style={{
+                                fontSize: "12px",
+                                fontWeight: "bold",
+                                marginBottom: "2px",
+                              }}
+                            >
+                              {typeof badge.value === "number" ? (
+                                <CountUp
+                                  start={0}
+                                  end={badge.value as number}
+                                  separator=","
+                                  duration={1}
+                                />
+                              ) : (
+                                badge.value
+                              )}
+                            </h5>
                           )}
-                        </h5>
-                      )}
 
-                      {/* Badge */}
-                      <span
+                          {/* Badge */}
+                          <span
+                            className={`badge bg-warning text-white badge-border small px-2 py-1`}
+                            // onClick={badge.onClick} // optional
+                          >
+                            {badge.label}
+                          </span>
+                        </div>
+
+                        {/* Divider */}
+                        {customClass && index < badges.length - 1 && (
+                          <div
+                            style={{
+                              width: "1px",
+                              height: "40px",
+                              backgroundColor: "#ccc",
+                              margin: "0 10px",
+                            }}
+                          />
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className="position-absolute"
+                  style={{
+                    bottom: "10px",
+                    zIndex: 1,
+                    fontFamily: "Public Sans",
+                  }}
+                >
+                  {badges.map((badge, index) => (
+                    <React.Fragment key={badge.type}>
+                      <Link
+                        to="#"
                         className={`badge ${
                           badge.isActive
                             ? `bg-${badge.type} text-white`
@@ -487,24 +634,14 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                         onClick={badge.onClick}
                       >
                         {badge.label}
-                      </span>
-                    </div>
-
-                    {/* Divider */}
-                    {customClass && index < badges.length - 1 && (
-                      <div
-                        style={{
-                          width: "1px",
-                          height: "40px",
-                          backgroundColor: "#ccc",
-                          margin: "0 10px",
-                        }}
-                      />
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-            </div>
+                      </Link>
+                      {/* Add space except after the last badge */}
+                      {index < badges.length - 1 && <span>&nbsp;</span>}
+                    </React.Fragment>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </CardBody>
       </Card>{" "}

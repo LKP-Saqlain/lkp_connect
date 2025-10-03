@@ -60,16 +60,21 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
     direct: 0,
     indirect: 0,
   });
-  const [uniqueTradedClientsData, setUniqueTradedClientsData] =
-    useState<MetricData>({
-      total: 0,
-      direct: 0,
-      indirect: 0,
-    });
-  const [newAccountsData, setNewAccountsData] = useState<MetricData>({
+  const [uniqueTradedClientsData, setUniqueTradedClientsData] = useState<any>({
     total: 0,
     direct: 0,
     indirect: 0,
+    MonthTotal: 0,
+    directTotal: 0,
+    indirectTotal: 0,
+  });
+  const [newAccountsData, setNewAccountsData] = useState<any>({
+    total: 10,
+    direct: 100,
+    indirect: 1000,
+    MonthTotal: 0,
+    directTotal: 0,
+    indirectTotal: 0,
   });
   const [upcomingDormantAccountsData, setUpcomingDormantAccountsData] =
     useState<MetricData>({
@@ -98,6 +103,12 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
     useState<ChartData>(emptyChartData);
   const [slbmSegment, setSlbmSegment] = useState<ChartData>(emptyChartData);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
+  const [selectedButtons, setSelectedButtons] = useState<
+    Record<string, "MTD" | "YTD">
+  >({
+    "Unique Traded Clients": "MTD",
+    "New Accounts Added": "MTD",
+  });
 
   const extractChartData = (
     resData: any[],
@@ -272,6 +283,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
           total: d.yearlyUTC_Total ?? 0,
           direct: d.yearlyUTC_Direct ?? 0,
           indirect: d.yearlyUTC_Indirect ?? 0,
+          MonthTotal: d.monthlyUTC_Total ?? 0,
+          directTotal: d.monthlyUTC_Direct ?? 0,
+          indirectTotal: d.monthlyUTC_Indirect ?? 0,
         });
       }
 
@@ -281,6 +295,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
           total: d.yearlyNA_Total ?? 0,
           direct: d.yearlyNA_Direct ?? 0,
           indirect: d.yearlyNA_Indirect ?? 0,
+          MonthTotal: d.monthlyNA_Total ?? 0,
+          directTotal: d.monthlyNA_Direct ?? 0,
+          indirectTotal: d.monthlyNA_Indirect ?? 0,
         });
       }
 
@@ -504,8 +521,8 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
   // });
 
   useEffect(() => {
-    console.log("test1121", formik.values);
-  }, [formik.values]);
+    console.log("testValues", uniqueTradedClientsData, newAccountsData);
+  }, [uniqueTradedClientsData, newAccountsData]);
 
   useEffect(() => {
     fetchDashboardMetrics();
@@ -587,25 +604,44 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         </form>
         <Row style={{ marginTop: "20px" }}>
           {metrics.map((metric, index) => {
+            const isToggleMetric =
+              metric.title === "Unique Traded Clients" ||
+              metric.title === "New Accounts Added";
+
+            const selectedButton = selectedButtons[metric.title] || "MTD"; // per-card selected button
+            const isMTD = selectedButton === "MTD";
+
             const badges = [
               {
                 type: "warning",
                 label: "Total",
-                value: metric.data.total,
+                value: isToggleMetric
+                  ? isMTD
+                    ? metric.data.MonthTotal // MTD value
+                    : metric.data.total // YTD value
+                  : metric.data.total,
                 isActive: activeBadges[index] === "total",
                 onClick: () => handleBadgeClick(index, "total"),
               },
               {
                 type: "info",
                 label: "Direct",
-                value: metric.data.direct,
+                value: isToggleMetric
+                  ? isMTD
+                    ? metric.data.directTotal
+                    : metric.data.direct
+                  : metric.data.direct,
                 isActive: activeBadges[index] === "direct",
                 onClick: () => handleBadgeClick(index, "direct"),
               },
               {
                 type: "primary",
                 label: "Indirect",
-                value: metric.data.indirect,
+                value: isToggleMetric
+                  ? isMTD
+                    ? metric.data.indirectTotal
+                    : metric.data.indirect
+                  : metric.data.indirect,
                 isActive: activeBadges[index] === "indirect",
                 onClick: () => handleBadgeClick(index, "indirect"),
               },
@@ -618,6 +654,14 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
                   value={getMetricValue(index)}
                   badges={badges}
                   customClass={true}
+                  mainCustomClass={true}
+                  selectedButton={selectedButton}
+                  setSelectedButton={(val: any) =>
+                    setSelectedButtons((prev) => ({
+                      ...prev,
+                      [metric.title]: val,
+                    }))
+                  }
                 />
               </Col>
             );
