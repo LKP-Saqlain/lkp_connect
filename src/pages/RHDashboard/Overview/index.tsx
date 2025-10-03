@@ -118,8 +118,16 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
     direct: resData.map((item) => item[mapping.direct] ?? 0),
     indirect: resData.map((item) => item[mapping.indirect] ?? 0),
     total: resData.map((item) => item[mapping.total] ?? 0),
-    dates: resData.map((item) => dayjs(item.tradeDate).format("DD-MMM-YY")),
-    startDate: resData.map((item) => dayjs(item.startDate).format("DD-MMM-YY")),
+    dates: resData.map((item) =>
+      item.tradeDate
+        ? dayjs(item.tradeDate).format("DD-MMM-YY")
+        : item.startDate
+        ? dayjs(item.startDate).format("DD-MMM-YY")
+        : ""
+    ),
+    // startDate: resData.map((item) =>
+    //   item.startDate ? dayjs(item.startDate).format("DD-MMM-YY") : ""
+    // ),
   });
 
   interface FormValues {
