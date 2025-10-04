@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, Col, Container, Label, Row } from "reactstrap";
+import { Button, Card, Col, Container, Label, Row } from "reactstrap";
 import ChartCard from "../../../components/common/ChartCard";
 import { apiServices } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,6 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import dayjs from "dayjs";
 import DashboardCard from "../../../components/common/DashboardCard";
-import Select from "react-select";
 import ShowToast from "../../../utils/toastUtils";
 import { useFormik } from "formik";
 
@@ -556,47 +555,67 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         >
           {accessType === "ALL" && (
             <Card>
-              <Row className="align-items-end" style={{ margin: "5px" }}>
-                {/* Zone Dropdown */}
-                <Col xl={3} lg={4} md={6} sm={12}>
-                  <div className="mb-3" style={{ maxWidth: "300px" }}>
-                    <Label
-                      htmlFor="zone-select"
-                      className="form-label text-muted label-font"
-                    >
-                      Zone
-                    </Label>
-                    <Select
-                      value={formik.values.selectedZone}
-                      onChange={(option: any) =>
-                        formik.setFieldValue("selectedZone", option)
-                      }
-                      onBlur={formik.handleBlur}
-                      options={noSortingGroup}
-                      menuPortalTarget={document.body} // Renders dropdown outside normal DOM flow
-                      isClearable
-                      className="placeholder-font"
-                      id="zone-select"
-                      styles={{
-                        control: (base: any) => ({
-                          ...base,
-                          cursor: "pointer",
+              <Row style={{ margin: "5px", minWidth: "100%" }}>
+                <Col
+                  xs={12}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start", // or "center" if you want horizontal centering
+                  }}
+                >
+                  <div className="m-1">
+                    <div className="d-flex align-items-center gap-2">
+                      {/* Label (not scrollable) */}
+                      <Label
+                        htmlFor="zone-select"
+                        className="form-label text-muted label-font mb-0"
+                        style={{ minWidth: "50px" }}
+                      >
+                        Zone
+                      </Label>
 
-                          borderColor:
-                            formik.touched.selectedZone &&
-                            formik.errors.selectedZone
-                              ? "#DC4535"
-                              : base.borderColor,
-                          "&:hover": {
-                            borderColor:
-                              formik.touched.selectedZone &&
-                              formik.errors.selectedZone
-                                ? "#DC4535"
-                                : base.borderColor,
-                          },
-                        }),
-                      }}
-                    />
+                      {/* Scrollable horizontal buttons */}
+                      <div
+                        className="d-flex flex-nowrap gap-2 overflow-auto"
+                        style={{ maxWidth: "100%" }}
+                      >
+                        {noSortingGroup.map((zone: any) => {
+                          const isSelected =
+                            formik.values.selectedZone?.value === zone.value;
+
+                          return (
+                            <Button
+                              key={zone.value}
+                              type="button"
+                              style={{
+                                minWidth: "60px",
+                                whiteSpace: "nowrap",
+                                fontSize: "12px",
+                                padding: "2px",
+                                borderRadius: "6px",
+                                border: "1px solid #11395c",
+                                backgroundColor: isSelected
+                                  ? "#11395c"
+                                  : "#ffffff",
+                                color: isSelected ? "#ffffff" : "#11395c",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                formik.setFieldValue("selectedZone", zone)
+                              }
+                              onBlur={() =>
+                                formik.setFieldTouched("selectedZone", true)
+                              }
+                            >
+                              {zone.label}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Validation error message */}
                     {formik.touched.selectedZone &&
                       formik.errors.selectedZone && (
                         <div
