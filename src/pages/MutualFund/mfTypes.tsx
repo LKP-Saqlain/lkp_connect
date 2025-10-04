@@ -74,6 +74,7 @@ export interface PortfolioRecord {
   avgPrice: number;
   xirr: string | null;
   totalXIRR: string | null;
+  physicalQuantity: number;
   // add any other fields you need
 }
 
