@@ -155,7 +155,8 @@ const MutualFundTable = ({
           localeText={{ noRowsLabel: "No Records!" }}
           sx={{
             "& .MuiDataGrid-columnHeader": {
-              fontSize: "12px",
+              fontSize: "13px",
+              backgroundColor: "#e5e9ff",
             },
             "& .MuiDataGrid-cell": {
               fontSize: "12px",

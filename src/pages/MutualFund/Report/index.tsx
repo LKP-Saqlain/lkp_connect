@@ -85,7 +85,7 @@ const MfReport = (props: any) => {
         clientCodeField: clientCode, // "MT0600508"
         fromDateField: "01/01/2000",
         mandateIdField: "",
-        toDateField: "01/09/2025",
+        toDateField: "01/09/2026",
       };
       dispatch(showLoader(""));
       apiServices
@@ -128,7 +128,7 @@ const MfReport = (props: any) => {
         assetClassIDs: null,
         asOnDateTime: "2024-02-15T17:41:00.673+05:30",
         fromDateTime: "2023-02-15T17:41:00.674+05:30",
-        toDateTime: "2025-09-01T17:41:00.673+05:30",
+        toDateTime: "2026-09-01T17:41:00.673+05:30",
         asOnDate: "2024-02-15",
         reportID: 0,
         portfolioID: 1,
@@ -210,12 +210,12 @@ const MfReport = (props: any) => {
         loginUserMasterID: 0,
         clientMasterID: 0,
         fromDate: "2020-02-07",
-        toDate: "2024-02-07",
+        toDate: "2026-08-07",
         assetClassID: 86,
         assetClassIDs: null,
         asOnDateTime: "2024-02-07T10:54:05.584+05:30",
         fromDateTime: "2020-02-07T00:00:00",
-        toDateTime: "2025-09-02T10:54:05.584+05:30",
+        toDateTime: "2026-09-02T10:54:05.584+05:30",
         asOnDate: null,
         reportID: 0,
         portfolioID: 1,

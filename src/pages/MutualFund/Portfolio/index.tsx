@@ -16,6 +16,7 @@ import { apiServices } from "../../../services";
 import StatBoxComponent from "../../../components/common/MfStatBox";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { BankDetail, PortfolioRecord, PortfolioSummary } from "../mfTypes";
+import { capitalizeEachWord } from "../../../utils";
 // import ShowToast from "../../../utils/toastUtils";
 
 const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
@@ -24,6 +25,8 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
     useState<PortfolioSummary | null>(null);
   const [redeemModalOpen, setRedeemModalOpen] = useState(false);
   const [confirmation, SetConfirmation] = useState(false);
+  const [confirmationMessage, SetConfirmationMessage] = useState(false);
+  const [message, SetMessage] = useState("");
   // const [banks, setBanks] = useState<BankDetail[]>([]);
   const [selectedRow, setSelectedRow] = useState<PortfolioRecord | null>(null);
   const [selectedBank, setSelectedBank] = useState<BankDetail | null>(null);
@@ -48,10 +51,10 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
         toDate: "",
         assetClassID: 86,
         assetClassIDs: "",
-        asOnDateTime: "2024-08-08",
+        asOnDateTime: "2026-08-08",
         fromDateTime: "2000-01-01",
-        toDateTime: "2025-09-01",
-        asOnDate: "2025-09-01",
+        toDateTime: "2026-09-01",
+        asOnDate: "2026-09-01",
         reportID: 0,
         portfolioID: 1,
         withIndexation: false,
@@ -117,6 +120,8 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
     setRedeemModalOpen((prev) => !prev);
     setSelectedRow(null);
     SetConfirmation(false);
+    SetConfirmationMessage(false);
+    SetMessage("");
   };
 
   const clientBankDetails = async () => {
@@ -194,7 +199,13 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
   }, [confirmation, dispatch, selectedRow]);
 
   const redeemApiCall = async () => {
-    console.log("Confirmed!", bseSchemeCode);
+    if (!selectedRow) return;
+    console.log(
+      selectedRow.physicalQuantity > 0 ? "P" : "C",
+      "Confirmed!",
+      bseSchemeCode
+    );
+
     const payload = {
       transCode: "NEW",
       orderId: "",
@@ -213,7 +224,7 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
       refNo: "",
       subBrCode: "",
       minRedeem: "",
-      dpTxn: "C",
+      dpTxn: selectedRow.physicalQuantity > 0 ? "P" : "C",
       ipAdd: "",
       mobileNo: mobile,
       emailID: email,
@@ -229,7 +240,7 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
       filler6: "",
     };
 
-    dispatch(showLoader("Placing Lumpsum Order..."));
+    dispatch(showLoader("Redeeming Order..."));
 
     try {
       const response = await apiServices.BSEStar_MfOrderEntry(payload);
@@ -237,7 +248,10 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
       if (response?.status === 200) {
         const rawData = response?.data?.data;
         console.log("Order Entry Response:", rawData);
-        handleModalToggle();
+        // handleModalToggle();
+        SetMessage(rawData);
+        SetConfirmationMessage(true);
+        SetConfirmation(false);
         // ShowToast("info","h")
       } else {
         throw new Error("Lumpsum order API failed");
@@ -280,58 +294,159 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
       );
     }
 
-    if (confirmation) {
+    if (confirmationMessage) {
       return (
         <>
-          <ModalHeader toggle={handleModalToggle}>
-            GTT Order Cancel Confirmation
-          </ModalHeader>
-
-          <ModalBody sx={{ p: "1.5rem" }}>
+          <ModalBody sx={{ px: 4, py: 3 }}>
             <Box
-              display="grid"
-              gridTemplateColumns="100px 1fr"
-              rowGap={2}
-              columnGap={3}
-              sx={{ fontSize: 14 }}
+              sx={{
+                backgroundColor: "#f5f7fa",
+                borderRadius: 2,
+                textAlign: "center",
+              }}
             >
-              <Typography color="text.secondary">Fund</Typography>
-              <Typography fontWeight={600}>{selectedRow.reedosName}</Typography>
-
-              <Typography color="text.secondary">Folio</Typography>
-              <Typography fontWeight={600}>
-                {selectedRow.folioNumber}
-              </Typography>
-
-              <Typography color="text.secondary">Units</Typography>
-              <Typography fontWeight={600}>{redeemUnits}</Typography>
-
-              <Typography color="text.secondary">Bank Account</Typography>
-              <Typography fontWeight={600}>
-                {selectedBank
-                  ? `${selectedBank.name} XXXX${selectedBank.account.slice(-4)}`
-                  : "—"}
+              <Typography variant="body1" fontWeight={400} color="text.primary">
+                {capitalizeEachWord(message)}
               </Typography>
             </Box>
           </ModalBody>
 
-          <ModalFooter>
-            {/* Cancel button */}
-            <Button color="secondary" onClick={handleModalToggle}>
-              Cancel
-            </Button>
-
-            {/* Confirm button */}
+          <ModalFooter sx={{ justifyContent: "center", pb: 3 }}>
             <Button
-              color="primary"
-              onClick={() => {
-                // put your confirm logic here
-                redeemApiCall();
+              onClick={handleModalToggle}
+              style={{
+                textTransform: "none",
+                fontWeight: 500,
+
+                backgroundColor: "#11395C",
+                color: "#fff",
+                boxShadow: "none",
+                borderRadius: "8px",
               }}
             >
-              Confirm
+              Okay
             </Button>
           </ModalFooter>
+        </>
+      );
+    }
+
+    if (confirmation) {
+      return (
+        <>
+          <Box
+            sx={{
+              borderRadius: "16px",
+              background: "linear-gradient(135deg, #f9fafb, #eef2ff)",
+              p: 4,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+              textAlign: "center",
+            }}
+          >
+            {/* Icon Section */}
+            <Box
+              sx={{
+                width: 60,
+                height: 60,
+                borderRadius: "50%",
+                background:
+                  "linear-gradient(135deg, rgba(37,99,235,0.15), rgba(29,78,216,0.3))",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mx: "auto",
+                mb: 2,
+              }}
+            >
+              <i
+                className="ri-shield-check-line"
+                style={{ fontSize: 28, color: "#2563eb" }}
+              />
+            </Box>
+
+            {/* Title */}
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: 700, color: "#1e293b", mb: 3 }}
+            >
+              Confirm Your Redemption
+            </Typography>
+
+            {/* Detail Card */}
+            <Box
+              sx={{
+                background: "#fff",
+                borderRadius: "12px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                p: 3,
+                textAlign: "left",
+                mb: 3,
+              }}
+            >
+              <Stack spacing={2}>
+                <Box display="flex" justifyContent="space-between">
+                  <Typography color="text.secondary">Fund</Typography>
+                  <Typography fontWeight={600}>
+                    {selectedRow.reedosName}
+                  </Typography>
+                </Box>
+
+                <Box display="flex" justifyContent="space-between">
+                  <Typography color="text.secondary">Folio</Typography>
+                  <Typography fontWeight={600}>
+                    {selectedRow.folioNumber}
+                  </Typography>
+                </Box>
+
+                <Box display="flex" justifyContent="space-between">
+                  <Typography color="text.secondary">Units</Typography>
+                  <Typography fontWeight={600}>{redeemUnits}</Typography>
+                </Box>
+
+                <Box display="flex" justifyContent="space-between">
+                  <Typography color="text.secondary">Bank Account</Typography>
+                  <Typography fontWeight={600}>
+                    {selectedBank
+                      ? `${selectedBank.name} •••• ${selectedBank.account.slice(
+                          -4
+                        )}`
+                      : "—"}
+                  </Typography>
+                </Box>
+              </Stack>
+            </Box>
+
+            {/* Action Buttons */}
+            <Stack direction="row" spacing={2} justifyContent="center">
+              <Button
+                onClick={handleModalToggle}
+                style={{
+                  borderRadius: "10px",
+                  textTransform: "none",
+                  fontWeight: 600,
+                  backgroundColor: "#f1f5f9",
+                  color: "#475569",
+                }}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                onClick={redeemApiCall}
+                style={{
+                  borderRadius: "10px",
+                  textTransform: "none",
+                  fontWeight: 600,
+                  background: "#22c55e", // green gradient
+                  border: "1px solid #22c55e",
+                  color: "#fff",
+                  boxShadow: "0 4px 12px rgba(34,197,94,0.4)",
+                }}
+              >
+                Confirm
+              </Button>
+            </Stack>
+          </Box>
         </>
       );
     }

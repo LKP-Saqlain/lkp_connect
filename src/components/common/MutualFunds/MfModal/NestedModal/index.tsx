@@ -199,7 +199,7 @@ const NestedModal = ({
       startDate: startDate, //
       frequencyType: "MONTHLY", //
       installmentAmount: amount.toString(), //
-      noOfInstallment: "12",
+      noOfInstallment: "300",
       remarks: "test",
       firstOrderFlag: "Y",
       brokerage: "",
@@ -322,8 +322,14 @@ const NestedModal = ({
         type === "ENACH"
           ? await apiServices.EnachEmailToClient(payload)
           : await apiServices.SinglePaymentEmail(payload);
+      let responseMessage = response?.data?.message;
+      console.log(response?.data?.data, "Email response");
 
-      console.log(response, "Email response");
+      if (responseMessage === "Email sent Succesfully") {
+        ShowToast("error", responseMessage);
+        console.log(response?.data, "Email response from if loop");
+        setSecondsLeft(5);
+      }
     } catch (error) {
       console.error("Error sending email", error);
     } finally {
