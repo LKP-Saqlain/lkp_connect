@@ -8116,6 +8116,54 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+  {
+    field: "SPIPClientsTarget",
+    headerName: "SPIP Clients Target",
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "SPIPClientsAchieved",
+    headerName: "SPIP Clients Achieved",
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "InsurancePremTarget",
+    headerName: "Insurance Premium Target",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
+  },
+  {
+    field: "InsurancePremAchieved",
+    headerName: "Insurance Premium Achieved",
+    minWidth: 120,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
+        params
+      ),
+  },
 ];
 export const MutualFundList: GridColDef[] = [
   {
