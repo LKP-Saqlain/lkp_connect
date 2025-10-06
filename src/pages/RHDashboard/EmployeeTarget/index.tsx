@@ -99,7 +99,7 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
           console.log("Response-->", res);
           if (res?.status === 200) {
             let zoneDropdown = res?.data.map((item: any) => ({
-              label: item.itemVal, // This will be displayed in the dropdown
+              label: item.itemDesc, // This will be displayed in the dropdown
               value: item.itemVal, // This will be the actual value
             }));
             console.log("dropdown value", zoneDropdown);
