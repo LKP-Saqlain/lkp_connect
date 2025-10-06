@@ -1,17 +1,11 @@
-import {
-  Card,
-  CardBody,
-  // CardHeader, Col,
-  Container,
-  Row,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 
-// import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
-// import theme from "../../../theme";
-// import contestReward from "../../../assets/images/AP Contest Reward.png";
-// import ActiveClient from "../../../assets/images/Clients.json";
-// import DashboardCard from "../../../components/common/DashboardCard";
-// import UserInfoTable from "../../../components/common/UserInfoTable";
+import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
+import theme from "../../../theme";
+import contestReward from "../../../assets/images/AP Contest Reward.png";
+import ActiveClient from "../../../assets/images/Clients.json";
+import DashboardCard from "../../../components/common/DashboardCard";
+import UserInfoTable from "../../../components/common/UserInfoTable";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -20,33 +14,29 @@ import { apiServices } from "../../../services";
 
 import UserCapsules from "../../ClientDetails/UserCapsules";
 
-// interface APContestData {
-//   rowId: number;
-//   apCode: string;
-//   apName: string;
-//   zone: string;
-//   qtarget: number;
-//   newClientCount: number;
-//   prize: string;
-// }
+interface APContestData {
+  rowId: number;
+  apCode: string;
+  apName: string;
+  zone: string;
+  qtarget: number;
+  newClientCount: number;
+  prize: string;
+}
 
-const APContest = ({
-  // activeMenu,
-  isCustomRender,
-  row,
-}: any) => {
+const APContest = ({ activeMenu, isCustomRender, row }: any) => {
   const [selectedCapsule, setSelectedCapsule] = useState("Contest Rewards");
-  // const [targetData, setTargetData] = useState<APContestData | null>(null);
-  // const [userData, setUserData] = useState<any[]>([]);
-  // const [apContestAchSummaryRecord, setApContestAchSummaryRecord] = useState<
-  //   any[]
-  // >([]);
-  // const [apContestSummary, setApContestSummary] = useState<{
-  //   brokerageNetToLKP: number;
-  //   newClients: number;
-  // } | null>(null);
+  const [targetData, setTargetData] = useState<APContestData | null>(null);
+  const [userData, setUserData] = useState<any[]>([]);
+  const [apContestAchSummaryRecord, setApContestAchSummaryRecord] = useState<
+    any[]
+  >([]);
+  const [apContestSummary, setApContestSummary] = useState<{
+    brokerageNetToLKP: number;
+    newClients: number;
+  } | null>(null);
 
-  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -65,7 +55,7 @@ const APContest = ({
         if (response?.status === 200) {
           const data = response?.data?.data?.[0];
           console.log("GetAPContestTargetDetails", data);
-          // setTargetData(data);
+          setTargetData(data);
         }
       } catch (error) {
         console.error("Error fetching AP Contest Target Details", error);
@@ -92,12 +82,12 @@ const APContest = ({
         if (response?.status === 200) {
           console.log("ResponseAPContest", response?.data?.data);
           dispatch(hideLoader());
-          // setUserData(
-          //   response?.data?.data?.map((item: any, index: number) => ({
-          //     ...item,
-          //     id: index,
-          //   }))
-          // );
+          setUserData(
+            response?.data?.data?.map((item: any, index: number) => ({
+              ...item,
+              id: index,
+            }))
+          );
         }
       })
       .catch((error) => {
@@ -118,7 +108,7 @@ const APContest = ({
         if (response?.status === 200) {
           console.log("ResponseAPContestAchClients", response?.data?.data);
           dispatch(hideLoader());
-          // setApContestAchSummaryRecord(response?.data?.data);
+          setApContestAchSummaryRecord(response?.data?.data);
         }
       })
       .catch((error) => {
@@ -139,8 +129,8 @@ const APContest = ({
         if (response?.status === 200) {
           console.log("Respponsee-->", response?.data?.data);
           dispatch(hideLoader());
-          // setUserData(response?.data?.data);
-          // setApContestSummary(response?.data?.data);
+          setUserData(response?.data?.data);
+          setApContestSummary(response?.data?.data);
         }
       })
       .catch((error) => {
@@ -148,12 +138,12 @@ const APContest = ({
       });
   };
 
-  // const formatIndianNumber = (number: number) => {
-  //   return `₹${number.toLocaleString("en-IN", {
-  //     minimumFractionDigits: 0,
-  //     maximumFractionDigits: 0,
-  //   })}`;
-  // };
+  const formatIndianNumber = (number: number) => {
+    return `₹${number.toLocaleString("en-IN", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })}`;
+  };
   const handleClick = (value: string) => {
     console.log("You clicked the Chip.", value);
     setSelectedCapsule(value);
@@ -170,7 +160,7 @@ const APContest = ({
         <Container fluid>
           <Row>
             <div className="card-body">
-              {/* {selectedCapsule === "Contest Rewards" && (
+              {selectedCapsule === "Contest Rewards" && (
                 <Row className="mt-3">
                   <Col sm={12}>
                     <Card className="contest-card">
@@ -197,7 +187,6 @@ const APContest = ({
               {selectedCapsule === "Broking Revenue" && (
                 <>
                   <Row className="g-3" style={{ marginTop: "5px" }}>
-                
                     <Col xxl={4} lg={4} md={6} sm={12}>
                       <DashboardCard
                         title="Revenue Achieved*"
@@ -252,7 +241,6 @@ const APContest = ({
               {selectedCapsule === "Client Achieve" && (
                 <>
                   <Row className="g-3" style={{ margin: "5px 0px" }}>
-                  
                     <Col xxl={4} lg={4} md={6} sm={12}>
                       <DashboardCard
                         title="Client Target*"
@@ -310,9 +298,9 @@ const APContest = ({
                     </CardBody>
                   </Card>
                 </>
-              )} */}
+              )}
 
-              <Card className="contest-card">
+              {/* <Card className="contest-card">
                 <CardBody style={{ textAlign: "center" }}>
                   <p style={{ fontWeight: "500", marginBottom: "15px" }}>
                     Contest Period - 1st October to 31st December
@@ -327,7 +315,7 @@ const APContest = ({
                     Coming Soon
                   </h4>{" "}
                 </CardBody>
-              </Card>
+              </Card> */}
             </div>
           </Row>
         </Container>

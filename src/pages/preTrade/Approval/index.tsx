@@ -184,7 +184,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
           console.log("response->", res);
           if (res?.status === 200) {
             let branchDropdown = res?.data.map((item: any) => ({
-              label: item.itemDesc,
+              label: item.itemVal,
               value: item.itemVal,
             }));
             branchDropdown = [

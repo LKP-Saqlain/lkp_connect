@@ -110,7 +110,7 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
           console.log("response->", res);
           if (res?.status === 200) {
             let branchDropdown = res?.data.map((item: any) => ({
-              label: item.itemDesc, // Display value in dropdown
+              label: item.itemVal, // Display value in dropdown
               value: item.itemVal, // Actual value of the dropdown item
             }));
             branchDropdown = [

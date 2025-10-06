@@ -1,7 +1,4 @@
-import {
-  useEffect,
-  //  useState
-} from "react";
+import { useEffect, useState } from "react";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -10,25 +7,24 @@ import {
   Card,
   CardBody,
   CardHeader,
-  // Col,
+  Col,
   Container,
-  // Label,
-  // Row,
+  Label,
+  Row,
 } from "reactstrap";
-// import DataTable from "../../../components/common/UserInfoTable";
-// import Select from "react-select";
-// import * as XLSX from "xlsx";
-// import { saveAs } from "file-saver";
-// import { Button } from "@mui/material";
+import DataTable from "../../../components/common/UserInfoTable";
+import Select from "react-select";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import { Button } from "@mui/material";
 import { useFormik } from "formik";
-// import DownloadIcon from "@mui/icons-material/Download";
+import DownloadIcon from "@mui/icons-material/Download";
 import ShowToast from "../../../utils/toastUtils";
-// import { getAPContestReportColumns } from "../../../helper/tableColumns";
+import { getAPContestReportColumns } from "../../../helper/tableColumns";
 
-const PartnerContestReport = ({}: // activeSubItem
-any) => {
-  // const [data, setData] = useState<any>();
-  // const [noSortingGroup, setNoSortingGroup] = useState([]);
+const PartnerContestReport = ({ activeSubItem }: any) => {
+  const [data, setData] = useState<any>();
+  const [noSortingGroup, setNoSortingGroup] = useState([]);
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -59,32 +55,32 @@ any) => {
     },
   });
 
-  // const exportToExcel = (data: any[], fileName: string) => {
-  //   const orderedData = data.map((row) => {
-  //     const orderedRow: any = {};
-  //     getAPContestReportColumns.forEach((col: any) => {
-  //       let cellValue = row[col.field as string];
+  const exportToExcel = (data: any[], fileName: string) => {
+    const orderedData = data.map((row) => {
+      const orderedRow: any = {};
+      getAPContestReportColumns.forEach((col: any) => {
+        let cellValue = row[col.field as string];
 
-  //       // If valueFormatter exists, apply it
-  //       if (col.valueFormatter) {
-  //         cellValue = col.valueFormatter(cellValue);
-  //       }
+        // If valueFormatter exists, apply it
+        if (col.valueFormatter) {
+          cellValue = col.valueFormatter(cellValue);
+        }
 
-  //       orderedRow[col.headerName as string] = cellValue;
-  //     });
-  //     return orderedRow;
-  //   });
+        orderedRow[col.headerName as string] = cellValue;
+      });
+      return orderedRow;
+    });
 
-  //   const worksheet = XLSX.utils.json_to_sheet(orderedData);
-  //   const workbook = XLSX.utils.book_new();
-  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Employee Report");
-  //   const excelBuffer = XLSX.write(workbook, {
-  //     bookType: "xlsx",
-  //     type: "array",
-  //   });
-  //   const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-  //   saveAs(blob, `${fileName}.xlsx`);
-  // };
+    const worksheet = XLSX.utils.json_to_sheet(orderedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Employee Report");
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
 
   useEffect(() => {
     if (accessType === "ALL") {
@@ -127,7 +123,7 @@ any) => {
               value: item.itemVal, // This will be the actual value
             }));
             console.log("dropdown value", zoneDropdown);
-            // setNoSortingGroup(zoneDropdown);
+            setNoSortingGroup(zoneDropdown);
             if (zoneDropdown.length > 0) {
               formik.setFieldValue("selectedZone", zoneDropdown[0]);
             }
@@ -166,12 +162,12 @@ any) => {
       .then((response) => {
         const result = response?.data?.data || [];
         console.log("A1 GetAPContestReport Data", result);
-        // setData(
-        //   result.map((item: any, index: any) => ({
-        //     ...item,
-        //     id: index + 1,
-        //   }))
-        // );
+        setData(
+          result.map((item: any, index: any) => ({
+            ...item,
+            id: index + 1,
+          }))
+        );
       })
       .catch((error) => {
         console.error("Error fetching compliance data:", error);
@@ -203,7 +199,7 @@ any) => {
               <span style={{ fontSize: "12px" }}> (October - December)</span>
             </h4>
           </CardHeader>
-          <CardBody>
+          {/* <CardBody style={{ textAlign: "center" }}>
             <h4
               style={{
                 fontWeight: "700",
@@ -213,12 +209,11 @@ any) => {
             >
               Coming Soon
             </h4>{" "}
-          </CardBody>
-          {/* <CardBody>
+          </CardBody> */}
+          <CardBody>
             <form onSubmit={formik.handleSubmit}>
               {accessType === "ALL" && (
                 <Row className="align-items-end">
-                 
                   <Col xl={3} lg={4} md={6} sm={12}>
                     <div className="mb-3" style={{ maxWidth: "300px" }}>
                       <Label
@@ -289,7 +284,7 @@ any) => {
               )}
             </form>
             <DataTable activeSubItem={activeSubItem} T6Data={data} />
-          </CardBody> */}
+          </CardBody>
         </Card>
       </Container>
     </div>
