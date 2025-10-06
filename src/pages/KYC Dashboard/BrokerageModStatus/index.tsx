@@ -60,7 +60,7 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
       .then((res) => {
         if (res?.status === 200) {
           const formatted = res.data.map((item: any) => ({
-            label: item.itemVal,
+            label: item.itemDesc,
             value: item.itemVal,
           }));
           setZoneOptions(formatted);

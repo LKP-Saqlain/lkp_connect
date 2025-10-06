@@ -207,7 +207,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
           console.log("response->", res);
           if (res?.status === 200) {
             let branchDropdown = res?.data.map((item: any) => ({
-              label: item.itemVal, // Display value in dropdown
+              label: item.itemDesc, // Display value in dropdown
               value: item.itemVal, // Actual value of the dropdown item
             }));
             branchDropdown = [

@@ -272,7 +272,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
           console.log("response->", res);
           if (res?.status === 200) {
             let branchDropdown = res?.data.map((item: any) => ({
-              label: item.itemVal,
+              label: item.itemDesc,
               value: item.itemVal,
             }));
             branchDropdown = [
