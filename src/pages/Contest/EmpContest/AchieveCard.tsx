@@ -94,19 +94,19 @@ const AchieveCard = () => {
       title: "Brokerage Achieved ",
       dataKey: "broking",
       menu: "Employee Brokerage Achieved",
-      timeFrame: "(July-Sept)",
+      timeFrame: "(October-December)",
     },
     {
       title: "Non-Brokerage Achieved ",
       dataKey: "nonBroking",
       menu: "Employee Non-Brokerage Achieved",
-      timeFrame: "(July-Sept)",
+      timeFrame: "(October-December)",
     },
     {
       title: "New Clients Achieved ",
       dataKey: "client",
       menu: "Employee Clients Achieved",
-      timeFrame: "(July-Sept)",
+      timeFrame: "(October-December)",
     },
   ];
 

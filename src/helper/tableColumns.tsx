@@ -3237,6 +3237,12 @@ export const pledgeCapsules = [
   // { id: 2, label: "Template" },
 ];
 
+export const partnerContestCapsules = [
+  { id: 1, label: "Contest Rewards" },
+  { id: 2, label: "Broking Revenue" },
+  { id: 3, label: "Client Achieve" },
+];
+
 export const ClientInfoCapsules = [
   { id: 1, label: "Equity", status: "Active" },
   { id: 2, label: "F & O", status: "Active" },
@@ -7720,19 +7726,19 @@ export const getAPContestReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
   },
-  {
-    field: "qtarget",
-    headerName: "Revenue Target",
-    flex: 1.2,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "right",
-    headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
-        params
-      ),
-  },
+  // {
+  //   field: "qtarget",
+  //   headerName: "Revenue Target",
+  //   flex: 1.2,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "right",
+  //   headerClassName: "header-wrap-custom",
+  //   valueFormatter: (params: any) =>
+  //     new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
+  //       params
+  //     ),
+  // },
   {
     field: "brokerageAchieved",
     headerName: "Revenue Achieved",
@@ -7746,19 +7752,19 @@ export const getAPContestReportColumns: GridColDef[] = [
         params
       ),
   },
-  {
-    field: "brokerageAchievedPerc",
-    headerName: "Revenue Achievement (%)",
-    flex: 1.4,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-    headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      return `${params} %`;
-    },
-    // valueGetter: (params: any) => `${params.achievementPercentage ?? 0}%`,
-  },
+  // {
+  //   field: "brokerageAchievedPerc",
+  //   headerName: "Revenue Achievement (%)",
+  //   flex: 1.4,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   valueFormatter: (params: any) => {
+  //     return `${params} %`;
+  //   },
+  //   // valueGetter: (params: any) => `${params.achievementPercentage ?? 0}%`,
+  // },
   {
     field: "newClientCount",
     headerName: " Clients Target",
@@ -7777,26 +7783,26 @@ export const getAPContestReportColumns: GridColDef[] = [
     align: "center",
     headerClassName: "header-wrap-custom",
   },
-  {
-    field: "clientsAchievedPerc",
-    headerName: "Client Achievement (%)",
-    flex: 1.4,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-    headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      return `${params} %`;
-    },
-  },
-  {
-    field: "prize",
-    headerName: "Prize",
-    flex: 1.5,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
+  // {
+  //   field: "clientsAchievedPerc",
+  //   headerName: "Client Achievement (%)",
+  //   flex: 1.4,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   valueFormatter: (params: any) => {
+  //     return `${params} %`;
+  //   },
+  // },
+  // {
+  //   field: "prize",
+  //   headerName: "Prize",
+  //   flex: 1.5,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
 ];
 
 export const clientUnpledgeReport: GridColDef[] = [

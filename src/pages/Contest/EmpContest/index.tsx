@@ -134,7 +134,7 @@ const EMPContest = () => {
             title="Revenue Target"
             value={formatIndianNumber(revenueCard.broking)}
             animationData={RevenueImg}
-            note={isMobile && `* Contest Period - 1st July to 30th September`}
+            note={isMobile && `* Contest Period - 1st October to 31st December`}
             customClass={true}
             rightValue={formatIndianNumber(revenueCard.nonBroking)}
             subHeading="Broking"

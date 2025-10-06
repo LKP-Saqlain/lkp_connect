@@ -7,6 +7,7 @@ import {
   ODCapsules,
   DPDebitCapsules,
   pledgeCapsules,
+  partnerContestCapsules,
 } from "../../../helper/tableColumns.tsx";
 // import { useMediaQuery } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
@@ -39,6 +40,8 @@ const UserCapsules = ({
       ? DPDebitCapsules
       : capsuleType === "Pledge Request"
       ? pledgeCapsules
+      : capsuleType === "Partner Contest"
+      ? partnerContestCapsules
       : ODCapsules;
 
   return (

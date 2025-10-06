@@ -211,7 +211,7 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
           >
             <h4 className="card-title mb-0">
               Employee Target Report{" "}
-              <span style={{ fontSize: "12px" }}> (July-September)</span>
+              <span style={{ fontSize: "12px" }}> (October-December)</span>
             </h4>
           </CardHeader>
           <CardBody>

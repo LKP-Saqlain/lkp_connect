@@ -326,7 +326,7 @@ const NestedModal = ({
       console.log(response?.data?.data, "Email response");
 
       if (responseMessage === "Email sent Succesfully") {
-        ShowToast("error", responseMessage);
+        ShowToast("info", responseMessage);
         console.log(response?.data, "Email response from if loop");
         setSecondsLeft(5);
       }
@@ -496,37 +496,46 @@ const NestedModal = ({
                   </div>
                 ))}
               </div>
-
-              <Button
-                style={{
-                  backgroundColor: "#307e34",
-                  color: "#fff",
-                  marginTop: "5px",
-                }}
-                onClick={() => {
-                  setShowCreateMandateModal(true);
-                  setSelectedMandateId(null);
-                  setStopEnach(false);
-                }}
-              >
-                Create New Mandate
-              </Button>
             </>
           )}
         </ModalBody>
 
         {!timerPage && (
-          <ModalFooter>
-            <Button color="secondary" onClick={toggle}>
-              {cancelLabel}
-            </Button>
+          <ModalFooter
+            style={{ justifyContent: "space-between", alignItems: "center" }}
+          >
             <Button
-              color="primary"
-              onClick={handleFinalConfirm}
-              disabled={!selectedMandateId}
+              style={{
+                backgroundColor: "#307e34",
+                color: "#fff",
+                marginTop: "5px",
+                border: "none",
+              }}
+              onClick={() => {
+                setShowCreateMandateModal(true);
+                setSelectedMandateId(null);
+                setStopEnach(false);
+              }}
             >
-              {confirmLabel}
+              Create New Mandate
             </Button>
+
+            <div>
+              <Button
+                color="secondary"
+                onClick={toggle}
+                style={{ marginRight: "8px" }}
+              >
+                {cancelLabel}
+              </Button>
+              <Button
+                color="primary"
+                onClick={handleFinalConfirm}
+                disabled={!selectedMandateId}
+              >
+                {confirmLabel}
+              </Button>
+            </div>
           </ModalFooter>
         )}
       </Modal>
