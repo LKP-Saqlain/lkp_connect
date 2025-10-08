@@ -60,6 +60,7 @@ import {
   clientUnpledgeReport,
   EmployeeTargetReportColumns,
   dpDebitMandateColumns,
+  ClientMandateReport,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -2083,6 +2084,10 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "Dp Debit Collection") {
+      return ClientMandateReport.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }

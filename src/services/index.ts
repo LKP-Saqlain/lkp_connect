@@ -922,4 +922,13 @@ export const apiServices = {
   GetActiveClients: async (payload: any) => {
     return await apiService("POST", endpoints.GetActiveClients, payload);
   },
+  CollectMandatePayment: async (payload: any) => {
+    return await apiService("POST", endpoints.CollectMandatePayment, payload);
+  },
+  PreDebitMandateNotify: async (payload: any) => {
+    return await apiService("POST", endpoints.PreDebitMandateNotify, payload);
+  },
+  ExecuteUpiMandate: async (payload: any) => {
+    return await apiService("POST", endpoints.ExecuteUpiMandate, payload);
+  },
 };

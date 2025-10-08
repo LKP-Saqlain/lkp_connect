@@ -212,4 +212,7 @@ export const endpoints = {
   UpcomingDormantAccount: "/api/Dashboard/UpcomingDormantAccount",
   GetUniqueTradedClient: "/api/Dashboard/GetUniqueTradedClient",
   GetActiveClients: "/api/Dashboard/GetActiveClients",
+  CollectMandatePayment: "/api/Mandate/CollectMandatePayment",
+  PreDebitMandateNotify: "/api/Mandate/PreDebitMandateNotify",
+  ExecuteUpiMandate: "/api/Mandate/ExecuteUpiMandate",
 };
