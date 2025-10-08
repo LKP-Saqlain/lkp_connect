@@ -8185,7 +8185,7 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "SPIPClientsTarget",
+    field: "spipClientsTarget",
     headerName: "SPIP Clients Target",
     minWidth: 100,
     flex: 1,
@@ -8195,7 +8195,7 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "SPIPClientsAchieved",
+    field: "spipClientsAchieved",
     headerName: "SPIP Clients Achieved",
     minWidth: 100,
     flex: 1,
@@ -8205,7 +8205,7 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "InsurancePremTarget",
+    field: "insurancePremTarget",
     headerName: "Insurance Premium Target",
     minWidth: 120,
     flex: 1,
@@ -8213,13 +8213,11 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
-      ),
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
-    field: "InsurancePremAchieved",
+    field: "insurancePremAchieved",
     headerName: "Insurance Premium Achieved",
     minWidth: 120,
     flex: 1,
@@ -8227,10 +8225,8 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
-      ),
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
 ];
 export const MutualFundList: GridColDef[] = [
