@@ -736,7 +736,7 @@ const SideBar = () => {
   // };
 
   const rmsSubItems: Record<string, JSX.Element> = {
-    "Upload SLBM Holding": <SLBMHoldings activeSubItem={activeSubItem} />,
+    "Upload SLBM Holding": <SLBMHoldings />,
     "Pledge Holdings Adjustment": (
       // <RMSPledgeHolding activeSubItem={activeSubItem} />
       <></>
