@@ -1,5 +1,12 @@
-import { useEffect, useMemo } from "react";
-import { Modal, ModalBody, ModalHeader, Card, CardBody } from "reactstrap";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Card,
+  CardBody,
+  Button,
+} from "reactstrap";
 import { DataGrid } from "@mui/x-data-grid";
 import "../../../components/common/table/style.css";
 import {
@@ -8,7 +15,9 @@ import {
   upcomingDormantClientColumns,
   newClientAddFiveDays,
   spipSubscriptionColumns,
+  getBrokerageKycDetails,
 } from "../../../helper/tableColumns.tsx";
+import { Stack, TextField } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
 // import { useMediaQuery } from "@mui/material";
 
@@ -17,23 +26,61 @@ const NudgeTable = ({
   onClose,
   selectedReport,
   filteredData,
+  singleData,
+  handleAction,
+  handleDownload,
 }: {
   isOpen: boolean;
   onClose: () => void;
   selectedReport: any;
-  filteredData: Record<string, any[]>;
+  filteredData?: Record<string, any[]>;
+  singleData?: any;
+  handleAction?: (payload: {
+    row: any;
+    remarks: string;
+    action: "A" | "R";
+  }) => void;
+  handleDownload?: (row: any) => void;
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const [remarks, setRemarks] = useState<string>("");
+  const [showValidation, setShowValidation] = useState(false); // for red textfield when empty
+
+  const handleActionClick = (actionType: "A" | "R") => {
+    // Validation: remarks should not be empty
+    if (!remarks.trim()) {
+      setShowValidation(true);
+      return;
+    }
+    // Clear error before proceeding
+    setShowValidation(false);
+    // Proceed with parent callback
+    handleAction?.({
+      row: singleData,
+      remarks: remarks.trim(),
+      action: actionType,
+    });
+
+    console.log(singleData, remarks, actionType, "from nudge");
+
+    // Optional: reset input
+    setRemarks("");
+  };
+
   useEffect(() => {
     console.log("filteredData:", filteredData);
-  }, [filteredData]);
+    setShowValidation(false);
+  }, [filteredData, isOpen]);
 
   // Get data specific to selectedReport
   const reportData = useMemo(() => {
-    return filteredData[selectedReport] || [];
-  }, [filteredData, selectedReport]);
+    if (singleData && Array.isArray(singleData)) {
+      return singleData;
+    }
+    return filteredData?.[selectedReport] || [];
+  }, [filteredData, singleData, selectedReport]);
 
   // Select columns based on the selectedReport
   const columns = useMemo(() => {
@@ -48,6 +95,9 @@ const NudgeTable = ({
         return upcomingDormantClientColumns;
       case "SPIP Subscription in last 10 days":
         return spipSubscriptionColumns;
+      case "More details about segment":
+        return getBrokerageKycDetails(handleDownload ?? (() => {}));
+
       default:
         return []; // If no predefined columns, return an empty array
     }
@@ -63,19 +113,7 @@ const NudgeTable = ({
   );
 
   return (
-    <Modal
-      size="xl"
-      isOpen={isOpen}
-      toggle={onClose}
-      centered
-      // style={
-      //   {
-      //     // maxWidth: "895px",
-      //     // width: "90%",
-      //     // marginLeft: !isMobile ? "260px" : "auto",
-      //   }
-      // }
-    >
+    <Modal size="xl" isOpen={isOpen} toggle={onClose} centered>
       <ModalHeader
         className="modal-title"
         id="myExtraLargeModalLabel"
@@ -143,6 +181,44 @@ const NudgeTable = ({
             />
           </CardBody>
         </Card>
+        {selectedReport === "More details about segment" && (
+          <div style={{ marginTop: "20px" }}>
+            <Stack spacing={2} direction="column">
+              <TextField
+                label="Remarks"
+                value={remarks}
+                onChange={(e) => {
+                  setRemarks(e.target.value);
+                  if (e.target.value.trim()) {
+                    setShowValidation(false); // live remove error
+                  }
+                }}
+                error={showValidation && !remarks.trim()}
+                fullWidth
+              />
+              <Stack direction="row" spacing={2} justifyContent="flex-end">
+                <Button
+                  style={{
+                    backgroundColor: "#EE4B2B",
+                    borderColor: "#EE4B2B",
+                    color: "#fff",
+                  }}
+                  onClick={() => handleActionClick("R")}
+                >
+                  Reject
+                </Button>
+                <Button
+                  style={{ color: "white", backgroundColor: "#11395C" }}
+                  onClick={() => {
+                    handleActionClick("A");
+                  }}
+                >
+                  Approve
+                </Button>
+              </Stack>
+            </Stack>
+          </div>
+        )}
       </ModalBody>
     </Modal>
   );

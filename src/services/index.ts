@@ -298,6 +298,27 @@ export const apiServices = {
   GetBrokerageKycStatus: async (payload: any) => {
     return await apiService("POST", endpoints.GetBrokerageKycStatus, payload);
   },
+  UpdateBrokerageKycStatusNew: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateBrokerageKycStatusNew,
+      payload
+    );
+  },
+  GetBrokerageKycStatusNew: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetBrokerageKycStatusNew,
+      payload
+    );
+  },
+  GetBrokerageKycDetailsStatus: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetBrokerageKycDetailsStatus,
+      payload
+    );
+  },
   UpdateBrokerageKycStatus: async (payload: any) => {
     return await apiService(
       "POST",
@@ -313,6 +334,13 @@ export const apiServices = {
   },
   GetTechExcelApiResponse: async (payload: any) => {
     return await apiService("POST", endpoints.GetTechExcelApiResponse, payload);
+  },
+  GetTechExcelApiResponseNew: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetTechExcelApiResponseNew,
+      payload
+    );
   },
   GetBrokerageModificationValidity: async (payload: any) => {
     return await apiService(
@@ -519,6 +547,9 @@ export const apiServices = {
   },
   SLBMHoldingsUpload: async (payload: any) => {
     return await apiService("POST", endpoints.SLBMHoldingsUpload, payload);
+  },
+  SLBMHoldingsUploadOdin: async (payload: any) => {
+    return await apiService("POST", endpoints.SLBMHoldingsUploadOdin, payload);
   },
   GenerateClientPerformancePdf: async (payload: any) => {
     return await apiService(

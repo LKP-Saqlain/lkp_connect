@@ -67,6 +67,7 @@ import "../../pages/ClientDetails/style.css";
 import EmailIcon from "@mui/icons-material/Email";
 import CustomModal from "./DPModal";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import CancelIcon from "@mui/icons-material/Cancel";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Tooltip from "@mui/material/Tooltip";
@@ -139,6 +140,8 @@ interface SelectedWidgetProps {
   onRowSelectionModelChange?: any;
   handleVerifyDetails?: any;
   isBankVerified?: any;
+  setIsNudgeTableOpen?: any;
+  setSegmentRow?: any;
   setIsBankVerified?: any;
   handleUpdate?: (data: any) => void;
 }
@@ -189,6 +192,8 @@ const DataTable = ({
   isBankVerified,
   setIsBankVerified,
   handleUpdate,
+  setIsNudgeTableOpen,
+  setSegmentRow,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -527,17 +532,16 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "KYC Approval") {
       return BrokerageKyc.map((column) => {
-        if (column.field === "remark") {
+        if (column.field === "More Details") {
           return {
             ...column,
             renderCell: (params: any) => (
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <div
                   onClick={() => {
-                    setSelectedRow(params.row);
-                    HandleApprovalModal("approve");
-                    // HandleApprovalModal("approve", params);
-                    console.log(params.row.rowId, "selectedrow approve");
+                    setSegmentRow(params.row);
+                    setIsNudgeTableOpen(true);
+                    console.log(params.row, "selectedrow More Details");
                   }}
                   style={{
                     cursor: "pointer",
@@ -546,58 +550,15 @@ const DataTable = ({
                     marginRight: 5,
                   }}
                 >
-                  <Tooltip title="Approve" arrow placement="top">
-                    <CheckCircleIcon
-                      style={{ color: "green", marginLeft: 4 }}
-                    />
-                  </Tooltip>
-                </div>
-                <div style={{ fontSize: 20, color: "gray" }}>|</div>
-                <div
-                  onClick={() => {
-                    setSelectedRow(params.row);
-                    HandleApprovalModal("reject");
-                  }}
-                  style={{
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    marginLeft: 5,
-                  }}
-                >
-                  <Tooltip title="Reject" arrow placement="top">
-                    <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                  <Tooltip title="More details" arrow placement="top">
+                    <ControlPointIcon />
                   </Tooltip>
                 </div>
               </div>
             ),
           };
         }
-        if (column.field === "consentfilename") {
-          return {
-            ...column,
-            renderCell: (params: any) => {
-              const fileName = params.row?.consentfilename;
 
-              return fileName ? (
-                <button
-                  onClick={() => handleDownload(params.row)}
-                  style={{
-                    color: "#11395C",
-                    textDecoration: "underline",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  <DownloadForOfflineIcon />
-                </button>
-              ) : (
-                "╶─"
-              );
-            },
-          };
-        }
         return column;
       });
     } else if (activeSubItem === "Terminal") {

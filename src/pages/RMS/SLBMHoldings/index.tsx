@@ -8,37 +8,47 @@ import {
   Row,
   Button,
 } from "reactstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
-import axios from "axios";
-import { endpoints } from "../../../services/endpoints";
 import ShowToast from "../../../utils/toastUtils";
 import { Tooltip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { apiServices } from "../../../services";
+import { RootState } from "../../../redux/store";
 
-interface SLBMHoldingsProps {
-  activeSubItem: any;
-}
+const ALLOWED_EXTENSIONS = [".txt", ".csv"];
 
-const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
+const SLBMHoldings: React.FC = () => {
   const dispatch = useDispatch();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string>("");
   const [inputKey, setInputKey] = useState<number>(0);
-  const [uploadedFileData, setUploadedFileData] = useState<{
-    name: string;
-    content: string;
-  } | null>(null);
+
+  const resetForm = () => {
+    setSelectedFile(null);
+    setFileError("");
+    setInputKey((prev) => prev + 1); // reset input field
+  };
+
+  const isValidExtension = (fileName: string): boolean => {
+    return ALLOWED_EXTENSIONS.some((ext) =>
+      fileName.toLowerCase().endsWith(ext)
+    );
+  };
 
   const handleFileChange = (file: File | null) => {
     if (!file) return;
-    const isCSV = file.name.toLowerCase().endsWith(".csv");
-    if (!isCSV) {
-      setFileError("Only .csv files are allowed.");
+
+    if (!isValidExtension(file.name)) {
+      setFileError("Only .txt and .csv files are allowed.");
       setSelectedFile(null);
       return;
     }
+
     setSelectedFile(file);
     setFileError("");
   };
@@ -49,54 +59,11 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    e.stopPropagation();
-    const file = e.dataTransfer.files?.[0];
-    handleFileChange(file);
+    handleFileChange(e.dataTransfer.files?.[0] || null);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleFileUpload = async () => {
-    if (!selectedFile) {
-      setFileError("Please upload a .csv file before submitting.");
-      return;
-    }
-    try {
-      dispatch(showLoader("Please wait, we are processing your request..."));
-      const base64Content = await getBase64Content(selectedFile);
-      const payload = {
-        user_id: localStorage.getItem("Id"),
-        file_name: selectedFile.name,
-        file_content: base64Content,
-      };
-      const token = localStorage.getItem("tkn");
-      const response = await axios.post(
-        `https://middlewareapi.lkp.net.in${endpoints.SLBMHoldingsUpload}`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (response.status === 200) {
-        ShowToast("success", response?.data);
-        setUploadedFileData({
-          name: selectedFile.name,
-          content: base64Content,
-        });
-        resetForm();
-        console.log(uploadedFileData);
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      setFileError("Failed to upload the file. Please try again.");
-    } finally {
-      dispatch(hideLoader());
-    }
   };
 
   const getBase64Content = (file: File): Promise<string> =>
@@ -110,10 +77,36 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
       reader.readAsDataURL(file);
     });
 
-  const resetForm = () => {
-    setSelectedFile(null);
-    setFileError("");
-    setInputKey((prev) => prev + 1);
+  const handleFileUpload = async () => {
+    if (!selectedFile) {
+      setFileError("Please upload a .txt or .csv file before submitting.");
+      return;
+    }
+
+    try {
+      dispatch(showLoader("Uploading file..."));
+
+      const base64Content = await getBase64Content(selectedFile);
+      const payload = {
+        user_id: user_id,
+        file_name: selectedFile.name,
+        file_content: base64Content,
+      };
+
+      const response = await apiServices.SLBMHoldingsUploadOdin(payload);
+
+      if (response?.status === 200) {
+        ShowToast("success", response?.data);
+        resetForm();
+      } else {
+        ShowToast("error", "Upload failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      setFileError("Failed to upload the file. Please try again.");
+    } finally {
+      dispatch(hideLoader());
+    }
   };
 
   document.title = "LKP Securities | SLBM Holdings File Upload";
@@ -147,16 +140,16 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
                       Upload File
                     </Label>
                     <div
-                      style={{ position: "relative", width: "100%" }}
                       onDrop={handleDrop}
                       onDragOver={handleDragOver}
+                      style={{ position: "relative", width: "100%" }}
                     >
                       <input
                         type="file"
                         id="customFileUpload"
                         key={inputKey}
                         style={{ display: "none" }}
-                        accept=".csv"
+                        accept=".txt,.csv"
                         onChange={handleInputChange}
                       />
 
@@ -186,8 +179,12 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
                         {selectedFile ? (
                           <>
                             {selectedFile.name}
-                            <Tooltip title="Delete file" arrow>
+                            <Tooltip title="Remove file" arrow>
                               <span
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  resetForm();
+                                }}
                                 style={{
                                   position: "absolute",
                                   right: "8px",
@@ -198,10 +195,6 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
                                   display: "flex",
                                   alignItems: "center",
                                 }}
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  resetForm();
-                                }}
                               >
                                 <CloseIcon fontSize="small" />
                               </span>
@@ -209,8 +202,8 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
                           </>
                         ) : (
                           <span>
-                            <strong>Click to upload</strong> or drag and drop
-                            your <strong>.csv</strong> file here
+                            <strong>Click to upload</strong> or drag and drop a{" "}
+                            <strong>.txt</strong> or <strong>.csv</strong> file
                           </span>
                         )}
                       </Button>
@@ -226,7 +219,8 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
 
                       <div className="mt-1">
                         <small className="text-muted d-block">
-                          • Only <strong>.csv</strong> files are accepted.
+                          • Only <strong>.txt</strong> and <strong>.csv</strong>{" "}
+                          files are accepted.
                         </small>
                         {/* <small className="text-muted d-block">
                           • Max size: <strong>20MB</strong>.
@@ -237,10 +231,14 @@ const SLBMHoldings: React.FC<SLBMHoldingsProps> = () => {
                 </Row>
 
                 <Row>
-                  <Col lg={4} className="mt-2">
+                  <Col lg={4} className="mt-3">
                     <Button
                       onClick={handleFileUpload}
-                      style={{ backgroundColor: "#11395C" }}
+                      style={{
+                        backgroundColor: "#11395C",
+                        color: "white",
+                        width: "150px",
+                      }}
                     >
                       Upload File
                     </Button>
