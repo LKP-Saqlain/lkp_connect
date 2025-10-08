@@ -8924,3 +8924,108 @@ export const dpDebitMandateColumns: GridColDef[] = [
     align: "center",
   },
 ];
+
+export const ClientMandateReport: GridColDef[] = [
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 200,
+    headerAlign: "center",
+    disableColumnMenu: true,
+    flex: 1,
+  },
+  {
+    field: "branchcode",
+    headerName: "Branch Code",
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    minWidth: 100,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "boid",
+    headerName: "BOID",
+    minWidth: 200,
+    headerAlign: "center",
+    disableColumnMenu: true,
+    flex: 1,
+  },
+  {
+    field: "dpDebit",
+    headerName: "DP Debit",
+    minWidth: 120,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "mandateAmount",
+    headerName: "Mandate Amount",
+    minWidth: 140,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "umn",
+    headerName: "UMN",
+    minWidth: 250,
+    headerAlign: "center",
+    disableColumnMenu: true,
+    flex: 1,
+  },
+  {
+    field: "referenceNumber",
+    headerName: "Reference No.",
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "nextRecurDate",
+    headerName: "Next Recur Date",
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    // Optional: format DD/MM/YYYY
+    // valueFormatter: (params) => {
+    //   const v = params.value?.toString();
+    //   if (v?.length === 8) {
+    //     return `${v.substring(0, 2)}/${v.substring(2, 4)}/${v.substring(4)}`;
+    //   }
+    //   return v || "N/A";
+    // },
+  },
+];

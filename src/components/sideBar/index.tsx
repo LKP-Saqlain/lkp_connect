@@ -99,6 +99,7 @@ import MutualFundIndex from "../../pages/MutualFund";
 import MtfComponent from "../../pages/RMS/Mtf";
 import UnpledgeRequest from "../../pages/UnpledgeRequest";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import MandatePayment from "../../pages/ThirdParty/Mandate";
 // import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
 
 const drawerWidth = 260;
@@ -736,7 +737,7 @@ const SideBar = () => {
   // };
 
   const rmsSubItems: Record<string, JSX.Element> = {
-    "Upload SLBM Holding": <SLBMHoldings activeSubItem={activeSubItem} />,
+    "Upload SLBM Holding": <SLBMHoldings />,
     "Pledge Holdings Adjustment": (
       // <RMSPledgeHolding activeSubItem={activeSubItem} />
       <></>
@@ -779,6 +780,7 @@ const SideBar = () => {
     "Third Party Invoice Report": (
       <InvoiceStatusReport activeSubItem={activeSubItem} />
     ),
+    "Dp Debit Collection": <MandatePayment activeSubItem={activeSubItem} />,
   };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>

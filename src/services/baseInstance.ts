@@ -57,6 +57,9 @@ const publicEndpoints = [
   endpoints.GetMandateCallBackDetails,
   endpoints.UpdateUpiMandate,
   endpoints.RevokeUpiMandate,
+  endpoints.CollectMandatePayment,
+  endpoints.PreDebitMandateNotify,
+  endpoints.ExecuteUpiMandate,
 ];
 
 const fundamentalEndpoints = [
