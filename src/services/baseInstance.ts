@@ -90,6 +90,7 @@ const multipartEndpoints = [
   endpoints.TPInvoiceStaging,
   endpoints.MergeIntoOdinFile,
   endpoints.MergeIntoSymphonyFile,
+  endpoints.SLBMHoldingsUploadOdin,
 ];
 
 const mutualFundEndpoints = [

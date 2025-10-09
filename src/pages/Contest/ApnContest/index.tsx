@@ -2,7 +2,7 @@ import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 
 import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
 import theme from "../../../theme";
-import contestReward from "../../../assets/images/AP Contest Reward.png";
+import contestReward from "../../../assets/images/AP Contest.png";
 import ActiveClient from "../../../assets/images/Clients.json";
 import DashboardCard from "../../../components/common/DashboardCard";
 import UserInfoTable from "../../../components/common/UserInfoTable";

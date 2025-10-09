@@ -66,47 +66,76 @@ const SLBMHoldings: React.FC = () => {
     e.preventDefault();
   };
 
-  const getBase64Content = (file: File): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result as string;
-        resolve(result.replace(/^data:.*;base64,/, ""));
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
+  // const getBase64Content = (file: File): Promise<string> =>
+  //   new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       const result = reader.result as string;
+  //       resolve(result.replace(/^data:.*;base64,/, ""));
+  //     };
+  //     reader.onerror = reject;
+  //     reader.readAsDataURL(file);
+  //   });
+
+  // const handleFileUpload = async () => {
+  //   if (!selectedFile) {
+  //     setFileError("Please upload a .txt or .csv file before submitting.");
+  //     return;
+  //   }
+
+  //   try {
+  //     dispatch(showLoader("Uploading file..."));
+
+  //     const base64Content = await getBase64Content(selectedFile);
+  //     const payload = {
+  //       user_id: user_id,
+  //       file_name: selectedFile.name,
+  //       file_content: base64Content,
+  //     };
+
+  //     const response = await apiServices.SLBMHoldingsUploadOdin(payload);
+  //     console.log(payload, "slbm payload");
+
+  //     if (response?.status === 200) {
+  //       ShowToast("success", response?.data);
+  //       resetForm();
+  //     } else {
+  //       ShowToast("error", "Upload failed. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Upload error:", error);
+  //     setFileError("Failed to upload the file. Please try again.");
+  //   } finally {
+  //     dispatch(hideLoader());
+  //   }
+  // };
 
   const handleFileUpload = async () => {
-    if (!selectedFile) {
-      setFileError("Please upload a .txt or .csv file before submitting.");
-      return;
-    }
+    if (!selectedFile) return;
 
-    try {
-      dispatch(showLoader("Uploading file..."));
+    const formData = new FormData();
+    formData.append("File", selectedFile);
+    formData.append("user_id", user_id);
 
-      const base64Content = await getBase64Content(selectedFile);
-      const payload = {
-        user_id: user_id,
-        file_name: selectedFile.name,
-        file_content: base64Content,
-      };
-
-      const response = await apiServices.SLBMHoldingsUploadOdin(payload);
-
-      if (response?.status === 200) {
-        ShowToast("success", response?.data);
-        resetForm();
-      } else {
-        ShowToast("error", "Upload failed. Please try again.");
-      }
-    } catch (error) {
-      console.error("Upload error:", error);
-      setFileError("Failed to upload the file. Please try again.");
-    } finally {
-      dispatch(hideLoader());
-    }
+    dispatch(showLoader(""));
+    apiServices
+      .SLBMHoldingsUploadOdin(formData)
+      .then((response) => {
+        if (response?.data?.statusCode === 200) {
+          //     console.log(payload, "slbm payload");
+          ShowToast("success", response?.data?.message);
+          resetForm();
+        } else {
+          ShowToast("error", response?.data?.message);
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error);
+        ShowToast("error", "File upload failed.");
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
   };
 
   document.title = "LKP Securities | SLBM Holdings File Upload";
