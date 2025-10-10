@@ -153,7 +153,14 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           maxWidth: "500px",
           overflow: "hidden",
           marginBottom: "20px",
-          height: title === "Prize*" ? "100px" : "6.8rem",
+          height:
+            title === "Prize*"
+              ? "100px"
+              : title === "Revenue Achieved*" ||
+                "Client Target*" ||
+                "Clients Achieved*"
+              ? "3.5rem"
+              : "6.8rem",
           minHeight: title === "Prize*" ? "110px" : "auto",
           ...cardStyle,
         }}
@@ -200,6 +207,39 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 {title}
               </h6>
 
+              <h5
+                className="mb-0"
+                style={{
+                  color: "#1B1B1B",
+                  fontSize: "17px",
+                  fontWeight: "bold",
+
+                  width: rightValue === "Coming Soon" ? "6rem" : undefined,
+                }}
+              >
+                {prefix}
+                {typeof value === "number" ? (
+                  <CountUp
+                    start={0}
+                    end={value ?? 0}
+                    separator=","
+                    decimals={decimals}
+                    prefix=""
+                    duration={1}
+                    formattingFn={formatIndianNumber}
+                  />
+                ) : (
+                  title !== "Prize*" && <span>{value}</span>
+                )}
+                <small
+                  className="fs-12"
+                  style={{
+                    fontWeight: "bold",
+                  }}
+                >
+                  {suffix}
+                </small>
+              </h5>
               {/* Right side tabs */}
               {customClass &&
                 (title === "Unique Traded Clients" ||
@@ -320,12 +360,14 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     </div>
                   </div>
                 ) : (
-                  <Lottie
-                    loop
-                    play
-                    animationData={animationData}
-                    style={{ width: 40, height: 40 }}
-                  />
+                  title !== "Client Target*" && (
+                    <Lottie
+                      loop
+                      play
+                      animationData={animationData}
+                      style={{ width: 40, height: 40 }}
+                    />
+                  )
                 )}
 
                 {/* {title === "Prize*" ? (
@@ -386,44 +428,47 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     style={{ width: 40, height: 40 }}
                   />
                 )} */}
-                {!mainCustomClass && (
-                  <div>
-                    <h5
-                      className="mb-0"
-                      style={{
-                        color: "#1B1B1B",
-                        fontSize: "17px",
-                        fontWeight: "bold",
-
-                        width:
-                          rightValue === "Coming Soon" ? "6rem" : undefined,
-                      }}
-                    >
-                      {prefix}
-                      {typeof value === "number" ? (
-                        <CountUp
-                          start={0}
-                          end={value ?? 0}
-                          separator=","
-                          decimals={decimals}
-                          prefix=""
-                          duration={1}
-                          formattingFn={formatIndianNumber}
-                        />
-                      ) : (
-                        title !== "Prize*" && <span>{value}</span>
-                      )}
-                      <small
-                        className="fs-12"
+                {!mainCustomClass &&
+                  title !== "Revenue Achieved*" &&
+                  title !== "Client Target*" &&
+                  title !== "Clients Achieved*" && (
+                    <div>
+                      <h5
+                        className="mb-0"
                         style={{
+                          color: "#1B1B1B",
+                          fontSize: "17px",
                           fontWeight: "bold",
+
+                          width:
+                            rightValue === "Coming Soon" ? "6rem" : undefined,
                         }}
                       >
-                        {suffix}
-                      </small>
-                    </h5>
-                  </div>
-                )}
+                        {prefix}
+                        {typeof value === "number" ? (
+                          <CountUp
+                            start={0}
+                            end={value ?? 0}
+                            separator=","
+                            decimals={decimals}
+                            prefix=""
+                            duration={1}
+                            formattingFn={formatIndianNumber}
+                          />
+                        ) : (
+                          title !== "Prize*" && <span>{"value"}</span>
+                        )}
+                        <small
+                          className="fs-12"
+                          style={{
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {suffix}
+                        </small>
+                      </h5>
+                    </div>
+                  )}
               </div>
               <p
                 style={{

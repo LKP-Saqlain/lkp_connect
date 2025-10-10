@@ -13,6 +13,7 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 
 import UserCapsules from "../../ClientDetails/UserCapsules";
+// import ShowToast from "../../../utils/toastUtils";
 
 interface APContestData {
   rowId: number;
@@ -65,10 +66,10 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
     };
 
     fetchContestTargetDetails();
-    fetchAPachievedBrokerage();
-    fetchAPContestAchClients();
-    fetchAPContestSummary();
-  }, []);
+    // fetchAPachievedBrokerage();
+    // fetchAPContestAchClients();
+    // fetchAPContestSummary();
+  }, [row?.apCode]);
 
   const fetchAPachievedBrokerage = () => {
     let payload = {
@@ -80,8 +81,9 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
       .GetAPContestAchievedBrokerage(payload)
       .then((response) => {
         if (response?.status === 200) {
-          console.log("ResponseAPContest", response?.data?.data);
           dispatch(hideLoader());
+          console.log("ResponseAPContest", response?.data);
+
           setUserData(
             response?.data?.data?.map((item: any, index: number) => ({
               ...item,
@@ -106,8 +108,11 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
       .GetAPContestAchievedClients(payload)
       .then((response) => {
         if (response?.status === 200) {
-          console.log("ResponseAPContestAchClients", response?.data?.data);
           dispatch(hideLoader());
+          console.log("ResponseAPContestAchClients", response?.data);
+          if (response?.data?.data.length === 0) {
+            // ShowToast("error", response?.data?.message);
+          }
           setApContestAchSummaryRecord(response?.data?.data);
         }
       })
@@ -148,6 +153,15 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
     console.log("You clicked the Chip.", value);
     setSelectedCapsule(value);
   };
+
+  useEffect(() => {
+    if (selectedCapsule === "Broking Revenue") {
+      fetchAPachievedBrokerage();
+      fetchAPContestSummary();
+    } else if (selectedCapsule === "Client Achieve") {
+      fetchAPContestAchClients();
+    }
+  }, [selectedCapsule]);
 
   return (
     <>

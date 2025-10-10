@@ -85,7 +85,7 @@ const MandateCall = () => {
         pspRefNo: "",
       },
       payeeType: {
-        virtualAddress: "abhishek88@hdfcbank",
+        virtualAddress: "raj2025@hdfcbank",
       },
     };
     dispatch(showLoader(""));
@@ -113,7 +113,7 @@ const MandateCall = () => {
       dpCode: data?.dpcode,
       dpid: data?.dpid,
       amount: amount,
-      upiID: "abhishek88@hdfcbank",
+      upiID: "raj2025@hdfcbank",
     };
     dispatch(showLoader(""));
     apiServices
@@ -190,8 +190,9 @@ const MandateCall = () => {
       .UpdateUpiMandate(payload)
       .then((response) => {
         if (response?.status === 200) {
-          console.log("response1", response?.data);
           dispatch(hideLoader());
+          console.log("response1", response?.data?.data?.statusDesc);
+          ShowToast("success", response?.data?.data?.statusDesc);
         }
       })
       .catch((errror) => {
