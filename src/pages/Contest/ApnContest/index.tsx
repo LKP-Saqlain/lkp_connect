@@ -68,7 +68,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
     fetchContestTargetDetails();
     // fetchAPachievedBrokerage();
     // fetchAPContestAchClients();
-    // fetchAPContestSummary();
+    fetchAPContestSummary();
   }, [row?.apCode]);
 
   const fetchAPachievedBrokerage = () => {
@@ -83,13 +83,13 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
         if (response?.status === 200) {
           dispatch(hideLoader());
           console.log("ResponseAPContest", response?.data);
-
           setUserData(
             response?.data?.data?.map((item: any, index: number) => ({
               ...item,
               id: index,
             }))
           );
+          console.log(userData);
         }
       })
       .catch((error) => {
@@ -155,9 +155,9 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
   };
 
   useEffect(() => {
+    // alert(selectedCapsule);
     if (selectedCapsule === "Broking Revenue") {
       fetchAPachievedBrokerage();
-      fetchAPContestSummary();
     } else if (selectedCapsule === "Client Achieve") {
       fetchAPContestAchClients();
     }

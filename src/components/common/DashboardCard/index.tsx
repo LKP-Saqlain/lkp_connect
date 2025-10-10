@@ -156,9 +156,11 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           height:
             title === "Prize*"
               ? "100px"
-              : title === "Revenue Achieved*" ||
-                "Client Target*" ||
-                "Clients Achieved*"
+              : title === "Revenue Achieved*"
+              ? "3.5rem"
+              : title === "Client Target*"
+              ? "3.5rem"
+              : title === "Clients Achieved*"
               ? "3.5rem"
               : "6.8rem",
           minHeight: title === "Prize*" ? "110px" : "auto",
@@ -206,40 +208,44 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
               >
                 {title}
               </h6>
-
-              <h5
-                className="mb-0"
-                style={{
-                  color: "#1B1B1B",
-                  fontSize: "17px",
-                  fontWeight: "bold",
-
-                  width: rightValue === "Coming Soon" ? "6rem" : undefined,
-                }}
-              >
-                {prefix}
-                {typeof value === "number" ? (
-                  <CountUp
-                    start={0}
-                    end={value ?? 0}
-                    separator=","
-                    decimals={decimals}
-                    prefix=""
-                    duration={1}
-                    formattingFn={formatIndianNumber}
-                  />
-                ) : (
-                  title !== "Prize*" && <span>{value}</span>
-                )}
-                <small
-                  className="fs-12"
+              {[
+                "Revenue Achieved*",
+                "Client Target*",
+                "Clients Achieved*",
+              ].includes(title) && (
+                <h5
+                  className="mb-0"
                   style={{
+                    color: "#1B1B1B",
+                    fontSize: "17px",
                     fontWeight: "bold",
+                    width: rightValue === "Coming Soon" ? "6rem" : undefined,
                   }}
                 >
-                  {suffix}
-                </small>
-              </h5>
+                  {prefix}
+                  {typeof value === "number" ? (
+                    <CountUp
+                      start={0}
+                      end={value ?? 0}
+                      separator=","
+                      decimals={decimals}
+                      prefix=""
+                      duration={1}
+                      formattingFn={formatIndianNumber}
+                    />
+                  ) : (
+                    title !== "Prize*" && <span>{value}</span>
+                  )}
+                  <small
+                    className="fs-12"
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {suffix}
+                  </small>
+                </h5>
+              )}
               {/* Right side tabs */}
               {customClass &&
                 (title === "Unique Traded Clients" ||
@@ -456,7 +462,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                             formattingFn={formatIndianNumber}
                           />
                         ) : (
-                          title !== "Prize*" && <span>{"value"}</span>
+                          title !== "Prize*" && <span>{value}</span>
                         )}
                         <small
                           className="fs-12"
