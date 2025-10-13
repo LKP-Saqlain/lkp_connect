@@ -14,7 +14,7 @@ import {
 
 import UserCapsules from "../ClientDetails/UserCapsules";
 
-const Index = ({ activeSubItem }: any) => {
+const Index = ({ activeMenu }: any) => {
   //   const [data, setData] = useState<any>();
   //   const [flag, setFlag] = useState<boolean>(false);
   //   const [boId, setBoId] = useState("");
@@ -113,7 +113,7 @@ const Index = ({ activeSubItem }: any) => {
 
           <CardBody>
             <DataTable
-              activeSubItem={activeSubItem}
+              activeMenu={activeMenu}
               T6Data={tableData}
               // handleDownload={handleClick}
               // showSearch={Array.isArray(data) && data.length > 0}

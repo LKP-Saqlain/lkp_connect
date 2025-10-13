@@ -1454,7 +1454,7 @@ const DataTable = ({
       return EmpBrokerageAchieved.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Referal Entry") {
+    } else if (activeMenu === "DP AMC Contest") {
       return AmcMembershipHeader.map((column) => ({
         ...column,
       }));
