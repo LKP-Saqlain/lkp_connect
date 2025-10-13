@@ -8,6 +8,7 @@ import {
   DPDebitCapsules,
   pledgeCapsules,
   partnerContestCapsules,
+  AmcMembership,
 } from "../../../helper/tableColumns.tsx";
 // import { useMediaQuery } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
@@ -42,6 +43,8 @@ const UserCapsules = ({
       ? pledgeCapsules
       : capsuleType === "Partner Contest"
       ? partnerContestCapsules
+      : capsuleType === "AMC Membership"
+      ? AmcMembership
       : ODCapsules;
 
   return (

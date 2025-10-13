@@ -3232,6 +3232,10 @@ export const ODCapsules = [
   { id: 1, label: "Backoffice Report" },
   { id: 2, label: "Template" },
 ];
+export const AmcMembership = [
+  { id: 1, label: "Lifetime Membership" },
+  { id: 2, label: "Non-Lifetime Membership" },
+];
 export const pledgeCapsules = [
   { id: 1, label: "Pledge Request" },
   // { id: 2, label: "Template" },
@@ -9068,5 +9072,101 @@ export const ClientMandateReport: GridColDef[] = [
     //   }
     //   return v || "N/A";
     // },
+  },
+];
+
+export const AmcMembershipHeader: GridColDef[] = [
+  {
+    field: "trading_Code",
+    headerName: "Trading Code",
+    flex: 1,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "dP_ID",
+    headerName: "DP ID",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "primary_Holder",
+    headerName: "Primary Holder",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "primaryHolder_phn",
+    headerName: "Mobile No.",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "secondary_Holder_Name",
+    headerName: "Secondary Holder Name",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      if (!params?.value) return "-";
+      return params.value;
+    },
+  },
+  {
+    field: "third_Holder_Name",
+    headerName: "Third Holder Name",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      if (!params?.value) return "-";
+      return params.value;
+    },
+  },
+  {
+    field: "branch_code",
+    headerName: "Branch Code",
+    flex: 1,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 1,
+    minWidth: 70,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "module_Description",
+    headerName: "Module Description",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
   },
 ];
