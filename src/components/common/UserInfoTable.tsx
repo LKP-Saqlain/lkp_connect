@@ -61,6 +61,7 @@ import {
   EmployeeTargetReportColumns,
   dpDebitMandateColumns,
   ClientMandateReport,
+  AmcMembershipHeader,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1451,6 +1452,10 @@ const DataTable = ({
       }));
     } else if (activeMenu === "Employee Brokerage Achieved") {
       return EmpBrokerageAchieved.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Referal Entry") {
+      return AmcMembershipHeader.map((column) => ({
         ...column,
       }));
     } else if (activeMenu === "Employee Non-Brokerage Achieved") {

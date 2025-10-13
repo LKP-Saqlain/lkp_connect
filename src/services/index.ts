@@ -931,4 +931,11 @@ export const apiServices = {
   ExecuteUpiMandate: async (payload: any) => {
     return await apiService("POST", endpoints.ExecuteUpiMandate, payload);
   },
+  GetClientModuleDataForAmc: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetClientModuleDataForAmc,
+      payload
+    );
+  },
 };

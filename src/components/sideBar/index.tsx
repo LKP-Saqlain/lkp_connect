@@ -100,6 +100,7 @@ import MtfComponent from "../../pages/RMS/Mtf";
 import UnpledgeRequest from "../../pages/UnpledgeRequest";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MandatePayment from "../../pages/ThirdParty/Mandate";
+import AmcMembership from "../../pages/AmcMembership";
 // import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
 
 const drawerWidth = 260;
@@ -698,9 +699,9 @@ const SideBar = () => {
     "Unpledge Report": <UnpledgeRequest activeSubItem={activeSubItem} />,
   };
 
-  // const referalSubItems: Record<string, JSX.Element> = {
-  //   "Referal Entry Status": <Main activeSubItem={activeSubItem} />,
-  // };
+  const referalSubItems: Record<string, JSX.Element> = {
+    "Referal Entry": <AmcMembership activeSubItem={activeSubItem} />,
+  };
 
   const complianceSubItems: Record<string, JSX.Element> = {
     // "UCCCode MATCH": (
@@ -816,6 +817,7 @@ const SideBar = () => {
       8: () => getSubItemComponent(complianceSubItems),
       9: () => getSubItemComponent(kycSubItems),
       10: () => <StockStudy />,
+      11: () => getSubItemComponent(referalSubItems),
       14: () => (
         <MutualFundIndex
         // activeSubItem={activeSubItem}
