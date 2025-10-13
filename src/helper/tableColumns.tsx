@@ -6731,35 +6731,63 @@ export const EmpBrokerageAchieved: GridColDef[] = [
     headerName: "Gross Brokerage",
     width: 150,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "netToLKPBrokerage",
     headerName: "Net To LKP Brokerage",
     width: 150,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "slbM_GrossBrokerage",
     headerName: "SLBM Gross Brokerage",
     width: 150,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "slbM_NetToLKPBrokerage",
     headerName: "SLBM Net To LKP Brokerage",
     width: 150,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
 ];
 export const EmpNonBrokerageAchieved: GridColDef[] = [
@@ -6785,7 +6813,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     headerName: "Insurance Gross",
     width: 150,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     disableColumnMenu: true,
   },
   {
@@ -6793,7 +6821,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     headerName: "Insurance Net To LKP",
     width: 170,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
   },
@@ -6802,7 +6830,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     headerName: "Loan Revenue",
     width: 140,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     disableColumnMenu: true,
   },
   {
@@ -6810,7 +6838,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     headerName: "MF Revenue",
     width: 130,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     disableColumnMenu: true,
   },
   {
@@ -6818,7 +6846,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     headerName: "Liquid Loans Revenue",
     width: 180,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
   },
@@ -6827,15 +6855,22 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     headerName: "SPIP Revenue",
     width: 130,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "trilogyRev",
     headerName: "Trilogy Revenue",
     width: 140,
     headerAlign: "center",
-    align: "center",
+    align: "right",
     disableColumnMenu: true,
   },
 ];
