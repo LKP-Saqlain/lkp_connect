@@ -24,9 +24,11 @@ interface APContestData {
   mfauM_Net: number;
   freshCash: number;
   mfaum: number;
+  spipAccountCount: number;
+  insurancePremiumTarget: number;
 }
 
-const EMPContest = () => {
+const EMPContest = ({ activeMenu }: any) => {
   const [revenueCard, setRevenueCard] = useState({
     broking: 0,
     nonBroking: 0,
@@ -42,6 +44,8 @@ const EMPContest = () => {
     mfAUM_NET: 0,
     newClient: 0,
     reactivate: 0,
+    spipAchieved: 0,
+    insuranceAchieved: 0,
   });
   const [targetData, setTargetData] = useState<APContestData | null>(null);
   const [achievedData, setAchievedData] = useState<APContestData | null>(null);
@@ -103,6 +107,8 @@ const EMPContest = () => {
           const mfAUM_NET = data.mfaum || 0;
           const newClient = data.newClients || 0;
           const reactivate = data.reactivatedClients || 0;
+          const spipAchieved = data.spipClientsAchieved || 0;
+          const insuranceAchieved = data.insurancePremAchieved || 0;
 
           setAchieveCard({
             broking,
@@ -111,6 +117,8 @@ const EMPContest = () => {
             mfAUM_NET,
             newClient,
             reactivate,
+            spipAchieved,
+            insuranceAchieved,
           });
         }
       })
@@ -122,19 +130,28 @@ const EMPContest = () => {
       });
   }, []);
 
-  function formatIndianNumber(value?: number): string {
-    if (typeof value !== "number") return "₹0";
-    return `₹${value.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
+  function formatIndianNumber(
+    value?: number,
+    showCurrency: boolean = true
+  ): string {
+    if (typeof value !== "number" || isNaN(value))
+      return showCurrency ? "₹0" : "0";
+    const formatted = value.toLocaleString("en-IN", {
+      maximumFractionDigits: 0,
+    });
+    return showCurrency ? `₹${formatted}` : formatted;
   }
+
   return (
     <div>
       <Row style={{ marginTop: "20px" }}>
-        <Col xxl={4} lg={4} md={6} sm={12}>
+        <Col xxl={3} lg={3} md={6} sm={12}>
           <DashboardCard
+            activeMenu={activeMenu}
             title="Revenue Target"
             value={formatIndianNumber(revenueCard.broking)}
             animationData={RevenueImg}
-            note={isMobile && `* Contest Period - 1st October to 31st December`}
+            note={isMobile && `* Contest Period - 1st Oct to 31st Dec`}
             customClass={true}
             rightValue={formatIndianNumber(revenueCard.nonBroking)}
             subHeading="Broking"
@@ -142,8 +159,9 @@ const EMPContest = () => {
           />
         </Col>
 
-        <Col xxl={4} lg={4} md={6} sm={12}>
+        <Col xxl={3} lg={3} md={6} sm={12}>
           <DashboardCard
+            activeMenu={activeMenu}
             title="Clients Target"
             value={revenueCard.newClient}
             animationData={ActiveClient}
@@ -157,8 +175,9 @@ const EMPContest = () => {
           />
         </Col>
 
-        <Col xxl={4} lg={4} md={6} sm={12}>
+        <Col xxl={3} lg={3} md={6} sm={12}>
           <DashboardCard
+            activeMenu={activeMenu}
             title="Fresh Cash Margin Target"
             value={formatIndianNumber(targetData?.freshCashMargin)}
             animationData={CoinIcon}
@@ -167,10 +186,25 @@ const EMPContest = () => {
             rightValue={formatIndianNumber(targetData?.mfauM_Net)}
           />
         </Col>
+        <Col xxl={3} lg={3} md={6} sm={12}>
+          <DashboardCard
+            activeMenu={activeMenu}
+            title="SPIP Client Target"
+            value={formatIndianNumber(targetData?.spipAccountCount, false)}
+            animationData={CoinIcon}
+            customClass={true}
+            rightTitle="Insurance Target"
+            rightValue={formatIndianNumber(
+              targetData?.insurancePremiumTarget,
+              false
+            )}
+          />
+        </Col>
       </Row>
       <Row>
-        <Col xxl={4} lg={4} md={6} sm={12}>
+        <Col xxl={3} lg={3} md={6} sm={12}>
           <DashboardCard
+            activeMenu={activeMenu}
             title="Revenue Achieved"
             value={formatIndianNumber(achieveCard.broking)}
             animationData={RevenueImg}
@@ -181,8 +215,9 @@ const EMPContest = () => {
           />
         </Col>
 
-        <Col xxl={4} lg={4} md={6} sm={12}>
+        <Col xxl={3} lg={3} md={6} sm={12}>
           <DashboardCard
+            activeMenu={activeMenu}
             title="Clients Achieved"
             value={achieveCard.newClient}
             animationData={ActiveClient}
@@ -196,14 +231,27 @@ const EMPContest = () => {
           />
         </Col>
 
-        <Col xxl={4} lg={4} md={6} sm={12}>
+        <Col xxl={3} lg={3} md={6} sm={12}>
           <DashboardCard
+            activeMenu={activeMenu}
             title="Fresh Cash Margin Achieved"
-            value={achieveCard.freeCash_Margin}
+            value={formatIndianNumber(achieveCard.freeCash_Margin)}
+            // value={achieveCard.freeCash_Margin}
             animationData={CoinIcon}
             customClass={true}
             rightTitle="MF AUM Achieved"
             rightValue={"0"}
+          />
+        </Col>
+        <Col xxl={3} lg={3} md={6} sm={12}>
+          <DashboardCard
+            activeMenu={activeMenu}
+            title="SPIP Client Achieved"
+            value={achieveCard.spipAchieved}
+            animationData={CoinIcon}
+            customClass={true}
+            rightTitle="Insurance Achieved"
+            rightValue={achieveCard.insuranceAchieved}
           />
         </Col>
       </Row>

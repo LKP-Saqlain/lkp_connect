@@ -6657,8 +6657,18 @@ export const clientAPBrokerageColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    // valueFormatter: (params: any) => {
+    //   return `${params} %`;
+    // },
     valueFormatter: (params: any) => {
-      return `${params} %`;
+      const value = parseFloat(params);
+      if (isNaN(value)) return "0%";
+      return (
+        new Intl.NumberFormat("en-IN", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(value) + "%"
+      );
     },
   },
 ];
@@ -7833,15 +7843,15 @@ export const getAPContestReportColumns: GridColDef[] = [
   //   },
   //   // valueGetter: (params: any) => `${params.achievementPercentage ?? 0}%`,
   // },
-  {
-    field: "newClientCount",
-    headerName: " Clients Target",
-    flex: 1,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-    headerClassName: "header-wrap-custom",
-  },
+  // {
+  //   field: "newClientCount",
+  //   headerName: " Clients Target",
+  //   flex: 1,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   headerClassName: "header-wrap-custom",
+  // },
   {
     field: "clientsAchieved",
     headerName: "Clients Achieved",

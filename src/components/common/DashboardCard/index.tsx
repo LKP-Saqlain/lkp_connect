@@ -62,7 +62,7 @@ interface DashboardCardProps {
   rightValue?: number | string;
   rightSubHeading?: string;
   cardStyle?: any;
-  isCustomRender?: any;
+  // isCustomRender?: any;
   activeClient?: ClientData;
   uniqueTradedClient?: ClientData;
   newAccData?: ClientData;
@@ -70,6 +70,7 @@ interface DashboardCardProps {
   selectedButton?: any;
   setSelectedButton?: any;
   mainCustomClass?: any;
+  activeMenu?: any;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -90,7 +91,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   cardStyle,
   subHeading,
   rightSubHeading,
-  isCustomRender,
+  // isCustomRender,
   activeClient,
   uniqueTradedClient,
   newAccData,
@@ -98,6 +99,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   selectedButton,
   setSelectedButton,
   mainCustomClass,
+  activeMenu,
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -188,6 +190,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     ? "12px"
                     : "14px",
                   fontWeight: "bold",
+                  marginLeft:
+                    rightTitle === "Insurance Achieved" ? "2rem" : "0rem",
                 }}
               >
                 {rightTitle}
@@ -336,6 +340,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     >
                       {value}
                     </div>
+
+                    {/* Right: Image */}
                     <div
                       style={{
                         width: 100,
@@ -355,23 +361,22 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                         }
                         alt=""
                         style={{
-                          // width: "100%",
                           marginTop: value === "Iphone 16" ? "5rem" : "9rem",
                           height: value === "Iphone 16" ? "270px" : "150px",
                           objectFit: "contain",
-                          // marginBottom: "1rem",
                           marginRight: value !== "Iphone 16" ? "4rem" : "0rem",
                         }}
                       />
                     </div>
                   </div>
                 ) : (
-                  title !== "Client Target*" && (
+                  title !== "Client Target*" &&
+                  activeMenu?.trim().toLowerCase() !== "employee target" && (
                     <Lottie
                       loop
                       play
                       animationData={animationData}
-                      style={{ width: 40, height: 40 }}
+                      style={{ width: 30, height: 30 }}
                     />
                   )
                 )}
@@ -507,13 +512,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 }}
               >
                 <div className="d-flex align-items-center gap-2">
-                  <Lottie
-                    loop
-                    play
-                    animationData={animationData}
-                    style={{ width: 40, height: 40 }}
-                  />
-
                   <div
                     className="text-end"
                     style={{
@@ -699,19 +697,16 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
       {/* Note */}
       {note && (
         <div
-          className={!isCustomRender ? "movable-note" : ""}
-          style={
-            isCustomRender
-              ? {
-                  fontSize: "12px",
-                  position: "relative",
-                  color: "#6c757d",
-                  right: "4rem",
-                }
-              : undefined
-          }
+          style={{
+            // marginTop: "5px", // small spacing below the card
+            textAlign: "left",
+            color: "#6c757d",
+            fontSize: "12px",
+            fontFamily: "Public Sans",
+            marginLeft: "5px", // align with card padding
+          }}
         >
-          <span style={{ fontFamily: "Public Sans" }}>{note}</span>
+          {note}
         </div>
       )}
     </>

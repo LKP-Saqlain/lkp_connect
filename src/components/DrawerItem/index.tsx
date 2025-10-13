@@ -37,8 +37,8 @@ import { FaFileInvoice } from "react-icons/fa";
 import LocalPoliceIcon from "@mui/icons-material/LocalPolice";
 import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import StarBurst from "../../assets/images/starburst.png";
-import StarBurst1 from "../../assets/images/starburst1.png";
+// import StarBurst from "../../assets/images/starburst.png";
+// import StarBurst1 from "../../assets/images/starburst1.png";
 import StarBurst2 from "../../assets/images/starburst2.png";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 // import "./style.css";
@@ -66,7 +66,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
 }) => {
   const [activeSubItem, setActiveSubItem] = useState<string | null>(null);
   const isMenuOpen = activeMenu === title;
-  const images = [StarBurst, StarBurst1, StarBurst2];
+  const images = [StarBurst2];
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {

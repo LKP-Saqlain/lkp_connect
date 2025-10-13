@@ -843,7 +843,7 @@ const SideBar = () => {
         />
       ),
       30: () => getSubItemComponent(tpdSubItems),
-      31: () => <EmpContest />,
+      31: () => <EmpContest activeMenu={activeMenu} />,
       32: () => <ApnContest activeMenu={activeMenu} />,
       33: () => getSubItemComponent(AccountSubItems),
       34: () => <PledgeRequest activeMenu={activeMenu} />,

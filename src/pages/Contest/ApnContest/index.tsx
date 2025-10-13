@@ -213,10 +213,9 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                         }
                         customClass={true}
                         note={
-                          isMobile &&
-                          `* Contest Period - 1st October to 31st December`
+                          isMobile && `* Contest Period - 1st Oct to 31st Dec`
                         }
-                        isCustomRender={isCustomRender}
+                        // isCustomRender={isCustomRender}
                       />
                     </Col>
                   </Row>
@@ -263,8 +262,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                         activeClientsEmpty={true}
                         customClass={true}
                         note={
-                          isMobile &&
-                          `* Contest Period - 1st October to 31st December`
+                          isMobile && `* Contest Period - 1st Oct to 31st Dec`
                         }
                       />
                     </Col>
