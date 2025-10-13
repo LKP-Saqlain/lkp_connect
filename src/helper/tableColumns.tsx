@@ -9069,7 +9069,7 @@ export const AmcMembershipHeader: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "secondary_Holder_Name",
+    field: "secondary_Holder_Name", // must match JSON key exactly
     headerName: "Secondary Holder Name",
     flex: 1,
     minWidth: 180,
@@ -9077,9 +9077,8 @@ export const AmcMembershipHeader: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      if (!params?.value) return "-";
-      return params.value;
+    valueGetter: (params: any) => {
+      return params || "-";
     },
   },
   {
@@ -9091,9 +9090,8 @@ export const AmcMembershipHeader: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      if (!params?.value) return "-";
-      return params.value;
+    valueGetter: (params: any) => {
+      return params || "-";
     },
   },
   {
