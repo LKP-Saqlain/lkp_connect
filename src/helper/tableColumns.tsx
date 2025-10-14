@@ -9087,7 +9087,7 @@ export const AmcMembershipHeader: GridColDef[] = [
   },
   {
     field: "dP_ID",
-    headerName: "DP ID",
+    headerName: "BOID",
     flex: 1,
     minWidth: 150,
     disableColumnMenu: true,
@@ -9096,7 +9096,7 @@ export const AmcMembershipHeader: GridColDef[] = [
   },
   {
     field: "primary_Holder",
-    headerName: "Primary Holder",
+    headerName: "Primary Holder Name",
     flex: 1,
     minWidth: 180,
     disableColumnMenu: true,
@@ -9112,9 +9112,27 @@ export const AmcMembershipHeader: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      const mobile = params.value || ""; // Extract the mobile number
+
+      // Mask all digits except the first 2 and the last 2
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+
+      // Return tooltip with the masked mobile number
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
   },
   {
-    field: "secondary_Holder_Name",
+    field: "secondary_Holder_Name", // must match JSON key exactly
     headerName: "Secondary Holder Name",
     flex: 1,
     minWidth: 180,
@@ -9122,9 +9140,8 @@ export const AmcMembershipHeader: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      if (!params?.value) return "-";
-      return params.value;
+    valueGetter: (params: any) => {
+      return params || "-";
     },
   },
   {
@@ -9136,9 +9153,8 @@ export const AmcMembershipHeader: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      if (!params?.value) return "-";
-      return params.value;
+    valueGetter: (params: any) => {
+      return params || "-";
     },
   },
   {

@@ -699,9 +699,9 @@ const SideBar = () => {
     "Unpledge Report": <UnpledgeRequest activeSubItem={activeSubItem} />,
   };
 
-  const referalSubItems: Record<string, JSX.Element> = {
-    "Referal Entry": <AmcMembership activeSubItem={activeSubItem} />,
-  };
+  // const referalSubItems: Record<string, JSX.Element> = {
+  //   "Referal Entry": <AmcMembership activeSubItem={activeSubItem} />,
+  // };
 
   const complianceSubItems: Record<string, JSX.Element> = {
     // "UCCCode MATCH": (
@@ -817,7 +817,7 @@ const SideBar = () => {
       8: () => getSubItemComponent(complianceSubItems),
       9: () => getSubItemComponent(kycSubItems),
       10: () => <StockStudy />,
-      11: () => getSubItemComponent(referalSubItems),
+      // 11: () => getSubItemComponent(referalSubItems),
       14: () => (
         <MutualFundIndex
         // activeSubItem={activeSubItem}
@@ -849,6 +849,7 @@ const SideBar = () => {
       32: () => <ApnContest activeMenu={activeMenu} />,
       33: () => getSubItemComponent(AccountSubItems),
       34: () => <PledgeRequest activeMenu={activeMenu} />,
+      35: () => <AmcMembership activeMenu={activeMenu} />,
     };
 
     return dynamicMap[menu_order]?.() || null;
