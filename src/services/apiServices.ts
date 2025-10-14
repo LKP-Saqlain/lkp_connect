@@ -5,7 +5,7 @@ const apiService = async (
   endpoint: string,
   payload?: any,
   customHeaders: any = {},
-  timeout: number = 120000 //commented no need to set restricted timeout from frontend 14/10/2025
+  timeout: number = 500000 //commented no need to set restricted timeout from frontend 14/10/2025
 ) => {
   const config = {
     headers: { ...customHeaders },
