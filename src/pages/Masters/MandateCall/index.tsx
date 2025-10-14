@@ -53,9 +53,13 @@ const MandateCall = () => {
 
   const fetchMandateData = useCallback(() => {
     if (!decryptCode) return;
+    let payload = {
+      clientcode: decryptCode,
+      user_id: user_id,
+    };
     dispatch(showLoader(""));
     apiServices
-      .GetMandateCallBackDetails({ clientcode: decryptCode })
+      .GetMandateCallBackDetails(payload)
       .then((response) => {
         if (response?.status === 200) {
           const rawData = response?.data?.data;

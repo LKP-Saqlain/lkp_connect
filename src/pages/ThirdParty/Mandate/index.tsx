@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import { apiServices } from "../../../services";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import ShowToast from "../../../utils/toastUtils";
@@ -22,11 +22,19 @@ type MandateUser = {
 
 const MandatePayment = ({ activeSubItem }: any) => {
   const [userData, setUserData] = useState<MandateUser[]>([]);
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
+    let payload = {
+      user_id: user_id,
+    };
     dispatch(showLoader(""));
     apiServices
-      .CollectMandatePayment({})
+      .CollectMandatePayment(payload)
       .then((response) => {
         if (response?.status === 200) {
           console.log("Response", response?.data?.data);
