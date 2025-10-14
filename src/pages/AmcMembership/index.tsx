@@ -3,34 +3,41 @@ import { Card, CardBody, CardHeader, Container } from "reactstrap";
 import DataTable from "../../components/common/UserInfoTable";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
-import {
-  useDispatch,
-  // useSelector
-} from "react-redux";
-import {
-  AppDispatch,
-  // RootState
-} from "../../redux/store";
-
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import UserCapsules from "../ClientDetails/UserCapsules";
+import ComDropDown from "../../components/common/Dropdown/commonDropdown";
+
+type DropdownOption = {
+  label: string;
+  value: string;
+};
 
 const Index = ({ activeMenu }: any) => {
-  //   const [data, setData] = useState<any>();
-  //   const [flag, setFlag] = useState<boolean>(false);
   //   const [boId, setBoId] = useState("");
   const [selectedCapsule, setSelectedCapsule] = useState("Lifetime Membership");
   const [lifetimeData, setLifetimeData] = useState<any[]>([]);
   const [nonLifetimeData, setNonLifetimeData] = useState<any[]>([]);
-
-  //   const [filteredData, setFilteredData] = useState([]);
+  const [selectedZone, setSelectedZone] = useState<DropdownOption | null>(null);
+  const [selectedBranch, setSelectedBranch] = useState<DropdownOption | null>(
+    null
+  );
 
   const dispatch = useDispatch<AppDispatch>();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+  const { accessType } = useSelector(
+    (state: RootState) => state.AuthUser?.data?.data
+  );
+  // ... inside your component:
 
-  useEffect(() => {
+  const fetchData = () => {
     const payload = {
-      zone: "ALL",
-      branchCode: "ALL",
+      zone: selectedZone?.value || "ALL",
+      branchCode: selectedBranch?.value || "ALL",
       tradingCode: "ALL",
+      userId: user_id,
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
@@ -64,7 +71,12 @@ const Index = ({ activeMenu }: any) => {
       .finally(() => {
         dispatch(hideLoader());
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedZone, selectedBranch]);
+
   const tableData =
     selectedCapsule === "Lifetime Membership" ? lifetimeData : nonLifetimeData;
 
@@ -112,14 +124,21 @@ const Index = ({ activeMenu }: any) => {
           </CardHeader>
 
           <CardBody>
+            {accessType === "ALL" && (
+              <ComDropDown
+                onSelectionChange={(zone: any, branch: any) => {
+                  setSelectedZone(zone);
+                  setSelectedBranch(branch);
+                }}
+              />
+            )}
             <DataTable
               activeMenu={activeMenu}
               T6Data={tableData}
               // handleDownload={handleClick}
-              // showSearch={Array.isArray(data) && data.length > 0}
+              //   showSearch={Array.isArray(tableData) && tableData.length > 0}
               // handleSearchBasedOnInput={handleSearchBasedOnInput}
               // searchValue={searchQuery}
-              // T6Data={searchQuery ? filteredData : data}
             />
           </CardBody>
         </Card>
