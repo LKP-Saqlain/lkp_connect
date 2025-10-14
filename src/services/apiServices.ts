@@ -4,12 +4,11 @@ const apiService = async (
   method: "GET" | "POST",
   endpoint: string,
   payload?: any,
-  customHeaders: any = {},
-  timeout: number = 120000
+  customHeaders: any = {}
+  // timeout: number = 120000 //commented no need to set restricted timeout from frontend 14/10/2025
 ) => {
   const config = {
     headers: { ...customHeaders },
-    timeout: timeout,
   };
   try {
     let response;
