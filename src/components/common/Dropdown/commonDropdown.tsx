@@ -129,8 +129,8 @@ const ComDropDown = ({ onSelectionChange }: any) => {
           xs={12}
           style={{
             flex: "0 0 auto",
-            minWidth: "140px",
-            maxWidth: "150px",
+            // minWidth: "140px",
+            maxWidth: "180px",
           }}
           className="mb-3"
         >
@@ -180,8 +180,7 @@ const ComDropDown = ({ onSelectionChange }: any) => {
           xs={12}
           style={{
             flex: "0 0 auto",
-            minWidth: "140px",
-            maxWidth: "150px",
+            maxWidth: "180px",
           }}
           className="mb-3"
         >
