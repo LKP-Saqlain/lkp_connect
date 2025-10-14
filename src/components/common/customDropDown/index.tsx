@@ -136,24 +136,20 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
       selectedZone?.value
     );
     tradeData([]);
-    // setSelectedZone(null);
-    // setSelectedBranchCode(null);
-    let Id = localStorage.getItem("Id");
+
+    const Id = localStorage.getItem("Id");
     const payload = {
       user_id: Id,
       zone: accessType === "" ? "ALL" : selectedZone?.value,
       branchCode: accessType === "" ? "ALL" : selectedBranchCode?.value,
     };
+
     dispatch(showLoader("Please wait, we are processing your request..."));
+
     apiServices
       .ClientCash(payload)
       .then((response) => {
-        console.log(
-          "dropdown options ClientCashresponse",
-          response?.data?.data,
-          response
-        );
-        // handleValues(response?.data?.data);
+        console.log("ClientCash response", response);
         dispatch(hideLoader());
 
         if (response?.status === 200 && typeof response?.data === "object") {
@@ -162,33 +158,39 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
           setCustomLedgerData(response?.data?.data);
           handleValues(response?.data?.data, true);
         } else {
-          setResponseStatus(false); // hide search field if no valid data
+          setResponseStatus(false);
           setCustomLedgerData([]);
-          // ShowToast("error", response?.data);
           handleValues([], false);
         }
-
-        if (response?.status === 200) {
-          setResponseStatus(true);
-          console.log("userData", !responseStatus);
-          setUserData(response?.data?.data);
-          console.log("userData", response);
-          const dataTypeCheck = response?.data;
-          if (typeof dataTypeCheck === "object") {
-            setCustomLedgerData(response?.data?.data);
-          } else {
-            ShowToast("error", response?.data);
-            setCustomLedgerData([]);
-          }
-        }
+        console.log(responseStatus);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("ClientCash error:", error);
+        // setResponseStatus([])
+        const errors = error?.response?.data?.errors;
+
+        // ✅ Show Zone error only if it exists
+        if (errors?.Zone && errors.Zone.length > 0) {
+          ShowToast("error", errors.Zone[0]);
+        }
+
+        // ✅ Show BranchCode error only if it exists
+        if (errors?.BranchCode && errors.BranchCode.length > 0) {
+          ShowToast("error", errors.BranchCode[0]);
+        }
+
+        // Optional: handle other errors (network, etc.)
+        if (!errors?.Zone && !errors?.BranchCode) {
+          ShowToast("error", "Something went wrong. Please try again.");
+        }
+
         setCustomLedgerData([]);
       })
       .finally(() => {
         dispatch(hideLoader());
       });
   };
+
   // const handleExcelDownload = () => {
   //   tradeData([]);
   //   let Id = localStorage.getItem("Id");
