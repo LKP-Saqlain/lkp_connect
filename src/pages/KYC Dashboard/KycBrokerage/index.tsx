@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
-import NudgeTable from "../../../components/common/NudgeTable";
+// import NudgeTable from "../../../components/common/NudgeTable";
 
 type SegmentRowType = {
   clientcode: string;
@@ -16,10 +16,10 @@ type SegmentRowType = {
 
 const KycBrokerage = ({ activeSubItem }: any) => {
   const [kycData, setKycData] = useState([]);
-  const [combinedKycData, setCombinedKycData] = useState({});
+  // const [combinedKycData, setCombinedKycData] = useState({});
   const [flag, setFlag] = useState<boolean>(false);
   const [fileType, setFileType] = useState<string | null>(null);
-  const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
+  // const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
   const [segmentRow, setSegmentRow] = useState<SegmentRowType | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -41,27 +41,27 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       .finally(() => dispatch(hideLoader()));
   }, [flag]);
 
-  useEffect(() => {
-    if (!segmentRow) return; // ✅ wait until segmentRow is set
+  // useEffect(() => {
+  //   if (!segmentRow) return; // ✅ wait until segmentRow is set
 
-    dispatch(showLoader("Please wait..."));
+  //   dispatch(showLoader("Please wait..."));
 
-    const payload = {
-      clientcode: segmentRow.clientcode,
-      brokSeg: segmentRow.segment,
-    };
+  //   const payload = {
+  //     clientcode: segmentRow.clientcode,
+  //     brokSeg: segmentRow.segment,
+  //   };
 
-    apiServices
-      .GetBrokerageKycDetailsStatus(payload)
-      .then((response) => {
-        if (response?.status === 200) {
-          console.log("kyc-data", response?.data?.data);
-          setCombinedKycData(response?.data?.data);
-        }
-      })
-      .catch((err) => console.log("Error", err))
-      .finally(() => dispatch(hideLoader()));
-  }, [segmentRow]);
+  //   apiServices
+  //     .GetBrokerageKycDetailsStatus(payload)
+  //     .then((response) => {
+  //       if (response?.status === 200) {
+  //         console.log("kyc-data", response?.data?.data);
+  //         setCombinedKycData(response?.data?.data);
+  //       }
+  //     })
+  //     .catch((err) => console.log("Error", err))
+  //     .finally(() => dispatch(hideLoader()));
+  // }, [segmentRow]);
 
   const handleApproval = async (
     fullRow: {
@@ -267,9 +267,9 @@ const KycBrokerage = ({ activeSubItem }: any) => {
     }
   }, [segmentRow]);
 
-  const closeNudgeTable = () => {
-    setIsNudgeTableOpen(false);
-  };
+  // const closeNudgeTable = () => {
+  //   setIsNudgeTableOpen(false);
+  // };
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -297,7 +297,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
               T6Data={kycData}
               handleApproval={handleApproval}
               handleDownload={handlePreview}
-              setIsNudgeTableOpen={setIsNudgeTableOpen}
+              // setIsNudgeTableOpen={setIsNudgeTableOpen}
               setSegmentRow={setSegmentRow}
             />
           </CardBody>

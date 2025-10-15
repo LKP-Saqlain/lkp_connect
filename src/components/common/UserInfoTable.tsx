@@ -69,7 +69,7 @@ import "../../pages/ClientDetails/style.css";
 import EmailIcon from "@mui/icons-material/Email";
 import CustomModal from "./DPModal";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
+// import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import CancelIcon from "@mui/icons-material/Cancel";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Tooltip from "@mui/material/Tooltip";
@@ -194,9 +194,9 @@ const DataTable = ({
   isBankVerified,
   setIsBankVerified,
   handleUpdate,
-  setIsNudgeTableOpen,
-  setSegmentRow,
-}: SelectedWidgetProps) => {
+}: // setIsNudgeTableOpen,
+// setSegmentRow,
+SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
   const [modal_center, setmodal_center] = useState<boolean>(false);

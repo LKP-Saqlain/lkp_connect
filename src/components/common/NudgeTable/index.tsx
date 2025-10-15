@@ -28,8 +28,8 @@ const NudgeTable = ({
   filteredData,
   singleData,
   handleAction,
-  handleDownload,
-}: {
+}: // handleDownload,
+{
   isOpen: boolean;
   onClose: () => void;
   selectedReport: any;
