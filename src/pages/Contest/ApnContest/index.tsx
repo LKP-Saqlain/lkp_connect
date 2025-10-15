@@ -166,11 +166,14 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
   return (
     <>
       <div className="page-content page-view">
-        <UserCapsules
-          selectedCapsule={selectedCapsule}
-          handleClick={handleClick}
-          capsuleType="Partner Contest"
-        />
+        <div>
+          <UserCapsules
+            selectedCapsule={selectedCapsule}
+            handleClick={handleClick}
+            capsuleType="Partner Contest"
+            targetData={targetData}
+          />
+        </div>
         <Container fluid>
           <Row>
             <div className="card-body">
