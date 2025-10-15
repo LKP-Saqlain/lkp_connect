@@ -57,6 +57,8 @@ const MandateCall = () => {
       clientcode: decryptCode,
       user_id: user_id,
     };
+    console.log("payload", payload);
+
     dispatch(showLoader(""));
     apiServices
       .GetMandateCallBackDetails(payload)
