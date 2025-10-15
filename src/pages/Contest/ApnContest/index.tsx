@@ -256,10 +256,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
 
               {selectedCapsule === "Client Achieve" && (
                 <>
-                  <Row
-                    className="g-3"
-                    style={{ margin: "5px 0px", border: "2px solid black" }}
-                  >
+                  <Row className="g-3" style={{ margin: "5px 0px" }}>
                     <Col xxl={4} lg={4} md={6} sm={12}>
                       <DashboardCard
                         title="Client Target*"
