@@ -15,7 +15,7 @@ import {
   upcomingDormantClientColumns,
   newClientAddFiveDays,
   spipSubscriptionColumns,
-  getBrokerageKycDetails,
+  // getBrokerageKycDetails,
 } from "../../../helper/tableColumns.tsx";
 import { Stack, TextField } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
@@ -95,8 +95,8 @@ const NudgeTable = ({
         return upcomingDormantClientColumns;
       case "SPIP Subscription in last 10 days":
         return spipSubscriptionColumns;
-      case "More details about segment":
-        return getBrokerageKycDetails(handleDownload ?? (() => {}));
+      // case "More details about segment":
+      //   return getBrokerageKycDetails(handleDownload ?? (() => {}));
 
       default:
         return []; // If no predefined columns, return an empty array

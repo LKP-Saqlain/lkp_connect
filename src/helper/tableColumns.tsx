@@ -3861,15 +3861,6 @@ export const BrokerageModificationStatus: GridColDef[] = [
 ];
 export const BrokerageKyc: GridColDef[] = [
   {
-    field: "More Details",
-    headerName: "",
-    minWidth: 60,
-    flex: 0.5,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
     field: "zone",
     headerName: "Zone",
     minWidth: 60,
@@ -3878,95 +3869,93 @@ export const BrokerageKyc: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+  ...RegionalHead,
   {
-    field: "branchcode",
-    headerName: "Branch",
-    minWidth: 70,
-    flex: 0.6,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "clientcode",
-    headerName: "Client Code",
-    flex: 0.6,
-    minWidth: 100,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "left",
-  },
-  {
-    field: "clientName",
-    headerName: "Client Name",
-    flex: 1.5,
+    field: "kycApproveStatusDate",
+    headerName: "Date approved by RH",
+    flex: 1,
     minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
-  },
-
-  {
-    field: "segment",
-    headerName: "Segment",
-    flex: 1,
-    minWidth: 120,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "left",
+    sortable: false,
   },
 ];
-export const getBrokerageKycDetails = (
-  handleDownload: (row: any) => void
-): GridColDef[] => {
-  return [
-    ...RegionalHead.filter(
-      (col) =>
-        col.field !== "branchcode" &&
-        col.field !== "remark" &&
-        col.field !== "consentfilename"
-    ),
-    {
-      field: "consentfilename",
-      headerName: "Download",
-      disableColumnMenu: true,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (params: any) => {
-        const fileName = params.row?.consentfilename;
 
-        return fileName ? (
-          <button
-            onClick={() => handleDownload(params.row)}
-            style={{
-              color: "#11395C",
-              textDecoration: "underline",
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            <span title="Download">
-              <DownloadForOfflineIcon />
-            </span>
-          </button>
-        ) : (
-          "╶─"
-        );
-      },
-    },
-    {
-      field: "kycApproveStatusDate",
-      headerName: "Date approved by RH",
-      flex: 1,
-      minWidth: 180,
-      disableColumnMenu: true,
-      headerAlign: "center",
-      align: "left",
-      sortable: false,
-    },
-  ];
-};
+// export const getBrokerageKycDetails = (
+//   handleDownload: (row: any) => void
+// ): GridColDef[] => {
+//   return [
+//     ...RegionalHead.filter(
+//       (col) =>
+//         col.field !== "branchcode" &&
+//         col.field !== "remark" &&
+//         col.field !== "consentfilename"
+//     ),
+//     {
+//       field: "consentfilename",
+//       headerName: "Download",
+//       disableColumnMenu: true,
+//       headerAlign: "center",
+//       align: "center",
+//       renderCell: (params: any) => {
+//         const fileName = params.row?.consentfilename;
+
+//         return fileName ? (
+//           <button
+//             onClick={() => handleDownload(params.row)}
+//             style={{
+//               color: "#11395C",
+//               textDecoration: "underline",
+//               background: "none",
+//               border: "none",
+//               cursor: "pointer",
+//             }}
+//           >
+//             <span title="Download">
+//               <DownloadForOfflineIcon />
+//             </span>
+//           </button>
+//         ) : (
+//           "╶─"
+//         );
+//       },
+//     },
+//     {
+//       field: "kycApproveStatusDate",
+//       headerName: "Date approved by RH",
+//       flex: 1,
+//       minWidth: 180,
+//       disableColumnMenu: true,
+//       headerAlign: "center",
+//       align: "left",
+//       sortable: false,
+//     },
+//   ];
+// };
+
+// export const BrokerageKyc: GridColDef[] = [
+//   {
+//     field: "zone",
+//     headerName: "Zone",
+//     minWidth: 60,
+//     flex: 0.5,
+//     disableColumnMenu: true,
+//     headerAlign: "center",
+//     align: "center",
+//   },
+//   ...RegionalHead,
+//   {
+//     field: "kycApproveStatusDate",
+//     headerName: "Date approved by RH",
+//     flex: 1,
+//     minWidth: 180,
+//     disableColumnMenu: true,
+//     headerAlign: "center",
+//     align: "left",
+//     sortable: false,
+//   },
+// ];
 
 export const PreProofUploadColumns: GridColDef[] = [
   {
