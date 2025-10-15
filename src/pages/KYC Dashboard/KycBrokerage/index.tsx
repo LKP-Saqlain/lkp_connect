@@ -98,46 +98,46 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       console.log(kycPayload, secondPayload, "kycPayload,secondPayload");
 
       // If entryFlag is A, prioritize TechExcel API
-      // if (entryFlag === "A") {
-      //   const techExcelRes = await apiServices.GetTechExcelApiResponse(
-      //     secondPayload
-      //   );
-      //   console.log(
-      //     "TechExcel Response:",
-      //     techExcelRes,
-      //     techExcelRes?.data?.statusCode
-      //   );
-      //   if (
-      //     techExcelRes?.data?.statusCode === 200 ||
-      //     techExcelRes?.data?.isSuccess === true
-      //   ) {
-      //     // Proceed with KYC update
-      //     const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
-      //     if (kycRes?.status === 200) {
-      //       setFlag((prev) => !prev);
-      //     } else {
-      //       console.error("KYC API failed:", kycRes);
-      //       ShowToast("error", kycRes?.data?.msg || kycRes?.data?.message);
-      //     }
-      //   } else {
-      //     // TechExcel failed — show warning or stop
-      //     console.warn(
-      //       "TechExcel API failed or partially failed:",
-      //       techExcelRes
-      //     );
-      //     ShowToast("error", "Failed to update in Techexcel");
-      //     // Optional: show message to user
-      //     // toast.error("TechExcel failed: " + (techExcelRes.message || techExcelRes.data));
-      //   }
-      // } else {
-      //   // Not 'A' — directly update KYC
-      //   const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
-      //   if (kycRes?.status === 200) {
-      //     setFlag((prev) => !prev);
-      //   } else {
-      //     console.error("KYC API failed:", kycRes);
-      //   }
-      // }
+      if (entryFlag === "A") {
+        const techExcelRes = await apiServices.GetTechExcelApiResponse(
+          secondPayload
+        );
+        console.log(
+          "TechExcel Response:",
+          techExcelRes,
+          techExcelRes?.data?.statusCode
+        );
+        if (
+          techExcelRes?.data?.statusCode === 200 ||
+          techExcelRes?.data?.isSuccess === true
+        ) {
+          // Proceed with KYC update
+          const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
+          if (kycRes?.status === 200) {
+            setFlag((prev) => !prev);
+          } else {
+            console.error("KYC API failed:", kycRes);
+            ShowToast("error", kycRes?.data?.msg || kycRes?.data?.message);
+          }
+        } else {
+          // TechExcel failed — show warning or stop
+          console.warn(
+            "TechExcel API failed or partially failed:",
+            techExcelRes
+          );
+          ShowToast("error", "Failed to update in Techexcel");
+          // Optional: show message to user
+          // toast.error("TechExcel failed: " + (techExcelRes.message || techExcelRes.data));
+        }
+      } else {
+        // Not 'A' — directly update KYC
+        const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
+        if (kycRes?.status === 200) {
+          setFlag((prev) => !prev);
+        } else {
+          console.error("KYC API failed:", kycRes);
+        }
+      }
     } catch (err) {
       console.error("Error in API call:", err);
     } finally {
