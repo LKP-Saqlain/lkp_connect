@@ -21,6 +21,7 @@ interface userCapsules {
   activeClient?: any;
   inactiveClient?: any;
   capsuleType?: string;
+  targetData?: any;
 }
 
 const UserCapsules = ({
@@ -30,6 +31,7 @@ const UserCapsules = ({
   // activeClient,
   // inactiveClient,
   capsuleType,
+  targetData,
 }: userCapsules) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -49,92 +51,74 @@ const UserCapsules = ({
 
   return (
     <React.Fragment>
-      <Row>
-        {capsules.map((item, key) => (
-          <Col md={capsuleType === "DPDebit" ? 4 : 3} key={key}>
-            <Card
-              className={`rounded-pill capsule-hover ${
-                selectedCapsule ? "selected-widget" : ""
-              }`}
-              style={{
-                boxShadow:
-                  selectedCapsule === item.label
-                    ? "0 4px 12px rgba(0, 0, 0, 0.6)"
-                    : "0 4px 8px rgba(0, 0, 0, 0.4)",
-                border: "1px solid rgba(0, 0, 0, 0.2)",
-                backgroundColor:
-                  selectedCapsule === item.label ? "#11395C" : "#fff",
-                color: selectedCapsule === item.label ? "#fff" : "#000",
-                marginTop: "0px",
-                marginBottom: "8px",
-              }}
-            >
-              <CardBody>
-                <div
-                  className="d-flex align-items-center justify-content-row"
-                  style={{ height: "20px" }}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap", // responsive
+          gap: "10px",
+        }}
+      >
+        {/* Left: Capsules */}
+        <div style={{ flex: 1 }}>
+          <Row>
+            {capsules.map((item, key) => (
+              <Col md={capsuleType === "DPDebit" ? 4 : 3} key={key}>
+                <Card
+                  className={`rounded-pill capsule-hover ${
+                    selectedCapsule === item.label ? "selected-widget" : ""
+                  }`}
+                  style={{
+                    boxShadow:
+                      selectedCapsule === item.label
+                        ? "0 4px 12px rgba(0, 0, 0, 0.6)"
+                        : "0 4px 8px rgba(0, 0, 0, 0.4)",
+                    border: "1px solid rgba(0, 0, 0, 0.2)",
+                    backgroundColor:
+                      selectedCapsule === item.label ? "#11395C" : "#fff",
+                    color: selectedCapsule === item.label ? "#fff" : "#000",
+                    marginTop: "0px",
+                    marginBottom: "8px",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleClick?.(item.label)}
                 >
-                  <div className="flex-grow-1 text cursor-pointer">
+                  <CardBody className="text-center">
                     <p
-                      className="fw-semibold fs-12 mb-1 trade-dash-txt text-center"
+                      className="fw-semibold fs-12 mb-0 trade-dash-txt"
                       style={{
                         fontFamily: "Public Sans",
-                        marginBottom: 0,
                       }}
-                      onClick={() => handleClick?.(item.label)}
                     >
                       {item.label}
-                      {item.label === "Total Clients" && (
-                        <span
-                          style={{
-                            marginLeft: "8px",
-                            fontWeight: "600",
-                            color:
-                              selectedCapsule === item.label ? "#fff" : "#000",
-                          }}
-                        >
-                          {/* {new Intl.NumberFormat("en-IN").format(
-                            Math.round(totalCount)
-                          )} */}
-                        </span>
-                      )}
-                      {item.label === "Active Clients" && (
-                        <span
-                          style={{
-                            marginLeft: "8px",
-                            fontWeight: "600",
-                            color:
-                              selectedCapsule === item.label ? "#fff" : "#000",
-                          }}
-                        >
-                          {/* {new Intl.NumberFormat("en-IN").format(
-                            Math.round(activeClient)
-                          )} */}
-                        </span>
-                      )}
-                      {item.label === "Inactive Clients" && (
-                        <span
-                          style={{
-                            marginLeft: "10px",
-                            fontWeight: "600",
-                            color:
-                              selectedCapsule === item.label ? "#fff" : "#000",
-                          }}
-                        >
-                          {/* {new Intl.NumberFormat("en-IN").format(
-                            Math.round(inactiveClient)
-                          )} */}
-                        </span>
-                      )}
                     </p>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+                  </CardBody>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
+
+        {targetData && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              textAlign: "right",
+              lineHeight: "1.6",
+              minWidth: "180px",
+              fontWeight: 500,
+            }}
+          >
+            <div>AP NAME: {targetData.apName || "-"}</div>
+            <div>AP CODE: {targetData.apCode || "-"}</div>
+          </div>
+        )}
+      </div>
     </React.Fragment>
   );
 };
+
 export default UserCapsules;

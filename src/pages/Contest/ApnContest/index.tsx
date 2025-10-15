@@ -166,11 +166,14 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
   return (
     <>
       <div className="page-content page-view">
-        <UserCapsules
-          selectedCapsule={selectedCapsule}
-          handleClick={handleClick}
-          capsuleType="Partner Contest"
-        />
+        <div>
+          <UserCapsules
+            selectedCapsule={selectedCapsule}
+            handleClick={handleClick}
+            capsuleType="Partner Contest"
+            targetData={targetData}
+          />
+        </div>
         <Container fluid>
           <Row>
             <div className="card-body">
@@ -253,7 +256,10 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
 
               {selectedCapsule === "Client Achieve" && (
                 <>
-                  <Row className="g-3" style={{ margin: "5px 0px" }}>
+                  <Row
+                    className="g-3"
+                    style={{ margin: "5px 0px", border: "2px solid black" }}
+                  >
                     <Col xxl={4} lg={4} md={6} sm={12}>
                       <DashboardCard
                         title="Client Target*"
