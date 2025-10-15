@@ -34,7 +34,7 @@ const CustomTabs = ({ TabClick }: customTabs) => {
             padding: "6px 12px",
             backgroundColor: "#e0e0e0",
             marginRight: "8px",
-
+            transition: "background-color 0.2s",
             "&.Mui-selected": {
               backgroundColor: "#11395C",
               color: "#fff",
@@ -48,7 +48,7 @@ const CustomTabs = ({ TabClick }: customTabs) => {
         <Tab label="Equity" />
         <Tab label="F&O" />
         <Tab label="Commodity" />
-        <Tab label="Currency" />
+        {/* <Tab label="Currency" /> */}
       </Tabs>
     </Box>
   );

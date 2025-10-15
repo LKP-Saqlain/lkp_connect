@@ -108,10 +108,11 @@
 }
 
 .trade-button {
-  margin-top: 20px;
-  padding: 4px 16px;
-  font-size: 13px;
+  /* margin-top: 20px; */
+  padding: 4px 40px;
+  font-size: 10px;
   border-radius: 6px;
+  
 }
 
 @media (max-width: 768px) {

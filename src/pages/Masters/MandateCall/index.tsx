@@ -295,18 +295,16 @@ const MandateCall = () => {
                               color: "#FFF",
                               border: "1px solid #11395C",
                             }}
-                          >
-                            {" "}
-                            Field
-                          </th>
+                          ></th>
                           <th
                             style={{
                               backgroundColor: "#11395C",
                               color: "#FFF",
                               border: "1px solid #11395C",
+                              paddingBottom: "20px",
                             }}
                           >
-                            Value
+                            {" "}
                           </th>
                         </tr>
                       </thead>
@@ -317,20 +315,20 @@ const MandateCall = () => {
                         }}
                       >
                         <tr>
-                          <td>Client Name</td>
+                          <td style={{ fontWeight: "bold" }}>Client Name</td>
                           <td>{data.clientName}</td>
                         </tr>
                         <tr></tr>
                         <tr>
-                          <td>Client Code</td>
+                          <td style={{ fontWeight: "bold" }}>Client Code</td>
                           <td>{data.clientcode}</td>
                         </tr>
                         <tr>
-                          <td>DP Code</td>
+                          <td style={{ fontWeight: "bold" }}>DP Code</td>
                           <td>{data.dpcode}</td>
                         </tr>
                         <tr>
-                          <td>DP ID</td>
+                          <td style={{ fontWeight: "bold" }}>DP ID</td>
                           <td>{data.dpid}</td>
                         </tr>
                       </tbody>

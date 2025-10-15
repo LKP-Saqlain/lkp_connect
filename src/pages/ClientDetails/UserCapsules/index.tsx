@@ -105,15 +105,15 @@ const UserCapsules = ({
             style={{
               display: "flex",
               flexDirection: "column",
+              fontSize: "13px",
               alignItems: "flex-end",
-              textAlign: "right",
-              lineHeight: "1.6",
-              minWidth: "180px",
-              fontWeight: 500,
+              // textAlign: "right",
+              fontWeight: 300,
             }}
           >
-            <div>AP NAME: {targetData.apName || "-"}</div>
-            <div>AP CODE: {targetData.apCode || "-"}</div>
+            {/* <div>AP NAME: {targetData.apName || "-"}</div>
+            <div>AP CODE: {targetData.apCode || "-"}</div> */}
+            {`${targetData?.apName} / ${targetData?.apCode}`}
           </div>
         )}
       </div>

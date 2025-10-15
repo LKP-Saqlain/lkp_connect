@@ -1365,8 +1365,12 @@ const ModalComponent = ({
                 <Col lg={12}>
                   <FormControl fullWidth>
                     <label style={{ fontSize: "12px" }} className="form-label">
-                      Date of Communication
+                      <span>
+                        Date of Communication{" "}
+                        <span style={{ color: "red" }}>*</span>
+                      </span>
                     </label>
+
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
                         format="DD/MM/YYYY"
@@ -1482,7 +1486,13 @@ const ModalComponent = ({
                 </Col>
 
                 <FileUploadField
-                  label="Upload Proof of Communication"
+                  // label="Upload Proof of Communication"
+                  label={
+                    <span>
+                      Upload Proof of Communication{" "}
+                      <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   fieldName="uploadProof"
                   fileRef={fileInputRef}
                   file={uploadedFile}
@@ -1501,7 +1511,11 @@ const ModalComponent = ({
             {isMarketingMaterial && (
               <>
                 <FileUploadField
-                  label="Upload Images"
+                  label={
+                    <span>
+                      Upload Images <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
                   fieldName="image"
                   fileRef={fileInputRefImage}
                   file={uploadedImageM}
@@ -1528,7 +1542,9 @@ const ModalComponent = ({
 
                 <Col lg={12}>
                   <label style={{ fontSize: "12px" }} className="form-label">
-                    Description
+                    <span>
+                      Description <span style={{ color: "red" }}>*</span>
+                    </span>
                   </label>
                   <TextField
                     fullWidth
@@ -1551,7 +1567,12 @@ const ModalComponent = ({
                 </Col>
 
                 <FileUploadField
-                  label="Upload Documents"
+                  label={
+                    <span>
+                      Upload Documents <span style={{ color: "red" }}>*</span>
+                    </span>
+                  }
+                  // label="Upload Documents *"
                   fieldName="fileUpload"
                   fileRef={fileInputRefDocument}
                   file={uploadedFileM}
