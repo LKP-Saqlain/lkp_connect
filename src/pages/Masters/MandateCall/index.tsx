@@ -315,20 +315,20 @@ const MandateCall = () => {
                         }}
                       >
                         <tr>
-                          <td style={{ fontWeight: "bold" }}>Client Name</td>
+                          <td>Client Name</td>
                           <td>{data.clientName}</td>
                         </tr>
                         <tr></tr>
                         <tr>
-                          <td style={{ fontWeight: "bold" }}>Client Code</td>
+                          <td>Client Code</td>
                           <td>{data.clientcode}</td>
                         </tr>
                         <tr>
-                          <td style={{ fontWeight: "bold" }}>DP Code</td>
+                          <td>DP Code</td>
                           <td>{data.dpcode}</td>
                         </tr>
                         <tr>
-                          <td style={{ fontWeight: "bold" }}>DP ID</td>
+                          <td>DP ID</td>
                           <td>{data.dpid}</td>
                         </tr>
                       </tbody>
