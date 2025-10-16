@@ -11,7 +11,7 @@ const FileUploadField = ({
   onChange,
   accept = ".pdf,.doc,.docx",
 }: {
-  label: string;
+  label: any;
   fieldName: string;
   fileRef: React.RefObject<HTMLInputElement>;
   file: File | null;

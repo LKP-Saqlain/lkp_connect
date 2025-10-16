@@ -1,9 +1,10 @@
 import { Divider } from "@mui/material";
 import React from "react";
-import { Card, CardBody, Button } from "reactstrap";
+import { Card, CardBody } from "reactstrap";
 import "./TradeCard.css";
 import dayjs from "dayjs";
 import { capitalizeEachWord } from "../../../utils";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 interface TradeCardProps {
   stockName?: any;
@@ -34,8 +35,8 @@ interface TradeCardProps {
 const TradeCard: React.FC<TradeCardProps> = ({
   stockName,
   exchange,
-  ltp,
-  ltpChange,
+  // ltp,
+  // ltpChange,
   stopLoss,
   recPrice,
   targetPrice,
@@ -60,11 +61,12 @@ const TradeCard: React.FC<TradeCardProps> = ({
       case "Open":
         return { bg: "#e6ffe6", color: "#009933", border: "#c2f0c2" };
       case "Closed":
-        return { bg: "#ffe6e6", color: "#cc0000", border: "#f5b3b3" };
+        return { bg: "#ffe6e6", color: "#d32f2f", border: "#f5b3b3" };
       default:
         return { bg: "#fff3e6", color: "#ff6600", border: "#ffd6b3" };
     }
   };
+
   const { bg, color, border } = getStatusColor();
 
   const cleanedDate = regnDate
@@ -101,6 +103,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
     expiry = result.expiry;
     strike = result.strike;
   }
+
   return (
     <Card className={type != "Mandate" ? "trade-card" : ""}>
       {type === "Mandate" ? (
@@ -214,11 +217,33 @@ const TradeCard: React.FC<TradeCardProps> = ({
         <CardBody className="trade-card-body">
           {/* Left */}
           <div className="trade-left">
-            <div className="trade-name">
+            <div
+              className="trade-name"
+              style={{ display: "flex", alignItems: "center", gap: "6px" }}
+            >
+              {/* Buy/Sell Badge */}
+              {buySell && (
+                <div
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "10px",
+                    color: buySell === "Buy" ? "#0a8a0a" : "#d32f2f",
+                    backgroundColor: buySell === "Buy" ? "#e8f5e9" : "#ffebee", // lighter background
+                    border: `1px solid ${
+                      buySell === "Buy" ? "#a5d6a7" : "#ef9a9a"
+                    }`, // subtle border
+                    borderRadius: "5px",
+                    padding: "2px 6px",
+                    display: "inline-block",
+                    minWidth: "20px",
+                    textAlign: "center",
+                  }}
+                >
+                  {buySell.charAt(0).toUpperCase()}
+                </div>
+              )}
+              {/* Stock Name */}
               {name} <span className="trade-exchange">{exchange}</span>
-              <span className="trade-ltp">
-                LTP {ltp} (+{ltpChange}%)
-              </span>
             </div>
 
             {["F&O", "Commodity", "Currency"].includes(category) && expiry && (
@@ -269,35 +294,48 @@ const TradeCard: React.FC<TradeCardProps> = ({
 
           {/* Right */}
           <div style={{ textAlign: "right" }}>
-            <div
-              className="trade-status"
-              style={{
-                background: bg,
-                color: color,
-                borderTop: `1px solid ${border}`,
-                borderLeft: `1px solid ${border}`,
-                borderRight: `1px solid ${border}`,
-              }}
-            >
-              {status}
-            </div>
-
             <div className="trade-tags">
               <span className="trade-tag trade-category">{category}</span>
               <span className="trade-tag trade-label">{tag}</span>
             </div>
 
             <div className="trade-valid-till">Valid Till</div>
-            <div className="trade-datetime">{dateTime}</div>
+            <div className="trade-datetime">
+              {(() => {
+                const parsedDate = dayjs(dateTime, "DD-MM-YYYY HH:mm:ss");
+                return parsedDate.isAfter(dayjs()) ? (
+                  parsedDate.format("DD-MMM-YYYY")
+                ) : (
+                  <RemoveIcon sx={{ fontSize: "15px", color: "#999" }} />
+                );
+              })()}
+            </div>
 
-            {buySell && (
+            {/* {buySell && (
               <Button
                 color={buySell === "Sell" ? "danger" : "success"}
                 className="trade-button"
               >
                 {buySell}
               </Button>
-            )}
+            )} */}
+
+            <div
+              style={{
+                fontWeight: 600,
+                fontSize: "13px",
+                color: color,
+                backgroundColor: bg,
+                border: `1px solid ${border}`,
+                borderRadius: "6px", // rounded corners
+                padding: "2px 8px",
+                display: "inline-block",
+                textAlign: "center",
+                minWidth: "60px",
+              }}
+            >
+              {status}
+            </div>
           </div>
         </CardBody>
       )}

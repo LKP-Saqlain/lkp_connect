@@ -20,18 +20,26 @@ const SessionExpiryHandler = () => {
   );
   const tokenExpiryTime = data?.data?.tokenExpiryTime;
 
-  const excludedPaths = ["/", "/authorization", "/DPMandate/:encryptedCode"];
+  const excludedPaths = ["/", "/authorization"];
+
+  const isMandatePath = (path: string) => {
+    return path.startsWith("/DPMandate/"); // matches any /DPMandate/<anything>
+  };
 
   useEffect(() => {
     const currentPath = location.pathname;
-    const isExcluded = excludedPaths.includes(currentPath);
 
+    const isExcluded = excludedPaths.includes(currentPath);
     const cameFromExcludedPath =
       excludedPaths.includes(prevPathRef.current || "") ||
-      (prevPathRef.current || "").startsWith("/DPMandate/:encryptedCode");
-    console.log("excluededPaths", isExcluded);
+      isMandatePath(prevPathRef.current || "");
 
-    if (isNewUser || isExcluded || cameFromExcludedPath) {
+    if (
+      isNewUser ||
+      isExcluded ||
+      cameFromExcludedPath ||
+      isMandatePath(currentPath)
+    ) {
       prevPathRef.current = currentPath;
       return;
     }

@@ -13,6 +13,7 @@ import ShowToast from "../../utils/toastUtils";
 import Nudge from "../../components/common/Nudge";
 import TradeCard from "../../components/common/tradeCard";
 import ResearchTabs from "../../components/common/CustomCards";
+import dayjs from "dayjs";
 // import { Pagination } from "@mui/material";
 
 interface T6Selling {
@@ -68,6 +69,9 @@ const DashboardCrypto = ({
   const [commodityCalls, setCommodityCalls] = useState<any[]>([]);
   const [currencyCalls, setCurrencyCalls] = useState<any[]>([]);
   const [filteredCalls, setFilteredCalls] = useState<any[]>([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>("All");
+  const [uniqueSubCategories, setUniqueSubCategories] = useState<string[]>([]);
+  const [selectedTab, setSelectedTab] = useState<number>(0);
   //pagination logic
   // const [currentPage, setCurrentPage] = useState(1);
   // const recordsPerPage = 10;
@@ -326,13 +330,34 @@ const DashboardCrypto = ({
     setmodal_animationZoom((prev) => !prev);
   }
 
-  const handleTabClick = (value: any) => {
-    console.log("tabClickValue", value);
-    if (value === 0) setFilteredCalls(allCalls);
-    if (value === 1) setFilteredCalls(equityCalls);
-    if (value === 2) setFilteredCalls(foCalls);
-    if (value === 3) setFilteredCalls(commodityCalls);
-    if (value === 4) setFilteredCalls(currencyCalls);
+  const handleTabClick = (value: number) => {
+    setSelectedTab(value);
+    let filteredByCategory = [];
+
+    if (value === 0) filteredByCategory = allCalls;
+    if (value === 1)
+      filteredByCategory = allCalls.filter(
+        (item) => item.category === "Equity"
+      );
+    if (value === 2)
+      filteredByCategory = allCalls.filter((item) => item.category === "F&O");
+    if (value === 3)
+      filteredByCategory = allCalls.filter(
+        (item) => item.category === "Commodity"
+      );
+    if (value === 4)
+      filteredByCategory = allCalls.filter(
+        (item) => item.category === "Currency"
+      );
+
+    // Apply subCategory filter if not "All"
+    if (selectedSubCategory && selectedSubCategory !== "All") {
+      filteredByCategory = filteredByCategory.filter(
+        (item) => item.subCategory === selectedSubCategory
+      );
+    }
+
+    setFilteredCalls(filteredByCategory);
   };
 
   useEffect(() => {
@@ -365,13 +390,29 @@ const DashboardCrypto = ({
             setCommodityCalls(
               data.filter((item: any) => item.category === "Commodity")
             );
-            console.log("commodityRecords", commodityCalls);
 
             setCurrencyCalls(
               data.filter((item: any) => item.category === "Currency")
             );
 
-            // default: show all
+            const uniqueSubs: any = [
+              "All",
+              ...Array.from(new Set(data.map((item: any) => item.subCategory))),
+            ];
+            setUniqueSubCategories(uniqueSubs);
+
+            uniqueSubs.forEach((subCat: any, index: any) => {
+              console.log(`${index + 1}. ${subCat}`);
+            });
+
+            console.log(
+              "dummyConsole",
+              uniqueSubs,
+              equityCalls,
+              foCalls,
+              commodityCalls,
+              currencyCalls
+            );
             setFilteredCalls(data);
           }
           dispatch(hideLoader());
@@ -382,6 +423,34 @@ const DashboardCrypto = ({
         });
     }
   }, [dispatch, selectedItem]);
+
+  const handleSubCategoryFilter = (subCat: string) => {
+    setSelectedSubCategory(subCat);
+
+    let filtered = allCalls;
+    switch (selectedTab) {
+      case 1:
+        filtered = filtered.filter((item) => item.category === "Equity");
+        break;
+      case 2:
+        filtered = filtered.filter((item) => item.category === "F&O");
+        break;
+      case 3:
+        filtered = filtered.filter((item) => item.category === "Commodity");
+        break;
+      case 4:
+        filtered = filtered.filter((item) => item.category === "Currency");
+        break;
+      default:
+        break; // 0 or All
+    }
+
+    if (subCat !== "All") {
+      filtered = filtered.filter((item) => item.subCategory === subCat);
+    }
+
+    setFilteredCalls(filtered);
+  };
 
   document.title = document.title = "LKP Securities | Trading";
   return (
@@ -440,28 +509,83 @@ const DashboardCrypto = ({
               >
                 <CardBody>
                   <ResearchTabs TabClick={handleTabClick} />
+                  <div
+                    style={{
+                      marginBottom: "12px",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "2px",
+                    }}
+                  >
+                    {uniqueSubCategories?.map((subCat) => (
+                      <div
+                        key={subCat}
+                        onClick={() => handleSubCategoryFilter(subCat)}
+                        style={{
+                          fontWeight: 500,
+                          fontSize: "13px",
+                          color:
+                            selectedSubCategory === subCat ? "#fff" : "#11395C",
+                          backgroundColor:
+                            selectedSubCategory === subCat
+                              ? "#11395C"
+                              : "#e6f0ff",
+                          borderRadius: "5px",
+                          padding: "4px 12px",
+                          minWidth: "50px",
+                          height: "20px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          cursor: "pointer",
+                          textAlign: "center",
+                          transition: "background-color 0.2s",
+                          userSelect: "none",
+                          marginRight: "2px",
+                        }}
+                      >
+                        {subCat}
+                      </div>
+                    ))}
+                  </div>
+
                   <div>
                     {filteredCalls.length > 0 ? (
-                      // currentRecords.map((item, index) => (  //Only for pagination
-                      filteredCalls.map((item, index) => (
-                        <TradeCard
-                          key={index}
-                          stockName={item.scripName}
-                          exchange={`${item.exchange}`}
-                          ltp={parseFloat(item.lastTradedPrice)}
-                          ltpChange={0}
-                          stopLoss={parseFloat(item.stopLoss)}
-                          recPrice={parseFloat(item.price)}
-                          targetPrice={parseFloat(item.targetPrice)}
-                          status={item.status}
-                          category={item.category}
-                          tag={item.subCategory}
-                          dateTime={item.validity}
-                          partialProfitText={item.statusDescreption}
-                          buySell={item.buySell}
-                          type="ResearchCall"
-                        />
-                      ))
+                      [...filteredCalls]
+                        .sort((a, b) => {
+                          const dateA = dayjs(
+                            a.validity,
+                            "DD-MM-YYYY HH:mm:ss"
+                          );
+                          const dateB = dayjs(
+                            b.validity,
+                            "DD-MM-YYYY HH:mm:ss"
+                          );
+
+                          if (!dateA.isValid()) return 1; // invalid dates go last
+                          if (!dateB.isValid()) return -1;
+
+                          return dateB.valueOf() - dateA.valueOf(); // descending
+                        })
+                        .map((item, index) => (
+                          <TradeCard
+                            key={index}
+                            stockName={item.scripName}
+                            exchange={`${item.exchange}`}
+                            ltp={parseFloat(item.lastTradedPrice)}
+                            ltpChange={0}
+                            stopLoss={parseFloat(item.stopLoss)}
+                            recPrice={parseFloat(item.price)}
+                            targetPrice={parseFloat(item.targetPrice)}
+                            status={item.status}
+                            category={item.category}
+                            tag={item.subCategory}
+                            dateTime={item.validity}
+                            partialProfitText={item.statusDescreption}
+                            buySell={item.buySell}
+                            type="ResearchCall"
+                          />
+                        ))
                     ) : (
                       <>
                         <Card
