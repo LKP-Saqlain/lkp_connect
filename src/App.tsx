@@ -106,7 +106,7 @@ const App = () => {
               />
             }
           />
-          <Route
+          {/* <Route
             path="/DPMandate"
             element={
               <PrivateRoute customLogin={false} dashElement={<DpMandate />} />
@@ -117,7 +117,9 @@ const App = () => {
             element={
               <PrivateRoute customLogin={false} dashElement={<DpMandate />} />
             }
-          />
+          /> */}
+          <Route path="/DPMandate" element={<DpMandate />} />
+          <Route path="/DPMandate/:encryptedCode" element={<DpMandate />} />
         </Routes>
       </Suspense>
     </Router>
