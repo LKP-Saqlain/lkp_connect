@@ -55,7 +55,7 @@ const MandateCall = () => {
     if (!decryptCode) return;
     let payload = {
       clientcode: decryptCode,
-      user_id: user_id,
+      // user_id: user_id,
     };
     console.log("payload", payload);
 
