@@ -3,14 +3,23 @@ import ClientInfo from "./ClientInfo";
 import PaymentChoice from "./PaymentChoice";
 import Logo from "../../assets/logo.png";
 import LedgerOtp from "./Ledger/LedgerOtp";
-import { Card, CardHeader, Container } from "reactstrap";
+import { Button, Card, CardHeader, Container } from "reactstrap";
 import ESign from "./CommonSteps/ESign";
 import TariffForm from "./CommonSteps/TariffForm";
 import Confirmation from "./CommonSteps/Confirmation";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AmcMembership = () => {
   const [step, setStep] = useState(1);
   const [flow, setFlow] = useState<"ledger" | "online" | null>(null);
+  const [clientData, setClientData] = useState<any>(null);
+
+  const location = useLocation();
+  const selectedRow = location.state?.selectedRow;
+  const navigate = useNavigate();
+  useEffect(() => {
+    console.log("Received row:", selectedRow);
+  }, [selectedRow]);
 
   const next = () => setStep((s) => s + 1);
 
@@ -55,10 +64,30 @@ const AmcMembership = () => {
               >
                 Online Lifetime AMC Scheme Activation
               </h5>
+              <Button
+                color="primary"
+                style={{
+                  // padding: "0.6rem 2rem",
+                  borderRadius: "6px",
+                  backgroundColor: "#003366",
+                  border: "none",
+                }}
+                onClick={() => navigate("/dashboard")}
+              >
+                back to dashboard
+              </Button>
             </CardHeader>
-            {step === 1 && <ClientInfo onNext={next} />}
+            {step === 1 && (
+              <ClientInfo
+                onNext={next}
+                selectedRow={selectedRow}
+                setClientData={setClientData}
+              />
+            )}
+
             {step === 2 && (
               <PaymentChoice
+                clientData={clientData}
                 onLedger={() => {
                   setFlow("ledger");
                   next();
@@ -72,18 +101,24 @@ const AmcMembership = () => {
 
             {flow === "ledger" && (
               <>
-                {step === 3 && <LedgerOtp onNext={next} />}
+                {step === 3 && (
+                  <LedgerOtp onNext={next} clientData={clientData} />
+                )}
                 {step === 4 && <Confirmation onNext={next} status={1} />}
-                {step === 5 && <TariffForm onNext={next} />}
-                {step === 6 && <ESign />}
+                {step === 5 && (
+                  <TariffForm onNext={next} selectedRow={selectedRow} />
+                )}
+                {step === 6 && <ESign selectedRow={selectedRow} />}
               </>
             )}
 
             {flow === "online" && (
               <>
                 {step === 3 && <Confirmation onNext={next} status={3} />}
-                {step === 4 && <TariffForm onNext={next} />}
-                {step === 5 && <ESign />}
+                {step === 4 && (
+                  <TariffForm onNext={next} selectedRow={selectedRow} />
+                )}
+                {step === 5 && <ESign selectedRow={selectedRow} />}
               </>
             )}
           </Card>

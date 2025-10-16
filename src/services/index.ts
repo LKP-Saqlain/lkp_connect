@@ -938,4 +938,10 @@ export const apiServices = {
       payload
     );
   },
+  GetClientModuleDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientModuleDetails, payload);
+  },
+  ProcessOTP: async (payload: any) => {
+    return await apiService("POST", endpoints.ProcessOTP, payload);
+  },
 };

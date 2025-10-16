@@ -9064,7 +9064,7 @@ export const ClientMandateReport: GridColDef[] = [
   },
 ];
 
-export const AmcMembershipHeader: GridColDef[] = [
+export const AmcLifeMembership: GridColDef[] = [
   {
     field: "trading_Code",
     headerName: "Trading Code",
@@ -9122,7 +9122,7 @@ export const AmcMembershipHeader: GridColDef[] = [
   },
   {
     field: "secondary_Holder_Name", // must match JSON key exactly
-    headerName: "Secondary Holder Name",
+    headerName: "Second Holder Name",
     flex: 1,
     minWidth: 180,
     disableColumnMenu: true,
@@ -9174,4 +9174,16 @@ export const AmcMembershipHeader: GridColDef[] = [
     align: "center",
     headerClassName: "header-wrap-custom",
   },
+];
+export const AmcNonLifeMembership: GridColDef[] = [
+  {
+    field: "MoreDetails",
+    headerName: "More Details",
+    flex: 1,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  ...AmcLifeMembership,
 ];

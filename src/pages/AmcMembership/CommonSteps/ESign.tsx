@@ -1,34 +1,37 @@
-import React from "react";
 import { Row, Col, Button } from "reactstrap";
 
 interface ESignProps {
   onPrimarySign?: () => void;
   onSecondarySign?: () => void;
+  onThirdSign?: () => void;
+  selectedRow: any;
 }
 
-const ESign: React.FC<ESignProps> = ({ onPrimarySign, onSecondarySign }) => {
+const ESign = ({
+  onPrimarySign,
+  onSecondarySign,
+  onThirdSign,
+  selectedRow,
+}: ESignProps) => {
+  console.log(selectedRow, "selectedRow from eSign");
+
   const holders = [
     {
-      name: "Mahesh Ganesh Sharma",
+      name: selectedRow?.primary_Holder,
       type: "Primary Holder",
       onClick: onPrimarySign,
     },
     {
-      name: "Suresh Ganesh Sharma",
-      type: "Secondary Holder",
+      name: selectedRow?.secondary_Holder_Name,
+      type: "Second Holder",
       onClick: onSecondarySign,
     },
     {
-      name: "Suresh Ganesh Sharma",
-      type: "Secondary Holder",
-      onClick: onSecondarySign,
+      name: selectedRow?.third_Holder_Name,
+      type: "Third Holder",
+      onClick: onThirdSign, // you can make separate handler if needed
     },
-    {
-      name: "Suresh Ganesh Sharma",
-      type: "Secondary Holder",
-      onClick: onSecondarySign,
-    },
-  ];
+  ].filter((holder) => holder.name?.trim()); // ✅ Only include non-empty names
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>

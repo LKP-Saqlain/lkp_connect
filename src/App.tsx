@@ -9,7 +9,7 @@ import SessionExpiryHandler from "./pages/Authentication/sessionExpiryHandler";
 import "./Global.css";
 import ChangePassword from "./pages/Authentication/ChangePassword";
 import Maintenance from "./pages/Maintenance";
-import AmcMembership from "./pages/AmcMembership/Steps";
+import AmcMembershipSteps from "./pages/AmcMembership/Steps";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(
@@ -87,7 +87,7 @@ const App = () => {
             element={
               <PrivateRoute
                 customLogin={false}
-                dashElement={<AmcMembership />}
+                dashElement={<AmcMembershipSteps />}
               />
             }
           />

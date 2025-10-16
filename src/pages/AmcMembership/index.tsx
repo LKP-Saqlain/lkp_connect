@@ -14,7 +14,6 @@ type DropdownOption = {
 };
 
 const Index = ({ activeMenu }: any) => {
-  //   const [boId, setBoId] = useState("");
   const [selectedCapsule, setSelectedCapsule] = useState("Lifetime Membership");
   const [lifetimeData, setLifetimeData] = useState<any[]>([]);
   const [nonLifetimeData, setNonLifetimeData] = useState<any[]>([]);
@@ -81,7 +80,7 @@ const Index = ({ activeMenu }: any) => {
     selectedCapsule === "Lifetime Membership" ? lifetimeData : nonLifetimeData;
 
   const handleClick = (value: string) => {
-    console.log("You clicked the Chip.", value);
+    console.log(activeMenu, "You clicked the Chip.", value);
     setSelectedCapsule(value);
   };
 
@@ -133,7 +132,7 @@ const Index = ({ activeMenu }: any) => {
               />
             )}
             <DataTable
-              activeMenu={activeMenu}
+              selectedWidget={selectedCapsule}
               T6Data={tableData}
               // handleDownload={handleClick}
               //   showSearch={Array.isArray(tableData) && tableData.length > 0}
