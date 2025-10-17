@@ -1549,7 +1549,7 @@ SelectedWidgetProps) => {
                     marginRight: 5,
                   }}
                 >
-                  <Tooltip title={"View Details"} arrow placement="top">
+                  {/* <Tooltip title={"View Details"} arrow placement="top">
                     <OpenInNewIcon
                       style={{ cursor: "pointer", color: "#11395C" }}
                       onClick={() => {
@@ -1558,8 +1558,8 @@ SelectedWidgetProps) => {
                         });
                       }}
                     />
-                  </Tooltip>
-                  {/* <Tooltip title={"View Details"} arrow placement="top">
+                  </Tooltip> */}
+                  <Tooltip title={"View Details"} arrow placement="top">
                     <OpenInNewIcon
                       style={{ cursor: "pointer", color: "#11395C" }}
                       onClick={() => {
@@ -1578,7 +1578,7 @@ SelectedWidgetProps) => {
                         window.open("/AmcMembership", "_blank");
                       }}
                     />
-                  </Tooltip> */}
+                  </Tooltip>
                 </div>
               </div>
             ),

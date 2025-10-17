@@ -29,7 +29,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
   useEffect(() => {
     const sendOtp = async () => {
       const payload = {
-        // mobileNo: clientData?.mobile_No || "99693727591",
+        // mobileNo: clientData?.mobile_No ,
         mobileNo: "99693727591",
         otp: "",
         action: "Send",
@@ -83,7 +83,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     }
 
     const payload = {
-      // mobileNo: clientData?.mobile_No || "99693727591",
+      // mobileNo: clientData?.mobile_No ,
       mobileNo: "99693727591",
       otp: enteredOtp,
       action: "Verify",
@@ -119,7 +119,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     setOtpSent(false);
 
     const payload = {
-      // mobileNo: clientData?.mobile_No || "99693727591",
+      // mobileNo: clientData?.mobile_No ,
       mobileNo: "99693727591",
       otp: "",
       action: "Send",
