@@ -351,7 +351,7 @@ const DashboardCrypto = ({
       );
 
     // Apply subCategory filter if not "All"
-    if (selectedSubCategory && selectedSubCategory !== "All") {
+    if (selectedSubCategory && selectedSubCategory !== "All" && value !== 0) {
       filteredByCategory = filteredByCategory.filter(
         (item) => item.subCategory === selectedSubCategory
       );
@@ -414,6 +414,11 @@ const DashboardCrypto = ({
               currencyCalls
             );
             setFilteredCalls(data);
+            console.log(
+              "uniqueSubCategories-->",
+              selectedTab,
+              uniqueSubCategories
+            );
           }
           dispatch(hideLoader());
         })
@@ -426,7 +431,7 @@ const DashboardCrypto = ({
 
   const handleSubCategoryFilter = (subCat: string) => {
     setSelectedSubCategory(subCat);
-
+    console.log("TestTestTest", selectedTab, subCat, filteredCalls);
     let filtered = allCalls;
     switch (selectedTab) {
       case 1:
@@ -452,7 +457,35 @@ const DashboardCrypto = ({
     setFilteredCalls(filtered);
   };
 
-  document.title = document.title = "LKP Securities | Trading";
+  const tabCategoryMap: Record<number, string> = {
+    1: "Equity",
+    2: "F&O",
+    3: "Commodity",
+    5: "Currency",
+  };
+
+  const filteredSubCategories = uniqueSubCategories.filter((subCat) => {
+    // For 'All' (0) and 'Fundamental' (4), show all subcategories
+    if (selectedTab === 0 || selectedTab === 4) return true;
+
+    // For others, only show subcategories that have data
+    return allCalls.some(
+      (item) =>
+        item.category === tabCategoryMap[selectedTab] &&
+        item.subCategory === subCat
+    );
+  });
+
+  const finalSubCategories =
+    selectedTab !== 0 && selectedTab !== 4
+      ? ["All", ...filteredSubCategories]
+      : filteredSubCategories;
+
+  useEffect(() => {
+    console.log("filteredCallsData", filteredCalls);
+  }, [filteredCalls]);
+
+  document.title = document.title = "LKP Securities | Zone Target";
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -509,45 +542,46 @@ const DashboardCrypto = ({
               >
                 <CardBody>
                   <ResearchTabs TabClick={handleTabClick} />
-                  <div
-                    style={{
-                      marginBottom: "12px",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "2px",
-                    }}
-                  >
-                    {uniqueSubCategories?.map((subCat) => (
-                      <div
-                        key={subCat}
-                        onClick={() => handleSubCategoryFilter(subCat)}
-                        style={{
-                          fontWeight: 500,
-                          fontSize: "13px",
-                          color:
-                            selectedSubCategory === subCat ? "#fff" : "#11395C",
-                          backgroundColor:
-                            selectedSubCategory === subCat
-                              ? "#11395C"
-                              : "#e6f0ff",
-                          borderRadius: "5px",
-                          padding: "4px 12px",
-                          minWidth: "50px",
-                          height: "20px",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          cursor: "pointer",
-                          textAlign: "center",
-                          transition: "background-color 0.2s",
-                          userSelect: "none",
-                          marginRight: "2px",
-                        }}
-                      >
-                        {subCat}
-                      </div>
-                    ))}
-                  </div>
+                  {selectedTab !== 0 && selectedTab !== 4 && (
+                    <div
+                      style={{
+                        marginBottom: "12px",
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: "2px",
+                      }}
+                    >
+                      {finalSubCategories.map((subCat) => (
+                        <div
+                          key={subCat}
+                          onClick={() => handleSubCategoryFilter(subCat)}
+                          style={{
+                            fontWeight: 500,
+                            fontSize: "10px",
+                            color:
+                              selectedSubCategory === subCat
+                                ? "#fff"
+                                : "#11395C",
+                            backgroundColor:
+                              selectedSubCategory === subCat
+                                ? "#11395C"
+                                : "#e6f0ff",
+                            borderRadius: "5px",
+                            padding: "4px 12px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            cursor: "pointer",
+                            userSelect: "none",
+                            transition: "background-color 0.2s ease",
+                            marginRight: "3px",
+                          }}
+                        >
+                          {subCat}
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
                   <div>
                     {filteredCalls.length > 0 ? (
@@ -584,6 +618,8 @@ const DashboardCrypto = ({
                             partialProfitText={item.statusDescreption}
                             buySell={item.buySell}
                             type="ResearchCall"
+                            exchSegment={item.exchSegment}
+                            selectedTab={selectedTab}
                           />
                         ))
                     ) : (
@@ -610,37 +646,6 @@ const DashboardCrypto = ({
                         </Card>
                       </>
                     )}
-                    {/* Below is only for pagination */}
-                    {/* {filteredCalls.length > recordsPerPage && (
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          // marginTop: "20px",
-                        }}
-                      >
-                        <Pagination
-                          count={totalPages}
-                          page={currentPage}
-                          onChange={handlePageChange}
-                          // color="primary"
-                          shape="circular"
-                          size="medium"
-                          sx={{
-                            "& .MuiPaginationItem-root": {
-                              color: "#11395C", // text color
-                            },
-                            "& .Mui-selected": {
-                              backgroundColor: "#11395C", // active page background
-                              color: "white", // active text color
-                            },
-                            "& .MuiPaginationItem-root:hover": {
-                              backgroundColor: "rgba(17,57,92,0.1)", // hover effect
-                            },
-                          }}
-                        />
-                      </div>
-                    )} */}
                   </div>
                 </CardBody>
               </Card>

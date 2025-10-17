@@ -30,6 +30,8 @@ interface TradeCardProps {
   bankAccNumber?: any;
   regnDate?: any;
   amount?: number;
+  exchSegment?: any;
+  selectedTab?: any;
 }
 
 const TradeCard: React.FC<TradeCardProps> = ({
@@ -55,6 +57,8 @@ const TradeCard: React.FC<TradeCardProps> = ({
   bankAccNumber,
   regnDate,
   amount,
+  exchSegment,
+  selectedTab,
 }) => {
   const getStatusColor = () => {
     switch (status) {
@@ -125,7 +129,13 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 marginBottom: "6px",
               }}
             >
-              <div style={{ fontWeight: 600, fontSize: "14px" }}>
+              <div
+                style={{
+                  fontWeight: 600,
+                  fontSize: "14px",
+                  border: "1px solid black",
+                }}
+              >
                 {clientName}
               </div>
               <div style={{ fontSize: "14px", color: "#666" }}>
@@ -226,16 +236,16 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 <div
                   style={{
                     fontWeight: 600,
-                    fontSize: "10px",
+                    fontSize: "12px",
                     color: buySell === "Buy" ? "#0a8a0a" : "#d32f2f",
                     backgroundColor: buySell === "Buy" ? "#e8f5e9" : "#ffebee", // lighter background
                     border: `1px solid ${
-                      buySell === "Buy" ? "#a5d6a7" : "#ef9a9a"
+                      buySell === "Buy" ? "#469949" : "#df3434"
                     }`, // subtle border
                     borderRadius: "5px",
                     padding: "2px 6px",
                     display: "inline-block",
-                    minWidth: "20px",
+                    minWidth: "25px",
                     textAlign: "center",
                   }}
                 >
@@ -243,11 +253,26 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 </div>
               )}
               {/* Stock Name */}
-              {name} <span className="trade-exchange">{exchange}</span>
+              <span style={{ fontSize: "14px", fontWeight: 700 }}>
+                {" "}
+                {name}{" "}
+              </span>
+              <span className="trade-exchange">{exchange}</span>
             </div>
 
             {["F&O", "Commodity", "Currency"].includes(category) && expiry && (
-              <div className="trade-expiry">
+              <div
+                className="trade-expiry"
+                // style={{ border: "1px solid black" }}
+              >
+                {(selectedTab === 2 || selectedTab === 3) && exchSegment && (
+                  <span
+                    className="trade-tag trade-category"
+                    style={{ marginRight: ".5rem" }}
+                  >
+                    {exchSegment.slice(0, 3).toUpperCase()}
+                  </span>
+                )}
                 {expiry} {strike && <span>{strike}</span>}
               </div>
             )}

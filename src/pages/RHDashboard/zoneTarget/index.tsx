@@ -1,0 +1,441 @@
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Label,
+  Row,
+} from "reactstrap";
+import { useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { apiServices } from "../../../services";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import ShowToast from "../../../utils/toastUtils";
+import DashboardCard from "../../../components/common/DashboardCard";
+import { extractBarModelData } from "../../../helper/method";
+import ZoneTargetChart from "../../../components/common/zoneTargetChart";
+
+interface FormValues {
+  selectedZone: { label: string; value: string } | null;
+}
+interface MetricData {
+  total: number;
+  direct: number;
+  indirect: number;
+}
+
+const ZoneTarget = ({ activeSubItem }: any) => {
+  const [noSortingGroup, setNoSortingGroup] = useState([]);
+  const [zoneTargetData, setZoneTargetData] = useState({
+    total: 10,
+    direct: 100,
+    indirect: 1000,
+  });
+  const [zoneTargetAchievedData, setZoneTargetAchievedData] = useState({
+    total: 20,
+    direct: 200,
+    indirect: 2000,
+  });
+  const [
+    zoneTargetAchievedPercentageData,
+    setZoneTargetAchievedPercentageData,
+  ] = useState({
+    total: 30,
+    direct: 300,
+    indirect: 3000,
+  });
+  const [activeBadges, setActiveBadges] = useState<string[]>(
+    Array(4).fill("total")
+  );
+  const [zoneBarData, setZoneBarData] = useState({
+    barDirectModel: null,
+    barInDirectModel: null,
+    barInTotalModel: null,
+  });
+  const dispatch = useDispatch<AppDispatch>();
+  const { accessType } = useSelector(
+    (state: RootState) => state.AuthUser?.data?.data
+  );
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+
+  const formik = useFormik<FormValues>({
+    initialValues: {
+      selectedZone: null,
+    },
+    // validationSchema,
+    onSubmit: (values) => {
+      // Only called if no validation errors
+      console.log("activeSubItem values1-->", activeSubItem, values);
+      // handleSubmit(values);
+      // handleDownloadExcel();
+    },
+  });
+
+  useEffect(() => {
+    if (accessType === "ALL") {
+      const str = user_id;
+      const userType = localStorage.getItem("uIdType");
+      let extractUserId: string | null = null;
+
+      if (str) {
+        const parts = str.split("-");
+        if (parts.length > 1) {
+          extractUserId = parts[1];
+        }
+      }
+      let payload = {
+        user_id: str === "APN-7161" ? "5376" : extractUserId,
+        option: "zone",
+        userType:
+          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+        zone: "ALL",
+      };
+
+      const username = "admin";
+      const password = "admin";
+      const credentials = `${username}:${password}`;
+      const encodedCredentials = btoa(credentials); // Base64 encode
+      const LoginauthHeader = `Basic ${encodedCredentials}`;
+
+      const customHeaders = {
+        Authorization: LoginauthHeader, // Use LoginauthHeader for this request
+      };
+
+      dispatch(showLoader("Please wait, we are processing your request..."));
+      apiServices
+        .getDropDown(payload, customHeaders)
+        .then((res) => {
+          console.log("Response-->", res);
+          if (res?.status === 200) {
+            let zoneDropdown = res?.data.map((item: any) => ({
+              label: item.itemDesc, // This will be displayed in the dropdown
+              value: item.itemVal, // This will be the actual value
+            }));
+            console.log("dropdown value", zoneDropdown);
+            setNoSortingGroup(zoneDropdown);
+            if (zoneDropdown.length > 0) {
+              formik.setFieldValue("selectedZone", zoneDropdown[0]);
+            }
+            // setSelectedNoSortingGroup(selectedNoSortingGroup);
+          }
+        })
+        .catch((Err) => {
+          const { message } = Err.response.data;
+          console.log("Error->", message);
+          dispatch(hideLoader());
+          // formik.setFieldError("password", message);
+          const errorMessage = Err.response.data.message;
+          ShowToast(
+            "error",
+            errorMessage ||
+              "Sorry for the inconvenience, please try after some time."
+          );
+        });
+
+      dispatch(hideLoader());
+    }
+  }, [dispatch, accessType]);
+
+  useEffect(() => {
+    if (!user_id) return;
+
+    const payload = {
+      quarterName: "Q3",
+      zone: formik.values.selectedZone?.value || "ALL",
+      user_ID: user_id,
+    };
+
+    dispatch(showLoader(""));
+
+    apiServices
+      .GetZoneTargetdata(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+        if (response?.status === 200) {
+          const data = response?.data?.data;
+          console.log("Zone Target API Response:", data);
+
+          if (data) {
+            const targets = data.targets?.[0] || {};
+            setZoneTargetData({
+              total: targets.target_TotalBrokerage || 0,
+              direct: targets.target_DirectTotalBrokerage || 0,
+              indirect: targets.target_InDirectTotalBrokerage || 0,
+            });
+
+            const actuals = data.actuals?.[0] || {};
+            setZoneTargetAchievedData({
+              total: actuals.total_Achieved_Brokerage || 0,
+              direct: actuals.zone_Achieved_DirectBrokerage || 0,
+              indirect: actuals.zone_Achieved_InDirect_Brokerage || 0,
+            });
+
+            const percentages = data.percentages?.[0] || {};
+            setZoneTargetAchievedPercentageData({
+              total: parseFloat(percentages.total_Achieved_Percentage) || 0,
+              direct: parseFloat(percentages.direct_Achieved_Percentage) || 0,
+              indirect:
+                parseFloat(percentages.indirect_Achieved_Percentage) || 0,
+            });
+
+            const zonebarData = data.zonebarData?.[0];
+            if (zonebarData) {
+              // 👇 store zonebarData in local state
+              setZoneBarData({
+                barDirectModel: zonebarData.barDirectModel,
+                barInDirectModel: zonebarData.barInDirectModel,
+                barInTotalModel: zonebarData.barInTotalModel,
+              });
+            }
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("Zone Target API Error:", error);
+        dispatch(hideLoader());
+        ShowToast("error", "Failed to fetch Zone Target data.");
+      });
+  }, [dispatch, user_id, formik.values.selectedZone]);
+
+  const metrics = [
+    { title: "Zone Target", data: zoneTargetData },
+    { title: "Zone Target Achieved", data: zoneTargetAchievedData },
+    { title: "Zone Target Achieved %", data: zoneTargetAchievedPercentageData },
+  ];
+
+  const getMetricValue = (index: number): number => {
+    const badge = activeBadges[index];
+    const dataArray = [
+      zoneTargetData,
+      zoneTargetAchievedData,
+      zoneTargetAchievedPercentageData,
+    ];
+    console.log("badgeValue", badge, dataArray);
+
+    return dataArray[index][badge as keyof MetricData] || 0;
+  };
+
+  const handleBadgeClick = (cardIndex: number, type: string) => {
+    setActiveBadges((prev) => {
+      const updated = [...prev];
+      updated[cardIndex] = type;
+      return updated;
+    });
+  };
+
+  const directChartData = extractBarModelData(
+    zoneBarData.barDirectModel,
+    "Direct"
+  );
+  const indirectChartData = extractBarModelData(
+    zoneBarData.barInDirectModel,
+    "Indirect"
+  );
+  const totalChartData = extractBarModelData(
+    zoneBarData.barInTotalModel,
+    "Total"
+  );
+
+  const allValues = [
+    ...directChartData.series.flatMap((s) => s.data),
+    ...indirectChartData.series.flatMap((s) => s.data),
+    ...totalChartData.series.flatMap((s) => s.data),
+  ];
+
+  const maxValue = Math.max(...allValues);
+
+  return (
+    <React.Fragment>
+      <div className="page-content page-view">
+        <div className="container-fluid">
+          <Row className="row-font">
+            <Col lg={12}>
+              {accessType === "ALL" && (
+                <Card>
+                  <Row style={{ margin: "5px", minWidth: "100%" }}>
+                    <Col
+                      xs={12}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start", // or "center" if you want horizontal centering
+                      }}
+                    >
+                      <div className="m-1">
+                        <div className="d-flex align-items-center gap-2">
+                          {/* Label (not scrollable) */}
+                          <Label
+                            htmlFor="zone-select"
+                            className="form-label text-muted label-font mb-0"
+                            style={{ minWidth: "50px" }}
+                          >
+                            Zone
+                          </Label>
+
+                          {/* Scrollable horizontal buttons */}
+                          <div
+                            className="d-flex flex-nowrap gap-2 overflow-auto"
+                            style={{ maxWidth: "100%" }}
+                          >
+                            {noSortingGroup.map((zone: any) => {
+                              const isSelected =
+                                formik.values.selectedZone?.value ===
+                                zone.value;
+
+                              return (
+                                <Button
+                                  key={zone.value}
+                                  type="button"
+                                  style={{
+                                    minWidth: "60px",
+                                    whiteSpace: "nowrap",
+                                    fontSize: "12px",
+                                    padding: "2px",
+                                    borderRadius: "6px",
+                                    border: "1px solid #11395c",
+                                    backgroundColor: isSelected
+                                      ? "#11395c"
+                                      : "#ffffff",
+                                    color: isSelected ? "#ffffff" : "#11395c",
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() =>
+                                    formik.setFieldValue("selectedZone", zone)
+                                  }
+                                  onBlur={() =>
+                                    formik.setFieldTouched("selectedZone", true)
+                                  }
+                                >
+                                  {zone.label}
+                                </Button>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Validation error message */}
+                        {formik.touched.selectedZone &&
+                          formik.errors.selectedZone && (
+                            <div
+                              className="text-danger"
+                              style={{ fontSize: "12px" }}
+                            >
+                              {formik.errors.selectedZone}
+                            </div>
+                          )}
+                      </div>
+                    </Col>
+                  </Row>
+                </Card>
+              )}
+              <Row style={{ marginTop: "20px" }}>
+                {metrics.map((metric, index) => {
+                  const badges = [
+                    {
+                      type: "warning",
+                      label: "Total",
+                      value: metric.data.total,
+                      isActive: activeBadges[index] === "total",
+                      onClick: () => handleBadgeClick(index, "total"),
+                    },
+                    {
+                      type: "info",
+                      label: "Direct",
+                      value: metric.data.direct,
+                      isActive: activeBadges[index] === "direct",
+                      onClick: () => handleBadgeClick(index, "direct"),
+                    },
+                    {
+                      type: "primary",
+                      label: "Indirect",
+                      value: metric.data.indirect,
+                      isActive: activeBadges[index] === "indirect",
+                      onClick: () => handleBadgeClick(index, "indirect"),
+                    },
+                  ];
+
+                  return (
+                    <Col
+                      key={index}
+                      xxl={4}
+                      lg={4}
+                      md={4}
+                      sm={12}
+                      style={{ marginBottom: "1rem" }}
+                    >
+                      <DashboardCard
+                        title={metric.title}
+                        value={getMetricValue(index)}
+                        badges={badges}
+                        customZoneClass={true}
+                        customClass={true}
+                        mainCustomClass={true}
+                      />
+                    </Col>
+                  );
+                })}
+              </Row>
+              <Card
+                style={{
+                  minHeight: "80vh",
+                  borderRadius: "15px",
+                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                }}
+              >
+                <CardHeader
+                  style={{
+                    borderRadius: "15px 15px 0 0",
+                    boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                    backgroundColor: "#fff",
+                    padding: "0.2rem 0.8rem",
+                  }}
+                >
+                  <h4 className="card-title flex-grow-1 d-flex justify-content-center">
+                    Zone Target Q3
+                  </h4>
+                </CardHeader>
+                <CardBody>
+                  <Row>
+                    <div style={{ display: "flex", gap: "20px" }}>
+                      <ZoneTargetChart
+                        title="Direct"
+                        categories={directChartData.categories}
+                        series={directChartData.series}
+                        maxValue={maxValue}
+                        borderRight
+                      />
+
+                      <ZoneTargetChart
+                        title="Indirect"
+                        categories={indirectChartData.categories}
+                        series={indirectChartData.series}
+                        maxValue={maxValue}
+                        borderRight
+                      />
+
+                      <div style={{ flex: 1, paddingRight: "20px" }}>
+                        <ZoneTargetChart
+                          title="Total"
+                          categories={totalChartData.categories}
+                          series={totalChartData.series}
+                          maxValue={maxValue}
+                        />
+                      </div>
+                    </div>
+                  </Row>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+};
+
+export default ZoneTarget;

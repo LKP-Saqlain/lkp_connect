@@ -216,4 +216,5 @@ export const endpoints = {
   PreDebitMandateNotify: "/api/Mandate/PreDebitMandateNotify",
   ExecuteUpiMandate: "/api/Mandate/ExecuteUpiMandate",
   GetClientModuleDataForAmc: "/api/Client/GetClientModuleDataForAmc",
+  GetZoneTargetdata: "/api/Dashboard/GetZoneTargetdata",
 };

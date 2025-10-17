@@ -48,6 +48,7 @@ const CustomTabs = ({ TabClick }: customTabs) => {
         <Tab label="Equity" />
         <Tab label="F&O" />
         <Tab label="Commodity" />
+        <Tab label="Fundamental" />
         {/* <Tab label="Currency" /> */}
       </Tabs>
     </Box>

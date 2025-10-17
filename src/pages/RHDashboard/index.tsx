@@ -8,6 +8,7 @@ import Indirect from "./Indirect";
 // import VendorMaster from "../ThirdParty/VendorMaster";
 import PartnerContestReport from "./partnerContest";
 import EmployeeTargetReport from "./EmployeeTarget";
+import ZoneTarget from "./zoneTarget";
 
 interface RH {
   activeSubItem: string;
@@ -58,6 +59,8 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
         return <Overview activeSubItem={activeSubItem} />;
       } else if (activeSubItem === SubItemKeys.EMPLOYEE_TARGET_REPORT) {
         return <EmployeeTargetReport activeSubItem={activeSubItem} />;
+      } else if (activeSubItem === SubItemKeys.RH_ZONE_TARGET) {
+        return <ZoneTarget activeSubItem={activeSubItem} />;
       } else {
         // return <Overview activeSubItem={activeSubItem} />;
       }
