@@ -541,7 +541,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                         }}
                       >
                         {rightValue}
-                      </span> // ✅ Fix: Wrap in a JSX element
+                      </span> //  Fix: Wrap in a JSX element
                     )}
                   </div>
                 </div>

@@ -1,19 +1,29 @@
 import { useEffect } from "react";
 import { Row, Col, Button } from "reactstrap";
+import { apiServices } from "../../services";
+import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import ShowToast from "../../utils/toastUtils";
+import { capitalizeEachWord } from "../../utils";
 
 interface PaymentChoiceProps {
   clientData: any;
   onLedger: () => void;
   onOnline: () => void;
+  setTotalPayable: (amount: number) => void;
 }
 
 const PaymentChoice = ({
   onLedger,
   onOnline,
   clientData,
+  setTotalPayable,
 }: PaymentChoiceProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
-    console.log("✅ clientData from payment:", clientData);
+    console.log(" clientData from payment:", clientData);
   }, [clientData]);
 
   // Fixed AMC details
@@ -40,6 +50,10 @@ const PaymentChoice = ({
   // Compute totals
   const totalPayable = existingOutstanding + amcAmount;
 
+  useEffect(() => {
+    setTotalPayable(totalPayable);
+  }, [totalPayable, setTotalPayable]);
+
   // Determine if ledger payment is possible
   const isLedgerSufficient = ledgerBalance >= totalPayable;
 
@@ -49,6 +63,26 @@ const PaymentChoice = ({
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })}`;
+
+  const handleOnlinePayment = async () => {
+    const payload = {
+      boid: clientData?.dP_ID,
+    };
+    dispatch(showLoader("Sending payment link to your email..."));
+    try {
+      const response = await apiServices.SendDPAMCEmail(payload);
+      console.log(" Payment link response:", response);
+      if (response?.data?.isSuccess) {
+        ShowToast("success", capitalizeEachWord(response?.data?.data));
+        onOnline(); // proceed to next step
+      } else {
+      }
+    } catch (error) {
+    } finally {
+      dispatch(hideLoader());
+    }
+    // onOnline();
+  };
 
   return (
     <>
@@ -133,7 +167,7 @@ const PaymentChoice = ({
               borderRadius: "6px",
               padding: "0.6rem 1.5rem",
             }}
-            onClick={onOnline}
+            onClick={handleOnlinePayment}
           >
             Online Payment
           </Button>

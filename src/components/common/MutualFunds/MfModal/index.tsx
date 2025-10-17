@@ -364,7 +364,7 @@ const MutualFundModal = ({
         <ModalBody>
           {/* {modalType === "redeem" && <h1>redemption Arc</h1>} */}
           {modalType === "oneTime" ? (
-            // ✅ Lumpsum UI
+            //  Lumpsum UI
             <div style={{ display: "flex", gap: "20px" }}>
               {/* Left - Amount */}
               <div style={{ flex: 1 }}>
@@ -522,7 +522,7 @@ const MutualFundModal = ({
               </div>
             </div>
           ) : (
-            // ✅ SIP UI (placeholder for now, you’ll fill later)
+            //  SIP UI (placeholder for now, you’ll fill later)
             <div style={{ display: "flex", gap: "20px" }}>
               {/* SIP Amount Section */}
               <div style={{ flex: 1 }}>
@@ -760,7 +760,7 @@ const MutualFundModal = ({
                 ))}
               </div>
 
-              {/* ✅ Extra UPI Input Field & Verify Button */}
+              {/*  Extra UPI Input Field & Verify Button */}
               {selectedPaymentType === "upi" && (
                 <div style={{ marginTop: "16px", maxWidth: "400px" }}>
                   <Label style={{ fontWeight: 600, marginBottom: "6px" }}>

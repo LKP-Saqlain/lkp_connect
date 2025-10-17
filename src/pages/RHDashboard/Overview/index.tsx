@@ -155,7 +155,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
           total_Equity: (item.total_Delivery ?? 0) + (item.total_Intraday ?? 0),
         }));
 
-        // ✅ Correct logging
+        //  Correct logging
         console.log(
           "if (isEquitySegment) combined data:",
           resData,

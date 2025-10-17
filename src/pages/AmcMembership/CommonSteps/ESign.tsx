@@ -31,7 +31,7 @@ const ESign = ({
       type: "Third Holder",
       onClick: onThirdSign, // you can make separate handler if needed
     },
-  ].filter((holder) => holder.name?.trim()); // ✅ Only include non-empty names
+  ].filter((holder) => holder.name?.trim()); //  Only include non-empty names
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>

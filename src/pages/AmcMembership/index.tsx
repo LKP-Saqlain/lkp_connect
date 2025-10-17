@@ -37,6 +37,9 @@ const Index = ({ activeMenu }: any) => {
       branchCode: selectedBranch?.value || "ALL",
       tradingCode: "ALL",
       userId: user_id,
+      // zone: "H.O.",
+      // userId: "EMP-0040",
+      // branchCode: "BH.O.",
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));

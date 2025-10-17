@@ -71,7 +71,7 @@ const MutualFundTable = ({
                   // onClick={toggle}
                   onClick={() => {
                     if (onRedeemClick) {
-                      onRedeemClick(_params.row); // ✅ send row to parent
+                      onRedeemClick(_params.row); //  send row to parent
                       // handleRedeem(_params);
                     }
                   }}

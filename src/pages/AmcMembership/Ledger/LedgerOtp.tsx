@@ -46,10 +46,10 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
           setServerOtp(response?.data?.data?.otp || null); // debug only
           setTimer(59); // restart timer
         } else {
-          console.warn("⚠️ Failed to send OTP");
+          console.warn(" Failed to send OTP");
         }
       } catch (error) {
-        console.error("❌ Error sending OTP:", error);
+        console.error(" Error sending OTP:", error);
       } finally {
         dispatch(hideLoader());
       }
@@ -93,19 +93,19 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
 
     try {
       const response = await apiServices.ProcessOTP(payload);
-      console.log("✅ Verify OTP Response:", response);
+      console.log(" Verify OTP Response:", response);
 
       const isVerified = response?.data?.data?.isVerified === 1;
       setOtpVerify(isVerified);
 
       if (isVerified) {
-        console.log("✅ OTP Verified Successfully");
+        console.log(" OTP Verified Successfully");
         onNext(); // move forward
       } else {
         alert("Invalid OTP, please try again");
       }
     } catch (error) {
-      console.error("❌ Error verifying OTP:", error);
+      console.error(" Error verifying OTP:", error);
     } finally {
       dispatch(hideLoader());
     }
@@ -137,7 +137,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
         alert("OTP resent successfully");
       }
     } catch (error) {
-      console.error("❌ Error resending OTP:", error);
+      console.error(" Error resending OTP:", error);
     } finally {
       dispatch(hideLoader());
     }
@@ -221,7 +221,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
           fontSize: "0.95rem",
         }}
       >
-        {otpVerify ? "Verified ✅" : "Proceed"}
+        {otpVerify ? "Verified " : "Proceed"}
       </Button>
 
       {/* Timer + Resend */}

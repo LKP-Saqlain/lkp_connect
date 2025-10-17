@@ -81,7 +81,7 @@ import { RootState } from "../../redux/store.ts";
 import { useSelector } from "react-redux";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 interface Trade {
   id: string;
@@ -213,7 +213,7 @@ SelectedWidgetProps) => {
   >([]);
 
   const [showSearchCustom, setShowSearchCustom] = useState(showSearch);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { user_type } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data || {}
   );

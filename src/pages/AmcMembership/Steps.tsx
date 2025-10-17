@@ -3,7 +3,7 @@ import ClientInfo from "./ClientInfo";
 import PaymentChoice from "./PaymentChoice";
 import Logo from "../../assets/logo.png";
 import LedgerOtp from "./Ledger/LedgerOtp";
-import { Button, Card, CardHeader, Container } from "reactstrap";
+import { Card, CardHeader, Container } from "reactstrap";
 import ESign from "./CommonSteps/ESign";
 import TariffForm from "./CommonSteps/TariffForm";
 import Confirmation from "./CommonSteps/Confirmation";
@@ -14,6 +14,7 @@ const AmcMembership = () => {
   const [flow, setFlow] = useState<"ledger" | "online" | null>(null);
   const [clientData, setClientData] = useState<any>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
+  const [totalPayable, setTotalPayable] = useState<any>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,10 +44,12 @@ const AmcMembership = () => {
 
   const next = () => setStep((s) => s + 1);
 
-  const handleGoBack = () => {
-    sessionStorage.removeItem("selectedRow"); // cleanup
-    navigate("/dashboard");
-  };
+  // const handleGoBack = () => {
+  //   sessionStorage.removeItem("selectedRow"); // cleanup
+  //   navigate("/dashboard");
+  // };
+
+  const goToStep2 = () => setStep(2);
 
   return (
     <div className="page-content page-view">
@@ -84,7 +87,7 @@ const AmcMembership = () => {
             >
               Online Lifetime AMC Scheme Activation
             </h5>
-            <Button
+            {/* <Button
               color="primary"
               style={{
                 borderRadius: "6px",
@@ -94,7 +97,7 @@ const AmcMembership = () => {
               onClick={handleGoBack}
             >
               Back to Dashboard
-            </Button>
+            </Button> */}
           </CardHeader>
 
           {/* Step-based Flow */}
@@ -117,6 +120,7 @@ const AmcMembership = () => {
                 setFlow("online");
                 next();
               }}
+              setTotalPayable={setTotalPayable}
             />
           )}
 
@@ -125,7 +129,16 @@ const AmcMembership = () => {
               {step === 3 && (
                 <LedgerOtp onNext={next} clientData={clientData} />
               )}
-              {step === 4 && <Confirmation onNext={next} status={1} />}
+              {step === 4 && (
+                <Confirmation
+                  onNext={next}
+                  // status={1}
+                  flow={flow}
+                  selectedRow={selectedRow}
+                  totalPayable={totalPayable}
+                  onBackToStep2={goToStep2}
+                />
+              )}
               {step === 5 && (
                 <TariffForm onNext={next} selectedRow={selectedRow} />
               )}
@@ -135,7 +148,16 @@ const AmcMembership = () => {
 
           {flow === "online" && (
             <>
-              {step === 3 && <Confirmation onNext={next} status={3} />}
+              {step === 3 && (
+                <Confirmation
+                  onNext={next}
+                  // status={3}
+                  flow={flow}
+                  selectedRow={selectedRow}
+                  totalPayable={totalPayable}
+                  onBackToStep2={goToStep2}
+                />
+              )}
               {step === 4 && (
                 <TariffForm onNext={next} selectedRow={selectedRow} />
               )}

@@ -100,7 +100,7 @@ const MutualFundIndex = () => {
         }
         // localStorage.setItem("mfToken", res?.data?.data);
         setEncryptedValue("mfToken", res?.data?.data);
-        // ✅ Close modal only on success
+        //  Close modal only on success
         setShowClientCodeModal(false);
         setSelectedMutualFund("");
       }

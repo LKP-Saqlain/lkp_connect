@@ -404,7 +404,7 @@ const CustomModal = ({
       console.log("Base64 file:", base64String);
       base64 = base64String;
     }
-    // ✅ All fields are valid
+    //  All fields are valid
     console.log(
       "rowCheck Base64-->",
       row,

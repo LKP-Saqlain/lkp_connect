@@ -218,4 +218,7 @@ export const endpoints = {
   GetClientModuleDataForAmc: "/api/Client/GetClientModuleDataForAmc",
   GetClientModuleDetails: "/api/Client/GetClientModuleDetails",
   ProcessOTP: "/api/Client/ProcessOTP",
+  ActivateAMC: "/api/Client/ActivateAMC",
+  SendDPAMCEmail: "/api/Client/SendDPAMCEmail",
+  GetDPAMCPaymentResponse: "/api/Client/GetDPAMCPaymentResponse",
 };

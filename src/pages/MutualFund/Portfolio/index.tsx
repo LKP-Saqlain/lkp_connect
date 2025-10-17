@@ -88,7 +88,7 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
               })
             ) || [];
 
-          const r1 = res?.data?.data?.dataBucket?.r1?.[0] || null; // ✅ take first r1 record
+          const r1 = res?.data?.data?.dataBucket?.r1?.[0] || null; //  take first r1 record
           setPortfolioSummary(r1);
           setPortfolioData(records);
         }
@@ -272,7 +272,7 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
   };
 
   const handleRedeemUnitsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!selectedRow) return; // ✅ Guard clause
+    if (!selectedRow) return; //  Guard clause
     let value = e.target.value;
 
     // Ensure only numeric values (allow decimals if needed)

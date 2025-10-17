@@ -9,7 +9,7 @@ import { capitalizeEachWord } from "../../utils";
 interface ClientInfoProps {
   onNext: () => void;
   selectedRow: any;
-  setClientData: (data: any) => void; // ✅ add this
+  setClientData: (data: any) => void; //  add this
 }
 
 const ClientInfo = ({
@@ -47,11 +47,11 @@ const ClientInfo = ({
       try {
         const response = await apiServices.GetClientModuleDetails(payload);
         const result = response?.data?.data?.[0] || null;
-        console.log("✅ GetClientModuleDetails:", result);
+        console.log(" GetClientModuleDetails:", result);
         setLocalClientData(result);
-        setClientData(result); // ✅ this sends data to parent (AmcMembership)
+        setClientData(result); //  this sends data to parent (AmcMembership)
       } catch (error) {
-        console.error("❌ Error fetching client module details:", error);
+        console.error(" Error fetching client module details:", error);
       } finally {
         dispatch(hideLoader());
       }

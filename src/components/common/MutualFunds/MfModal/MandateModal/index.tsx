@@ -146,7 +146,7 @@ const CreateMandateModal = ({
         </Button>
         <Button
           color="primary"
-          onClick={createMandates} // ✅ Call the function here
+          onClick={createMandates} //  Call the function here
           disabled={!selectedBank || !amount}
         >
           Confirm & Create

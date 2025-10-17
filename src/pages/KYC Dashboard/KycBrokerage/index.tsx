@@ -42,7 +42,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
   }, [flag]);
 
   // useEffect(() => {
-  //   if (!segmentRow) return; // ✅ wait until segmentRow is set
+  //   if (!segmentRow) return; //  wait until segmentRow is set
 
   //   dispatch(showLoader("Please wait..."));
 
@@ -170,7 +170,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
   //   dispatch(showLoader("Please wait..."));
 
   //   try {
-  //     // ✅ Step 1: Check TechExcel only if action is approve
+  //     //  Step 1: Check TechExcel only if action is approve
   //     if (action === "A") {
   //       for (const item of row) {
   //         const techPayload = {
@@ -197,7 +197,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
   //       }
   //     }
 
-  //     // ✅ Step 2: All TechExcel calls succeeded, proceed with KYC update
+  //     //  Step 2: All TechExcel calls succeeded, proceed with KYC update
   //     const kycRes = await apiServices.UpdateBrokerageKycStatusNew(kycPayload);
 
   //     if (kycRes?.data?.isSuccess === 200) {

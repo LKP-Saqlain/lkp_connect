@@ -241,7 +241,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   };
   const handleBrokerageBadgeClick = (type: BrokerageBadge) => {
     // console.log("Badge clicked:", type, badges);
-    setActiveBrokerageBadge(type); // ✅ Update the active badge
+    setActiveBrokerageBadge(type); //  Update the active badge
   };
 
   const brokerageBadges = [
