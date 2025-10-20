@@ -91,7 +91,7 @@ const MandateCall = () => {
         pspRefNo: "",
       },
       payeeType: {
-        virtualAddress: "raj2025@hdfcbank",
+        virtualAddress: upiId,
       },
     };
     dispatch(showLoader(""));
