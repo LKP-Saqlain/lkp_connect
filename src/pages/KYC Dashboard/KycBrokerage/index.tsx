@@ -35,6 +35,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
         if (response?.status === 200) {
           console.log("kyc-data", response?.data?.data);
           setKycData(response?.data?.data);
+          setFlag((prev) => !prev); // refresh parent
         }
       })
       .catch((err) => console.log("Error", err))
@@ -62,88 +63,6 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       .catch((err) => console.log("Error", err))
       .finally(() => dispatch(hideLoader()));
   }, [segmentRow, isNudgeTableOpen]);
-
-  // const handleApproval = async (
-  //   fullRow: {
-  //     rowId: number;
-  //     segment: string;
-  //     clientcode: number;
-  //     moduleNo: number;
-  //   },
-  //   remark: string,
-  //   entryFlag: string
-  // ) => {
-  //   const kycPayload = {
-  //     rowID: fullRow.rowId,
-  //     kycflag: entryFlag,
-  //     kycUserId: user_id,
-  //     kycRemark: remark,
-  //   };
-  //   dispatch(showLoader("Please wait..."));
-
-  //   const now = new Date();
-  //   const day = String(now.getDate()).padStart(2, "0");
-  //   const month = String(now.getMonth() + 1).padStart(2, "0");
-  //   const year = now.getFullYear();
-  //   const formattedDate = `${day}-${month}-${year}`;
-
-  //   const secondPayload = {
-  //     segment: fullRow.segment,
-  //     clientcode: fullRow.clientcode,
-  //     startdate: formattedDate,
-  //     moduleNo: fullRow.moduleNo,
-  //   };
-
-  //   try {
-  //     console.log(kycPayload, secondPayload, "kycPayload,secondPayload");
-
-  //     // If entryFlag is A, prioritize TechExcel API
-  //     if (entryFlag === "A") {
-  //       const techExcelRes = await apiServices.GetTechExcelApiResponse(
-  //         secondPayload
-  //       );
-  //       console.log(
-  //         "TechExcel Response:",
-  //         techExcelRes,
-  //         techExcelRes?.data?.statusCode
-  //       );
-  //       if (
-  //         techExcelRes?.data?.statusCode === 200 ||
-  //         techExcelRes?.data?.isSuccess === true
-  //       ) {
-  //         // Proceed with KYC update
-  //         const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
-  //         if (kycRes?.status === 200) {
-  //           setFlag((prev) => !prev);
-  //         } else {
-  //           console.error("KYC API failed:", kycRes);
-  //           ShowToast("error", kycRes?.data?.msg || kycRes?.data?.message);
-  //         }
-  //       } else {
-  //         // TechExcel failed — show warning or stop
-  //         console.warn(
-  //           "TechExcel API failed or partially failed:",
-  //           techExcelRes
-  //         );
-  //         ShowToast("error", "Failed to update in Techexcel");
-  //         // Optional: show message to user
-  //         // toast.error("TechExcel failed: " + (techExcelRes.message || techExcelRes.data));
-  //       }
-  //     } else {
-  //       // Not 'A' — directly update KYC
-  //       const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
-  //       if (kycRes?.status === 200) {
-  //         setFlag((prev) => !prev);
-  //       } else {
-  //         console.error("KYC API failed:", kycRes);
-  //       }
-  //     }
-  //   } catch (err) {
-  //     console.error("Error in API call:", err);
-  //   } finally {
-  //     dispatch(hideLoader());
-  //   }
-  // };
 
   const handleKyc = async ({ row, remarks, action }: any) => {
     if (!Array.isArray(row) || row.length === 0) return;
@@ -195,7 +114,8 @@ const KycBrokerage = ({ activeSubItem }: any) => {
           const techPayload = {
             segment: segmentRow?.segment,
             clientcode: item?.clientcode,
-            startdate: formattedDate,
+            startdate: "23-11-2025",
+            // startdate: formattedDate,
             moduleNo: thisModuleNo,
             moduleNo2: otherModuleNo,
             segment1: thisSegment ?? "",
@@ -226,7 +146,6 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       if (kycRes?.data?.isSuccess === 200) {
         ShowToast("success", kycRes?.data?.data?.[0]);
         console.log(" KYC response:", kycRes.data.data);
-        setFlag((prev) => !prev); // refresh parent
       } else {
         ShowToast("error", kycRes?.data?.data?.[0]);
         console.error("KYC API Error:", kycRes);
