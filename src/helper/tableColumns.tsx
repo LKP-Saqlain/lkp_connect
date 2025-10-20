@@ -3235,6 +3235,7 @@ export const ODCapsules = [
 export const AmcMembership = [
   { id: 1, label: "Lifetime Membership" },
   { id: 2, label: "Non-Lifetime Membership" },
+  // { id: 3, label: "Contest Earned" },
 ];
 export const pledgeCapsules = [
   { id: 1, label: "Pledge Request" },

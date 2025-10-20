@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card, CardBody, CardHeader, Container } from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import DataTable from "../../components/common/UserInfoTable";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import UserCapsules from "../ClientDetails/UserCapsules";
 import ComDropDown from "../../components/common/Dropdown/commonDropdown";
+import DashboardCard from "../../components/common/DashboardCard";
 
 type DropdownOption = {
   label: string;
@@ -76,7 +77,7 @@ const Index = ({ activeMenu }: any) => {
   };
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
   }, [selectedZone, selectedBranch]);
 
   const tableData =
@@ -94,6 +95,20 @@ const Index = ({ activeMenu }: any) => {
         capsuleType="AMC Membership"
         handleClick={handleClick}
       />
+      {selectedCapsule === "Contest Earned" && (
+        <Row style={{ margin: "10px" }}>
+          <Col xxl={3} lg={3} md={6} sm={12}>
+            <DashboardCard title="Client Count" value={""} customClass={true} />{" "}
+          </Col>
+          <Col xxl={3} lg={3} md={6} sm={12}>
+            <DashboardCard
+              title="Incentitive Earned"
+              value={""}
+              customClass={true}
+            />
+          </Col>
+        </Row>
+      )}
       <Container fluid>
         <Card
           style={{
@@ -126,7 +141,7 @@ const Index = ({ activeMenu }: any) => {
           </CardHeader>
 
           <CardBody>
-            {accessType === "ALL" && (
+            {accessType === "ALL" && selectedCapsule != "Contest Earned" && (
               <ComDropDown
                 onSelectionChange={(zone: any, branch: any) => {
                   setSelectedZone(zone);
@@ -134,6 +149,7 @@ const Index = ({ activeMenu }: any) => {
                 }}
               />
             )}
+
             <DataTable
               selectedWidget={selectedCapsule}
               T6Data={tableData}
