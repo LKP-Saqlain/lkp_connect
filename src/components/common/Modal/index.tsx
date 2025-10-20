@@ -247,7 +247,7 @@ const ModalComponent = ({
           console.log(`${minKey} is lesser or equal → no consent`);
         }
       } else {
-        // ✅ NEW CONDITION: other keys (not Intraday/Delivery)
+        //  NEW CONDITION: other keys (not Intraday/Delivery)
         // If there is a segment-specific Min, compare it
         const minKey = key.replace("Per", "Min"); // e.g. EquityFuturesPer -> EquityFuturesMin
         const newMin = matchedPlan[minKey];
@@ -355,8 +355,8 @@ const ModalComponent = ({
         link.download = fileName;
         document.body.appendChild(link);
         link.click();
-        link.remove(); // ✅ Clean up
-        URL.revokeObjectURL(url); // ✅ Revoke after use
+        link.remove(); //  Clean up
+        URL.revokeObjectURL(url); //  Revoke after use
       } else {
         console.error("Error during download", response);
         ShowToast("info", "Error downloading file");

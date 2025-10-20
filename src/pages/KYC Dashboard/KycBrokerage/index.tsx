@@ -30,6 +30,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
     dispatch(showLoader("Please wait..."));
     apiServices
       .GetBrokerageKycStatusNew({})
+      // .GetBrokerageKycStatus({})
       .then((response) => {
         if (response?.status === 200) {
           console.log("kyc-data", response?.data?.data);
@@ -41,7 +42,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
   }, [flag]);
 
   useEffect(() => {
-    if (!segmentRow) return; // ✅ wait until segmentRow is set
+    if (!segmentRow) return; //  wait until segmentRow is set
 
     dispatch(showLoader("Please wait..."));
 
@@ -60,7 +61,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       })
       .catch((err) => console.log("Error", err))
       .finally(() => dispatch(hideLoader()));
-  }, [segmentRow]);
+  }, [segmentRow, isNudgeTableOpen]);
 
   // const handleApproval = async (
   //   fullRow: {
@@ -94,6 +95,8 @@ const KycBrokerage = ({ activeSubItem }: any) => {
   //   };
 
   //   try {
+  //     console.log(kycPayload, secondPayload, "kycPayload,secondPayload");
+
   //     // If entryFlag is A, prioritize TechExcel API
   //     if (entryFlag === "A") {
   //       const techExcelRes = await apiServices.GetTechExcelApiResponse(
@@ -104,7 +107,6 @@ const KycBrokerage = ({ activeSubItem }: any) => {
   //         techExcelRes,
   //         techExcelRes?.data?.statusCode
   //       );
-
   //       if (
   //         techExcelRes?.data?.statusCode === 200 ||
   //         techExcelRes?.data?.isSuccess === true
@@ -145,7 +147,10 @@ const KycBrokerage = ({ activeSubItem }: any) => {
 
   const handleKyc = async ({ row, remarks, action }: any) => {
     if (!Array.isArray(row) || row.length === 0) return;
-
+    if (!segmentRow) {
+      console.error("segmentRow is null. Aborting.");
+      return;
+    }
     const now = new Date();
     const day = String(now.getDate()).padStart(2, "0");
     const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -168,16 +173,36 @@ const KycBrokerage = ({ activeSubItem }: any) => {
     dispatch(showLoader("Please wait..."));
 
     try {
-      // ✅ Step 1: Check TechExcel only if action is approve
+      //  Step 1: Check TechExcel only if action is approve
       if (action === "A") {
+        const moduleMap = row.map((item: any) => item?.moduleNo);
+        const segmentMap = row.map((item: any) => item?.segment);
+
         for (const item of row) {
+          const thisModuleNo = item?.moduleNo;
+          const thisSegment = item?.segment;
+
+          const otherModuleNo =
+            moduleMap.length > 1
+              ? moduleMap.find((mod) => mod !== thisModuleNo) || ""
+              : "";
+
+          const otherSegment =
+            segmentMap.length > 1
+              ? segmentMap.find((seg) => seg !== thisSegment) || ""
+              : "";
+
           const techPayload = {
-            segment: item?.segment,
+            segment: segmentRow?.segment,
             clientcode: item?.clientcode,
             startdate: formattedDate,
-            moduleNo: item?.moduleNo,
-            moduleNo2: item?.moduleNo2 || "", // fallback if undefined
+            moduleNo: thisModuleNo,
+            moduleNo2: otherModuleNo,
+            segment1: thisSegment ?? "",
+            segment2: otherSegment ?? "",
           };
+
+          console.log(techPayload, "techPayload", row, action);
 
           const techRes = await apiServices.GetTechExcelApiResponseNew(
             techPayload
@@ -195,7 +220,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
         }
       }
 
-      // ✅ Step 2: All TechExcel calls succeeded, proceed with KYC update
+      //  Step 2: All TechExcel calls succeeded, proceed with KYC update
       const kycRes = await apiServices.UpdateBrokerageKycStatusNew(kycPayload);
 
       if (kycRes?.data?.isSuccess === 200) {
@@ -206,6 +231,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
         ShowToast("error", kycRes?.data?.data?.[0]);
         console.error("KYC API Error:", kycRes);
       }
+      console.log(kycRes, "kycPayload");
     } catch (error) {
       console.error(" Exception in KYC flow:", error);
       ShowToast("error", "Something went wrong while updating KYC");
@@ -294,7 +320,8 @@ const KycBrokerage = ({ activeSubItem }: any) => {
               activeSubItem={activeSubItem}
               T6Data={kycData}
               // handleApproval={handleApproval}
-              // handleDownload={handlePreview}
+              // handleApproval={handleApproval}
+              handleDownload={handlePreview}
               setIsNudgeTableOpen={setIsNudgeTableOpen}
               setSegmentRow={setSegmentRow}
             />

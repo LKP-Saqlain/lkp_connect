@@ -239,7 +239,7 @@ const StockStudy = () => {
                     if (newInputValue === "") {
                       // Clear selection if input is cleared
                       setPendingSelected(null);
-                      setSelectedIsin(null); // ✅ Clear the selected ISIN
+                      setSelectedIsin(null); //  Clear the selected ISIN
                       console.log("Cleared ISIN due to empty input");
                     }
                     console.log(event);

@@ -1,7 +1,15 @@
-import React from "react";
+import { useEffect } from "react";
 import { Row, Col, Button } from "reactstrap";
 
-const TariffForm: React.FC<{ onNext: () => void }> = ({ onNext }) => {
+interface TariffProps {
+  onNext: () => void;
+  selectedRow: any;
+}
+const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
+  useEffect(() => {
+    console.log(selectedRow, "selectedRow from tarif");
+  }, []);
+
   return (
     <div style={{ padding: "1rem 2rem" }}>
       {/* Header Line */}
@@ -20,10 +28,14 @@ const TariffForm: React.FC<{ onNext: () => void }> = ({ onNext }) => {
 
         <div style={{ display: "flex", gap: "2rem" }}>
           <p style={{ margin: 0, fontWeight: 500, color: "#000" }}>
-            DP ID– <span style={{ color: "#1c3c6b" }}>12030000</span>
+            DP ID –{" "}
+            <span style={{ color: "#1c3c6b" }}>{selectedRow?.dP_ID}</span>
           </p>
           <p style={{ margin: 0, fontWeight: 500, color: "#000" }}>
-            Client ID– <span style={{ color: "#1c3c6b" }}>12234</span>
+            Client ID –{" "}
+            <span style={{ color: "#1c3c6b" }}>
+              {selectedRow?.trading_Code}
+            </span>
           </p>
         </div>
       </div>

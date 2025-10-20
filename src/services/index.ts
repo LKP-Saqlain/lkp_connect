@@ -941,4 +941,19 @@ export const apiServices = {
   GetZoneTargetdata: async (payload: any) => {
     return await apiService("POST", endpoints.GetZoneTargetdata, payload);
   },
+  GetClientModuleDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientModuleDetails, payload);
+  },
+  ProcessOTP: async (payload: any) => {
+    return await apiService("POST", endpoints.ProcessOTP, payload);
+  },
+  ActivateAMC: async (payload: any) => {
+    return await apiService("POST", endpoints.ActivateAMC, payload);
+  },
+  SendDPAMCEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendDPAMCEmail, payload);
+  },
+  GetDPAMCPaymentResponse: async (payload: any) => {
+    return await apiService("POST", endpoints.GetDPAMCPaymentResponse, payload);
+  },
 };

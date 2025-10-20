@@ -61,7 +61,8 @@ import {
   EmployeeTargetReportColumns,
   dpDebitMandateColumns,
   ClientMandateReport,
-  AmcMembershipHeader,
+  AmcLifeMembership,
+  AmcNonLifeMembership,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -80,6 +81,7 @@ import { RootState } from "../../redux/store.ts";
 import { useSelector } from "react-redux";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+// import { useNavigate } from "react-router-dom";
 
 interface Trade {
   id: string;
@@ -211,7 +213,7 @@ const DataTable = ({
   >([]);
 
   const [showSearchCustom, setShowSearchCustom] = useState(showSearch);
-
+  // const navigate = useNavigate();
   const { user_type } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data || {}
   );
@@ -533,6 +535,80 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "KYC Approval") {
+      // return BrokerageKyc.map((column) => {
+      //   if (column.field === "remark") {
+      //     return {
+      //       ...column,
+      //       renderCell: (params: any) => (
+      //         <div style={{ display: "flex", justifyContent: "center" }}>
+      //           <div
+      //             onClick={() => {
+      //               setSelectedRow(params.row);
+      //               HandleApprovalModal("approve");
+      //               // HandleApprovalModal("approve", params);
+      //               console.log(params.row.rowId, "selectedrow approve");
+      //             }}
+      //             style={{
+      //               cursor: "pointer",
+      //               display: "flex",
+      //               alignItems: "center",
+      //               marginRight: 5,
+      //             }}
+      //           >
+      //             <Tooltip title="Approve" arrow placement="top">
+      //               <CheckCircleIcon
+      //                 style={{ color: "green", marginLeft: 4 }}
+      //               />
+      //             </Tooltip>
+      //           </div>
+      //           <div style={{ fontSize: 20, color: "gray" }}>|</div>
+      //           <div
+      //             onClick={() => {
+      //               setSelectedRow(params.row);
+      //               HandleApprovalModal("reject");
+      //             }}
+      //             style={{
+      //               cursor: "pointer",
+      //               display: "flex",
+      //               alignItems: "center",
+      //               marginLeft: 5,
+      //             }}
+      //           >
+      //             <Tooltip title="Reject" arrow placement="top">
+      //               <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+      //             </Tooltip>
+      //           </div>
+      //         </div>
+      //       ),
+      //     };
+      //   }
+      //   if (column.field === "consentfilename") {
+      //     return {
+      //       ...column,
+      //       renderCell: (params: any) => {
+      //         const fileName = params.row?.consentfilename;
+
+      //         return fileName ? (
+      //           <button
+      //             onClick={() => handleDownload(params.row)}
+      //             style={{
+      //               color: "#11395C",
+      //               textDecoration: "underline",
+      //               background: "none",
+      //               border: "none",
+      //               cursor: "pointer",
+      //             }}
+      //           >
+      //             <DownloadForOfflineIcon />
+      //           </button>
+      //         ) : (
+      //           "╶─"
+      //         );
+      //       },
+      //     };
+      //   }
+      //   return column;
+      // });
       return BrokerageKyc.map((column) => {
         if (column.field === "More Details") {
           return {
@@ -543,7 +619,11 @@ const DataTable = ({
                   onClick={() => {
                     setSegmentRow(params.row);
                     setIsNudgeTableOpen(true);
-                    console.log(params.row, "selectedrow More Details");
+                    console.log(
+                      params.row,
+                      "selectedrow More Details",
+                      setSegmentRow
+                    );
                   }}
                   style={{
                     cursor: "pointer",
@@ -1454,10 +1534,63 @@ const DataTable = ({
       return EmpBrokerageAchieved.map((column) => ({
         ...column,
       }));
-    } else if (activeMenu === "DP AMC Contest") {
-      return AmcMembershipHeader.map((column) => ({
+    } else if (selectedWidget === "Lifetime Membership") {
+      return AmcLifeMembership.map((column) => ({
         ...column,
       }));
+    } else if (selectedWidget === "Non-Lifetime Membership") {
+      return AmcNonLifeMembership.map((column) => {
+        if (column.field === "MoreDetails") {
+          return {
+            ...column,
+            renderCell: (params: any) => (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <div
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: 5,
+                  }}
+                >
+                  {/* <Tooltip title={"View Details"} arrow placement="top">
+                    <OpenInNewIcon
+                      style={{ cursor: "pointer", color: "#11395C" }}
+                      onClick={() => {
+                        navigate("/AmcMembership", {
+                          state: { selectedRow: params.row },
+                        });
+                      }}
+                    />
+                  </Tooltip> */}
+                  <Tooltip title={"View Details"} arrow placement="top">
+                    <OpenInNewIcon
+                      style={{ cursor: "pointer", color: "#11395C" }}
+                      onClick={() => {
+                        // Check if "selectedRow" already exists
+                        if (sessionStorage.getItem("selectedRow")) {
+                          sessionStorage.removeItem("selectedRow");
+                        }
+
+                        // Set new selectedRow
+                        sessionStorage.setItem(
+                          "selectedRow",
+                          JSON.stringify(params.row)
+                        );
+
+                        // Open the page in a new tab
+                        window.open("/AmcMembership", "_blank");
+                      }}
+                    />
+                  </Tooltip>
+                </div>
+              </div>
+            ),
+          };
+        }
+
+        return column;
+      });
     } else if (activeMenu === "Employee Non-Brokerage Achieved") {
       return EmpNonBrokerageAchieved.map((column) => ({
         ...column,

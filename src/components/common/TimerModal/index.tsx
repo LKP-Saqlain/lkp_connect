@@ -109,7 +109,7 @@ const TimerModal: React.FC<TimerModalProps> = ({
         )}
       </ModalBody>
 
-      {/* ✅ Only show footer buttons when NOT on timer page */}
+      {/*  Only show footer buttons when NOT on timer page */}
       {!timerPage && (
         <ModalFooter>
           <Button color="secondary" onClick={toggle}>

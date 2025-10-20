@@ -217,4 +217,9 @@ export const endpoints = {
   ExecuteUpiMandate: "/api/Mandate/ExecuteUpiMandate",
   GetClientModuleDataForAmc: "/api/Client/GetClientModuleDataForAmc",
   GetZoneTargetdata: "/api/Dashboard/GetZoneTargetdata",
+  GetClientModuleDetails: "/api/Client/GetClientModuleDetails",
+  ProcessOTP: "/api/Client/ProcessOTP",
+  ActivateAMC: "/api/Client/ActivateAMC",
+  SendDPAMCEmail: "/api/Client/SendDPAMCEmail",
+  GetDPAMCPaymentResponse: "/api/Client/GetDPAMCPaymentResponse",
 };
