@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
-// import NudgeTable from "../../../components/common/NudgeTable";
+import NudgeTable from "../../../components/common/NudgeTable";
 
 type SegmentRowType = {
   clientcode: string;
@@ -16,10 +16,10 @@ type SegmentRowType = {
 
 const KycBrokerage = ({ activeSubItem }: any) => {
   const [kycData, setKycData] = useState([]);
-  // const [combinedKycData, setCombinedKycData] = useState({});
+  const [combinedKycData, setCombinedKycData] = useState({});
   const [flag, setFlag] = useState<boolean>(false);
   const [fileType, setFileType] = useState<string | null>(null);
-  // const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
+  const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
   const [segmentRow, setSegmentRow] = useState<SegmentRowType | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -29,8 +29,8 @@ const KycBrokerage = ({ activeSubItem }: any) => {
   useEffect(() => {
     dispatch(showLoader("Please wait..."));
     apiServices
-      // .GetBrokerageKycStatusNew({})
-      .GetBrokerageKycStatus({})
+      .GetBrokerageKycStatusNew({})
+      // .GetBrokerageKycStatus({})
       .then((response) => {
         if (response?.status === 200) {
           console.log("kyc-data", response?.data?.data);
@@ -41,112 +41,45 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       .finally(() => dispatch(hideLoader()));
   }, [flag]);
 
-  // useEffect(() => {
-  //   if (!segmentRow) return; //  wait until segmentRow is set
+  useEffect(() => {
+    if (!segmentRow) return; //  wait until segmentRow is set
 
-  //   dispatch(showLoader("Please wait..."));
-
-  //   const payload = {
-  //     clientcode: segmentRow.clientcode,
-  //     brokSeg: segmentRow.segment,
-  //   };
-
-  //   apiServices
-  //     .GetBrokerageKycDetailsStatus(payload)
-  //     .then((response) => {
-  //       if (response?.status === 200) {
-  //         console.log("kyc-data", response?.data?.data);
-  //         setCombinedKycData(response?.data?.data);
-  //       }
-  //     })
-  //     .catch((err) => console.log("Error", err))
-  //     .finally(() => dispatch(hideLoader()));
-  // }, [segmentRow]);
-
-  const handleApproval = async (
-    fullRow: {
-      rowId: number;
-      segment: string;
-      clientcode: number;
-      moduleNo: number;
-    },
-    remark: string,
-    entryFlag: string
-  ) => {
-    const kycPayload = {
-      rowID: fullRow.rowId,
-      kycflag: entryFlag,
-      kycUserId: user_id,
-      kycRemark: remark,
-    };
     dispatch(showLoader("Please wait..."));
 
-    const now = new Date();
-    const day = String(now.getDate()).padStart(2, "0");
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const year = now.getFullYear();
-    const formattedDate = `${day}-${month}-${year}`;
-
-    const secondPayload = {
-      segment: fullRow.segment,
-      clientcode: fullRow.clientcode,
-      startdate: formattedDate,
-      moduleNo: fullRow.moduleNo,
+    const payload = {
+      clientcode: segmentRow.clientcode,
+      brokSeg: segmentRow.segment,
     };
 
-    try {
-      console.log(kycPayload, secondPayload, "kycPayload,secondPayload");
-
-      // If entryFlag is A, prioritize TechExcel API
-      if (entryFlag === "A") {
-        const techExcelRes = await apiServices.GetTechExcelApiResponse(
-          secondPayload
-        );
-        console.log(
-          "TechExcel Response:",
-          techExcelRes,
-          techExcelRes?.data?.statusCode
-        );
-        if (
-          techExcelRes?.data?.statusCode === 200 ||
-          techExcelRes?.data?.isSuccess === true
-        ) {
-          // Proceed with KYC update
-          const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
-          if (kycRes?.status === 200) {
-            setFlag((prev) => !prev);
-          } else {
-            console.error("KYC API failed:", kycRes);
-            ShowToast("error", kycRes?.data?.msg || kycRes?.data?.message);
-          }
-        } else {
-          // TechExcel failed — show warning or stop
-          console.warn(
-            "TechExcel API failed or partially failed:",
-            techExcelRes
-          );
-          ShowToast("error", "Failed to update in Techexcel");
-          // Optional: show message to user
-          // toast.error("TechExcel failed: " + (techExcelRes.message || techExcelRes.data));
+    apiServices
+      .GetBrokerageKycDetailsStatus(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("kyc-data", response?.data?.data);
+          setCombinedKycData(response?.data?.data);
         }
-      } else {
-        // Not 'A' — directly update KYC
-        const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
-        if (kycRes?.status === 200) {
-          setFlag((prev) => !prev);
-        } else {
-          console.error("KYC API failed:", kycRes);
-        }
-      }
-    } catch (err) {
-      console.error("Error in API call:", err);
-    } finally {
-      dispatch(hideLoader());
-    }
-  };
+      })
+      .catch((err) => console.log("Error", err))
+      .finally(() => dispatch(hideLoader()));
+  }, [segmentRow, isNudgeTableOpen]);
 
-  // const handleKyc = async ({ row, remarks, action }: any) => {
-  //   if (!Array.isArray(row) || row.length === 0) return;
+  // const handleApproval = async (
+  //   fullRow: {
+  //     rowId: number;
+  //     segment: string;
+  //     clientcode: number;
+  //     moduleNo: number;
+  //   },
+  //   remark: string,
+  //   entryFlag: string
+  // ) => {
+  //   const kycPayload = {
+  //     rowID: fullRow.rowId,
+  //     kycflag: entryFlag,
+  //     kycUserId: user_id,
+  //     kycRemark: remark,
+  //   };
+  //   dispatch(showLoader("Please wait..."));
 
   //   const now = new Date();
   //   const day = String(now.getDate()).padStart(2, "0");
@@ -154,68 +87,159 @@ const KycBrokerage = ({ activeSubItem }: any) => {
   //   const year = now.getFullYear();
   //   const formattedDate = `${day}-${month}-${year}`;
 
-  //   const commonFields = {
-  //     kycflag: action,
-  //     kycUserId: user_id,
-  //     kycRemark: remarks,
+  //   const secondPayload = {
+  //     segment: fullRow.segment,
+  //     clientcode: fullRow.clientcode,
+  //     startdate: formattedDate,
+  //     moduleNo: fullRow.moduleNo,
   //   };
-
-  //   const kycPayload = {
-  //     brokeragedtls: row.map((item: any) => ({
-  //       rowID: item?.rowId,
-  //       ...commonFields,
-  //     })),
-  //   };
-
-  //   dispatch(showLoader("Please wait..."));
 
   //   try {
-  //     //  Step 1: Check TechExcel only if action is approve
-  //     if (action === "A") {
-  //       for (const item of row) {
-  //         const techPayload = {
-  //           segment: item?.segment,
-  //           clientcode: item?.clientcode,
-  //           startdate: formattedDate,
-  //           moduleNo: item?.moduleNo,
-  //           moduleNo2: item?.moduleNo2 || "", // fallback if undefined
-  //         };
+  //     console.log(kycPayload, secondPayload, "kycPayload,secondPayload");
 
-  //         const techRes = await apiServices.GetTechExcelApiResponseNew(
-  //           techPayload
-  //         );
-
-  //         const isSuccess =
-  //           techRes?.data?.statusCode === 200 ||
-  //           techRes?.data?.isSuccess === true;
-
-  //         if (!isSuccess) {
-  //           ShowToast("error", `Techexcel failed for ${item.clientcode}`);
-  //           console.warn("Techexcel failed:", techRes);
-  //           return;
+  //     // If entryFlag is A, prioritize TechExcel API
+  //     if (entryFlag === "A") {
+  //       const techExcelRes = await apiServices.GetTechExcelApiResponse(
+  //         secondPayload
+  //       );
+  //       console.log(
+  //         "TechExcel Response:",
+  //         techExcelRes,
+  //         techExcelRes?.data?.statusCode
+  //       );
+  //       if (
+  //         techExcelRes?.data?.statusCode === 200 ||
+  //         techExcelRes?.data?.isSuccess === true
+  //       ) {
+  //         // Proceed with KYC update
+  //         const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
+  //         if (kycRes?.status === 200) {
+  //           setFlag((prev) => !prev);
+  //         } else {
+  //           console.error("KYC API failed:", kycRes);
+  //           ShowToast("error", kycRes?.data?.msg || kycRes?.data?.message);
   //         }
+  //       } else {
+  //         // TechExcel failed — show warning or stop
+  //         console.warn(
+  //           "TechExcel API failed or partially failed:",
+  //           techExcelRes
+  //         );
+  //         ShowToast("error", "Failed to update in Techexcel");
+  //         // Optional: show message to user
+  //         // toast.error("TechExcel failed: " + (techExcelRes.message || techExcelRes.data));
+  //       }
+  //     } else {
+  //       // Not 'A' — directly update KYC
+  //       const kycRes = await apiServices.UpdateBrokerageKycStatus(kycPayload);
+  //       if (kycRes?.status === 200) {
+  //         setFlag((prev) => !prev);
+  //       } else {
+  //         console.error("KYC API failed:", kycRes);
   //       }
   //     }
-
-  //     //  Step 2: All TechExcel calls succeeded, proceed with KYC update
-  //     const kycRes = await apiServices.UpdateBrokerageKycStatusNew(kycPayload);
-
-  //     if (kycRes?.data?.isSuccess === 200) {
-  //       ShowToast("success", kycRes?.data?.data?.[0]);
-  //       console.log(" KYC response:", kycRes.data.data);
-  //       setFlag((prev) => !prev); // refresh parent
-  //     } else {
-  //       ShowToast("error", kycRes?.data?.data?.[0]);
-  //       console.error("KYC API Error:", kycRes);
-  //     }
-  //   } catch (error) {
-  //     console.error(" Exception in KYC flow:", error);
-  //     ShowToast("error", "Something went wrong while updating KYC");
+  //   } catch (err) {
+  //     console.error("Error in API call:", err);
   //   } finally {
   //     dispatch(hideLoader());
-  //     setIsNudgeTableOpen(false);
   //   }
   // };
+
+  const handleKyc = async ({ row, remarks, action }: any) => {
+    if (!Array.isArray(row) || row.length === 0) return;
+    if (!segmentRow) {
+      console.error("segmentRow is null. Aborting.");
+      return;
+    }
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, "0");
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const year = now.getFullYear();
+    const formattedDate = `${day}-${month}-${year}`;
+
+    const commonFields = {
+      kycflag: action,
+      kycUserId: user_id,
+      kycRemark: remarks,
+    };
+
+    const kycPayload = {
+      brokeragedtls: row.map((item: any) => ({
+        rowID: item?.rowId,
+        ...commonFields,
+      })),
+    };
+
+    dispatch(showLoader("Please wait..."));
+
+    try {
+      //  Step 1: Check TechExcel only if action is approve
+      if (action === "A") {
+        const moduleMap = row.map((item: any) => item?.moduleNo);
+        const segmentMap = row.map((item: any) => item?.segment);
+
+        for (const item of row) {
+          const thisModuleNo = item?.moduleNo;
+          const thisSegment = item?.segment;
+
+          const otherModuleNo =
+            moduleMap.length > 1
+              ? moduleMap.find((mod) => mod !== thisModuleNo) || ""
+              : "";
+
+          const otherSegment =
+            segmentMap.length > 1
+              ? segmentMap.find((seg) => seg !== thisSegment) || ""
+              : "";
+
+          const techPayload = {
+            segment: segmentRow?.segment,
+            clientcode: item?.clientcode,
+            startdate: formattedDate,
+            moduleNo: thisModuleNo,
+            moduleNo2: otherModuleNo,
+            segment1: thisSegment ?? "",
+            segment2: otherSegment ?? "",
+          };
+
+          console.log(techPayload, "techPayload", row, action);
+
+          const techRes = await apiServices.GetTechExcelApiResponseNew(
+            techPayload
+          );
+
+          const isSuccess =
+            techRes?.data?.statusCode === 200 ||
+            techRes?.data?.isSuccess === true;
+
+          if (!isSuccess) {
+            ShowToast("error", `Techexcel failed for ${item.clientcode}`);
+            console.warn("Techexcel failed:", techRes);
+            return;
+          }
+        }
+      }
+
+      //  Step 2: All TechExcel calls succeeded, proceed with KYC update
+      const kycRes = await apiServices.UpdateBrokerageKycStatusNew(kycPayload);
+
+      if (kycRes?.data?.isSuccess === 200) {
+        ShowToast("success", kycRes?.data?.data?.[0]);
+        console.log(" KYC response:", kycRes.data.data);
+        setFlag((prev) => !prev); // refresh parent
+      } else {
+        ShowToast("error", kycRes?.data?.data?.[0]);
+        console.error("KYC API Error:", kycRes);
+      }
+      console.log(kycRes, "kycPayload");
+    } catch (error) {
+      console.error(" Exception in KYC flow:", error);
+      ShowToast("error", "Something went wrong while updating KYC");
+    } finally {
+      dispatch(hideLoader());
+      setIsNudgeTableOpen(false);
+    }
+  };
 
   const handlePreview = async (row: any) => {
     setFileType("");
@@ -267,9 +291,9 @@ const KycBrokerage = ({ activeSubItem }: any) => {
     }
   }, [segmentRow]);
 
-  // const closeNudgeTable = () => {
-  //   setIsNudgeTableOpen(false);
-  // };
+  const closeNudgeTable = () => {
+    setIsNudgeTableOpen(false);
+  };
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -295,21 +319,22 @@ const KycBrokerage = ({ activeSubItem }: any) => {
             <DataTable
               activeSubItem={activeSubItem}
               T6Data={kycData}
-              handleApproval={handleApproval}
+              // handleApproval={handleApproval}
+              // handleApproval={handleApproval}
               handleDownload={handlePreview}
-              // setIsNudgeTableOpen={setIsNudgeTableOpen}
+              setIsNudgeTableOpen={setIsNudgeTableOpen}
               setSegmentRow={setSegmentRow}
             />
           </CardBody>
         </Card>
-        {/* <NudgeTable
+        <NudgeTable
           isOpen={isNudgeTableOpen}
           onClose={closeNudgeTable}
           selectedReport={"More details about segment"}
           singleData={combinedKycData}
           handleAction={handleKyc}
           handleDownload={handlePreview}
-        /> */}
+        />
       </Container>
     </div>
   );
