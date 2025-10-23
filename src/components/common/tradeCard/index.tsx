@@ -299,6 +299,17 @@ const TradeCard: React.FC<TradeCardProps> = ({
                   maximumFractionDigits: 2,
                 })}
               </div>
+              <div>
+                <div>Profit Potential</div>
+                {(
+                  ((Number(targetPrice) - Number(recPrice)) /
+                    Number(recPrice)) *
+                  100
+                ).toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </div>
             </div>
 
             <Divider sx={{ mb: 2, mt: 2 }} />

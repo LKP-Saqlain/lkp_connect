@@ -640,16 +640,19 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                               }}
                             >
                               {typeof badge.value === "number" ? (
-                                <CountUp
-                                  start={0}
-                                  end={badge.value}
-                                  separator=","
-                                  decimals={badge.value % 1 !== 0 ? 2 : 0}
-                                  duration={1}
-                                  formattingFn={
-                                    (value) => value.toLocaleString("en-IN") // 🔹 Indian comma style (1,00,000)
-                                  }
-                                />
+                                <>
+                                  <CountUp
+                                    start={0}
+                                    end={badge.value}
+                                    separator=","
+                                    decimals={badge.value % 1 !== 0 ? 2 : 0}
+                                    duration={1}
+                                    formattingFn={(value) =>
+                                      value.toLocaleString("en-IN")
+                                    } // Indian style commas
+                                  />
+                                  {title === "Zone Target Achieved %" && "%"}
+                                </>
                               ) : (
                                 badge.value
                               )}
