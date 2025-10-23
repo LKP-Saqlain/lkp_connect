@@ -142,7 +142,7 @@ const PaymentChoice = ({
         </p>
 
         <div style={buttonGroupStyle}>
-          <Button
+          <button
             style={{
               backgroundColor: isLedgerSufficient ? "#003366" : "#d3d3d3",
               color: isLedgerSufficient ? "#fff" : "#000",
@@ -155,7 +155,7 @@ const PaymentChoice = ({
             disabled={!isLedgerSufficient}
           >
             Debit from Ledger
-          </Button>
+          </button>
 
           <span style={{ fontWeight: "500", color: "#555" }}>or</span>
 
