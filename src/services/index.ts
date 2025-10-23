@@ -956,4 +956,7 @@ export const apiServices = {
   GetDPAMCPaymentResponse: async (payload: any) => {
     return await apiService("POST", endpoints.GetDPAMCPaymentResponse, payload);
   },
+  GetClientDPContest: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientDPContest, payload);
+  },
 };

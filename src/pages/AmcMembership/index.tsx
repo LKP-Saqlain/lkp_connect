@@ -18,6 +18,9 @@ const Index = ({ activeMenu }: any) => {
   const [selectedCapsule, setSelectedCapsule] = useState("Lifetime Membership");
   const [lifetimeData, setLifetimeData] = useState<any[]>([]);
   const [nonLifetimeData, setNonLifetimeData] = useState<any[]>([]);
+  const [contestData, SetContestData] = useState<any[]>([]);
+  const [clientCount, setClientCount] = useState(0);
+  const [incentiveEarned, setIncentiveEarned] = useState(0);
   const [selectedZone, setSelectedZone] = useState<DropdownOption | null>(null);
   const [selectedBranch, setSelectedBranch] = useState<DropdownOption | null>(
     null
@@ -75,13 +78,53 @@ const Index = ({ activeMenu }: any) => {
         dispatch(hideLoader());
       });
   };
+  const fetchContestData = () => {
+    const payload = {
+      zone: selectedZone?.value || "ALL",
+      branchcode: selectedBranch?.value || "ALL",
+      tradingCode: "ALL",
+      user_id: user_id,
+    };
+
+    dispatch(showLoader("Please wait, we are processing your request..."));
+
+    apiServices
+      .GetClientDPContest(payload)
+      .then((response) => {
+        const resData = response?.data?.data?.clientModule;
+        const countDetails =
+          response?.data?.data?.dpClientcountdetails?.[0] || {};
+        const formattedData = resData.map((item: any, index: number) => ({
+          id: index + 1,
+          ...item,
+        }));
+        console.log(formattedData, "resDatafrom GetClientDPContest");
+        SetContestData(formattedData);
+        setClientCount(countDetails.traded_Client_Count || 0);
+        setIncentiveEarned(countDetails.incentiveEran || 0);
+      })
+      .catch((error) => {
+        console.error("Error fetching compliance data:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
 
   useEffect(() => {
-    // fetchData();
-  }, [selectedZone, selectedBranch]);
+    if (selectedCapsule === "Contest Earned") {
+      fetchContestData();
+    } else {
+      fetchData();
+    }
+  }, [selectedZone, selectedBranch, selectedCapsule]);
 
   const tableData =
-    selectedCapsule === "Lifetime Membership" ? lifetimeData : nonLifetimeData;
+    selectedCapsule === "Lifetime Membership"
+      ? lifetimeData
+      : selectedCapsule === "Non-Lifetime Membership"
+      ? nonLifetimeData
+      : contestData;
 
   const handleClick = (value: string) => {
     console.log(activeMenu, "You clicked the Chip.", value);
@@ -98,12 +141,16 @@ const Index = ({ activeMenu }: any) => {
       {selectedCapsule === "Contest Earned" && (
         <Row style={{ margin: "10px" }}>
           <Col xxl={3} lg={3} md={6} sm={12}>
-            <DashboardCard title="Client Count" value={""} customClass={true} />{" "}
+            <DashboardCard
+              title="Client Count"
+              value={clientCount}
+              customClass={true}
+            />
           </Col>
           <Col xxl={3} lg={3} md={6} sm={12}>
             <DashboardCard
               title="Incentitive Earned"
-              value={""}
+              value={incentiveEarned}
               customClass={true}
             />
           </Col>

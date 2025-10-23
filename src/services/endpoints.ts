@@ -222,4 +222,5 @@ export const endpoints = {
   ActivateAMC: "/api/Client/ActivateAMC",
   SendDPAMCEmail: "/api/Client/SendDPAMCEmail",
   GetDPAMCPaymentResponse: "/api/Client/GetDPAMCPaymentResponse",
+  GetClientDPContest: "/api/Client/GetClientDPContest",
 };

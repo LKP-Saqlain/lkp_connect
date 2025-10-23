@@ -63,6 +63,7 @@ import {
   ClientMandateReport,
   AmcLifeMembership,
   AmcNonLifeMembership,
+  AmcContest,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1536,6 +1537,10 @@ const DataTable = ({
       }));
     } else if (selectedWidget === "Lifetime Membership") {
       return AmcLifeMembership.map((column) => ({
+        ...column,
+      }));
+    } else if (selectedWidget === "Contest Earned") {
+      return AmcContest.map((column) => ({
         ...column,
       }));
     } else if (selectedWidget === "Non-Lifetime Membership") {
