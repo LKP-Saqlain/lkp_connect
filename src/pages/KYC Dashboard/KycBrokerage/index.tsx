@@ -40,7 +40,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       })
       .catch((err) => console.log("Error", err))
       .finally(() => dispatch(hideLoader()));
-  }, [flag]);
+  }, [isNudgeTableOpen]);
 
   useEffect(() => {
     if (!segmentRow) return; //  wait until segmentRow is set
@@ -62,7 +62,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       })
       .catch((err) => console.log("Error", err))
       .finally(() => dispatch(hideLoader()));
-  }, [segmentRow, isNudgeTableOpen]);
+  }, [segmentRow]);
 
   const handleKyc = async ({ row, remarks, action }: any) => {
     if (!Array.isArray(row) || row.length === 0) return;

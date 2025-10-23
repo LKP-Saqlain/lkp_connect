@@ -126,7 +126,7 @@ const PaymentChoice = ({
             </span>
             {!isLedgerSufficient && (
               <p style={{ color: "#b30000", marginTop: "5px" }}>
-                Insufficient balance for ledger payment.
+                Insufficient balance for ledger debit.
               </p>
             )}
           </div>
