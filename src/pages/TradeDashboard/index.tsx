@@ -70,7 +70,7 @@ const DashboardCrypto = ({
   const [currencyCalls, setCurrencyCalls] = useState<any[]>([]);
   const [filteredCalls, setFilteredCalls] = useState<any[]>([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("All");
-  const [uniqueSubCategories, setUniqueSubCategories] = useState<string[]>([]);
+  // const [uniqueSubCategories, setUniqueSubCategories] = useState<string[]>([]);
   const [selectedTab, setSelectedTab] = useState<number>(0);
   //pagination logic
   // const [currentPage, setCurrentPage] = useState(1);
@@ -399,7 +399,8 @@ const DashboardCrypto = ({
               "All",
               ...Array.from(new Set(data.map((item: any) => item.subCategory))),
             ];
-            setUniqueSubCategories(uniqueSubs);
+            // setUniqueSubCategories(uniqueSubs); // bydefault All is not selected with this hook
+            setSelectedSubCategory("All"); //-----> with this Bydefault All is selected
 
             uniqueSubs.forEach((subCat: any, index: any) => {
               console.log(`${index + 1}. ${subCat}`);
@@ -414,11 +415,7 @@ const DashboardCrypto = ({
               currencyCalls
             );
             setFilteredCalls(data);
-            console.log(
-              "uniqueSubCategories-->",
-              selectedTab,
-              uniqueSubCategories
-            );
+            console.log("uniqueSubCategories-->", selectedTab);
           }
           dispatch(hideLoader());
         })
@@ -464,22 +461,25 @@ const DashboardCrypto = ({
     5: "Currency",
   };
 
-  const filteredSubCategories = uniqueSubCategories.filter((subCat) => {
-    // For 'All' (0) and 'Fundamental' (4), show all subcategories
-    if (selectedTab === 0 || selectedTab === 4) return true;
+  const subCategoriesForTab = Array.from(
+    new Set(
+      allCalls
+        .filter((item) => {
+          if (selectedTab === 0) return true; // show all
+          return item.category === tabCategoryMap[selectedTab];
+        })
+        .map((item) => item.subCategory)
+    )
+  ).filter((subCat) => subCat && subCat.trim() !== ""); // remove blanks
 
-    // For others, only show subcategories that have data
-    return allCalls.some(
-      (item) =>
-        item.category === tabCategoryMap[selectedTab] &&
-        item.subCategory === subCat
-    );
-  });
+  // Conditionally add "All" only if subcategories exist
+  const filteredSubCategories =
+    subCategoriesForTab.length > 0 ? ["All", ...subCategoriesForTab] : [];
 
-  const finalSubCategories =
-    selectedTab !== 0 && selectedTab !== 4
-      ? ["All", ...filteredSubCategories]
-      : filteredSubCategories;
+  // const finalSubCategories =
+  //   selectedTab !== 0 && selectedTab !== 4
+  //     ? ["All", ...filteredSubCategories]
+  //     : filteredSubCategories;
 
   useEffect(() => {
     console.log("filteredCallsData", filteredCalls);
@@ -542,46 +542,48 @@ const DashboardCrypto = ({
               >
                 <CardBody>
                   <ResearchTabs TabClick={handleTabClick} />
-                  {selectedTab !== 0 && selectedTab !== 4 && (
-                    <div
-                      style={{
-                        marginBottom: "12px",
-                        display: "flex",
-                        flexWrap: "wrap",
-                        gap: "2px",
-                      }}
-                    >
-                      {finalSubCategories.map((subCat) => (
-                        <div
-                          key={subCat}
-                          onClick={() => handleSubCategoryFilter(subCat)}
-                          style={{
-                            fontWeight: 500,
-                            fontSize: "10px",
-                            color:
-                              selectedSubCategory === subCat
-                                ? "#fff"
-                                : "#11395C",
-                            backgroundColor:
-                              selectedSubCategory === subCat
-                                ? "#11395C"
-                                : "#e6f0ff",
-                            borderRadius: "5px",
-                            padding: "4px 12px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            cursor: "pointer",
-                            userSelect: "none",
-                            transition: "background-color 0.2s ease",
-                            marginRight: "3px",
-                          }}
-                        >
-                          {subCat}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  {selectedTab !== 0 &&
+                    selectedTab !== 4 &&
+                    filteredSubCategories.length > 0 && (
+                      <div
+                        style={{
+                          marginBottom: "12px",
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: "2px",
+                        }}
+                      >
+                        {filteredSubCategories.map((subCat) => (
+                          <div
+                            key={subCat}
+                            onClick={() => handleSubCategoryFilter(subCat)}
+                            style={{
+                              fontWeight: 500,
+                              fontSize: "10px",
+                              color:
+                                selectedSubCategory === subCat
+                                  ? "#fff"
+                                  : "#11395C",
+                              backgroundColor:
+                                selectedSubCategory === subCat
+                                  ? "#11395C"
+                                  : "#e6f0ff",
+                              borderRadius: "5px",
+                              padding: "4px 12px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              cursor: "pointer",
+                              userSelect: "none",
+                              transition: "background-color 0.2s ease",
+                              marginRight: "3px",
+                            }}
+                          >
+                            {subCat}
+                          </div>
+                        ))}
+                      </div>
+                    )}
 
                   <div>
                     {filteredCalls.length > 0 ? (

@@ -6,7 +6,7 @@ interface ZoneTargetChartProps {
   categories: string[];
   series: ApexAxisChartSeries;
   borderRight?: boolean;
-  maxValue: number;
+  selectedType: "both" | "target" | "achieved";
 }
 
 const formatIndianNumber = (num: number) => {
@@ -26,8 +26,17 @@ const ZoneTargetChart: React.FC<ZoneTargetChartProps> = ({
   categories,
   series,
   borderRight = false,
-  maxValue,
+  selectedType,
 }) => {
+  const maxValue = Math.max(...series.flatMap((s) => s.data as number[]));
+
+  const colors =
+    selectedType === "both"
+      ? ["#11395C", "#F57C00"] // Target + Achieved
+      : selectedType === "target"
+      ? ["#11395C"] // only Target
+      : ["#F57C00"]; // only Achieved
+
   const options: ApexCharts.ApexOptions = {
     chart: {
       type: "bar",
@@ -53,11 +62,8 @@ const ZoneTargetChart: React.FC<ZoneTargetChartProps> = ({
       },
     },
     fill: { opacity: 1 },
-    colors: ["#11395C", "#F57C00"],
-    legend: {
-      position: "bottom",
-      horizontalAlign: "center",
-    },
+    colors,
+    legend: { show: false }, //  legend hidden
     tooltip: {
       y: {
         formatter: (val: number) => {

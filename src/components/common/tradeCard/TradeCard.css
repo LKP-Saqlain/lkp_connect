@@ -47,7 +47,7 @@
 
 .trade-prices {
   display: flex;
-  gap: 14rem; 
+  gap: 9rem; 
   margin-top: 6px;
   font-size: 13px;
   flex-wrap: wrap; 

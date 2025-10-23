@@ -17,6 +17,7 @@ import ShowToast from "../../../utils/toastUtils";
 import DashboardCard from "../../../components/common/DashboardCard";
 import { extractBarModelData } from "../../../helper/method";
 import ZoneTargetChart from "../../../components/common/zoneTargetChart";
+import { Button as MuiButton } from "@mui/material";
 
 interface FormValues {
   selectedZone: { label: string; value: string } | null;
@@ -55,6 +56,10 @@ const ZoneTarget = ({ activeSubItem }: any) => {
     barInDirectModel: null,
     barInTotalModel: null,
   });
+  const [selectedType, setSelectedType] = useState<
+    "both" | "target" | "achieved"
+  >("both");
+
   const dispatch = useDispatch<AppDispatch>();
   const { accessType } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
@@ -241,14 +246,18 @@ const ZoneTarget = ({ activeSubItem }: any) => {
     "Total"
   );
 
-  const allValues = [
-    ...directChartData.series.flatMap((s) => s.data),
-    ...indirectChartData.series.flatMap((s) => s.data),
-    ...totalChartData.series.flatMap((s) => s.data),
-  ];
+  // const allValues = [
+  //   ...directChartData.series.flatMap((s) => s.data),
+  //   ...indirectChartData.series.flatMap((s) => s.data),
+  //   ...totalChartData.series.flatMap((s) => s.data),
+  // ];
 
-  const maxValue = Math.max(...allValues);
-
+  // const maxValue = Math.max(...allValues);
+  const colorMap: Record<"both" | "target" | "achieved", [string, string]> = {
+    both: ["#11395C", "#fff"], // [bgColor, textColor]
+    target: ["#11395C", "#fff"],
+    achieved: ["#F57C00", "#fff"],
+  };
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -392,38 +401,94 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                     borderRadius: "15px 15px 0 0",
                     boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
                     backgroundColor: "#fff",
-                    padding: "0.2rem 0.8rem",
+                    padding: "0.5rem 1rem",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  <h4 className="card-title flex-grow-1 d-flex justify-content-center">
-                    Zone Target Q3
-                  </h4>
+                  {/* Left side title */}
+                  <h4 className="card-title mb-0">Zone Target Q3</h4>
+
+                  {/* Right side buttons */}
+                  <div style={{ display: "flex", gap: "1px" }}>
+                    {(["both", "target", "achieved"] as const).map((view) => (
+                      <MuiButton
+                        key={view}
+                        size="small"
+                        onClick={() => setSelectedType(view)}
+                        style={{
+                          borderRadius: "6px",
+                          fontWeight: 500,
+                          minWidth: 80,
+                          margin: "0px 2px",
+                          backgroundColor:
+                            selectedType === view
+                              ? colorMap[view][0]
+                              : undefined,
+                          color:
+                            selectedType === view
+                              ? colorMap[view][1]
+                              : undefined,
+                        }}
+                        variant={
+                          selectedType === view ? "contained" : "outlined"
+                        }
+                      >
+                        {view.charAt(0).toUpperCase() + view.slice(1)}{" "}
+                        {/* Capitalize label */}
+                      </MuiButton>
+                    ))}
+                  </div>
                 </CardHeader>
+
                 <CardBody>
                   <Row>
                     <div style={{ display: "flex", gap: "20px" }}>
                       <ZoneTargetChart
                         title="Direct"
                         categories={directChartData.categories}
-                        series={directChartData.series}
-                        maxValue={maxValue}
+                        series={
+                          selectedType === "both"
+                            ? directChartData.series
+                            : directChartData.series.filter((s) =>
+                                selectedType === "target"
+                                  ? s.name.includes("Target")
+                                  : s.name.includes("Achieved")
+                              )
+                        }
                         borderRight
+                        selectedType={selectedType}
                       />
-
                       <ZoneTargetChart
                         title="Indirect"
                         categories={indirectChartData.categories}
-                        series={indirectChartData.series}
-                        maxValue={maxValue}
+                        series={
+                          selectedType === "both"
+                            ? indirectChartData.series
+                            : indirectChartData.series.filter((s) =>
+                                selectedType === "target"
+                                  ? s.name.includes("Target")
+                                  : s.name.includes("Achieved")
+                              )
+                        }
                         borderRight
+                        selectedType={selectedType}
                       />
-
                       <div style={{ flex: 1, paddingRight: "20px" }}>
                         <ZoneTargetChart
                           title="Total"
                           categories={totalChartData.categories}
-                          series={totalChartData.series}
-                          maxValue={maxValue}
+                          series={
+                            selectedType === "both"
+                              ? totalChartData.series
+                              : totalChartData.series.filter((s) =>
+                                  selectedType === "target"
+                                    ? s.name.includes("Target")
+                                    : s.name.includes("Achieved")
+                                )
+                          }
+                          selectedType={selectedType}
                         />
                       </div>
                     </div>
