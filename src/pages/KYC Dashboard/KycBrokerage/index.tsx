@@ -114,8 +114,8 @@ const KycBrokerage = ({ activeSubItem }: any) => {
           const techPayload = {
             segment: segmentRow?.segment,
             clientcode: item?.clientcode,
-            startdate: "23-11-2025",
-            // startdate: formattedDate,
+            // startdate: "23-11-2025",
+            startdate: formattedDate,
             moduleNo: thisModuleNo,
             moduleNo2: otherModuleNo,
             segment1: thisSegment ?? "",
