@@ -87,16 +87,13 @@ const ESign = ({ selectedRow }: ESignProps) => {
       console.log(payload, "payload downloadSignedPdf");
       const response = await apiServices.DownloadSignedPdf(payload); // API call
       console.log(response, "response from downloadSignedPdf");
-      if (response?.data?.success) {
-        ShowToast("success", "PDF Downloaded Successfully!");
-        // Disable button automatically here
-        // setIsDownloaded(true);
+      if (response?.status == 200) {
+        console.log("success", "PDF Downloaded Successfully!");
       } else {
         ShowToast("error", response?.data?.message || "Failed to download PDF");
       }
     } catch (error) {
-      ShowToast("error", "Error downloading signed PDF");
-      console.error(error);
+      console.warn(error);
     }
   };
 
