@@ -77,7 +77,7 @@ const Index = ({ activeMenu }: any) => {
   };
 
   useEffect(() => {
-    // fetchData();
+    fetchData();
   }, [selectedZone, selectedBranch]);
 
   const tableData =
