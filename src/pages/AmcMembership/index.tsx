@@ -37,13 +37,15 @@ const Index = ({ activeMenu }: any) => {
 
   const fetchData = () => {
     const payload = {
-      zone: selectedZone?.value || "ALL",
-      branchCode: selectedBranch?.value || "ALL",
+      // zone: selectedZone?.value || "ALL",
+      // branchCode: selectedBranch?.value || "ALL",
       tradingCode: "ALL",
       userId: user_id,
+      zone: "0009",
       // zone: "H.O.",
       // userId: "EMP-0040",
       // branchCode: "BH.O.",
+      branchCode: "B1400",
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));

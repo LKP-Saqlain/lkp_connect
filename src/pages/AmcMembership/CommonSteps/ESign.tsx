@@ -1,4 +1,7 @@
 import { Row, Col, Button } from "reactstrap";
+import { useState } from "react";
+import ShowToast from "../../../utils/toastUtils";
+import { apiServices } from "../../../services";
 
 interface ESignProps {
   onPrimarySign?: () => void;
@@ -6,32 +9,117 @@ interface ESignProps {
   onThirdSign?: () => void;
   selectedRow: any;
 }
+declare const Digio: any;
 
-const ESign = ({
-  onPrimarySign,
-  onSecondarySign,
-  onThirdSign,
-  selectedRow,
-}: ESignProps) => {
-  console.log(selectedRow, "selectedRow from eSign");
+const ESign = ({ selectedRow }: ESignProps) => {
+  const [isSigning, setIsSigning] = useState(false);
+  const [disabledHolders, setDisabledHolders] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const handleSign = async (holderType: "primary" | "secondary" | "third") => {
+    try {
+      setIsSigning(true);
+      ShowToast("info", `Initiating ${holderType} holder signing...`);
+
+      let apiFunc;
+      if (holderType === "primary")
+        apiFunc = apiServices.SendFirstHolderSignature;
+      else if (holderType === "secondary")
+        apiFunc = apiServices.SendSecondHolderSignature;
+      else apiFunc = apiServices.SendThirdHolderSignature;
+
+      const response = await apiFunc({
+        dpid: selectedRow?.dP_ID,
+        // dpid: "1203000001123371",
+        // dpid: "1203000001078403", //Msir
+      });
+      const data = response?.data?.clsUploadPDFResponse;
+
+      if (!data?.id || !data?.access_token?.id) {
+        ShowToast("error", "Invalid response from signature API");
+        setIsSigning(false);
+        return;
+      }
+
+      const documentId = data.id;
+      const signerIdentifier = data.signing_parties?.[0]?.identifier;
+      const accessToken = data.access_token.id;
+      const fileName = data.file_name;
+      const logoUrl =
+        "https://www.lkpsec.com/App_Themes/images/webp/LKP--Final--Logo-New-2021-D2.webp";
+
+      const options = {
+        environment: "production",
+        callback: async function (resp: any) {
+          if (resp?.error_code) {
+            ShowToast("error", "Signing failed  ");
+            setIsSigning(false);
+            return;
+          }
+
+          ShowToast("success", "Signing completed successfully");
+          console.log(resp, " from digio");
+          setDisabledHolders((prev) => ({ ...prev, [holderType]: true }));
+          await downloadSignedPdf(documentId, fileName);
+        },
+        logo: logoUrl,
+        theme: { primaryColor: "#07152B", secondaryColor: "#000000" },
+      };
+
+      const digio = new Digio(options);
+      digio.init();
+      digio.submit(documentId, signerIdentifier, accessToken);
+    } catch (err) {
+      ShowToast("error", "Error during signing process");
+    } finally {
+      setIsSigning(false);
+    }
+  };
+
+  const downloadSignedPdf = async (documentId: string, fileName: string) => {
+    console.log("check before downloadSignedPdf");
+    try {
+      const payload = {
+        id: documentId,
+        name: fileName,
+      };
+      console.log(payload, "payload downloadSignedPdf");
+      const response = await apiServices.DownloadSignedPdf(payload); // API call
+      console.log(response, "response from downloadSignedPdf");
+      if (response?.data?.success) {
+        ShowToast("success", "PDF Downloaded Successfully!");
+        // Disable button automatically here
+        // setIsDownloaded(true);
+      } else {
+        ShowToast("error", response?.data?.message || "Failed to download PDF");
+      }
+    } catch (error) {
+      ShowToast("error", "Error downloading signed PDF");
+      console.error(error);
+    }
+  };
 
   const holders = [
     {
       name: selectedRow?.primary_Holder,
       type: "Primary Holder",
-      onClick: onPrimarySign,
+      action: () => handleSign("primary"),
+      key: "primary",
     },
     {
       name: selectedRow?.secondary_Holder_Name,
       type: "Second Holder",
-      onClick: onSecondarySign,
+      action: () => handleSign("secondary"),
+      key: "secondary",
     },
     {
       name: selectedRow?.third_Holder_Name,
       type: "Third Holder",
-      onClick: onThirdSign, // you can make separate handler if needed
+      action: () => handleSign("third"),
+      key: "third",
     },
-  ].filter((holder) => holder.name?.trim()); //  Only include non-empty names
+  ].filter((holder) => holder.name?.trim());
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
@@ -49,7 +137,6 @@ const ESign = ({
               marginBottom: "2rem",
             }}
           >
-            {/* Circular Placeholder */}
             <div
               style={{
                 width: "80px",
@@ -60,7 +147,6 @@ const ESign = ({
               }}
             ></div>
 
-            {/* Holder Info */}
             <p
               style={{
                 marginBottom: "0.25rem",
@@ -80,7 +166,6 @@ const ESign = ({
               {holder.type}
             </p>
 
-            {/* Proceed Button */}
             <Button
               color="primary"
               style={{
@@ -89,9 +174,10 @@ const ESign = ({
                 borderRadius: "6px",
                 padding: "0.5rem 1.5rem",
               }}
-              onClick={holder.onClick}
+              onClick={holder.action}
+              disabled={isSigning || disabledHolders[holder.key]}
             >
-              Proceed to eSign
+              {disabledHolders[holder.key] ? "Signed" : "Proceed to eSign"}
             </Button>
           </Col>
         ))}

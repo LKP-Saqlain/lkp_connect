@@ -122,7 +122,7 @@ const Confirmation = ({
   useEffect(() => {
     if (flow === "ledger") {
       setPaymentStatus("success");
-      activateAMC("ledger");
+      // activateAMC("ledger");
     }
     // else {
     //   const now = new Date();
