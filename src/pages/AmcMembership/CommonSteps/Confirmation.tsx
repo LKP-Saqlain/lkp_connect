@@ -75,15 +75,14 @@ const Confirmation = ({
 
   //  Function: Poll payment response (for online)
   const getPaymentResponse = async () => {
-    const payload =
-      // {
-      //   boid: selectedRow?.dP_ID,
-      //   amount: totalPayable.toString(),
-      // };
-      {
-        boid: "1203000001017198",
-        amount: "2777.84",
-      };
+    const payload = {
+      boid: selectedRow?.dP_ID,
+      amount: totalPayable.toString(),
+    };
+    // {
+    //   boid: "1203000001017198",
+    //   amount: "2777.84",
+    // };
 
     console.log("Checking payment status...", payload);
 
@@ -122,7 +121,7 @@ const Confirmation = ({
   useEffect(() => {
     if (flow === "ledger") {
       setPaymentStatus("success");
-      // activateAMC("ledger");
+      activateAMC("ledger");
     }
     // else {
     //   const now = new Date();

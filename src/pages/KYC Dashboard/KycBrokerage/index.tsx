@@ -36,6 +36,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
           console.log("kyc-data", response?.data?.data);
           setKycData(response?.data?.data);
           setFlag((prev) => !prev); // refresh parent
+          console.log(flag, isNudgeTableOpen);
         }
       })
       .catch((err) => console.log("Error", err))
