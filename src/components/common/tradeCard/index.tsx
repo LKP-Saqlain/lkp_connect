@@ -65,7 +65,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
 }) => {
   const zoom = useZoomLevel();
 
-  const containerClass = zoom < 95 ? "trade-prices-2" : "trade-prices";
+  const containerClass = zoom < 90 ? "trade-prices-2" : "trade-prices";
 
   const getStatusColor = () => {
     switch (status) {
@@ -293,14 +293,17 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 className="trade-expiry"
                 // style={{ border: "1px solid black" }}
               >
-                {(selectedTab === 2 || selectedTab === 3) && exchSegment && (
-                  <span
-                    className="trade-tag trade-category"
-                    style={{ marginRight: ".5rem" }}
-                  >
-                    {exchSegment.slice(0, 3).toUpperCase()}
-                  </span>
-                )}
+                {(selectedTab === 0 ||
+                  selectedTab === 2 ||
+                  selectedTab === 3) &&
+                  exchSegment && (
+                    <span
+                      className="trade-tag trade-category"
+                      style={{ marginRight: ".5rem" }}
+                    >
+                      {exchSegment.slice(0, 3).toUpperCase()}
+                    </span>
+                  )}
                 {expiry} {strike && <span>{strike}</span>}
               </div>
             )}
