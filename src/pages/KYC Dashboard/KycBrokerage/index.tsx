@@ -36,6 +36,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
           console.log("kyc-data", response?.data?.data);
           setKycData(response?.data?.data);
           setFlag((prev) => !prev); // refresh parent
+          console.log(flag, isNudgeTableOpen, "<---nud");
         }
       })
       .catch((err) => console.log("Error", err))
@@ -70,11 +71,11 @@ const KycBrokerage = ({ activeSubItem }: any) => {
       console.error("segmentRow is null. Aborting.");
       return;
     }
+
     const now = new Date();
-    const day = String(now.getDate()).padStart(2, "0");
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const year = now.getFullYear();
-    const formattedDate = `${day}-${month}-${year}`;
+    const formattedDate = `${String(now.getDate()).padStart(2, "0")}-${String(
+      now.getMonth() + 1
+    ).padStart(2, "0")}-${now.getFullYear()}`;
 
     const commonFields = {
       kycflag: action,
@@ -92,10 +93,15 @@ const KycBrokerage = ({ activeSubItem }: any) => {
     dispatch(showLoader("Please wait..."));
 
     try {
-      //  Step 1: Check TechExcel only if action is approve
+      let allTechExcelSuccess = true;
+
+      // Step 1: Call TechExcel only if approving (A)
       if (action === "A") {
         const moduleMap = row.map((item: any) => item?.moduleNo);
         const segmentMap = row.map((item: any) => item?.segment);
+
+        // prevent duplicate reverse calls (e.g., Intraday ↔ Delivery)
+        const uniquePairs = new Set<string>();
 
         for (const item of row) {
           const thisModuleNo = item?.moduleNo;
@@ -111,10 +117,16 @@ const KycBrokerage = ({ activeSubItem }: any) => {
               ? segmentMap.find((seg) => seg !== thisSegment) || ""
               : "";
 
+          const pairKey = [thisModuleNo, otherModuleNo].sort().join("-");
+          if (uniquePairs.has(pairKey)) {
+            console.log("Skipping duplicate TechExcel pair:", pairKey);
+            continue;
+          }
+          uniquePairs.add(pairKey);
+
           const techPayload = {
             segment: segmentRow?.segment,
             clientcode: item?.clientcode,
-            // startdate: "23-11-2025",
             startdate: formattedDate,
             moduleNo: thisModuleNo,
             moduleNo2: otherModuleNo,
@@ -122,37 +134,63 @@ const KycBrokerage = ({ activeSubItem }: any) => {
             segment2: otherSegment ?? "",
           };
 
-          console.log(techPayload, "techPayload", row, action);
+          console.log("TechExcel Payload:", techPayload);
 
           const techRes = await apiServices.GetTechExcelApiResponseNew(
             techPayload
           );
 
+          const statusCode = techRes?.data?.statusCode;
+          const message = techRes?.data?.data || "";
+
+          // ✅ treat “Slab Already Exists” (206) as success
+          const isSoftSuccess =
+            statusCode === 206 &&
+            typeof message === "string" &&
+            message.toLowerCase().includes("slab already exists");
+
           const isSuccess =
-            techRes?.data?.statusCode === 200 ||
-            techRes?.data?.isSuccess === true;
+            statusCode === 200 ||
+            techRes?.data?.isSuccess === true ||
+            isSoftSuccess;
 
           if (!isSuccess) {
-            ShowToast("error", `Techexcel failed for ${item.clientcode}`);
-            console.warn("Techexcel failed:", techRes);
-            return;
+            allTechExcelSuccess = false;
+            ShowToast(
+              "error",
+              `TechExcel failed for ${item.clientcode}: ${
+                techRes?.data?.data || "Unknown error"
+              }`
+            );
+            console.warn("TechExcel failed:", techRes);
+            break; // stop loop — no need to continue
+          } else {
+            console.log(
+              `✅ TechExcel success for ${item.clientcode}: ${techRes?.data?.data}`
+            );
           }
         }
       }
 
-      //  Step 2: All TechExcel calls succeeded, proceed with KYC update
-      const kycRes = await apiServices.UpdateBrokerageKycStatusNew(kycPayload);
+      // Step 2: Only call KYC if either Reject (R) or all TechExcel succeeded
+      if (action === "R" || allTechExcelSuccess) {
+        const kycRes = await apiServices.UpdateBrokerageKycStatusNew(
+          kycPayload
+        );
 
-      if (kycRes?.data?.isSuccess === 200) {
-        ShowToast("success", kycRes?.data?.data?.[0]);
-        console.log(" KYC response:", kycRes.data.data);
+        if (kycRes?.data?.isSuccess == true) {
+          ShowToast("success", kycRes?.data?.data?.[0]);
+          console.log("KYC response:", kycRes.data.data);
+        } else {
+          ShowToast("error", kycRes?.data?.data?.[0]);
+          console.error("KYC API Error:", kycRes);
+        }
+        console.log("KYC Payload:", kycPayload);
       } else {
-        ShowToast("error", kycRes?.data?.data?.[0]);
-        console.error("KYC API Error:", kycRes);
+        console.warn("Skipping KYC update due to failed TechExcel check.");
       }
-      console.log(kycRes, "kycPayload");
     } catch (error) {
-      console.error(" Exception in KYC flow:", error);
+      console.error("Exception in KYC flow:", error);
       ShowToast("error", "Something went wrong while updating KYC");
     } finally {
       dispatch(hideLoader());
