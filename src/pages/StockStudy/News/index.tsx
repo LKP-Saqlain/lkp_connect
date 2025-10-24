@@ -104,7 +104,7 @@ const News = ({ selectedIsin }: any) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Learn More
+                  Read More
                 </Button>
 
                 <span style={{ fontSize: "14px" }}>

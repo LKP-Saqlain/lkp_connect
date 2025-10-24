@@ -302,8 +302,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
               gridTemplateColumns:
                 rightTitle || rightValue ? "1fr auto 1fr" : "1fr",
               alignItems: "center",
-              marginTop: !customClass ? "1.5rem" : "0rem",
-              marginBottom: customClass ? "1rem" : "0rem",
+              marginTop: !customClass ? "0.8rem" : "0rem",
+              marginBottom: customClass ? "0.8rem" : "0rem",
             }}
           >
             {/* Left Side */}
@@ -452,7 +452,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                           color: "#1B1B1B",
                           fontSize: "17px",
                           fontWeight: "bold",
-
                           width:
                             rightValue === "Coming Soon" ? "6rem" : undefined,
                         }}

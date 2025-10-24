@@ -52,48 +52,53 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
   useEffect(() => {
     const Id = localStorage.getItem("Id");
     const userType = localStorage.getItem("uIdType");
+
     let payload = {
       user_id: Id,
       option: "zone",
-      userType: userType == "Employee" ? "EMP" : "",
+      userType: userType === "Employee" ? "EMP" : "",
       zone: selectedZone?.value,
     };
 
     const username = "admin";
     const password = "admin";
     const credentials = `${username}:${password}`;
-    const encodedCredentials = btoa(credentials); // Base64 encode
+    const encodedCredentials = btoa(credentials);
     const LoginauthHeader = `Basic ${encodedCredentials}`;
 
     const customHeaders = {
-      Authorization: LoginauthHeader, // Use LoginauthHeader for this request
+      Authorization: LoginauthHeader,
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
+
     apiServices
       .getDropDown(payload, customHeaders)
       .then((res) => {
-        console.log("Response-->", res);
         if (res?.status === 200) {
-          let zoneDropdown = res?.data.map((item: any) => ({
-            label: item.itemDesc, // This will be displayed in the dropdown
-            value: item.itemVal, // This will be the actual value
+          const zoneDropdown = res.data.map((item: any) => ({
+            label: item.itemDesc,
+            value: item.itemVal,
           }));
-          console.log("dropdown value", zoneDropdown);
           setNoSortingGroup(zoneDropdown);
 
-          // setSelectedNoSortingGroup(selectedNoSortingGroup);
+          //  Automatically select the first zone in the list
+          if (zoneDropdown.length > 0) {
+            setSelectedZone(zoneDropdown[0]);
+          }
         }
       })
-      .catch((Err) => {
-        console.log("Error", Err);
+      .catch((err) => {
+        console.error("Error fetching zones:", err);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
       });
-
-    dispatch(hideLoader());
   }, [dispatch]);
 
   useEffect(() => {
     const Id = localStorage.getItem("Id");
+
     if (selectedZone) {
       const payload = {
         user_id: Id,
@@ -107,27 +112,35 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
       apiServices
         .getDropDown(payload)
         .then((res) => {
-          console.log("response->", res);
           if (res?.status === 200) {
-            let branchDropdown = res?.data.map((item: any) => ({
-              label: item.itemVal, // Display value in dropdown
-              value: item.itemVal, // Actual value of the dropdown item
+            let branchDropdown = res.data.map((item: any) => ({
+              label: item.itemVal, // Display value
+              value: item.itemVal, // Actual value
             }));
+
+            // Add "ALL" as first option
             branchDropdown = [
               { label: "ALL", value: "ALL" },
               ...branchDropdown,
             ];
 
-            setBranchCodeOptions(branchDropdown); // Set the updated branch dropdown
+            setBranchCodeOptions(branchDropdown); // set dropdown options
+
+            //  Automatically select the first branch (e.g., ALL)
+            if (branchDropdown.length > 0) {
+              setSelectedBranchCode(branchDropdown[0]);
+            }
           }
-          dispatch(hideLoader());
         })
         .catch((err) => {
           console.error("Error fetching branch data:", err);
+        })
+        .finally(() => {
           dispatch(hideLoader());
         });
     }
-  }, [selectedZone, dispatch]); // This effect runs when `selectedZone` changes
+  }, [selectedZone, dispatch]);
+  // This effect runs when `selectedZone` changes
 
   const handleSubmit = async () => {
     console.log(
@@ -182,7 +195,26 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
           }
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("ClientCash error:", error);
+        // setResponseStatus([])
+        const errors = error?.response?.data?.errors;
+
+        // ✅ Show Zone error only if it exists
+        if (errors?.Zone && errors.Zone.length > 0) {
+          ShowToast("error", errors.Zone[0]);
+        }
+
+        // ✅ Show BranchCode error only if it exists
+        if (errors?.BranchCode && errors.BranchCode.length > 0) {
+          ShowToast("error", errors.BranchCode[0]);
+        }
+
+        // Optional: handle other errors (network, etc.)
+        if (!errors?.Zone && !errors?.BranchCode) {
+          ShowToast("error", "Something went wrong. Please try again.");
+        }
+
         setCustomLedgerData([]);
       })
       .finally(() => {

@@ -2,6 +2,7 @@ import Dividends from "./Dividends";
 import Bonus from "./Bonus";
 import Split from "./Spilt";
 import BoardMeeting from "./BoardMeeting";
+import { TableCell, TableRow } from "@mui/material";
 // import Right from "./Right"; // Uncomment when implemented
 
 const CorporateAction = ({ activeSubmenu, selectedIsin }: any) => {
@@ -25,10 +26,9 @@ const CorporateAction = ({ activeSubmenu, selectedIsin }: any) => {
 
     default:
       return (
-        <div>
-          <h6>No active data available for: {activeSubmenu}</h6>
-          <p>Please select a valid submenu item.</p>
-        </div>
+        <TableRow>
+          <TableCell align="center">No data available !</TableCell>
+        </TableRow>
       );
   }
 };

@@ -331,6 +331,7 @@ const DashboardCrypto = ({
   }
 
   const handleTabClick = (value: number) => {
+    // alert(value);
     setSelectedTab(value);
     let filteredByCategory = [];
 
@@ -364,65 +365,69 @@ const DashboardCrypto = ({
     tog_animationZoom();
   }, []);
 
+  const fetchResearchCall = async () => {
+    let payload = {
+      user_id: user_id,
+      groupName: "GSG",
+      activeCallFlag: 1,
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .ResearchCallData(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("API_RESPONSE", response?.data?.data);
+
+          setResearchCalls(response?.data?.data || []);
+          const data = response?.data?.data || [];
+          console.log(researchCalls);
+
+          setAllCalls(data);
+          setEquityCalls(
+            data.filter((item: any) => item.category === "Equity")
+          );
+          setFoCalls(data.filter((item: any) => item.category === "F&O"));
+          setCommodityCalls(
+            data.filter((item: any) => item.category === "Commodity")
+          );
+
+          setCurrencyCalls(
+            data.filter((item: any) => item.category === "Currency")
+          );
+
+          const uniqueSubs: any = [
+            "All",
+            ...Array.from(new Set(data.map((item: any) => item.subCategory))),
+          ];
+          // setUniqueSubCategories(uniqueSubs); // bydefault All is not selected with this hook
+          setSelectedSubCategory("All"); //-----> with this Bydefault All is selected
+
+          uniqueSubs.forEach((subCat: any, index: any) => {
+            console.log(`${index + 1}. ${subCat}`);
+          });
+
+          console.log(
+            "dummyConsole",
+            uniqueSubs,
+            equityCalls,
+            foCalls,
+            commodityCalls,
+            currencyCalls
+          );
+          setFilteredCalls(data);
+          console.log("uniqueSubCategories-->", selectedTab);
+        }
+        dispatch(hideLoader());
+      })
+      .catch((error) => {
+        console.log("Errrrror", error);
+        dispatch(hideLoader());
+      });
+  };
+
   useEffect(() => {
     if (selectedItem === "Reasearch Calls") {
-      let payload = {
-        user_id: user_id,
-        groupName: "GSG",
-        activeCallFlag: 1,
-      };
-      dispatch(showLoader(""));
-      apiServices
-        .ResearchCallData(payload)
-        .then((response) => {
-          if (response?.status === 200) {
-            console.log("API_RESPONSE", response?.data?.data);
-
-            setResearchCalls(response?.data?.data || []);
-            const data = response?.data?.data || [];
-            console.log(researchCalls);
-
-            setAllCalls(data);
-            setEquityCalls(
-              data.filter((item: any) => item.category === "Equity")
-            );
-            setFoCalls(data.filter((item: any) => item.category === "F&O"));
-            setCommodityCalls(
-              data.filter((item: any) => item.category === "Commodity")
-            );
-
-            setCurrencyCalls(
-              data.filter((item: any) => item.category === "Currency")
-            );
-
-            const uniqueSubs: any = [
-              "All",
-              ...Array.from(new Set(data.map((item: any) => item.subCategory))),
-            ];
-            // setUniqueSubCategories(uniqueSubs); // bydefault All is not selected with this hook
-            setSelectedSubCategory("All"); //-----> with this Bydefault All is selected
-
-            uniqueSubs.forEach((subCat: any, index: any) => {
-              console.log(`${index + 1}. ${subCat}`);
-            });
-
-            console.log(
-              "dummyConsole",
-              uniqueSubs,
-              equityCalls,
-              foCalls,
-              commodityCalls,
-              currencyCalls
-            );
-            setFilteredCalls(data);
-            console.log("uniqueSubCategories-->", selectedTab);
-          }
-          dispatch(hideLoader());
-        })
-        .catch((error) => {
-          console.log("Errrrror", error);
-          dispatch(hideLoader());
-        });
+      fetchResearchCall();
     }
   }, [dispatch, selectedItem]);
 
@@ -480,6 +485,17 @@ const DashboardCrypto = ({
   //   selectedTab !== 0 && selectedTab !== 4
   //     ? ["All", ...filteredSubCategories]
   //     : filteredSubCategories;
+
+  const handleRefreshClicked = async () => {
+    // Reset main tab selection to "All"
+    setSelectedTab(0);
+
+    // Re-fetch API
+    await fetchResearchCall();
+
+    // ✅ Reapply filtering for "All" tab to show all records
+    handleTabClick(0);
+  };
 
   useEffect(() => {
     console.log("filteredCallsData", filteredCalls);
@@ -541,7 +557,12 @@ const DashboardCrypto = ({
                 }}
               >
                 <CardBody>
-                  <ResearchTabs TabClick={handleTabClick} />
+                  <ResearchTabs
+                    TabClick={handleTabClick}
+                    handleRefreshClicked={handleRefreshClicked}
+                    value={selectedTab}
+                  />
+
                   {selectedTab !== 0 &&
                     selectedTab !== 4 &&
                     filteredSubCategories.length > 0 && (
@@ -589,19 +610,22 @@ const DashboardCrypto = ({
                     {filteredCalls.length > 0 ? (
                       [...filteredCalls]
                         .sort((a, b) => {
+                          // Prefer insertionTime if available, else fallback to validity
                           const dateA = dayjs(
-                            a.validity,
+                            a.insertionTime || a.validity,
                             "DD-MM-YYYY HH:mm:ss"
                           );
                           const dateB = dayjs(
-                            b.validity,
+                            b.insertionTime || b.validity,
                             "DD-MM-YYYY HH:mm:ss"
                           );
 
-                          if (!dateA.isValid()) return 1; // invalid dates go last
+                          // Invalid dates go last
+                          if (!dateA.isValid()) return 1;
                           if (!dateB.isValid()) return -1;
 
-                          return dateB.valueOf() - dateA.valueOf(); // descending
+                          // Descending order (latest first)
+                          return dateB.valueOf() - dateA.valueOf();
                         })
                         .map((item, index) => (
                           <TradeCard
@@ -622,6 +646,7 @@ const DashboardCrypto = ({
                             type="ResearchCall"
                             exchSegment={item.exchSegment}
                             selectedTab={selectedTab}
+                            insertionTime={item.insertionTime}
                           />
                         ))
                     ) : (

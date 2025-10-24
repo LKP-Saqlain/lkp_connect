@@ -265,7 +265,7 @@ const ZoneTarget = ({ activeSubItem }: any) => {
           <Row className="row-font">
             <Col lg={12}>
               {accessType === "ALL" && (
-                <Card>
+                <Card style={{ marginBottom: "0.7rem" }}>
                   <Row style={{ margin: "5px", minWidth: "100%" }}>
                     <Col
                       xs={12}
@@ -342,7 +342,7 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                   </Row>
                 </Card>
               )}
-              <Row style={{ marginTop: "20px" }}>
+              <Row>
                 {metrics.map((metric, index) => {
                   const badges = [
                     {
@@ -391,7 +391,7 @@ const ZoneTarget = ({ activeSubItem }: any) => {
               </Row>
               <Card
                 style={{
-                  minHeight: "80vh",
+                  minHeight: "55vh",
                   borderRadius: "15px",
                   boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
                 }}
