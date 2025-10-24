@@ -452,7 +452,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                           color: "#1B1B1B",
                           fontSize: "17px",
                           fontWeight: "bold",
-
                           width:
                             rightValue === "Coming Soon" ? "6rem" : undefined,
                         }}

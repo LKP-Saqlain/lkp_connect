@@ -5,6 +5,7 @@ import "./TradeCard.css";
 import dayjs from "dayjs";
 import { capitalizeEachWord } from "../../../utils";
 import RemoveIcon from "@mui/icons-material/Remove";
+import useZoomLevel from "../../../hooks/useZoomLevel";
 
 interface TradeCardProps {
   stockName?: any;
@@ -62,6 +63,10 @@ const TradeCard: React.FC<TradeCardProps> = ({
   selectedTab,
   insertionTime,
 }) => {
+  const zoom = useZoomLevel();
+
+  const containerClass = zoom < 95 ? "trade-prices-2" : "trade-prices";
+
   const getStatusColor = () => {
     switch (status) {
       case "Open":
@@ -300,43 +305,56 @@ const TradeCard: React.FC<TradeCardProps> = ({
               </div>
             )}
 
-            <div className="trade-prices">
+            <div
+              className={containerClass}
+              style={{ color: "#999999", fontSize: "12px" }}
+            >
               <div>
                 <div>Stop Loss</div>
-                {Number(stopLoss).toLocaleString("en-IN", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                <div style={{ color: "#666" }}>
+                  {Number(stopLoss).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </div>
               </div>
               <div>
                 <div>Rec. Price</div>
-                {Number(recPrice).toLocaleString("en-IN", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                <div style={{ color: "#666" }}>
+                  {Number(recPrice).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </div>
               </div>
               <div>
                 <div>Target Price</div>
-                {Number(targetPrice).toLocaleString("en-IN", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
+                <div style={{ color: "#666" }}>
+                  {Number(targetPrice).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </div>
               </div>
               <div>
                 <div>Profit Potential</div>
-                {(
-                  ((Number(targetPrice) - Number(recPrice)) /
-                    Number(recPrice)) *
-                  100
-                ).toLocaleString("en-IN", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}
-                %
+                <div style={{ color: "#666" }}>
+                  {(
+                    ((Number(targetPrice) - Number(recPrice)) /
+                      Number(recPrice)) *
+                    100
+                  ).toLocaleString("en-IN", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                  %
+                </div>
               </div>
               <div>
                 <div>Insertion date</div>
-                <div>{formatInsertionTime(insertionTime)}</div>
+                <div style={{ color: "#666" }}>
+                  {formatInsertionTime(insertionTime)}
+                </div>
               </div>
             </div>
 
@@ -363,7 +381,15 @@ const TradeCard: React.FC<TradeCardProps> = ({
               <span className="trade-tag trade-label">{tag}</span>
             </div>
 
-            <div className="trade-valid-till">Valid Till</div>
+            <div
+              style={{
+                fontSize: "12px",
+                color: "#999",
+                marginTop: expiry !== "" ? "1.8rem" : "0rem",
+              }}
+            >
+              Valid Till
+            </div>
             <div className="trade-datetime">
               {(() => {
                 const parsedDate = dayjs(dateTime, "DD-MM-YYYY HH:mm:ss");

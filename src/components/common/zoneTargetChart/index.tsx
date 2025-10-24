@@ -87,7 +87,7 @@ const ZoneTargetChart: React.FC<ZoneTargetChartProps> = ({
         borderRight: borderRight ? "3px solid #ccc" : "none",
       }}
     >
-      <Chart options={options} series={series} type="bar" height={350} />
+      <Chart options={options} series={series} type="bar" height={275} />
     </div>
   );
 };

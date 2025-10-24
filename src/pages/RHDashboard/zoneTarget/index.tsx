@@ -391,7 +391,7 @@ const ZoneTarget = ({ activeSubItem }: any) => {
               </Row>
               <Card
                 style={{
-                  minHeight: "80vh",
+                  minHeight: "55vh",
                   borderRadius: "15px",
                   boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
                 }}
