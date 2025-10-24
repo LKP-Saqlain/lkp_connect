@@ -45,6 +45,7 @@ const PaymentChoice = ({
     clientData?.existing_dp_outstanding
   );
   const ledgerBalance = parseCurrency(clientData?.ledgerbalance);
+  // const ledgerBalance = "435345";
   const amcAmount = parseCurrency(amcFee);
 
   // Compute totals

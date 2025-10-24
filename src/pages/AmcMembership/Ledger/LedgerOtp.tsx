@@ -15,7 +15,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
   const [timer, setTimer] = useState<number>(59);
   const [otpVerify, setOtpVerify] = useState<boolean>(false);
   const [otpSent, setOtpSent] = useState<boolean>(false);
-  const [serverOtp, setServerOtp] = useState<string | null>(null); // for debugging (remove in prod)
+  // const [serverOtp, setServerOtp] = useState<string | null>(null); // for debugging (remove in prod)
   const dispatch = useDispatch<AppDispatch>();
 
   // Timer countdown
@@ -29,8 +29,8 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
   useEffect(() => {
     const sendOtp = async () => {
       const payload = {
-        // mobileNo: clientData?.mobile_No ,
-        mobileNo: "99693727591",
+        mobileNo: clientData?.mobile_No,
+        // mobileNo: "99693727591",
         otp: "",
         action: "Send",
       };
@@ -43,7 +43,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
 
         if (response?.data?.isSuccess) {
           setOtpSent(true);
-          setServerOtp(response?.data?.data?.otp || null); // debug only
+          // setServerOtp(response?.data?.data?.otp || null); // debug only
           setTimer(59); // restart timer
         } else {
           console.warn(" Failed to send OTP");
@@ -83,8 +83,8 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     }
 
     const payload = {
-      // mobileNo: clientData?.mobile_No ,
-      mobileNo: "99693727591",
+      mobileNo: clientData?.mobile_No,
+      // mobileNo: "99693727591",
       otp: enteredOtp,
       action: "Verify",
     };
@@ -119,8 +119,8 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     setOtpSent(false);
 
     const payload = {
-      // mobileNo: clientData?.mobile_No ,
-      mobileNo: "99693727591",
+      mobileNo: clientData?.mobile_No,
+      // mobileNo: "99693727591",
       otp: "",
       action: "Send",
     };
@@ -244,11 +244,11 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
       </p>
 
       {/* Debug info (optional) */}
-      {serverOtp && (
+      {/* {serverOtp && (
         <p style={{ fontSize: "0.8rem", color: "gray" }}>
           (Test OTP: <strong>{serverOtp}</strong>)
         </p>
-      )}
+      )} */}
     </div>
   );
 };

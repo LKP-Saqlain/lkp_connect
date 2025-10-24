@@ -222,4 +222,9 @@ export const endpoints = {
   ActivateAMC: "/api/Client/ActivateAMC",
   SendDPAMCEmail: "/api/Client/SendDPAMCEmail",
   GetDPAMCPaymentResponse: "/api/Client/GetDPAMCPaymentResponse",
+  GetClientDPContest: "/api/Client/GetClientDPContest",
+  SendFirstHolderSignature: "/api/Client/SendFirstHolderSignature",
+  SendSecondHolderSignature: "/api/Client/SendSecondHolderSignature",
+  SendThirdHolderSignature: "/api/Client/SendThirdHolderSignature",
+  DownloadSignedPdf: "/api/Client/DownloadSignedPdf",
 };

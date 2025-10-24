@@ -956,4 +956,31 @@ export const apiServices = {
   GetDPAMCPaymentResponse: async (payload: any) => {
     return await apiService("POST", endpoints.GetDPAMCPaymentResponse, payload);
   },
+  GetClientDPContest: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientDPContest, payload);
+  },
+  SendFirstHolderSignature: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendFirstHolderSignature,
+      payload
+    );
+  },
+  SendSecondHolderSignature: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendSecondHolderSignature,
+      payload
+    );
+  },
+  SendThirdHolderSignature: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendThirdHolderSignature,
+      payload
+    );
+  },
+  DownloadSignedPdf: async (payload: any) => {
+    return await apiService("POST", endpoints.DownloadSignedPdf, payload);
+  },
 };
