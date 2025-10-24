@@ -9279,7 +9279,14 @@ export const AmcContest: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "module_No",

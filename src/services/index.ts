@@ -959,4 +959,28 @@ export const apiServices = {
   GetClientDPContest: async (payload: any) => {
     return await apiService("POST", endpoints.GetClientDPContest, payload);
   },
+  SendFirstHolderSignature: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendFirstHolderSignature,
+      payload
+    );
+  },
+  SendSecondHolderSignature: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendSecondHolderSignature,
+      payload
+    );
+  },
+  SendThirdHolderSignature: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendThirdHolderSignature,
+      payload
+    );
+  },
+  DownloadSignedPdf: async (payload: any) => {
+    return await apiService("POST", endpoints.DownloadSignedPdf, payload);
+  },
 };
