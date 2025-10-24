@@ -32,6 +32,7 @@ interface TradeCardProps {
   amount?: number;
   exchSegment?: any;
   selectedTab?: any;
+  insertionTime?: any;
 }
 
 const TradeCard: React.FC<TradeCardProps> = ({
@@ -59,6 +60,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
   amount,
   exchSegment,
   selectedTab,
+  insertionTime,
 }) => {
   const getStatusColor = () => {
     switch (status) {
@@ -69,6 +71,27 @@ const TradeCard: React.FC<TradeCardProps> = ({
       default:
         return { bg: "#fff3e6", color: "#ff6600", border: "#ffd6b3" };
     }
+  };
+
+  const formatInsertionTime = (value: string) => {
+    if (!value) return "";
+    const [datePart, timePart] = value.split(" ");
+    const [day, month, year] = datePart.split("-");
+    const monthNames = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    return `${day}-${monthNames[Number(month) - 1]}-${year} ${timePart}`;
   };
 
   const { bg, color, border } = getStatusColor();
@@ -309,6 +332,11 @@ const TradeCard: React.FC<TradeCardProps> = ({
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
                 })}
+                %
+              </div>
+              <div>
+                <div>Insertion date</div>
+                <div>{formatInsertionTime(insertionTime)}</div>
               </div>
             </div>
 

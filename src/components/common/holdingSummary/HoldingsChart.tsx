@@ -12,6 +12,8 @@ const StoreVisitsCharts = ({ fundamentalShareHolding }: any) => {
 
   useEffect(() => {
     if (fundamentalShareHolding?.summaryData) {
+      console.log("donutChartData", fundamentalShareHolding?.summaryData);
+
       const summaryData = fundamentalShareHolding.summaryData;
 
       const labels = summaryData.slice(1).map((item: any) => item[0]);

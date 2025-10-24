@@ -1513,7 +1513,7 @@ const ModalComponent = ({
                 <FileUploadField
                   label={
                     <span>
-                      Upload Images <span style={{ color: "red" }}>*</span>
+                      Upload Image <span style={{ color: "red" }}>*</span>
                     </span>
                   }
                   fieldName="image"
@@ -1560,6 +1560,7 @@ const ModalComponent = ({
                       formik.touched.description &&
                       Boolean(formik.errors.description)
                     }
+                    inputProps={{ maxLength: 80 }}
                     helperText={
                       formik.touched.description && formik.errors.description
                     }
@@ -1569,7 +1570,7 @@ const ModalComponent = ({
                 <FileUploadField
                   label={
                     <span>
-                      Upload Documents <span style={{ color: "red" }}>*</span>
+                      Upload Document <span style={{ color: "red" }}>*</span>
                     </span>
                   }
                   // label="Upload Documents *"

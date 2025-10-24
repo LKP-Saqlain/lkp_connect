@@ -50,6 +50,8 @@ const CashFlowTable = ({ annualDataDump, customHeaderType }: any) => {
   const [expandedRows, setExpandedRows] = useState<string[]>([]);
 
   useEffect(() => {
+    console.log("Testtest", annualDataDump);
+
     if (annualDataDump?.standalone && annualDataDump?.consolidated) {
       const selectedData =
         selectedButton === "Standalone"
@@ -57,7 +59,7 @@ const CashFlowTable = ({ annualDataDump, customHeaderType }: any) => {
           : annualDataDump.consolidated;
 
       if (selectedData) {
-        const extractedYears = Object.keys(selectedData);
+        const extractedYears = Object.keys(selectedData).reverse();
         setYears(extractedYears);
         setFinancialData(selectedData);
       }

@@ -554,7 +554,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
           style={{ marginTop: "20px", zIndex: "1000" }}
         >
           {accessType === "ALL" && (
-            <Card>
+            <Card style={{ marginBottom: "0.7rem" }}>
               <Row style={{ margin: "5px", minWidth: "100%" }}>
                 <Col
                   xs={12}
@@ -631,7 +631,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
             </Card>
           )}
         </form>
-        <Row style={{ marginTop: "20px" }}>
+        <Row>
           {metrics.map((metric, index) => {
             const isToggleMetric =
               metric.title === "Unique Traded Clients" ||
