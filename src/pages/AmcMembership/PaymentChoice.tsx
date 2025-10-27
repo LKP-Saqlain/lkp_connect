@@ -88,49 +88,113 @@ const PaymentChoice = ({
   return (
     <>
       {/* Payment Details */}
-      <Row style={{ padding: "0 1rem" }}>
-        <Col md="12" className="mb-3">
-          <p>
-            <strong>Existing DP Outstanding:</strong>{" "}
-            <span style={{ color: "#333" }}>
-              {formatCurrency(existingOutstanding)}
-            </span>
-          </p>
+      <Row
+        style={{
+          padding: "0 1rem",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Col
+          md="12"
+          className="mb-3"
+          style={{
+            textAlign: "left",
+            maxWidth: "400px", // slightly wider for a balanced table look
+          }}
+        >
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              color: "#333",
+              fontSize: "14px",
+            }}
+          >
+            <tbody>
+              {/* Existing DP Outstanding */}
+              <tr>
+                <td style={{ padding: "6px 8px", fontWeight: 600 }}>
+                  Existing DP Outstanding:
+                </td>
+                <td style={{ fontWeight: 600, padding: "6px 8px" }}>
+                  {formatCurrency(existingOutstanding)}
+                </td>
+              </tr>
 
-          <hr style={dividerStyle} />
+              <tr>
+                <td colSpan={2}>
+                  <hr style={dividerStyle} />
+                </td>
+              </tr>
 
-          <p>
-            <strong>Lifetime AMC Fee:</strong>{" "}
-            <span style={{ color: "#333" }}>
-              {amcFee} <small>({amcBreakup})</small>
-            </span>
-          </p>
+              {/* Lifetime AMC Fee */}
+              <tr>
+                <td style={{ padding: "6px 8px", fontWeight: 600 }}>
+                  Lifetime AMC Fee:
+                </td>
+                <td style={{ fontWeight: 600, padding: "6px 8px" }}>
+                  {amcFee} <small>({amcBreakup})</small>
+                </td>
+              </tr>
 
-          <hr style={dividerStyle} />
+              <tr>
+                <td colSpan={2}>
+                  <hr style={dividerStyle} />
+                </td>
+              </tr>
 
-          <p>
-            <strong>Total Payable Amount:</strong>{" "}
-            <span style={{ color: "#333", fontWeight: 600 }}>
-              {formatCurrency(totalPayable)}
-            </span>
-          </p>
+              {/* Total Payable Amount */}
+              <tr>
+                <td style={{ padding: "6px 8px", fontWeight: 600 }}>
+                  Total Payable Amount:
+                </td>
+                <td
+                  style={{
+                    padding: "6px 8px",
+                    fontWeight: 600,
+                    // color: "#1c3c6b",
+                  }}
+                >
+                  {formatCurrency(totalPayable)}
+                </td>
+              </tr>
 
-          <div style={ledgerBoxStyle}>
-            <strong>Ledger Balance:</strong>{" "}
-            <span
-              style={{
-                color: isLedgerSufficient ? "#1c3c6b" : "#b30000",
-                fontWeight: 600,
-              }}
-            >
-              {formatCurrency(ledgerBalance)}
-            </span>
-            {!isLedgerSufficient && (
-              <p style={{ color: "#b30000", marginTop: "5px" }}>
-                Insufficient balance for ledger debit.
-              </p>
-            )}
-          </div>
+              <tr>
+                <td colSpan={2}>
+                  <hr style={dividerStyle} />
+                </td>
+              </tr>
+
+              {/* Ledger Balance */}
+              <tr>
+                <td style={{ padding: "6px 8px", fontWeight: 600 }}>
+                  Ledger Balance:
+                </td>
+                <td
+                  style={{
+                    padding: "6px 8px",
+                    fontWeight: 700,
+                    color: isLedgerSufficient ? "#1c3c6b" : "#b30000",
+                  }}
+                >
+                  {formatCurrency(ledgerBalance)}
+                </td>
+              </tr>
+
+              {/* Insufficient balance message */}
+              {!isLedgerSufficient && (
+                <tr>
+                  <td
+                    colSpan={2}
+                    style={{ padding: "4px 8px", color: "#b30000" }}
+                  >
+                    Insufficient balance for ledger debit.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </Col>
       </Row>
 
@@ -149,7 +213,7 @@ const PaymentChoice = ({
               color: isLedgerSufficient ? "#fff" : "#000",
               border: "none",
               borderRadius: "6px",
-              padding: "0.6rem 1.5rem",
+              padding: "0.3rem 1.5rem",
               cursor: isLedgerSufficient ? "pointer" : "not-allowed",
             }}
             onClick={onLedger}
@@ -166,7 +230,7 @@ const PaymentChoice = ({
               color: "#fff",
               border: "none",
               borderRadius: "6px",
-              padding: "0.6rem 1.5rem",
+              padding: "0.3rem 1.5rem",
             }}
             onClick={handleOnlinePayment}
           >

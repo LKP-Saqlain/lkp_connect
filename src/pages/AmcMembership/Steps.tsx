@@ -52,15 +52,27 @@ const AmcMembership = () => {
   const goToStep2 = () => setStep(2);
 
   return (
-    <div className="page-content page-view">
+    <div
+      className="page-content page-view"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        backgroundColor: "#f5f7fa", // Light background (optional)
+      }}
+    >
       <Container fluid>
         <Card
           style={{
+            maxWidth: "90%",
+            maxHeight: "90%",
+            margin: "auto",
             borderRadius: "15px",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+            // boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+            boxShadow: " 0px 6.16px 17.68px -0.88px #00000036",
             padding: "1.5rem",
-            backgroundColor: "#fff",
-            margin: "0 auto",
+            backgroundColor: "#fff", // White card background
           }}
         >
           {/* Common Header */}
@@ -75,18 +87,19 @@ const AmcMembership = () => {
               marginBottom: "2rem",
             }}
           >
-            <img src={Logo} alt="LKP Logo" style={{ height: "40px" }} />
-            <h5
+            <img src={Logo} alt="LKP Logo" style={{ height: "50px" }} />
+            <h4
               style={{
-                fontWeight: "600",
+                fontWeight: "700",
                 color: "#1c3c6b",
                 margin: 0,
                 flex: 1,
                 textAlign: "center",
+                marginRight: "150px",
               }}
             >
               Online Lifetime AMC Scheme Activation
-            </h5>
+            </h4>
             {/* <Button
               color="primary"
               style={{
