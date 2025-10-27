@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   ListItem,
   ListItemButton,
@@ -39,8 +39,11 @@ import SpaceDashboardIcon from "@mui/icons-material/SpaceDashboard";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // import StarBurst from "../../assets/images/starburst.png";
 // import StarBurst1 from "../../assets/images/starburst1.png";
-import StarBurst2 from "../../assets/images/starburst2.png";
+// import StarBurst2 from "../../assets/images/starburst2.png";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import Lottie from "react-lottie-player";
+import newIcon from "../../assets/images/new.json";
+
 // import "./style.css";
 
 type DrawerItemProps = {
@@ -62,22 +65,22 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
   handleClick,
   activeMenu,
   handleSubItemClick,
-  visible,
+  // visible,
 }) => {
   const [activeSubItem, setActiveSubItem] = useState<string | null>(null);
   const isMenuOpen = activeMenu === title;
-  const images = [StarBurst2];
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // const images = [StarBurst2];
+  // const [currentIndex, setCurrentIndex] = useState(0);
 
-  useEffect(() => {
-    if (!visible) return;
+  // useEffect(() => {
+  //   if (!visible) return;
 
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 600);
+  //   const interval = setInterval(() => {
+  //     setCurrentIndex((prev) => (prev + 1) % images.length);
+  //   }, 600);
 
-    return () => clearInterval(interval);
-  }, [visible]);
+  //   return () => clearInterval(interval);
+  // }, [visible]);
 
   const iconMap: Record<string, JSX.Element> = {
     Account: <ReceiptRoundedIcon />,
@@ -208,11 +211,11 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           title === "Mutual Fund" ||
           title === "Partner Contest") && (
           <div className="starburst-bg">
-            <img
-              src={images[currentIndex]}
-              height="30px"
-              alt={`starburst-${currentIndex}`}
-              style={{ display: visible ? "inline" : "none" }}
+            <Lottie
+              loop
+              play
+              animationData={newIcon}
+              style={{ width: 30, height: 30 }}
             />
             {/* <div className="starburst-bg">
             <img src={StarBurst} height={"30px"} alt="" />

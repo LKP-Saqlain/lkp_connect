@@ -938,4 +938,7 @@ export const apiServices = {
       payload
     );
   },
+  GetZoneTargetdata: async (payload: any) => {
+    return await apiService("POST", endpoints.GetZoneTargetdata, payload);
+  },
 };

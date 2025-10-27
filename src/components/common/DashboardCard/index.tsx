@@ -71,6 +71,7 @@ interface DashboardCardProps {
   setSelectedButton?: any;
   mainCustomClass?: any;
   activeMenu?: any;
+  customZoneClass?: any;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -100,6 +101,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   setSelectedButton,
   mainCustomClass,
   activeMenu,
+  customZoneClass,
 }) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -300,8 +302,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
               gridTemplateColumns:
                 rightTitle || rightValue ? "1fr auto 1fr" : "1fr",
               alignItems: "center",
-              marginTop: !customClass ? "1.5rem" : "0rem",
-              marginBottom: customClass ? "1rem" : "0rem",
+              marginTop: !customClass ? "0.8rem" : "0rem",
+              marginBottom: customClass ? "0.8rem" : "0rem",
             }}
           >
             {/* Left Side */}
@@ -450,7 +452,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                           color: "#1B1B1B",
                           fontSize: "17px",
                           fontWeight: "bold",
-
                           width:
                             rightValue === "Coming Soon" ? "6rem" : undefined,
                         }}
@@ -604,9 +605,21 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     bottom: "10px",
                     zIndex: 1,
                     fontFamily: "Public Sans",
+                    // border: "1px solid black",
+                    marginLeft: customZoneClass ? "1rem" : "0rem",
                   }}
                 >
-                  <div className="d-flex">
+                  <div
+                    className={`d-flex ${
+                      customZoneClass
+                        ? "gap-3"
+                        : customClass
+                        ? "gap-3"
+                        : customZoneClass
+                        ? "gap-2"
+                        : ""
+                    }`}
+                  >
                     {badges.map((badge, index) => (
                       <React.Fragment key={badge.label}>
                         <div
@@ -626,35 +639,40 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                               }}
                             >
                               {typeof badge.value === "number" ? (
-                                <CountUp
-                                  start={0}
-                                  end={badge.value as number}
-                                  separator=","
-                                  duration={1}
-                                />
+                                <>
+                                  <CountUp
+                                    start={0}
+                                    end={badge.value}
+                                    separator=","
+                                    decimals={badge.value % 1 !== 0 ? 2 : 0}
+                                    duration={1}
+                                    formattingFn={(value) =>
+                                      value.toLocaleString("en-IN")
+                                    } // Indian style commas
+                                  />
+                                  {title === "Zone Target Achieved %" && "%"}
+                                </>
                               ) : (
                                 badge.value
                               )}
                             </h5>
                           )}
 
-                          {/* Badge */}
+                          {/* Badge Label */}
                           <span
                             className={`badge bg-warning text-white badge-border small px-2 py-1`}
-                            // onClick={badge.onClick} // optional
                           >
                             {badge.label}
                           </span>
                         </div>
 
-                        {/* Divider */}
+                        {/* Divider between badges (only when customClass true) */}
                         {customClass && index < badges.length - 1 && (
                           <div
                             style={{
                               width: "1px",
                               height: "40px",
                               backgroundColor: "#ccc",
-                              margin: "0 10px",
                             }}
                           />
                         )}
@@ -684,7 +702,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                       >
                         {badge.label}
                       </Link>
-                      {/* Add space except after the last badge */}
+
+                      {/* Keep default tight spacing when customClass is false */}
                       {index < badges.length - 1 && <span>&nbsp;</span>}
                     </React.Fragment>
                   ))}

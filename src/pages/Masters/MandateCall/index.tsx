@@ -3,8 +3,8 @@ import { Card, CardBody, CardHeader, Col, Row, Table } from "reactstrap";
 import { apiServices } from "../../../services";
 import { TextField, Button, Grid, Box } from "@mui/material";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
 import ShowToast from "../../../utils/toastUtils";
 // import { encryptAES } from "../../../utils/encryptDecrypt";
 import { useNavigate, useParams } from "react-router-dom";
@@ -23,9 +23,9 @@ const MandateCall = () => {
   const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
-  );
+  // const { user_id } = useSelector(
+  //   (state: RootState) => state.UserLogin?.data?.data
+  // );
 
   const { encryptedCode } = useParams<{ encryptedCode: string }>();
   const decryptCode = encryptedCode
@@ -55,8 +55,10 @@ const MandateCall = () => {
     if (!decryptCode) return;
     let payload = {
       clientcode: decryptCode,
-      user_id: user_id,
+      // user_id: user_id,
     };
+    console.log("payload", payload);
+
     dispatch(showLoader(""));
     apiServices
       .GetMandateCallBackDetails(payload)
@@ -113,7 +115,7 @@ const MandateCall = () => {
   const HandleMandate = () => {
     let payload = {
       clientcode: data?.clientcode,
-      user_id: user_id,
+      // user_id: user_id,
       dpCode: data?.dpcode,
       dpid: data?.dpid,
       amount: amount,
@@ -293,18 +295,16 @@ const MandateCall = () => {
                               color: "#FFF",
                               border: "1px solid #11395C",
                             }}
-                          >
-                            {" "}
-                            Field
-                          </th>
+                          ></th>
                           <th
                             style={{
                               backgroundColor: "#11395C",
                               color: "#FFF",
                               border: "1px solid #11395C",
+                              paddingBottom: "20px",
                             }}
                           >
-                            Value
+                            {" "}
                           </th>
                         </tr>
                       </thead>

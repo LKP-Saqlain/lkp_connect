@@ -1,25 +1,39 @@
-import React, { useState } from "react";
-import { Tabs, Tab, Box } from "@mui/material";
-interface customTabs {
-  TabClick?: (value: any) => void;
+import React from "react";
+import { Tabs, Tab, Box, Button } from "@mui/material";
+import RefreshIcon from "@mui/icons-material/Refresh";
+
+interface ResearchTabsProps {
+  value: number;
+  TabClick?: (value: number) => void;
+  handleRefreshClicked?: () => void;
 }
 
-const CustomTabs = ({ TabClick }: customTabs) => {
-  const [value, setValue] = useState(0);
-
+const ResearchTabs = ({
+  value,
+  TabClick,
+  handleRefreshClicked,
+}: ResearchTabsProps) => {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+    console.log("event", event?.target);
+
     TabClick?.(newValue);
-    console.log(event);
   };
 
   return (
-    <Box sx={{ width: "100%", bgcolor: "transparent" }}>
+    <Box
+      sx={{
+        width: "100%",
+        bgcolor: "transparent",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
       <Tabs
         value={value}
         onChange={handleChange}
         textColor="inherit"
-        TabIndicatorProps={{ style: { display: "none" } }} // remove default underline
+        TabIndicatorProps={{ style: { display: "none" } }}
         sx={{
           minHeight: "40px",
           "& .MuiTab-root": {
@@ -30,11 +44,10 @@ const CustomTabs = ({ TabClick }: customTabs) => {
             fontWeight: 500,
             color: "#666",
             borderRadius: "6px",
-            // marginBottom: "2rem",
             padding: "6px 12px",
             backgroundColor: "#e0e0e0",
             marginRight: "8px",
-
+            transition: "background-color 0.2s",
             "&.Mui-selected": {
               backgroundColor: "#11395C",
               color: "#fff",
@@ -43,15 +56,29 @@ const CustomTabs = ({ TabClick }: customTabs) => {
           },
         }}
       >
-        {/* <Typography sx={{ fontWeight: 600, mr: 2 }}>Reasearch</Typography> */}
         <Tab label="All" />
         <Tab label="Equity" />
         <Tab label="F&O" />
         <Tab label="Commodity" />
-        <Tab label="Currency" />
+        <Tab label="Fundamental" />
       </Tabs>
+
+      <Button
+        size="small"
+        variant="outlined"
+        sx={{
+          textTransform: "none",
+          borderRadius: "16px",
+          fontSize: "0.8rem",
+          padding: "2px 8px",
+          color: "#11395C",
+        }}
+        onClick={handleRefreshClicked}
+      >
+        Refresh <RefreshIcon sx={{ fontSize: "1.1rem" }} />
+      </Button>
     </Box>
   );
 };
 
-export default CustomTabs;
+export default ResearchTabs;

@@ -13,6 +13,7 @@ import ShowToast from "../../utils/toastUtils";
 import Nudge from "../../components/common/Nudge";
 import TradeCard from "../../components/common/tradeCard";
 import ResearchTabs from "../../components/common/CustomCards";
+import dayjs from "dayjs";
 // import { Pagination } from "@mui/material";
 
 interface T6Selling {
@@ -68,6 +69,9 @@ const DashboardCrypto = ({
   const [commodityCalls, setCommodityCalls] = useState<any[]>([]);
   const [currencyCalls, setCurrencyCalls] = useState<any[]>([]);
   const [filteredCalls, setFilteredCalls] = useState<any[]>([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>("All");
+  // const [uniqueSubCategories, setUniqueSubCategories] = useState<string[]>([]);
+  const [selectedTab, setSelectedTab] = useState<number>(0);
   //pagination logic
   // const [currentPage, setCurrentPage] = useState(1);
   // const recordsPerPage = 10;
@@ -326,64 +330,178 @@ const DashboardCrypto = ({
     setmodal_animationZoom((prev) => !prev);
   }
 
-  const handleTabClick = (value: any) => {
-    console.log("tabClickValue", value);
-    if (value === 0) setFilteredCalls(allCalls);
-    if (value === 1) setFilteredCalls(equityCalls);
-    if (value === 2) setFilteredCalls(foCalls);
-    if (value === 3) setFilteredCalls(commodityCalls);
-    if (value === 4) setFilteredCalls(currencyCalls);
+  const handleTabClick = (value: number) => {
+    // alert(value);
+    setSelectedTab(value);
+    let filteredByCategory = [];
+
+    if (value === 0) filteredByCategory = allCalls;
+    if (value === 1)
+      filteredByCategory = allCalls.filter(
+        (item) => item.category === "Equity"
+      );
+    if (value === 2)
+      filteredByCategory = allCalls.filter((item) => item.category === "F&O");
+    if (value === 3)
+      filteredByCategory = allCalls.filter(
+        (item) => item.category === "Commodity"
+      );
+    if (value === 4)
+      filteredByCategory = allCalls.filter(
+        (item) => item.category === "Currency"
+      );
+
+    // Apply subCategory filter if not "All"
+    if (selectedSubCategory && selectedSubCategory !== "All" && value !== 0) {
+      filteredByCategory = filteredByCategory.filter(
+        (item) => item.subCategory === selectedSubCategory
+      );
+    }
+
+    setFilteredCalls(filteredByCategory);
   };
 
   useEffect(() => {
     tog_animationZoom();
   }, []);
 
+  const fetchResearchCall = async () => {
+    let payload = {
+      user_id: user_id,
+      groupName: "GSG",
+      activeCallFlag: 1,
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .ResearchCallData(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("API_RESPONSE", response?.data?.data);
+
+          setResearchCalls(response?.data?.data || []);
+          const data = response?.data?.data || [];
+          console.log(researchCalls);
+
+          setAllCalls(data);
+          setEquityCalls(
+            data.filter((item: any) => item.category === "Equity")
+          );
+          setFoCalls(data.filter((item: any) => item.category === "F&O"));
+          setCommodityCalls(
+            data.filter((item: any) => item.category === "Commodity")
+          );
+
+          setCurrencyCalls(
+            data.filter((item: any) => item.category === "Currency")
+          );
+
+          const uniqueSubs: any = [
+            "All",
+            ...Array.from(new Set(data.map((item: any) => item.subCategory))),
+          ];
+          // setUniqueSubCategories(uniqueSubs); // bydefault All is not selected with this hook
+          setSelectedSubCategory("All"); //-----> with this Bydefault All is selected
+
+          uniqueSubs.forEach((subCat: any, index: any) => {
+            console.log(`${index + 1}. ${subCat}`);
+          });
+
+          console.log(
+            "dummyConsole",
+            uniqueSubs,
+            equityCalls,
+            foCalls,
+            commodityCalls,
+            currencyCalls
+          );
+          setFilteredCalls(data);
+          console.log("uniqueSubCategories-->", selectedTab);
+        }
+        dispatch(hideLoader());
+      })
+      .catch((error) => {
+        console.log("Errrrror", error);
+        dispatch(hideLoader());
+      });
+  };
+
   useEffect(() => {
     if (selectedItem === "Reasearch Calls") {
-      let payload = {
-        user_id: user_id,
-        groupName: "GSG",
-        activeCallFlag: 1,
-      };
-      dispatch(showLoader(""));
-      apiServices
-        .ResearchCallData(payload)
-        .then((response) => {
-          if (response?.status === 200) {
-            console.log("API_RESPONSE", response?.data?.data);
-
-            setResearchCalls(response?.data?.data || []);
-            const data = response?.data?.data || [];
-            console.log(researchCalls);
-
-            setAllCalls(data);
-            setEquityCalls(
-              data.filter((item: any) => item.category === "Equity")
-            );
-            setFoCalls(data.filter((item: any) => item.category === "F&O"));
-            setCommodityCalls(
-              data.filter((item: any) => item.category === "Commodity")
-            );
-            console.log("commodityRecords", commodityCalls);
-
-            setCurrencyCalls(
-              data.filter((item: any) => item.category === "Currency")
-            );
-
-            // default: show all
-            setFilteredCalls(data);
-          }
-          dispatch(hideLoader());
-        })
-        .catch((error) => {
-          console.log("Errrrror", error);
-          dispatch(hideLoader());
-        });
+      fetchResearchCall();
     }
   }, [dispatch, selectedItem]);
 
-  document.title = document.title = "LKP Securities | Trading";
+  const handleSubCategoryFilter = (subCat: string) => {
+    setSelectedSubCategory(subCat);
+    console.log("TestTestTest", selectedTab, subCat, filteredCalls);
+    let filtered = allCalls;
+    switch (selectedTab) {
+      case 1:
+        filtered = filtered.filter((item) => item.category === "Equity");
+        break;
+      case 2:
+        filtered = filtered.filter((item) => item.category === "F&O");
+        break;
+      case 3:
+        filtered = filtered.filter((item) => item.category === "Commodity");
+        break;
+      case 4:
+        filtered = filtered.filter((item) => item.category === "Currency");
+        break;
+      default:
+        break; // 0 or All
+    }
+
+    if (subCat !== "All") {
+      filtered = filtered.filter((item) => item.subCategory === subCat);
+    }
+
+    setFilteredCalls(filtered);
+  };
+
+  const tabCategoryMap: Record<number, string> = {
+    1: "Equity",
+    2: "F&O",
+    3: "Commodity",
+    5: "Currency",
+  };
+
+  const subCategoriesForTab = Array.from(
+    new Set(
+      allCalls
+        .filter((item) => {
+          if (selectedTab === 0) return true; // show all
+          return item.category === tabCategoryMap[selectedTab];
+        })
+        .map((item) => item.subCategory)
+    )
+  ).filter((subCat) => subCat && subCat.trim() !== ""); // remove blanks
+
+  // Conditionally add "All" only if subcategories exist
+  const filteredSubCategories =
+    subCategoriesForTab.length > 0 ? ["All", ...subCategoriesForTab] : [];
+
+  // const finalSubCategories =
+  //   selectedTab !== 0 && selectedTab !== 4
+  //     ? ["All", ...filteredSubCategories]
+  //     : filteredSubCategories;
+
+  const handleRefreshClicked = async () => {
+    // Reset main tab selection to "All"
+    setSelectedTab(0);
+
+    // Re-fetch API
+    await fetchResearchCall();
+
+    // ✅ Reapply filtering for "All" tab to show all records
+    handleTabClick(0);
+  };
+
+  useEffect(() => {
+    console.log("filteredCallsData", filteredCalls);
+  }, [filteredCalls]);
+
+  document.title = document.title = "LKP Securities | Zone Target";
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -439,29 +557,98 @@ const DashboardCrypto = ({
                 }}
               >
                 <CardBody>
-                  <ResearchTabs TabClick={handleTabClick} />
+                  <ResearchTabs
+                    TabClick={handleTabClick}
+                    handleRefreshClicked={handleRefreshClicked}
+                    value={selectedTab}
+                  />
+
+                  {selectedTab !== 0 &&
+                    selectedTab !== 4 &&
+                    filteredSubCategories.length > 0 && (
+                      <div
+                        style={{
+                          marginBottom: "12px",
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: "2px",
+                        }}
+                      >
+                        {filteredSubCategories.map((subCat) => (
+                          <div
+                            key={subCat}
+                            onClick={() => handleSubCategoryFilter(subCat)}
+                            style={{
+                              fontWeight: 500,
+                              fontSize: "10px",
+                              color:
+                                selectedSubCategory === subCat
+                                  ? "#fff"
+                                  : "#11395C",
+                              backgroundColor:
+                                selectedSubCategory === subCat
+                                  ? "#11395C"
+                                  : "#e6f0ff",
+                              borderRadius: "5px",
+                              padding: "4px 12px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              cursor: "pointer",
+                              userSelect: "none",
+                              transition: "background-color 0.2s ease",
+                              marginRight: "3px",
+                            }}
+                          >
+                            {subCat}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                   <div>
                     {filteredCalls.length > 0 ? (
-                      // currentRecords.map((item, index) => (  //Only for pagination
-                      filteredCalls.map((item, index) => (
-                        <TradeCard
-                          key={index}
-                          stockName={item.scripName}
-                          exchange={`${item.exchange}`}
-                          ltp={parseFloat(item.lastTradedPrice)}
-                          ltpChange={0}
-                          stopLoss={parseFloat(item.stopLoss)}
-                          recPrice={parseFloat(item.price)}
-                          targetPrice={parseFloat(item.targetPrice)}
-                          status={item.status}
-                          category={item.category}
-                          tag={item.subCategory}
-                          dateTime={item.validity}
-                          partialProfitText={item.statusDescreption}
-                          buySell={item.buySell}
-                          type="ResearchCall"
-                        />
-                      ))
+                      [...filteredCalls]
+                        .sort((a, b) => {
+                          // Prefer insertionTime if available, else fallback to validity
+                          const dateA = dayjs(
+                            a.insertionTime || a.validity,
+                            "DD-MM-YYYY HH:mm:ss"
+                          );
+                          const dateB = dayjs(
+                            b.insertionTime || b.validity,
+                            "DD-MM-YYYY HH:mm:ss"
+                          );
+
+                          // Invalid dates go last
+                          if (!dateA.isValid()) return 1;
+                          if (!dateB.isValid()) return -1;
+
+                          // Descending order (latest first)
+                          return dateB.valueOf() - dateA.valueOf();
+                        })
+                        .map((item, index) => (
+                          <TradeCard
+                            key={index}
+                            stockName={item.scripName}
+                            exchange={`${item.exchange}`}
+                            ltp={parseFloat(item.lastTradedPrice)}
+                            ltpChange={0}
+                            stopLoss={parseFloat(item.stopLoss)}
+                            recPrice={parseFloat(item.price)}
+                            targetPrice={parseFloat(item.targetPrice)}
+                            status={item.status}
+                            category={item.category}
+                            tag={item.subCategory}
+                            dateTime={item.validity}
+                            partialProfitText={item.statusDescreption}
+                            buySell={item.buySell}
+                            type="ResearchCall"
+                            exchSegment={item.exchSegment}
+                            selectedTab={selectedTab}
+                            insertionTime={item.insertionTime}
+                          />
+                        ))
                     ) : (
                       <>
                         <Card
@@ -486,37 +673,6 @@ const DashboardCrypto = ({
                         </Card>
                       </>
                     )}
-                    {/* Below is only for pagination */}
-                    {/* {filteredCalls.length > recordsPerPage && (
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          // marginTop: "20px",
-                        }}
-                      >
-                        <Pagination
-                          count={totalPages}
-                          page={currentPage}
-                          onChange={handlePageChange}
-                          // color="primary"
-                          shape="circular"
-                          size="medium"
-                          sx={{
-                            "& .MuiPaginationItem-root": {
-                              color: "#11395C", // text color
-                            },
-                            "& .Mui-selected": {
-                              backgroundColor: "#11395C", // active page background
-                              color: "white", // active text color
-                            },
-                            "& .MuiPaginationItem-root:hover": {
-                              backgroundColor: "rgba(17,57,92,0.1)", // hover effect
-                            },
-                          }}
-                        />
-                      </div>
-                    )} */}
                   </div>
                 </CardBody>
               </Card>

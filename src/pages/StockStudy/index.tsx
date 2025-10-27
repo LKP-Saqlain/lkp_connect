@@ -44,7 +44,7 @@ const menuData: MenuItem[] = [
   { title: "Bulk / Block Deal", submenus: [] },
   {
     title: "Corporate Action",
-    submenus: ["Dividend", "Bonus", "Split", "Right", "Board Meeting"],
+    submenus: ["Dividend", "Bonus", "Split", "Rights", "Board Meeting"],
   },
 ];
 

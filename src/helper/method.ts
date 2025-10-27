@@ -19,3 +19,37 @@ export function isValidPANNo(panNo: any) {
   const panRegex = RegExp(/^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/);
   return panRegex.test(panNo);
 }
+
+export const extractBarModelData = (
+  model: any,
+  type: "Direct" | "Indirect" | "Total"
+) => {
+  if (!model) return { categories: [], series: [] };
+
+  const months = [
+    { key: "a", label: "Oct" },
+    { key: "b", label: "Nov" },
+    { key: "c", label: "Dec" },
+  ];
+
+  const categories = months.map((m) => m.label);
+
+  const targetData = months.map((m) =>
+    type === "Total"
+      ? model[`${m.key}_Target_Total`] || 0
+      : model[`${m.key}_Target_${type}`] || 0
+  );
+
+  const achievedData = months.map((m) =>
+    type === "Total"
+      ? model[`${m.key}_Total_Achieved`] || 0
+      : model[`${m.key}_Achieved_${type}`] || 0
+  );
+
+  const series = [
+    { name: "Target", data: targetData },
+    { name: "Achieved", data: achievedData },
+  ];
+
+  return { categories, series };
+};

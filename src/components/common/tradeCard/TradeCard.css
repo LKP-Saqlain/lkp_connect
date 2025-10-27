@@ -47,11 +47,19 @@
 
 .trade-prices {
   display: flex;
-  gap: 14rem; 
+  gap: 4.5rem; 
   margin-top: 6px;
   font-size: 13px;
   flex-wrap: wrap; 
 }
+.trade-prices-2 {
+  display: flex;
+  gap: 8rem; 
+  margin-top: 6px;
+  font-size: 13px;
+  flex-wrap: wrap; 
+}
+
 
 .trade-prices div {
   display: flex;
@@ -99,19 +107,21 @@
 .trade-valid-till {
   font-size: 12px;
   color: #999;
-  margin-top: 12px;
+  /* margin-top: 2rem; */
 }
 
 .trade-datetime {
   font-size: 12px;
   color: #666;
+  margin-bottom: 1.4rem;
 }
 
 .trade-button {
-  margin-top: 20px;
-  padding: 4px 16px;
-  font-size: 13px;
+  /* margin-top: 20px; */
+  padding: 4px 40px;
+  font-size: 10px;
   border-radius: 6px;
+  
 }
 
 @media (max-width: 768px) {

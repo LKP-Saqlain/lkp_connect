@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   useMediaQuery,
   useTheme,
-  CardMedia,
+  // CardMedia,
   CardContent,
   Typography,
 } from "@mui/material";
@@ -161,26 +161,64 @@ const MarketingMaterial = () => {
                     boxShadow: isMobile
                       ? "0 6px 12px rgba(0, 0, 0, 0.3)"
                       : "0 12px 24px rgba(0, 0, 0, 0.4)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    height: "250px",
                   }}
                 >
-                  <CardMedia
-                    component="img"
-                    image={item.imageUrl}
-                    alt={item.title}
-                    sx={{ height: 120, objectFit: "cover" }}
-                  />
-                  <CardContent>
+                  {/* Image Box */}
+                  <div
+                    style={{
+                      height: 120, // fixed height
+                      width: "100%", // fixed width relative to card
+                      borderRadius: "12px",
+                      backgroundColor: "#f0f0f0", // placeholder background
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {item.imageUrl ? (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title}
+                        style={{
+                          height: "100%", // fill height
+                          width: "100%", // fill width
+                          objectFit: "cover", // crop to fill
+                          display: "block",
+                        }}
+                      />
+                    ) : (
+                      <span style={{ color: "#999", fontSize: "12px" }}>
+                        No Image
+                      </span>
+                    )}
+                  </div>
+
+                  <CardContent
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      padding: "8px 0",
+                    }}
+                  >
                     <Typography
                       style={{
                         fontSize: isMobile ? 10 : 12,
                         color: "#11395C",
                         fontWeight: "bold",
-                        textAlign: "center",
                       }}
                     >
                       {item.title}
                     </Typography>
                   </CardContent>
+
                   <Button
                     onClick={() => handleDownload(item)}
                     style={{

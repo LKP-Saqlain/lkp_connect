@@ -15,9 +15,31 @@ const CorporateTable = ({ CorporateData, name }: any) => {
 
   // Setting headers and data from CorporateData
   useEffect(() => {
+    console.log("corporateData", CorporateData);
+
+    if (!CorporateData) return;
+
     setHeader(CorporateData.tableHeaders || []);
-    setData(CorporateData[name] || []);
-    console.log(header, "yeda", data, name);
+
+    const reversedData = (CorporateData[name] || []).map((row: any) => {
+      return row.map((cell: any, index: number) => {
+        // Format the first column as date
+        if ((cell && index === 0) || index === 2 || (index === 3 && cell)) {
+          return new Date(cell).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "2-digit",
+          });
+        }
+        // Format numeric columns (assuming second column is amount)
+        if (index === 1 && typeof cell === "number") {
+          return cell.toFixed(2);
+        }
+        return cell;
+      });
+    });
+
+    setData(reversedData);
   }, [CorporateData, name]);
 
   const columnCount = header.length + 1;
@@ -35,16 +57,10 @@ const CorporateTable = ({ CorporateData, name }: any) => {
         <Table stickyHeader sx={{ tableLayout: "fixed", width: "100%" }}>
           <TableHead>
             <TableRow>
-              <TableCell
-                align="center"
-                style={{ ...cellStyle, fontWeight: "bold" }}
-              >
-                Sr. No
-              </TableCell>
               {header &&
                 header.map((headerItem, index) => (
                   <TableCell
-                    align="left"
+                    align="center"
                     key={index}
                     style={{
                       ...cellStyle,
@@ -60,12 +76,12 @@ const CorporateTable = ({ CorporateData, name }: any) => {
             {data && data.length > 0 ? (
               data.map((row, rowIndex) => (
                 <TableRow key={rowIndex}>
-                  <TableCell align="center" sx={{ ...cellStyle }}>
+                  {/* <TableCell align="center" sx={{ ...cellStyle }}>
                     {rowIndex + 1}
-                  </TableCell>
+                  </TableCell> */}
                   {row.map((cell: any, cellIndex: any) => (
                     <TableCell
-                      align="left"
+                      align="center"
                       key={cellIndex}
                       sx={{ ...cellStyle }}
                     >

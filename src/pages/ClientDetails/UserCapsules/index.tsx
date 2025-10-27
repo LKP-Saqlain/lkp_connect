@@ -113,7 +113,7 @@ const UserCapsules = ({
           >
             {/* <div>AP NAME: {targetData.apName || "-"}</div>
             <div>AP CODE: {targetData.apCode || "-"}</div> */}
-            {`${targetData?.apName} - ${targetData?.apCode}`}
+            {`${targetData?.apName} / ${targetData?.apCode}`}
           </div>
         )}
       </div>

@@ -19,18 +19,27 @@ const DynamicTable = ({ fundamentalShareHolding }: any) => {
     const data = fundamentalShareHolding.chartData;
     console.log("ShareHoldingChartData", data);
 
-    // Extract quarters from the first category
-    const firstCategory = Object.keys(data)[0];
-    const extractedQuarters = data[firstCategory]
+    // Exclude "Institutional" and "MF"
+    const filteredData = Object.fromEntries(
+      Object.entries(data).filter(
+        ([key]) => key !== "Institutional" && key !== "MF"
+      )
+    ) as Record<string, any[]>;
+
+    const firstCategory = Object.keys(filteredData)[0];
+    if (!firstCategory || !filteredData[firstCategory]) return;
+
+    // Assert that filteredData[firstCategory] is an array
+    const extractedQuarters = (filteredData[firstCategory] as any[])
       .slice(1)
-      .map((row: any) => row[0]); // First column of each row (Quarter)
+      .map((row: any) => row[0]);
 
     console.log("quarters", extractedQuarters);
     setQuarters(extractedQuarters);
 
-    // Prepare table data: Each category becomes a row
-    const formattedData = Object.entries(data).map(
-      ([category, values]: any) => {
+    // Prepare table data
+    const formattedData = Object.entries(filteredData).map(
+      ([category, values]: [string, any[]]) => {
         const holdings = values.slice(1).map((row: any) => row[1]);
         return { category, holdings };
       }
@@ -67,7 +76,7 @@ const DynamicTable = ({ fundamentalShareHolding }: any) => {
               <TableCell style={{ fontWeight: "bold" }}>
                 {row.category}
               </TableCell>
-              {row.holdings.map((holding: any, index: any) => (
+              {row.holdings.map((holding: any, index: number) => (
                 <TableCell key={index}>{holding}%</TableCell>
               ))}
             </TableRow>
