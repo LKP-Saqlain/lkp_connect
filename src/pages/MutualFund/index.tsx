@@ -55,7 +55,7 @@ const MutualFundIndex = () => {
     try {
       dispatch(showLoader("Verifying Client Code..."));
       const response = await fetch(
-        `http://uatmiddlewareapi.lkp.net.in/api/Client/VerifyClientCode?ClientCode=${clientCode}`,
+        `https://middlewareapi.lkp.net.in/api/Client/VerifyClientCode?ClientCode=${clientCode}`,
         {
           method: "POST",
           headers: {
