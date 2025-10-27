@@ -134,7 +134,7 @@ const ClientInfo = ({
         <Button
           color="primary"
           style={{
-            padding: "0.6rem 2rem",
+            padding: "0.3rem 2rem",
             borderRadius: "6px",
             backgroundColor: "#003366",
             border: "none",

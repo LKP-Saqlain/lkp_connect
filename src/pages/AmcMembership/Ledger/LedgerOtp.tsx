@@ -216,7 +216,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
           backgroundColor: "#0b3155",
           border: "none",
           borderRadius: "6px",
-          padding: "0.6rem 2rem",
+          padding: "0.3rem 2rem",
           fontWeight: 500,
           fontSize: "0.95rem",
         }}

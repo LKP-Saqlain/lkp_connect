@@ -9148,7 +9148,6 @@ export const AmcLifeMembership: GridColDef[] = [
         }
       );
 
-      // Return tooltip with the masked mobile number
       return (
         <Tooltip title={mobile} arrow placement="top">
           <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
@@ -9157,7 +9156,53 @@ export const AmcLifeMembership: GridColDef[] = [
     },
   },
   {
-    field: "secondary_Holder_Name", // must match JSON key exactly
+    field: "branchType",
+    headerName: "Branch Type",
+    flex: 1,
+    minWidth: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "dealerName",
+    headerName: "Dealer Name",
+    flex: 1,
+    minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => {
+      return params || "-";
+    },
+  },
+
+  {
+    field: "rmname",
+    headerName: "RM Name",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "status",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "secondary_Holder_Name",
     headerName: "Second Holder Name",
     flex: 1,
     minWidth: 180,
@@ -9210,6 +9255,20 @@ export const AmcLifeMembership: GridColDef[] = [
     align: "center",
     headerClassName: "header-wrap-custom",
   },
+  {
+    field: "module_Modified_date",
+    headerName: "Module Modified Date",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params).format("DD-MMM-YY"); // Converts date to "27-Feb-24"
+    },
+  },
 ];
 export const AmcNonLifeMembership: GridColDef[] = [
   {
@@ -9226,6 +9285,15 @@ export const AmcNonLifeMembership: GridColDef[] = [
 
 export const AmcContest: GridColDef[] = [
   {
+    field: "trading_Code",
+    headerName: "Trading Code",
+    flex: 1,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
     field: "dp_Id",
     headerName: "DP ID",
     flex: 1,
@@ -9241,14 +9309,74 @@ export const AmcContest: GridColDef[] = [
     minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
   },
   {
     field: "primaryHolder_phn",
     headerName: "Primary Holder Phone",
     flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      const mobile = params.value || "";
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "branchType",
+    headerName: "Branch Type",
+    flex: 1,
+    minWidth: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "dealerName",
+    headerName: "Dealer Name",
+    flex: 1,
     minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => {
+      return params || "-";
+    },
+  },
+
+  {
+    field: "rmname",
+    headerName: "RM Name",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "status",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -9258,16 +9386,17 @@ export const AmcContest: GridColDef[] = [
     field: "branch_code",
     headerName: "Branch Code",
     flex: 1,
-    minWidth: 100,
+    minWidth: 80,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "zone",
     headerName: "Zone",
     flex: 1,
-    minWidth: 100,
+    minWidth: 80,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -9280,6 +9409,7 @@ export const AmcContest: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
+    headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) => {
       const value = parseFloat(params); // Convert the value to a number
       return new Intl.NumberFormat("en-IN", {
@@ -9292,16 +9422,17 @@ export const AmcContest: GridColDef[] = [
     field: "module_No",
     headerName: "Module No",
     flex: 1,
-    minWidth: 100,
+    minWidth: 80,
     disableColumnMenu: true,
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     align: "center",
   },
   {
     field: "module_Description",
     headerName: "Module Description",
     flex: 1,
-    minWidth: 180,
+    minWidth: 160,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -9320,11 +9451,15 @@ export const AmcContest: GridColDef[] = [
     field: "module_Modified_date",
     headerName: "Module Modified Date",
     flex: 1,
-    minWidth: 170,
+    minWidth: 150,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
     headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params).format("DD-MMM-YY"); // Converts date to "27-Feb-24"
+    },
   },
   {
     field: "secondary_Holder_Name",
@@ -9333,7 +9468,7 @@ export const AmcContest: GridColDef[] = [
     minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
   },
   {
@@ -9343,16 +9478,7 @@ export const AmcContest: GridColDef[] = [
     minWidth: 160,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
-  },
-  {
-    field: "trading_Code",
-    headerName: "Trading Code",
-    flex: 1,
-    minWidth: 140,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
   },
 ];
