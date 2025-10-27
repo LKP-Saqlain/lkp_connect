@@ -732,4 +732,16 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   );
 };
 
-export default DashboardCard;
+function areEqual(
+  prevProps: DashboardCardProps,
+  nextProps: DashboardCardProps
+) {
+  return (
+    prevProps.value === nextProps.value &&
+    prevProps.title === nextProps.title &&
+    prevProps.selectedButton === nextProps.selectedButton && // only re-render if its own button changes
+    JSON.stringify(prevProps.badges) === JSON.stringify(nextProps.badges)
+  );
+}
+
+export default React.memo(DashboardCard, areEqual);
