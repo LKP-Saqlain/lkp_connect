@@ -151,7 +151,7 @@ const Index = ({ activeMenu }: any) => {
           </Col>
           <Col xxl={3} lg={3} md={6} sm={12}>
             <DashboardCard
-              title="Incentitive Earned"
+              title="Incentive Earned"
               value={incentiveEarned}
               customClass={true}
             />
