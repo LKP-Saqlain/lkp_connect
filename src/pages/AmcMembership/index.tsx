@@ -242,38 +242,42 @@ const Index = ({ activeMenu }: any) => {
           <CardBody>
             <Row className="align-items-end flex-wrap" style={{ gap: "1rem" }}>
               {accessType === "ALL" && selectedCapsule !== "Contest Earned" && (
-                <Col>
-                  <Label className="form-label text-muted label-font mb-0">
-                    Zone
-                  </Label>
-                  <div
-                    className="d-flex flex-nowrap gap-2 overflow-auto mt-1"
-                    style={{ maxWidth: "100%" }}
-                  >
-                    {noSortingGroup.map((zone: any) => {
-                      const isSelected = selectedZone?.value === zone.value;
-                      return (
-                        <Button
-                          key={zone.value}
-                          type="button"
-                          style={{
-                            minWidth: "60px",
-                            whiteSpace: "nowrap",
-                            fontSize: "12px",
-                            padding: "2px 8px",
-                            borderRadius: "6px",
-                            border: "1px solid #11395c",
-                            backgroundColor: isSelected ? "#11395c" : "#ffffff",
-                            color: isSelected ? "#ffffff" : "#11395c",
-                          }}
-                          onClick={() => setSelectedZone(zone)}
-                        >
-                          {zone.label}
-                        </Button>
-                      );
-                    })}
+                <Row>
+                  <div className="d-flex align-items-center gap-2">
+                    <Label className="form-label text-muted label-font mb-0">
+                      Zone
+                    </Label>
+                    <div
+                      className="d-flex flex-nowrap gap-2 overflow-auto mt-1"
+                      style={{ maxWidth: "100%" }}
+                    >
+                      {noSortingGroup.map((zone: any) => {
+                        const isSelected = selectedZone?.value === zone.value;
+                        return (
+                          <Button
+                            key={zone.value}
+                            type="button"
+                            style={{
+                              minWidth: "60px",
+                              whiteSpace: "nowrap",
+                              fontSize: "12px",
+                              padding: "2px 8px",
+                              borderRadius: "6px",
+                              border: "1px solid #11395c",
+                              backgroundColor: isSelected
+                                ? "#11395c"
+                                : "#ffffff",
+                              color: isSelected ? "#ffffff" : "#11395c",
+                            }}
+                            onClick={() => setSelectedZone(zone)}
+                          >
+                            {zone.label}
+                          </Button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </Col>
+                </Row>
               )}
               {/* <Col xl={3} lg={4} md={5} sm={6} xs={12} className="mb-3"> */}
               <Col xl={4} lg={5} md={6} sm={8} xs={12} className="mb-3">
