@@ -90,7 +90,7 @@ const Index = ({ activeMenu }: any) => {
       zone: selectedZone?.value || "ALL",
       branchcode: "ALL",
       tradingCode: "ALL",
-      user_id: user_id,
+      UserId: user_id,
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
@@ -158,10 +158,12 @@ const Index = ({ activeMenu }: any) => {
   }, [dispatch, user_id]);
 
   useEffect(() => {
+    fetchData();
+  }, [selectedZone]);
+
+  useEffect(() => {
     if (selectedCapsule === "Contest Earned") {
       fetchContestData();
-    } else {
-      fetchData();
     }
   }, [selectedZone, selectedCapsule]);
 
@@ -241,7 +243,7 @@ const Index = ({ activeMenu }: any) => {
 
           <CardBody>
             <Row className="align-items-end flex-wrap" style={{ gap: "1rem" }}>
-              {accessType === "ALL" && selectedCapsule !== "Contest Earned" && (
+              {accessType === "ALL" && (
                 <Row>
                   <div className="d-flex align-items-center gap-2">
                     <Label className="form-label text-muted label-font mb-0">
