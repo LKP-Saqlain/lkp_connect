@@ -13,6 +13,7 @@ type ConfirmationProps = {
   selectedRow: any;
   totalPayable: number;
   onBackToStep2: () => void;
+  complete: boolean;
 };
 
 const Confirmation = ({
@@ -22,6 +23,7 @@ const Confirmation = ({
   selectedRow,
   totalPayable,
   onBackToStep2,
+  complete,
 }: ConfirmationProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -36,6 +38,7 @@ const Confirmation = ({
   const isWaiting = paymentStatus === "waiting";
   const isSuccess = paymentStatus === "success";
   const isFailure = paymentStatus === "failure";
+  const isComplete = complete === true;
 
   //  Helper: Format seconds → MM:SS
   const formatTime = (seconds: number) => {
@@ -161,6 +164,12 @@ const Confirmation = ({
     }
   }, [flow, paymentStatus]);
 
+  useEffect(() => {
+    if (complete) {
+      setPaymentStatus("success");
+    }
+  }, [complete]);
+
   //  UI
   return (
     <div
@@ -176,7 +185,7 @@ const Confirmation = ({
       }}
     >
       {/* ICONS */}
-      {isSuccess && (
+      {(isSuccess || isComplete) && (
         <FaCheckCircle
           size={60}
           color="#28a745"
@@ -207,7 +216,7 @@ const Confirmation = ({
       )}
 
       {/* TEXT */}
-      {isSuccess && (
+      {isSuccess && !isComplete && (
         <>
           <h4 style={{ fontWeight: 600, color: "#003366" }}>
             Payment Successful
@@ -217,6 +226,32 @@ const Confirmation = ({
             <strong>₹{totalPayable?.toLocaleString("en-IN")}</strong> was
             successful.
           </p>
+        </>
+      )}
+
+      {isComplete && (
+        <>
+          <h4 style={{ fontWeight: 600, color: "#003366", maxWidth: "320px" }}>
+            Thank You for the subscribing to lifetime DP AMC Scheme
+          </h4>
+          {/* <p style={{ marginTop: "0.5rem", color: "#444" }}>
+            Thank You for the subscribing to lifetime DP AMC Scheme
+          </p> */}
+          <Button
+            color="primary"
+            style={{
+              padding: "0.6rem 2rem",
+              borderRadius: "6px",
+              backgroundColor: "#003366",
+              border: "none",
+              marginTop: "1.5rem",
+            }}
+            onClick={() => {
+              window.close();
+            }}
+          >
+            Close Tab
+          </Button>
         </>
       )}
 
@@ -253,7 +288,7 @@ const Confirmation = ({
       )}
 
       {/* BUTTON */}
-      {!isWaiting && (
+      {!isWaiting && !isComplete && (
         <Button
           color="primary"
           style={{

@@ -1,5 +1,5 @@
 import { Row, Col, Button } from "reactstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ShowToast from "../../../utils/toastUtils";
 import { apiServices } from "../../../services";
 
@@ -8,14 +8,31 @@ interface ESignProps {
   onSecondarySign?: () => void;
   onThirdSign?: () => void;
   selectedRow: any;
+  onNext: () => void;
 }
 declare const Digio: any;
 
-const ESign = ({ selectedRow }: ESignProps) => {
+const ESign = ({ onNext, selectedRow }: ESignProps) => {
   const [isSigning, setIsSigning] = useState(false);
   const [disabledHolders, setDisabledHolders] = useState<{
     [key: string]: boolean;
   }>({});
+
+  // ✅ Trigger onNext when all holders are signed
+  useEffect(() => {
+    const holderKeys = holders.map((h) => h.key); // Active holders
+    const allSigned = holderKeys.every((key) => disabledHolders[key]);
+
+    if (allSigned && holderKeys.length > 0) {
+      ShowToast(
+        "success",
+        "All holders have signed. Proceeding to next step..."
+      );
+      setTimeout(() => {
+        onNext(); // call the next step
+      }, 800); // small delay to show toast
+    }
+  }, [disabledHolders]); // Runs each time a holder signs
 
   const handleSign = async (holderType: "primary" | "secondary" | "third") => {
     try {

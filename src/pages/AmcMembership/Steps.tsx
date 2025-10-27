@@ -36,11 +36,11 @@ const AmcMembership = () => {
   }, [location.state, navigate]);
 
   // Step: Auto-remove from sessionStorage when flow completes (final step)
-  useEffect(() => {
-    if (step === 6) {
-      sessionStorage.removeItem("selectedRow");
-    }
-  }, [step]);
+  // useEffect(() => {
+  //   if (step === 6) {
+  //     sessionStorage.removeItem("selectedRow");
+  //   }
+  // }, [step]);
 
   const next = () => setStep((s) => s + 1);
 
@@ -150,12 +150,23 @@ const AmcMembership = () => {
                   selectedRow={selectedRow}
                   totalPayable={totalPayable}
                   onBackToStep2={goToStep2}
+                  complete={false}
                 />
               )}
               {step === 5 && (
                 <TariffForm onNext={next} selectedRow={selectedRow} />
               )}
-              {step === 6 && <ESign selectedRow={selectedRow} />}
+              {step === 6 && <ESign selectedRow={selectedRow} onNext={next} />}
+              {step === 7 && (
+                <Confirmation
+                  flow={flow}
+                  selectedRow={selectedRow}
+                  totalPayable={totalPayable}
+                  onNext={() => {}}
+                  onBackToStep2={goToStep2}
+                  complete={true}
+                />
+              )}
             </>
           )}
 
@@ -169,12 +180,23 @@ const AmcMembership = () => {
                   selectedRow={selectedRow}
                   totalPayable={totalPayable}
                   onBackToStep2={goToStep2}
+                  complete={false}
                 />
               )}
               {step === 4 && (
                 <TariffForm onNext={next} selectedRow={selectedRow} />
               )}
-              {step === 5 && <ESign selectedRow={selectedRow} />}
+              {step === 5 && <ESign selectedRow={selectedRow} onNext={next} />}
+              {step === 6 && (
+                <Confirmation
+                  flow={flow}
+                  selectedRow={selectedRow}
+                  totalPayable={totalPayable}
+                  onNext={() => {}}
+                  onBackToStep2={goToStep2}
+                  complete={true}
+                />
+              )}
             </>
           )}
         </Card>
