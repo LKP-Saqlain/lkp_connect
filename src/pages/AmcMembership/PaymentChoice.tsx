@@ -249,13 +249,13 @@ const dividerStyle = {
   margin: "1rem 0",
 };
 
-const ledgerBoxStyle = {
-  backgroundColor: "#f8f9fa",
-  padding: "0.75rem 1rem",
-  borderRadius: "8px",
-  marginTop: "1rem",
-  border: "1px solid #eee",
-};
+// const ledgerBoxStyle = {
+//   backgroundColor: "#f8f9fa",
+//   padding: "0.75rem 1rem",
+//   borderRadius: "8px",
+//   marginTop: "1rem",
+//   border: "1px solid #eee",
+// };
 
 const buttonGroupStyle = {
   display: "flex",
