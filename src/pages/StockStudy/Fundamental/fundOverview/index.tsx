@@ -92,7 +92,7 @@ const FundOverview = ({ activeMenu, selectedIsin }: any) => {
                 boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <StatItem label="Previous Close Price" value="--" />
+              {/* <StatItem label="Previous Close Price" value="--" /> */}
               <StatItem label="Company P/BV" {...getStatValue("PBV_A")} />
               <StatItem label="Net Profit TTM" {...getStatValue("NP_TTM")} />
               <StatItem
@@ -113,7 +113,7 @@ const FundOverview = ({ activeMenu, selectedIsin }: any) => {
                 boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <StatItem label="52 Wk Hi / Lo" value="--" />
+              {/* <StatItem label="52 Wk Hi / Lo" value="--" /> */}
               <StatItem label="Company PEG" {...getStatValue("PEG_TTM")} />
               <StatItem
                 label="Dividend Yield"
