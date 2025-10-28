@@ -501,7 +501,7 @@ const DashboardCrypto = ({
     console.log("filteredCallsData", filteredCalls);
   }, [filteredCalls]);
 
-  document.title = document.title = "LKP Securities | Zone Target";
+  document.title = document.title = "LKP Securities | Trading";
   return (
     <React.Fragment>
       <div className="page-content page-view">
