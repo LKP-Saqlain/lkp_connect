@@ -366,7 +366,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
               </div>
               <div>
                 <div style={{ textAlign: "center" }}>
-                  Call Publish date & Time
+                  Call Publish Date & Time
                 </div>
                 <div style={{ color: "#666", textAlign: "center" }}>
                   {formatInsertionTime(insertionTime)}
