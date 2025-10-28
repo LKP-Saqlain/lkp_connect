@@ -72,6 +72,7 @@ const ResearchTabs = ({
           fontSize: "0.8rem",
           padding: "2px 8px",
           color: "#11395C",
+          marginBottom: "11px",
         }}
         onClick={handleRefreshClicked}
       >
