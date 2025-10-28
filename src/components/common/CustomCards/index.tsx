@@ -60,7 +60,7 @@ const ResearchTabs = ({
         <Tab label="Equity" />
         <Tab label="F&O" />
         <Tab label="Commodity" />
-        <Tab label="Fundamental" />
+        {/* <Tab label="Fundamental" /> */}
       </Tabs>
 
       <Button

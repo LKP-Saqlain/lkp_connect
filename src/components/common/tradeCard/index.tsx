@@ -257,7 +257,11 @@ const TradeCard: React.FC<TradeCardProps> = ({
           <div className="trade-left">
             <div
               className="trade-name"
-              style={{ display: "flex", alignItems: "center", gap: "6px" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
             >
               {/* Buy/Sell Badge */}
               {buySell && (
@@ -266,10 +270,10 @@ const TradeCard: React.FC<TradeCardProps> = ({
                     fontWeight: 600,
                     fontSize: "12px",
                     color: buySell === "Buy" ? "#0a8a0a" : "#d32f2f",
-                    backgroundColor: buySell === "Buy" ? "#e8f5e9" : "#ffebee", // lighter background
+                    backgroundColor: buySell === "Buy" ? "#e8f5e9" : "#ffebee",
                     border: `1px solid ${
                       buySell === "Buy" ? "#469949" : "#df3434"
-                    }`, // subtle border
+                    }`,
                     borderRadius: "5px",
                     padding: "2px 6px",
                     display: "inline-block",
@@ -280,41 +284,48 @@ const TradeCard: React.FC<TradeCardProps> = ({
                   {buySell.charAt(0).toUpperCase()}
                 </div>
               )}
-              {/* Stock Name */}
-              <span style={{ fontSize: "14px", fontWeight: 700 }}>
-                {" "}
-                {name}{" "}
-              </span>
-              <span className="trade-exchange">{exchange}</span>
-            </div>
 
-            {["F&O", "Commodity", "Currency"].includes(category) && expiry && (
+              {/* Name + Exchange + Expiry in one row */}
               <div
-                className="trade-expiry"
-                // style={{ border: "1px solid black" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  flexWrap: "wrap",
+                }}
               >
-                {(selectedTab === 0 ||
-                  selectedTab === 2 ||
-                  selectedTab === 3) &&
-                  exchSegment && (
-                    <span
-                      className="trade-tag trade-category"
-                      style={{ marginRight: ".5rem" }}
-                    >
-                      {exchSegment.slice(0, 3).toUpperCase()}
-                    </span>
+                <span style={{ fontSize: "14px", fontWeight: 700 }}>
+                  {name}
+                  <span className="trade-exchange">{exchange}</span>
+                </span>
+
+                {["F&O", "Commodity", "Currency"].includes(category) &&
+                  expiry && (
+                    <div className="trade-expiry">
+                      {(selectedTab === 0 ||
+                        selectedTab === 2 ||
+                        selectedTab === 3) &&
+                        exchSegment && (
+                          <span
+                            className="trade-tag trade-category"
+                            style={{ marginRight: ".1rem" }}
+                          >
+                            {exchSegment.slice(0, 3).toUpperCase()}
+                          </span>
+                        )}
+                      {expiry} {strike && <span>{strike}</span>}
+                    </div>
                   )}
-                {expiry} {strike && <span>{strike}</span>}
               </div>
-            )}
+            </div>
 
             <div
               className={containerClass}
               style={{ color: "#999999", fontSize: "12px" }}
             >
               <div>
-                <div>Stop Loss</div>
-                <div style={{ color: "#666" }}>
+                <div style={{ textAlign: "center" }}>Stop Loss</div>
+                <div style={{ color: "#666", textAlign: "center" }}>
                   {Number(stopLoss).toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -322,8 +333,8 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 </div>
               </div>
               <div>
-                <div>Rec. Price</div>
-                <div style={{ color: "#666" }}>
+                <div style={{ textAlign: "center" }}>Rec. Price</div>
+                <div style={{ color: "#666", textAlign: "center" }}>
                   {Number(recPrice).toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -331,8 +342,8 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 </div>
               </div>
               <div>
-                <div>Target Price</div>
-                <div style={{ color: "#666" }}>
+                <div style={{ textAlign: "center" }}>Target Price</div>
+                <div style={{ color: "#666", textAlign: "center" }}>
                   {Number(targetPrice).toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -340,8 +351,8 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 </div>
               </div>
               <div>
-                <div>Profit Potential</div>
-                <div style={{ color: "#666" }}>
+                <div style={{ textAlign: "center" }}>Profit Potential</div>
+                <div style={{ color: "#666", textAlign: "center" }}>
                   {(
                     ((Number(targetPrice) - Number(recPrice)) /
                       Number(recPrice)) *
@@ -354,27 +365,60 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 </div>
               </div>
               <div>
-                <div>Insertion date</div>
-                <div style={{ color: "#666" }}>
+                <div style={{ textAlign: "center" }}>
+                  Call Publish date & Time
+                </div>
+                <div style={{ color: "#666", textAlign: "center" }}>
                   {formatInsertionTime(insertionTime)}
                 </div>
               </div>
             </div>
 
             <Divider sx={{ mb: 2, mt: 2 }} />
-
-            {partialProfitText && (
+            <div
+              className="trade-bottom"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "8px",
+              }}
+            >
+              {partialProfitText && status !== "Open" && (
+                <div
+                  style={{
+                    fontSize: "13px",
+                    color: "green",
+                    fontWeight: 500,
+                    flex: 1,
+                  }}
+                >
+                  {partialProfitText
+                    .toLowerCase()
+                    .replace(/\b\w/g, (char) => char.toUpperCase())}
+                </div>
+              )}
               <div
                 style={{
-                  marginTop: "8px",
+                  position: "absolute",
+                  bottom: status !== "Open" ? "12px" : "8px",
+                  right: "16px",
+                  fontWeight: 600,
                   fontSize: "13px",
-                  color: "green",
-                  fontWeight: 500,
+                  color: color,
+                  backgroundColor: bg,
+                  border: `1px solid ${border}`,
+                  borderRadius: "6px",
+                  padding: "2px 8px",
+                  display: "inline-block",
+                  textAlign: "center",
+                  minWidth: "60px",
                 }}
               >
-                {partialProfitText}
+                {status}
               </div>
-            )}
+            </div>
           </div>
 
           {/* Right */}
@@ -388,11 +432,12 @@ const TradeCard: React.FC<TradeCardProps> = ({
               style={{
                 fontSize: "12px",
                 color: "#999",
-                marginTop: expiry !== "" ? "1.8rem" : "0rem",
+                // marginTop: expiry !== "" ? "1.8rem" : "0rem",
               }}
             >
               Valid Till
             </div>
+
             <div className="trade-datetime">
               {(() => {
                 const parsedDate = dayjs(dateTime, "DD-MM-YYYY HH:mm:ss");
@@ -413,8 +458,11 @@ const TradeCard: React.FC<TradeCardProps> = ({
               </Button>
             )} */}
 
-            <div
+            {/* <div
               style={{
+                position: "absolute",
+                bottom:"8px",
+                right:"16px",
                 fontWeight: 600,
                 fontSize: "13px",
                 color: color,
@@ -428,7 +476,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
               }}
             >
               {status}
-            </div>
+            </div> */}
           </div>
         </CardBody>
       )}
