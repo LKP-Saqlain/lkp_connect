@@ -1568,7 +1568,7 @@ const DataTable = ({
                       }}
                     />
                   </Tooltip> */}
-                  <Tooltip title={"View Details"} arrow placement="top">
+                  <Tooltip title={"Lifetime AMC scheme"} arrow placement="top">
                     <OpenInNewIcon
                       style={{ cursor: "pointer", color: "#11395C" }}
                       onClick={() => {

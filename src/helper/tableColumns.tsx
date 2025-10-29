@@ -9316,7 +9316,7 @@ export const AmcLifeMembership: GridColDef[] = [
 export const AmcNonLifeMembership: GridColDef[] = [
   {
     field: "MoreDetails",
-    headerName: "More Details",
+    headerName: "Activate",
     flex: 1,
     minWidth: 100,
     disableColumnMenu: true,
