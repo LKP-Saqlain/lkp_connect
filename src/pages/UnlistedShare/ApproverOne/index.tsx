@@ -65,8 +65,8 @@ const index = ({ activeSubItem }: any) => {
     rid: number,
     remark: string,
     entryFlag: string,
-    vendorName?: number,
-    dealSheetB64?: string
+    vendorName?: number
+    // dealSheetB64?: string
   ) => {
     const payload = {
       rowID: rid,
@@ -75,7 +75,7 @@ const index = ({ activeSubItem }: any) => {
       status: entryFlag === "approve" ? "A" : "R",
       remarks: remark,
       vendorName: entryFlag === "approve" ? Number(vendorName) : null,
-      dealSheetB64: entryFlag === "approve" ? dealSheetB64 : null,
+      // dealSheetB64: entryFlag === "approve" ? dealSheetB64 : null,
     };
     dispatch(showLoader("Approving..."));
 
