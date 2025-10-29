@@ -8,7 +8,7 @@ import { AppDispatch } from "../../../../redux/store";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 
-const MfOverview = ({ schemeCode, onBack, hasToken }: any) => {
+const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<any>(null);
   const [modalType, setModalType] = useState<"oneTime" | "sip" | null>(null);
@@ -80,6 +80,8 @@ const MfOverview = ({ schemeCode, onBack, hasToken }: any) => {
         title={data?.schemeName ?? ""}
         bseSchemeCode={bseSchemeCode}
         hasToken={hasToken}
+        onOrderSuccess={onOrderSuccess}
+        onBack={onBack}
       />
 
       <Card>
@@ -211,7 +213,7 @@ const MfOverview = ({ schemeCode, onBack, hasToken }: any) => {
             <MfAreaChart
               series={chartSeries}
               defaultRange="one_year"
-              height={400}
+              height={280}
             />
           )}
         </div>

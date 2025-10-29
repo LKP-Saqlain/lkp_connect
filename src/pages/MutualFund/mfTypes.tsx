@@ -42,6 +42,8 @@ export interface MutualFundModalProps {
   title?: string;
   bseSchemeCode?: string;
   hasToken?: string;
+  onOrderSuccess?: any;
+  onBack?: any;
 }
 
 export interface BankDetail {

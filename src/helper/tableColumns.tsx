@@ -8730,7 +8730,9 @@ export const NFOList: GridColDef[] = [
   },
 ];
 
-export const RecommendationList: GridColDef[] = [
+export const getRecommendationListColumns = (
+  selectedReturnPeriod: string
+): GridColDef[] => [
   {
     field: "schemeName",
     headerName: "Fund Name",
@@ -8753,6 +8755,7 @@ export const RecommendationList: GridColDef[] = [
     headerName: "Category",
     flex: 1.5,
     minWidth: 160,
+    disableColumnMenu: true,
     renderCell: (params) => (
       <span style={{ fontSize: "13px" }}>
         {params.row.category?.split("|")[1]?.trim() || "-"}
@@ -8766,6 +8769,7 @@ export const RecommendationList: GridColDef[] = [
     headerAlign: "center",
     flex: 1,
     minWidth: 100,
+    disableColumnMenu: true,
     renderCell: (params) => (
       <span>₹{Number(params.row.sipMinimum || 0).toLocaleString()}</span>
     ),
@@ -8776,6 +8780,7 @@ export const RecommendationList: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     flex: 1,
+    disableColumnMenu: true,
     minWidth: 100,
     renderCell: (params) => (
       <span>₹{Number(params.row.aum || 0).toLocaleString()}</span>
@@ -8787,24 +8792,27 @@ export const RecommendationList: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     flex: 1,
+    disableColumnMenu: true,
     minWidth: 120,
     renderCell: (params) => (
       <span>₹{Number(params.row.investmentAmount || 0).toLocaleString()}</span>
     ),
   },
   {
-    field: "oneWeek",
-    headerName: "1W Returns",
+    field: selectedReturnPeriod, // 👈 dynamic field
+    headerName: "Returns",
     align: "center",
     headerAlign: "center",
     flex: 1,
+    disableColumnMenu: true,
     minWidth: 100,
     renderCell: (params) => {
-      const val = parseFloat(params.row.oneWeek);
+      const val = parseFloat(params.row[selectedReturnPeriod]);
       const isNegative = val < 0;
       return (
         <span style={{ color: isNegative ? "red" : "green" }}>
-          {val.toFixed(2)}%
+          {isNegative ? "-" : ""}
+          {Math.abs(val).toFixed(2)}%
         </span>
       );
     },
