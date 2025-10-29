@@ -17,22 +17,38 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
   const [disabledHolders, setDisabledHolders] = useState<{
     [key: string]: boolean;
   }>({});
+  const [signCount, setSignCount] = useState<number>(0); // ✅
 
   // ✅ Trigger onNext when all holders are signed
-  useEffect(() => {
-    const holderKeys = holders.map((h) => h.key); // Active holders
-    const allSigned = holderKeys.every((key) => disabledHolders[key]);
+  // useEffect(() => {
+  //   const holderKeys = holders.map((h) => h.key); // Active holders
+  //   const allSigned = holderKeys.every((key) => disabledHolders[key]);
 
-    if (allSigned && holderKeys.length > 0) {
+  //   if (allSigned && holderKeys.length > 0) {
+  //     ShowToast(
+  //       "success",
+  //       "All holders have signed. Proceeding to next step..."
+  //     );
+  //     setTimeout(() => {
+  //       onNext(); // call the next step
+  //       sendFinalEmail();
+  //     }, 1000); // small delay to show toast
+  //   }
+  // }, [disabledHolders]); // Runs each time a holder signs
+
+  useEffect(() => {
+    const totalHolders = holders.length;
+    if (signCount === totalHolders && totalHolders > 0) {
       ShowToast(
         "success",
         "All holders have signed. Proceeding to next step..."
       );
       setTimeout(() => {
-        onNext(); // call the next step
-      }, 800); // small delay to show toast
+        sendFinalEmail();
+        onNext();
+      }, 1000);
     }
-  }, [disabledHolders]); // Runs each time a holder signs
+  }, [signCount]);
 
   const handleSign = async (holderType: "primary" | "secondary" | "third") => {
     try {
@@ -78,6 +94,7 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
           ShowToast("success", "Signing completed successfully");
           console.log(resp, " from digio");
           setDisabledHolders((prev) => ({ ...prev, [holderType]: true }));
+          setSignCount((prevCount) => prevCount + 1);
           await downloadSignedPdf(documentId, fileName);
         },
         logo: logoUrl,
@@ -108,6 +125,27 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
         console.log("success", "PDF Downloaded Successfully!");
       } else {
         ShowToast("error", response?.data?.message || "Failed to download PDF");
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const sendFinalEmail = async () => {
+    console.log("check before downloadSignedPdf");
+    try {
+      const payload = {
+        dpid: selectedRow?.dP_ID,
+        maxStage: signCount,
+      };
+
+      const response = await apiServices.SendFinalSignedMail(payload);
+      console.log(response, "response from downloadSignedPdf");
+      if (response?.data?.success == true) {
+        ShowToast("success", response?.data?.message);
+        console.log("success", "Email sent succesfully", response);
+      } else {
+        console.log("Failure", "Email NOT sent succesfully", response);
       }
     } catch (error) {
       console.warn(error);

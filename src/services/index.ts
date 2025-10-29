@@ -983,4 +983,7 @@ export const apiServices = {
   DownloadSignedPdf: async (payload: any) => {
     return await apiService("POST", endpoints.DownloadSignedPdf, payload);
   },
+  SendFinalSignedMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendFinalSignedMail, payload);
+  },
 };

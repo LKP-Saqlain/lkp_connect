@@ -227,4 +227,5 @@ export const endpoints = {
   SendSecondHolderSignature: "/api/Client/SendSecondHolderSignature",
   SendThirdHolderSignature: "/api/Client/SendThirdHolderSignature",
   DownloadSignedPdf: "/api/Client/DownloadSignedPdf",
+  SendFinalSignedMail: "/api/Client/SendFinalSignedMail",
 };

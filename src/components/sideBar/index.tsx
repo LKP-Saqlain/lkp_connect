@@ -100,7 +100,7 @@ import MtfComponent from "../../pages/RMS/Mtf";
 import UnpledgeRequest from "../../pages/UnpledgeRequest";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MandatePayment from "../../pages/ThirdParty/Mandate";
-// import AmcMembership from "../../pages/AmcMembership";
+import AmcMembership from "../../pages/AmcMembership";
 // import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
 
 const drawerWidth = 260;
@@ -849,7 +849,7 @@ const SideBar = () => {
       32: () => <ApnContest activeMenu={activeMenu} />,
       33: () => getSubItemComponent(AccountSubItems),
       34: () => <PledgeRequest activeMenu={activeMenu} />,
-      // 35: () => <AmcMembership activeMenu={activeMenu} />,
+      35: () => <AmcMembership activeMenu={activeMenu} />,
     };
 
     return dynamicMap[menu_order]?.() || null;
