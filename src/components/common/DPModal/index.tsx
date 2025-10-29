@@ -389,10 +389,10 @@ const CustomModal = ({
     });
 
     // Validate file input
-    if (!selectedFile) {
-      ShowToast("error", "Please select a PDF file to upload.");
-      return;
-    }
+    // if (!selectedFile) {
+    //   ShowToast("error", "Please select a PDF file to upload.");
+    //   return;
+    // }
 
     if (!isValid) {
       ShowToast("error", "Please fill all required fields.");
@@ -419,8 +419,8 @@ const CustomModal = ({
       row,
       formik.values.remark,
       action ?? "approve",
-      formik.values.dropdownOption,
-      base64
+      formik.values.dropdownOption
+      // base64
     );
     setSelectedFile(null);
     setmodal_center(false);
@@ -926,17 +926,6 @@ const CustomModal = ({
                 </option>
               ))}
           </Input>
-
-          <Input
-            name="uploadProof"
-            type="file"
-            accept=".pdf"
-            className="form-control mb-3"
-            onChange={(e) =>
-              e.target.files && setSelectedFile(e.target.files[0])
-            }
-            style={{ width: "100%", minHeight: "40px", borderColor: "#C4C4C4" }}
-          />
 
           <div
             style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}

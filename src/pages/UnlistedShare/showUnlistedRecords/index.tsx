@@ -171,12 +171,8 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       });
   };
 
-  const handleFormSubmit = async (
-    data: any,
-    apiStatus: any,
-    fileBase64: any
-  ) => {
-    console.log("FormData", data, apiStatus, fileBase64);
+  const handleFormSubmit = async (data: any, fileBase64: any) => {
+    console.log("FormData", data, fileBase64);
     if (editData && Object.keys(editData).length > 0) {
       updateUnlistedVals(data);
       return;
@@ -224,6 +220,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
         : 0,
       netBrokerage: unformatNumber(netBrokerage),
       rmCode: rmCode?.toString().trim(),
+      dealSheetB64: fileBase64,
     };
     console.log("Payload", payload);
 

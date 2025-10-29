@@ -3194,11 +3194,11 @@ export const topBirthdays: GridColDef[] = [
 ];
 
 export const cyptoWidgets = [
-  {
-    id: 1,
-    label: "Reasearch Calls",
-    color: "primary",
-  },
+  // {
+  //   id: 1,
+  //   label: "Reasearch Calls",
+  //   color: "primary",
+  // },
   {
     id: 2,
     label: "Clients With Ledger Balance",
@@ -5984,6 +5984,49 @@ export const spipClientDetails: GridColDef[] = [
 ];
 
 export const getApproverOneDetails: GridColDef[] = [
+  {
+    field: "dealSheetB64",
+    headerName: "Deal Sheet",
+    headerClassName: "header-wrap-custom",
+    minWidth: 50,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    sortable: false,
+
+    renderCell: (params) => {
+      const base64Data = params.value;
+      const today = new Date();
+
+      const dd = String(today.getDate()).padStart(2, "0");
+      const mm = String(today.getMonth() + 1).padStart(2, "0"); // January is 0!
+      const yy = String(today.getFullYear()).slice(-2);
+
+      const filename = `Deal_Sheet_${dd}-${mm}-${yy}.pdf`;
+
+      const handleDownload = () => {
+        const link = document.createElement("a");
+        link.href = `data:application/pdf;base64,${base64Data}`;
+        link.download = filename;
+        link.click();
+      };
+
+      return (
+        <button
+          onClick={handleDownload}
+          style={{
+            color: "#11395C",
+            textDecoration: "underline",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          <DownloadForOfflineIcon />
+        </button>
+      );
+    },
+  },
   {
     field: "Action",
     headerName: "Approve | Reject",
