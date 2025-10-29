@@ -100,6 +100,10 @@ const DashboardCrypto = ({
   );
 
   useEffect(() => {
+    setSelectedSubCategory("All");
+  }, [selectedTab]);
+
+  useEffect(() => {
     console.log("testProps->", selectedViewMore);
     if (selectedViewMore === "T6") {
       setSelectedItem("Clients Ageing Report");
@@ -668,7 +672,7 @@ const DashboardCrypto = ({
                               color: "#666",
                             }}
                           >
-                            No Records Found!
+                            No Research Data!
                           </CardBody>
                         </Card>
                       </>

@@ -301,19 +301,64 @@ const TradeCard: React.FC<TradeCardProps> = ({
 
                 {["F&O", "Commodity", "Currency"].includes(category) &&
                   expiry && (
-                    <div className="trade-expiry">
+                    <div className="trade-tag">
                       {(selectedTab === 0 ||
                         selectedTab === 2 ||
                         selectedTab === 3) &&
-                        exchSegment && (
-                          <span
-                            className="trade-tag trade-category"
-                            style={{ marginRight: ".1rem" }}
-                          >
-                            {exchSegment.slice(0, 3).toUpperCase()}
-                          </span>
-                        )}
-                      {expiry} {strike && <span>{strike}</span>}
+                        exchSegment &&
+                        (() => {
+                          const seg = exchSegment.slice(0, 3).toUpperCase();
+
+                          const getColors = (seg: string) => {
+                            switch (seg) {
+                              case "FUT":
+                                return { bg: "#d4edda", color: "#2e7d32" }; // light green
+                              case "CE":
+                                return { bg: "#d6e9f9", color: "#1e88e5" }; // light blue
+                              case "PE":
+                                return { bg: "#ffe6cc", color: "#ff8c00" }; // light orange
+                              default:
+                                return { bg: "#f5f5f5", color: "#000" }; // neutral
+                            }
+                          };
+
+                          const { bg, color } = getColors(seg);
+
+                          return (
+                            <>
+                              {/* exchSegment (colored) */}
+                              <span
+                                className="trade-tag trade-category"
+                                style={{
+                                  marginRight: ".1rem",
+                                  backgroundColor: bg,
+                                  color: color,
+                                }}
+                              >
+                                {seg}
+                              </span>
+
+                              {/* expiry (same color as exchSegment) */}
+                              <span
+                                className="trade-tag trade-category"
+                                style={{
+                                  marginRight: ".1rem",
+                                  backgroundColor: bg,
+                                  color: color,
+                                }}
+                              >
+                                {expiry}
+                              </span>
+
+                              {/* strike (default style) */}
+                              {strike && (
+                                <span className="trade-tag trade-category">
+                                  {strike}
+                                </span>
+                              )}
+                            </>
+                          );
+                        })()}
                     </div>
                   )}
               </div>
@@ -424,8 +469,8 @@ const TradeCard: React.FC<TradeCardProps> = ({
           {/* Right */}
           <div style={{ textAlign: "right" }}>
             <div className="trade-tags">
-              <span className="trade-tag trade-category">{category}</span>
-              <span className="trade-tag trade-label">{tag}</span>
+              <span className="trade-tag trade-label">{category}</span>
+              <span className="trade-tag trade-category">{tag}</span>
             </div>
 
             <div
@@ -448,35 +493,6 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 );
               })()}
             </div>
-
-            {/* {buySell && (
-              <Button
-                color={buySell === "Sell" ? "danger" : "success"}
-                className="trade-button"
-              >
-                {buySell}
-              </Button>
-            )} */}
-
-            {/* <div
-              style={{
-                position: "absolute",
-                bottom:"8px",
-                right:"16px",
-                fontWeight: 600,
-                fontSize: "13px",
-                color: color,
-                backgroundColor: bg,
-                border: `1px solid ${border}`,
-                borderRadius: "6px", // rounded corners
-                padding: "2px 8px",
-                display: "inline-block",
-                textAlign: "center",
-                minWidth: "60px",
-              }}
-            >
-              {status}
-            </div> */}
           </div>
         </CardBody>
       )}
