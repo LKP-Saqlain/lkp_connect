@@ -28,9 +28,11 @@ const MandateCall = () => {
   // );
 
   const { encryptedCode } = useParams<{ encryptedCode: string }>();
-  const decryptCode = encryptedCode
-    ? decryptAES(decodeURIComponent(encryptedCode))
-    : "";
+  const normalizedCode = decodeURIComponent(encryptedCode || "").replace(
+    / /g,
+    "+"
+  );
+  const decryptCode = normalizedCode ? decryptAES(normalizedCode) : "";
 
   useEffect(() => {
     if (!encryptedCode) return;
@@ -38,7 +40,7 @@ const MandateCall = () => {
     dispatch(showLoader(""));
 
     apiServices
-      .GetDpClientDetails({ clientcode: encryptedCode })
+      .GetDpClientDetails({ clientcode: decryptCode })
       .then((response) => {
         if (response?.status === 200) {
           setData(response.data.data);

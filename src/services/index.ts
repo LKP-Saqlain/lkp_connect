@@ -989,4 +989,7 @@ export const apiServices = {
   GetClientMISDetails: async (payload: any) => {
     return await apiService("POST", endpoints.GetClientMISDetails, payload);
   },
+  ViewVendorDetailsReport: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewVendorDetailsReport, payload);
+  },
 };
