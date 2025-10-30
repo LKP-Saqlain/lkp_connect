@@ -1363,7 +1363,7 @@ const ModalComponent = ({
           dispatch(hideLoader());
         });
     }
-  }, [editUserCheck, editData, dispatch]);
+  }, [editUserCheck, editData, dispatch, activeSubItem]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileInput = e.target;
