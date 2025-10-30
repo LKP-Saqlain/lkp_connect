@@ -154,6 +154,27 @@ const MutualFundTable = ({
 
   console.log(columns, selectedLabel);
   // const columns = MutualFundList;
+
+  const getReturnValue = (fund: any) => {
+    const periodKeyMap: any = {
+      oneWeek: fund.oneWeek,
+      oneMonth: fund.oneMonth,
+      threeMonth: fund.threeMonth,
+      sixMonth: fund.sixMonth,
+      oneYear: fund.oneYear,
+      threeYear: fund.threeYear,
+      fiveYear: fund.fiveYear,
+    };
+    return parseFloat(periodKeyMap[selectedReturnPeriod]) || 0;
+  };
+
+  const sortedFunds =
+    selectedLabel && recommendationTypes.includes(selectedLabel)
+      ? [...rows].sort(
+          (a: any, b: any) => getReturnValue(b) - getReturnValue(a)
+        ) // ✅ Descending
+      : rows;
+
   return (
     <>
       <MutualFundModal
@@ -195,7 +216,7 @@ const MutualFundTable = ({
       )}
       <Box sx={{ height: 400, width: "100%" }}>
         <DataGrid
-          rows={rows}
+          rows={sortedFunds}
           columns={columns}
           // pageSizeOptions={[5]}
           disableRowSelectionOnClick

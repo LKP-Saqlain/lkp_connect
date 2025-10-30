@@ -8483,6 +8483,20 @@ export const MfPortfolio: GridColDef[] = [
     minWidth: 200,
   },
   {
+    field: "physicalQuantity",
+    headerName: "Mode",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+    align: "right",
+    headerAlign: "right",
+    valueFormatter: (params: any) => {
+      if (params > 0) return "Physical";
+      else return "Demat";
+    },
+  },
+
+  {
     field: "folioNumber",
     headerName: "Folio Number",
     disableColumnMenu: true,
@@ -8836,6 +8850,16 @@ export const MutualFundOrderColumns: GridColDef[] = [
         <div style={{ fontWeight: 500 }}>{params.row.schemeName}</div>
       </div>
     ),
+  },
+  {
+    field: "transType",
+    headerName: "Transaction Type",
+    disableColumnMenu: true,
+    flex: 0.7,
+    minWidth: 60,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "successFlag",

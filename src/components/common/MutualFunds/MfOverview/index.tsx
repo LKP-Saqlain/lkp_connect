@@ -13,6 +13,7 @@ const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
   const [data, setData] = useState<any>(null);
   const [modalType, setModalType] = useState<"oneTime" | "sip" | null>(null);
   const [bseSchemeCode, setBseSchemeCode] = useState<any>("");
+  const [fundOverviewData, setFundOverviewData] = useState<any>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const toggle = () => setOpen(!open);
@@ -59,6 +60,7 @@ const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
         ]);
 
         // handle FundOverView response
+        setFundOverviewData(bseRes?.data?.data[0]);
         setBseSchemeCode(bseRes?.data?.data[0]?.bseSchemeCode ?? "");
       } catch (err: any) {
         console.error("Error->", err.message);
@@ -220,7 +222,7 @@ const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
       </Card>
 
       {/* Fund Details */}
-      {data && <FundDetails data={data} />}
+      {data && <FundDetails data={data} fundOverviewData={fundOverviewData} />}
     </>
   );
 };

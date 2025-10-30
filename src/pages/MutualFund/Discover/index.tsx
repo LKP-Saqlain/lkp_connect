@@ -7,6 +7,7 @@ import {
   MfCardPassLabel,
   popularTabList,
   assetClassTabList,
+  returnPeriodsTabs,
 } from "../../../pages/MutualFund/mfTypes";
 import MfinfoCard from "../../../components/common/MutualFunds/MfInfoCard";
 import { useEffect, useState } from "react";
@@ -24,6 +25,7 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
   const [assetTab, setAssetTab] = useState("Equity");
   const [assetTabOrder, setAssetTabOrder] = useState(0);
   const [assetClassData, setAssetClassData] = useState<any[]>([]);
+  const [selectedReturnPeriod, setSelectedReturnPeriod] = useState("1Y");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -172,12 +174,16 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
                 tabs={popularTabList}
                 value={popularTabOrder}
                 onChange={handleTabChange}
+                returnPeriods={returnPeriodsTabs}
+                selectedReturnPeriod={selectedReturnPeriod}
+                onReturnPeriodChange={setSelectedReturnPeriod}
               />
               {popularCategorydata.length > 0 && (
                 <MfinfoCard
                   CardType="Popular Category"
                   funds={popularCategorydata}
                   handleSelectedMutualFund={handleSelectedMutualFund}
+                  selectedReturnPeriod={selectedReturnPeriod}
                 />
               )}
             </Card>
@@ -237,12 +243,16 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
                 tabs={assetClassTabList}
                 value={assetTabOrder}
                 onChange={handleAssetTabChange}
+                returnPeriods={returnPeriodsTabs}
+                selectedReturnPeriod={selectedReturnPeriod}
+                onReturnPeriodChange={setSelectedReturnPeriod}
               />
               {assetClassData.length > 0 && (
                 <MfinfoCard
                   CardType="Asset Class"
                   funds={assetClassData}
                   handleSelectedMutualFund={handleSelectedMutualFund}
+                  selectedReturnPeriod={selectedReturnPeriod}
                 />
               )}
             </Card>
