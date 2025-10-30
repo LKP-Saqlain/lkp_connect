@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import MutualFundTable from "../../../../components/common/MutualFunds/MfTable";
-import BasicTabs from "../../../../components/common/MutualFunds/NavTabs";
+// import BasicTabs from "../../../../components/common/MutualFunds/NavTabs";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../redux/store";
 import { apiServices } from "../../../../services";
@@ -89,12 +89,12 @@ const MutualFundList = ({
         padding: "20px",
       }}
     >
-      <BasicTabs
+      {/* <BasicTabs
         heading="Mutual Fund List"
         tabs={[]}
         value={0}
         onChange={() => {}}
-      />
+      /> */}
       {/* Header Row */}
       <div
         style={{

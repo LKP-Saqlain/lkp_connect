@@ -161,7 +161,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 style={{
                   fontWeight: 600,
                   fontSize: "14px",
-                  border: "1px solid black",
+                  // border: "1px solid black",
                 }}
               >
                 {clientName}

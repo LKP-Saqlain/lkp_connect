@@ -128,6 +128,11 @@ const MutualFundIndex = () => {
     }
   }, [autoReopen]);
 
+  const handleSetOrderTab = () => {
+    const orderIndex = mainMenu.findIndex((m) => m.label === "Order");
+    setActiveTab(orderIndex);
+  };
+
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -276,12 +281,14 @@ const MutualFundIndex = () => {
             schemeCode={selectedMutualFund}
             onBack={handleBack}
             hasToken={hasToken}
+            onOrderSuccess={handleSetOrderTab}
           />
         ) : (
           mainMenu[activeTab]?.content({
             onSelectFund: setSelectedMutualFund,
             clientCode,
             hasToken,
+            // onOrderSuccess: handleSetOrderTab,
           })
         )}
       </Container>
