@@ -7704,6 +7704,17 @@ export const VendorMasterColumns: GridColDef[] = [
     //   </div>
     // ),
   },
+  {
+    field: "accRemark",
+    headerName: "Remark",
+    minWidth: 160,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
 ];
 
 export const VendorMasterApprovalColumns: GridColDef[] = [
@@ -7885,6 +7896,17 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     field: "actions",
     headerName: "Actions",
     minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "accRemark",
+    headerName: "Remark",
+    minWidth: 160,
     flex: 0.6,
     sortable: false,
     filterable: false,
@@ -9523,5 +9545,179 @@ export const AmcContest: GridColDef[] = [
     headerAlign: "center",
     align: "left",
     headerClassName: "header-wrap-custom",
+  },
+];
+
+export const clientMISColumns: GridColDef[] = [
+  {
+    field: "zoneCode",
+    headerName: "Zone Code",
+    headerClassName: "header-wrap-custom",
+    minWidth: 70,
+    flex: 0.6,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    headerClassName: "header-wrap-custom",
+    minWidth: 90,
+    flex: 0.6,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "raCode",
+    headerName: "RA Code",
+    minWidth: 85,
+    flex: 0.5,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 220,
+    flex: 1,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "partnerName",
+    headerName: "Partner Name",
+    minWidth: 220,
+    flex: 1,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "partnerCode",
+    headerName: "Partner Code",
+    headerClassName: "header-wrap-custom",
+    minWidth: 70,
+    flex: 0.6,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "totalSPIPIRevenue",
+    headerName: "Total SPIP Revenue",
+    headerClassName: "header-wrap-custom",
+    minWidth: 100,
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "partnerShare",
+    headerName: "Partner Share",
+    headerClassName: "header-wrap-custom",
+    minWidth: 80,
+    flex: 0.8,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "lkpShare",
+    headerName: "LKP Share",
+    headerClassName: "header-wrap-custom",
+    minWidth: 90,
+    flex: 0.8,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "totalBrokRevenue",
+    headerName: "Total Brokerage Revenue",
+    headerClassName: "header-wrap-custom",
+    minWidth: 100,
+    flex: 1.2,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "partnerbrokShare",
+    headerName: "Partner Brok. Share",
+    headerClassName: "header-wrap-custom",
+    minWidth: 80,
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "lkpbroshare",
+    headerName: "LKP Brok. Share",
+    headerClassName: "header-wrap-custom",
+    minWidth: 80,
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "email",
+    headerName: "Email ID",
+    minWidth: 200,
+    flex: 1.2,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "cmobileno",
+    headerName: "Mobile No",
+    minWidth: 140,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "rmName",
+    headerName: "RM Name",
+    minWidth: 160,
+    flex: 1,
+    align: "left",
+    headerAlign: "center",
   },
 ];

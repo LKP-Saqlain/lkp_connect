@@ -13,6 +13,7 @@ export const SubItemKeys = {
   EMPLOYEE_TARGET_REPORT: "Employee Target Report",
   RH_PARTNER: "Partner Contest Report",
   RH_ZONE_TARGET: "Zone Target Q3",
+  SPIP_CLIENT_MIS: "SPIP Client MIS",
 } as const;
 
 export type SubItemKey = (typeof SubItemKeys)[keyof typeof SubItemKeys];
