@@ -28,10 +28,14 @@ const MandateCall = () => {
   // );
 
   const { encryptedCode } = useParams<{ encryptedCode: string }>();
+
+  //  Normalize it once — decode URL and fix "+" issue
   const normalizedCode = decodeURIComponent(encryptedCode || "").replace(
     / /g,
     "+"
   );
+
+  // (Optional) Decrypt only if you need to display the client code locally
   const decryptCode = normalizedCode ? decryptAES(normalizedCode) : "";
 
   useEffect(() => {
@@ -40,7 +44,7 @@ const MandateCall = () => {
     dispatch(showLoader(""));
 
     apiServices
-      .GetDpClientDetails({ clientcode: decryptCode })
+      .GetDpClientDetails({ clientcode: normalizedCode })
       .then((response) => {
         if (response?.status === 200) {
           setData(response.data.data);
