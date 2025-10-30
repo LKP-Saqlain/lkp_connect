@@ -101,6 +101,7 @@ import UnpledgeRequest from "../../pages/UnpledgeRequest";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MandatePayment from "../../pages/ThirdParty/Mandate";
 import AmcMembership from "../../pages/AmcMembership";
+import LedgerDebitReport from "../../pages/AmcMembership/LedgerReport";
 // import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
 
 const drawerWidth = 260;
@@ -782,6 +783,7 @@ const SideBar = () => {
       <InvoiceStatusReport activeSubItem={activeSubItem} />
     ),
     "Dp Debit Collection": <MandatePayment activeSubItem={activeSubItem} />,
+    "DP AMC Ledger Debit": <LedgerDebitReport activeSubItem={activeSubItem} />,
   };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>

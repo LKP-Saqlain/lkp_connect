@@ -986,4 +986,7 @@ export const apiServices = {
   SendFinalSignedMail: async (payload: any) => {
     return await apiService("POST", endpoints.SendFinalSignedMail, payload);
   },
+  GetLedgerReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetLedgerReport, payload);
+  },
 };
