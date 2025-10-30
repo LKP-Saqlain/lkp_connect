@@ -9581,7 +9581,7 @@ export const AmcLedgerReport: GridColDef[] = [
     disableColumnMenu: true,
     valueFormatter: (params: any) => {
       if (!params) return "-";
-      return dayjs(params).format("DD-MMM-YY"); // Converts date to "27-Feb-24"
+      return dayjs(params).format("DD-MMM-YY HH:mm:ss");
     },
   },
 ];

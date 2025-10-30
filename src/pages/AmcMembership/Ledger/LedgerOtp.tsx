@@ -24,6 +24,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     const interval = setInterval(() => setTimer((t) => t - 1), 1000);
     return () => clearInterval(interval);
   }, [timer]);
+  console.log(clientData, "mobile and email OTP");
 
   // 🔹 Send OTP on component mount
   useEffect(() => {
@@ -33,6 +34,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
         // mobileNo: "99693727591",
         otp: "",
         action: "Send",
+        emailId: clientData?.email_id,
       };
 
       dispatch(showLoader("Sending OTP to your registered mobile..."));
@@ -87,6 +89,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
       // mobileNo: "99693727591",
       otp: enteredOtp,
       action: "Verify",
+      emailId: clientData?.email_id,
     };
 
     dispatch(showLoader("Verifying OTP..."));
@@ -123,13 +126,14 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
       // mobileNo: "99693727591",
       otp: "",
       action: "Send",
+      emailId: clientData?.email_id,
     };
 
     dispatch(showLoader("Resending OTP..."));
 
     try {
       const response = await apiServices.ProcessOTP(payload);
-      console.log("📨 Resend OTP Response:", response);
+      console.log(" Resend OTP Response:", response);
 
       if (response?.data?.isSuccess) {
         setOtpSent(true);
