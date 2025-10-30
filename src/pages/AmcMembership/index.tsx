@@ -165,6 +165,7 @@ const Index = ({ activeMenu }: any) => {
     if (selectedCapsule === "Contest Earned") {
       fetchContestData();
     }
+    setSearchQuery("");
   }, [selectedZone, selectedCapsule]);
 
   const tableData =
@@ -283,13 +284,13 @@ const Index = ({ activeMenu }: any) => {
               )}
               {/* <Col xl={3} lg={4} md={5} sm={6} xs={12} className="mb-3"> */}
               <Col xl={4} lg={5} md={6} sm={8} xs={12} className="mb-3">
-                <Label className="form-label text-muted label-font">
+                {/* <Label className="form-label text-muted label-font">
                   Client Code / Name / BOID
-                </Label>
+                </Label> */}
                 <TextField
                   size="small"
                   variant="outlined"
-                  placeholder="Enter Client Code or Name or BOID"
+                  placeholder="Search by Client Code or Name or BOID"
                   fullWidth
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}

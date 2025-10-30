@@ -58,6 +58,9 @@ const PaymentChoice = ({
   // Determine if ledger payment is possible
   const isLedgerSufficient = ledgerBalance >= totalPayable;
 
+  //----------- remove later--------------
+  console.log(isLedgerSufficient, onLedger);
+
   // Format back into currency with ₹ and commas
   const formatCurrency = (num: number) =>
     `₹ ${num.toLocaleString("en-IN", {
@@ -167,7 +170,7 @@ const PaymentChoice = ({
               </tr>
 
               {/* Ledger Balance */}
-              <tr>
+              {/* <tr>
                 <td style={{ padding: "6px 8px", fontWeight: 600 }}>
                   Ledger Balance:
                 </td>
@@ -180,10 +183,10 @@ const PaymentChoice = ({
                 >
                   {formatCurrency(ledgerBalance)}
                 </td>
-              </tr>
+              </tr> */}
 
               {/* Insufficient balance message */}
-              {!isLedgerSufficient && (
+              {/* {!isLedgerSufficient && (
                 <tr>
                   <td
                     colSpan={2}
@@ -192,7 +195,7 @@ const PaymentChoice = ({
                     Insufficient balance for ledger debit.
                   </td>
                 </tr>
-              )}
+              )} */}
             </tbody>
           </table>
         </Col>
@@ -202,11 +205,11 @@ const PaymentChoice = ({
 
       {/* Payment Buttons */}
       <div style={{ textAlign: "center" }}>
-        <p style={{ fontWeight: "600", color: "#000" }}>
+        {/* <p style={{ fontWeight: "600", color: "#000" }}>
           Select Payment Method
-        </p>
+        </p> */}
 
-        <div style={buttonGroupStyle}>
+        {/* <div style={buttonGroupStyle}>
           <button
             style={{
               backgroundColor: isLedgerSufficient ? "#003366" : "#d3d3d3",
@@ -220,24 +223,24 @@ const PaymentChoice = ({
             disabled={!isLedgerSufficient}
           >
             Debit from Ledger
-          </button>
+          </button> */}
 
-          <span style={{ fontWeight: "500", color: "#555" }}>or</span>
+        {/* <span style={{ fontWeight: "500", color: "#555" }}>or</span> */}
 
-          <Button
-            style={{
-              backgroundColor: "#003366",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-              padding: "0.3rem 1.5rem",
-            }}
-            onClick={handleOnlinePayment}
-          >
-            Online Payment
-          </Button>
-        </div>
+        <Button
+          style={{
+            backgroundColor: "#003366",
+            color: "#fff",
+            border: "none",
+            borderRadius: "6px",
+            padding: "0.3rem 1.5rem",
+          }}
+          onClick={handleOnlinePayment}
+        >
+          Make Payment
+        </Button>
       </div>
+      {/* </div> */}
     </>
   );
 };
@@ -257,12 +260,12 @@ const dividerStyle = {
 //   border: "1px solid #eee",
 // };
 
-const buttonGroupStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  gap: "1rem",
-  marginTop: "1rem",
-};
+// const buttonGroupStyle = {
+//   display: "flex",
+//   justifyContent: "center",
+//   alignItems: "center",
+//   gap: "1rem",
+//   marginTop: "1rem",
+// };
 
 export default PaymentChoice;
