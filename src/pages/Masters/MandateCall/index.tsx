@@ -44,7 +44,7 @@ const MandateCall = () => {
     dispatch(showLoader(""));
 
     apiServices
-      .GetDpClientDetails({ clientcode: normalizedCode })
+      .GetDpClientDetails({ clientcode: encryptedCode })
       .then((response) => {
         if (response?.status === 200) {
           setData(response.data.data);
