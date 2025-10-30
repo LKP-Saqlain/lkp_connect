@@ -21,7 +21,10 @@ const Index = ({ activeSubItem }: any) => {
 
       const result = response?.data?.data || [];
       setData(
-        result.map(({ item, index }: any) => ({ id: index + 1, ...item }))
+        result.map((item: any, index: number) => ({
+          id: index + 1,
+          ...item,
+        }))
       );
       console.log(setCreatedDate);
     } catch (err) {
