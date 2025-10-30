@@ -142,7 +142,7 @@ const Confirmation = ({
             clearInterval(timerInterval);
             clearInterval(intervalRef.current!);
             if (paymentStatus === "waiting") {
-              console.warn("⏰ Timer finished, marking payment as failed");
+              console.warn("Timer finished, marking payment as failed");
               setPaymentStatus("failure");
             }
             return 0;
@@ -171,6 +171,45 @@ const Confirmation = ({
   }, [complete]);
 
   //  UI
+  if (isComplete) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          backgroundColor: "#fff",
+          padding: "1rem",
+          minHeight: "350px",
+        }}
+      >
+        <FaCheckCircle
+          size={60}
+          color="#28a745"
+          style={{ margin: "2rem 0 1rem" }}
+        />
+        <h4 style={{ fontWeight: 600, color: "#003366", maxWidth: "320px" }}>
+          Thank You for subscribing to the lifetime DP AMC Scheme
+        </h4>
+        <Button
+          color="primary"
+          style={{
+            padding: "0.6rem 2rem",
+            borderRadius: "6px",
+            backgroundColor: "#003366",
+            border: "none",
+            marginTop: "1.5rem",
+          }}
+          onClick={() => window.close()}
+        >
+          Close Tab
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <div
       style={{
