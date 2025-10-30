@@ -28,9 +28,15 @@ const MandateCall = () => {
   // );
 
   const { encryptedCode } = useParams<{ encryptedCode: string }>();
-  const decryptCode = encryptedCode
-    ? decryptAES(decodeURIComponent(encryptedCode))
-    : "";
+
+  //  Normalize it once — decode URL and fix "+" issue
+  const normalizedCode = decodeURIComponent(encryptedCode || "").replace(
+    / /g,
+    "+"
+  );
+
+  // (Optional) Decrypt only if you need to display the client code locally
+  const decryptCode = normalizedCode ? decryptAES(normalizedCode) : "";
 
   useEffect(() => {
     if (!encryptedCode) return;

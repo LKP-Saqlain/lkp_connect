@@ -9,6 +9,7 @@ import PeroformanceReport from "./PerformanceReport";
 // import SPIPOverview from "./SPIPOverview";
 import { SubItemKeys } from "../../constants/subItemKeys";
 import Loader from "../../components/common/Loader";
+import ClientMIS from "./ClientMIS";
 
 interface SPIPProps {
   activeSubItem: string;
@@ -54,6 +55,7 @@ const SPIP = ({
       />
     ),
     [SubItemKeys.SPIP_PERFORMANCE_REPORT]: <PeroformanceReport />,
+    [SubItemKeys.SPIP_CLIENT_MIS]: <ClientMIS activeSubItem={activeSubItem} />,
   };
 
   const isValidSubItem =
