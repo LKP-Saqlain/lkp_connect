@@ -61,9 +61,10 @@ const ClientInfo = ({
   }, [dispatch, selectedRow, user_id]);
 
   // Extract and safely display API values with fallback
-  const primaryHolder = clientData?.primary_Holder || "-";
-  const secondaryHolder = clientData?.secondary_Holder_Name || "-";
-  const tertiaryHolder = clientData?.third_Holder_Name || "-";
+  const primaryHolder = clientData?.primary_Holder || " Not Applicable ";
+  const secondaryHolder =
+    clientData?.secondary_Holder_Name || " Not Applicable ";
+  const tertiaryHolder = clientData?.third_Holder_Name || " Not Applicable ";
   const email = clientData?.email_id || "-";
   const mobile = clientData?.mobile_No || "-";
   const dpId = clientData?.dP_ID || "-";
