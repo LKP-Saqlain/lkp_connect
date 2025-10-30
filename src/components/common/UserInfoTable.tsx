@@ -65,6 +65,7 @@ import {
   AmcNonLifeMembership,
   AmcContest,
   AmcLedgerReport,
+  clientMISColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1782,18 +1783,23 @@ const DataTable = ({
             ...column,
             renderCell: (params: any) => {
               const isDeleted = params.row.isDeleted;
+              const isApproved = params.row.accApproval === "A";
+
+              // ✅ If approved, hide the entire actions (no edit/delete)
+              if (isApproved) {
+                return <span style={{ color: "gray" }}>--</span>;
+              }
 
               const handleEdit = () => {
                 setSelectedRow(params.row);
                 handleEditClick?.(params.row, true);
-                // You can open edit modal or set state for edit form here
               };
 
               const handleDelete = () => {
                 setAction("delete");
-                handleDeleteEntry?.(params.row); // Pass row to delete handler
-                setSelectedRow(params.row); // Store row for confirmation
-                tog_center(); // Open delete confirmation modal
+                handleDeleteEntry?.(params.row);
+                setSelectedRow(params.row);
+                tog_center();
               };
 
               return (
@@ -1844,6 +1850,7 @@ const DataTable = ({
             },
           };
         }
+
         return column;
       });
     } else if (activeSubItem === "Vendor Approval") {
@@ -1854,51 +1861,76 @@ const DataTable = ({
         if (column.field === "actions") {
           return {
             ...column,
-            renderCell: (params: any) => (
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <div
-                  onClick={() => {
-                    console.log("rowTest", params.row);
-                    setSelectedRow(params.row);
-                    // HandleApprovalModal("approve", params);
-                    HandleApprovalModal("approve");
-                    console.log(params.row.vendorId, "selectedrow approve");
-                  }}
-                  style={{
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    marginRight: 5,
-                  }}
-                >
-                  <Tooltip title="Approve" arrow placement="top">
-                    <CheckCircleIcon
-                      style={{ color: "green", marginLeft: 4 }}
-                    />
-                  </Tooltip>
+            renderCell: (params: any) => {
+              // ✅ Check condition
+              if (params.row.accApproval === "A") {
+                // Already approved — no actions
+                return <span style={{ color: "gray" }}>--</span>;
+              }
+
+              // ✅ Show Approve / Reject only if not approved
+              return (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div
+                    onClick={() => {
+                      console.log("rowTest", params.row);
+                      setSelectedRow(params.row);
+                      HandleApprovalModal("approve");
+                      console.log(params.row.vendorId, "selectedrow approve");
+                    }}
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      marginRight: 5,
+                    }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon
+                        style={{ color: "green", marginLeft: 4 }}
+                      />
+                    </Tooltip>
+                  </div>
+
+                  <div style={{ fontSize: 20, color: "gray" }}>|</div>
+
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      marginLeft: 5,
+                    }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                    </Tooltip>
+                  </div>
                 </div>
-                <div style={{ fontSize: 20, color: "gray" }}>|</div>
-                <div
-                  onClick={() => {
-                    setSelectedRow(params.row);
-                    HandleApprovalModal("reject");
-                    // HandleApprovalModal("reject", params);
-                  }}
-                  style={{
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    marginLeft: 5,
-                  }}
-                >
-                  <Tooltip title="Reject" arrow placement="top">
-                    <CancelIcon style={{ color: "red", marginLeft: 4 }} />
-                  </Tooltip>
-                </div>
-              </div>
-            ),
+              );
+            },
           };
         }
+        if (column.field === "accRemark") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              if (params.row.accApproval === "A" || "R") {
+                return (
+                  <span style={{ color: "#11395C", fontWeight: 500 }}>
+                    {params.row.accRemark || "--"}
+                  </span>
+                );
+              }
+              return <span>--</span>;
+            },
+          };
+        }
+
         if (column.field === "tdsPath") {
           return {
             ...column,
@@ -2234,6 +2266,10 @@ const DataTable = ({
       });
     } else if (activeSubItem === "Dp Debit Collection") {
       return ClientMandateReport.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "SPIP Client MIS") {
+      return clientMISColumns.map((column) => ({
         ...column,
       }));
     } else {

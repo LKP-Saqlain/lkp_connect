@@ -229,4 +229,6 @@ export const endpoints = {
   DownloadSignedPdf: "/api/Client/DownloadSignedPdf",
   SendFinalSignedMail: "/api/Client/SendFinalSignedMail",
   GetLedgerReport: "/api/Client/GetLedgerReport",
+  GetClientMISDetails: "/api/SPIP/GetClientMISDetails",
+  ViewVendorDetailsReport: "/api/Account/ViewVendorDetailsReport",
 };

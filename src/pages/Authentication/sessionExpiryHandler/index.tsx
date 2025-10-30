@@ -75,7 +75,7 @@ const SessionExpiryHandler = () => {
     isNewUser,
   ]);
 
-  const isOnMandate = location.pathname.startsWith("/DPMandate/:encryptedCode");
+  const isOnMandate = location.pathname.startsWith("/DPMandate/");
 
   const shouldShowModal =
     !isNewUser &&
