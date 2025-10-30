@@ -5,6 +5,7 @@ import { AppDispatch } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 import { useEffect, useRef, useState } from "react";
+import dayjs from "dayjs";
 
 type ConfirmationProps = {
   onNext: () => void;
@@ -77,15 +78,12 @@ const Confirmation = ({
   };
 
   //  Function: Poll payment response (for online)
+
   const getPaymentResponse = async () => {
     const payload = {
       boid: selectedRow?.dP_ID,
-      amount: totalPayable.toString(),
+      amount: "1.00",
     };
-    // {
-    //   boid: "1203000001017198",
-    //   amount: "2777.84",
-    // };
 
     console.log("Checking payment status...", payload);
 
@@ -95,23 +93,25 @@ const Confirmation = ({
       console.log("Payment Response:", paymentData);
 
       if (paymentData?.status === "Success" && paymentData?.transDate) {
-        const transDate = new Date(paymentData.transDate);
+        // ✅ Parse date properly
+        const transDate = dayjs(
+          paymentData.transDate,
+          "DD/MM/YYYY HH:mm:ss"
+        ).toDate();
         const now = new Date();
 
-        // Calculate time difference in milliseconds
         const timeDifference = Math.abs(now.getTime() - transDate.getTime());
-
-        // Check if within 5 minutes (5 * 60 * 1000 ms)
         const FIVE_MINUTES = 5 * 60 * 1000;
 
         if (timeDifference <= FIVE_MINUTES) {
           console.log(
-            "Payment Success within 5 minutes, triggering AMC activation..."
+            " Payment Success within 5 minutes, triggering AMC activation..."
           );
           clearInterval(intervalRef.current!);
           setPaymentStatus("success");
           activateAMC("online-success");
         } else {
+          console.warn(" Transaction too old (>5 min)");
           setPaymentStatus("failure");
         }
       }

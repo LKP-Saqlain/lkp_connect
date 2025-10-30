@@ -9525,3 +9525,63 @@ export const AmcContest: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
 ];
+
+export const AmcLedgerReport: GridColDef[] = [
+  {
+    field: "tradingCode",
+    headerName: "Trading Code",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "boid",
+    headerName: "BO ID",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1.5,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "paymentAmount",
+    headerName: "Payment Amount (₹)",
+    type: "number",
+    align: "center",
+    headerAlign: "center",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "createdDate",
+    headerName: "Created Date",
+    flex: 1.2,
+    minWidth: 160,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      if (!params) return "-";
+      return dayjs(params).format("DD-MMM-YY HH:mm:ss");
+    },
+  },
+];

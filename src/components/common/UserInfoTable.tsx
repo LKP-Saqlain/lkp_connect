@@ -64,6 +64,7 @@ import {
   AmcLifeMembership,
   AmcNonLifeMembership,
   AmcContest,
+  AmcLedgerReport,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1647,6 +1648,10 @@ const DataTable = ({
       });
     } else if (activeSubItem === "RHDashboardTop10Clients") {
       return RHTopClientsColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "DP AMC Ledger Debit") {
+      return AmcLedgerReport.map((column) => ({
         ...column,
       }));
     } else if (activeSubItem === "Third Party Vendor Master") {
