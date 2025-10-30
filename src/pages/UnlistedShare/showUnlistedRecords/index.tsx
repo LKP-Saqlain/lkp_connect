@@ -356,6 +356,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                     onSubmit={handleFormSubmit}
                     editUserCheck={editUserCheck}
                     isUnlistedContent={true}
+                    activeSubItem={activeSubItem}
                   />
                   {activeSubItem === "Unlisted Shares Entry" && (
                     <Button

@@ -1278,7 +1278,7 @@ const ModalComponent = ({
   }, [user_id]);
 
   useEffect(() => {
-    if (editUserCheck) {
+    if (editUserCheck && activeSubItem !== "Unlisted Shares Entry") {
       const fileExtension =
         editData && editData.panDoc
           ? `.${editData.panDoc.split(".").pop()?.toLowerCase()}`
@@ -1322,7 +1322,7 @@ const ModalComponent = ({
           dispatch(hideLoader());
         });
     }
-  }, [editUserCheck, editData, dispatch]);
+  }, [editUserCheck, editData, activeSubItem, dispatch]);
 
   return (
     <Modal
