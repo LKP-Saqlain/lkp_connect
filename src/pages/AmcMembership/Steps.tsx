@@ -36,11 +36,9 @@ const AmcMembership = () => {
   }, [location.state, navigate]);
 
   // Step: Auto-remove from sessionStorage when flow completes (final step)
-  // useEffect(() => {
-  //   if (step === 6) {
-  //     sessionStorage.removeItem("selectedRow");
-  //   }
-  // }, [step]);
+  useEffect(() => {
+    console.log("current step", step);
+  }, [step]);
 
   const next = () => setStep((s) => s + 1);
 
@@ -50,6 +48,7 @@ const AmcMembership = () => {
   // };
 
   const goToStep2 = () => setStep(2);
+  const goToStep4 = () => setStep(4);
 
   return (
     <div
@@ -134,6 +133,7 @@ const AmcMembership = () => {
                 next();
               }}
               setTotalPayable={setTotalPayable}
+              goToStep4={goToStep4}
             />
           )}
 

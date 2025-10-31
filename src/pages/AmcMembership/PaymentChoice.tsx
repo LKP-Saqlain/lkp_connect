@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Row, Col, Button } from "reactstrap";
 import { apiServices } from "../../services";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import ShowToast from "../../utils/toastUtils";
 import { capitalizeEachWord } from "../../utils";
 
@@ -11,6 +11,7 @@ interface PaymentChoiceProps {
   clientData: any;
   onLedger: () => void;
   onOnline: () => void;
+  goToStep4: () => void;
   setTotalPayable: (amount: number) => void;
 }
 
@@ -19,8 +20,13 @@ const PaymentChoice = ({
   onOnline,
   clientData,
   setTotalPayable,
+  goToStep4,
 }: PaymentChoiceProps) => {
+  const [paymentStatus, setPaymentStatus] = useState<boolean | null>(null);
   const dispatch = useDispatch<AppDispatch>();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   useEffect(() => {
     console.log(" clientData from payment:", clientData);
@@ -68,6 +74,10 @@ const PaymentChoice = ({
       maximumFractionDigits: 2,
     })}`;
 
+  useEffect(() => {
+    checkPaymentStatus();
+  }, []);
+
   const handleOnlinePayment = async () => {
     const payload = {
       boid: clientData?.dP_ID,
@@ -76,6 +86,7 @@ const PaymentChoice = ({
     try {
       const response = await apiServices.SendDPAMCEmail(payload);
       console.log(" Payment link response:", response);
+
       if (response?.data?.isSuccess) {
         ShowToast("success", capitalizeEachWord(response?.data?.data));
         onOnline(); // proceed to next step
@@ -85,7 +96,37 @@ const PaymentChoice = ({
     } finally {
       dispatch(hideLoader());
     }
-    // onOnline();
+  };
+  const checkPaymentStatus = async () => {
+    const payload = {
+      boid: clientData?.dP_ID,
+      userId: user_id,
+    };
+    dispatch(showLoader("Checking payment status..."));
+    try {
+      const response = await apiServices.GetAMCActivationStatus(payload);
+      console.log(
+        "GetAMCActivationStatus Payment link response:",
+        response?.data?.data[0]
+      );
+      if (response?.data?.data[0]?.message === "Record Found") {
+        setPaymentStatus(true);
+      } else {
+        setPaymentStatus(false);
+      }
+    } catch (error) {
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const handleClick = () => {
+    if (paymentStatus === true) {
+      onOnline(); // proceed to next step
+      goToStep4();
+    } else {
+      handleOnlinePayment();
+    }
   };
 
   return (
@@ -235,7 +276,7 @@ const PaymentChoice = ({
             borderRadius: "6px",
             padding: "0.3rem 1.5rem",
           }}
-          onClick={handleOnlinePayment}
+          onClick={handleClick}
         >
           Make Payment
         </Button>
