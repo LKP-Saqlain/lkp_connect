@@ -30,7 +30,7 @@
   color: #666;
   font-weight: 500;
   font-size: 10px;
-  margin-left: 2px;
+  margin-left: 4px;
 }
 
 .trade-ltp {
@@ -118,8 +118,8 @@
 }
 
 .trade-label {
-  background: #ffe6cc;
-  color: #ff6600;
+  background: #fff0d9;
+  color: #ffa726;
 }
 
 /* Validity & Date */

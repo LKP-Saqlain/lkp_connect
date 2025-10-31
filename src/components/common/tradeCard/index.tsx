@@ -70,7 +70,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
   const getStatusColor = () => {
     switch (status) {
       case "Open":
-        return { bg: "#e6ffe6", color: "#009933", border: "#c2f0c2" };
+        return { bg: "#D5F5D5", color: "#0B7D0B", border: "#8edb8e" };
       case "Closed":
         return { bg: "#ffe6e6", color: "#d32f2f", border: "#f5b3b3" };
       default:
@@ -272,7 +272,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
                     color: buySell === "Buy" ? "#0a8a0a" : "#d32f2f",
                     backgroundColor: buySell === "Buy" ? "#e8f5e9" : "#ffebee",
                     border: `1px solid ${
-                      buySell === "Buy" ? "#469949" : "#df3434"
+                      buySell === "Buy" ? "#8edb8e" : "#f28c8c"
                     }`,
                     borderRadius: "5px",
                     padding: "2px 6px",
@@ -309,27 +309,32 @@ const TradeCard: React.FC<TradeCardProps> = ({
                         (() => {
                           const seg = exchSegment.slice(0, 3).toUpperCase();
 
-                          const getColors = (seg: string) => {
+                          // Enhanced color logic
+                          const getColors = (seg: string, strike: string) => {
+                            if (seg === "OPT") {
+                              if (strike?.toUpperCase().includes("CE")) {
+                                return { bg: "#d6e9f9", color: "#1e88e5" };
+                              } else if (strike?.toUpperCase().includes("PE")) {
+                                return { bg: "#fff0d9", color: "#ffa726" };
+                              }
+                            }
                             switch (seg) {
                               case "FUT":
-                                return { bg: "#d4edda", color: "#2e7d32" }; // light green
-                              case "CE":
-                                return { bg: "#d6e9f9", color: "#1e88e5" }; // light blue
-                              case "PE":
-                                return { bg: "#ffe6cc", color: "#ff8c00" }; // light orange
+                                return { bg: "#d4edda", color: "#5cb85c" }; // lighter green
                               default:
                                 return { bg: "#f5f5f5", color: "#000" }; // neutral
                             }
                           };
 
-                          const { bg, color } = getColors(seg);
+                          const { bg, color } = getColors(seg, strike);
 
                           return (
                             <>
-                              {/* exchSegment (colored) */}
+                              {/* SEG */}
                               <span
                                 className="trade-tag trade-category"
                                 style={{
+                                  fontWeight: 400,
                                   marginRight: ".1rem",
                                   backgroundColor: bg,
                                   color: color,
@@ -338,24 +343,43 @@ const TradeCard: React.FC<TradeCardProps> = ({
                                 {seg}
                               </span>
 
-                              {/* expiry (same color as exchSegment) */}
+                              {/* STRIKE */}
+                              {strike && (
+                                <span
+                                  className="trade-tag trade-category"
+                                  style={{
+                                    fontWeight: 400,
+                                    marginRight: ".1rem",
+                                    backgroundColor: bg,
+                                    color: color,
+                                  }}
+                                >
+                                  {(() => {
+                                    const cleaned = strike
+                                      .replace(/\.00$/, "")
+                                      .trim();
+                                    const parts = cleaned.split(" ");
+                                    if (parts.length === 2) {
+                                      const [optionType, strikeValue] = parts;
+                                      return `${strikeValue} ${optionType}`;
+                                    }
+                                    return cleaned;
+                                  })()}
+                                </span>
+                              )}
+
+                              {/* EXPIRY */}
                               <span
                                 className="trade-tag trade-category"
                                 style={{
+                                  fontWeight: 400,
                                   marginRight: ".1rem",
                                   backgroundColor: bg,
                                   color: color,
                                 }}
                               >
-                                {expiry}
+                                {expiry?.toUpperCase()}
                               </span>
-
-                              {/* strike (default style) */}
-                              {strike && (
-                                <span className="trade-tag trade-category">
-                                  {strike}
-                                </span>
-                              )}
                             </>
                           );
                         })()}
@@ -435,7 +459,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
                   style={{
                     fontSize: "13px",
                     color: "green",
-                    fontWeight: 500,
+                    fontWeight: 100,
                     flex: 1,
                   }}
                 >
@@ -449,7 +473,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
                   position: "absolute",
                   bottom: status !== "Open" ? "12px" : "8px",
                   right: "16px",
-                  fontWeight: 600,
+                  fontWeight: 500,
                   fontSize: "13px",
                   color: color,
                   backgroundColor: bg,
@@ -469,8 +493,18 @@ const TradeCard: React.FC<TradeCardProps> = ({
           {/* Right */}
           <div style={{ textAlign: "right" }}>
             <div className="trade-tags">
-              <span className="trade-tag trade-label">{category}</span>
-              <span className="trade-tag trade-category">{tag}</span>
+              <span
+                className="trade-tag trade-label"
+                style={{ fontWeight: 100 }}
+              >
+                {category}
+              </span>
+              <span
+                className="trade-tag trade-category"
+                style={{ fontWeight: 100 }}
+              >
+                {tag}
+              </span>
             </div>
 
             <div
