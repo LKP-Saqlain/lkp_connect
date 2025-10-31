@@ -9445,7 +9445,7 @@ export const AmcContest: GridColDef[] = [
   },
   {
     field: "primaryHolder_phn",
-    headerName: "Primary Holder Phone",
+    headerName: "Mobile No.",
     flex: 1,
     minWidth: 120,
     disableColumnMenu: true,
@@ -9552,23 +9552,24 @@ export const AmcContest: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
-  {
-    field: "bal_Amount",
-    headerName: "Balance Amount",
-    flex: 1,
-    minWidth: 120,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "right",
-    headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
-  },
+  // {
+  //   field: "bal_Amount",
+  //   headerName: "Balance Amount",
+  //   flex: 1,
+  //   minWidth: 120,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "right",
+  //   headerClassName: "header-wrap-custom",
+  //   valueFormatter: (params: any) => {
+  //     const value = parseFloat(params); // Convert the value to a number
+  //     return new Intl.NumberFormat("en-IN", {
+  //       minimumFractionDigits: 2,
+  //       maximumFractionDigits: 2,
+  //     }).format(value);
+  //   },
+  // },
+
   // {
   //   field: "module_No",
   //   headerName: "Module No",
