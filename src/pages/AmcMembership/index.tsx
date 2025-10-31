@@ -33,7 +33,6 @@ const Index = ({ activeMenu }: any) => {
   const [selectedZone, setSelectedZone] = useState<DropdownOption | null>(null);
   const [noSortingGroup, setNoSortingGroup] = useState<DropdownOption[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [esignStatus, setEsignStatus] = useState<boolean | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
