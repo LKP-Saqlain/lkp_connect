@@ -9352,58 +9352,58 @@ export const AmcLifeMembership: GridColDef[] = [
     align: "center",
     headerClassName: "header-wrap-custom",
   },
-  {
-    field: "module_Modified_date",
-    headerName: "Module Modified Date",
-    flex: 1,
-    minWidth: 150,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-    headerClassName: "header-wrap-custom",
-    valueGetter: (params: any) => {
-      const rawDate = params;
-      if (!rawDate) return null; // Handle missing data
+  // {
+  //   field: "module_Modified_date",
+  //   headerName: "Module Modified Date",
+  //   flex: 1,
+  //   minWidth: 150,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   valueGetter: (params: any) => {
+  //     const rawDate = params;
+  //     if (!rawDate) return null; // Handle missing data
 
-      const parsedDate = new Date(
-        rawDate.replace(
-          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
-            const monthMap: any = {
-              Jan: "01",
-              Feb: "02",
-              Mar: "03",
-              Apr: "04",
-              May: "05",
-              Jun: "06",
-              Jul: "07",
-              Aug: "08",
-              Sep: "09",
-              Oct: "10",
-              Nov: "11",
-              Dec: "12",
-            };
-            console.log(match);
-            return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
-      );
+  //     const parsedDate = new Date(
+  //       rawDate.replace(
+  //         /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+  //         (match: any, day: any, month: any, year: any) => {
+  //           const monthMap: any = {
+  //             Jan: "01",
+  //             Feb: "02",
+  //             Mar: "03",
+  //             Apr: "04",
+  //             May: "05",
+  //             Jun: "06",
+  //             Jul: "07",
+  //             Aug: "08",
+  //             Sep: "09",
+  //             Oct: "10",
+  //             Nov: "11",
+  //             Dec: "12",
+  //           };
+  //           console.log(match);
+  //           return `20${year}-${monthMap[month]}-${day}`;
+  //         }
+  //       )
+  //     );
 
-      return parsedDate;
-    },
-    sortComparator: (v1: any, v2: any) => {
-      if (!v1 || !v2) return 0; // Handle missing values
-      return v1 - v2; // Sort in ascending order
-    },
-    valueFormatter: (params: any) => {
-      if (!params) return "";
-      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
-    },
-  },
+  //     return parsedDate;
+  //   },
+  //   sortComparator: (v1: any, v2: any) => {
+  //     if (!v1 || !v2) return 0; // Handle missing values
+  //     return v1 - v2; // Sort in ascending order
+  //   },
+  //   valueFormatter: (params: any) => {
+  //     if (!params) return "";
+  //     return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+  //   },
+  // },
 ];
 export const AmcNonLifeMembership: GridColDef[] = [
   {
-    field: "MoreDetails",
+    field: "schemeStatus",
     headerName: "Activate",
     flex: 1,
     minWidth: 100,
@@ -9569,29 +9569,29 @@ export const AmcContest: GridColDef[] = [
       }).format(value);
     },
   },
-  {
-    field: "module_No",
-    headerName: "Module No",
-    flex: 1,
-    minWidth: 80,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    headerClassName: "header-wrap-custom",
-    align: "center",
-  },
-  {
-    field: "module_Description",
-    headerName: "Scheme",
-    flex: 1,
-    minWidth: 160,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-    headerClassName: "header-wrap-custom",
-  },
+  // {
+  //   field: "module_No",
+  //   headerName: "Module No",
+  //   flex: 1,
+  //   minWidth: 80,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   align: "center",
+  // },
+  // {
+  //   field: "module_Description",
+  //   headerName: "Scheme",
+  //   flex: 1,
+  //   minWidth: 160,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   headerClassName: "header-wrap-custom",
+  // },
   {
     field: "module_Narr",
-    headerName: "Module Narration",
+    headerName: "Scheme Name",
     flex: 1,
     minWidth: 150,
     disableColumnMenu: true,
@@ -9599,18 +9599,14 @@ export const AmcContest: GridColDef[] = [
     align: "center",
   },
   {
-    field: "module_Modified_date",
-    headerName: "Module Modified Date",
+    field: "schemeStatus",
+    headerName: "Scheme Status ",
     flex: 1,
     minWidth: 150,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      if (!params) return "-";
-      return dayjs(params).format("DD-MMM-YY"); // Converts date to "27-Feb-24"
-    },
   },
 ];
 
