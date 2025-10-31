@@ -3,8 +3,15 @@ const SECRET_KEY = import.meta.env.VITE_MANDATE_SECRET_KEY as string;
 /**
  * AES Key & IV setup
  */
+
+if (!SECRET_KEY) {
+  console.error(
+    "Missing VITE_MANDATE_SECRET_KEY — check .env or build config!"
+  );
+}
 const getKeyAndIv = () => {
-  const key = CryptoJS.enc.Utf8.parse(SECRET_KEY.padEnd(16).substring(0, 16));
+  const safeKey = SECRET_KEY.padEnd(16).substring(0, 16);
+  const key = CryptoJS.enc.Utf8.parse(safeKey);
   return { key, iv: key };
 };
 /**
