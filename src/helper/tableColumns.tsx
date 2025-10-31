@@ -9294,7 +9294,7 @@ export const AmcLifeMembership: GridColDef[] = [
     minWidth: 150,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
   },
 
@@ -9509,7 +9509,7 @@ export const AmcContest: GridColDef[] = [
     minWidth: 150,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
   },
 
