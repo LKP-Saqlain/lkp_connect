@@ -82,7 +82,7 @@ const Confirmation = ({
   const getPaymentResponse = async () => {
     const payload = {
       boid: selectedRow?.dP_ID,
-      amount: "1.00",
+      amount: totalPayable.toString(),
     };
 
     console.log("Checking payment status...", payload);
