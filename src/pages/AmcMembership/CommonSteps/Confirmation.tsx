@@ -191,7 +191,7 @@ const Confirmation = ({
           style={{ margin: "2rem 0 1rem" }}
         />
         <h4 style={{ fontWeight: 600, color: "#003366", maxWidth: "320px" }}>
-          Thank You for subscribing to the lifetime DP AMC Scheme
+          Thank You for subscribing to the lifetime DP AMC Scheme.
         </h4>
         <Button
           color="primary"

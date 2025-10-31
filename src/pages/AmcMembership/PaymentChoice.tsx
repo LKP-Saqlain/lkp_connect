@@ -11,6 +11,7 @@ interface PaymentChoiceProps {
   clientData: any;
   onLedger: () => void;
   onOnline: () => void;
+
   setTotalPayable: (amount: number) => void;
 }
 
@@ -76,6 +77,7 @@ const PaymentChoice = ({
     try {
       const response = await apiServices.SendDPAMCEmail(payload);
       console.log(" Payment link response:", response);
+
       if (response?.data?.isSuccess) {
         ShowToast("success", capitalizeEachWord(response?.data?.data));
         onOnline(); // proceed to next step
@@ -85,7 +87,6 @@ const PaymentChoice = ({
     } finally {
       dispatch(hideLoader());
     }
-    // onOnline();
   };
 
   return (

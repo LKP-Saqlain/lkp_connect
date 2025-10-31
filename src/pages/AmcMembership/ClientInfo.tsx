@@ -10,14 +10,17 @@ interface ClientInfoProps {
   onNext: () => void;
   selectedRow: any;
   setClientData: (data: any) => void; //  add this
+  goToStep4: () => void;
 }
 
 const ClientInfo = ({
   onNext,
   selectedRow,
   setClientData,
+  goToStep4,
 }: ClientInfoProps) => {
   const [clientData, setLocalClientData] = useState<any>(null);
+  const [paymentStatus, setPaymentStatus] = useState<boolean | null>(null);
   // const [clientData, setClientData] = useState<any>(null);
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -60,6 +63,43 @@ const ClientInfo = ({
     fetchData();
   }, [dispatch, selectedRow, user_id]);
 
+  const checkPaymentStatus = async () => {
+    const payload = {
+      boid: selectedRow?.dP_ID,
+      userId: user_id,
+    };
+    // {
+    //   boid: "1203000001123371",
+    //   userId: "EMP-5376",
+    // };
+    dispatch(showLoader("Checking payment status..."));
+    try {
+      const response = await apiServices.GetAMCActivationStatus(payload);
+      console.log(
+        "GetAMCActivationStatus Payment link response:",
+        response?.data?.data[0]
+      );
+      if (response?.data?.data[0]?.message === "Record Found") {
+        setPaymentStatus(true);
+      } else {
+        setPaymentStatus(false);
+      }
+    } catch (error) {
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  useEffect(() => {
+    checkPaymentStatus();
+  }, []);
+  const handleClick = () => {
+    if (paymentStatus === true) {
+      goToStep4();
+    } else {
+      onNext();
+    }
+  };
   // Extract and safely display API values with fallback
   const primaryHolder = clientData?.primary_Holder || "-- Not Applicable --";
   const secondaryHolder =
@@ -141,7 +181,7 @@ const ClientInfo = ({
             backgroundColor: "#003366",
             border: "none",
           }}
-          onClick={onNext}
+          onClick={handleClick}
         >
           Proceed
         </Button>
