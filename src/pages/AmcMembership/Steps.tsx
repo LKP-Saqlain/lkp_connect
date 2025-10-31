@@ -118,6 +118,10 @@ const AmcMembership = () => {
               onNext={next}
               selectedRow={selectedRow}
               setClientData={setClientData}
+              goToStep4={() => {
+                setFlow("online");
+                goToStep4();
+              }}
             />
           )}
 
@@ -133,7 +137,6 @@ const AmcMembership = () => {
                 next();
               }}
               setTotalPayable={setTotalPayable}
-              goToStep4={goToStep4}
             />
           )}
 
