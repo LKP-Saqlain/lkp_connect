@@ -151,6 +151,7 @@ interface SelectedWidgetProps {
   setSegmentRow?: any;
   setIsBankVerified?: any;
   handleUpdate?: (data: any) => void;
+  onViewAmcDetails?: (row: any) => void;
 }
 
 const DataTable = ({
@@ -201,6 +202,7 @@ const DataTable = ({
   handleUpdate,
   setIsNudgeTableOpen,
   setSegmentRow,
+  onViewAmcDetails,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -1547,52 +1549,47 @@ const DataTable = ({
       }));
     } else if (selectedWidget === "Non-Lifetime Membership") {
       return AmcNonLifeMembership.map((column) => {
-        if (column.field === "MoreDetails") {
+        if (column.field === "schemeStatus") {
           return {
             ...column,
-            renderCell: (params: any) => (
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <div
-                  style={{
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    marginRight: 5,
-                  }}
-                >
-                  {/* <Tooltip title={"View Details"} arrow placement="top">
-                    <OpenInNewIcon
-                      style={{ cursor: "pointer", color: "#11395C" }}
-                      onClick={() => {
-                        navigate("/AmcMembership", {
-                          state: { selectedRow: params.row },
-                        });
-                      }}
-                    />
-                  </Tooltip> */}
-                  <Tooltip title={"Lifetime AMC scheme"} arrow placement="top">
-                    <OpenInNewIcon
-                      style={{ cursor: "pointer", color: "#11395C" }}
-                      onClick={() => {
-                        // Check if "selectedRow" already exists
-                        if (sessionStorage.getItem("selectedRow")) {
-                          sessionStorage.removeItem("selectedRow");
-                        }
+            renderCell: (params: any) => {
+              const status = params?.row?.schemeStatus;
 
-                        // Set new selectedRow
-                        sessionStorage.setItem(
-                          "selectedRow",
-                          JSON.stringify(params.row)
-                        );
-
-                        // Open the page in a new tab
-                        window.open("/AmcMembership", "_blank");
-                      }}
-                    />
-                  </Tooltip>
+              return (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      marginRight: 5,
+                    }}
+                  >
+                    {status === "Submitted" ? (
+                      <>
+                        {/* <span style={{ color: "#003366", fontWeight: 600 }}> */}
+                        {status}
+                        {/* </span> */}
+                      </>
+                    ) : (
+                      <Tooltip
+                        title="Lifetime AMC scheme"
+                        arrow
+                        placement="top"
+                      >
+                        <OpenInNewIcon
+                          style={{ cursor: "pointer", color: "#11395C" }}
+                          onClick={() => {
+                            console.log("Clicked row:", params.row);
+                            if (onViewAmcDetails) onViewAmcDetails(params.row);
+                          }}
+                        />
+                      </Tooltip>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ),
+              );
+            },
           };
         }
 

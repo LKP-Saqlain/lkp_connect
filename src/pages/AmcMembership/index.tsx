@@ -33,6 +33,7 @@ const Index = ({ activeMenu }: any) => {
   const [selectedZone, setSelectedZone] = useState<DropdownOption | null>(null);
   const [noSortingGroup, setNoSortingGroup] = useState<DropdownOption[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [esignStatus, setEsignStatus] = useState<boolean | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
@@ -191,6 +192,43 @@ const Index = ({ activeMenu }: any) => {
     setSelectedCapsule(value);
   };
 
+  const checkPaymentStatus = async (row: any) => {
+    const payload = {
+      boid: row?.dP_ID,
+      userId: user_id,
+    };
+    // {
+    //   boid: "1203000001123371",
+    //   userId: "EMP-5376",
+    // };
+    dispatch(showLoader("Checking payment status..."));
+    try {
+      const response = await apiServices.GetAMCActivationStatus(payload);
+      console.log("EsignStatus response:", response?.data?.data[0]);
+      return response?.data?.data[0]?.message2 === "eSign already submitted";
+    } catch (error) {
+      console.error(error);
+      return false;
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const handleAmcDetailsClick = async (row: any) => {
+    console.log("Row clicked from child:", row);
+    const status = await checkPaymentStatus(row);
+    if (status) {
+      fetchData();
+      console.log("Page refreshed, esign found");
+    } else {
+      if (sessionStorage.getItem("selectedRow")) {
+        sessionStorage.removeItem("selectedRow");
+      }
+      sessionStorage.setItem("selectedRow", JSON.stringify(row));
+      window.open("/AmcMembership", "_blank");
+    }
+  };
+
   return (
     <div className="page-content page-view">
       <UserCapsules
@@ -298,7 +336,11 @@ const Index = ({ activeMenu }: any) => {
               </Col>
             </Row>
 
-            <DataTable selectedWidget={selectedCapsule} T6Data={filteredData} />
+            <DataTable
+              selectedWidget={selectedCapsule}
+              T6Data={filteredData}
+              onViewAmcDetails={(row) => handleAmcDetailsClick(row)}
+            />
           </CardBody>
         </Card>
       </Container>
