@@ -28,8 +28,8 @@ const PaymentChoice = ({
   }, [clientData]);
 
   // Fixed AMC details
-  const amcFee = "₹ 1,770";
-  const amcBreakup = "₹ 1500 + GST";
+  const amcFee = "₹ 1,770.00";
+  const amcBreakup = "₹ 1500.00 + GST";
 
   // Helper to safely parse numbers from currency or numeric strings
   const parseCurrency = (val: any) =>

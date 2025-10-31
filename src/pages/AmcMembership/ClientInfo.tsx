@@ -158,7 +158,7 @@ const ClientInfo = ({
           <p>
             <strong>Lifetime AMC Fee:</strong>{" "}
             <span style={{ color: "#333" }}>
-              ₹ 1,770 <small> ( ₹ 1500 + GST)</small>
+              ₹ 1,770.00 <small> ( ₹ 1500.00 + GST)</small>
             </span>
           </p>
 
