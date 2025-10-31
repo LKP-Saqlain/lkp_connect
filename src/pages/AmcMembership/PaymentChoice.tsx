@@ -54,6 +54,7 @@ const PaymentChoice = ({
 
   useEffect(() => {
     setTotalPayable(totalPayable);
+    console.log(totalPayable, "totalPayable");
   }, [totalPayable, setTotalPayable]);
 
   // Determine if ledger payment is possible

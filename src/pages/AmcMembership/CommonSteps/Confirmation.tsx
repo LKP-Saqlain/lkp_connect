@@ -55,7 +55,7 @@ const Confirmation = ({
     const payload = {
       tradingCode: selectedRow?.trading_Code,
       boid: selectedRow?.dP_ID,
-      paymentAmount: totalPayable,
+      paymentAmount: totalPayable.toFixed(2),
       paymentType: flow,
       otP_ID: 1,
       option: "SaveAMC",
@@ -82,7 +82,7 @@ const Confirmation = ({
   const getPaymentResponse = async () => {
     const payload = {
       boid: selectedRow?.dP_ID,
-      amount: totalPayable.toString(),
+      amount: totalPayable.toFixed(2),
     };
 
     console.log("Checking payment status...", payload);
