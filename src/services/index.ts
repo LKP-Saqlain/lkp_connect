@@ -995,4 +995,7 @@ export const apiServices = {
   ViewVendorDetailsReport: async (payload: any) => {
     return await apiService("POST", endpoints.ViewVendorDetailsReport, payload);
   },
+  GetAMCActivationStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.GetAMCActivationStatus, payload);
+  },
 };
