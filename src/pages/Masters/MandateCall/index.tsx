@@ -91,7 +91,7 @@ const MandateCall = () => {
   }, [decryptCode, dispatch]);
 
   const HandleVerifyUpi = () => {
-    let payload = {
+    const payload = {
       requestInfo: {
         pgMerchantId: "HDFC000010010275",
         pspRefNo: "",
@@ -100,19 +100,39 @@ const MandateCall = () => {
         virtualAddress: upiId,
       },
     };
+
     dispatch(showLoader(""));
+
     apiServices
       .checkUpi(JSON.stringify(payload))
       .then((response) => {
-        if (response?.status === 200) {
-          console.log("UPI Verified", response?.data);
-          setIsMandateEnabled(true); // enable mandate button
-          ShowToast("success", response?.data?.message);
+        console.log("UPI Verified", response?.data);
+
+        // Check inner statusCode from API response
+        if (response?.data?.statusCode === 400) {
+          ShowToast("error", response?.data?.message || "Invalid UPI ID");
+          setIsMandateEnabled(false);
+          dispatch(hideLoader());
+          return; // stop execution here
         }
+
+        // If success
+        if (response?.data?.isSuccess) {
+          ShowToast(
+            "success",
+            response?.data?.message || "UPI Verified Successfully"
+          );
+          setIsMandateEnabled(true);
+        } else {
+          ShowToast("error", response?.data?.message || "Something went wrong");
+          setIsMandateEnabled(false);
+        }
+
         dispatch(hideLoader());
       })
       .catch((error) => {
         console.log("error", error);
+        ShowToast("error", "Failed to verify UPI ID");
         setIsMandateEnabled(false);
         dispatch(hideLoader());
       });
