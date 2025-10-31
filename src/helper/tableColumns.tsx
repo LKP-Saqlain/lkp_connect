@@ -8548,6 +8548,20 @@ export const MfPortfolio: GridColDef[] = [
     minWidth: 200,
   },
   {
+    field: "physicalQuantity",
+    headerName: "Mode",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+    align: "right",
+    headerAlign: "right",
+    valueFormatter: (params: any) => {
+      if (params > 0) return "Physical";
+      else return "Demat";
+    },
+  },
+
+  {
     field: "folioNumber",
     headerName: "Folio Number",
     disableColumnMenu: true,
@@ -8795,7 +8809,9 @@ export const NFOList: GridColDef[] = [
   },
 ];
 
-export const RecommendationList: GridColDef[] = [
+export const getRecommendationListColumns = (
+  selectedReturnPeriod: string
+): GridColDef[] => [
   {
     field: "schemeName",
     headerName: "Fund Name",
@@ -8818,6 +8834,7 @@ export const RecommendationList: GridColDef[] = [
     headerName: "Category",
     flex: 1.5,
     minWidth: 160,
+    disableColumnMenu: true,
     renderCell: (params) => (
       <span style={{ fontSize: "13px" }}>
         {params.row.category?.split("|")[1]?.trim() || "-"}
@@ -8831,6 +8848,7 @@ export const RecommendationList: GridColDef[] = [
     headerAlign: "center",
     flex: 1,
     minWidth: 100,
+    disableColumnMenu: true,
     renderCell: (params) => (
       <span>₹{Number(params.row.sipMinimum || 0).toLocaleString()}</span>
     ),
@@ -8841,6 +8859,7 @@ export const RecommendationList: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     flex: 1,
+    disableColumnMenu: true,
     minWidth: 100,
     renderCell: (params) => (
       <span>₹{Number(params.row.aum || 0).toLocaleString()}</span>
@@ -8852,24 +8871,27 @@ export const RecommendationList: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     flex: 1,
+    disableColumnMenu: true,
     minWidth: 120,
     renderCell: (params) => (
       <span>₹{Number(params.row.investmentAmount || 0).toLocaleString()}</span>
     ),
   },
   {
-    field: "oneWeek",
-    headerName: "1W Returns",
+    field: selectedReturnPeriod, // 👈 dynamic field
+    headerName: "Returns",
     align: "center",
     headerAlign: "center",
     flex: 1,
+    disableColumnMenu: true,
     minWidth: 100,
     renderCell: (params) => {
-      const val = parseFloat(params.row.oneWeek);
+      const val = parseFloat(params.row[selectedReturnPeriod]);
       const isNegative = val < 0;
       return (
         <span style={{ color: isNegative ? "red" : "green" }}>
-          {val.toFixed(2)}%
+          {isNegative ? "-" : ""}
+          {Math.abs(val).toFixed(2)}%
         </span>
       );
     },
@@ -8893,6 +8915,16 @@ export const MutualFundOrderColumns: GridColDef[] = [
         <div style={{ fontWeight: 500 }}>{params.row.schemeName}</div>
       </div>
     ),
+  },
+  {
+    field: "transType",
+    headerName: "Transaction Type",
+    disableColumnMenu: true,
+    flex: 0.7,
+    minWidth: 60,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "successFlag",
@@ -9168,7 +9200,7 @@ export const ClientMandateReport: GridColDef[] = [
 export const AmcLifeMembership: GridColDef[] = [
   {
     field: "trading_Code",
-    headerName: "Trading Code",
+    headerName: "Client Code",
     flex: 1,
     minWidth: 100,
     disableColumnMenu: true,
@@ -9200,7 +9232,7 @@ export const AmcLifeMembership: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "right",
+    align: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
@@ -9219,6 +9251,16 @@ export const AmcLifeMembership: GridColDef[] = [
         </Tooltip>
       );
     },
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "branchType",
@@ -9256,16 +9298,6 @@ export const AmcLifeMembership: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
 
-  {
-    field: "status",
-    headerName: "Status",
-    flex: 1,
-    minWidth: 120,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-    headerClassName: "header-wrap-custom",
-  },
   {
     field: "secondary_Holder_Name",
     headerName: "Second Holder Name",
@@ -9312,7 +9344,7 @@ export const AmcLifeMembership: GridColDef[] = [
   },
   {
     field: "module_Description",
-    headerName: "Module Description",
+    headerName: "Scheme",
     flex: 1,
     minWidth: 180,
     disableColumnMenu: true,
@@ -9329,9 +9361,43 @@ export const AmcLifeMembership: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => {
+      const rawDate = params;
+      if (!rawDate) return null; // Handle missing data
+
+      const parsedDate = new Date(
+        rawDate.replace(
+          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+          (match: any, day: any, month: any, year: any) => {
+            const monthMap: any = {
+              Jan: "01",
+              Feb: "02",
+              Mar: "03",
+              Apr: "04",
+              May: "05",
+              Jun: "06",
+              Jul: "07",
+              Aug: "08",
+              Sep: "09",
+              Oct: "10",
+              Nov: "11",
+              Dec: "12",
+            };
+            console.log(match);
+            return `20${year}-${monthMap[month]}-${day}`;
+          }
+        )
+      );
+
+      return parsedDate;
+    },
+    sortComparator: (v1: any, v2: any) => {
+      if (!v1 || !v2) return 0; // Handle missing values
+      return v1 - v2; // Sort in ascending order
+    },
     valueFormatter: (params: any) => {
-      if (!params) return "-";
-      return dayjs(params).format("DD-MMM-YY"); // Converts date to "27-Feb-24"
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
     },
   },
 ];
@@ -9351,7 +9417,7 @@ export const AmcNonLifeMembership: GridColDef[] = [
 export const AmcContest: GridColDef[] = [
   {
     field: "trading_Code",
-    headerName: "Trading Code",
+    headerName: "Client Code",
     flex: 1,
     minWidth: 100,
     disableColumnMenu: true,
@@ -9360,7 +9426,7 @@ export const AmcContest: GridColDef[] = [
   },
   {
     field: "dp_Id",
-    headerName: "DP ID",
+    headerName: "BOID",
     flex: 1,
     minWidth: 160,
     disableColumnMenu: true,
@@ -9402,6 +9468,16 @@ export const AmcContest: GridColDef[] = [
     },
   },
   {
+    field: "status",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
     field: "branchType",
     headerName: "Branch Type",
     flex: 1,
@@ -9438,13 +9514,23 @@ export const AmcContest: GridColDef[] = [
   },
 
   {
-    field: "status",
-    headerName: "Status",
+    field: "secondary_Holder_Name",
+    headerName: "Secondary Holder Name",
     flex: 1,
-    minWidth: 120,
+    minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "third_Holder_Name",
+    headerName: "Third Holder Name",
+    flex: 1,
+    minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
   },
   {
@@ -9495,7 +9581,7 @@ export const AmcContest: GridColDef[] = [
   },
   {
     field: "module_Description",
-    headerName: "Module Description",
+    headerName: "Scheme",
     flex: 1,
     minWidth: 160,
     disableColumnMenu: true,
@@ -9525,26 +9611,6 @@ export const AmcContest: GridColDef[] = [
       if (!params) return "-";
       return dayjs(params).format("DD-MMM-YY"); // Converts date to "27-Feb-24"
     },
-  },
-  {
-    field: "secondary_Holder_Name",
-    headerName: "Secondary Holder Name",
-    flex: 1,
-    minWidth: 180,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "left",
-    headerClassName: "header-wrap-custom",
-  },
-  {
-    field: "third_Holder_Name",
-    headerName: "Third Holder Name",
-    flex: 1,
-    minWidth: 160,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "left",
-    headerClassName: "header-wrap-custom",
   },
 ];
 
@@ -9601,9 +9667,43 @@ export const AmcLedgerReport: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
+    valueGetter: (params: any) => {
+      const rawDate = params;
+      if (!rawDate) return null; // Handle missing data
+
+      const parsedDate = new Date(
+        rawDate.replace(
+          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+          (match: any, day: any, month: any, year: any) => {
+            const monthMap: any = {
+              Jan: "01",
+              Feb: "02",
+              Mar: "03",
+              Apr: "04",
+              May: "05",
+              Jun: "06",
+              Jul: "07",
+              Aug: "08",
+              Sep: "09",
+              Oct: "10",
+              Nov: "11",
+              Dec: "12",
+            };
+            console.log(match);
+            return `20${year}-${monthMap[month]}-${day}`;
+          }
+        )
+      );
+
+      return parsedDate;
+    },
+    sortComparator: (v1: any, v2: any) => {
+      if (!v1 || !v2) return 0; // Handle missing values
+      return v1 - v2; // Sort in ascending order
+    },
     valueFormatter: (params: any) => {
-      if (!params) return "-";
-      return dayjs(params).format("DD-MMM-YY HH:mm:ss");
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
     },
   },
 ];

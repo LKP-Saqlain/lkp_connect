@@ -46,9 +46,9 @@ const SipCalculator = () => {
   return (
     <Card
       style={{
-        borderRadius: "15px",
-        marginBottom: "16px",
-        padding: "16px",
+        borderRadius: "12px",
+        marginBottom: "12px",
+        padding: "10px", // reduced from 16px
       }}
     >
       {/* Title */}
@@ -60,7 +60,7 @@ const SipCalculator = () => {
           options={chartOptions}
           series={[invested, gain]}
           type="donut"
-          height={180}
+          height={120}
         />
       </div>
 
@@ -69,9 +69,9 @@ const SipCalculator = () => {
         style={{
           display: "flex",
           flexDirection: "column",
-          gap: "12px",
+          gap: "8px", // reduced from 12px
           borderTop: "1px solid #e5e7eb",
-          paddingTop: "12px",
+          paddingTop: "8px",
         }}
       >
         {/* Expected Returns */}
@@ -128,32 +128,8 @@ const SipCalculator = () => {
       </div>
 
       {/* Year Selector */}
-      {/* <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "12px",
-          fontSize: "12px",
-        }}
-      >
-        {[1, 3, 5, 10].map((y) => (
-          <button
-            key={y}
-            onClick={() => setYears(y)}
-            style={{
-              padding: "4px 12px",
-              borderRadius: "6px",
-              border: `1px solid ${years === y ? "#60a5fa" : "#d1d5db"}`,
-              backgroundColor: years === y ? "#dbeafe" : "#f3f4f6",
-              color: years === y ? "#2563eb" : "#4b5563",
-              cursor: "pointer",
-            }}
-          >
-            {y}Y
-          </button>
-        ))}
-      </div> */}
-      <div style={{ marginTop: "12px" }}>
+
+      <div style={{ marginTop: "8px" }}>
         <label
           style={{ fontSize: "14px", marginBottom: "6px", display: "block" }}
         >
@@ -183,7 +159,7 @@ const SipCalculator = () => {
         <div
           style={{
             flex: 1,
-            padding: "12px",
+            padding: "8px",
             border: "1px solid #e5e7eb",
             borderRadius: "8px",
             backgroundColor: "#fff",
@@ -227,7 +203,7 @@ const SipCalculator = () => {
         <div
           style={{
             flex: 1,
-            padding: "12px",
+            padding: "8px",
             border: "1px solid #e5e7eb",
             borderRadius: "8px",
             backgroundColor: "#fff",

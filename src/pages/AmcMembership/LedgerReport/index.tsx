@@ -80,7 +80,7 @@ const LedgerReport = ({ activeSubItem }: any) => {
               alignItems: "center",
             }}
           >
-            <h4 className="card-title mb-0">Ledger Report</h4>
+            <h4 className="card-title mb-0">Ledger Debit Report</h4>
 
             {/* 🔹 Date Picker + Refresh */}
             <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>

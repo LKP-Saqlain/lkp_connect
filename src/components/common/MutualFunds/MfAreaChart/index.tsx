@@ -35,6 +35,9 @@ const MfAreaChart: React.FC<ApexChartProps> = ({
         enabled: false, //  disable zoom including scroll
         // autoScaleYaxis: true,
       },
+      toolbar: {
+        show: false,
+      },
     },
     colors: ["#2d8a0b"], //  custom line color
     dataLabels: { enabled: false },

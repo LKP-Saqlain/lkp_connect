@@ -30,6 +30,8 @@ const MutualFundModal = ({
   title,
   bseSchemeCode,
   hasToken,
+  onOrderSuccess,
+  onBack,
 }: MutualFundModalProps) => {
   const [amount, setAmount] = useState<string>("500");
   const [selectedPaymentType, setSelectedPaymentType] = useState<string | null>(
@@ -136,6 +138,8 @@ const MutualFundModal = ({
         if (!orderNumber) {
           throw new Error("Could not extract order number from response");
         }
+        onBack && onBack();
+        onOrderSuccess && onOrderSuccess();
         return orderNumber;
       } else {
         throw new Error("Lumpsum order API failed");

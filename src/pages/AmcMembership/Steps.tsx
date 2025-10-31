@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ClientInfo from "./ClientInfo";
 import PaymentChoice from "./PaymentChoice";
 import Logo from "../../assets/logo.png";
-import LedgerOtp from "./Ledger/LedgerOtp";
+// import LedgerOtp from "./Ledger/LedgerOtp";
 import { Card, CardHeader, Container } from "reactstrap";
 import ESign from "./CommonSteps/ESign";
 import TariffForm from "./CommonSteps/TariffForm";
@@ -137,7 +137,7 @@ const AmcMembership = () => {
             />
           )}
 
-          {flow === "ledger" && (
+          {/* {flow === "ledger" && (
             <>
               {step === 3 && (
                 <LedgerOtp onNext={next} clientData={clientData} />
@@ -168,7 +168,7 @@ const AmcMembership = () => {
                 />
               )}
             </>
-          )}
+          )} */}
 
           {flow === "online" && (
             <>
