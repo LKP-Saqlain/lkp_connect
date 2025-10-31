@@ -9344,7 +9344,7 @@ export const AmcLifeMembership: GridColDef[] = [
   },
   {
     field: "module_Description",
-    headerName: "Scheme",
+    headerName: "Scheme Name",
     flex: 1,
     minWidth: 180,
     disableColumnMenu: true,
