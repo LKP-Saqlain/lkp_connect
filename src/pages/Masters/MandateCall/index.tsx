@@ -125,7 +125,7 @@ const MandateCall = () => {
       dpCode: data?.dpcode,
       dpid: data?.dpid,
       amount: amount,
-      upiID: "raj2025@hdfcbank",
+      upiID: upiId,
     };
     dispatch(showLoader(""));
     apiServices
