@@ -20,8 +20,8 @@ import { endpoints } from "../../../services/endpoints";
 
 const ClientStatus = [
   { value: "ALL", label: "ALL" },
-  { value: "ACTIVE", label: "ACTIVE" },
-  { value: "INACTIVE", label: "INACTIVE" },
+  { value: "Y", label: "ACTIVE" },
+  { value: "N", label: "INACTIVE" },
   //   { value: "Madrid", label: "Madrid" },
   //   { value: "Toronto", label: "Toronto" },
 ];
