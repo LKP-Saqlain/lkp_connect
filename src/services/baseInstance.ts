@@ -91,6 +91,8 @@ const multipartEndpoints = [
   endpoints.MergeIntoOdinFile,
   endpoints.MergeIntoSymphonyFile,
   endpoints.SLBMHoldingsUploadOdin,
+  endpoints.MTFStockAgeingFileUpload,
+  endpoints.MTFAgeingFileUpload,
 ];
 
 const mutualFundEndpoints = [

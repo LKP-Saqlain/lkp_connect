@@ -232,4 +232,8 @@ export const endpoints = {
   GetAMCActivationStatus: "/api/Client/GetAMCActivationStatus",
   GetClientMISDetails: "/api/SPIP/GetClientMISDetails",
   ViewVendorDetailsReport: "/api/Account/ViewVendorDetailsReport",
+  GetMTFShortfallData: "/api/RMS/GetMTFShortfallData",
+  ViewMTFAgeingReport: "/api/RMS/ViewMTFAgeingReport",
+  MTFAgeingFileUpload: "/api/RMS/MTFAgeingFileUpload",
+  MTFStockAgeingFileUpload: "/api/RMS/MTFStockAgeingFileUpload",
 };

@@ -16,6 +16,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
   const [isBankVerified, setIsBankVerified] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [fileExtension, setFileExtension] = useState("");
+  const [beneficiaryName, setBeneficiaryName] = useState("");
   // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [fileBase64, setFileBase64] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
@@ -235,7 +236,10 @@ const VendorApproval = ({ activeSubItem }: any) => {
         if (response?.status === 200) {
           dispatch(hideLoader());
           let data = response?.data;
-          console.log("VerifyBankResponse", data);
+          console.log("VerifyBankResponse", data?.data);
+          if (data?.data !== "") {
+            setBeneficiaryName(data?.data);
+          }
           if (data?.statusCode === 400) {
             ShowToast("error", "Invalid Bank Details!");
 
@@ -407,6 +411,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
                     handleDownload={handleDownload}
                     handleVerifyDetails={handleVerifyDetails}
                     isBankVerified={isBankVerified}
+                    beneficiaryName={beneficiaryName}
                     onFileUpload={handleFileUpload}
                     setIsBankVerified={setIsBankVerified}
                   />
