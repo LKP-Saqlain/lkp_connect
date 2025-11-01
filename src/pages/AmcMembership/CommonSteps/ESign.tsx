@@ -2,6 +2,7 @@ import { Row, Col, Button } from "reactstrap";
 import { useEffect, useState } from "react";
 import ShowToast from "../../../utils/toastUtils";
 import { apiServices } from "../../../services";
+import { Avatar } from "rsuite";
 
 interface ESignProps {
   onPrimarySign?: () => void;
@@ -171,7 +172,12 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
       action: () => handleSign("third"),
       key: "third",
     },
-  ].filter((holder) => holder.name?.trim());
+  ]
+    .filter((holder) => holder.name?.trim())
+    .map((holder) => ({
+      ...holder,
+      firstLetter: holder.name.charAt(0).toUpperCase(),
+    }));
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
@@ -195,9 +201,26 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
                 height: "80px",
                 border: "2px solid #1c3c6b",
                 borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 marginBottom: "1rem",
+                overflow: "hidden", // ensures avatar stays inside circle
               }}
-            ></div>
+            >
+              <Avatar
+                src="/static/images/avatar/2.jpg"
+                style={{
+                  width: "81px",
+                  height: "81px",
+                  backgroundColor: "#284c6c",
+                  fontSize: "34px",
+                  color: "#fff",
+                }}
+              >
+                {holder.firstLetter}
+              </Avatar>
+            </div>
 
             <p
               style={{
