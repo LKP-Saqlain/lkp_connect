@@ -101,7 +101,7 @@ const NestedModal = ({
         const response = await apiServices.BSEStar_MfMandateStatus(payload);
         const allMandates = response?.data?.data?.mandateDetails || [];
 
-        // ✅ Filter only APPROVED mandates
+        //  Filter only APPROVED mandates
         const approvedMandates = allMandates.filter(
           (m: any) => m.status?.toUpperCase() === "APPROVED"
         );
@@ -232,7 +232,7 @@ const NestedModal = ({
       if (orderNumber) {
         setOrderNo(orderNumber);
         console.log(orderNumber, "Received Order Number");
-        // ✅ Now call handleSinglepayment
+        //  Now call handleSinglepayment
         setTimeout(() => {
           handleSinglepayment(orderNumber);
         }, 5000);
@@ -273,7 +273,7 @@ const NestedModal = ({
 
       console.log(message, "eNach url");
 
-      // ✅ success: open URL and send email
+      //  success: open URL and send email
       if (message?.code === 200 && message?.message) {
         const url: string = message.message;
         // window.open(url, "_blank");
@@ -293,7 +293,7 @@ const NestedModal = ({
       dispatch(hideLoader());
     }
     dispatch(hideLoader());
-    // ⏳ Retry after 4 seconds
+    //  Retry after 4 seconds
     setTimeout(() => triggerENachLoop(mandu, retryCount + 1), 6000);
   };
 
@@ -408,7 +408,7 @@ const NestedModal = ({
         </ModalHeader>
         <ModalBody>
           {timerPage ? (
-            // ✅ Replace this block with your dynamic TimerModal component
+            //  Replace this block with your dynamic TimerModal component
             <TimerModal
               isOpen={isOpen}
               toggle={toggle}

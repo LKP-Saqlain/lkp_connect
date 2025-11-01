@@ -32,11 +32,14 @@ const MfAreaChart: React.FC<ApexChartProps> = ({
       type: "area",
       height,
       zoom: {
-        enabled: false, // 🔒 disable zoom including scroll
+        enabled: false, //  disable zoom including scroll
         // autoScaleYaxis: true,
       },
+      toolbar: {
+        show: false,
+      },
     },
-    colors: ["#2d8a0b"], // ✅ custom line color
+    colors: ["#2d8a0b"], //  custom line color
     dataLabels: { enabled: false },
     markers: { size: 0 },
     xaxis: {
@@ -52,12 +55,12 @@ const MfAreaChart: React.FC<ApexChartProps> = ({
         opacityTo: 0.9,
         stops: [0, 100],
       },
-      colors: ["#2d8a0b"], // ✅ custom fill color
+      colors: ["#2d8a0b"], //  custom fill color
     },
     stroke: {
       curve: "smooth",
       width: 3,
-      colors: ["#2d8a0b"], // ✅ custom stroke color
+      colors: ["#2d8a0b"], //  custom stroke color
     },
   };
   const getDateRange = (rangeKey: string, data: [number, number][]) => {

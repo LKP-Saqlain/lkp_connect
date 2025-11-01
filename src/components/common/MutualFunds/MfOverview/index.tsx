@@ -8,11 +8,12 @@ import { AppDispatch } from "../../../../redux/store";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 
-const MfOverview = ({ schemeCode, onBack, hasToken }: any) => {
+const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<any>(null);
   const [modalType, setModalType] = useState<"oneTime" | "sip" | null>(null);
   const [bseSchemeCode, setBseSchemeCode] = useState<any>("");
+  const [fundOverviewData, setFundOverviewData] = useState<any>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const toggle = () => setOpen(!open);
@@ -59,6 +60,7 @@ const MfOverview = ({ schemeCode, onBack, hasToken }: any) => {
         ]);
 
         // handle FundOverView response
+        setFundOverviewData(bseRes?.data?.data[0]);
         setBseSchemeCode(bseRes?.data?.data[0]?.bseSchemeCode ?? "");
       } catch (err: any) {
         console.error("Error->", err.message);
@@ -80,6 +82,8 @@ const MfOverview = ({ schemeCode, onBack, hasToken }: any) => {
         title={data?.schemeName ?? ""}
         bseSchemeCode={bseSchemeCode}
         hasToken={hasToken}
+        onOrderSuccess={onOrderSuccess}
+        onBack={onBack}
       />
 
       <Card>
@@ -211,14 +215,14 @@ const MfOverview = ({ schemeCode, onBack, hasToken }: any) => {
             <MfAreaChart
               series={chartSeries}
               defaultRange="one_year"
-              height={400}
+              height={280}
             />
           )}
         </div>
       </Card>
 
       {/* Fund Details */}
-      {data && <FundDetails data={data} />}
+      {data && <FundDetails data={data} fundOverviewData={fundOverviewData} />}
     </>
   );
 };

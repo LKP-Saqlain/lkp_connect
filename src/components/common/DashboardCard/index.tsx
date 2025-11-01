@@ -160,7 +160,9 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           height:
             title === "Prize*"
               ? "100px"
-              : title === "Revenue Achieved*"
+              : title === "Revenue Achieved*" ||
+                title === "Client Count" ||
+                title === "Incentive Earned"
               ? "3.5rem"
               : title === "Client Target*"
               ? "3.5rem"
@@ -218,6 +220,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 "Revenue Achieved*",
                 "Client Target*",
                 "Clients Achieved*",
+                "Client Count",
+                "Incentive Earned",
               ].includes(title) && (
                 <h5
                   className="mb-0"
@@ -444,7 +448,9 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 {!mainCustomClass &&
                   title !== "Revenue Achieved*" &&
                   title !== "Client Target*" &&
-                  title !== "Clients Achieved*" && (
+                  title !== "Clients Achieved*" &&
+                  title !== "Client Count" &&
+                  title !== "Incentive Earned" && (
                     <div>
                       <h5
                         className="mb-0"
@@ -542,7 +548,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                         }}
                       >
                         {rightValue}
-                      </span> // ✅ Fix: Wrap in a JSX element
+                      </span> //  Fix: Wrap in a JSX element
                     )}
                   </div>
                 </div>

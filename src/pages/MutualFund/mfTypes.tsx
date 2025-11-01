@@ -42,6 +42,8 @@ export interface MutualFundModalProps {
   title?: string;
   bseSchemeCode?: string;
   hasToken?: string;
+  onOrderSuccess?: any;
+  onBack?: any;
 }
 
 export interface BankDetail {
@@ -128,6 +130,16 @@ export const popularTabList = [
   { label: "Small Cap" },
   { label: "Mid Cap" },
   // { label: "Others" },
+];
+
+export const returnPeriodsTabs = [
+  { label: "1W", value: "oneWeek" },
+  { label: "1M", value: "oneMonth" },
+  { label: "3M", value: "threeMonth" },
+  { label: "6M", value: "sixMonth" },
+  { label: "1Y", value: "oneYear" },
+  { label: "3Y", value: "threeYear" },
+  { label: "5Y", value: "fiveYear" },
 ];
 
 export const assetClassTabList = [

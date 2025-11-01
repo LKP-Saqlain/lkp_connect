@@ -65,12 +65,12 @@ const TradeCard: React.FC<TradeCardProps> = ({
 }) => {
   const zoom = useZoomLevel();
 
-  const containerClass = zoom < 95 ? "trade-prices-2" : "trade-prices";
+  const containerClass = zoom < 90 ? "trade-prices-2" : "trade-prices";
 
   const getStatusColor = () => {
     switch (status) {
       case "Open":
-        return { bg: "#e6ffe6", color: "#009933", border: "#c2f0c2" };
+        return { bg: "#D5F5D5", color: "#0B7D0B", border: "#8edb8e" };
       case "Closed":
         return { bg: "#ffe6e6", color: "#d32f2f", border: "#f5b3b3" };
       default:
@@ -161,7 +161,7 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 style={{
                   fontWeight: 600,
                   fontSize: "14px",
-                  border: "1px solid black",
+                  // border: "1px solid black",
                 }}
               >
                 {clientName}
@@ -257,7 +257,11 @@ const TradeCard: React.FC<TradeCardProps> = ({
           <div className="trade-left">
             <div
               className="trade-name"
-              style={{ display: "flex", alignItems: "center", gap: "6px" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
             >
               {/* Buy/Sell Badge */}
               {buySell && (
@@ -266,10 +270,10 @@ const TradeCard: React.FC<TradeCardProps> = ({
                     fontWeight: 600,
                     fontSize: "12px",
                     color: buySell === "Buy" ? "#0a8a0a" : "#d32f2f",
-                    backgroundColor: buySell === "Buy" ? "#e8f5e9" : "#ffebee", // lighter background
+                    backgroundColor: buySell === "Buy" ? "#e8f5e9" : "#ffebee",
                     border: `1px solid ${
-                      buySell === "Buy" ? "#469949" : "#df3434"
-                    }`, // subtle border
+                      buySell === "Buy" ? "#8edb8e" : "#f28c8c"
+                    }`,
                     borderRadius: "5px",
                     padding: "2px 6px",
                     display: "inline-block",
@@ -280,38 +284,117 @@ const TradeCard: React.FC<TradeCardProps> = ({
                   {buySell.charAt(0).toUpperCase()}
                 </div>
               )}
-              {/* Stock Name */}
-              <span style={{ fontSize: "14px", fontWeight: 700 }}>
-                {" "}
-                {name}{" "}
-              </span>
-              <span className="trade-exchange">{exchange}</span>
-            </div>
 
-            {["F&O", "Commodity", "Currency"].includes(category) && expiry && (
+              {/* Name + Exchange + Expiry in one row */}
               <div
-                className="trade-expiry"
-                // style={{ border: "1px solid black" }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  flexWrap: "wrap",
+                }}
               >
-                {(selectedTab === 2 || selectedTab === 3) && exchSegment && (
-                  <span
-                    className="trade-tag trade-category"
-                    style={{ marginRight: ".5rem" }}
-                  >
-                    {exchSegment.slice(0, 3).toUpperCase()}
-                  </span>
-                )}
-                {expiry} {strike && <span>{strike}</span>}
+                <span style={{ fontSize: "14px", fontWeight: 700 }}>
+                  {name}
+                  <span className="trade-exchange">{exchange}</span>
+                </span>
+
+                {["F&O", "Commodity", "Currency"].includes(category) &&
+                  expiry && (
+                    <div className="trade-tag">
+                      {(selectedTab === 0 ||
+                        selectedTab === 2 ||
+                        selectedTab === 3) &&
+                        exchSegment &&
+                        (() => {
+                          const seg = exchSegment.slice(0, 3).toUpperCase();
+
+                          // Enhanced color logic
+                          const getColors = (seg: string, strike: string) => {
+                            if (seg === "OPT") {
+                              if (strike?.toUpperCase().includes("CE")) {
+                                return { bg: "#d6e9f9", color: "#1e88e5" };
+                              } else if (strike?.toUpperCase().includes("PE")) {
+                                return { bg: "#fff0d9", color: "#ffa726" };
+                              }
+                            }
+                            switch (seg) {
+                              case "FUT":
+                                return { bg: "#d4edda", color: "#5cb85c" }; // lighter green
+                              default:
+                                return { bg: "#f5f5f5", color: "#000" }; // neutral
+                            }
+                          };
+
+                          const { bg, color } = getColors(seg, strike);
+
+                          return (
+                            <>
+                              {/* SEG */}
+                              <span
+                                className="trade-tag trade-category"
+                                style={{
+                                  fontWeight: 400,
+                                  marginRight: ".1rem",
+                                  backgroundColor: bg,
+                                  color: color,
+                                }}
+                              >
+                                {seg}
+                              </span>
+
+                              {/* STRIKE */}
+                              {strike && (
+                                <span
+                                  className="trade-tag trade-category"
+                                  style={{
+                                    fontWeight: 400,
+                                    marginRight: ".1rem",
+                                    backgroundColor: bg,
+                                    color: color,
+                                  }}
+                                >
+                                  {(() => {
+                                    const cleaned = strike
+                                      .replace(/\.00$/, "")
+                                      .trim();
+                                    const parts = cleaned.split(" ");
+                                    if (parts.length === 2) {
+                                      const [optionType, strikeValue] = parts;
+                                      return `${strikeValue} ${optionType}`;
+                                    }
+                                    return cleaned;
+                                  })()}
+                                </span>
+                              )}
+
+                              {/* EXPIRY */}
+                              <span
+                                className="trade-tag trade-category"
+                                style={{
+                                  fontWeight: 400,
+                                  marginRight: ".1rem",
+                                  backgroundColor: bg,
+                                  color: color,
+                                }}
+                              >
+                                {expiry?.toUpperCase()}
+                              </span>
+                            </>
+                          );
+                        })()}
+                    </div>
+                  )}
               </div>
-            )}
+            </div>
 
             <div
               className={containerClass}
               style={{ color: "#999999", fontSize: "12px" }}
             >
               <div>
-                <div>Stop Loss</div>
-                <div style={{ color: "#666" }}>
+                <div style={{ textAlign: "center" }}>Stop Loss</div>
+                <div style={{ color: "#666", textAlign: "center" }}>
                   {Number(stopLoss).toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -319,8 +402,8 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 </div>
               </div>
               <div>
-                <div>Rec. Price</div>
-                <div style={{ color: "#666" }}>
+                <div style={{ textAlign: "center" }}>Rec. Price</div>
+                <div style={{ color: "#666", textAlign: "center" }}>
                   {Number(recPrice).toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -328,8 +411,8 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 </div>
               </div>
               <div>
-                <div>Target Price</div>
-                <div style={{ color: "#666" }}>
+                <div style={{ textAlign: "center" }}>Target Price</div>
+                <div style={{ color: "#666", textAlign: "center" }}>
                   {Number(targetPrice).toLocaleString("en-IN", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -337,8 +420,8 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 </div>
               </div>
               <div>
-                <div>Profit Potential</div>
-                <div style={{ color: "#666" }}>
+                <div style={{ textAlign: "center" }}>Profit Potential</div>
+                <div style={{ color: "#666", textAlign: "center" }}>
                   {(
                     ((Number(targetPrice) - Number(recPrice)) /
                       Number(recPrice)) *
@@ -351,45 +434,89 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 </div>
               </div>
               <div>
-                <div>Insertion date</div>
-                <div style={{ color: "#666" }}>
+                <div style={{ textAlign: "center" }}>
+                  Call Publish Date & Time
+                </div>
+                <div style={{ color: "#666", textAlign: "center" }}>
                   {formatInsertionTime(insertionTime)}
                 </div>
               </div>
             </div>
 
             <Divider sx={{ mb: 2, mt: 2 }} />
-
-            {partialProfitText && (
+            <div
+              className="trade-bottom"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "8px",
+              }}
+            >
+              {partialProfitText && status !== "Open" && (
+                <div
+                  style={{
+                    fontSize: "13px",
+                    color: "green",
+                    fontWeight: 100,
+                    flex: 1,
+                  }}
+                >
+                  {partialProfitText
+                    .toLowerCase()
+                    .replace(/\b\w/g, (char) => char.toUpperCase())}
+                </div>
+              )}
               <div
                 style={{
-                  marginTop: "8px",
-                  fontSize: "13px",
-                  color: "green",
+                  position: "absolute",
+                  bottom: status !== "Open" ? "12px" : "8px",
+                  right: "16px",
                   fontWeight: 500,
+                  fontSize: "13px",
+                  color: color,
+                  backgroundColor: bg,
+                  border: `1px solid ${border}`,
+                  borderRadius: "6px",
+                  padding: "2px 8px",
+                  display: "inline-block",
+                  textAlign: "center",
+                  minWidth: "60px",
                 }}
               >
-                {partialProfitText}
+                {status}
               </div>
-            )}
+            </div>
           </div>
 
           {/* Right */}
           <div style={{ textAlign: "right" }}>
             <div className="trade-tags">
-              <span className="trade-tag trade-category">{category}</span>
-              <span className="trade-tag trade-label">{tag}</span>
+              <span
+                className="trade-tag trade-label"
+                style={{ fontWeight: 100 }}
+              >
+                {category}
+              </span>
+              <span
+                className="trade-tag trade-category"
+                style={{ fontWeight: 100 }}
+              >
+                {tag}
+              </span>
             </div>
 
             <div
               style={{
                 fontSize: "12px",
                 color: "#999",
-                marginTop: expiry !== "" ? "1.8rem" : "0rem",
+                // marginTop: expiry !== "" ? "1.8rem" : "0rem",
               }}
             >
               Valid Till
             </div>
+
             <div className="trade-datetime">
               {(() => {
                 const parsedDate = dayjs(dateTime, "DD-MM-YYYY HH:mm:ss");
@@ -399,32 +526,6 @@ const TradeCard: React.FC<TradeCardProps> = ({
                   <RemoveIcon sx={{ fontSize: "15px", color: "#999" }} />
                 );
               })()}
-            </div>
-
-            {/* {buySell && (
-              <Button
-                color={buySell === "Sell" ? "danger" : "success"}
-                className="trade-button"
-              >
-                {buySell}
-              </Button>
-            )} */}
-
-            <div
-              style={{
-                fontWeight: 600,
-                fontSize: "13px",
-                color: color,
-                backgroundColor: bg,
-                border: `1px solid ${border}`,
-                borderRadius: "6px", // rounded corners
-                padding: "2px 8px",
-                display: "inline-block",
-                textAlign: "center",
-                minWidth: "60px",
-              }}
-            >
-              {status}
             </div>
           </div>
         </CardBody>

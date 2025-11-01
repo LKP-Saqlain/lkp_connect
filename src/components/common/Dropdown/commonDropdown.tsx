@@ -45,7 +45,7 @@ const ComDropDown = ({ onSelectionChange }: any) => {
       try {
         dispatch(showLoader("Please wait, we are processing your request..."));
 
-        const res = await apiServices.getDropDown(payload); // ✅ No auth header here
+        const res = await apiServices.getDropDown(payload); //  No auth header here
         if (res?.status === 200) {
           const zoneOptions = res.data.map((item: any) => ({
             label: item.itemDesc,
@@ -89,7 +89,7 @@ const ComDropDown = ({ onSelectionChange }: any) => {
       try {
         dispatch(showLoader("Please wait, we are processing your request..."));
 
-        const res = await apiServices.getDropDown(payload); // ✅ No auth header here
+        const res = await apiServices.getDropDown(payload); //  No auth header here
         if (res?.status === 200) {
           let branchOptions = res.data.map((item: any) => ({
             label: item.itemVal,

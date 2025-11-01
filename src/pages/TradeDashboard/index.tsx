@@ -100,6 +100,11 @@ const DashboardCrypto = ({
   );
 
   useEffect(() => {
+    setSelectedSubCategory("All");
+    handleSubCategoryFilter("All"); // refresh data immediately
+  }, [selectedTab]);
+
+  useEffect(() => {
     console.log("testProps->", selectedViewMore);
     if (selectedViewMore === "T6") {
       setSelectedItem("Clients Ageing Report");
@@ -426,15 +431,46 @@ const DashboardCrypto = ({
   };
 
   useEffect(() => {
-    if (selectedItem === "Reasearch Calls") {
+    if (selectedItem === "Research Calls") {
       fetchResearchCall();
     }
   }, [dispatch, selectedItem]);
+
+  const SUBCATEGORY_MAP: Record<string, string[]> = {
+    Equity: ["All", "Spade", "Alpha", "Momentum", "Wealth", "Positional"],
+    "F&O": [
+      "All",
+      "Spade+",
+      "Stock Future",
+      "Stock Option",
+      "Index Future",
+      "Index Option",
+    ],
+    Commodity: ["All", "Spade", "MCXF", "MCXO"],
+    Currency: ["All"], // optional, in case needed later
+  };
+
+  const getSubCategoriesForTab = () => {
+    switch (selectedTab) {
+      case 1:
+        return SUBCATEGORY_MAP["Equity"];
+      case 2:
+        return SUBCATEGORY_MAP["F&O"];
+      case 3:
+        return SUBCATEGORY_MAP["Commodity"];
+      case 4:
+        return SUBCATEGORY_MAP["Currency"];
+      default:
+        return [];
+    }
+  };
 
   const handleSubCategoryFilter = (subCat: string) => {
     setSelectedSubCategory(subCat);
     console.log("TestTestTest", selectedTab, subCat, filteredCalls);
     let filtered = allCalls;
+
+    //  Filter by main tab (category)
     switch (selectedTab) {
       case 1:
         filtered = filtered.filter((item) => item.category === "Equity");
@@ -449,37 +485,42 @@ const DashboardCrypto = ({
         filtered = filtered.filter((item) => item.category === "Currency");
         break;
       default:
-        break; // 0 or All
+        break;
     }
 
+    //  Filter by selected subcategory
     if (subCat !== "All") {
-      filtered = filtered.filter((item) => item.subCategory === subCat);
+      filtered = filtered.filter((item) => {
+        const itemSub = item.subCategory?.trim().toLowerCase() || "";
+        const selectedSub = subCat.trim().toLowerCase();
+        return itemSub === selectedSub;
+      });
     }
 
     setFilteredCalls(filtered);
   };
 
-  const tabCategoryMap: Record<number, string> = {
-    1: "Equity",
-    2: "F&O",
-    3: "Commodity",
-    5: "Currency",
-  };
+  // const tabCategoryMap: Record<number, string> = {
+  //   1: "Equity",
+  //   2: "F&O",
+  //   3: "Commoditay",
+  //   5: "Currency",
+  // };
 
-  const subCategoriesForTab = Array.from(
-    new Set(
-      allCalls
-        .filter((item) => {
-          if (selectedTab === 0) return true; // show all
-          return item.category === tabCategoryMap[selectedTab];
-        })
-        .map((item) => item.subCategory)
-    )
-  ).filter((subCat) => subCat && subCat.trim() !== ""); // remove blanks
+  // const subCategoriesForTab = Array.from(
+  //   new Set(
+  //     allCalls
+  //       .filter((item) => {
+  //         if (selectedTab === 0) return true; // show all
+  //         return item.category === tabCategoryMap[selectedTab];
+  //       })
+  //       .map((item) => item.subCategory)
+  //   )
+  // ).filter((subCat) => subCat && subCat.trim() !== ""); // remove blanks
 
   // Conditionally add "All" only if subcategories exist
-  const filteredSubCategories =
-    subCategoriesForTab.length > 0 ? ["All", ...subCategoriesForTab] : [];
+  // const filteredSubCategories =
+  //   subCategoriesForTab.length > 0 ? ["All", ...subCategoriesForTab] : [];
 
   // const finalSubCategories =
   //   selectedTab !== 0 && selectedTab !== 4
@@ -501,7 +542,7 @@ const DashboardCrypto = ({
     console.log("filteredCallsData", filteredCalls);
   }, [filteredCalls]);
 
-  document.title = document.title = "LKP Securities | Zone Target";
+  document.title = document.title = "LKP Securities | Trading";
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -520,7 +561,7 @@ const DashboardCrypto = ({
               selectedWidget={selectedItem}
               handleItemClick={handleItemClick}
             />
-            {/* {selectedItem === "Reasearch Calls" && <TradeCapsule />} */}
+            {/* {selectedItem === "Research Calls" && <TradeCapsule />} */}
             {/* {selectedItem === "Clients With Ledger Balance" && <DropDown />} */}
           </Row>
           {selectedItem === "Clients With Ledger Balance" ||
@@ -563,48 +604,46 @@ const DashboardCrypto = ({
                     value={selectedTab}
                   />
 
-                  {selectedTab !== 0 &&
-                    selectedTab !== 4 &&
-                    filteredSubCategories.length > 0 && (
-                      <div
-                        style={{
-                          marginBottom: "12px",
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: "2px",
-                        }}
-                      >
-                        {filteredSubCategories.map((subCat) => (
-                          <div
-                            key={subCat}
-                            onClick={() => handleSubCategoryFilter(subCat)}
-                            style={{
-                              fontWeight: 500,
-                              fontSize: "10px",
-                              color:
-                                selectedSubCategory === subCat
-                                  ? "#fff"
-                                  : "#11395C",
-                              backgroundColor:
-                                selectedSubCategory === subCat
-                                  ? "#11395C"
-                                  : "#e6f0ff",
-                              borderRadius: "5px",
-                              padding: "4px 12px",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              cursor: "pointer",
-                              userSelect: "none",
-                              transition: "background-color 0.2s ease",
-                              marginRight: "3px",
-                            }}
-                          >
-                            {subCat}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                  {selectedTab !== 0 && selectedTab !== 4 && (
+                    <div
+                      style={{
+                        marginBottom: "12px",
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: "2px",
+                      }}
+                    >
+                      {getSubCategoriesForTab().map((subCat) => (
+                        <div
+                          key={subCat}
+                          onClick={() => handleSubCategoryFilter(subCat)}
+                          style={{
+                            fontWeight: 500,
+                            fontSize: "10px",
+                            color:
+                              selectedSubCategory === subCat
+                                ? "#fff"
+                                : "#11395C",
+                            backgroundColor:
+                              selectedSubCategory === subCat
+                                ? "#11395C"
+                                : "#e6f0ff",
+                            borderRadius: "5px",
+                            padding: "4px 12px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            cursor: "pointer",
+                            userSelect: "none",
+                            transition: "background-color 0.2s ease",
+                            marginRight: "3px",
+                          }}
+                        >
+                          {subCat}
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
                   <div>
                     {filteredCalls.length > 0 ? (
@@ -664,11 +703,11 @@ const DashboardCrypto = ({
                             style={{
                               // padding: "40px 20px",
                               fontSize: "16px",
-                              fontWeight: 500,
+                              fontWeight: 400,
                               color: "#666",
                             }}
                           >
-                            No Records Found!
+                            No Research Data
                           </CardBody>
                         </Card>
                       </>

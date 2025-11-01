@@ -7,6 +7,7 @@ import {
   MfCardPassLabel,
   popularTabList,
   assetClassTabList,
+  returnPeriodsTabs,
 } from "../../../pages/MutualFund/mfTypes";
 import MfinfoCard from "../../../components/common/MutualFunds/MfInfoCard";
 import { useEffect, useState } from "react";
@@ -24,6 +25,7 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
   const [assetTab, setAssetTab] = useState("Equity");
   const [assetTabOrder, setAssetTabOrder] = useState(0);
   const [assetClassData, setAssetClassData] = useState<any[]>([]);
+  const [selectedReturnPeriod, setSelectedReturnPeriod] = useState("1Y");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -150,13 +152,7 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
   };
 
   return (
-    <Card
-      style={{
-        borderRadius: "15px",
-        // marginBottom: "16px",
-        padding: "16px",
-      }}
-    >
+    <Card style={{ borderRadius: "15px", padding: "16px" }}>
       {selectedMfType ? (
         <MutualFundList
           selectedMfType={selectedMfType}
@@ -165,79 +161,61 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
         />
       ) : (
         <Row>
-          <Card
-            style={{
-              borderRadius: "15px",
-              // marginBottom: "16px",
-              padding: "16px",
-            }}
-          >
-            <BasicTabs
-              heading="Popular Category"
-              tabs={popularTabList}
-              value={popularTabOrder}
-              onChange={handleTabChange}
-            />
-            {popularCategorydata.length > 0 && (
-              <MfinfoCard
-                CardType="Popular Category"
-                funds={popularCategorydata}
-                handleSelectedMutualFund={handleSelectedMutualFund}
-              />
-            )}
-          </Card>
-          <Col xl={8}>
-            {/* Recommendation Section */}
+          <Col xl={12}>
             <Card
               style={{
                 borderRadius: "15px",
-                margin: "0",
                 padding: "16px",
+                marginBottom: "16px",
               }}
             >
               <BasicTabs
-                heading="Our Recommendation"
-                tabs={[]}
-                value={0}
-                onChange={() => {}}
+                heading="Popular Category"
+                tabs={popularTabList}
+                value={popularTabOrder}
+                onChange={handleTabChange}
+                returnPeriods={returnPeriodsTabs}
+                selectedReturnPeriod={selectedReturnPeriod}
+                onReturnPeriodChange={setSelectedReturnPeriod}
               />
-              <MfCards
-                CardData={MfCardRecoLabel}
-                handleSelectedMfType={handleSelectedMfType}
-              />
-            </Card>
-
-            {/* Asset Class Section */}
-            <Card
-              style={{
-                borderRadius: "15px",
-                // marginBottom: "16px",
-                padding: "16px",
-              }}
-            >
-              <BasicTabs
-                heading="Asset Class"
-                tabs={assetClassTabList}
-                value={assetTabOrder}
-                onChange={handleAssetTabChange}
-              />
-              {assetClassData.length > 0 && (
+              {popularCategorydata.length > 0 && (
                 <MfinfoCard
-                  CardType="Asset Class"
-                  funds={assetClassData}
+                  CardType="Popular Category"
+                  funds={popularCategorydata}
                   handleSelectedMutualFund={handleSelectedMutualFund}
+                  selectedReturnPeriod={selectedReturnPeriod}
                 />
               )}
             </Card>
+          </Col>
 
-            {/* Passive & Product Cards */}
+          {/*  Our Recommendation + Calculator */}
+          <Col xl={8}>
             <Row>
-              <Col xl={6}>
+              <Card
+                style={{
+                  borderRadius: "15px",
+                  padding: "16px",
+                  marginBottom: "16px",
+                }}
+              >
+                <BasicTabs
+                  heading="Our Recommendation"
+                  tabs={[]}
+                  value={0}
+                  onChange={() => {}}
+                />
+                <MfCards
+                  CardData={MfCardRecoLabel}
+                  handleSelectedMfType={handleSelectedMfType}
+                />
+              </Card>
+              <Col xl={4}>
                 <Card
                   style={{
                     borderRadius: "15px",
-                    margin: "0",
                     padding: "16px",
+                    marginBottom: "16px",
                   }}
                 >
                   <BasicTabs
@@ -253,13 +231,31 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
                 </Card>
               </Col>
             </Row>
-
-            {/* Popular Category Section */}
           </Col>
-
-          {/* Right Section */}
           <Col xl={4}>
             <SipCalculator />
+          </Col>
+
+          <Col xl={12}>
+            <Card style={{ borderRadius: "15px", padding: "16px" }}>
+              <BasicTabs
+                heading="Asset Class"
+                tabs={assetClassTabList}
+                value={assetTabOrder}
+                onChange={handleAssetTabChange}
+                returnPeriods={returnPeriodsTabs}
+                selectedReturnPeriod={selectedReturnPeriod}
+                onReturnPeriodChange={setSelectedReturnPeriod}
+              />
+              {assetClassData.length > 0 && (
+                <MfinfoCard
+                  CardType="Asset Class"
+                  funds={assetClassData}
+                  handleSelectedMutualFund={handleSelectedMutualFund}
+                  selectedReturnPeriod={selectedReturnPeriod}
+                />
+              )}
+            </Card>
           </Col>
         </Row>
       )}

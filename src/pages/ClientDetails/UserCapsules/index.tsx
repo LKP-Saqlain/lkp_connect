@@ -58,6 +58,7 @@ const UserCapsules = ({
           alignItems: "center",
           flexWrap: "wrap", // responsive
           gap: "10px",
+          marginLeft: "10px",
         }}
       >
         {/* Left: Capsules */}

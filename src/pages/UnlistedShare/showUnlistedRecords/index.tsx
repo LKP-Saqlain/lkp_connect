@@ -73,6 +73,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
               ...item,
               id: index + 1,
               transactionDate: item.transactionDate?.split(" ")[0],
+              dealSheetB64: item.dealSheetB64 ? item.dealSheetB64 : null,
             })
           );
           console.log("ViewListedShareRecord", filteredResponse);
@@ -98,7 +99,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       ? parseFloat(value.replace(/,/g, ""))
       : Number(value || 0);
 
-  const updateUnlistedVals = (data: any) => {
+  const updateUnlistedVals = (data: any, fileBase64: any) => {
     console.log("updateUnlistedVals", data);
 
     const formattedDate = dayjs(editData?.transactionDate, "DD/MM/YYYY").format(
@@ -112,7 +113,9 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       clientName: data.clientName,
       securitiesName: data.securitiesName,
       noOfShares: cleanNumber(data?.noOfShare),
-      brokeragePerShare: cleanNumber(data?.brokPerShare),
+      clientRate: data.clientRate,
+      vendorRate: data.vendorRate,
+      lkpCommissionPerShare: cleanNumber(data?.brokPerShare),
       brokerageInclusiveGST: cleanNumber(data?.brokIncGST),
       gst: cleanNumber(data?.gst),
       brokerageExclusiveGST: cleanNumber(data?.brokExcGST),
@@ -124,6 +127,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
         0,
       netBrokerage: cleanNumber(data?.netBrokerage),
       rowId: editData?.rowID,
+      dealSheetB64: fileBase64,
     };
     console.log("Payload", payload);
 
@@ -134,6 +138,10 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
         if (response?.status === 200) {
           console.log("UpdateResponse", response?.data);
           dispatch(hideLoader());
+          if (response?.data?.statusCode === 400) {
+            ShowToast("error", response?.data?.message);
+            return;
+          }
           setmodal_grid(false);
 
           // if (response?.data?.data === null) {
@@ -171,14 +179,10 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       });
   };
 
-  const handleFormSubmit = async (
-    data: any,
-    apiStatus: any,
-    fileBase64: any
-  ) => {
-    console.log("FormData", data, apiStatus, fileBase64);
+  const handleFormSubmit = async (data: any, fileBase64: any) => {
+    console.log("FormData", data, fileBase64);
     if (editData && Object.keys(editData).length > 0) {
-      updateUnlistedVals(data);
+      updateUnlistedVals(data, fileBase64);
       return;
     }
 
@@ -224,6 +228,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
         : 0,
       netBrokerage: unformatNumber(netBrokerage),
       rmCode: rmCode?.toString().trim(),
+      dealSheetB64: fileBase64,
     };
     console.log("Payload", payload);
 
@@ -279,7 +284,6 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
   };
 
   const handleEditClick = (data: any, editCheck: boolean) => {
-    // debugger;
     console.log("TestModalData", data, editCheck);
     // const formattedDate = data.DateOfCommunication
     //   ? dayjs(data.DateOfCommunication, "DD-MMM-YY").format("DD/MM/YYYY")

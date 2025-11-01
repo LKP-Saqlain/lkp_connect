@@ -941,4 +941,61 @@ export const apiServices = {
   GetZoneTargetdata: async (payload: any) => {
     return await apiService("POST", endpoints.GetZoneTargetdata, payload);
   },
+  GetClientModuleDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientModuleDetails, payload);
+  },
+  ProcessOTP: async (payload: any) => {
+    return await apiService("POST", endpoints.ProcessOTP, payload);
+  },
+  ActivateAMC: async (payload: any) => {
+    return await apiService("POST", endpoints.ActivateAMC, payload);
+  },
+  SendDPAMCEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendDPAMCEmail, payload);
+  },
+  GetDPAMCPaymentResponse: async (payload: any) => {
+    return await apiService("POST", endpoints.GetDPAMCPaymentResponse, payload);
+  },
+  GetClientDPContest: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientDPContest, payload);
+  },
+  SendFirstHolderSignature: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendFirstHolderSignature,
+      payload
+    );
+  },
+  SendSecondHolderSignature: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendSecondHolderSignature,
+      payload
+    );
+  },
+  SendThirdHolderSignature: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendThirdHolderSignature,
+      payload
+    );
+  },
+  DownloadSignedPdf: async (payload: any) => {
+    return await apiService("POST", endpoints.DownloadSignedPdf, payload);
+  },
+  SendFinalSignedMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendFinalSignedMail, payload);
+  },
+  GetLedgerReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetLedgerReport, payload);
+  },
+  GetClientMISDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientMISDetails, payload);
+  },
+  ViewVendorDetailsReport: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewVendorDetailsReport, payload);
+  },
+  GetAMCActivationStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.GetAMCActivationStatus, payload);
+  },
 };

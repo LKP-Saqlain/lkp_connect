@@ -3196,7 +3196,7 @@ export const topBirthdays: GridColDef[] = [
 export const cyptoWidgets = [
   // {
   //   id: 1,
-  //   label: "Reasearch Calls",
+  //   label: "Research Calls",
   //   color: "primary",
   // },
   {
@@ -3235,6 +3235,7 @@ export const ODCapsules = [
 export const AmcMembership = [
   { id: 1, label: "Lifetime Membership" },
   { id: 2, label: "Non-Lifetime Membership" },
+  { id: 3, label: "Contest Earned" },
 ];
 export const pledgeCapsules = [
   { id: 1, label: "Pledge Request" },
@@ -3861,6 +3862,15 @@ export const BrokerageModificationStatus: GridColDef[] = [
 ];
 export const BrokerageKyc: GridColDef[] = [
   {
+    field: "More Details",
+    headerName: "",
+    minWidth: 60,
+    flex: 0.5,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
     field: "zone",
     headerName: "Zone",
     minWidth: 60,
@@ -3869,70 +3879,96 @@ export const BrokerageKyc: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
-  ...RegionalHead,
   {
-    field: "kycApproveStatusDate",
-    headerName: "Date approved by RH",
-    flex: 1,
+    field: "branchcode",
+    headerName: "Branch",
+    minWidth: 70,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientcode",
+    headerName: "Client Code",
+    flex: 0.6,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1.5,
     minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
-    sortable: false,
+  },
+
+  {
+    field: "segment",
+    headerName: "Segment",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
   },
 ];
 
-// export const getBrokerageKycDetails = (
-//   handleDownload: (row: any) => void
-// ): GridColDef[] => {
-//   return [
-//     ...RegionalHead.filter(
-//       (col) =>
-//         col.field !== "branchcode" &&
-//         col.field !== "remark" &&
-//         col.field !== "consentfilename"
-//     ),
-//     {
-//       field: "consentfilename",
-//       headerName: "Download",
-//       disableColumnMenu: true,
-//       headerAlign: "center",
-//       align: "center",
-//       renderCell: (params: any) => {
-//         const fileName = params.row?.consentfilename;
+export const getBrokerageKycDetails = (
+  handleDownload: (row: any) => void
+): GridColDef[] => {
+  return [
+    ...RegionalHead.filter(
+      (col) =>
+        col.field !== "branchcode" &&
+        col.field !== "remark" &&
+        col.field !== "consentfilename"
+    ),
+    {
+      field: "consentfilename",
+      headerName: "Download",
+      disableColumnMenu: true,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (params: any) => {
+        const fileName = params.row?.consentfilename;
 
-//         return fileName ? (
-//           <button
-//             onClick={() => handleDownload(params.row)}
-//             style={{
-//               color: "#11395C",
-//               textDecoration: "underline",
-//               background: "none",
-//               border: "none",
-//               cursor: "pointer",
-//             }}
-//           >
-//             <span title="Download">
-//               <DownloadForOfflineIcon />
-//             </span>
-//           </button>
-//         ) : (
-//           "╶─"
-//         );
-//       },
-//     },
-//     {
-//       field: "kycApproveStatusDate",
-//       headerName: "Date approved by RH",
-//       flex: 1,
-//       minWidth: 180,
-//       disableColumnMenu: true,
-//       headerAlign: "center",
-//       align: "left",
-//       sortable: false,
-//     },
-//   ];
-// };
+        return fileName ? (
+          <button
+            onClick={() => handleDownload(params.row)}
+            style={{
+              color: "#11395C",
+              textDecoration: "underline",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            <span title="Download">
+              <DownloadForOfflineIcon />
+            </span>
+          </button>
+        ) : (
+          "╶─"
+        );
+      },
+    },
+    {
+      field: "kycApproveStatusDate",
+      headerName: "Date approved by RH",
+      flex: 1,
+      minWidth: 180,
+      disableColumnMenu: true,
+      headerAlign: "center",
+      align: "left",
+      sortable: false,
+    },
+  ];
+};
 
 // export const BrokerageKyc: GridColDef[] = [
 //   {
@@ -5949,6 +5985,49 @@ export const spipClientDetails: GridColDef[] = [
 
 export const getApproverOneDetails: GridColDef[] = [
   {
+    field: "dealSheetB64",
+    headerName: "Deal Sheet",
+    headerClassName: "header-wrap-custom",
+    minWidth: 50,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    sortable: false,
+
+    renderCell: (params) => {
+      const base64Data = params.value;
+      const today = new Date();
+
+      const dd = String(today.getDate()).padStart(2, "0");
+      const mm = String(today.getMonth() + 1).padStart(2, "0"); // January is 0!
+      const yy = String(today.getFullYear()).slice(-2);
+
+      const filename = `Deal_Sheet_${dd}-${mm}-${yy}.pdf`;
+
+      const handleDownload = () => {
+        const link = document.createElement("a");
+        link.href = `data:application/pdf;base64,${base64Data}`;
+        link.download = filename;
+        link.click();
+      };
+
+      return (
+        <button
+          onClick={handleDownload}
+          style={{
+            color: "#11395C",
+            textDecoration: "underline",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          <DownloadForOfflineIcon />
+        </button>
+      );
+    },
+  },
+  {
     field: "Action",
     headerName: "Approve | Reject",
     headerClassName: "header-wrap-custom",
@@ -7625,6 +7704,17 @@ export const VendorMasterColumns: GridColDef[] = [
     //   </div>
     // ),
   },
+  {
+    field: "accRemark",
+    headerName: "Remark",
+    minWidth: 160,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
 ];
 
 export const VendorMasterApprovalColumns: GridColDef[] = [
@@ -7806,6 +7896,17 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     field: "actions",
     headerName: "Actions",
     minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "accRemark",
+    headerName: "Remark",
+    minWidth: 160,
     flex: 0.6,
     sortable: false,
     filterable: false,
@@ -8447,6 +8548,20 @@ export const MfPortfolio: GridColDef[] = [
     minWidth: 200,
   },
   {
+    field: "physicalQuantity",
+    headerName: "Mode",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+    align: "right",
+    headerAlign: "right",
+    valueFormatter: (params: any) => {
+      if (params > 0) return "Physical";
+      else return "Demat";
+    },
+  },
+
+  {
     field: "folioNumber",
     headerName: "Folio Number",
     disableColumnMenu: true,
@@ -8694,7 +8809,9 @@ export const NFOList: GridColDef[] = [
   },
 ];
 
-export const RecommendationList: GridColDef[] = [
+export const getRecommendationListColumns = (
+  selectedReturnPeriod: string
+): GridColDef[] => [
   {
     field: "schemeName",
     headerName: "Fund Name",
@@ -8717,6 +8834,7 @@ export const RecommendationList: GridColDef[] = [
     headerName: "Category",
     flex: 1.5,
     minWidth: 160,
+    disableColumnMenu: true,
     renderCell: (params) => (
       <span style={{ fontSize: "13px" }}>
         {params.row.category?.split("|")[1]?.trim() || "-"}
@@ -8730,6 +8848,7 @@ export const RecommendationList: GridColDef[] = [
     headerAlign: "center",
     flex: 1,
     minWidth: 100,
+    disableColumnMenu: true,
     renderCell: (params) => (
       <span>₹{Number(params.row.sipMinimum || 0).toLocaleString()}</span>
     ),
@@ -8740,6 +8859,7 @@ export const RecommendationList: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     flex: 1,
+    disableColumnMenu: true,
     minWidth: 100,
     renderCell: (params) => (
       <span>₹{Number(params.row.aum || 0).toLocaleString()}</span>
@@ -8751,24 +8871,27 @@ export const RecommendationList: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     flex: 1,
+    disableColumnMenu: true,
     minWidth: 120,
     renderCell: (params) => (
       <span>₹{Number(params.row.investmentAmount || 0).toLocaleString()}</span>
     ),
   },
   {
-    field: "oneWeek",
-    headerName: "1W Returns",
+    field: selectedReturnPeriod, // 👈 dynamic field
+    headerName: "Returns",
     align: "center",
     headerAlign: "center",
     flex: 1,
+    disableColumnMenu: true,
     minWidth: 100,
     renderCell: (params) => {
-      const val = parseFloat(params.row.oneWeek);
+      const val = parseFloat(params.row[selectedReturnPeriod]);
       const isNegative = val < 0;
       return (
         <span style={{ color: isNegative ? "red" : "green" }}>
-          {val.toFixed(2)}%
+          {isNegative ? "-" : ""}
+          {Math.abs(val).toFixed(2)}%
         </span>
       );
     },
@@ -8792,6 +8915,16 @@ export const MutualFundOrderColumns: GridColDef[] = [
         <div style={{ fontWeight: 500 }}>{params.row.schemeName}</div>
       </div>
     ),
+  },
+  {
+    field: "transType",
+    headerName: "Transaction Type",
+    disableColumnMenu: true,
+    flex: 0.7,
+    minWidth: 60,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "successFlag",
@@ -9064,10 +9197,10 @@ export const ClientMandateReport: GridColDef[] = [
   },
 ];
 
-export const AmcMembershipHeader: GridColDef[] = [
+export const AmcLifeMembership: GridColDef[] = [
   {
     field: "trading_Code",
-    headerName: "Trading Code",
+    headerName: "Client Code",
     flex: 1,
     minWidth: 100,
     disableColumnMenu: true,
@@ -9099,7 +9232,7 @@ export const AmcMembershipHeader: GridColDef[] = [
     minWidth: 120,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "right",
+    align: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
@@ -9112,7 +9245,6 @@ export const AmcMembershipHeader: GridColDef[] = [
         }
       );
 
-      // Return tooltip with the masked mobile number
       return (
         <Tooltip title={mobile} arrow placement="top">
           <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
@@ -9121,8 +9253,54 @@ export const AmcMembershipHeader: GridColDef[] = [
     },
   },
   {
-    field: "secondary_Holder_Name", // must match JSON key exactly
-    headerName: "Secondary Holder Name",
+    field: "status",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "branchType",
+    headerName: "Branch Type",
+    flex: 1,
+    minWidth: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "dealerName",
+    headerName: "Dealer Name",
+    flex: 1,
+    minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => {
+      return params || "-";
+    },
+  },
+
+  {
+    field: "rmname",
+    headerName: "RM Name",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "secondary_Holder_Name",
+    headerName: "Second Holder Name",
     flex: 1,
     minWidth: 180,
     disableColumnMenu: true,
@@ -9166,12 +9344,537 @@ export const AmcMembershipHeader: GridColDef[] = [
   },
   {
     field: "module_Description",
-    headerName: "Module Description",
+    headerName: "Scheme Name",
     flex: 1,
     minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
     headerClassName: "header-wrap-custom",
+  },
+  // {
+  //   field: "module_Modified_date",
+  //   headerName: "Module Modified Date",
+  //   flex: 1,
+  //   minWidth: 150,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   valueGetter: (params: any) => {
+  //     const rawDate = params;
+  //     if (!rawDate) return null; // Handle missing data
+
+  //     const parsedDate = new Date(
+  //       rawDate.replace(
+  //         /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+  //         (match: any, day: any, month: any, year: any) => {
+  //           const monthMap: any = {
+  //             Jan: "01",
+  //             Feb: "02",
+  //             Mar: "03",
+  //             Apr: "04",
+  //             May: "05",
+  //             Jun: "06",
+  //             Jul: "07",
+  //             Aug: "08",
+  //             Sep: "09",
+  //             Oct: "10",
+  //             Nov: "11",
+  //             Dec: "12",
+  //           };
+  //           console.log(match);
+  //           return `20${year}-${monthMap[month]}-${day}`;
+  //         }
+  //       )
+  //     );
+
+  //     return parsedDate;
+  //   },
+  //   sortComparator: (v1: any, v2: any) => {
+  //     if (!v1 || !v2) return 0; // Handle missing values
+  //     return v1 - v2; // Sort in ascending order
+  //   },
+  //   valueFormatter: (params: any) => {
+  //     if (!params) return "";
+  //     return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+  //   },
+  // },
+];
+export const AmcNonLifeMembership: GridColDef[] = [
+  {
+    field: "schemeStatus",
+    headerName: "Activate",
+    flex: 1,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  ...AmcLifeMembership,
+];
+
+export const AmcContest: GridColDef[] = [
+  {
+    field: "trading_Code",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "dp_Id",
+    headerName: "BOID",
+    flex: 1,
+    minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "primary_Holder",
+    headerName: "Primary Holder Name",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "primaryHolder_phn",
+    headerName: "Mobile No.",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      const mobile = params.value || "";
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "branchType",
+    headerName: "Branch Type",
+    flex: 1,
+    minWidth: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "dealerName",
+    headerName: "Dealer Name",
+    flex: 1,
+    minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => {
+      return params || "-";
+    },
+  },
+
+  {
+    field: "rmname",
+    headerName: "RM Name",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "secondary_Holder_Name",
+    headerName: "Secondary Holder Name",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "third_Holder_Name",
+    headerName: "Third Holder Name",
+    flex: 1,
+    minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "branch_code",
+    headerName: "Branch Code",
+    flex: 1,
+    minWidth: 80,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 1,
+    minWidth: 80,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  // {
+  //   field: "bal_Amount",
+  //   headerName: "Balance Amount",
+  //   flex: 1,
+  //   minWidth: 120,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "right",
+  //   headerClassName: "header-wrap-custom",
+  //   valueFormatter: (params: any) => {
+  //     const value = parseFloat(params); // Convert the value to a number
+  //     return new Intl.NumberFormat("en-IN", {
+  //       minimumFractionDigits: 2,
+  //       maximumFractionDigits: 2,
+  //     }).format(value);
+  //   },
+  // },
+
+  // {
+  //   field: "module_No",
+  //   headerName: "Module No",
+  //   flex: 1,
+  //   minWidth: 80,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   align: "center",
+  // },
+  // {
+  //   field: "module_Description",
+  //   headerName: "Scheme",
+  //   flex: 1,
+  //   minWidth: 160,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   headerClassName: "header-wrap-custom",
+  // },
+  {
+    field: "module_Narr",
+    headerName: "Scheme Name",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "schemeStatus",
+    headerName: "Scheme Status ",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+];
+
+export const AmcLedgerReport: GridColDef[] = [
+  {
+    field: "tradingCode",
+    headerName: "Trading Code",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "boid",
+    headerName: "BO ID",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1.5,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "paymentAmount",
+    headerName: "Payment Amount (₹)",
+    type: "number",
+    align: "center",
+    headerAlign: "center",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "createdDate",
+    headerName: "Created Date",
+    flex: 1.2,
+    minWidth: 160,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    valueGetter: (params: any) => {
+      const rawDate = params;
+      if (!rawDate) return null; // Handle missing data
+
+      const parsedDate = new Date(
+        rawDate.replace(
+          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+          (match: any, day: any, month: any, year: any) => {
+            const monthMap: any = {
+              Jan: "01",
+              Feb: "02",
+              Mar: "03",
+              Apr: "04",
+              May: "05",
+              Jun: "06",
+              Jul: "07",
+              Aug: "08",
+              Sep: "09",
+              Oct: "10",
+              Nov: "11",
+              Dec: "12",
+            };
+            console.log(match);
+            return `20${year}-${monthMap[month]}-${day}`;
+          }
+        )
+      );
+
+      return parsedDate;
+    },
+    sortComparator: (v1: any, v2: any) => {
+      if (!v1 || !v2) return 0; // Handle missing values
+      return v1 - v2; // Sort in ascending order
+    },
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+  },
+];
+
+export const clientMISColumns: GridColDef[] = [
+  {
+    field: "zoneCode",
+    headerName: "Zone Code",
+    headerClassName: "header-wrap-custom",
+    minWidth: 70,
+    flex: 0.6,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    headerClassName: "header-wrap-custom",
+    minWidth: 90,
+    flex: 0.6,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "raCode",
+    headerName: "RA Code",
+    minWidth: 85,
+    flex: 0.5,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 220,
+    flex: 1,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "partnerName",
+    headerName: "Partner Name",
+    minWidth: 220,
+    flex: 1,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "partnerCode",
+    headerName: "Partner Code",
+    headerClassName: "header-wrap-custom",
+    minWidth: 70,
+    flex: 0.6,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "totalSPIPIRevenue",
+    headerName: "Total SPIP Revenue",
+    headerClassName: "header-wrap-custom",
+    minWidth: 100,
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "partnerShare",
+    headerName: "Partner Share",
+    headerClassName: "header-wrap-custom",
+    minWidth: 80,
+    flex: 0.8,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "lkpShare",
+    headerName: "LKP Share",
+    headerClassName: "header-wrap-custom",
+    minWidth: 90,
+    flex: 0.8,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "totalBrokRevenue",
+    headerName: "Total Brokerage Revenue",
+    headerClassName: "header-wrap-custom",
+    minWidth: 100,
+    flex: 1.2,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "partnerbrokShare",
+    headerName: "Partner Brok. Share",
+    headerClassName: "header-wrap-custom",
+    minWidth: 80,
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "lkpbroshare",
+    headerName: "LKP Brok. Share",
+    headerClassName: "header-wrap-custom",
+    minWidth: 80,
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "email",
+    headerName: "Email ID",
+    minWidth: 200,
+    flex: 1.2,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "cmobileno",
+    headerName: "Mobile No",
+    minWidth: 140,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "rmName",
+    headerName: "RM Name",
+    minWidth: 160,
+    flex: 1,
+    align: "left",
+    headerAlign: "center",
   },
 ];

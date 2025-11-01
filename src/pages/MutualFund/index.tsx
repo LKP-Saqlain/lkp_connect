@@ -100,7 +100,7 @@ const MutualFundIndex = () => {
         }
         // localStorage.setItem("mfToken", res?.data?.data);
         setEncryptedValue("mfToken", res?.data?.data);
-        // ✅ Close modal only on success
+        //  Close modal only on success
         setShowClientCodeModal(false);
         setSelectedMutualFund("");
       }
@@ -127,6 +127,11 @@ const MutualFundIndex = () => {
       return () => clearTimeout(timer);
     }
   }, [autoReopen]);
+
+  const handleSetOrderTab = () => {
+    const orderIndex = mainMenu.findIndex((m) => m.label === "Order");
+    setActiveTab(orderIndex);
+  };
 
   return (
     <div className="page-content page-view">
@@ -276,12 +281,14 @@ const MutualFundIndex = () => {
             schemeCode={selectedMutualFund}
             onBack={handleBack}
             hasToken={hasToken}
+            onOrderSuccess={handleSetOrderTab}
           />
         ) : (
           mainMenu[activeTab]?.content({
             onSelectFund: setSelectedMutualFund,
             clientCode,
             hasToken,
+            // onOrderSuccess: handleSetOrderTab,
           })
         )}
       </Container>

@@ -1,6 +1,7 @@
 import {
   Button,
   Col,
+  Input,
   Label,
   Modal,
   ModalBody,
@@ -142,6 +143,12 @@ const ModalComponent = ({
   const fileInputRefDocument = useRef<HTMLInputElement>(null);
   const [setShowImg, setSetShowImg] = useState<boolean>(false);
   const [modal_center, setModalCenter] = useState(false);
+  const [selectedFileB64, setSelectedFileB64] = useState<string | null>(null);
+
+  // const [selectedDealSheetFileB64, setSelectedDealSheetFileB64] = useState<
+  //   string | null
+  // >(null);
+  const [selectedFileObj, setSelectedFileObj] = useState<File | null>(null);
 
   const allowedFormats = [
     "doc",
@@ -509,6 +516,24 @@ const ModalComponent = ({
     },
   });
 
+  useEffect(() => {
+    if (editData?.dealSheetB64) {
+      const base64Data = editData.dealSheetB64;
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length)
+        .fill(null)
+        .map((_, i) => byteCharacters.charCodeAt(i));
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: "application/pdf" });
+
+      const fileName = `Deal_Sheet_${dayjs().format("YYYY-MM-DD")}.pdf`;
+      const file = new File([blob], fileName, { type: "application/pdf" });
+
+      setSelectedFileObj(file);
+      setSelectedFileB64(`data:application/pdf;base64,${base64Data}`);
+    }
+  }, [editData]);
+
   const fetchVendorMastertContent = async (setTouched: any, values: any) => {
     console.log("fetchVendorMasterValues", setTouched, values);
 
@@ -545,6 +570,15 @@ const ModalComponent = ({
     formik.resetForm();
   };
 
+  const convertFileToBase64WithPrefix = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file); // Keeps full "data:application/pdf;base64,..." prefix
+      reader.onload = () => resolve(reader.result?.toString() || "");
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
   const fetchUnlistedContent = async (setTouched: any, values: any) => {
     console.log("unlistedValuess", values);
 
@@ -557,7 +591,14 @@ const ModalComponent = ({
       sbCode: true,
       sbRate: true,
     });
-    onSubmit?.(values);
+
+    if (!selectedFileB64 || selectedFileB64.trim() === "") {
+      ShowToast("error", "Please upload a PDF document before submitting.");
+      return; // stop execution
+    }
+
+    onSubmit?.(values, selectedFileB64);
+
     formik.resetForm();
   };
   const fetchSubmissionValues = (values: any) => {
@@ -1322,7 +1363,41 @@ const ModalComponent = ({
           dispatch(hideLoader());
         });
     }
-  }, [editUserCheck, editData, activeSubItem, dispatch]);
+  }, [editUserCheck, editData, dispatch, activeSubItem]);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileInput = e.target;
+    const file = fileInput.files?.[0];
+    if (!file) return;
+
+    const fileExtension = file.name.split(".").pop()?.toLowerCase();
+    const mimeType = file.type;
+
+    if (fileExtension !== "pdf" || mimeType !== "application/pdf") {
+      ShowToast("error", "Please upload PDF file only.");
+      fileInput.value = "";
+      setSelectedFileB64(null);
+      setSelectedFileObj(null);
+      return;
+    }
+
+    try {
+      const base64 = await convertFileToBase64WithPrefix(file);
+      setSelectedFileB64(base64);
+      setSelectedFileObj(file);
+    } catch (error) {
+      console.error("File conversion error:", error);
+      ShowToast("error", "Failed to process the PDF file.");
+      fileInput.value = "";
+      setSelectedFileB64(null);
+      setSelectedFileObj(null);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setSelectedFileObj(null);
+    setSelectedFileB64(null);
+  };
 
   return (
     <Modal
@@ -2070,6 +2145,62 @@ const ModalComponent = ({
                       formik.touched.netBrokerage && formik.errors.netBrokerage
                     }
                   />
+                </Col>
+                <Col lg={12}>
+                  <Label
+                    htmlFor="dealSheet"
+                    style={{ fontSize: "10px" }}
+                    className="form-label"
+                  >
+                    Upload Document
+                  </Label>
+
+                  {/* ✅ Show file input only when no file exists */}
+                  {!selectedFileObj ? (
+                    <Input
+                      name="uploadProof"
+                      type="file"
+                      accept=".pdf"
+                      className="form-control mb-3"
+                      onChange={handleFileChange}
+                      style={{
+                        width: "100%",
+                        minHeight: "40px",
+                        borderColor: "#C4C4C4",
+                      }}
+                    />
+                  ) : (
+                    // ✅ Show filename + cross icon
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        background: "#f9f9f9",
+                        padding: "8px 12px",
+                        borderRadius: "6px",
+                        border: "1px solid #dcdcdc",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "12px",
+                          color: "#555",
+                          fontStyle: "italic",
+                          wordBreak: "break-all",
+                        }}
+                      >
+                        📄 {selectedFileObj.name}
+                      </span>
+
+                      <CloseIcon
+                        // color="#ff4d4f"
+                        style={{ cursor: "pointer" }}
+                        onClick={handleRemoveFile}
+                        fontSize="small"
+                      />
+                    </div>
+                  )}
                 </Col>
               </>
             )}

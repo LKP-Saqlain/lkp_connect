@@ -28,9 +28,15 @@ const MandateCall = () => {
   // );
 
   const { encryptedCode } = useParams<{ encryptedCode: string }>();
-  const decryptCode = encryptedCode
-    ? decryptAES(decodeURIComponent(encryptedCode))
-    : "";
+
+  //  Normalize it once — decode URL and fix "+" issue
+  const normalizedCode = decodeURIComponent(encryptedCode || "").replace(
+    / /g,
+    "+"
+  );
+
+  // (Optional) Decrypt only if you need to display the client code locally
+  const decryptCode = normalizedCode ? decryptAES(normalizedCode) : "";
 
   useEffect(() => {
     if (!encryptedCode) return;
@@ -85,28 +91,48 @@ const MandateCall = () => {
   }, [decryptCode, dispatch]);
 
   const HandleVerifyUpi = () => {
-    let payload = {
+    const payload = {
       requestInfo: {
         pgMerchantId: "HDFC000010010275",
         pspRefNo: "",
       },
       payeeType: {
-        virtualAddress: "raj2025@hdfcbank",
+        virtualAddress: upiId,
       },
     };
+
     dispatch(showLoader(""));
+
     apiServices
       .checkUpi(JSON.stringify(payload))
       .then((response) => {
-        if (response?.status === 200) {
-          console.log("UPI Verified", response?.data);
-          setIsMandateEnabled(true); // enable mandate button
-          ShowToast("success", response?.data?.message);
+        console.log("UPI Verified", response?.data);
+
+        // Check inner statusCode from API response
+        if (response?.data?.statusCode === 400) {
+          ShowToast("error", response?.data?.message || "Invalid UPI ID");
+          setIsMandateEnabled(false);
+          dispatch(hideLoader());
+          return; // stop execution here
         }
+
+        // If success
+        if (response?.data?.isSuccess) {
+          ShowToast(
+            "success",
+            response?.data?.message || "UPI Verified Successfully"
+          );
+          setIsMandateEnabled(true);
+        } else {
+          ShowToast("error", response?.data?.message || "Something went wrong");
+          setIsMandateEnabled(false);
+        }
+
         dispatch(hideLoader());
       })
       .catch((error) => {
         console.log("error", error);
+        ShowToast("error", "Failed to verify UPI ID");
         setIsMandateEnabled(false);
         dispatch(hideLoader());
       });
@@ -119,7 +145,7 @@ const MandateCall = () => {
       dpCode: data?.dpcode,
       dpid: data?.dpid,
       amount: amount,
-      upiID: "raj2025@hdfcbank",
+      upiID: upiId,
     };
     dispatch(showLoader(""));
     apiServices

@@ -61,7 +61,11 @@ import {
   EmployeeTargetReportColumns,
   dpDebitMandateColumns,
   ClientMandateReport,
-  AmcMembershipHeader,
+  AmcLifeMembership,
+  AmcNonLifeMembership,
+  AmcContest,
+  AmcLedgerReport,
+  clientMISColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -69,7 +73,7 @@ import "../../pages/ClientDetails/style.css";
 import EmailIcon from "@mui/icons-material/Email";
 import CustomModal from "./DPModal";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-// import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import CancelIcon from "@mui/icons-material/Cancel";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import Tooltip from "@mui/material/Tooltip";
@@ -80,6 +84,7 @@ import { RootState } from "../../redux/store.ts";
 import { useSelector } from "react-redux";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+// import { useNavigate } from "react-router-dom";
 
 interface Trade {
   id: string;
@@ -146,6 +151,7 @@ interface SelectedWidgetProps {
   setSegmentRow?: any;
   setIsBankVerified?: any;
   handleUpdate?: (data: any) => void;
+  onViewAmcDetails?: (row: any) => void;
 }
 
 const DataTable = ({
@@ -194,9 +200,10 @@ const DataTable = ({
   isBankVerified,
   setIsBankVerified,
   handleUpdate,
-}: // setIsNudgeTableOpen,
-// setSegmentRow,
-SelectedWidgetProps) => {
+  setIsNudgeTableOpen,
+  setSegmentRow,
+  onViewAmcDetails,
+}: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
   const [modal_center, setmodal_center] = useState<boolean>(false);
@@ -211,7 +218,7 @@ SelectedWidgetProps) => {
   >([]);
 
   const [showSearchCustom, setShowSearchCustom] = useState(showSearch);
-
+  // const navigate = useNavigate();
   const { user_type } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data || {}
   );
@@ -533,91 +540,18 @@ SelectedWidgetProps) => {
         ...column,
       }));
     } else if (activeSubItem === "KYC Approval") {
-      return BrokerageKyc.map((column) => {
-        if (column.field === "remark") {
-          return {
-            ...column,
-            renderCell: (params: any) => (
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <div
-                  onClick={() => {
-                    setSelectedRow(params.row);
-                    HandleApprovalModal("approve");
-                    // HandleApprovalModal("approve", params);
-                    console.log(params.row.rowId, "selectedrow approve");
-                  }}
-                  style={{
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    marginRight: 5,
-                  }}
-                >
-                  <Tooltip title="Approve" arrow placement="top">
-                    <CheckCircleIcon
-                      style={{ color: "green", marginLeft: 4 }}
-                    />
-                  </Tooltip>
-                </div>
-                <div style={{ fontSize: 20, color: "gray" }}>|</div>
-                <div
-                  onClick={() => {
-                    setSelectedRow(params.row);
-                    HandleApprovalModal("reject");
-                  }}
-                  style={{
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    marginLeft: 5,
-                  }}
-                >
-                  <Tooltip title="Reject" arrow placement="top">
-                    <CancelIcon style={{ color: "red", marginLeft: 4 }} />
-                  </Tooltip>
-                </div>
-              </div>
-            ),
-          };
-        }
-        if (column.field === "consentfilename") {
-          return {
-            ...column,
-            renderCell: (params: any) => {
-              const fileName = params.row?.consentfilename;
-
-              return fileName ? (
-                <button
-                  onClick={() => handleDownload(params.row)}
-                  style={{
-                    color: "#11395C",
-                    textDecoration: "underline",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  <DownloadForOfflineIcon />
-                </button>
-              ) : (
-                "╶─"
-              );
-            },
-          };
-        }
-        return column;
-      });
       // return BrokerageKyc.map((column) => {
-      //   if (column.field === "More Details") {
+      //   if (column.field === "remark") {
       //     return {
       //       ...column,
       //       renderCell: (params: any) => (
       //         <div style={{ display: "flex", justifyContent: "center" }}>
       //           <div
       //             onClick={() => {
-      //               setSegmentRow(params.row);
-      //               setIsNudgeTableOpen(true);
-      //               console.log(params.row, "selectedrow More Details");
+      //               setSelectedRow(params.row);
+      //               HandleApprovalModal("approve");
+      //               // HandleApprovalModal("approve", params);
+      //               console.log(params.row.rowId, "selectedrow approve");
       //             }}
       //             style={{
       //               cursor: "pointer",
@@ -626,17 +560,94 @@ SelectedWidgetProps) => {
       //               marginRight: 5,
       //             }}
       //           >
-      //             <Tooltip title="More details" arrow placement="top">
-      //               <ControlPointIcon />
+      //             <Tooltip title="Approve" arrow placement="top">
+      //               <CheckCircleIcon
+      //                 style={{ color: "green", marginLeft: 4 }}
+      //               />
+      //             </Tooltip>
+      //           </div>
+      //           <div style={{ fontSize: 20, color: "gray" }}>|</div>
+      //           <div
+      //             onClick={() => {
+      //               setSelectedRow(params.row);
+      //               HandleApprovalModal("reject");
+      //             }}
+      //             style={{
+      //               cursor: "pointer",
+      //               display: "flex",
+      //               alignItems: "center",
+      //               marginLeft: 5,
+      //             }}
+      //           >
+      //             <Tooltip title="Reject" arrow placement="top">
+      //               <CancelIcon style={{ color: "red", marginLeft: 4 }} />
       //             </Tooltip>
       //           </div>
       //         </div>
       //       ),
       //     };
       //   }
+      //   if (column.field === "consentfilename") {
+      //     return {
+      //       ...column,
+      //       renderCell: (params: any) => {
+      //         const fileName = params.row?.consentfilename;
 
+      //         return fileName ? (
+      //           <button
+      //             onClick={() => handleDownload(params.row)}
+      //             style={{
+      //               color: "#11395C",
+      //               textDecoration: "underline",
+      //               background: "none",
+      //               border: "none",
+      //               cursor: "pointer",
+      //             }}
+      //           >
+      //             <DownloadForOfflineIcon />
+      //           </button>
+      //         ) : (
+      //           "╶─"
+      //         );
+      //       },
+      //     };
+      //   }
       //   return column;
       // });
+      return BrokerageKyc.map((column) => {
+        if (column.field === "More Details") {
+          return {
+            ...column,
+            renderCell: (params: any) => (
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <div
+                  onClick={() => {
+                    setSegmentRow(params.row);
+                    setIsNudgeTableOpen(true);
+                    console.log(
+                      params.row,
+                      "selectedrow More Details",
+                      setSegmentRow
+                    );
+                  }}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: 5,
+                  }}
+                >
+                  <Tooltip title="More details" arrow placement="top">
+                    <ControlPointIcon />
+                  </Tooltip>
+                </div>
+              </div>
+            ),
+          };
+        }
+
+        return column;
+      });
     } else if (activeSubItem === "Terminal") {
       return terminalcol.map((column) => ({
         ...column,
@@ -1528,10 +1539,89 @@ SelectedWidgetProps) => {
       return EmpBrokerageAchieved.map((column) => ({
         ...column,
       }));
-    } else if (activeMenu === "DP AMC Contest") {
-      return AmcMembershipHeader.map((column) => ({
+    } else if (selectedWidget === "Lifetime Membership") {
+      return AmcLifeMembership.map((column) => ({
         ...column,
       }));
+    } else if (selectedWidget === "Contest Earned") {
+      return AmcContest.map((column) => ({
+        ...column,
+      }));
+    } else if (selectedWidget === "Non-Lifetime Membership") {
+      return AmcNonLifeMembership.map((column) => {
+        if (column.field === "schemeStatus") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const status = params?.row?.schemeStatus;
+
+              return (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      marginRight: 5,
+                    }}
+                  >
+                    {status === "Submitted" ? (
+                      // 🚫 Not clickable
+                      <span
+                        style={{
+                          color: "#003366",
+                          fontWeight: 600,
+                          cursor: "default",
+                        }}
+                      >
+                        {status}
+                      </span>
+                    ) : status === "eSign Pending" ? (
+                      // ✅ Clickable eSign Pending
+                      <Tooltip title="eSign Pending" arrow placement="top">
+                        <span
+                          onClick={() => {
+                            console.log(
+                              "Clicked eSign Pending row:",
+                              params.row
+                            );
+                            if (onViewAmcDetails) onViewAmcDetails(params.row);
+                          }}
+                          style={{
+                            cursor: "pointer",
+                            color: "#11395C",
+                            textDecoration: "underline",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {status}
+                        </span>
+                      </Tooltip>
+                    ) : (
+                      // Default: show OpenInNew icon for other statuses
+                      <Tooltip
+                        title="Lifetime AMC scheme"
+                        arrow
+                        placement="top"
+                      >
+                        <OpenInNewIcon
+                          style={{ cursor: "pointer", color: "#11395C" }}
+                          onClick={() => {
+                            console.log("Clicked row:", params.row);
+                            if (onViewAmcDetails) onViewAmcDetails(params.row);
+                          }}
+                        />
+                      </Tooltip>
+                    )}
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+
+        return column;
+      });
     } else if (activeMenu === "Employee Non-Brokerage Achieved") {
       return EmpNonBrokerageAchieved.map((column) => ({
         ...column,
@@ -1583,6 +1673,10 @@ SelectedWidgetProps) => {
       });
     } else if (activeSubItem === "RHDashboardTop10Clients") {
       return RHTopClientsColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "DP AMC Ledger Debit") {
+      return AmcLedgerReport.map((column) => ({
         ...column,
       }));
     } else if (activeSubItem === "Third Party Vendor Master") {
@@ -1713,18 +1807,23 @@ SelectedWidgetProps) => {
             ...column,
             renderCell: (params: any) => {
               const isDeleted = params.row.isDeleted;
+              const isApproved = params.row.accApproval === "A";
+
+              // ✅ If approved, hide the entire actions (no edit/delete)
+              if (isApproved) {
+                return <span style={{ color: "gray" }}>--</span>;
+              }
 
               const handleEdit = () => {
                 setSelectedRow(params.row);
                 handleEditClick?.(params.row, true);
-                // You can open edit modal or set state for edit form here
               };
 
               const handleDelete = () => {
                 setAction("delete");
-                handleDeleteEntry?.(params.row); // Pass row to delete handler
-                setSelectedRow(params.row); // Store row for confirmation
-                tog_center(); // Open delete confirmation modal
+                handleDeleteEntry?.(params.row);
+                setSelectedRow(params.row);
+                tog_center();
               };
 
               return (
@@ -1775,6 +1874,7 @@ SelectedWidgetProps) => {
             },
           };
         }
+
         return column;
       });
     } else if (activeSubItem === "Vendor Approval") {
@@ -1785,51 +1885,76 @@ SelectedWidgetProps) => {
         if (column.field === "actions") {
           return {
             ...column,
-            renderCell: (params: any) => (
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <div
-                  onClick={() => {
-                    console.log("rowTest", params.row);
-                    setSelectedRow(params.row);
-                    // HandleApprovalModal("approve", params);
-                    HandleApprovalModal("approve");
-                    console.log(params.row.vendorId, "selectedrow approve");
-                  }}
-                  style={{
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    marginRight: 5,
-                  }}
-                >
-                  <Tooltip title="Approve" arrow placement="top">
-                    <CheckCircleIcon
-                      style={{ color: "green", marginLeft: 4 }}
-                    />
-                  </Tooltip>
+            renderCell: (params: any) => {
+              // ✅ Check condition
+              if (params.row.accApproval === "A") {
+                // Already approved — no actions
+                return <span style={{ color: "gray" }}>--</span>;
+              }
+
+              // ✅ Show Approve / Reject only if not approved
+              return (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <div
+                    onClick={() => {
+                      console.log("rowTest", params.row);
+                      setSelectedRow(params.row);
+                      HandleApprovalModal("approve");
+                      console.log(params.row.vendorId, "selectedrow approve");
+                    }}
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      marginRight: 5,
+                    }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon
+                        style={{ color: "green", marginLeft: 4 }}
+                      />
+                    </Tooltip>
+                  </div>
+
+                  <div style={{ fontSize: 20, color: "gray" }}>|</div>
+
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      marginLeft: 5,
+                    }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red", marginLeft: 4 }} />
+                    </Tooltip>
+                  </div>
                 </div>
-                <div style={{ fontSize: 20, color: "gray" }}>|</div>
-                <div
-                  onClick={() => {
-                    setSelectedRow(params.row);
-                    HandleApprovalModal("reject");
-                    // HandleApprovalModal("reject", params);
-                  }}
-                  style={{
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    marginLeft: 5,
-                  }}
-                >
-                  <Tooltip title="Reject" arrow placement="top">
-                    <CancelIcon style={{ color: "red", marginLeft: 4 }} />
-                  </Tooltip>
-                </div>
-              </div>
-            ),
+              );
+            },
           };
         }
+        if (column.field === "accRemark") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              if (params.row.accApproval === "A" || "R") {
+                return (
+                  <span style={{ color: "#11395C", fontWeight: 500 }}>
+                    {params.row.accRemark || "--"}
+                  </span>
+                );
+              }
+              return <span>--</span>;
+            },
+          };
+        }
+
         if (column.field === "tdsPath") {
           return {
             ...column,
@@ -2165,6 +2290,10 @@ SelectedWidgetProps) => {
       });
     } else if (activeSubItem === "Dp Debit Collection") {
       return ClientMandateReport.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "SPIP Client MIS") {
+      return clientMISColumns.map((column) => ({
         ...column,
       }));
     } else {

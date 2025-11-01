@@ -88,7 +88,7 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
               })
             ) || [];
 
-          const r1 = res?.data?.data?.dataBucket?.r1?.[0] || null; // ✅ take first r1 record
+          const r1 = res?.data?.data?.dataBucket?.r1?.[0] || null; //  take first r1 record
           setPortfolioSummary(r1);
           setPortfolioData(records);
         }
@@ -213,10 +213,10 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
       schemeCd: bseSchemeCode,
       buySell: "R",
       buySellType: "FRESH",
-      orderVal: "",
+      orderVal: "0",
       qty: redeemUnits.toLocaleString(),
       allRedeem: "N",
-      folioNo: "",
+      folioNo: selectedRow.folioNumber,
       remarks: "test",
       dpc: "Y",
       euinVal: "Y",
@@ -272,7 +272,7 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
   };
 
   const handleRedeemUnitsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!selectedRow) return; // ✅ Guard clause
+    if (!selectedRow) return; //  Guard clause
     let value = e.target.value;
 
     // Ensure only numeric values (allow decimals if needed)
