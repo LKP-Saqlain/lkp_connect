@@ -22,6 +22,7 @@ import StackedBarChartIcon from "@mui/icons-material/StackedBarChart";
 import BallotIcon from "@mui/icons-material/Ballot";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import List from "@mui/material/List";
 import { MenuItems } from "../../types/index";
 import StoreIcon from "@mui/icons-material/Store";
@@ -114,6 +115,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "SPIP Dashboard": <SpaceDashboardIcon />,
     "Client Request": <PublishedWithChangesIcon />,
     "Mutual Fund": <AttachMoneyIcon />,
+    "DP AMC Contest": <AssignmentTurnedInIcon />,
   };
 
   const getIcon = (title: string) => {
@@ -209,7 +211,8 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           title === "Client Request" ||
           title === "Back Office Report" ||
           title === "Mutual Fund" ||
-          title === "Partner Contest") && (
+          title === "Partner Contest" ||
+          title === "DP AMC Contest") && (
           <div className="starburst-bg">
             <Lottie
               loop
