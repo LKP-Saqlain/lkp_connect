@@ -103,7 +103,7 @@ import MandatePayment from "../../pages/ThirdParty/Mandate";
 import AmcMembership from "../../pages/AmcMembership";
 import LedgerDebitReport from "../../pages/AmcMembership/LedgerReport";
 // import VendorReport from "../../pages/ThirdParty/VendorReport";
-// import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
+import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
 
 const drawerWidth = 260;
 
@@ -742,8 +742,7 @@ const SideBar = () => {
   const rmsSubItems: Record<string, JSX.Element> = {
     "Upload SLBM Holding": <SLBMHoldings />,
     "Pledge Holdings Adjustment": (
-      // <RMSPledgeHolding activeSubItem={activeSubItem} />
-      <></>
+      <RMSPledgeHolding activeSubItem={activeSubItem} />
     ),
     "MTF File Merge": <MtfComponent activeSubItem={activeSubItem} />,
   };
