@@ -15,6 +15,7 @@ import { apiServices } from "../../../services";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
+import UserInfoTable from "../../../components/common/UserInfoTable";
 
 const VendorReport = ({ activeSubItem }: any) => {
   const [startDate, setStartDate] = useState<string | null>(null);
@@ -23,6 +24,7 @@ const VendorReport = ({ activeSubItem }: any) => {
   const [selectedDateRange, setSelectedDateRange] = useState<
     [Date | null, Date | null]
   >([null, null]);
+  const [vendorRows, setVendorRows] = useState<any[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -45,9 +47,94 @@ const VendorReport = ({ activeSubItem }: any) => {
         endDate,
         formattedDateRange,
       });
-      //   fetchReport(values);
+      fetchReport();
     },
   });
+
+  useEffect(() => {
+    console.log("dataaaass", startDate, endDate, formik.values.vendorName);
+  }, [formik, startDate, endDate]);
+
+  const fetchReport = () => {
+    let payload = {
+      vendorName: formik.values.vendorName || "ALL",
+      startdate: startDate, // "2025-10-30"
+      enddate: endDate, //"2025-10-30"
+    };
+
+    dispatch(showLoader(""));
+    apiServices
+      .ViewVendorDetailsReport(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+
+        if (response?.status === 200) {
+          const data = response?.data?.data[0];
+
+          if (data) {
+            const formattedRow = {
+              id: data.vendorId,
+              vendorId: data.vendorId,
+              vendorName: data.vendorName,
+              address1: data.address1,
+              address2: data.address2,
+              address3: data.address3,
+              city: data.city,
+              state: data.state,
+              pincode: data.pincode,
+              mobileNo: data.mobileNo,
+              teleNo: data.teleNo,
+              emailID: data.emailID,
+              websiteName: data.websiteName,
+              panNo: data.panNo,
+              panDoc: data.panDoc,
+              bankName: data.bankName,
+              bankActNo: data.bankActNo,
+              ifscCode: data.ifscCode,
+              bankDoc: data.bankDoc, // base64
+              chqPrintNameFlag: data.chqPrintNameFlag,
+              chqPrintLocFlag: data.chqPrintLocFlag,
+              chqPrintLocCode: data.chqPrintLocCode,
+              chqPrintName: data.chqPrintName,
+              createdBy: data.createdBy,
+              createdDate: formatDate(data.createdDate),
+              faxNo: data.faxNo,
+              paymentBank: data.paymentBank,
+              gstNo: data.gstNo,
+              tdsFlag: data.tdsFlag,
+              tdsPath: data.tdsPath, // base64
+              msmeFlag: data.msmeFlag,
+              msmeType: data.msmeType,
+              msmePath: data.msmePath, // base64
+              bankDocExtn: data.bankDocExtn,
+              tdsExtn: data.tdsExtn,
+              msmseExtn: data.msmseExtn,
+              accApproval: data.accApproval,
+              accRemark: data.accRemark,
+            };
+
+            setVendorRows([formattedRow]); // store entire record
+            console.log("Formatted Vendor Data:", formattedRow);
+          }
+        }
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        console.error("Error fetching vendor report:", error);
+      });
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date
+      .toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+      .replace(/ /g, "-");
+  };
 
   const onDateRangeChange = (value: [Date | null, Date | null] | null) => {
     if (
@@ -102,26 +189,6 @@ const VendorReport = ({ activeSubItem }: any) => {
       setFormattedDateRange("");
     }
   };
-
-  useEffect(() => {
-    let payload = {
-      vendorName: "Darshana",
-      startdate: "2025-10-30",
-      enddate: "2025-10-30",
-    };
-    dispatch(showLoader(""));
-    apiServices
-      .ViewVendorDetailsReport(payload)
-      .then((response) => {
-        if (response?.status === 200) {
-          dispatch(hideLoader());
-          console.log("responsesee", response?.data);
-        }
-      })
-      .catch((error) => {
-        console.log("Error ", error);
-      });
-  }, [dispatch]);
 
   return (
     <div className="page-content page-view">
@@ -249,12 +316,10 @@ const VendorReport = ({ activeSubItem }: any) => {
               }}
             >
               <CardBody>
-                {/* <DataTable
-                activeSubItem={activeSubItem}
-                T6Data={report}
-                // handleApproval={handleApproval}
-                // handleDownload={handlePreview}
-              /> */}
+                <UserInfoTable
+                  activeSubItem={activeSubItem}
+                  T6Data={vendorRows}
+                />
               </CardBody>
             </Card>
           </Col>

@@ -68,6 +68,7 @@ interface CustomModalProps {
   handleVerifyDetails?: (accNo: any, ifscCode: any) => void;
   isBankVerified?: any;
   setIsBankVerified?: any;
+  beneficiaryName?: any;
 }
 
 const CustomModal = ({
@@ -94,6 +95,7 @@ const CustomModal = ({
   handleVerifyDetails,
   isBankVerified,
   setIsBankVerified,
+  beneficiaryName,
 }: CustomModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -514,26 +516,57 @@ const CustomModal = ({
         name="accNo"
         sx={{ mt: 2 }}
       />
-      <Button
-        style={{
-          position: "relative",
-          right: isBankVerified ? -200 : -170, //-170
-          fontSize: "10px",
-          minWidth: "37px",
-          padding: "1px 10px",
-          // lineHeight: 1.2,
-          borderRadius: "6px",
-          marginTop: "10px",
-          color: "#fff",
-          backgroundColor: "#11395C",
-          borderColor: "#11395C",
-          cursor: isBankVerified ? "not-allowed" : "pointer",
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between", // ensures opposite sides
+          mt: 1.5,
+          width: "100%",
         }}
-        disabled={isBankVerified}
-        onClick={handleVerifyBank}
       >
-        {isBankVerified ? "Verified!" : " Verify Bank Account?"}
-      </Button>
+        {isBankVerified ? (
+          <Typography
+            variant="body2"
+            sx={{
+              fontWeight: 600,
+              color: "#11395C",
+              fontSize: "12px",
+              flex: 1,
+              textAlign: "left",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            Beneficiary Name:{" "}
+            <span style={{ color: "#2e7d32", fontFamily: "Public Sans" }}>
+              {beneficiaryName}
+            </span>
+          </Typography>
+        ) : (
+          <Box sx={{ flex: 1 }} /> // keeps spacing consistent when hidden
+        )}
+
+        <Button
+          style={{
+            fontSize: "10px",
+            minWidth: "37px",
+            padding: "5px 12px",
+            borderRadius: "6px",
+            // marginTop: "px",
+            color: "#fff",
+            backgroundColor: "#11395C",
+            borderColor: "#11395C",
+            cursor: isBankVerified ? "not-allowed" : "pointer",
+          }}
+          disabled={isBankVerified}
+          onClick={handleVerifyBank}
+        >
+          {isBankVerified ? "Verified!" : "Verify Bank Account?"}
+        </Button>
+      </Box>
+
       {/* TDS Flag Section */}
       <FormControl sx={{ width: "100%", mt: 2 }}>
         <FormLabel

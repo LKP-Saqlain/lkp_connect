@@ -66,6 +66,9 @@ import {
   AmcContest,
   AmcLedgerReport,
   clientMISColumns,
+  shortfallColumns,
+  ageingColumns,
+  vendorApprovalColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -150,6 +153,7 @@ interface SelectedWidgetProps {
   setIsNudgeTableOpen?: any;
   setSegmentRow?: any;
   setIsBankVerified?: any;
+  beneficiaryName?: any;
   handleUpdate?: (data: any) => void;
   onViewAmcDetails?: (row: any) => void;
 }
@@ -203,6 +207,7 @@ const DataTable = ({
   setIsNudgeTableOpen,
   setSegmentRow,
   onViewAmcDetails,
+  beneficiaryName,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -2269,6 +2274,18 @@ const DataTable = ({
       return clientMISColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "MTF Stock Ageing Report") {
+      return shortfallColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "MTF Ageing Report") {
+      return ageingColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Vendor Details Report") {
+      return vendorApprovalColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
@@ -2424,6 +2441,7 @@ const DataTable = ({
         }
         handleVerifyDetails={handleVerifyDetails}
         isBankVerified={isBankVerified}
+        beneficiaryName={beneficiaryName}
         setIsBankVerified={setIsBankVerified}
       />
       {selectedWidget === "Clients With Ledger Balance" && (
