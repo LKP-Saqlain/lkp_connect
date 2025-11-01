@@ -1566,12 +1566,39 @@ const DataTable = ({
                     }}
                   >
                     {status === "Submitted" ? (
-                      <>
-                        {/* <span style={{ color: "#003366", fontWeight: 600 }}> */}
+                      // 🚫 Not clickable
+                      <span
+                        style={{
+                          color: "#003366",
+                          fontWeight: 600,
+                          cursor: "default",
+                        }}
+                      >
                         {status}
-                        {/* </span> */}
-                      </>
+                      </span>
+                    ) : status === "eSign Pending" ? (
+                      // ✅ Clickable eSign Pending
+                      <Tooltip title="eSign Pending" arrow placement="top">
+                        <span
+                          onClick={() => {
+                            console.log(
+                              "Clicked eSign Pending row:",
+                              params.row
+                            );
+                            if (onViewAmcDetails) onViewAmcDetails(params.row);
+                          }}
+                          style={{
+                            cursor: "pointer",
+                            color: "#11395C",
+                            textDecoration: "underline",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {status}
+                        </span>
+                      </Tooltip>
                     ) : (
+                      // Default: show OpenInNew icon for other statuses
                       <Tooltip
                         title="Lifetime AMC scheme"
                         arrow

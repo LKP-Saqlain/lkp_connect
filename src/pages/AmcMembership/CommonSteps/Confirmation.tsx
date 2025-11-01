@@ -28,7 +28,7 @@ const Confirmation = ({
 }: ConfirmationProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [timer, setTimer] = useState(300); // 5 minutes = 300 seconds
+  const [timer, setTimer] = useState(600); // 5 minutes = 300 seconds
   // const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<
     "waiting" | "success" | "failure"
@@ -101,17 +101,17 @@ const Confirmation = ({
         const now = new Date();
 
         const timeDifference = Math.abs(now.getTime() - transDate.getTime());
-        const FIVE_MINUTES = 5 * 60 * 1000;
+        const TEN_MINUTES = 10 * 60 * 1000; // 10 minutes in milliseconds
 
-        if (timeDifference <= FIVE_MINUTES) {
+        if (timeDifference <= TEN_MINUTES) {
           console.log(
-            " Payment Success within 5 minutes, triggering AMC activation..."
+            " Payment Success within 10 minutes, triggering AMC activation..."
           );
           clearInterval(intervalRef.current!);
           setPaymentStatus("success");
           activateAMC("online-success");
         } else {
-          console.warn(" Transaction too old (>5 min)");
+          console.warn(" Transaction too old (>10 min)");
           setPaymentStatus("failure");
         }
       }
@@ -154,7 +154,7 @@ const Confirmation = ({
       // Start polling every 5 sec
       intervalRef.current = setInterval(() => {
         getPaymentResponse();
-      }, 10000);
+      }, 5000); // changed from 10000 → 5000
 
       // Cleanup
       return () => {
@@ -268,14 +268,12 @@ const Confirmation = ({
         </>
       )}
 
-      {isComplete && (
+      {/* {isComplete && (
         <>
           <h4 style={{ fontWeight: 600, color: "#003366", maxWidth: "320px" }}>
             Thank You for the subscribing to lifetime DP AMC Scheme
           </h4>
-          {/* <p style={{ marginTop: "0.5rem", color: "#444" }}>
-            Thank You for the subscribing to lifetime DP AMC Scheme
-          </p> */}
+        
           <Button
             color="primary"
             style={{
@@ -292,7 +290,7 @@ const Confirmation = ({
             Close Tab
           </Button>
         </>
-      )}
+      )} */}
 
       {isFailure && (
         <h4 style={{ fontWeight: 600, color: "#b30000", marginTop: "1rem" }}>

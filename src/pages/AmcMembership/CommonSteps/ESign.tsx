@@ -219,22 +219,24 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
             </p>
 
             <Button
-              onClick={holder.action}
-              disabled={
-                isSigning ||
-                disabledHolders[holder.key] ||
-                (idx > 0 && !disabledHolders[holders[idx - 1].key])
-              }
+              onClick={() => {
+                const shouldDisable =
+                  isSigning ||
+                  disabledHolders[holder.key] ||
+                  (idx > 0 && !disabledHolders[holders[idx - 1].key]);
+
+                if (!shouldDisable) holder.action(); // ✅ only call if active
+              }}
               style={{
                 backgroundColor:
-                  disabledHolders[holder.key] ||
                   isSigning ||
+                  disabledHolders[holder.key] ||
                   (idx > 0 && !disabledHolders[holders[idx - 1].key])
-                    ? "#d3d3d3" // greyed out when disabled
-                    : "#003366", // active
+                    ? "#d3d3d3"
+                    : "#003366",
                 color:
-                  disabledHolders[holder.key] ||
                   isSigning ||
+                  disabledHolders[holder.key] ||
                   (idx > 0 && !disabledHolders[holders[idx - 1].key])
                     ? "#000"
                     : "#fff",
@@ -242,8 +244,8 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
                 borderRadius: "6px",
                 padding: "0.3rem 1.5rem",
                 cursor:
-                  disabledHolders[holder.key] ||
                   isSigning ||
+                  disabledHolders[holder.key] ||
                   (idx > 0 && !disabledHolders[holders[idx - 1].key])
                     ? "not-allowed"
                     : "pointer",
