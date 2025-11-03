@@ -9876,6 +9876,24 @@ export const clientMISColumns: GridColDef[] = [
     flex: 1.2,
     align: "left",
     headerAlign: "center",
+    renderCell: (params: any) => {
+      const email = params.value || ""; // Extract the email ID
+
+      // Mask the email if it exists
+      const maskedEmail = email.replace(
+        /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
+        (_: any, firstChar: any, middleChars: any, domain: any) => {
+          return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
+        }
+      );
+
+      // Return tooltip with the original email and masked email for display
+      return (
+        <Tooltip title={email} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "cmobileno",
@@ -9884,6 +9902,20 @@ export const clientMISColumns: GridColDef[] = [
     flex: 0.8,
     align: "center",
     headerAlign: "center",
+    renderCell: (params: any) => {
+      const mobile = params.value || "";
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, prefix: any, middle: any, suffix: any) => {
+          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
+        }
+      );
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "rmName",
