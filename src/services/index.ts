@@ -724,6 +724,13 @@ export const apiServices = {
   ViewVendorDetails: async (payload: any) => {
     return await apiService("POST", endpoints.ViewVendorDetails, payload);
   },
+  ViewAccountVendorDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ViewAccountVendorDetails,
+      payload
+    );
+  },
   DeleteVendorDetails: async (payload: any) => {
     return await apiService("POST", endpoints.DeleteVendorDetails, payload);
   },

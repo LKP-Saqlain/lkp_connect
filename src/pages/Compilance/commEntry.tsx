@@ -282,23 +282,38 @@ const CommEntry = ({ activeSubItem }: any) => {
                     padding: "0.2rem 0.8rem",
                   }}
                 >
-                  <h4 className="card-title mb-0">Communication Entry</h4>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    {" "}
+                    <h4 className="card-title mb-0">Communication Entry</h4>
+                    <Box>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        className="btn-font"
+                        onClick={tog_grid}
+                        style={{
+                          backgroundColor: "#11395C",
+                          height: "32px",
+                          fontSize: "13px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          textTransform: "none",
+                          borderRadius: "6px",
+                        }}
+                      >
+                        Add
+                      </Button>
+                    </Box>
+                  </div>
                 </CardHeader>
                 <CardBody>
-                  <Box>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      className="btn-font"
-                      onClick={tog_grid}
-                      style={{
-                        backgroundColor: "#11395C",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      Add
-                    </Button>
-                  </Box>
                   <UserInfoTable
                     activeSubItem={activeSubItem}
                     T6Data={userData}
