@@ -9895,3 +9895,539 @@ export const clientMISColumns: GridColDef[] = [
     headerAlign: "center",
   },
 ];
+
+export const shortfallColumns: GridColDef[] = [
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1.5,
+    minWidth: 250,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "mtfCashCollateralA",
+    headerName: "MTF Cash Collateral (A)",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "mtfShareCollateralB",
+    headerName: "MTF Share Collateral (B)",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "netMarginReqC",
+    headerName: "Net Margin Req (C)",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    minWidth: 110,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "mtmLossD",
+    headerName: "MTM Loss (D)",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    minWidth: 100,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "marginShortExcess",
+    headerName: "Margin Short/Excess",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    minWidth: 95,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "totalFundedAmountE",
+    headerName: "Total Funded Amt (E)",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    minWidth: 110,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "grp1LedgerF",
+    headerName: "Grp1 Ledger (F)",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    minWidth: 110,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "mtfShareMarketValue",
+    headerName: "MTF Share Market Value",
+    flex: 1.2,
+    align: "right",
+    headerAlign: "center",
+    minWidth: 110,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "maxAmountLimit",
+    headerName: "Max Amount Limit",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    minWidth: 120,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "maxScripAmount",
+    headerName: "Max Scrip Amount",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    minWidth: 80,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "interestPercent",
+    headerName: "Interest %",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 80,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+];
+
+export const ageingColumns: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    headerClassName: "header-wrap-custom",
+    flex: 0.6,
+    minWidth: 60,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "branchcode",
+    headerName: "Branch Code",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 60,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "branchType",
+    headerName: "Branch Type",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientcode",
+    headerName: "Client Code",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 90,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientname",
+    headerName: "Client Name",
+    flex: 1.4,
+    minWidth: 220,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "rmCode",
+    headerName: "RM Code",
+    flex: 0.6,
+    minWidth: 60,
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "rmName",
+    headerName: "RM Name",
+    flex: 1.2,
+    minWidth: 240,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "dealerCode",
+    headerName: "Dealer Code",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 60,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "dealerName",
+    headerName: "Dealer Name",
+    flex: 1.2,
+    minWidth: 200,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "nseScrip",
+    headerName: "NSE Scrip",
+    flex: 0.8,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "bseScrip",
+    headerName: "BSE Scrip",
+    flex: 0.8,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "isin",
+    headerName: "ISIN",
+    flex: 1.2,
+    minWidth: 180,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "fundingAmount",
+    headerName: "Funding Amount",
+    flex: 1,
+    minWidth: 140,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "marketRate",
+    headerName: "Market Rate",
+    flex: 1,
+    minWidth: 120,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return isNaN(value)
+        ? "-"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value);
+    },
+  },
+  {
+    field: "varPerc",
+    headerName: "VAR %",
+    flex: 0.6,
+    minWidth: 90,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => `${parseFloat(params).toFixed(2)}%`,
+  },
+  {
+    field: "elmPerc",
+    headerName: "ELM %",
+    flex: 0.6,
+    minWidth: 90,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => `${parseFloat(params).toFixed(2)}%`,
+  },
+  {
+    field: "marginPerc",
+    headerName: "Margin %",
+    flex: 0.6,
+    minWidth: 90,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => `${parseFloat(params).toFixed(2)}%`,
+  },
+  {
+    field: "tradeDATE",
+    headerName: "Trade Date",
+    flex: 0.8,
+    minWidth: 130,
+    align: "center",
+    headerAlign: "center",
+    valueGetter: (params: any) => {
+      const rawDate = params;
+      if (!rawDate) return null;
+      const parsedDate = new Date(
+        rawDate.replace(
+          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+          (match: any, day: any, month: any, year: any) => {
+            const monthMap: any = {
+              Jan: "01",
+              Feb: "02",
+              Mar: "03",
+              Apr: "04",
+              May: "05",
+              Jun: "06",
+              Jul: "07",
+              Aug: "08",
+              Sep: "09",
+              Oct: "10",
+              Nov: "11",
+              Dec: "12",
+            };
+            console.log(match);
+            return `20${year}-${monthMap[month]}-${day}`;
+          }
+        )
+      );
+      return parsedDate;
+    },
+    sortComparator: (v1, v2) => {
+      if (!v1 || !v2) return 0; // Handle missing values
+      return v1 - v2; // Sort in ascending order
+    },
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+  },
+  {
+    field: "days",
+    headerName: "Days",
+    flex: 0.5,
+    minWidth: 80,
+    align: "right",
+    headerAlign: "center",
+  },
+];
+
+export const vendorApprovalColumns: GridColDef[] = [
+  {
+    field: "vendorName",
+    headerName: "Vendor Name",
+    headerClassName: "header-wrap-custom",
+    flex: 1.5,
+    minWidth: 200,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "city",
+    headerName: "City",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "state",
+    headerName: "State",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile No",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "emailID",
+    headerName: "Email ID",
+    headerClassName: "header-wrap-custom",
+    flex: 1.5,
+    minWidth: 200,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "bankName",
+    headerName: "Bank Name",
+    headerClassName: "header-wrap-custom",
+    flex: 1.2,
+    minWidth: 200,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "bankActNo",
+    headerName: "A/C No",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "ifscCode",
+    headerName: "IFSC Code",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "tdsFlag",
+    headerName: "TDS Flag",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? "Yes" : "No"),
+  },
+  {
+    field: "msmeFlag",
+    headerName: "MSME Flag",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? "Yes" : "No"),
+  },
+  {
+    field: "accApproval",
+    headerName: "Approval Status",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "accRemark",
+    headerName: "Account Remark",
+    headerClassName: "header-wrap-custom",
+    flex: 1.5,
+    minWidth: 200,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "createdDate",
+    headerName: "Created Date",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+];

@@ -1,58 +1,33 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../../redux/store";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../services";
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
   Col,
   Label,
   Row,
-  // Input,
-  Button,
 } from "reactstrap";
-// import { regEx } from "../../../helper/method";
-// import DownloadIcon from "@mui/icons-material/Download";
-import { apiServices } from "../../../services";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../../../redux/store";
-import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import Select from "react-select";
-// import DataTable from "../../../components/common/table";
-// import axios from "axios";
-// import { endpoints } from "../../../services/endpoints";
-import ShowToast from "../../../utils/toastUtils";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import "../style.css";
-// import { slbmColumns } from "../../../helper/tableColumns.tsx";
+import ShowToast from "../../../utils/toastUtils";
+import { TextField } from "@mui/material";
 import UserInfoTable from "../../../components/common/UserInfoTable";
-import { Autocomplete, TextField } from "@mui/material";
 
-// interface Option {
-//   label: string;
-//   value: string;
-// }
-
-const SlbmHoling = ({ activeSubItem }: any) => {
+const MTFAgeingReport = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
-  const [userData, setUserData] = useState([]);
-  const [totalEntries, setTotalEntries] = useState(null);
-  const [responseStatus, setResponseStatus] = useState(false);
-  // const [searchValue, setSearchValue] = React.useState("");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
-  const [isinRecords, setIsinRecords] = useState<any[]>([]);
-  const [inputText, setInputText] = useState<string>("");
-
-  // const [page, setPage] = useState(1); // Track current page
+  const [ageingRecords, setAgeingRecords] = useState<any[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
-  );
-  const { accessType } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data
   );
 
   const validationSchema = Yup.object({
@@ -60,58 +35,31 @@ const SlbmHoling = ({ activeSubItem }: any) => {
     selectedBranchCode: Yup.object()
       .nullable()
       .required("Branch code is required"),
-    // isInValue: Yup.string().required("SYMBOL / ISIN is required"),
+    // clientCode: Yup.string()
+    //   .required("Client Code is required")
+    //   .matches(/^[A-Z0-9]+$/, "Only uppercase letters and numbers allowed"),
   });
 
   interface FormValues {
     selectedZone: { label: string; value: string } | null;
     selectedBranchCode: { label: string; value: string } | null;
-    isInValue: string;
+    clientCode: string;
   }
-  useEffect(() => {
-    if (userData.length > 0) {
-      // Run logic when new data is loaded
-      console.log("New userData loaded", userData);
-      // You could filter, process, or trigger a render here
-    }
-  }, [userData]);
 
   const formik = useFormik<FormValues>({
     initialValues: {
       selectedZone: null,
       selectedBranchCode: null,
-      isInValue: "",
+      clientCode: "",
     },
     validationSchema,
     onSubmit: (values) => {
       // Only called if no validation errors
       console.log("values1-->", values);
-      handleSubmit(values);
+      handleSubmit();
       // handleDownloadExcel();
     },
   });
-
-  useEffect(() => {
-    dispatch(showLoader("Please wait we are processing your request"));
-    apiServices
-      .ScripSearch()
-      .then((response) => {
-        dispatch(hideLoader());
-        console.log("scriptSearchResponse", response?.data?.Table);
-
-        setIsinRecords(response?.data?.Table || []);
-      })
-      .catch((error) => {
-        dispatch(hideLoader());
-        console.log("error", error);
-      });
-  }, []);
-
-  // useEffect(() => {
-  //   if (accessType === "") {
-  //     handleSubmit();
-  //   }
-  // }, [accessType, searchValue]);
 
   useEffect(() => {
     const str = user_id;
@@ -176,11 +124,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
     dispatch(hideLoader());
   }, [dispatch]);
 
-  useEffect(() => {
-    console.log("formikValuesSLBM", formik.values, formik.errors);
-  }, [formik.values]);
   const str = user_id;
-
   useEffect(() => {
     if (formik.values.selectedZone) {
       const userType = localStorage.getItem("uIdType");
@@ -235,125 +179,48 @@ const SlbmHoling = ({ activeSubItem }: any) => {
           );
         });
     }
-  }, [formik.values.selectedZone, dispatch]); // This effect runs when `selectedZone` changes
+  }, [formik.values.selectedZone, dispatch]);
 
-  // const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   console.log("value", name, value);
-  //   if (regEx.alphaNumeric.test(value)) {
-  //     formik.setFieldValue(name, value);
-  //   }
-  // };
-
-  // const handlePageChange = (
-  //   event: React.ChangeEvent<unknown>,
-  //   newPage: number
-  // ) => {
-  //   setPage(newPage);
-  //   handleSubmit(event, newPage); // Fetch data for the new page
-  // };
-
-  const handleSubmit = async (event?: any, value?: any) => {
-    console.log("newPage", event, value);
-    // formik.setFieldValue("selectedZone", {});
-    // formik.setFieldValue("selectedBranchCode", {});
-    // formik.setFieldValue("isInValue", "");
-
+  const handleSubmit = () => {
     const payload = {
-      loginName: user_id,
-      start: 0,
-      pageSize: "600000",
-      searchKey: "",
-      zone:
-        str === "APN-7161"
-          ? formik.values.selectedZone?.value
-          : accessType === ""
-          ? "ALL"
-          : formik.values.selectedZone?.value,
-      branchCode:
-        str === "APN-7161"
-          ? formik.values.selectedBranchCode?.value
-          : accessType === ""
-          ? "ALL"
-          : formik.values.selectedBranchCode?.value,
-      symbolISIN: formik.values.isInValue,
+      user_id,
+      zone: formik.values.selectedZone?.value,
+      branchCode: formik.values.selectedBranchCode?.value,
+      clientCode: formik.values.clientCode?.trim() || "ALL",
     };
-    dispatch(showLoader("Please wait, we are processing your request..."));
-    await apiServices
-      .SLBMHoldingsReport(payload)
-      .then((response) => {
-        console.log("response", response?.data);
-        console.log(
-          "SLBMHoldingsReportResponse",
-          response?.data?.sLBMHoldings[0]
-        );
-        response?.data?.sLBMHoldings[0];
-        setTotalEntries(response?.data?.sLBMHoldings[0]?.recordsTotal);
-        console.log(totalEntries, "totalEntries slbm");
 
+    dispatch(showLoader("Fetching data..."));
+
+    apiServices
+      .ViewMTFAgeingReport(payload)
+      .then((response) => {
         dispatch(hideLoader());
-        if (response?.status === 200) {
-          setResponseStatus(true);
-          setUserData(response.data?.sLBMHoldings || []);
-          setFilteredData(response.data?.sLBMHoldings || []);
+
+        const data = response?.data?.data;
+
+        if (response?.status === 200 && Array.isArray(data)) {
+          const recordsWithId = data.map((item: any, index: number) => ({
+            id: index + 1,
+            ...item,
+          }));
+
+          setAgeingRecords(recordsWithId);
+
+          console.log("Total Records Received:", recordsWithId.length);
+          console.log("Sample Record:", recordsWithId);
+          if (recordsWithId.length === 0) {
+            ShowToast("error", response?.data?.message || "No records found");
+          }
+        } else {
+          ShowToast("error", "Unexpected response format");
         }
       })
       .catch((error) => {
+        console.error("Error fetching MTF Ageing Report:", error);
         dispatch(hideLoader());
-        console.error("errorMsg", error?.response?.data?.message);
-        const errors = error?.response?.data?.errors;
-
-        if (errors) {
-          // Extract error messages
-          const zoneError = errors?.Zone?.[0];
-          const branchError = errors?.BranchCode?.[0];
-
-          // Display the errors in ShowToast
-          if (zoneError) {
-            ShowToast("error", zoneError);
-          }
-          if (branchError) {
-            ShowToast("error", branchError);
-          }
-        } else {
-          // Default error message for unexpected errors
-          ShowToast("error", error?.response?.data?.message);
-        }
-      })
-      .finally(() => {
-        dispatch(hideLoader());
+        ShowToast("error", "Failed to fetch data");
       });
   };
-
-  const handleSearchBasedOnInput = (value: string) => {
-    console.log("handleSearchBasedOnInputValue", value);
-    const query = value;
-    setSearchQuery(query);
-
-    const lowerCaseValue = value.toLowerCase();
-
-    const filtered = userData.filter((item: any) => {
-      const clientNameMatch = item.clientName
-        ?.toLowerCase()
-        .includes(lowerCaseValue);
-      const accountCodeMatch = item.clientCode
-        ?.toString()
-        .toLowerCase()
-        .includes(lowerCaseValue);
-
-      // Optional: keep other fields also searchable
-      const otherMatch = Object.keys(item).some((key) =>
-        item[key]?.toString().toLowerCase().includes(lowerCaseValue)
-      );
-
-      return clientNameMatch || accountCodeMatch || otherMatch;
-    });
-
-    setFilteredData(filtered);
-    console.log("filteredSearch Records", filtered);
-  };
-
-  document.title = "LKP Securities | Dormant Client Report";
 
   return (
     <React.Fragment>
@@ -375,9 +242,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                     padding: "0.2rem 0.8rem",
                   }}
                 >
-                  <h4 className="card-title mb-0">
-                    SLBM Client Holding Report
-                  </h4>
+                  <h4 className="card-title mb-0">{activeSubItem}</h4>
                 </CardHeader>
                 <CardBody>
                   <form onSubmit={formik.handleSubmit}>
@@ -485,92 +350,38 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                         </Col>
 
                         <Col xl={3}>
-                          <div className="mb-3">
+                          <div className="mb-3" style={{ maxWidth: "300px" }}>
                             <Label
-                              htmlFor="choices-text-remove-button"
+                              htmlFor="client-code"
                               className="form-label text-muted label-font"
                             >
-                              Symbol / ISIN
+                              Enter Client Code
                             </Label>
-                            <Autocomplete
-                              freeSolo
-                              options={isinRecords}
-                              getOptionLabel={(option) =>
-                                typeof option === "string"
-                                  ? option
-                                  : option.ScripName || ""
-                              }
-                              filterOptions={(options, state) =>
-                                options.filter((option) => {
-                                  const input = state.inputValue.toLowerCase();
-                                  return (
-                                    option.ScripName?.toLowerCase().includes(
-                                      input
-                                    ) ||
-                                    option.BSECode?.toLowerCase().includes(
-                                      input
-                                    ) ||
-                                    option.NSECode?.toLowerCase().includes(
-                                      input
-                                    ) ||
-                                    option.ISINCode?.toLowerCase().includes(
-                                      input
-                                    )
-                                  );
-                                })
-                              }
-                              value={
-                                isinRecords.find(
-                                  (item) =>
-                                    item.ISINCode === formik.values.isInValue
-                                ) || null
-                              }
-                              inputValue={inputText}
-                              onInputChange={(event, newInputValue) => {
-                                setInputText(newInputValue);
-                                console.log(event);
 
-                                if (newInputValue === "") {
-                                  formik.setFieldValue("isInValue", "");
-                                }
+                            <TextField
+                              fullWidth
+                              id="client-code"
+                              name="clientCode"
+                              placeholder="Enter Client Code"
+                              variant="outlined"
+                              size="small"
+                              value={formik.values.clientCode}
+                              onChange={(e) => {
+                                const cleanedValue = e.target.value
+                                  .replace(/[^A-Za-z0-9]/g, "") // Remove special chars
+                                  .toUpperCase(); // Force uppercase
+                                formik.setFieldValue(
+                                  "clientCode",
+                                  cleanedValue
+                                );
                               }}
-                              onChange={(event, newValue) => {
-                                if (newValue && typeof newValue !== "string") {
-                                  console.log(event);
-                                  formik.setFieldValue(
-                                    "isInValue",
-                                    newValue.ISINCode || ""
-                                  );
-                                  setInputText(newValue.ISINCode || "");
-                                } else {
-                                  formik.setFieldValue("isInValue", "");
-                                  setInputText("");
-                                }
+                              onBlur={formik.handleBlur}
+                              InputProps={{
+                                style: {
+                                  textTransform: "uppercase",
+                                  fontSize: "14px",
+                                },
                               }}
-                              renderOption={(props, option) => (
-                                <li {...props} key={option.ISINCode}>
-                                  {option.ScripName}
-                                </li>
-                              )}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  placeholder="Please search ISIN"
-                                  name="isInValue"
-                                  onBlur={formik.handleBlur}
-                                  error={
-                                    formik.touched.isInValue &&
-                                    Boolean(formik.errors.isInValue)
-                                  }
-                                  helperText={
-                                    formik.touched.isInValue &&
-                                    formik.errors.isInValue
-                                      ? formik.errors.isInValue
-                                      : ""
-                                  }
-                                  size="small"
-                                />
-                              )}
                             />
                           </div>
                         </Col>
@@ -583,8 +394,8 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                                 formik.errors.selectedZone) ||
                               (formik.touched.selectedBranchCode &&
                                 formik.errors.selectedBranchCode) ||
-                              (formik.touched.isInValue &&
-                                formik.errors.isInValue)
+                              (formik.touched.clientCode &&
+                                formik.errors.clientCode)
                                 ? "-18px"
                                 : "",
                           }}
@@ -611,26 +422,24 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                               (formik.touched.selectedZone &&
                                 formik.errors.selectedZone) ||
                               (formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode) ||
-                              (formik.touched.isInValue &&
-                                formik.errors.isInValue)
+                                formik.errors.selectedBranchCode)
                                 ? "-18px"
                                 : "",
                           }}
                         >
                           <div className="mb-3" />
                           {/* <Button
-                            style={{
-                              backgroundColor: "#11395C",
-                              fontSize: "12px",
-                              height: "40px",
-                            }}
-                            type="button"
-                            onClick={handleDownloadExcel}
-                          >
-                            Excel
-                            <DownloadIcon fontSize="small" />
-                          </Button> */}
+                          style={{
+                            backgroundColor: "#11395C",
+                            fontSize: "12px",
+                            height: "40px",
+                          }}
+                          type="button"
+                          onClick={handleDownloadExcel}
+                        >
+                          Excel
+                          <DownloadIcon fontSize="small" />
+                        </Button> */}
                         </Col>
                       </Row>
                     </div>
@@ -646,25 +455,9 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                 }}
               >
                 <CardBody>
-                  {/* <DataTable
-                    dynamicHeader={slbmColumns}
-                    tableData={userData}
-                    totalRecords={totalEntries}
-                    page={page}
-                    onPageChange={handlePageChange}
-                    pageSize={10}
-                    handleSearchBasedOnInput={handleSearchBasedOnInput}
-                    handleSearchUser={handleSearchUser}
-                    showSearch={responseStatus}
-                    handleExcelDownload={handleDownloadExcel}
-                    searchValue={searchQuery}
-                  /> */}
                   <UserInfoTable
-                    showSearch={responseStatus}
                     activeSubItem={activeSubItem}
-                    T6Data={userData ? filteredData : filteredData}
-                    handleSearchBasedOnInput={handleSearchBasedOnInput}
-                    searchValue={searchQuery}
+                    T6Data={ageingRecords}
                   />
                 </CardBody>
               </Card>
@@ -676,4 +469,4 @@ const SlbmHoling = ({ activeSubItem }: any) => {
   );
 };
 
-export default SlbmHoling;
+export default MTFAgeingReport;
