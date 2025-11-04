@@ -34,6 +34,8 @@ const Confirmation = ({
     "waiting" | "success" | "failure"
   >("waiting");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isCheckingRef = useRef(false);
+  const isActivatingRef = useRef(false);
 
   // Derived UI states from paymentStatus
   const isWaiting = paymentStatus === "waiting";
@@ -52,6 +54,8 @@ const Confirmation = ({
 
   //  Function: Activate AMC
   const activateAMC = async (source: string) => {
+    if (isActivatingRef.current) return; // 🚫 prevent double activation
+    isActivatingRef.current = true;
     const payload = {
       tradingCode: selectedRow?.trading_Code,
       boid: selectedRow?.dP_ID,
@@ -80,6 +84,8 @@ const Confirmation = ({
   //  Function: Poll payment response (for online)
 
   const getPaymentResponse = async () => {
+    if (isCheckingRef.current || isActivatingRef.current) return;
+    isCheckingRef.current = true;
     const payload = {
       boid: selectedRow?.dP_ID,
       amount: totalPayable.toFixed(2),
@@ -117,6 +123,8 @@ const Confirmation = ({
       }
     } catch (error) {
       console.error("Error fetching payment response:", error);
+    } finally {
+      isCheckingRef.current = false;
     }
   };
 
