@@ -35,6 +35,9 @@ const Confirmation = ({
   >("waiting");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+  const isCheckingRef = useRef(false);
+  const isActivatingRef = useRef(false);
+
   // Derived UI states from paymentStatus
   const isWaiting = paymentStatus === "waiting";
   const isSuccess = paymentStatus === "success";
@@ -52,6 +55,8 @@ const Confirmation = ({
 
   //  Function: Activate AMC
   const activateAMC = async (source: string) => {
+    if (isActivatingRef.current) return; // 🚫 prevent double activation
+    isActivatingRef.current = true;
     const payload = {
       tradingCode: selectedRow?.trading_Code,
       boid: selectedRow?.dP_ID,
@@ -61,13 +66,13 @@ const Confirmation = ({
       option: "SaveAMC",
     };
 
-    console.log("🚀 Calling ActivateAMC from", source, payload);
+    console.log("🚀 Calling Activate_AMC from", source, payload);
 
     dispatch(showLoader("Please wait, activating AMC..."));
 
     try {
       const response = await apiServices.ActivateAMC(payload);
-      console.log(" ActivateAMC Response:", response);
+      console.log(" Activate_AMC Response:", response);
       setPaymentStatus("success");
     } catch (error) {
       console.error(" Error activating AMC:", error);
@@ -80,6 +85,8 @@ const Confirmation = ({
   //  Function: Poll payment response (for online)
 
   const getPaymentResponse = async () => {
+    if (isCheckingRef.current || isActivatingRef.current) return;
+    isCheckingRef.current = true;
     const payload = {
       boid: selectedRow?.dP_ID,
       amount: totalPayable.toFixed(2),
@@ -117,6 +124,8 @@ const Confirmation = ({
       }
     } catch (error) {
       console.error("Error fetching payment response:", error);
+    } finally {
+      isCheckingRef.current = false;
     }
   };
 
@@ -154,7 +163,7 @@ const Confirmation = ({
       // Start polling every 5 sec
       intervalRef.current = setInterval(() => {
         getPaymentResponse();
-      }, 5000); // changed from 10000 → 5000
+      }, 7000); // changed from 10000 → 5000
 
       // Cleanup
       return () => {
