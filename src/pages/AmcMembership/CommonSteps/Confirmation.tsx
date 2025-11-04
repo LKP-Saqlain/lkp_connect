@@ -34,8 +34,6 @@ const Confirmation = ({
     "waiting" | "success" | "failure"
   >("waiting");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const isCheckingRef = useRef(false);
-  const isActivatingRef = useRef(false);
 
   const isCheckingRef = useRef(false);
   const isActivatingRef = useRef(false);
@@ -118,7 +116,7 @@ const Confirmation = ({
           );
           clearInterval(intervalRef.current!);
           setPaymentStatus("success");
-          activateAMC("online-success");
+          // activateAMC("online-success");
         } else {
           console.warn(" Transaction too old (>10 min)");
           setPaymentStatus("failure");

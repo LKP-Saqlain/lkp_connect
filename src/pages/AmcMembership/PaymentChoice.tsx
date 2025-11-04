@@ -98,6 +98,11 @@ const PaymentChoice = ({
           padding: "0 1rem",
           display: "flex",
           justifyContent: "center",
+          minHeight: "60vh",
+          minWidth: "70vw",
+          fontSize: "21px",
+          lineHeight: "2.5",
+          alignItems: "center",
         }}
       >
         <Col
@@ -105,7 +110,7 @@ const PaymentChoice = ({
           className="mb-3"
           style={{
             textAlign: "left",
-            maxWidth: "400px", // slightly wider for a balanced table look
+            maxWidth: "700px", // slightly wider for a balanced table look
           }}
         >
           <table
@@ -113,7 +118,6 @@ const PaymentChoice = ({
               width: "100%",
               borderCollapse: "collapse",
               color: "#333",
-              fontSize: "14px",
             }}
           >
             <tbody>
@@ -235,7 +239,8 @@ const PaymentChoice = ({
             color: "#fff",
             border: "none",
             borderRadius: "6px",
-            padding: "0.3rem 1.5rem",
+            padding: "1rem 1.5rem",
+            fontSize: "18px",
           }}
           onClick={handleOnlinePayment}
         >

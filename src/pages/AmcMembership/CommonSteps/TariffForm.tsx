@@ -11,7 +11,15 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
   }, []);
 
   return (
-    <div style={{ padding: "1rem 2rem" }}>
+    <div
+      style={{
+        padding: "1.5rem 3rem",
+        minHeight: "60vh",
+        minWidth: "70vw",
+        fontSize: "1.25rem", // 🔹 Increased base font size (~20px)
+        lineHeight: "2",
+      }}
+    >
       {/* Header Line */}
       <div
         style={{
@@ -22,18 +30,34 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
           flexWrap: "wrap",
         }}
       >
-        <h6 style={{ color: "#1c3c6b", fontWeight: 600 }}>
+        <h5 style={{ color: "#1c3c6b", fontWeight: 700, fontSize: "1.4rem" }}>
           Lifetime–1500 Tariff for Non–Corporate Clients
-        </h6>
+        </h5>
 
-        <div style={{ display: "flex", gap: "2rem" }}>
-          <p style={{ margin: 0, fontWeight: 500, color: "#000" }}>
+        <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
+          <p
+            style={{
+              margin: 0,
+              fontWeight: 500,
+              color: "#000",
+              fontSize: "1.1rem",
+            }}
+          >
             DP ID –{" "}
-            <span style={{ color: "#1c3c6b" }}>{selectedRow?.dP_ID}</span>
+            <span style={{ color: "#1c3c6b", fontWeight: 600 }}>
+              {selectedRow?.dP_ID}
+            </span>
           </p>
-          <p style={{ margin: 0, fontWeight: 500, color: "#000" }}>
+          <p
+            style={{
+              margin: 0,
+              fontWeight: 500,
+              color: "#000",
+              fontSize: "1.1rem",
+            }}
+          >
             Client ID –{" "}
-            <span style={{ color: "#1c3c6b" }}>
+            <span style={{ color: "#1c3c6b", fontWeight: 600 }}>
               {selectedRow?.trading_Code}
             </span>
           </p>
@@ -42,19 +66,22 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
 
       <Row>
         {/* Left Column */}
-        <Col md="6" style={{ borderRight: "1px solid #ddd" }}>
-          <table style={{ width: "100%", color: "#000" }}>
-            <thead style={{ width: "100%", backgroundColor: "#dbdbdb" }}>
+        <Col
+          md="6"
+          style={{ borderRight: "1px solid #ddd", paddingRight: "1rem" }}
+        >
+          <table style={{ width: "100%", color: "#000", fontSize: "1.1rem" }}>
+            <thead style={{ backgroundColor: "#dbdbdb" }}>
               <tr style={{ borderBottom: "1px solid #ddd" }}>
-                <th style={{ padding: "8px", textAlign: "left" }}>
+                <th style={{ padding: "10px", textAlign: "left" }}>
                   Particulars
                 </th>
-                <th style={{ padding: "8px", textAlign: "right" }}>
+                <th style={{ padding: "10px", textAlign: "right" }}>
                   Lifetime–1500
                 </th>
               </tr>
             </thead>
-            <tbody style={{ fontSize: "0.95rem" }}>
+            <tbody>
               <tr>
                 <td>Annual Maintenance Charge (AMC)</td>
                 <td style={{ textAlign: "right" }}>₹1500</td>
@@ -88,19 +115,19 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
         </Col>
 
         {/* Right Column */}
-        <Col md="6">
-          <table style={{ width: "100%", color: "#000" }}>
+        <Col md="6" style={{ paddingLeft: "1rem" }}>
+          <table style={{ width: "100%", color: "#000", fontSize: "1.1rem" }}>
             <thead style={{ backgroundColor: "#dbdbdb" }}>
               <tr style={{ borderBottom: "1px solid #ddd" }}>
-                <th style={{ padding: "8px", textAlign: "left" }}>
+                <th style={{ padding: "10px", textAlign: "left" }}>
                   Particulars
                 </th>
-                <th style={{ padding: "8px", textAlign: "right" }}>
+                <th style={{ padding: "10px", textAlign: "right" }}>
                   Lifetime–1500
                 </th>
               </tr>
             </thead>
-            <tbody style={{ fontSize: "0.95rem" }}>
+            <tbody>
               <tr>
                 <td>Additional DIS Booklet</td>
                 <td style={{ textAlign: "right" }}>₹20</td>
@@ -131,19 +158,16 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
       </Row>
 
       {/* Button */}
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: "2rem",
-        }}
-      >
+      <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
         <Button
           color="primary"
           style={{
             backgroundColor: "#003366",
             border: "none",
             borderRadius: "6px",
-            padding: "0.6rem 2rem",
+            padding: "0.8rem 2.5rem",
+            fontSize: "1.1rem",
+            fontWeight: 600,
           }}
           onClick={onNext}
         >

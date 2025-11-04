@@ -9288,6 +9288,17 @@ export const AmcLifeMembership: GridColDef[] = [
     align: "center",
     headerClassName: "header-wrap-custom",
   },
+  {
+    field: "bsdA_Flag",
+    headerName: "BSDA",
+    flex: 1,
+    minWidth: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
 
   {
     field: "dealerName",

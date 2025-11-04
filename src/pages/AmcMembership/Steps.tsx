@@ -8,7 +8,7 @@ import ESign from "./CommonSteps/ESign";
 import TariffForm from "./CommonSteps/TariffForm";
 import Confirmation from "./CommonSteps/Confirmation";
 import { useLocation, useNavigate } from "react-router-dom";
-// import Bsda from "./CommonSteps/Bdsa";
+import Bsda from "./CommonSteps/Bdsa";
 
 const AmcMembership = () => {
   const [step, setStep] = useState(1);
@@ -41,15 +41,15 @@ const AmcMembership = () => {
     console.log("current step", step);
   }, [step]);
 
-  const next = () => setStep((s) => s + 1);
+  // ✅ Fix typo: use bSDA_Flag (not bsdA_Flag)
+  const isBSDA = selectedRow?.bsdA_Flag === "Y";
 
   // const handleGoBack = () => {
   //   sessionStorage.removeItem("selectedRow"); // cleanup
   //   navigate("/dashboard");
   // };
 
-  const goToStep2 = () => setStep(2);
-  const goToStep4 = () => setStep(4);
+  const goToStep2 = () => setStep(isBSDA ? 3 : 2); // dynamic back step
 
   return (
     <div
@@ -65,13 +65,9 @@ const AmcMembership = () => {
       <Card
         style={{
           maxWidth: "90%",
-          // maxWidth: "90vw",
-          maxHeight: "90%",
-          // maxHeight: "90vh",
           margin: "auto",
           borderRadius: "15px",
-          // boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-          boxShadow: " 0px 6.16px 17.68px -0.88px #00000036",
+          boxShadow: "0px 6.16px 17.68px -0.88px #00000036",
           padding: "1.5rem",
           backgroundColor: "#fff", // White card background
         }}
@@ -88,8 +84,8 @@ const AmcMembership = () => {
             marginBottom: "2rem",
           }}
         >
-          <img src={Logo} alt="LKP Logo" style={{ height: "50px" }} />
-          <h4
+          <img src={Logo} alt="LKP Logo" style={{ height: "70px" }} />
+          <h2
             style={{
               fontWeight: "700",
               color: "#1c3c6b",
@@ -99,45 +95,39 @@ const AmcMembership = () => {
               marginRight: "150px",
             }}
           >
-            Online Lifetime AMC Scheme Activation
-          </h4>
-          {/* <Button
-              color="primary"
-              style={{
-                borderRadius: "6px",
-                backgroundColor: "#003366",
-                border: "none",
-              }}
-              onClick={handleGoBack}
-            >
-              Back to Dashboard
-            </Button> */}
+            {isBSDA && step === 2
+              ? "BSDA Consent Required From Client"
+              : "Online Lifetime AMC Scheme Activation"}
+          </h2>
         </CardHeader>
 
         {/* Step-based Flow */}
         {step === 1 && selectedRow && (
           <ClientInfo
-            onNext={next}
+            onNext={() => setStep(isBSDA ? 2 : 2)} // always go to next (BSDA handled separately)
             selectedRow={selectedRow}
             setClientData={setClientData}
             goToStep4={() => {
               setFlow("online");
-              goToStep4();
+              setStep(isBSDA ? 5 : 4);
             }}
           />
         )}
-        {/* {step === 2 && <Bsda onNext={next} clientData={clientData} />} */}
 
-        {step === 2 && (
+        {isBSDA && step === 2 && (
+          <Bsda onNext={() => setStep(3)} clientData={clientData} />
+        )}
+
+        {((!isBSDA && step === 2) || (isBSDA && step === 3)) && (
           <PaymentChoice
             clientData={clientData}
             onLedger={() => {
               setFlow("ledger");
-              next();
+              setStep(isBSDA ? 4 : 3);
             }}
             onOnline={() => {
               setFlow("online");
-              next();
+              setStep(isBSDA ? 4 : 3);
             }}
             setTotalPayable={setTotalPayable}
           />
@@ -178,10 +168,10 @@ const AmcMembership = () => {
 
         {flow === "online" && (
           <>
-            {step === 3 && (
+            {/* Step 3 or 4: Confirmation */}
+            {step === (isBSDA ? 4 : 3) && (
               <Confirmation
-                onNext={next}
-                // status={3}
+                onNext={() => setStep(isBSDA ? 5 : 4)}
                 flow={flow}
                 selectedRow={selectedRow}
                 totalPayable={totalPayable}
@@ -189,11 +179,23 @@ const AmcMembership = () => {
                 complete={false}
               />
             )}
-            {step === 4 && (
-              <TariffForm onNext={next} selectedRow={selectedRow} />
+
+            {/* Step 4 or 5: Tariff Form */}
+            {step === (isBSDA ? 5 : 4) && (
+              <TariffForm
+                onNext={() => setStep(isBSDA ? 6 : 5)}
+                selectedRow={selectedRow}
+              />
             )}
-            {step === 5 && <ESign selectedRow={selectedRow} onNext={next} />}
-            {step === 6 && (
+            {step === (isBSDA ? 6 : 5) && (
+              <ESign
+                selectedRow={selectedRow}
+                onNext={() => setStep(isBSDA ? 7 : 6)}
+              />
+            )}
+
+            {/* Step 6 or 7: Final Confirmation */}
+            {step === (isBSDA ? 7 : 6) && (
               <Confirmation
                 flow={flow}
                 selectedRow={selectedRow}

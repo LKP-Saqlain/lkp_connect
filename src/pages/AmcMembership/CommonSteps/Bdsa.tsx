@@ -61,7 +61,7 @@ ${clientData?.primary_Holder}`;
           >
             In order to enable us to move the DP account to Regular Category,
             the client will need to send the below text message from their
-            registered email ID i.e. <b>{clientData?.email_id}</b> to{" "}
+            registered email ID i.e. <b>( {clientData?.email_id} )</b> to{" "}
             <a
               href="mailto:ho_dp@lkpsec.com"
               style={{ color: "#0055ff", textDecoration: "none" }}
@@ -97,12 +97,13 @@ ${clientData?.primary_Holder}`;
 
               <div
                 style={{
-                  color: "#1c3c6b",
+                  color: "#0055ff",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
                   gap: "4px",
                   fontSize: "0.9rem",
+                  textDecoration: "underline",
                 }}
                 onClick={() => handleCopy(emailSubject)}
               >
@@ -145,13 +146,14 @@ ${clientData?.primary_Holder}`;
 
               <div
                 style={{
-                  color: "#1c3c6b",
+                  color: "#0055ff",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
                   gap: "4px",
                   fontSize: "0.9rem",
                   whiteSpace: "nowrap",
+                  textDecoration: "underline",
                 }}
                 onClick={() => handleCopy(emailBodyText)}
               >

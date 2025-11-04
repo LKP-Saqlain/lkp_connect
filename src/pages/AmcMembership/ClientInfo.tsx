@@ -5,6 +5,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { capitalizeEachWord } from "../../utils";
+// import { decryptAES } from "../../utils/encryptDecrypt";
 
 interface ClientInfoProps {
   onNext: () => void;
@@ -113,7 +114,15 @@ const ClientInfo = ({
   return (
     <>
       {/* Holder Info */}
-      <Row style={{ padding: "0 1rem" }}>
+      <Row
+        style={{
+          padding: "0 1rem",
+          minHeight: "60vh",
+          minWidth: "70vw",
+          fontSize: "21px",
+          lineHeight: "2.6",
+        }}
+      >
         <Col md="6" className="mb-3">
           <p>
             <strong>Primary Holder:</strong>{" "}
@@ -180,6 +189,7 @@ const ClientInfo = ({
             borderRadius: "6px",
             backgroundColor: "#003366",
             border: "none",
+            fontSize: "21px",
           }}
           onClick={handleClick}
         >

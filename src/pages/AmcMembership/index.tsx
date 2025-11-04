@@ -44,7 +44,7 @@ const Index = ({ activeMenu }: any) => {
 
   const fetchData = () => {
     const payload = {
-      zone: selectedZone?.value || "ALL",
+      zone: selectedZone?.value || "H.O.",
       branchCode: "ALL",
       tradingCode: "ALL",
       userId: user_id,
@@ -87,7 +87,7 @@ const Index = ({ activeMenu }: any) => {
 
   const fetchContestData = () => {
     const payload = {
-      zone: selectedZone?.value || "ALL",
+      zone: selectedZone?.value || "H.O.",
       branchcode: "ALL",
       tradingCode: "ALL",
       UserId: user_id,
@@ -144,7 +144,7 @@ const Index = ({ activeMenu }: any) => {
 
           setNoSortingGroup(zoneOptions);
           if (zoneOptions.length > 0) {
-            setSelectedZone(zoneOptions[0]); // Pre-select first zone
+            setSelectedZone(zoneOptions[8]); // Pre-select first zone
           }
         }
       } catch (err: any) {
@@ -280,10 +280,14 @@ const Index = ({ activeMenu }: any) => {
           </CardHeader>
 
           <CardBody>
-            <Row className="align-items-end flex-wrap" style={{ gap: "1rem" }}>
+            <Row
+              className="align-items-center justify-content-between flex-wrap"
+              style={{ gap: "1rem", marginBottom: "1rem" }}
+            >
+              {/* Zone selection — only show if accessType === "ALL" */}
               {accessType === "ALL" && (
-                <Row>
-                  <div className="d-flex align-items-center gap-2">
+                <Col xs="auto">
+                  <div className="d-flex align-items-center gap-2 flex-wrap">
                     <Label className="form-label text-muted label-font mb-0">
                       Zone
                     </Label>
@@ -317,20 +321,18 @@ const Index = ({ activeMenu }: any) => {
                       })}
                     </div>
                   </div>
-                </Row>
+                </Col>
               )}
-              {/* <Col xl={3} lg={4} md={5} sm={6} xs={12} className="mb-3"> */}
-              <Col xl={4} lg={5} md={6} sm={8} xs={12} className="mb-3">
-                {/* <Label className="form-label text-muted label-font">
-                  Client Code / Name / BOID
-                </Label> */}
+
+              {/* Search bar — always visible */}
+              <Col xs="12" sm="auto" className="ms-auto">
                 <TextField
                   size="small"
                   variant="outlined"
-                  placeholder="Search by Client Code or Name or BOID"
-                  fullWidth
+                  placeholder="Search by Client Code/Name/BOID"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  style={{ minWidth: "250px" }}
                 />
               </Col>
             </Row>

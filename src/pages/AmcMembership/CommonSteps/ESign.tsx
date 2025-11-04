@@ -180,7 +180,15 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
     }));
 
   return (
-    <div style={{ padding: "2rem", textAlign: "center" }}>
+    <div
+      style={{
+        padding: "2rem",
+        textAlign: "center",
+        minHeight: "60vh",
+        minWidth: "70vw",
+        fontSize: "21px",
+      }}
+    >
       <Row className="justify-content-center">
         {holders.map((holder, idx) => (
           <Col
