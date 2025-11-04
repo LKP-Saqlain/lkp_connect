@@ -236,4 +236,7 @@ export const endpoints = {
   ViewMTFAgeingReport: "/api/RMS/ViewMTFAgeingReport",
   MTFAgeingFileUpload: "/api/RMS/MTFAgeingFileUpload",
   MTFStockAgeingFileUpload: "/api/RMS/MTFStockAgeingFileUpload",
+  T6BSESellingFileUpload: "/api/RMS/T6BSESellingFileUpload",
+  T6NSESellingFileUpload: "/api/RMS/T6NSESellingFileUpload",
+  ViewT6SellingReport: "/api/RMS/ViewT6SellingReport",
 };

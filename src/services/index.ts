@@ -1014,4 +1014,13 @@ export const apiServices = {
       payload
     );
   },
+  T6BSESellingFileUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.T6BSESellingFileUpload, payload);
+  },
+  T6NSESellingFileUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.T6NSESellingFileUpload, payload);
+  },
+  ViewT6SellingReport: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewT6SellingReport, payload);
+  },
 };
