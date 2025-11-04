@@ -34,7 +34,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
     dispatch(showLoader(""));
 
     apiServices
-      .ViewVendorDetails(payload)
+      .ViewAccountVendorDetails(payload)
       .then((response) => {
         if (response?.status === 200) {
           const newVendors = response?.data?.data || [];
