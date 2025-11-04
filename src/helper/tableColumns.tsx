@@ -10529,7 +10529,7 @@ export const t6SellingReportColumns: GridColDef[] = [
     field: "rmName",
     headerName: "RM Name",
     flex: 1.5,
-    align: "left",
+    align: "center",
     headerAlign: "center",
     minWidth: 240,
     headerClassName: "header-wrap-custom",
