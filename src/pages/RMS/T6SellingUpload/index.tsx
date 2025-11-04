@@ -191,6 +191,7 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
                     <Button
                       variant="contained"
                       size="small"
+                      disabled={formik.values.nseFile === null ? true : false}
                       sx={{
                         fontSize: "12px",
                         color: "#fff",
@@ -230,6 +231,7 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
                     <Button
                       variant="contained"
                       size="small"
+                      disabled={formik.values.bseFile === null ? true : false}
                       sx={{
                         fontSize: "12px",
                         color: "#fff",
