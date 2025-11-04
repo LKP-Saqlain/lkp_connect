@@ -348,7 +348,36 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                   padding: "0.2rem 0.8rem",
                 }}
               >
-                <h4 className="card-title mb-0">Unlisted Shares Entry</h4>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  {" "}
+                  <h4 className="card-title mb-0">Unlisted Shares Entry</h4>
+                  {activeSubItem === "Unlisted Shares Entry" && (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      className="btn-font"
+                      onClick={tog_grid}
+                      style={{
+                        backgroundColor: "#11395C",
+                        height: "32px",
+                        fontSize: "13px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textTransform: "none",
+                        borderRadius: "6px",
+                      }}
+                    >
+                      Add
+                    </Button>
+                  )}
+                </div>
               </CardHeader>
               <CardBody>
                 {" "}
@@ -362,20 +391,6 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                     isUnlistedContent={true}
                     activeSubItem={activeSubItem}
                   />
-                  {activeSubItem === "Unlisted Shares Entry" && (
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      className="btn-font"
-                      onClick={tog_grid}
-                      style={{
-                        backgroundColor: "#11395C",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      Add
-                    </Button>
-                  )}
                 </Box>
                 <DataTable
                   activeSubItem={activeSubItem}
