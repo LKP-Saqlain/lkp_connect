@@ -102,8 +102,11 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MandatePayment from "../../pages/ThirdParty/Mandate";
 import AmcMembership from "../../pages/AmcMembership";
 import LedgerDebitReport from "../../pages/AmcMembership/LedgerReport";
-// import VendorReport from "../../pages/ThirdParty/VendorReport";
-// import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
+import VendorReport from "../../pages/ThirdParty/VendorReport";
+import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
+import ShortFallReport from "../../pages/RMS/MTFsfReport";
+import MTFFileUpload from "../../pages/RMS/mtfFileUpload";
+import MTFAgeingReport from "../../pages/RMS/MTFAgeingReport";
 
 const drawerWidth = 260;
 
@@ -742,10 +745,14 @@ const SideBar = () => {
   const rmsSubItems: Record<string, JSX.Element> = {
     "Upload SLBM Holding": <SLBMHoldings />,
     "Pledge Holdings Adjustment": (
-      // <RMSPledgeHolding activeSubItem={activeSubItem} />
-      <></>
+      <RMSPledgeHolding activeSubItem={activeSubItem} />
     ),
     "MTF File Merge": <MtfComponent activeSubItem={activeSubItem} />,
+    "MTF Stock Ageing Report": (
+      <ShortFallReport activeSubItem={activeSubItem} />
+    ),
+    "MTF File Upload": <MTFFileUpload activeSubItem={activeSubItem} />,
+    "MTF Ageing Report": <MTFAgeingReport activeSubItem={activeSubItem} />,
   };
   const tpdSubItems: Record<string, JSX.Element> = {
     "Unlisted Shares Entry": (
@@ -785,7 +792,7 @@ const SideBar = () => {
     ),
     "Dp Debit Collection": <MandatePayment activeSubItem={activeSubItem} />,
     "DP AMC Ledger Debit": <LedgerDebitReport activeSubItem={activeSubItem} />,
-    // "Vendor Details Report": <VendorReport activeSubItem={activeSubItem} />,
+    "Vendor Details Report": <VendorReport activeSubItem={activeSubItem} />,
   };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>

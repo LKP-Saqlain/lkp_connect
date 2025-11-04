@@ -431,7 +431,7 @@ const DashboardCrypto = ({
   };
 
   useEffect(() => {
-    if (selectedItem === "Reasearch Calls") {
+    if (selectedItem === "Research Calls") {
       fetchResearchCall();
     }
   }, [dispatch, selectedItem]);
@@ -561,7 +561,7 @@ const DashboardCrypto = ({
               selectedWidget={selectedItem}
               handleItemClick={handleItemClick}
             />
-            {/* {selectedItem === "Reasearch Calls" && <TradeCapsule />} */}
+            {/* {selectedItem === "Research Calls" && <TradeCapsule />} */}
             {/* {selectedItem === "Clients With Ledger Balance" && <DropDown />} */}
           </Row>
           {selectedItem === "Clients With Ledger Balance" ||

@@ -998,4 +998,20 @@ export const apiServices = {
   GetAMCActivationStatus: async (payload: any) => {
     return await apiService("POST", endpoints.GetAMCActivationStatus, payload);
   },
+  GetMTFShortfallData: async (payload: any) => {
+    return await apiService("POST", endpoints.GetMTFShortfallData, payload);
+  },
+  ViewMTFAgeingReport: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewMTFAgeingReport, payload);
+  },
+  MTFAgeingFileUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.MTFAgeingFileUpload, payload);
+  },
+  MTFStockAgeingFileUpload: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.MTFStockAgeingFileUpload,
+      payload
+    );
+  },
 };

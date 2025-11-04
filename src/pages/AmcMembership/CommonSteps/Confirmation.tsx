@@ -34,6 +34,8 @@ const Confirmation = ({
     "waiting" | "success" | "failure"
   >("waiting");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isCheckingRef = useRef(false);
+  const isActivatingRef = useRef(false);
 
   const isCheckingRef = useRef(false);
   const isActivatingRef = useRef(false);
