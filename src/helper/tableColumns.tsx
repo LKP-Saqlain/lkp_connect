@@ -6164,23 +6164,6 @@ export const getApproverOneDetails: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "clientRate",
-    headerName: "Client Rate",
-    minWidth: 70,
-    align: "right",
-    disableColumnMenu: true,
-    headerAlign: "center",
-  },
-  {
-    field: "vendorRate",
-    headerName: "Vendor Rate",
-    minWidth: 70,
-    align: "right",
-    disableColumnMenu: true,
-    headerAlign: "center",
-  },
-
-  {
     field: "sbCommission",
     headerName: "SB Commission",
     minWidth: 100,
