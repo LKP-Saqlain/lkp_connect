@@ -1030,4 +1030,13 @@ export const apiServices = {
   ViewT6SellingReport: async (payload: any) => {
     return await apiService("POST", endpoints.ViewT6SellingReport, payload);
   },
+  REGBSEFileUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.REGBSEFileUpload, payload);
+  },
+  REGNSEFileUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.REGNSEFileUpload, payload);
+  },
+  ViewREGMasterdata: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewREGMasterdata, payload);
+  },
 };

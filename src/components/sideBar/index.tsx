@@ -109,6 +109,8 @@ import MTFFileUpload from "../../pages/RMS/mtfFileUpload";
 import MTFAgeingReport from "../../pages/RMS/MTFAgeingReport";
 import T6SellingUpload from "../../pages/RMS/T6SellingUpload";
 import T6SellingReport from "../../pages/RMS/T6SellingReport";
+import RegFileUpload from "../../pages/RMS/REGFileUpload";
+import RegMaster from "../../pages/RMS/RegMaster";
 
 const drawerWidth = 260;
 
@@ -757,6 +759,8 @@ const SideBar = () => {
     "MTF Ageing Report": <MTFAgeingReport activeSubItem={activeSubItem} />,
     "T6 Selling File Upload": <T6SellingUpload activeSubItem={activeSubItem} />,
     "T6 Selling Report": <T6SellingReport activeSubItem={activeSubItem} />,
+    "REG File Upload": <RegFileUpload activeSubItem={activeSubItem} />,
+    "REG Master Records": <RegMaster activeSubItem={activeSubItem} />,
   };
   const tpdSubItems: Record<string, JSX.Element> = {
     "Unlisted Shares Entry": (

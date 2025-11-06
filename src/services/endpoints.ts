@@ -240,4 +240,7 @@ export const endpoints = {
   T6BSESellingFileUpload: "/api/RMS/T6BSESellingFileUpload",
   T6NSESellingFileUpload: "/api/RMS/T6NSESellingFileUpload",
   ViewT6SellingReport: "/api/RMS/ViewT6SellingReport",
+  REGBSEFileUpload: "/api/RMS/REGBSEFileUpload",
+  REGNSEFileUpload: "/api/RMS/REGNSEFileUpload",
+  ViewREGMasterdata: "/api/RMS/ViewREGMasterdata",
 };

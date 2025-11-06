@@ -95,6 +95,8 @@ const multipartEndpoints = [
   endpoints.MTFAgeingFileUpload,
   endpoints.T6BSESellingFileUpload,
   endpoints.T6NSESellingFileUpload,
+  endpoints.REGNSEFileUpload,
+  endpoints.REGBSEFileUpload,
 ];
 
 const mutualFundEndpoints = [

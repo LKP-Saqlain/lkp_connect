@@ -70,6 +70,7 @@ import {
   ageingColumns,
   vendorApprovalColumns,
   t6SellingReportColumns,
+  regMasterColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -2316,6 +2317,10 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "T6 Selling Report") {
       return t6SellingReportColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "REG Master Records") {
+      return regMasterColumns.map((column) => ({
         ...column,
       }));
     } else {
