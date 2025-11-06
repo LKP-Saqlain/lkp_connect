@@ -44,9 +44,7 @@ const Index = ({ activeMenu }: any) => {
 
   const fetchData = () => {
     const zoneValue =
-      accessType.string().uppercase() === "ALL"
-        ? selectedZone?.value || "H.O."
-        : "ALL";
+      accessType === "ALL" ? selectedZone?.value || "H.O." : "ALL";
     const payload = {
       zone: zoneValue,
       branchCode: "ALL",
