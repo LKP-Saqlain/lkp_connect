@@ -44,12 +44,12 @@ const Index = ({ activeMenu }: any) => {
 
   const fetchData = () => {
     const payload = {
-      zone: selectedZone?.value || "H.O.",
+      zone: selectedZone?.value || "ALL",
       branchCode: "ALL",
       tradingCode: "ALL",
       userId: user_id,
       // zone: "0009",
-      // zone: "H.O.",
+      // zone: "ALL",
       // userId: "EMP-0040",
       // branchCode: "BH.O.",
       // branchCode: "B1400",
@@ -87,7 +87,7 @@ const Index = ({ activeMenu }: any) => {
 
   const fetchContestData = () => {
     const payload = {
-      zone: selectedZone?.value || "H.O.",
+      zone: selectedZone?.value || "ALL",
       branchcode: "ALL",
       tradingCode: "ALL",
       UserId: user_id,
