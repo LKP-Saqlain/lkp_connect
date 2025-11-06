@@ -69,6 +69,7 @@ import {
   shortfallColumns,
   ageingColumns,
   vendorApprovalColumns,
+  t6SellingReportColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -2311,6 +2312,10 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "Vendor Details Report") {
       return vendorApprovalColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "T6 Selling Report") {
+      return t6SellingReportColumns.map((column) => ({
         ...column,
       }));
     } else {

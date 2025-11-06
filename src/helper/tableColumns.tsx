@@ -10473,3 +10473,190 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
 ];
+
+export const t6SellingReportColumns: GridColDef[] = [
+  {
+    field: "exchange",
+    headerName: "Exchange",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 75,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 60,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "branchCode",
+    headerName: "Branch Code",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 70,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "branchType",
+    headerName: "Branch Type",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 70,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "rMcode",
+    headerName: "RM Code",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 60,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "rmName",
+    headerName: "RM Name",
+    flex: 1.5,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 240,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "dealercode",
+    headerName: "Dealer Code",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 80,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "dealerName",
+    headerName: "Dealer Name",
+    flex: 1.5,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 220,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 80,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1.8,
+    align: "left",
+    headerAlign: "center",
+    minWidth: 220,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  // {
+  //   field: "symbol",
+  //   headerName: "Symbol",
+  //   flex: 1,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   minWidth: 100,
+  //   headerClassName: "header-wrap-custom",
+  //   renderCell: (params) => (params.value ? params.value : "—"),
+  // },
+  // {
+  //   field: "series",
+  //   headerName: "Series",
+  //   flex: 0.8,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   minWidth: 80,
+  //   headerClassName: "header-wrap-custom",
+  //   renderCell: (params) => (params.value ? params.value : "—"),
+  // },
+  {
+    field: "symbolSeries",
+    headerName: "Symbol / Series",
+    width: 160,
+    align: "left",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      const symbol = (params.row?.symbol || "").trim();
+      const series = (params.row?.series || "").trim();
+      return `${symbol} / ${series}`;
+    },
+  },
+  {
+    field: "rate",
+    headerName: "Rate",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    minWidth: 100,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const value = params.value;
+
+      // Handle empty/null/undefined
+      if (value === null || value === undefined || value === "") {
+        return "—";
+      }
+
+      // Format the number with Indian locale and 2 decimal places
+      const formattedValue = new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(Number(value));
+
+      return formattedValue;
+    },
+  },
+  {
+    field: "qty",
+    headerName: "Quantity",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    minWidth: 100,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const value = params.value;
+
+      // Handle empty/null/undefined
+      if (value === null || value === undefined || value === "") {
+        return "—";
+      }
+
+      // Format the number with Indian locale and 2 decimal places
+      const formattedValue = new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(Number(value));
+
+      return formattedValue;
+    },
+  },
+];

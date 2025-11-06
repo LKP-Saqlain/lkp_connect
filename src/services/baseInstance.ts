@@ -93,6 +93,8 @@ const multipartEndpoints = [
   endpoints.SLBMHoldingsUploadOdin,
   endpoints.MTFStockAgeingFileUpload,
   endpoints.MTFAgeingFileUpload,
+  endpoints.T6BSESellingFileUpload,
+  endpoints.T6NSESellingFileUpload,
 ];
 
 const mutualFundEndpoints = [
