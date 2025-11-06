@@ -43,8 +43,10 @@ const Index = ({ activeMenu }: any) => {
   );
 
   const fetchData = () => {
+    const zoneValue =
+      accessType === "ALL" ? selectedZone?.value || "H.O." : "ALL";
     const payload = {
-      zone: selectedZone?.value || "ALL",
+      zone: zoneValue,
       branchCode: "ALL",
       tradingCode: "ALL",
       userId: user_id,
