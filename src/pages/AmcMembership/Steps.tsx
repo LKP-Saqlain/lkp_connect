@@ -9,6 +9,11 @@ import TariffForm from "./CommonSteps/TariffForm";
 import Confirmation from "./CommonSteps/Confirmation";
 import { useLocation, useNavigate } from "react-router-dom";
 import Bsda from "./CommonSteps/Bdsa";
+import { decryptAES } from "../../utils/encryptDecrypt";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
 
 const AmcMembership = () => {
   const [step, setStep] = useState(1);
@@ -16,6 +21,9 @@ const AmcMembership = () => {
   const [clientData, setClientData] = useState<any>(null);
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [totalPayable, setTotalPayable] = useState<any>(null);
+  const [passUserId, setPassUserId] = useState<string>("");
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,17 +32,60 @@ const AmcMembership = () => {
   useEffect(() => {
     const fromState = location.state?.selectedRow;
     const fromStorage = sessionStorage.getItem("selectedRow");
+    const queryParams = new URLSearchParams(location.search);
+    const isAMCLink = window.location.pathname.includes("AMCLink");
 
-    if (fromState) {
+    if (isAMCLink && queryParams.get("boid") && queryParams.get("user")) {
+      // External link scenario or pasted link
+      const decryptedBOID = decryptAES(
+        decodeURIComponent(queryParams.get("boid")!)
+      );
+      const decryptedUserId = decryptAES(
+        decodeURIComponent(queryParams.get("user")!)
+      );
+      setPassUserId(decryptedUserId);
+
+      fetchData({ decryptedBOID, decryptedUserId });
+      // Data will be saved to sessionStorage inside fetchData
+    } else if (fromState) {
+      // Internal navigation with state
       setSelectedRow(fromState);
-      sessionStorage.setItem("selectedRow", JSON.stringify(fromState)); // persist it
     } else if (fromStorage) {
+      // Returning user, sessionStorage exists
       setSelectedRow(JSON.parse(fromStorage));
     } else {
       console.warn("No selectedRow found. Redirecting.");
-      navigate("/dashboard"); // or show error UI
+      navigate("/dashboard");
     }
-  }, [location.state, navigate]);
+  }, [location.state, location.search]);
+
+  const fetchData = ({ decryptedBOID, decryptedUserId }: any) => {
+    const payload = {
+      zone: "ALL",
+      branchCode: "ALL",
+      tradingCode: decryptedBOID,
+      userId: decryptedUserId,
+      // userId: "EMP-5376",
+    };
+
+    dispatch(showLoader("Please wait, we are processing your request..."));
+
+    apiServices
+      .GetClientModuleDataForAmc(payload)
+      .then((response) => {
+        const withoutLifetime =
+          response?.data?.data?.withoutLifetimeAMC[0] || [];
+
+        setSelectedRow(withoutLifetime);
+        sessionStorage.setItem("selectedRow", JSON.stringify(withoutLifetime));
+      })
+      .catch((error) => {
+        console.error("Error fetching compliance data:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
 
   // Step: Auto-remove from sessionStorage when flow completes (final step)
   useEffect(() => {
@@ -104,6 +155,7 @@ const AmcMembership = () => {
         {/* Step-based Flow */}
         {step === 1 && selectedRow && (
           <ClientInfo
+            passUserId={passUserId}
             onNext={() => setStep(isBSDA ? 2 : 2)} // always go to next (BSDA handled separately)
             selectedRow={selectedRow}
             setClientData={setClientData}

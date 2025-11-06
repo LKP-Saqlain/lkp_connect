@@ -12,6 +12,7 @@ interface ClientInfoProps {
   selectedRow: any;
   setClientData: (data: any) => void; //  add this
   goToStep4: () => void;
+  passUserId: any;
 }
 
 const ClientInfo = ({
@@ -19,13 +20,15 @@ const ClientInfo = ({
   selectedRow,
   setClientData,
   goToStep4,
+  passUserId,
 }: ClientInfoProps) => {
   const [clientData, setLocalClientData] = useState<any>(null);
   const [paymentStatus, setPaymentStatus] = useState<boolean | null>(null);
   // const [clientData, setClientData] = useState<any>(null);
-  const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+  const reduxUserId = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data?.user_id
   );
+  const user_id = reduxUserId || passUserId || "";
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
