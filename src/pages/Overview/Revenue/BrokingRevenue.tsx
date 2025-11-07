@@ -156,7 +156,7 @@ const Revenue = ({
               filteredRevenueData[0]?.Ach_brokslbm_dir + //til here existing Broking flag below 2 inidirect flags added
               filteredRevenueData[0]?.Ach_brok_indir +
               filteredRevenueData[0]?.Ach_brok_ind_less2yrs +
-              filteredRevenueData[0]?.Ach_brokslbm_dir + //below 3 SLBM new flags added in SLBM
+              // filteredRevenueData[0]?.Ach_brokslbm_dir + //below 3 SLBM new flags added in SLBM
               filteredRevenueData[0]?.Ach_brokslbm_indir +
               filteredRevenueData[0]?.Ach_brokslbm_ind_less2yrs;
 

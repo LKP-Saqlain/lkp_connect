@@ -6103,6 +6103,13 @@ export const getApproverOneDetails: GridColDef[] = [
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "vendorRate",
@@ -6111,6 +6118,13 @@ export const getApproverOneDetails: GridColDef[] = [
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "lkpCommissionPerShare",
@@ -6120,6 +6134,13 @@ export const getApproverOneDetails: GridColDef[] = [
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "brokerageInclusiveGST",
@@ -6129,6 +6150,13 @@ export const getApproverOneDetails: GridColDef[] = [
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "gst",
@@ -6137,6 +6165,13 @@ export const getApproverOneDetails: GridColDef[] = [
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "brokerageExclusiveGST",
@@ -6146,6 +6181,13 @@ export const getApproverOneDetails: GridColDef[] = [
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "sbCode",
@@ -6162,6 +6204,13 @@ export const getApproverOneDetails: GridColDef[] = [
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "sbCommission",
@@ -6171,6 +6220,13 @@ export const getApproverOneDetails: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "netBrokerage",
@@ -6180,6 +6236,13 @@ export const getApproverOneDetails: GridColDef[] = [
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
 ];
 
@@ -6261,7 +6324,9 @@ export const getApproverTwoDetails: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
   },
-  ...getApproverOneDetails.filter((col) => col.field !== "Action"),
+  ...getApproverOneDetails.filter(
+    (col) => col.field !== "Action" && col.field !== "dealSheetB64"
+  ),
 ];
 
 export const unListedTradeColumns: GridColDef[] = [
