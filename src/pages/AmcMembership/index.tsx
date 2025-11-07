@@ -123,6 +123,7 @@ const Index = ({ activeMenu }: any) => {
   };
 
   useEffect(() => {
+    if (accessType !== "ALL") return;
     const fetchZones = async () => {
       const userType =
         localStorage.getItem("uIdType") === "Employee" ? "EMP" : "APN";
@@ -157,11 +158,12 @@ const Index = ({ activeMenu }: any) => {
     };
 
     fetchZones();
-  }, [dispatch, user_id]);
+  }, [dispatch, user_id, accessType]);
 
   useEffect(() => {
+    if (!selectedZone || noSortingGroup.length === 0) return;
     fetchData();
-  }, [selectedZone]);
+  }, [selectedZone, noSortingGroup]);
 
   useEffect(() => {
     if (selectedCapsule === "Contest Earned") {
