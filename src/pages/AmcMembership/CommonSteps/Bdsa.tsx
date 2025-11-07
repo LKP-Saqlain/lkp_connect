@@ -1,5 +1,7 @@
 import { Row, Col, Button } from "reactstrap";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 interface BsdaProps {
   onNext: () => void;
@@ -7,15 +9,16 @@ interface BsdaProps {
 }
 
 const Bsda = ({ onNext, clientData }: BsdaProps) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
   };
 
-  // ✅ Email Subject
   const emailSubject =
     "Consent for Conversion from BSDA to Regular Demat Account.";
 
-  // ✅ Plain text (for copying)
   const emailBodyText = `Dear LKP Team,
 
 BOID - ${clientData?.dP_ID}
@@ -27,7 +30,6 @@ Thank you.
 Warm regards,
 ${clientData?.primary_Holder}`;
 
-  // ✅ HTML body (for on-screen display with bold formatting)
   const emailBodyHTML = `
     Dear LKP Team,<br /><br />
     BOID - <b>${clientData?.dP_ID}</b><br /><br />
@@ -40,12 +42,22 @@ ${clientData?.primary_Holder}`;
   `;
 
   return (
-    <div style={{ padding: "1rem 2rem", fontSize: "17px" }}>
-      {/* Header */}
-
+    <div
+      style={{
+        padding: isMobile ? "1rem" : "1rem 2rem",
+        fontSize: isMobile ? "15px" : "17px",
+        lineHeight: "1.8",
+      }}
+    >
       <Row>
         <Col md="12">
-          <p style={{ color: "#333", lineHeight: "1.6", marginBottom: "1rem" }}>
+          <p
+            style={{
+              color: "#333",
+              marginBottom: isMobile ? "0.8rem" : "1rem",
+              textAlign: isMobile ? "center" : "left",
+            }}
+          >
             It has been observed that the Demat Account{" "}
             <b>{clientData?.dP_ID}</b> is under BSDA Category and in order to
             avail the Lifetime DP AMC Scheme, the DP Account will need to be
@@ -55,8 +67,8 @@ ${clientData?.primary_Holder}`;
           <p
             style={{
               color: "#333",
-              lineHeight: "1.6",
-              marginBottom: "1.5rem",
+              marginBottom: isMobile ? "1rem" : "1.5rem",
+              textAlign: isMobile ? "center" : "left",
             }}
           >
             In order to enable us to move the DP account to Regular Category,
@@ -64,30 +76,35 @@ ${clientData?.primary_Holder}`;
             registered email ID i.e. <b>( {clientData?.email_id} )</b> to{" "}
             <a
               href="mailto:ho_dp@lkpsec.com"
-              style={{ color: "#0055ff", textDecoration: "none" }}
+              style={{
+                color: "#0055ff",
+                textDecoration: "none",
+                // wordBreak: "break-all",
+              }}
             >
               ho_dp@lkpsec.com
             </a>
             .
           </p>
 
-          {/* ✅ Email Subject */}
+          {/* ✅ Email Subject Box */}
           <div
             style={{
               backgroundColor: "#f8f9fb",
               borderRadius: "10px",
               border: "1px solid #e0e0e0",
-              padding: "1rem",
+              padding: isMobile ? "0.8rem" : "1rem",
               marginBottom: "1rem",
             }}
           >
             <div
               style={{
                 display: "flex",
+                flexDirection: isMobile ? "column" : "row",
                 justifyContent: "space-between",
-                alignItems: "center",
-                flexWrap: "wrap",
-                gap: "1rem",
+                alignItems: isMobile ? "center" : "center",
+                gap: "0.8rem",
+                textAlign: isMobile ? "center" : "left",
               }}
             >
               <p style={{ fontWeight: 600, margin: 0 }}>
@@ -102,37 +119,38 @@ ${clientData?.primary_Holder}`;
                   display: "flex",
                   alignItems: "center",
                   gap: "4px",
-                  fontSize: "0.9rem",
+                  fontSize: isMobile ? "0.85rem" : "0.9rem",
+                  justifyContent: isMobile ? "center" : "flex-end",
                   textDecoration: "underline",
                 }}
                 onClick={() => handleCopy(emailSubject)}
               >
                 <ContentCopyIcon style={{ fontSize: "16px" }} />
-                <span>Click here to copy the subject line</span>
+                <span>Click to copy subject</span>
               </div>
             </div>
           </div>
 
-          {/* ✅ Email Body (With Bold Formatting) */}
+          {/*  Email Body Box */}
           <div
             style={{
               backgroundColor: "#f8f9fb",
               borderRadius: "10px",
               border: "1px solid #e0e0e0",
-              padding: "1rem",
+              padding: isMobile ? "0.8rem" : "1rem",
               marginBottom: "1rem",
             }}
           >
             <div
               style={{
                 display: "flex",
+                flexDirection: isMobile ? "column" : "row",
                 justifyContent: "space-between",
-                alignItems: "flex-end",
-                flexWrap: "wrap",
-                gap: "1rem",
+                alignItems: isMobile ? "center" : "flex-end",
+                gap: "0.8rem",
+                textAlign: isMobile ? "center" : "left",
               }}
             >
-              {/* Render formatted HTML safely */}
               <p
                 style={{
                   lineHeight: "1.6",
@@ -150,26 +168,27 @@ ${clientData?.primary_Holder}`;
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: isMobile ? "center" : "flex-end",
                   gap: "4px",
-                  fontSize: "0.9rem",
-                  whiteSpace: "nowrap",
+                  fontSize: isMobile ? "0.85rem" : "0.9rem",
                   textDecoration: "underline",
+                  whiteSpace: isMobile ? "normal" : "nowrap",
                 }}
                 onClick={() => handleCopy(emailBodyText)}
               >
                 <ContentCopyIcon style={{ fontSize: "16px" }} />
-                <span>Click here to copy the message</span>
+                <span>Click to copy message</span>
               </div>
             </div>
           </div>
         </Col>
       </Row>
 
-      {/* Proceed Button */}
+      {/*  Proceed Button */}
       <div
         style={{
           textAlign: "center",
-          marginTop: "2rem",
+          marginTop: isMobile ? "1.5rem" : "2rem",
         }}
       >
         <Button
@@ -178,8 +197,10 @@ ${clientData?.primary_Holder}`;
             backgroundColor: "#003366",
             border: "none",
             borderRadius: "6px",
-            padding: "0.6rem 2rem",
+            padding: isMobile ? "0.6rem 1.5rem" : "0.6rem 2rem",
             fontWeight: 600,
+            fontSize: isMobile ? "15px" : "17px",
+            width: isMobile ? "100%" : "auto",
           }}
           onClick={onNext}
         >

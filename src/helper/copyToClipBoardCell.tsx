@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { encryptAES } from "../utils/encryptDecrypt";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 interface Props {
   fullLink: string;
@@ -15,6 +17,10 @@ const CopyToClipboardCell: React.FC<Props> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const [mandateLink, setMandateLink] = useState("");
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   const fallbackCopyTextToClipboard = (text: string) => {
     const textarea = document.createElement("textarea");
@@ -46,14 +52,30 @@ const CopyToClipboardCell: React.FC<Props> = ({
   const handleCopy = () => {
     console.log("testsad", field, selectedRow);
     let textToCopy = field !== "dpMandate" ? fullLink : mandateLink;
-    if (field === "dpMandate") {
-      console.log("clientCode", selectedRow.ClientCode);
 
-      const encryptedCode = encryptAES(selectedRow.ClientCode);
-      const safeCode = encodeURIComponent(encryptedCode);
-      textToCopy = `${window.location.origin}/DPMandate/${safeCode}`;
-      setMandateLink(textToCopy);
-      console.log("customLink", textToCopy);
+    if (field === "dpMandate" || field === "AMC") {
+      console.log(
+        "clientCode&dP_ID",
+        selectedRow.ClientCode,
+        selectedRow.dP_ID
+      );
+
+      const isMandate = field === "dpMandate";
+
+      if (isMandate) {
+        const encryptedCode = encryptAES(selectedRow.ClientCode);
+        const safeCode = encodeURIComponent(encryptedCode);
+        textToCopy = `${window.location.origin}/DPMandate/${safeCode}`;
+        setMandateLink(textToCopy);
+        console.log("customLink", textToCopy);
+      } else {
+        const encryptedBOID = encodeURIComponent(encryptAES(selectedRow.dP_ID));
+        const encryptedUserId = encodeURIComponent(encryptAES(user_id));
+
+        textToCopy = `${window.location.origin}/AMCLink?boid=${encryptedBOID}&user=${encryptedUserId}`;
+        setMandateLink(textToCopy);
+        console.log("customLink", textToCopy);
+      }
     }
 
     if (navigator.clipboard && window.isSecureContext) {
@@ -70,7 +92,6 @@ const CopyToClipboardCell: React.FC<Props> = ({
           setTimeout(() => setCopied(false), 3000);
         });
     } else {
-      // Non-secure context or unsupported browser
       fallbackCopyTextToClipboard(textToCopy);
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);

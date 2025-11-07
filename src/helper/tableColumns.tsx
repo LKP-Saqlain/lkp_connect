@@ -9372,7 +9372,7 @@ export const AmcLifeMembership: GridColDef[] = [
     minWidth: 160,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
     valueGetter: (params: any) => {
       return params || "-";
@@ -9397,7 +9397,7 @@ export const AmcLifeMembership: GridColDef[] = [
     minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
     valueGetter: (params: any) => {
       return params || "-";
@@ -9410,7 +9410,7 @@ export const AmcLifeMembership: GridColDef[] = [
     minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
     valueGetter: (params: any) => {
       return params || "-";
@@ -9503,6 +9503,40 @@ export const AmcNonLifeMembership: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+  {
+    field: "AMC_Link",
+    headerName: "AMC Link",
+    headerClassName: "header-wrap-custom",
+    minWidth: 75,
+    flex: 0.3,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const { dP_ID } = params.row;
+      // if (!Payment_link || !EnCAccountCode)
+      //   return (
+      //     <Tooltip title={"No Link Available"} arrow placement="top">
+      //       <span>No Link Available</span>
+      //     </Tooltip>
+      //   );
+      if (params?.row?.schemeStatus === "Submitted") return <span>—</span>;
+
+      const fullLink = `${dP_ID}`;
+      console.log(
+        params?.row?.schemeStatus,
+        "Payment_link,  <CopyToClipboardCellEnCAccountCode",
+        fullLink
+      );
+      return (
+        <CopyToClipboardCell
+          fullLink={fullLink}
+          field={"AMC"}
+          selectedRow={params?.row}
+        />
+      );
+    },
+  },
   ...AmcLifeMembership,
 ];
 
@@ -9587,7 +9621,7 @@ export const AmcContest: GridColDef[] = [
     minWidth: 160,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
     valueGetter: (params: any) => {
       return params || "-";

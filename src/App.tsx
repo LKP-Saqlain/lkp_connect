@@ -120,6 +120,7 @@ const App = () => {
           /> */}
           <Route path="/DPMandate" element={<DpMandate />} />
           <Route path="/DPMandate/:encryptedCode" element={<DpMandate />} />
+          <Route path="/AMCLink" element={<AmcMembershipSteps />} />
         </Routes>
       </Suspense>
     </Router>

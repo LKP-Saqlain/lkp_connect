@@ -60,6 +60,17 @@ const publicEndpoints = [
   endpoints.CollectMandatePayment,
   endpoints.PreDebitMandateNotify,
   endpoints.ExecuteUpiMandate,
+  endpoints.GetClientModuleDataForAmc,
+  endpoints.GetClientModuleDetails,
+  endpoints.ActivateAMC,
+  endpoints.SendDPAMCEmail,
+  endpoints.GetDPAMCPaymentResponse,
+  endpoints.SendFirstHolderSignature,
+  endpoints.SendSecondHolderSignature,
+  endpoints.SendThirdHolderSignature,
+  endpoints.DownloadSignedPdf,
+  endpoints.SendFinalSignedMail,
+  endpoints.GetAMCActivationStatus,
 ];
 
 const fundamentalEndpoints = [

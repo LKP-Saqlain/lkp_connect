@@ -6,12 +6,13 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import ShowToast from "../../utils/toastUtils";
 import { capitalizeEachWord } from "../../utils";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 interface PaymentChoiceProps {
   clientData: any;
   onLedger: () => void;
   onOnline: () => void;
-
   setTotalPayable: (amount: number) => void;
 }
 
@@ -22,16 +23,18 @@ const PaymentChoice = ({
   setTotalPayable,
 }: PaymentChoiceProps) => {
   const dispatch = useDispatch<AppDispatch>();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    console.log(" clientData from payment:", clientData);
+    console.log("Client Data:", clientData);
   }, [clientData]);
 
   // Fixed AMC details
   const amcFee = "₹ 1,770.00";
   const amcBreakup = "₹ 1500.00 + GST";
 
-  // Helper to safely parse numbers from currency or numeric strings
+  // Parse currency strings
   const parseCurrency = (val: any) =>
     val
       ? Number(
@@ -41,15 +44,12 @@ const PaymentChoice = ({
         )
       : 0;
 
-  // Extract dynamic values from API response
   const existingOutstanding = parseCurrency(
     clientData?.existing_dp_outstanding
   );
   const ledgerBalance = parseCurrency(clientData?.ledgerbalance);
-  // const ledgerBalance = "435345";
   const amcAmount = parseCurrency(amcFee);
 
-  // Compute totals
   const totalPayable = existingOutstanding + amcAmount;
 
   useEffect(() => {
@@ -91,26 +91,30 @@ const PaymentChoice = ({
   };
 
   return (
-    <>
+    <div
+      style={{
+        padding: isMobile ? "1rem" : "1.5rem 2rem",
+        fontSize: isMobile ? "16px" : "20px",
+        lineHeight: "2.2",
+      }}
+    >
       {/* Payment Details */}
       <Row
         style={{
-          padding: "0 1rem",
           display: "flex",
           justifyContent: "center",
-          minHeight: "60vh",
-          minWidth: "70vw",
-          fontSize: "21px",
-          lineHeight: "2.5",
           alignItems: "center",
+          minHeight: isMobile ? "auto" : "60vh",
+          width: "100%",
         }}
       >
         <Col
           md="12"
           className="mb-3"
           style={{
-            textAlign: "left",
-            maxWidth: "700px", // slightly wider for a balanced table look
+            textAlign: isMobile ? "center" : "left",
+            maxWidth: isMobile ? "100%" : "700px",
+            overflowX: "auto",
           }}
         >
           <table
@@ -118,15 +122,15 @@ const PaymentChoice = ({
               width: "100%",
               borderCollapse: "collapse",
               color: "#333",
+              fontSize: isMobile ? "15px" : "21px",
             }}
           >
             <tbody>
-              {/* Existing DP Outstanding */}
               <tr>
-                <td style={{ padding: "6px 8px", fontWeight: 600 }}>
+                <td style={{ padding: "8px 6px", fontWeight: 600 }}>
                   Existing DP Outstanding:
                 </td>
-                <td style={{ fontWeight: 600, padding: "6px 8px" }}>
+                <td style={{ fontWeight: 600, padding: "8px 6px" }}>
                   {formatCurrency(existingOutstanding)}
                 </td>
               </tr>
@@ -137,12 +141,11 @@ const PaymentChoice = ({
                 </td>
               </tr>
 
-              {/* Lifetime AMC Fee */}
               <tr>
-                <td style={{ padding: "6px 8px", fontWeight: 600 }}>
+                <td style={{ padding: "8px 6px", fontWeight: 600 }}>
                   Lifetime AMC Fee:
                 </td>
-                <td style={{ fontWeight: 600, padding: "6px 8px" }}>
+                <td style={{ fontWeight: 600, padding: "8px 6px" }}>
                   {amcFee} <small>({amcBreakup})</small>
                 </td>
               </tr>
@@ -153,16 +156,15 @@ const PaymentChoice = ({
                 </td>
               </tr>
 
-              {/* Total Payable Amount */}
               <tr>
-                <td style={{ padding: "6px 8px", fontWeight: 600 }}>
+                <td style={{ padding: "8px 6px", fontWeight: 600 }}>
                   Total Payable Amount:
                 </td>
                 <td
                   style={{
-                    padding: "6px 8px",
-                    fontWeight: 600,
-                    // color: "#1c3c6b",
+                    padding: "8px 6px",
+                    fontWeight: 700,
+                    color: "#1c3c6b",
                   }}
                 >
                   {formatCurrency(totalPayable)}
@@ -207,52 +209,34 @@ const PaymentChoice = ({
         </Col>
       </Row>
 
-      <hr style={dividerStyle} />
-
-      {/* Payment Buttons */}
-      <div style={{ textAlign: "center" }}>
-        {/* <p style={{ fontWeight: "600", color: "#000" }}>
-          Select Payment Method
-        </p> */}
-
-        {/* <div style={buttonGroupStyle}>
-          <button
-            style={{
-              backgroundColor: isLedgerSufficient ? "#003366" : "#d3d3d3",
-              color: isLedgerSufficient ? "#fff" : "#000",
-              border: "none",
-              borderRadius: "6px",
-              padding: "0.3rem 1.5rem",
-              cursor: isLedgerSufficient ? "pointer" : "not-allowed",
-            }}
-            onClick={onLedger}
-            disabled={!isLedgerSufficient}
-          >
-            Debit from Ledger
-          </button> */}
-
-        {/* <span style={{ fontWeight: "500", color: "#555" }}>or</span> */}
-
+      {/* Payment Button */}
+      <div
+        style={{
+          textAlign: "center",
+          marginTop: isMobile ? "1rem" : "2rem",
+        }}
+      >
         <Button
           style={{
             backgroundColor: "#003366",
             color: "#fff",
             border: "none",
             borderRadius: "6px",
-            padding: "1rem 1.5rem",
-            fontSize: "18px",
+            padding: isMobile ? "0.7rem 1.5rem" : "1rem 2rem",
+            fontSize: isMobile ? "16px" : "18px",
+            fontWeight: 600,
+            width: isMobile ? "100%" : "auto",
           }}
           onClick={handleOnlinePayment}
         >
           Make Payment
         </Button>
       </div>
-      {/* </div> */}
-    </>
+    </div>
   );
 };
 
-// 🔹 Shared styles
+// 🔹 Shared Styles
 const dividerStyle = {
   border: "none",
   borderTop: "1px dotted #999",
