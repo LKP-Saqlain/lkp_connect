@@ -9307,7 +9307,7 @@ export const AmcLifeMembership: GridColDef[] = [
     minWidth: 160,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
     valueGetter: (params: any) => {
       return params || "-";
@@ -9332,7 +9332,7 @@ export const AmcLifeMembership: GridColDef[] = [
     minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
     valueGetter: (params: any) => {
       return params || "-";
@@ -9345,7 +9345,7 @@ export const AmcLifeMembership: GridColDef[] = [
     minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
     valueGetter: (params: any) => {
       return params || "-";
@@ -9556,7 +9556,7 @@ export const AmcContest: GridColDef[] = [
     minWidth: 160,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     headerClassName: "header-wrap-custom",
     valueGetter: (params: any) => {
       return params || "-";
