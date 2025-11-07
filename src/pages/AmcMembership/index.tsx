@@ -161,9 +161,14 @@ const Index = ({ activeMenu }: any) => {
   }, [dispatch, user_id, accessType]);
 
   useEffect(() => {
-    if (!selectedZone || noSortingGroup.length === 0) return;
-    fetchData();
-  }, [selectedZone, noSortingGroup]);
+    if (accessType !== "ALL" && !selectedZone) {
+      fetchData();
+      return;
+    }
+    if (accessType === "ALL" && selectedZone) {
+      fetchData();
+    }
+  }, [selectedZone, accessType]);
 
   useEffect(() => {
     if (selectedCapsule === "Contest Earned") {
