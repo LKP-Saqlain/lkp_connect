@@ -5,6 +5,8 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { capitalizeEachWord } from "../../utils";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 // import { decryptAES } from "../../utils/encryptDecrypt";
 
 interface ClientInfoProps {
@@ -25,6 +27,9 @@ const ClientInfo = ({
   const [clientData, setLocalClientData] = useState<any>(null);
   const [paymentStatus, setPaymentStatus] = useState<boolean | null>(null);
   // const [clientData, setClientData] = useState<any>(null);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const reduxUserId = useSelector(
     (state: RootState) => state.UserLogin?.data?.data?.user_id
   );
@@ -119,14 +124,21 @@ const ClientInfo = ({
       {/* Holder Info */}
       <Row
         style={{
-          padding: "0 1rem",
-          minHeight: "60vh",
-          minWidth: "70vw",
-          fontSize: "21px",
-          lineHeight: "2.6",
+          padding: isMobile ? "0 0.5rem" : "0 1rem",
+          minHeight: isMobile ? "auto" : "60vh",
+          minWidth: isMobile ? "100%" : "70vw",
+          fontSize: isMobile ? "16px" : "21px",
+          lineHeight: isMobile ? "1.8" : "2.6",
+          display: "flex",
+          flexDirection: isMobile ? "column" : "row",
+          textAlign: isMobile ? "center" : "left",
         }}
       >
-        <Col md="6" className="mb-3">
+        <Col
+          md="6"
+          className="mb-3"
+          style={{ marginBottom: isMobile ? "1rem" : "2rem" }}
+        >
           <p>
             <strong>Primary Holder:</strong>{" "}
             <span style={{ color: "#333" }}>{primaryHolder}</span>
@@ -142,7 +154,7 @@ const ClientInfo = ({
             <span style={{ color: "#333" }}>{tertiaryHolder}</span>
           </p>
 
-          <hr style={dividerStyle} />
+          {!isMobile && <hr style={dividerStyle} />}
 
           <p>
             <strong>Email ID:</strong>{" "}
@@ -159,7 +171,11 @@ const ClientInfo = ({
           <hr style={dividerStyle} />
         </Col>
 
-        <Col md="6" className="mb-3">
+        <Col
+          md="6"
+          className="mb-3"
+          style={{ marginBottom: isMobile ? "1rem" : "2rem" }}
+        >
           <p>
             <strong>DP ID:</strong>{" "}
             <span style={{ color: "#333" }}>{dpId}</span>
@@ -170,7 +186,7 @@ const ClientInfo = ({
           <p>
             <strong>Lifetime AMC Fee:</strong>{" "}
             <span style={{ color: "#333" }}>
-              ₹ 1,770.00 <small> ( ₹ 1500.00 + GST)</small>
+              ₹ 1,770.00 <small>(₹ 1500.00 + GST)</small>
             </span>
           </p>
 
@@ -182,17 +198,18 @@ const ClientInfo = ({
       <div
         style={{
           textAlign: "center",
-          marginTop: "1rem",
+          marginTop: isMobile ? "1.5rem" : "2rem",
         }}
       >
         <Button
           color="primary"
           style={{
-            padding: "0.3rem 2rem",
+            padding: isMobile ? "0.5rem 1.5rem" : "0.3rem 2rem",
             borderRadius: "6px",
             backgroundColor: "#003366",
             border: "none",
-            fontSize: "21px",
+            fontSize: isMobile ? "18px" : "21px",
+            width: isMobile ? "100%" : "auto",
           }}
           onClick={handleClick}
         >

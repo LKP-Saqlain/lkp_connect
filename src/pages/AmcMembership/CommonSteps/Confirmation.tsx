@@ -1,50 +1,45 @@
+import { useEffect, useRef, useState } from "react";
 import { Button } from "reactstrap";
 import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { apiServices } from "../../../services";
-import { useEffect, useRef, useState } from "react";
 import dayjs from "dayjs";
+import { AppDispatch } from "../../../redux/store";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../services";
 
 type ConfirmationProps = {
   onNext: () => void;
-  // status: 1 | 2 | 3; // 1: success, 2: failure, 3: waiting
+  onBackToStep2: () => void;
   flow: "ledger" | "online";
   selectedRow: any;
   totalPayable: number;
-  onBackToStep2: () => void;
   complete: boolean;
 };
 
 const Confirmation = ({
   onNext,
-  // status,
+  onBackToStep2,
   flow,
   selectedRow,
   totalPayable,
-  onBackToStep2,
   complete,
 }: ConfirmationProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const [timer, setTimer] = useState(600); // 5 minutes = 300 seconds
-  // const [currentTime, setCurrentTime] = useState<Date | null>(null);
+  const [timer, setTimer] = useState(600); // 10 minutes
   const [paymentStatus, setPaymentStatus] = useState<
     "waiting" | "success" | "failure"
   >("waiting");
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
   const isCheckingRef = useRef(false);
   const isActivatingRef = useRef(false);
 
-  // Derived UI states from paymentStatus
   const isWaiting = paymentStatus === "waiting";
   const isSuccess = paymentStatus === "success";
   const isFailure = paymentStatus === "failure";
   const isComplete = complete === true;
 
-  //  Helper: Format seconds → MM:SS
+  // Format seconds to MM:SS
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60)
       .toString()
@@ -53,9 +48,9 @@ const Confirmation = ({
     return `${m}:${s}`;
   };
 
-  //  Function: Activate AMC
+  // Activate AMC function
   const activateAMC = async (source: string) => {
-    if (isActivatingRef.current) return; // 🚫 prevent double activation
+    if (isActivatingRef.current) return;
     isActivatingRef.current = true;
     const payload = {
       tradingCode: selectedRow?.trading_Code,
@@ -66,24 +61,22 @@ const Confirmation = ({
       option: "SaveAMC",
     };
 
-    console.log("🚀 Calling Activate_AMC from", source, payload);
+    console.log("Activating AMC from", source, payload);
 
     dispatch(showLoader("Please wait, activating AMC..."));
 
     try {
-      const response = await apiServices.ActivateAMC(payload);
-      console.log(" Activate_AMC Response:", response);
+      await apiServices.ActivateAMC(payload);
       setPaymentStatus("success");
     } catch (error) {
-      console.error(" Error activating AMC:", error);
+      console.error("Error activating AMC:", error);
       setPaymentStatus("failure");
     } finally {
       dispatch(hideLoader());
     }
   };
 
-  //  Function: Poll payment response (for online)
-
+  // Polling payment response (online flow)
   const getPaymentResponse = async () => {
     if (isCheckingRef.current || isActivatingRef.current) return;
     isCheckingRef.current = true;
@@ -92,33 +85,23 @@ const Confirmation = ({
       amount: totalPayable.toFixed(2),
     };
 
-    console.log("Checking payment status...", payload);
-
     try {
       const response = await apiServices.GetDPAMCPaymentResponse(payload);
       const paymentData = response?.data?.data;
-      console.log("Payment Response:", paymentData);
 
       if (paymentData?.status === "Success" && paymentData?.transDate) {
-        // ✅ Parse date properly
         const transDate = dayjs(
           paymentData.transDate,
           "DD/MM/YYYY HH:mm:ss"
         ).toDate();
         const now = new Date();
+        const TEN_MINUTES = 10 * 60 * 1000;
 
-        const timeDifference = Math.abs(now.getTime() - transDate.getTime());
-        const TEN_MINUTES = 10 * 60 * 1000; // 10 minutes in milliseconds
-
-        if (timeDifference <= TEN_MINUTES) {
-          console.log(
-            " Payment Success within 10 minutes, triggering AMC activation..."
-          );
+        if (Math.abs(now.getTime() - transDate.getTime()) <= TEN_MINUTES) {
           clearInterval(intervalRef.current!);
           setPaymentStatus("success");
-          // activateAMC("online-success");
+          // Optionally trigger AMC activation here
         } else {
-          console.warn(" Transaction too old (>10 min)");
           setPaymentStatus("failure");
         }
       }
@@ -129,90 +112,55 @@ const Confirmation = ({
     }
   };
 
-  //  useEffect: Handle ledger flow immediately
+  // Ledger flow: activate AMC immediately
   useEffect(() => {
     if (flow === "ledger") {
       setPaymentStatus("success");
       activateAMC("ledger");
     }
-    // else {
-    //   const now = new Date();
-    //   setCurrentTime(now);
-    // }
   }, [flow]);
 
-  //  useEffect: Start timer & polling for online
+  // Online flow: countdown timer and polling
   useEffect(() => {
-    if (flow === "online") {
-      // Timer countdown
-      const timerInterval = setInterval(() => {
-        setTimer((prev) => {
-          if (prev <= 1) {
-            clearInterval(timerInterval);
-            clearInterval(intervalRef.current!);
-            if (paymentStatus === "waiting") {
-              console.warn("Timer finished, marking payment as failed");
-              setPaymentStatus("failure");
-            }
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+    if (flow !== "online") return;
 
-      // Start polling every 5 sec
-      intervalRef.current = setInterval(() => {
-        getPaymentResponse();
-      }, 7000); // changed from 10000 → 5000
+    const timerInterval = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerInterval);
+          clearInterval(intervalRef.current!);
+          if (paymentStatus === "waiting") setPaymentStatus("failure");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
-      // Cleanup
-      return () => {
-        clearInterval(timerInterval);
-        clearInterval(intervalRef.current!);
-      };
-    }
+    intervalRef.current = setInterval(getPaymentResponse, 7000);
+
+    return () => {
+      clearInterval(timerInterval);
+      clearInterval(intervalRef.current!);
+    };
   }, [flow, paymentStatus]);
 
   useEffect(() => {
-    if (complete) {
-      setPaymentStatus("success");
-    }
+    if (complete) setPaymentStatus("success");
   }, [complete]);
 
-  //  UI
+  // Render
   if (isComplete) {
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          backgroundColor: "#fff",
-          padding: "1rem",
-          minHeight: "350px",
-        }}
-      >
+      <div style={containerStyle}>
         <FaCheckCircle
           size={60}
           color="#28a745"
           style={{ margin: "2rem 0 1rem" }}
         />
-        <h4 style={{ fontWeight: 600, color: "#003366", maxWidth: "320px" }}>
+        <h4 style={messageStyle}>
           Thank You for subscribing to the lifetime DP AMC Scheme.
         </h4>
-        <Button
-          color="primary"
-          style={{
-            padding: "0.6rem 2rem",
-            borderRadius: "6px",
-            backgroundColor: "#003366",
-            border: "none",
-            marginTop: "1.5rem",
-          }}
-          onClick={() => window.close()}
-        >
+        <Button style={buttonStyle} onClick={() => window.close()}>
           Close Tab
         </Button>
       </div>
@@ -220,20 +168,9 @@ const Confirmation = ({
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        textAlign: "center",
-        backgroundColor: "#fff",
-        padding: "1rem",
-        minHeight: "350px",
-      }}
-    >
-      {/* ICONS */}
-      {(isSuccess || isComplete) && (
+    <div style={containerStyle}>
+      {/* Icons */}
+      {isSuccess && (
         <FaCheckCircle
           size={60}
           color="#28a745"
@@ -263,69 +200,36 @@ const Confirmation = ({
         </div>
       )}
 
-      {/* TEXT */}
+      {/* Text */}
       {isSuccess && !isComplete && (
         <>
-          <h4 style={{ fontWeight: 600, color: "#003366" }}>
-            Payment Successful
-          </h4>
+          <h4 style={messageStyle}>Payment Successful</h4>
           <p style={{ marginTop: "0.5rem", color: "#444" }}>
             Your payment of{" "}
-            <strong>₹{totalPayable?.toLocaleString("en-IN")}</strong> was
+            <strong>₹{totalPayable.toLocaleString("en-IN")}</strong> was
             successful.
           </p>
         </>
       )}
-
-      {/* {isComplete && (
-        <>
-          <h4 style={{ fontWeight: 600, color: "#003366", maxWidth: "320px" }}>
-            Thank You for the subscribing to lifetime DP AMC Scheme
-          </h4>
-        
-          <Button
-            color="primary"
-            style={{
-              padding: "0.6rem 2rem",
-              borderRadius: "6px",
-              backgroundColor: "#003366",
-              border: "none",
-              marginTop: "1.5rem",
-            }}
-            onClick={() => {
-              window.close();
-            }}
-          >
-            Close Tab
-          </Button>
-        </>
-      )} */}
-
       {isFailure && (
-        <h4 style={{ fontWeight: 600, color: "#b30000", marginTop: "1rem" }}>
+        <h4 style={{ color: "#b30000", marginTop: "1rem" }}>
           Payment Failed or Timed Out
         </h4>
       )}
-
       {isWaiting && (
         <>
-          <h4
-            style={{ fontWeight: 600, color: "#003366", marginTop: "1.5rem" }}
-          >
-            Payment Link Sent via Email & SMS
-          </h4>
+          <h4 style={messageStyle}>Payment Link Sent via Email & SMS</h4>
           <h5
             style={{ fontWeight: 500, color: "#003366", marginTop: "0.5rem" }}
           >
             Waiting for Client to Complete Payment
           </h5>
-
-          {/* Countdown Timer */}
           <p
             style={{
               marginTop: "1.5rem",
               color: "#b30000",
               fontWeight: 600,
+              fontSize: "17px",
             }}
           >
             Time Remaining: {formatTime(timer)}
@@ -333,24 +237,11 @@ const Confirmation = ({
         </>
       )}
 
-      {/* BUTTON */}
+      {/* Button */}
       {!isWaiting && !isComplete && (
         <Button
-          color="primary"
-          style={{
-            padding: "0.6rem 2rem",
-            borderRadius: "6px",
-            backgroundColor: "#003366",
-            border: "none",
-            marginTop: "1.5rem",
-          }}
-          onClick={() => {
-            if (isSuccess) {
-              onNext(); // move to next (Tariff Preview)
-            } else if (isFailure) {
-              onBackToStep2(); // 👈 return to Step 2 if failed
-            }
-          }}
+          style={buttonStyle}
+          onClick={() => (isSuccess ? onNext() : onBackToStep2())}
         >
           {isSuccess ? "Preview Tariff Form" : "Try Again"}
         </Button>
@@ -375,6 +266,32 @@ const Confirmation = ({
       </style>
     </div>
   );
+};
+
+// Shared styles
+const containerStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  textAlign: "center",
+  backgroundColor: "#fff",
+  padding: "1rem",
+  minHeight: "350px",
+};
+
+const messageStyle: React.CSSProperties = {
+  fontWeight: 600,
+  color: "#003366",
+  maxWidth: "320px",
+};
+
+const buttonStyle: React.CSSProperties = {
+  padding: "0.6rem 2rem",
+  borderRadius: "6px",
+  backgroundColor: "#003366",
+  border: "none",
+  marginTop: "1.5rem",
 };
 
 export default Confirmation;

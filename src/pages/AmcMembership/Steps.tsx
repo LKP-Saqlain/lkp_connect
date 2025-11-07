@@ -14,6 +14,8 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 const AmcMembership = () => {
   const [step, setStep] = useState(1);
@@ -24,6 +26,8 @@ const AmcMembership = () => {
   const [passUserId, setPassUserId] = useState<string>("");
 
   const dispatch = useDispatch<AppDispatch>();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -110,17 +114,18 @@ const AmcMembership = () => {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "100vh",
-        backgroundColor: "#f5f7fa", // Light background (optional)
+        backgroundColor: "#f5f7fa",
+        padding: isMobile ? "1rem" : "2rem",
       }}
     >
       <Card
         style={{
-          maxWidth: "90%",
+          width: isMobile ? "100%" : "90%",
           margin: "auto",
           borderRadius: "15px",
           boxShadow: "0px 6.16px 17.68px -0.88px #00000036",
-          padding: "1.5rem",
-          backgroundColor: "#fff", // White card background
+          padding: isMobile ? "1rem" : "1.5rem",
+          backgroundColor: "#fff",
         }}
       >
         {/* Common Header */}
@@ -128,22 +133,32 @@ const AmcMembership = () => {
           style={{
             backgroundColor: "#fff",
             display: "flex",
+            flexDirection: isMobile ? "column" : "row",
             alignItems: "center",
             justifyContent: "center",
-            gap: "12px",
+            gap: isMobile ? "8px" : "12px",
             padding: "1rem",
-            marginBottom: "2rem",
+            marginBottom: isMobile ? "1.5rem" : "2rem",
+            textAlign: isMobile ? "center" : "left",
           }}
         >
-          <img src={Logo} alt="LKP Logo" style={{ height: "70px" }} />
+          <img
+            src={Logo}
+            alt="LKP Logo"
+            style={{
+              height: isMobile ? "55px" : "70px",
+              marginBottom: isMobile ? "0.5rem" : 0,
+            }}
+          />
           <h2
             style={{
-              fontWeight: "700",
+              fontWeight: 700,
               color: "#1c3c6b",
               margin: 0,
               flex: 1,
               textAlign: "center",
-              marginRight: "150px",
+              fontSize: isMobile ? "28px" : "34px",
+              marginRight: isMobile ? "0" : "150px",
             }}
           >
             {isBSDA && step === 2
