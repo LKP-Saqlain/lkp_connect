@@ -6,6 +6,9 @@ import contestReward from "../../../assets/images/AP Contest.png";
 import ActiveClient from "../../../assets/images/Clients.json";
 import DashboardCard from "../../../components/common/DashboardCard";
 import UserInfoTable from "../../../components/common/UserInfoTable";
+import ClientWiseBrokerage from "./Clientwise Brokerage/index";
+import BrokingRevenue from "./Broking Revenue/index";
+import Leaderboard from "./LeaderBoard/index";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -13,6 +16,7 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 
 import UserCapsules from "../../ClientDetails/UserCapsules";
+
 // import ShowToast from "../../../utils/toastUtils";
 
 interface APContestData {
@@ -55,7 +59,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
 
         if (response?.status === 200) {
           const data = response?.data?.data?.[0];
-          console.log("GetAPContestTargetDetails", data);
+          console.log("GetAPContestTargetDetails", data, activeMenu, userData);
           setTargetData(data);
         }
       } catch (error) {
@@ -71,31 +75,31 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
     fetchAPContestSummary();
   }, [row?.apCode]);
 
-  const fetchAPachievedBrokerage = () => {
-    let payload = {
-      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
-    };
-    dispatch(showLoader(""));
+  // const fetchAPachievedBrokerage = () => {
+  //   let payload = {
+  //     user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+  //   };
+  //   dispatch(showLoader(""));
 
-    apiServices
-      .GetAPContestAchievedBrokerage(payload)
-      .then((response) => {
-        if (response?.status === 200) {
-          dispatch(hideLoader());
-          console.log("ResponseAPContest", response?.data);
-          setUserData(
-            response?.data?.data?.map((item: any, index: number) => ({
-              ...item,
-              id: index,
-            }))
-          );
-          console.log(userData);
-        }
-      })
-      .catch((error) => {
-        console.log("Errror", error);
-      });
-  };
+  //   apiServices
+  //     .GetAPContestAchievedBrokerage(payload)
+  //     .then((response) => {
+  //       if (response?.status === 200) {
+  //         dispatch(hideLoader());
+  //         console.log("ResponseAPContest", response?.data);
+  //         setUserData(
+  //           response?.data?.data?.map((item: any, index: number) => ({
+  //             ...item,
+  //             id: index,
+  //           }))
+  //         );
+  //         console.log(userData);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("Errror", error);
+  //     });
+  // };
 
   const fetchAPContestAchClients = () => {
     let payload = {
@@ -143,12 +147,6 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
       });
   };
 
-  const formatIndianNumber = (number: number) => {
-    return `₹${number.toLocaleString("en-IN", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    })}`;
-  };
   const handleClick = (value: string) => {
     console.log("You clicked the Chip.", value);
     setSelectedCapsule(value);
@@ -156,9 +154,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
 
   useEffect(() => {
     // alert(selectedCapsule);
-    if (selectedCapsule === "Broking Revenue") {
-      fetchAPachievedBrokerage();
-    } else if (selectedCapsule === "Client Achieve") {
+    if (selectedCapsule === "New Added Clients") {
       fetchAPContestAchClients();
     }
   }, [selectedCapsule]);
@@ -172,6 +168,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
             handleClick={handleClick}
             capsuleType="Partner Contest"
             targetData={targetData}
+            isCustomRender={isCustomRender}
           />
         </div>
         <Container fluid>
@@ -189,7 +186,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                           src={contestReward}
                           alt="Contest Reward"
                           style={{
-                            maxWidth: "100%",
+                            maxWidth: "75%",
                             height: "auto",
                             borderRadius: "8px",
                             // boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
@@ -201,66 +198,26 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                 </Row>
               )}
 
+              {selectedCapsule === "Leaderboard" && (
+                <Leaderboard isCustomRender={isCustomRender} row={row} />
+              )}
               {selectedCapsule === "Broking Revenue" && (
-                <>
-                  <Row className="g-3" style={{ marginTop: "5px" }}>
-                    <Col xxl={4} lg={4} md={6} sm={12}>
-                      <DashboardCard
-                        title="Revenue Achieved*"
-                        value={
-                          apContestSummary?.brokerageNetToLKP
-                            ? formatIndianNumber(
-                                apContestSummary.brokerageNetToLKP
-                              )
-                            : "-"
-                        }
-                        customClass={true}
-                        note={
-                          isMobile && `* Contest Period - 1st Oct to 31st Dec`
-                        }
-                        // isCustomRender={isCustomRender}
-                      />
-                    </Col>
-                  </Row>
-                  <Card
-                    style={{
-                      minHeight: "80vh",
-                      borderRadius: "15px",
-                      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-                    }}
-                  >
-                    <CardHeader
-                      style={{
-                        borderRadius: "15px 15px 0 0",
-                        boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
-                        backgroundColor: "#fff",
-                        padding: "0.2rem 0.8rem",
-                      }}
-                    >
-                      <h4 className="card-title mb-0">
-                        AP Contest Achieved Brokerage{" "}
-                        <span style={{ fontSize: "12px" }}>
-                          (October–December)
-                        </span>
-                      </h4>
-                    </CardHeader>
-                    <CardBody>
-                      <UserInfoTable
-                        T6Data={userData}
-                        activeMenu={activeMenu}
-                      />
-                    </CardBody>
-                  </Card>
-                </>
+                <BrokingRevenue isCustomRender={isCustomRender} row={row} />
+              )}
+              {selectedCapsule === "Clientwise Brokerage" && (
+                <ClientWiseBrokerage
+                  isCustomRender={isCustomRender}
+                  row={row}
+                />
               )}
 
-              {selectedCapsule === "Client Achieve" && (
+              {selectedCapsule === "New Added Clients" && (
                 <>
                   <Row className="g-3" style={{ margin: "5px 0px" }}>
                     <Col xxl={4} lg={4} md={6} sm={12}>
                       <DashboardCard
                         title="Client Target*"
-                        value={targetData?.newClientCount}
+                        value={12}
                         animationData={ActiveClient}
                         activeClientsEmpty={true}
                         customClass={true}

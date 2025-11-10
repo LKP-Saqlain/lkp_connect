@@ -1039,4 +1039,17 @@ export const apiServices = {
   ViewREGMasterdata: async (payload: any) => {
     return await apiService("POST", endpoints.ViewREGMasterdata, payload);
   },
+  GetAPTop10ClientBrokerage: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetAPTop10ClientBrokerage,
+      payload
+    );
+  },
+  APContestLeaderboard: async (payload: any) => {
+    return await apiService("POST", endpoints.APContestLeaderboard, payload);
+  },
+  GetAPContestDashboard: async (payload: any) => {
+    return await apiService("POST", endpoints.GetAPContestDashboard, payload);
+  },
 };

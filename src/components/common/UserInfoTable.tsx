@@ -71,6 +71,7 @@ import {
   vendorApprovalColumns,
   t6SellingReportColumns,
   regMasterColumns,
+  APTopClientsFields,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -1531,8 +1532,12 @@ const DataTable = ({
         // Return unchanged column if not the 'status' or 'document' field
         return column;
       });
-    } else if (activeMenu === "Partner Contest") {
+    } else if (activeMenu === "AP Contest Achieved Brokerage") {
       return clientAPBrokerageColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "LeaderBoard") {
+      return APTopClientsFields.map((column) => ({
         ...column,
       }));
     } else if (

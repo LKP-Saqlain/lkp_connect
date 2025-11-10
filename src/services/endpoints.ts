@@ -243,4 +243,7 @@ export const endpoints = {
   REGBSEFileUpload: "/api/RMS/REGBSEFileUpload",
   REGNSEFileUpload: "/api/RMS/REGNSEFileUpload",
   ViewREGMasterdata: "/api/RMS/ViewREGMasterdata",
+  GetAPTop10ClientBrokerage: "/api/MIS/GetAPTop10ClientBrokerage",
+  APContestLeaderboard: "/api/MIS/APContestLeaderboard",
+  GetAPContestDashboard: "/api/MIS/GetAPContestDashboard",
 };

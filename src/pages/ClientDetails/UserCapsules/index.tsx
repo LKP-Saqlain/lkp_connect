@@ -22,6 +22,7 @@ interface userCapsules {
   inactiveClient?: any;
   capsuleType?: string;
   targetData?: any;
+  isCustomRender?: any;
 }
 
 const UserCapsules = ({
@@ -32,6 +33,7 @@ const UserCapsules = ({
   // inactiveClient,
   capsuleType,
   targetData,
+  isCustomRender,
 }: userCapsules) => {
   // const theme = useTheme();
   // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -65,7 +67,16 @@ const UserCapsules = ({
         <div style={{ flex: 1 }}>
           <Row>
             {capsules.map((item, key) => (
-              <Col md={capsuleType === "DPDebit" ? 4 : 3} key={key}>
+              <Col
+                md={
+                  capsuleType === "DPDebit"
+                    ? 4
+                    : capsuleType === "Partner Contest"
+                    ? 2
+                    : 3
+                }
+                key={key}
+              >
                 <Card
                   className={`rounded-pill capsule-hover ${
                     selectedCapsule === item.label ? "selected-widget" : ""
@@ -101,7 +112,7 @@ const UserCapsules = ({
           </Row>
         </div>
 
-        {targetData && (
+        {targetData && isCustomRender && (
           <div
             style={{
               display: "flex",
