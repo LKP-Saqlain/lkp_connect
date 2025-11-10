@@ -6390,6 +6390,13 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "vendorRate",
@@ -6399,6 +6406,13 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "lkpCommissionPerShare",
