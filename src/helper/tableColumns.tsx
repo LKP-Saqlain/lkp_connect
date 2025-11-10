@@ -3244,8 +3244,10 @@ export const pledgeCapsules = [
 
 export const partnerContestCapsules = [
   { id: 1, label: "Contest Rewards" },
-  { id: 2, label: "Broking Revenue" },
-  { id: 3, label: "Client Achieve" },
+  { id: 2, label: "Leaderboard" },
+  { id: 3, label: "Broking Revenue" },
+  { id: 4, label: "Clientwise Brokerage" },
+  { id: 5, label: "New Added Clients" },
 ];
 
 export const ClientInfoCapsules = [
@@ -6822,6 +6824,43 @@ export const clientAPBrokerageColumns: GridColDef[] = [
           maximumFractionDigits: 2,
         }).format(value) + "%"
       );
+    },
+  },
+];
+export const APTopClientsFields: GridColDef[] = [
+  {
+    field: "rank",
+    headerName: "Rank",
+    width: 100,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    width: 100,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+
+  {
+    field: "grossBrokerage",
+    headerName: "Gross Brokerage",
+    width: 180,
+    flex: 1,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
     },
   },
 ];

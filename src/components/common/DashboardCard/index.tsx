@@ -162,6 +162,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
               ? "100px"
               : title === "Revenue Achieved*" ||
                 title === "Client Count" ||
+                title === "Active Clients" ||
+                title === "Unique Traded Clients*" ||
+                title === "New Accounts Added*" ||
+                title === "Upcoming Dormant Clients" ||
                 title === "Incentive Earned"
               ? "3.5rem"
               : title === "Client Target*"
@@ -222,6 +226,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 "Clients Achieved*",
                 "Client Count",
                 "Incentive Earned",
+                "Active Clients",
+                "Unique Traded Clients*",
+                "New Accounts Added*",
+                "Upcoming Dormant Clients",
               ].includes(title) && (
                 <h5
                   className="mb-0"
@@ -450,6 +458,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                   title !== "Client Target*" &&
                   title !== "Clients Achieved*" &&
                   title !== "Client Count" &&
+                  title !== "New Accounts Added*" &&
+                  title !== "Unique Traded Clients*" &&
+                  title !== "Upcoming Dormant Clients" &&
+                  title !== "Active Clients" &&
                   title !== "Incentive Earned" && (
                     <div>
                       <h5
