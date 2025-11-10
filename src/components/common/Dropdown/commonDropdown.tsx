@@ -1,42 +1,43 @@
-import { useEffect, useState } from "react";
-import { Col, Label, Row } from "reactstrap";
-import Select from "react-select";
-import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Col, Label, Button } from "reactstrap";
 import { AppDispatch, RootState } from "../../../redux/store";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import ShowToast from "../../../utils/toastUtils";
+import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
-interface FormValues {
-  selectedZone: { label: string; value: string } | null;
-  selectedBranchCode: { label: string; value: string } | null;
+import ShowToast from "../../../utils/toastUtils";
+
+interface ZoneOption {
+  label: string;
+  value: string;
 }
-const ComDropDown = ({ onSelectionChange }: any) => {
-  const [noSortingGroup, setNoSortingGroup] = useState([]);
-  const [branchCodeOptions, setBranchCodeOptions] = useState([]);
+
+interface ComDropDownProps {
+  onZoneChange?: (zone: ZoneOption | null) => void;
+}
+
+const ComDropDown: React.FC<ComDropDownProps> = ({ onZoneChange }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data || {}
   );
-  const formik = useFormik<FormValues>({
-    initialValues: {
-      selectedZone: null,
-      selectedBranchCode: null,
-    },
-    onSubmit: () => {
-      //   fetchData(); // defined below
-    },
-  });
+  const { accessType } = useSelector(
+    (state: RootState) => state.AuthUser?.data?.data || {}
+  );
 
-  // 1️⃣ Fetch Zones on Mount
+  const [zones, setZones] = useState<ZoneOption[]>([]);
+  const [selectedZone, setSelectedZone] = useState<ZoneOption | null>(null);
+
+  // 🔹 Fetch zones when accessType is ALL
   useEffect(() => {
+    if (accessType !== "ALL" || !user_id) return;
+
     const fetchZones = async () => {
       const userType =
         localStorage.getItem("uIdType") === "Employee" ? "EMP" : "APN";
 
       const payload = {
-        user_id: user_id,
+        user_id,
         option: "zone",
         userType,
         zone: "ALL",
@@ -45,190 +46,77 @@ const ComDropDown = ({ onSelectionChange }: any) => {
       try {
         dispatch(showLoader("Please wait, we are processing your request..."));
 
-        const res = await apiServices.getDropDown(payload); //  No auth header here
-        if (res?.status === 200) {
-          const zoneOptions = res.data.map((item: any) => ({
+        const res = await apiServices.getDropDown(payload);
+
+        if (res?.status === 200 && Array.isArray(res.data)) {
+          const zoneOptions: ZoneOption[] = res.data.map((item: any) => ({
             label: item.itemDesc,
             value: item.itemVal,
           }));
 
-          setNoSortingGroup(zoneOptions);
+          setZones(zoneOptions);
 
-          if (zoneOptions.length > 0) {
-            formik.setFieldValue("selectedZone", zoneOptions[0]); // Pre-select first zone
+          // Pre-select a default zone (index 0 or 8 if exists)
+          const preselected =
+            zoneOptions.length > 8 ? zoneOptions[8] : zoneOptions[0] || null;
+          setSelectedZone(preselected);
+          if (typeof onZoneChange === "function") {
+            onZoneChange(preselected);
           }
         }
       } catch (err: any) {
-        const errorMessage =
-          err?.response?.data?.message ||
-          "Failed to load zones. Please try again later.";
-        ShowToast("error", errorMessage);
+        console.error("Error fetching zones:", err);
+        ShowToast("error", "Failed to load zones. Please try again later.");
       } finally {
         dispatch(hideLoader());
       }
     };
 
     fetchZones();
-  }, [dispatch, user_id]);
+  }, [dispatch, user_id, accessType]);
 
-  // 2️⃣ Fetch Branch Codes Based on Selected Zone (no auth header)
+  // 🔹 Notify parent when user changes zone
   useEffect(() => {
-    const fetchBranches = async () => {
-      if (!formik.values.selectedZone) return;
+    if (typeof onZoneChange === "function") {
+      onZoneChange(selectedZone);
+    }
+  }, [selectedZone]);
 
-      const userType =
-        localStorage.getItem("uIdType") === "Employee" ? "EMP" : "APN";
-
-      const payload = {
-        user_id: user_id,
-        option: "BranchByZone",
-        userType,
-        zone: formik.values.selectedZone.value,
-      };
-
-      try {
-        dispatch(showLoader("Please wait, we are processing your request..."));
-
-        const res = await apiServices.getDropDown(payload); //  No auth header here
-        if (res?.status === 200) {
-          let branchOptions = res.data.map((item: any) => ({
-            label: item.itemVal,
-            value: item.itemVal,
-          }));
-          branchOptions = [{ label: "ALL", value: "ALL" }, ...branchOptions];
-          setBranchCodeOptions(branchOptions);
-
-          if (branchOptions.length > 0) {
-            formik.setFieldValue("selectedBranchCode", branchOptions[0]);
-          }
-        }
-      } catch (err: any) {
-        const errorMessage =
-          err?.response?.data?.message ||
-          "Failed to load branch codes. Please try again later.";
-        ShowToast("error", errorMessage);
-      } finally {
-        dispatch(hideLoader());
-      }
-    };
-
-    fetchBranches();
-  }, [formik.values.selectedZone, dispatch, user_id]);
-
-  useEffect(() => {
-    onSelectionChange(
-      formik.values.selectedZone,
-      formik.values.selectedBranchCode
-    );
-  }, [formik.values.selectedZone, formik.values.selectedBranchCode]);
+  if (accessType !== "ALL") return null;
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <Row>
-        <Col
-          xs={12}
-          style={{
-            flex: "0 0 auto",
-            // minWidth: "140px",
-            maxWidth: "180px",
-          }}
-          className="mb-3"
+    <Col xs="auto">
+      <div className="d-flex align-items-center gap-2 flex-wrap mb-2">
+        <Label className="form-label text-muted label-font mb-0">Zone</Label>
+        <div
+          className="d-flex flex-nowrap gap-2 overflow-auto mt-1"
+          style={{ maxWidth: "100%" }}
         >
-          <Label
-            htmlFor="zone-select"
-            className="form-label text-muted label-font"
-          >
-            Zone
-          </Label>
-          <Select
-            value={formik.values.selectedZone}
-            onChange={(option: any) =>
-              formik.setFieldValue("selectedZone", option)
-            }
-            onBlur={formik.handleBlur}
-            options={noSortingGroup}
-            className="placeholder-font"
-            isClearable
-            id="zone-select"
-            styles={{
-              control: (base: any) => ({
-                ...base,
-                cursor: "pointer",
-                minHeight: "36px",
-                fontSize: "12px",
-                borderColor:
-                  formik.touched.selectedZone && formik.errors.selectedZone
-                    ? "#DC4535"
-                    : base.borderColor,
-                "&:hover": {
-                  borderColor:
-                    formik.touched.selectedZone && formik.errors.selectedZone
-                      ? "#DC4535"
-                      : base.borderColor,
-                },
-              }),
-            }}
-          />
-          {formik.touched.selectedZone && formik.errors.selectedZone && (
-            <div className="text-danger error-msg">
-              {formik.errors.selectedZone}
-            </div>
-          )}
-        </Col>
-
-        <Col
-          xs={12}
-          style={{
-            flex: "0 0 auto",
-            maxWidth: "180px",
-          }}
-          className="mb-3"
-        >
-          <Label
-            htmlFor="branch-code-select"
-            className="form-label text-muted label-font"
-          >
-            Branch Code
-          </Label>
-          <Select
-            value={formik.values.selectedBranchCode}
-            onChange={(option) =>
-              formik.setFieldValue("selectedBranchCode", option)
-            }
-            onBlur={formik.handleBlur}
-            options={branchCodeOptions}
-            className="placeholder-font"
-            isClearable
-            id="branch-code-select"
-            styles={{
-              control: (base: any) => ({
-                ...base,
-                cursor: "pointer",
-                borderColor:
-                  formik.touched.selectedBranchCode &&
-                  formik.errors.selectedBranchCode
-                    ? "#DC4535"
-                    : base.borderColor,
-                "&:hover": {
-                  borderColor:
-                    formik.touched.selectedBranchCode &&
-                    formik.errors.selectedBranchCode
-                      ? "#DC4535"
-                      : base.borderColor,
-                },
-              }),
-            }}
-          />
-          {formik.touched.selectedBranchCode &&
-            formik.errors.selectedBranchCode && (
-              <div className="text-danger error-msg">
-                {formik.errors.selectedBranchCode}
-              </div>
-            )}
-        </Col>
-      </Row>
-      {/* </div> */}
-    </form>
+          {zones.map((zone) => {
+            const isSelected = selectedZone?.value === zone.value;
+            return (
+              <Button
+                key={zone.value}
+                type="button"
+                style={{
+                  minWidth: "60px",
+                  whiteSpace: "nowrap",
+                  fontSize: "12px",
+                  padding: "2px 8px",
+                  borderRadius: "6px",
+                  border: "1px solid #11395c",
+                  backgroundColor: isSelected ? "#11395c" : "#ffffff",
+                  color: isSelected ? "#ffffff" : "#11395c",
+                }}
+                onClick={() => setSelectedZone(zone)}
+              >
+                {zone.label}
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+    </Col>
   );
 };
 
