@@ -147,7 +147,7 @@ const ApContestSummaryCard = ({ isCustomRender, row }: any) => {
       dataLabels: {
         enabled: true, // ✅ show value above bar
         formatter: function (val: number) {
-          return `₹${val.toLocaleString("en-IN", {
+          return `${val.toLocaleString("en-IN", {
             maximumFractionDigits: 0,
           })}`;
         },

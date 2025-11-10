@@ -6424,6 +6424,13 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
     width: 100,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "brokerageInclusiveGST",
@@ -6487,6 +6494,13 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "sbCode",
@@ -6496,13 +6510,6 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
   },
   {
     field: "sbCommission",
