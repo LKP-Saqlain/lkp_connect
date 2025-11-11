@@ -207,9 +207,6 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
 
         {(title === "Zone Overview" ||
           title === "Account" ||
-          title === "Employee Target" ||
-          title === "Client Request" ||
-          title === "Back Office Report" ||
           title === "Mutual Fund" ||
           title === "Partner Contest" ||
           title === "DP AMC Contest") && (

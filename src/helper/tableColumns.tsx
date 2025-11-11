@@ -10833,6 +10833,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     renderCell: (params) => params.value || "—",
   },
   {
@@ -10843,6 +10844,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
     align: "left",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     renderCell: (params) => params.value || "—",
   },
   {
@@ -10853,6 +10855,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     renderCell: (params) => params.value || "—",
   },
   {
@@ -10863,6 +10866,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     renderCell: (params) => params.value ?? 0,
   },
   {
@@ -10873,6 +10877,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     renderCell: (params) => params.value ?? 0,
   },
   {
@@ -10883,6 +10888,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     renderCell: (params) =>
       params.value !== undefined && params.value !== null
         ? params.value.toLocaleString()
@@ -10897,6 +10903,7 @@ export const AmcZoneReportIndirect: GridColDef[] = [
     flex: 1,
     minWidth: 120,
     align: "center",
+    disableColumnMenu: true,
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params) => params.value || "—",
@@ -10906,6 +10913,7 @@ export const AmcZoneReportIndirect: GridColDef[] = [
     headerName: "Partner Name",
     flex: 1.5,
     minWidth: 160,
+    disableColumnMenu: true,
     align: "left",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
