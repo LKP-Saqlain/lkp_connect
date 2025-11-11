@@ -9,6 +9,7 @@ import Indirect from "./Indirect";
 import PartnerContestReport from "./partnerContest";
 import EmployeeTargetReport from "./EmployeeTarget";
 import ZoneTarget from "./zoneTarget";
+import AmcReport from "./AMC Report";
 
 interface RH {
   activeSubItem: string;
@@ -30,6 +31,7 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
     [SubItemKeys.RH_PARTNER]: (
       <PartnerContestReport activeSubItem={activeSubItem} />
     ),
+    [SubItemKeys.RH_AMC_REPORT]: <AmcReport activeSubItem={activeSubItem} />,
   };
 
   const getComponent = () => {
@@ -61,6 +63,8 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
         return <EmployeeTargetReport activeSubItem={activeSubItem} />;
       } else if (activeSubItem === SubItemKeys.RH_ZONE_TARGET) {
         return <ZoneTarget activeSubItem={activeSubItem} />;
+      } else if (activeSubItem === SubItemKeys.RH_AMC_REPORT) {
+        return <AmcReport activeSubItem={activeSubItem} />;
       } else {
         // return <Overview activeSubItem={activeSubItem} />;
       }

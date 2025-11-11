@@ -6791,41 +6791,12 @@ export const clientAPBrokerageColumns: GridColDef[] = [
     valueFormatter: (params: any) => {
       const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
       }).format(value);
     },
   },
-  // {
-  //   field: "sbBrokerage",
-  //   headerName: "Sub-Broker Brokerage",
-  //   width: 160,
-  //   headerAlign: "center",
-  //   align: "right",
-  //   disableColumnMenu: true,
-  //   valueFormatter: (params: any) => {
-  //     const value = parseFloat(params);
-  //     return new Intl.NumberFormat("en-IN", {
-  //       minimumFractionDigits: 2,
-  //       maximumFractionDigits: 2,
-  //     }).format(value);
-  //   },
-  // },
-  // {
-  //   field: "netBrokerage",
-  //   headerName: "Net Brokerage",
-  //   width: 140,
-  //   headerAlign: "center",
-  //   align: "right",
-  //   disableColumnMenu: true,
-  //   valueFormatter: (params: any) => {
-  //     const value = parseFloat(params);
-  //     return new Intl.NumberFormat("en-IN", {
-  //       minimumFractionDigits: 2,
-  //       maximumFractionDigits: 2,
-  //     }).format(value);
-  //   },
-  // },
+
   {
     field: "contribution",
     headerName: "Contribution %",
@@ -6879,8 +6850,8 @@ export const APTopClientsFields: GridColDef[] = [
     valueFormatter: (params: any) => {
       const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
       }).format(value);
     },
   },
@@ -10851,4 +10822,96 @@ export const regMasterColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params) => params.value || "—",
   },
+];
+
+export const AmcZoneReportDirect: GridColDef[] = [
+  {
+    field: "empOrAPCode",
+    headerName: "Employee Code",
+    flex: 1,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "empOrAPName",
+    headerName: "Employee Name",
+    flex: 1.5,
+    minWidth: 160,
+    align: "left",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "cunl",
+    headerName: "Code Under Non Lifetime",
+    flex: 1,
+    minWidth: 160,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "submitted",
+    headerName: "Submitted",
+    flex: 0.8,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value ?? 0,
+  },
+  {
+    field: "completed",
+    headerName: "Completed",
+    flex: 0.8,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value ?? 0,
+  },
+  {
+    field: "incentive_Earned",
+    headerName: "Incentive Earned",
+    flex: 1,
+    minWidth: 140,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) =>
+      params.value !== undefined && params.value !== null
+        ? params.value.toLocaleString()
+        : "0",
+  },
+];
+
+export const AmcZoneReportIndirect: GridColDef[] = [
+  {
+    field: "empOrAPCode",
+    headerName: "Partner Code",
+    flex: 1,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "empOrAPName",
+    headerName: "Partner Name",
+    flex: 1.5,
+    minWidth: 160,
+    align: "left",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  ...AmcZoneReportDirect.filter(
+    (col) => col.field !== "empOrAPName" && col.field !== "empOrAPCode"
+  ),
 ];

@@ -246,4 +246,5 @@ export const endpoints = {
   GetAPTop10ClientBrokerage: "/api/MIS/GetAPTop10ClientBrokerage",
   APContestLeaderboard: "/api/MIS/APContestLeaderboard",
   GetAPContestDashboard: "/api/MIS/GetAPContestDashboard",
+  GetAMCZoneReport: "/api/Client/GetAMCZoneReport",
 };

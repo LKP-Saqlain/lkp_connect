@@ -1052,4 +1052,7 @@ export const apiServices = {
   GetAPContestDashboard: async (payload: any) => {
     return await apiService("POST", endpoints.GetAPContestDashboard, payload);
   },
+  GetAMCZoneReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetAMCZoneReport, payload);
+  },
 };

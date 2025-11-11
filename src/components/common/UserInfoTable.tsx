@@ -6,6 +6,8 @@ import {
   ClientCashColumns,
   DormantOverViewColumns,
   T6Columns,
+  AmcZoneReportDirect,
+  AmcZoneReportIndirect,
   T6OverViewColumns,
   topBirthdays,
   DPDebitRecovery,
@@ -548,80 +550,6 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "KYC Approval") {
-      // return BrokerageKyc.map((column) => {
-      //   if (column.field === "remark") {
-      //     return {
-      //       ...column,
-      //       renderCell: (params: any) => (
-      //         <div style={{ display: "flex", justifyContent: "center" }}>
-      //           <div
-      //             onClick={() => {
-      //               setSelectedRow(params.row);
-      //               HandleApprovalModal("approve");
-      //               // HandleApprovalModal("approve", params);
-      //               console.log(params.row.rowId, "selectedrow approve");
-      //             }}
-      //             style={{
-      //               cursor: "pointer",
-      //               display: "flex",
-      //               alignItems: "center",
-      //               marginRight: 5,
-      //             }}
-      //           >
-      //             <Tooltip title="Approve" arrow placement="top">
-      //               <CheckCircleIcon
-      //                 style={{ color: "green", marginLeft: 4 }}
-      //               />
-      //             </Tooltip>
-      //           </div>
-      //           <div style={{ fontSize: 20, color: "gray" }}>|</div>
-      //           <div
-      //             onClick={() => {
-      //               setSelectedRow(params.row);
-      //               HandleApprovalModal("reject");
-      //             }}
-      //             style={{
-      //               cursor: "pointer",
-      //               display: "flex",
-      //               alignItems: "center",
-      //               marginLeft: 5,
-      //             }}
-      //           >
-      //             <Tooltip title="Reject" arrow placement="top">
-      //               <CancelIcon style={{ color: "red", marginLeft: 4 }} />
-      //             </Tooltip>
-      //           </div>
-      //         </div>
-      //       ),
-      //     };
-      //   }
-      //   if (column.field === "consentfilename") {
-      //     return {
-      //       ...column,
-      //       renderCell: (params: any) => {
-      //         const fileName = params.row?.consentfilename;
-
-      //         return fileName ? (
-      //           <button
-      //             onClick={() => handleDownload(params.row)}
-      //             style={{
-      //               color: "#11395C",
-      //               textDecoration: "underline",
-      //               background: "none",
-      //               border: "none",
-      //               cursor: "pointer",
-      //             }}
-      //           >
-      //             <DownloadForOfflineIcon />
-      //           </button>
-      //         ) : (
-      //           "╶─"
-      //         );
-      //       },
-      //     };
-      //   }
-      //   return column;
-      // });
       return BrokerageKyc.map((column) => {
         if (column.field === "More Details") {
           return {
@@ -2328,6 +2256,14 @@ const DataTable = ({
       return regMasterColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Client DP AMC Report direct") {
+      return AmcZoneReportDirect.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client DP AMC Report indirect") {
+      return AmcZoneReportIndirect.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
@@ -2373,20 +2309,6 @@ const DataTable = ({
       : T6Data;
   console.log("rowName from userinfo", rowName);
 
-  // const rowHeight = 200;
-  // const headerHeight = 80;
-  // const padding = 60;
-  // const minHeight = activeMenu === "Regulatory Announcement" ? 800 : 200;
-  // papper height
-  // const OFFSET = 120;
-  // const fullAvailableHeight = screenHeight - OFFSET;
-  // const calculatedHeight = Math.min(
-  //   Math.max(
-  //     rowName && rowName.length * rowHeight + headerHeight + padding,
-  //     minHeight
-  //   ),
-  //   fullAvailableHeight
-  // );
   useEffect(() => {
     console.log("childData", customLedgerData, selectedWidget);
   }, [customLedgerData, selectedWidget]);
