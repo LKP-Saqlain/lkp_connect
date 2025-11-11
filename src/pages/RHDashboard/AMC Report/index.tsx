@@ -51,6 +51,51 @@ const AmcReport = ({ activeSubItem }: any) => {
     "direct"
   );
 
+  useEffect(() => {
+    if (accessType === "ALL" && selectedZone === "all") return;
+    const fetchAMCZoneReport = async () => {
+      const payload = {
+        zone: selectedZone || "all",
+        userId: user_id,
+        optionType: "all",
+      };
+
+      dispatch(showLoader(""));
+
+      try {
+        const response = await apiServices.GetAMCZoneReport(payload);
+
+        if (response?.data?.statusCode === 200) {
+          const data = response.data.data;
+
+          const directData =
+            data.direct?.map((item: any, index: number) => ({
+              ...item,
+              id: index + 1,
+            })) || [];
+
+          const inDirectData =
+            data.inDirect?.map((item: any, index: number) => ({
+              ...item,
+              id: index + 1,
+            })) || [];
+
+          setUserData({
+            direct: directData,
+            inDirect: inDirectData,
+            summary: data.summary || {},
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching AMC Zone Report:", error);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+
+    fetchAMCZoneReport();
+  }, [dispatch, user_id, selectedZone, accessType]);
+
   const handleZoneChange = (zone: any) => {
     console.log("Selected zone:", zone);
     setSelectedZone(zone?.value || "all"); // update selected zone value here
@@ -100,50 +145,6 @@ const AmcReport = ({ activeSubItem }: any) => {
         return 0;
     }
   };
-
-  useEffect(() => {
-    const fetchAMCZoneReport = async () => {
-      const payload = {
-        zone: selectedZone || "all",
-        userId: user_id || "EMP-0040",
-        optionType: "all",
-      };
-
-      dispatch(showLoader(""));
-
-      try {
-        const response = await apiServices.GetAMCZoneReport(payload);
-
-        if (response?.data?.statusCode === 200) {
-          const data = response.data.data;
-
-          const directData =
-            data.direct?.map((item: any, index: number) => ({
-              ...item,
-              id: index + 1,
-            })) || [];
-
-          const inDirectData =
-            data.inDirect?.map((item: any, index: number) => ({
-              ...item,
-              id: index + 1,
-            })) || [];
-
-          setUserData({
-            direct: directData,
-            inDirect: inDirectData,
-            summary: data.summary || {},
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching AMC Zone Report:", error);
-      } finally {
-        dispatch(hideLoader());
-      }
-    };
-
-    fetchAMCZoneReport();
-  }, [dispatch, user_id, selectedZone]);
 
   const summaryMetrics = [
     { title: "Total Clients" },
