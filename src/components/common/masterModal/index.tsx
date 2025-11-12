@@ -1101,42 +1101,41 @@ const ModalComponent = ({
         resetBrokerageFields();
       }
     } else if (name === "sbRate") {
-      if (regEx.alphaNumeric.test(value)) {
-        const sanitizedValue = value.toUpperCase().replace(/\s/g, "");
-        formik.setFieldValue(name, sanitizedValue);
+      // Allow only digits and one dot
+      const decimalValue = value
+        .replace(/[^0-9.]/g, "")
+        .replace(/(\..*)\./g, "$1");
 
-        const noOfShare = parseInt(formik.values.noOfShare || "0");
-        const sbRate = parseFloat(value);
+      formik.setFieldValue(name, decimalValue);
 
-        if (noOfShare > 0 && !isNaN(sbRate)) {
-          const subBrokerValue = sbRate * noOfShare; //1600
-          const subBrokerCommission = Math.floor(subBrokerValue / 1.18);
-          console.log("sbCoMMISSION", subBrokerCommission);
+      const noOfShare = parseInt(formik.values.noOfShare || "0");
+      const sbRate = parseFloat(decimalValue);
 
-          // const subBrokerCommission = Math.floor(subBrokerValue - stComm);
+      if (noOfShare > 0 && !isNaN(sbRate)) {
+        const subBrokerValue = sbRate * noOfShare; //1600
+        const subBrokerCommission = Math.floor(subBrokerValue / 1.18);
+        console.log("sbCoMMISSION", subBrokerCommission);
 
-          const brokExcGST = Math.floor(
-            parseFloat(
-              (formik.values.brokExcGST ?? "0").toString().replace(/,/g, "")
-            )
-          );
+        // const subBrokerCommission = Math.floor(subBrokerValue - stComm);
 
-          const netBrokerage = Math.floor(
-            Math.abs(brokExcGST - subBrokerCommission)
-          );
+        const brokExcGST = Math.floor(
+          parseFloat(
+            (formik.values.brokExcGST ?? "0").toString().replace(/,/g, "")
+          )
+        );
 
-          formik.setFieldValue(
-            "sbCommision",
-            formatIndianNumber(subBrokerCommission)
-          );
-          formik.setFieldValue(
-            "netBrokerage",
-            formatIndianNumber(netBrokerage)
-          );
-        } else {
-          formik.setFieldValue("sbCommision", "");
-          formik.setFieldValue("netBrokerage", "");
-        }
+        const netBrokerage = Math.floor(
+          Math.abs(brokExcGST - subBrokerCommission)
+        );
+
+        formik.setFieldValue(
+          "sbCommision",
+          formatIndianNumber(subBrokerCommission)
+        );
+        formik.setFieldValue("netBrokerage", formatIndianNumber(netBrokerage));
+      } else {
+        formik.setFieldValue("sbCommision", "");
+        formik.setFieldValue("netBrokerage", "");
       }
     } else if (name === "sbCode" || name === "rmCode") {
       setSanitizedAlphaNumeric();
@@ -2065,6 +2064,10 @@ const ModalComponent = ({
                     label="Enter Sub-broker Rate"
                     variant="outlined"
                     size="small"
+                    inputProps={{
+                      inputMode: "decimal",
+                      pattern: "^[0-9]*\\.?[0-9]+$",
+                    }}
                     value={formik.values.sbRate}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
