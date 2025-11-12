@@ -8,6 +8,7 @@ import {
   T6Columns,
   AmcZoneReportDirect,
   AmcZoneReportIndirect,
+  DPTransactionColumns,
   T6OverViewColumns,
   topBirthdays,
   DPDebitRecovery,
@@ -2262,6 +2263,10 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "Client DP AMC Report indirect") {
       return AmcZoneReportIndirect.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "DP AMC Transaction") {
+      return DPTransactionColumns.map((column) => ({
         ...column,
       }));
     } else {

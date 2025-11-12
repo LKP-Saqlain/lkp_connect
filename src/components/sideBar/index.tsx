@@ -98,6 +98,7 @@ import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
 import MutualFundIndex from "../../pages/MutualFund";
 import MtfComponent from "../../pages/RMS/Mtf";
 import UnpledgeRequest from "../../pages/UnpledgeRequest";
+import DPTransactionIndex from "../../pages/Reports/AMC Transaction";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MandatePayment from "../../pages/ThirdParty/Mandate";
 import AmcMembership from "../../pages/AmcMembership";
@@ -706,6 +707,7 @@ const SideBar = () => {
     ),
     "CTCL Wise Activity Report": <CTCLReport activeSubItem={activeSubItem} />,
     "Unpledge Report": <UnpledgeRequest activeSubItem={activeSubItem} />,
+    "DP AMC Transaction": <DPTransactionIndex activeSubItem={activeSubItem} />,
   };
 
   // const referalSubItems: Record<string, JSX.Element> = {
