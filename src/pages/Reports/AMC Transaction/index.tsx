@@ -9,8 +9,9 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 import DataTable from "../../../components/common/UserInfoTable";
 import DownloadIcon from "@mui/icons-material/Download";
+import ShowToast from "../../../utils/toastUtils";
 
-const DPTransactionIndex = (activeSubItem: any) => {
+const DPTransactionIndex = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any[]>([]);
   const dispatch = useDispatch<AppDispatch>();
 
@@ -67,6 +68,42 @@ const DPTransactionIndex = (activeSubItem: any) => {
     saveAs(blob, `${fileName}.xlsx`);
   };
 
+  const handleDownload = (row: any) => {
+    console.log("DPAMCDownloadFile", row);
+
+    const payload = {
+      // boId: "1203000001123371",
+      boId: row?.dP_ID,
+      fileType: "eSignPDF",
+    };
+
+    dispatch(showLoader("Please wait, we are processing your request..."));
+
+    apiServices
+      .DPAMCDownloadFile(payload) // ensure this sets responseType: 'blob'
+
+      .then((response: any) => {
+        const blob = new Blob([response.data], { type: "application/pdf" });
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `AMC_${row.dP_ID || "file"}.pdf`;
+
+        document.body.appendChild(link);
+        link.click();
+
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(() => {
+        ShowToast("error", "Failed to download PDF");
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -111,7 +148,11 @@ const DPTransactionIndex = (activeSubItem: any) => {
           </CardHeader>
 
           <CardBody>
-            <DataTable T6Data={data} activeSubItem={"DP AMC Transaction"} />
+            <DataTable
+              T6Data={data}
+              activeSubItem={activeSubItem}
+              handleDownload={handleDownload}
+            />
           </CardBody>
         </Card>
       </Container>

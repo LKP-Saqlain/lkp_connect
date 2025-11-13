@@ -10926,6 +10926,36 @@ export const AmcZoneReportIndirect: GridColDef[] = [
 
 export const DPTransactionColumns: GridColDef[] = [
   {
+    field: "zone",
+    headerName: "Zone",
+    flex: 1,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "branch",
+    headerName: "Branch ",
+    flex: 1,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "branchType",
+    headerName: "Branch Type",
+    flex: 1,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
     field: "clientId",
     headerName: "Client ID",
     flex: 1,
@@ -10969,11 +10999,23 @@ export const DPTransactionColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params) => params.value || "—",
   },
+
   {
-    field: "order_Id",
-    headerName: "Order ID",
+    field: "requestDate",
+    headerName: "Request Date",
     flex: 1,
-    minWidth: 130,
+    minWidth: 180,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "schemeStatus",
+    headerName: "Scheme Status",
+    flex: 1,
+    minWidth: 150,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -10981,14 +11023,15 @@ export const DPTransactionColumns: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "requestDate",
-    headerName: "Request Date",
+    field: "order_Id",
+    headerName: "Order ID",
     flex: 1,
-    width: 200,
+    minWidth: 100,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
   },
   {
     field: "amount",
@@ -11005,6 +11048,17 @@ export const DPTransactionColumns: GridColDef[] = [
       const value = params.value;
       return value?.toLocaleString("en-IN");
     },
+  },
+  {
+    field: "downloadAMC",
+    headerName: "Esign File",
+    flex: 0.7,
+    minWidth: 70,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    // renderCell: (params) => params.value || "—",
   },
 ];
 

@@ -2267,9 +2267,45 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "DP AMC Transaction") {
-      return DPTransactionColumns.map((column) => ({
-        ...column,
-      }));
+      return DPTransactionColumns.map((column) => {
+        if (column.field === "downloadAMC") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const status = params.row?.schemeStatus;
+
+              // Show dash if EsignPending or null/undefined
+              if (status === "Submitted" || status === "Completed") {
+                // Otherwise, show the download button
+                return (
+                  <button
+                    onClick={() => {
+                      handleDownload(params.row); // trigger download
+                      console.log(
+                        "handleDownload(params.row)",
+                        params.row.schemeStatus
+                      );
+                    }}
+                    style={{
+                      color: "#11395C",
+                      textDecoration: "underline",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <DownloadForOfflineIcon />
+                  </button>
+                );
+              } else {
+                return <>—</>;
+              }
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
     } else if (activeSubItem === "Pledge Request Report") {
       return pledgeReportColumns.map((column) => ({
         ...column,

@@ -1061,4 +1061,7 @@ export const apiServices = {
   GetPledgeReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetPledgeReport, payload);
   },
+  DPAMCDownloadFile: async (payload: any) => {
+    return await apiService("POST", endpoints.DPAMCDownloadFile, payload);
+  },
 };
