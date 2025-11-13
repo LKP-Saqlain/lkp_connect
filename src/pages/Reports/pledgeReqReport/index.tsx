@@ -13,8 +13,8 @@ import moment from "moment";
 // import { regEx } from "../../../helper/method";
 import { apiServices } from "../../../services";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 
 const PledgeReport = ({ activeSubItem }: any) => {
@@ -27,6 +27,9 @@ const PledgeReport = ({ activeSubItem }: any) => {
   const [pledgeData, setPledgeData] = useState<any[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -57,6 +60,7 @@ const PledgeReport = ({ activeSubItem }: any) => {
 
   const fetchReport = () => {
     let payload = {
+      userId: user_id,
       clientCode: formik.values.clientCode || "",
       fromDate: startDate ? startDate : "", // "2025-10-30"
       toDate: endDate ? endDate : "", //"2025-10-30"
