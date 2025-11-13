@@ -10929,7 +10929,7 @@ export const DPTransactionColumns: GridColDef[] = [
     field: "clientId",
     headerName: "Client ID",
     flex: 1,
-    minWidth: 120,
+    minWidth: 100,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -10939,7 +10939,7 @@ export const DPTransactionColumns: GridColDef[] = [
   {
     field: "dP_ID",
     headerName: "DP ID",
-    flex: 1.2,
+    flex: 1,
     minWidth: 160,
     align: "center",
     headerAlign: "center",
@@ -10961,8 +10961,8 @@ export const DPTransactionColumns: GridColDef[] = [
   {
     field: "schemeName",
     headerName: "Scheme Name",
-    flex: 1.5,
-    minWidth: 180,
+    flex: 1,
+    minWidth: 120,
     align: "left",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -10981,9 +10981,10 @@ export const DPTransactionColumns: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "RequestDate",
+    field: "requestDate",
     headerName: "Request Date",
-    width: 150,
+    flex: 1,
+    width: 200,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -10998,7 +10999,92 @@ export const DPTransactionColumns: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
-    renderCell: (params) =>
-      params.value ? parseFloat(params.value).toFixed(2) : "—",
+    // renderCell: (params) =>
+    //   params.value ? parseFloat(params.value).toFixed(2) : "—",
+    renderCell: (params: any) => {
+      const value = params.value;
+      return value?.toLocaleString("en-IN");
+    },
+  },
+];
+
+export const pledgeReportColumns: GridColDef[] = [
+  {
+    field: "ucc",
+    headerName: "UCC",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 120,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "symbol",
+    headerName: "Symbol",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 150,
+    flex: 1,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "isin",
+    headerName: "ISIN",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "pledgeQuantity",
+    headerName: "Pledge Quantity",
+    headerClassName: "header-wrap-custom",
+    align: "right",
+    headerAlign: "center",
+    minWidth: 130,
+    renderCell: (params) => {
+      const value = params.value;
+
+      // Handle empty/null/undefined
+      if (value === null || value === undefined || value === "") {
+        return "—";
+      }
+
+      // Format the number with Indian locale and 2 decimal places
+      const formattedValue = new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(Number(value));
+
+      return formattedValue;
+    },
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 110,
+    renderCell: (params) => {
+      const value = params.value?.toString().trim() || "";
+      return value ? value : "—";
+    },
+  },
+  {
+    field: "lastUpdate",
+    headerName: "Last Updated",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => {
+      const value = params.value;
+      return value ? value : "—";
+    },
   },
 ];

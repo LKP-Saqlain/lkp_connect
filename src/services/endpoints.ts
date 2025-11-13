@@ -248,4 +248,5 @@ export const endpoints = {
   GetAPContestDashboard: "/api/MIS/GetAPContestDashboard",
   GetAMCZoneReport: "/api/Client/GetAMCZoneReport",
   GetDPTransactionDetails: "/api/Client/GetDPTransactionDetails",
+  GetPledgeReport: "/api/Dashboard/GetPledgeReport",
 };

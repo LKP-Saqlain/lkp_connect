@@ -75,6 +75,7 @@ import {
   t6SellingReportColumns,
   regMasterColumns,
   APTopClientsFields,
+  pledgeReportColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -2267,6 +2268,10 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "DP AMC Transaction") {
       return DPTransactionColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Pledge Request Report") {
+      return pledgeReportColumns.map((column) => ({
         ...column,
       }));
     } else {

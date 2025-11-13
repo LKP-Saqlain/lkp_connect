@@ -1058,4 +1058,7 @@ export const apiServices = {
   GetDPTransactionDetails: async (payload: any) => {
     return await apiService("POST", endpoints.GetDPTransactionDetails, payload);
   },
+  GetPledgeReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetPledgeReport, payload);
+  },
 };

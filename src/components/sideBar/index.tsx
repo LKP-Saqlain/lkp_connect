@@ -112,6 +112,7 @@ import T6SellingUpload from "../../pages/RMS/T6SellingUpload";
 import T6SellingReport from "../../pages/RMS/T6SellingReport";
 import RegFileUpload from "../../pages/RMS/REGFileUpload";
 import RegMaster from "../../pages/RMS/RegMaster";
+import PledgeReport from "../../pages/Reports/pledgeReqReport";
 
 const drawerWidth = 260;
 
@@ -708,6 +709,7 @@ const SideBar = () => {
     "CTCL Wise Activity Report": <CTCLReport activeSubItem={activeSubItem} />,
     "Unpledge Report": <UnpledgeRequest activeSubItem={activeSubItem} />,
     "DP AMC Transaction": <DPTransactionIndex activeSubItem={activeSubItem} />,
+    "Pledge Request Report": <PledgeReport activeSubItem={activeSubItem} />,
   };
 
   // const referalSubItems: Record<string, JSX.Element> = {
