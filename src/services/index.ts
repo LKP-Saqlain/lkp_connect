@@ -1055,4 +1055,7 @@ export const apiServices = {
   GetAMCZoneReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetAMCZoneReport, payload);
   },
+  GetPledgeReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetPledgeReport, payload);
+  },
 };

@@ -10923,3 +10923,84 @@ export const AmcZoneReportIndirect: GridColDef[] = [
     (col) => col.field !== "empOrAPName" && col.field !== "empOrAPCode"
   ),
 ];
+
+export const pledgeReportColumns: GridColDef[] = [
+  {
+    field: "ucc",
+    headerName: "UCC",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 120,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "symbol",
+    headerName: "Symbol",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 150,
+    flex: 1,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "isin",
+    headerName: "ISIN",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "pledgeQuantity",
+    headerName: "Pledge Quantity",
+    headerClassName: "header-wrap-custom",
+    align: "right",
+    headerAlign: "center",
+    minWidth: 130,
+    renderCell: (params) => {
+      const value = params.value;
+
+      // Handle empty/null/undefined
+      if (value === null || value === undefined || value === "") {
+        return "—";
+      }
+
+      // Format the number with Indian locale and 2 decimal places
+      const formattedValue = new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(Number(value));
+
+      return formattedValue;
+    },
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 110,
+    renderCell: (params) => {
+      const value = params.value?.toString().trim() || "";
+      return value ? value : "—";
+    },
+  },
+  {
+    field: "lastUpdate",
+    headerName: "Last Updated",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => {
+      const value = params.value;
+      return value ? value : "—";
+    },
+  },
+];
