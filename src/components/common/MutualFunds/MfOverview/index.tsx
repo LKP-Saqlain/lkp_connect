@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../redux/store";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
+import TypeMFModal from "../MfModal/TypeMF";
 
 const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
   const [open, setOpen] = useState(false);
@@ -14,6 +15,10 @@ const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
   const [modalType, setModalType] = useState<"oneTime" | "sip" | null>(null);
   const [bseSchemeCode, setBseSchemeCode] = useState<any>("");
   const [fundOverviewData, setFundOverviewData] = useState<any>(null);
+  const [isTypeModalOpen, setIsTypeModalOpen] = useState(false);
+  const [selectedMfType, setSelectedMfType] = useState<
+    "physical" | "demat" | ""
+  >("");
 
   const dispatch = useDispatch<AppDispatch>();
   const toggle = () => setOpen(!open);
@@ -74,6 +79,17 @@ const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
 
   return (
     <>
+      <TypeMFModal
+        isOpen={isTypeModalOpen}
+        toggle={() => setIsTypeModalOpen(!isTypeModalOpen)}
+        selectedType={selectedMfType}
+        onTypeSelect={(type) => {
+          setSelectedMfType(type);
+          setIsTypeModalOpen(false); // close Type modal
+          setOpen(true); // NOW open main MF modal
+        }}
+      />
+
       {/* Modal */}
       <MutualFundModal
         isOpen={open}
@@ -81,6 +97,7 @@ const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
         modalType={modalType}
         title={data?.schemeName ?? ""}
         bseSchemeCode={bseSchemeCode}
+        selectedType={selectedMfType}
         hasToken={hasToken}
         onOrderSuccess={onOrderSuccess}
         onBack={onBack}
@@ -177,9 +194,13 @@ const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
                     boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
                     transition: "all 0.2s ease-in-out",
                   }}
+                  // onClick={() => {
+                  //   setModalType("oneTime");
+                  //   setOpen(true);
+                  // }}
                   onClick={() => {
                     setModalType("oneTime");
-                    setOpen(true);
+                    setIsTypeModalOpen(true); // open type selector first
                   }}
                 >
                   Lumpsum
@@ -199,9 +220,13 @@ const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
                     boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
                     transition: "all 0.2s ease-in-out",
                   }}
+                  // onClick={() => {
+                  //   setModalType("sip");
+                  //   setOpen(true);
+                  // }}
                   onClick={() => {
                     setModalType("sip");
-                    setOpen(true);
+                    setIsTypeModalOpen(true); // open type selector first
                   }}
                 >
                   Start SIP

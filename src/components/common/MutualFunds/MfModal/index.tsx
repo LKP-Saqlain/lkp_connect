@@ -31,6 +31,7 @@ const MutualFundModal = ({
   bseSchemeCode,
   hasToken,
   onOrderSuccess,
+  selectedType,
   onBack,
 }: MutualFundModalProps) => {
   const [amount, setAmount] = useState<string>("500");
@@ -103,7 +104,7 @@ const MutualFundModal = ({
       refNo: "",
       subBrCode: "",
       minRedeem: "",
-      dpTxn: "C",
+      dpTxn: selectedType === "physical" ? "P" : "C",
       ipAdd: "",
       mobileNo: mobileNo,
       emailID: email,
@@ -895,6 +896,7 @@ const MutualFundModal = ({
         //   console.log("Selected mandate:", selected);
         //   finalConfirm(selected)
         // }}
+        selectedType={selectedType}
         clientNo={clientNo}
         banks={banks}
         selectedPaymentType={selectedPaymentType}
