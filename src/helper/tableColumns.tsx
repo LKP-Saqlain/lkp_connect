@@ -10363,6 +10363,7 @@ export const ageingColumns: GridColDef[] = [
     minWidth: 60,
     align: "center",
     headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
     field: "dealerName",
@@ -10371,6 +10372,7 @@ export const ageingColumns: GridColDef[] = [
     minWidth: 200,
     align: "left",
     headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
     field: "nseScrip",
@@ -10387,6 +10389,7 @@ export const ageingColumns: GridColDef[] = [
     minWidth: 120,
     align: "center",
     headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
     field: "isin",
