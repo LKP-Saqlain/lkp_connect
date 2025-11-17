@@ -11141,4 +11141,43 @@ export const pledgeReportColumns: GridColDef[] = [
       return value ? value : "—";
     },
   },
+  {
+    field: "value",
+    headerName: "Amount",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => {
+      const value = params.value;
+      return value ? value : "—";
+    },
+  },
+  {
+    field: "prfnumber",
+    headerName: "PRF Number",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => {
+      const value = params.value;
+      return value ? value : "—";
+    },
+  },
+  {
+    field: "pledgorintref",
+    headerName: "Pledge Or Intref",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => {
+      const value = params.value;
+      return value ? value : "—";
+    },
+  },
 ];
