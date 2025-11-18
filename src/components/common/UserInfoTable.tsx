@@ -163,6 +163,8 @@ interface SelectedWidgetProps {
   beneficiaryName?: any;
   handleUpdate?: (data: any) => void;
   onViewAmcDetails?: (row: any) => void;
+  handleMTFRow?: (row: any) => void;
+  openNudgeTable?: () => void;
 }
 
 const DataTable = ({
@@ -215,6 +217,8 @@ const DataTable = ({
   setSegmentRow,
   onViewAmcDetails,
   beneficiaryName,
+  handleMTFRow,
+  openNudgeTable,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -2243,9 +2247,31 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "MTF Ageing Report") {
-      return ageingColumns.map((column) => ({
-        ...column,
-      }));
+      return ageingColumns.map((column) => {
+        if (column.field === "clientcode") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <span
+                  style={{
+                    color: "#1976d2",
+                    cursor: "pointer",
+                    // textDecoration: "underline",
+                  }}
+                  onClick={() => {
+                    handleMTFRow?.(params?.row);
+                    openNudgeTable?.();
+                  }}
+                >
+                  {params.value}
+                </span>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else if (activeSubItem === "Vendor Details Report") {
       return vendorApprovalColumns.map((column) => ({
         ...column,

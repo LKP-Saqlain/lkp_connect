@@ -18,11 +18,16 @@ import { useFormik } from "formik";
 import ShowToast from "../../../utils/toastUtils";
 import { TextField } from "@mui/material";
 import UserInfoTable from "../../../components/common/UserInfoTable";
+import NudgeTable from "../../../components/common/NudgeTable";
 
 const MTFAgeingReport = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [ageingRecords, setAgeingRecords] = useState<any[]>([]);
+  const [MTFStockAgeingRecords, setMTFStockAgeingRecords] = useState<any[]>([]);
+  const [selectedMtfRow, setSelectedMtfRow] = useState<any | null>(null);
+  const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -222,11 +227,67 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
       });
   };
 
+  const handleMTFRow = (selectedRow: any) => {
+    console.log("TestSelectedRow", selectedRow);
+    setSelectedMtfRow(selectedRow);
+    fetchMTFStockAgeingRecords();
+  };
+
+  const closeNudgeTable = () => {
+    setIsNudgeTableOpen(false);
+    // tog_animationZoom(); // Reopen Nudge modal when closing NudgeTable
+  };
+
+  const openNudgeTable = () => {
+    // console.log("reportName", reportName);
+    setSelectedReport("MTF Ageing Report");
+    setIsNudgeTableOpen(true);
+  };
+
+  const fetchMTFStockAgeingRecords = () => {
+    let payload = {
+      user_id: user_id,
+      clientCode: selectedMtfRow?.clientcode,
+    };
+    dispatch(showLoader(""));
+
+    apiServices
+      .ViewMTFStockAgeingReport(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+        const data = response?.data?.data;
+        if (response?.status === 200 && Array.isArray(data)) {
+          const recordsWithId = data.map((item: any, index: number) => ({
+            id: index + 1,
+            ...item,
+          }));
+
+          setMTFStockAgeingRecords(recordsWithId);
+
+          console.log("MTF_Ageing_Records-->", recordsWithId);
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error);
+        dispatch(hideLoader());
+      });
+  };
+
+  useEffect(() => {
+    console.log("stateUpdate", selectedMtfRow);
+  }, [dispatch, selectedMtfRow]);
+
   return (
     <React.Fragment>
       <div className="page-content page-view">
         <div className="container-fluid">
           <Row className="row-font">
+            <NudgeTable
+              isOpen={isNudgeTableOpen}
+              onClose={closeNudgeTable}
+              selectedReport={selectedReport}
+              filteredData={{ "MTF Ageing Report": MTFStockAgeingRecords }}
+            />
             <Col lg={12}>
               <Card
                 style={{
@@ -458,6 +519,8 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
                   <UserInfoTable
                     activeSubItem={activeSubItem}
                     T6Data={ageingRecords}
+                    handleMTFRow={handleMTFRow}
+                    openNudgeTable={openNudgeTable}
                   />
                 </CardBody>
               </Card>

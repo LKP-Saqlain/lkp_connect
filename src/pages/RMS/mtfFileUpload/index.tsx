@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Container, Card, CardHeader, CardBody } from "reactstrap";
@@ -9,8 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import ShowToast from "../../../utils/toastUtils";
+import { formatDateTime } from "../../../helper/commmon";
+
+interface UploadDetail {
+  type: string;
+  uploadedon: string;
+  uploadedBy: string;
+}
 
 const MTFFileUpload = ({ activeSubItem }: any) => {
+  const [uploadDetails, setUploadDetails] = useState<UploadDetail[]>([]);
+
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -29,6 +38,28 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
       console.log("Form Values:", values);
     },
   });
+
+  useEffect(() => {
+    let payload = {
+      option: "MTFAgeing",
+    };
+    dispatch(showLoader(""));
+
+    apiServices
+      .GetFileuploadDetails(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          console.log("ResponseeeGetFileuploadDetails", response?.data?.data);
+          const data = response?.data?.data || [];
+          setUploadDetails(data);
+        }
+      })
+      .catch((error) => {
+        console.log("errror", error);
+        dispatch(hideLoader());
+      });
+  }, [dispatch]);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -152,6 +183,13 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
     </div>
   );
 
+  const MTFStockAgeing = uploadDetails.find(
+    (item: any) => item.type === "MTFStockAgeing"
+  );
+  const MTFAgeing = uploadDetails.find(
+    (item: any) => item.type === "MTFAgeing"
+  );
+
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -203,6 +241,9 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                     <Button
                       variant="contained"
                       size="small"
+                      disabled={
+                        formik.values.shortfallFile === null ? true : false
+                      }
                       sx={{
                         fontSize: "12px",
                         color: "#fff",
@@ -218,6 +259,24 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                     >
                       Upload MTF Stock Ageing File
                     </Button>
+                    {MTFStockAgeing && (
+                      <div
+                        style={{
+                          marginTop: "8px",
+                          fontSize: "11px",
+                          color: "#444",
+                        }}
+                      >
+                        <div>
+                          <strong>Last Uploaded By:</strong>{" "}
+                          {MTFStockAgeing.uploadedBy}
+                        </div>
+                        <div>
+                          <strong>Last Uploaded On:</strong>{" "}
+                          {formatDateTime(MTFStockAgeing?.uploadedon)}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -236,6 +295,9 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                     <Button
                       variant="contained"
                       size="small"
+                      disabled={
+                        formik.values.ageingFile === null ? true : false
+                      }
                       sx={{
                         fontSize: "12px",
                         color: "#fff",
@@ -251,6 +313,24 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                     >
                       Upload MTF Ageing File
                     </Button>
+                    {MTFAgeing && (
+                      <div
+                        style={{
+                          marginTop: "8px",
+                          fontSize: "11px",
+                          color: "#444",
+                        }}
+                      >
+                        <div>
+                          <strong>Last Uploaded By:</strong>{" "}
+                          {MTFAgeing.uploadedBy}
+                        </div>
+                        <div>
+                          <strong>Last Uploaded On:</strong>{" "}
+                          {formatDateTime(MTFAgeing?.uploadedon)}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
