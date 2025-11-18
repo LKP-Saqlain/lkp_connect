@@ -239,7 +239,7 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
 
   const openNudgeTable = () => {
     // console.log("reportName", reportName);
-    setSelectedReport("MTF Ageing Report");
+    setSelectedReport("MTF Stock Ageing Report");
     setIsNudgeTableOpen(true);
   };
 
@@ -291,7 +291,9 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
               isOpen={isNudgeTableOpen}
               onClose={closeNudgeTable}
               selectedReport={selectedReport}
-              filteredData={{ "MTF Ageing Report": MTFStockAgeingRecords }}
+              filteredData={{
+                "MTF Stock Ageing Report": MTFStockAgeingRecords,
+              }}
             />
             <Col lg={12}>
               <Card
