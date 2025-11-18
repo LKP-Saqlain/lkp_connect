@@ -16,6 +16,7 @@ import {
   newClientAddFiveDays,
   spipSubscriptionColumns,
   getBrokerageKycDetails,
+  MTFStockAgeingColumns,
 } from "../../../helper/tableColumns.tsx";
 import { Stack, TextField } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
@@ -95,6 +96,8 @@ const NudgeTable = ({
         return upcomingDormantClientColumns;
       case "SPIP Subscription in last 10 days":
         return spipSubscriptionColumns;
+      case "MTF Ageing Report":
+        return MTFStockAgeingColumns;
       case "More details about segment":
         return getBrokerageKycDetails(handleDownload ?? (() => {}));
 

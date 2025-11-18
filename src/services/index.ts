@@ -1064,4 +1064,14 @@ export const apiServices = {
   DPAMCDownloadFile: async (payload: any) => {
     return await apiService("POST", endpoints.DPAMCDownloadFile, payload);
   },
+  GetFileuploadDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetFileuploadDetails, payload);
+  },
+  ViewMTFStockAgeingReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ViewMTFStockAgeingReport,
+      payload
+    );
+  },
 };

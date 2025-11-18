@@ -250,4 +250,6 @@ export const endpoints = {
   GetDPTransactionDetails: "/api/Client/GetDPTransactionDetails",
   DPAMCDownloadFile: "/api/Client/DPAMCDownloadFile",
   GetPledgeReport: "/api/Dashboard/GetPledgeReport",
+  GetFileuploadDetails: "/api/RMS/GetFileuploadDetails",
+  ViewMTFStockAgeingReport: "/api/RMS/ViewMTFStockAgeingReport",
 };
