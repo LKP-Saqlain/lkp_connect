@@ -16,6 +16,7 @@ import {
   newClientAddFiveDays,
   spipSubscriptionColumns,
   getBrokerageKycDetails,
+  extendedAmcReport,
 } from "../../../helper/tableColumns.tsx";
 import { Stack, TextField } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
@@ -29,12 +30,14 @@ const NudgeTable = ({
   singleData,
   handleAction,
   handleDownload,
+  selectedTab,
 }: {
   isOpen: boolean;
   onClose: () => void;
   selectedReport: any;
   filteredData?: Record<string, any[]>;
   singleData?: any;
+  selectedTab?: any;
   handleAction?: (payload: {
     row: any;
     remarks: string;
@@ -47,6 +50,13 @@ const NudgeTable = ({
 
   const [remarks, setRemarks] = useState<string>("");
   const [showValidation, setShowValidation] = useState(false); // for red textfield when empty
+  const [activeTab, setActiveTab] = useState<"submitted" | "completed">(
+    selectedTab ?? "submitted"
+  );
+
+  useEffect(() => {
+    setActiveTab(selectedTab ?? "submitted");
+  }, [isOpen, selectedTab]);
 
   const handleActionClick = (actionType: "A" | "R") => {
     // Validation: remarks should not be empty
@@ -70,17 +80,28 @@ const NudgeTable = ({
   };
 
   useEffect(() => {
-    console.log("filteredData:", filteredData);
+    console.log("filteredData:", filteredData, activeTab, selectedTab);
+    console.log(singleData, "singleData");
     setShowValidation(false);
-  }, [filteredData, isOpen]);
+  }, [filteredData, isOpen, activeTab, singleData]);
 
   // Get data specific to selectedReport
   const reportData = useMemo(() => {
+    if (selectedReport === "AMC Contest Report") {
+      if (activeTab === "submitted") {
+        return singleData?.submittedList || [];
+      } else if (activeTab === "completed") {
+        return singleData?.completedList || [];
+      }
+      return [];
+    }
+
     if (singleData && Array.isArray(singleData)) {
       return singleData;
     }
+
     return filteredData?.[selectedReport] || [];
-  }, [filteredData, singleData, selectedReport]);
+  }, [filteredData, singleData, selectedReport, activeTab]);
 
   // Select columns based on the selectedReport
   const columns = useMemo(() => {
@@ -95,6 +116,8 @@ const NudgeTable = ({
         return upcomingDormantClientColumns;
       case "SPIP Subscription in last 10 days":
         return spipSubscriptionColumns;
+      case "AMC Contest Report":
+        return extendedAmcReport;
       case "More details about segment":
         return getBrokerageKycDetails(handleDownload ?? (() => {}));
 
@@ -119,8 +142,82 @@ const NudgeTable = ({
         id="myExtraLargeModalLabel"
         toggle={onClose}
       >
-        {selectedReport}
+        {selectedReport === "AMC Contest Report" ? (
+          <div
+            style={{
+              display: "flex",
+              gap: "24px",
+              alignItems: "center",
+              marginTop: ".5rem",
+            }}
+          >
+            <div
+              onClick={() => setActiveTab("submitted")}
+              style={{
+                cursor: "pointer",
+                borderBottom:
+                  activeTab === "submitted" ? "2px solid #11395C" : "none",
+                paddingBottom: "4px",
+                fontWeight: activeTab === "submitted" ? "600" : "400",
+                color: activeTab === "submitted" ? "#11395C" : "#666",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              Submitted Count
+              <span
+                style={{
+                  backgroundColor: "#e3e6eb",
+                  color: "#666",
+                  fontSize: "12px",
+                  padding: "2px 6px",
+                  borderRadius: "4px",
+                  minWidth: "22px",
+                  textAlign: "center",
+                  fontWeight: "500",
+                }}
+              >
+                {singleData?.summary?.submittedCount}
+              </span>
+            </div>
+
+            <div
+              onClick={() => setActiveTab("completed")}
+              style={{
+                cursor: "pointer",
+                borderBottom:
+                  activeTab === "completed" ? "2px solid #11395C" : "none",
+                paddingBottom: "4px",
+                fontWeight: activeTab === "completed" ? "600" : "400",
+                color: activeTab === "completed" ? "#11395C" : "#666",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              Completed Count
+              <span
+                style={{
+                  backgroundColor: "#e3e6eb",
+                  color: "#666",
+                  fontSize: "12px",
+                  padding: "2px 6px",
+                  borderRadius: "4px",
+                  minWidth: "22px",
+                  textAlign: "center",
+                  fontWeight: "500",
+                }}
+              >
+                {singleData?.summary?.completedCount}
+              </span>
+            </div>
+          </div>
+        ) : (
+          <span>{selectedReport}</span> // Normal title for other reports
+        )}
       </ModalHeader>
+
       <ModalBody>
         <Card className="main-card">
           <CardBody
@@ -135,7 +232,10 @@ const NudgeTable = ({
             }}
           >
             <DataGrid
-              rows={reportData.map((row, index) => ({ id: index, ...row }))}
+              rows={reportData.map((row: any, index: any) => ({
+                id: index,
+                ...row,
+              }))}
               columns={columns}
               pageSizeOptions={[0, 5]}
               rowHeight={30}

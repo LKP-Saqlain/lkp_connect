@@ -1064,4 +1064,11 @@ export const apiServices = {
   DPAMCDownloadFile: async (payload: any) => {
     return await apiService("POST", endpoints.DPAMCDownloadFile, payload);
   },
+  GetDPAMCZoneReportDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetDPAMCZoneReportDetails,
+      payload
+    );
+  },
 };
