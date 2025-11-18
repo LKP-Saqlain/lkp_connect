@@ -81,20 +81,28 @@ const NudgeTable = ({
   };
 
   useEffect(() => {
-    console.log("filteredData:", filteredData, activeTab, selectedTab);
+    console.log("filteredData:", filteredData);
     console.log(singleData, "singleData");
     setShowValidation(false);
-  }, [filteredData, isOpen, activeTab, singleData]);
+  }, [filteredData, isOpen]);
 
   // Get data specific to selectedReport
   const reportData = useMemo(() => {
     if (selectedReport === "AMC Contest Report") {
-      if (activeTab === "submitted") {
-        return singleData?.submittedList || [];
-      } else if (activeTab === "completed") {
-        return singleData?.completedList || [];
-      }
-      return [];
+      const list =
+        activeTab === "submitted"
+          ? singleData?.submittedList
+          : activeTab === "completed"
+          ? singleData?.completedList
+          : [];
+
+      // Add index (id) to each row
+      return (
+        list?.map((item: any, index: number) => ({
+          ...item,
+          id: index + 1,
+        })) || []
+      );
     }
 
     if (singleData && Array.isArray(singleData)) {
