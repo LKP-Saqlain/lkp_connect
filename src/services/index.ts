@@ -1074,4 +1074,11 @@ export const apiServices = {
       payload
     );
   },
+  GetDPAMCZoneReportDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetDPAMCZoneReportDetails,
+      payload
+    );
+  },
 };

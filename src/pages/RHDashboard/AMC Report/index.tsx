@@ -15,6 +15,7 @@ import { apiServices } from "../../../services";
 import ComDropDown from "../../../components/common/Dropdown/commonDropdown";
 import DashboardCard from "../../../components/common/DashboardCard";
 import UserInfoTable from "../../../components/common/UserInfoTable";
+import NudgeTable from "../../../components/common/NudgeTable";
 
 interface UserData {
   direct: any[];
@@ -46,10 +47,15 @@ const AmcReport = ({ activeSubItem }: any) => {
     inDirect: [],
     summary: {},
   });
-  const [selectedZone, setSelectedZone] = useState<string>("all");
   const [activeBranch, setActiveBranch] = useState<"direct" | "indirect">(
     "direct"
   );
+  const [selectedZone, setSelectedZone] = useState<string>("all");
+  const [extendedData, setExtendedData] = useState<any>(null);
+
+  const [selectedType, setSelectedType] = useState<any>();
+  const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
+  // const [segmentRow, setSegmentRow] = useState(null);
 
   useEffect(() => {
     if (accessType === "ALL" && selectedZone === "all") return;
@@ -95,6 +101,44 @@ const AmcReport = ({ activeSubItem }: any) => {
 
     fetchAMCZoneReport();
   }, [dispatch, user_id, selectedZone, accessType]);
+
+  const fetchAmcExtended = async (row: any) => {
+    console.log(fetchAmcExtended, row);
+
+    const payload = {
+      userId: user_id,
+      empOrAPCode: row.empOrAPCode,
+      branchType: row.branchType,
+    };
+
+    dispatch(showLoader(""));
+
+    try {
+      const response = await apiServices.GetDPAMCZoneReportDetails(payload);
+
+      if (response?.data?.statusCode === 200) {
+        const data = response.data.data;
+        console.log(data, "GetDPAMCZoneReportDetails");
+
+        setExtendedData(data);
+      }
+    } catch (error) {
+      console.error("Error fetching AMC Zone Report:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const handleExtendedVersion = (row: any, type: any) => {
+    fetchAmcExtended(row);
+    setSelectedType(type);
+    setIsNudgeTableOpen(true);
+    console.log(row, type, "row-----type");
+  };
+
+  // useEffect(() => {
+  //   console.log(segmentRow, "segmentRow from amc report");
+  // }, [segmentRow]);
 
   const handleZoneChange = (zone: any) => {
     console.log("Selected zone:", zone);
@@ -151,6 +195,10 @@ const AmcReport = ({ activeSubItem }: any) => {
     { title: "Submitted Clients" },
     { title: "Completed Clients" },
   ];
+
+  const closeNudgeTable = () => {
+    setIsNudgeTableOpen(false);
+  };
 
   return (
     <div className="page-content page-view">
@@ -288,9 +336,17 @@ const AmcReport = ({ activeSubItem }: any) => {
                 activeBranch === "direct" ? userData.direct : userData.inDirect
               }
               activeSubItem={`${activeSubItem} ${activeBranch}`}
+              handleDownload={handleExtendedVersion}
             />
           </CardBody>
         </Card>
+        <NudgeTable
+          isOpen={isNudgeTableOpen}
+          onClose={closeNudgeTable}
+          selectedReport={"AMC Contest Report"}
+          singleData={extendedData}
+          selectedTab={selectedType}
+        />
       </Container>
     </div>
   );

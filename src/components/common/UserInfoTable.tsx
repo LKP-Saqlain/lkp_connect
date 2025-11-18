@@ -2285,13 +2285,111 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "Client DP AMC Report direct") {
-      return AmcZoneReportDirect.map((column) => ({
-        ...column,
-      }));
+      return AmcZoneReportDirect.map((column) => {
+        if (column.field === "submitted") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              // Otherwise, show the download button
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, column.field); // trigger download
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.submitted}
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "completed") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              // Otherwise, show the download button
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, column.field); // trigger download
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.completed}
+                </button>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
     } else if (activeSubItem === "Client DP AMC Report indirect") {
-      return AmcZoneReportIndirect.map((column) => ({
-        ...column,
-      }));
+      return AmcZoneReportIndirect.map((column) => {
+        if (column.field === "submitted") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              // Otherwise, show the download button
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, column.field); // trigger download
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.submitted}
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "completed") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              // Otherwise, show the download button
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, column.field); // trigger download
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.completed}
+                </button>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
     } else if (activeSubItem === "DP AMC Transaction") {
       return DPTransactionColumns.map((column) => {
         if (column.field === "downloadAMC") {
@@ -2308,7 +2406,7 @@ const DataTable = ({
                     onClick={() => {
                       handleDownload(params.row); // trigger download
                       console.log(
-                        "handleDownload(params.row)",
+                        "DP AMC Transaction row",
                         params.row.schemeStatus
                       );
                     }}

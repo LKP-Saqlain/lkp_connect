@@ -11354,3 +11354,38 @@ export const MTFStockAgeingColumns: GridColDef[] = [
     renderCell: (params) => params.value ?? "0",
   },
 ];
+
+export const extendedAmcReport: GridColDef[] = [
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "dP_ID",
+    headerName: "DP ID",
+    flex: 1,
+    minWidth: 180,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "primary_Holder",
+    headerName: "Primary Holder",
+    flex: 1.5,
+    minWidth: 220,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "schemeName",
+    headerName: "Scheme Name",
+    flex: 1.2,
+    minWidth: 200,
+    align: "center",
+    headerAlign: "center",
+  },
+];
