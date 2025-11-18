@@ -585,7 +585,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                                 formik.errors.selectedBranchCode) ||
                               (formik.touched.isInValue &&
                                 formik.errors.isInValue)
-                                ? "-18px"
+                                ? "-25px"
                                 : "",
                           }}
                         >
