@@ -10,22 +10,28 @@ import { apiServices } from "../../../services";
 import DataTable from "../../../components/common/UserInfoTable";
 import DownloadIcon from "@mui/icons-material/Download";
 import ShowToast from "../../../utils/toastUtils";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 
 const DPTransactionIndex = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any[]>([]);
+  const [selectedDate, setSelectedDate] = useState<any>(null);
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
-  //   const { accessType } = useSelector(
-  //     (state: RootState) => state.AuthUser?.data?.data
-  //   );
 
-  // 🔹 Fetch DP Transaction Data
+  const getFormattedDate = () => {
+    return selectedDate ? selectedDate.format("DD-MM-YYYY") : "";
+  };
+
   useEffect(() => {
     const payload = {
       user_id,
+      filterDate: getFormattedDate(),
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
@@ -36,7 +42,6 @@ const DPTransactionIndex = ({ activeSubItem }: any) => {
         const result = response?.data?.data || [];
         console.log("DP Transaction Data:", result, activeSubItem);
 
-        // Add serial id for DataTable
         const formattedData = result.map((item: any, index: number) => ({
           id: index + 1,
           ...item,
@@ -50,9 +55,9 @@ const DPTransactionIndex = ({ activeSubItem }: any) => {
       .finally(() => {
         dispatch(hideLoader());
       });
-  }, [dispatch]);
+  }, [selectedDate]); // triggers when date changes
 
-  // 📤 Export to Excel
+  //  Export to Excel
   const exportToExcel = (data: any[], fileName: string) => {
     if (!data.length) return;
 
@@ -69,10 +74,7 @@ const DPTransactionIndex = ({ activeSubItem }: any) => {
   };
 
   const handleDownload = (row: any) => {
-    console.log("DPAMCDownloadFile", row);
-
     const payload = {
-      // boId: "1203000001123371",
       boId: row?.dP_ID,
       fileType: "eSignPDF",
     };
@@ -80,8 +82,7 @@ const DPTransactionIndex = ({ activeSubItem }: any) => {
     dispatch(showLoader("Please wait, we are processing your request..."));
 
     apiServices
-      .DPAMCDownloadFile(payload) // ensure this sets responseType: 'blob'
-
+      .DPAMCDownloadFile(payload)
       .then((response: any) => {
         const blob = new Blob([response.data], { type: "application/pdf" });
         const url = window.URL.createObjectURL(blob);
@@ -89,7 +90,6 @@ const DPTransactionIndex = ({ activeSubItem }: any) => {
         const link = document.createElement("a");
         link.href = url;
         link.download = `AMC_${row.dP_ID || "file"}.pdf`;
-
         document.body.appendChild(link);
         link.click();
 
@@ -124,26 +124,43 @@ const DPTransactionIndex = ({ activeSubItem }: any) => {
           >
             <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
               <h4 className="card-title mb-0">DP AMC Transaction</h4>
+              <div className="d-flex align-items-center gap-2">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    format="DD/MM/YYYY"
+                    value={selectedDate} // dayjs | null
+                    maxDate={dayjs()}
+                    onChange={(newDate) => setSelectedDate(newDate)} // update state
+                    slotProps={{
+                      field: { clearable: true },
+                      textField: {
+                        // size: "small",
+                        sx: { width: 180 },
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
 
-              <Button
-                type="button"
-                onClick={() => exportToExcel(data, "DP_Transaction_Report")}
-                variant="contained"
-                size="small"
-                startIcon={<DownloadIcon style={{ fontSize: "16px" }} />}
-                sx={{
-                  textTransform: "none",
-                  backgroundColor: "#11395C",
-                  color: "#fff",
-                  fontSize: "12px",
-                  height: "32px",
-                  padding: "0 12px",
-                  borderRadius: "6px",
-                  "&:hover": { backgroundColor: "#0d2f4c" },
-                }}
-              >
-                Export Excel
-              </Button>
+                <Button
+                  type="button"
+                  onClick={() => exportToExcel(data, "DP_Transaction_Report")}
+                  variant="contained"
+                  size="small"
+                  startIcon={<DownloadIcon style={{ fontSize: "16px" }} />}
+                  sx={{
+                    textTransform: "none",
+                    backgroundColor: "#11395C",
+                    color: "#fff",
+                    fontSize: "12px",
+                    height: "32px",
+                    padding: "0 12px",
+                    borderRadius: "6px",
+                    "&:hover": { backgroundColor: "#0d2f4c" },
+                  }}
+                >
+                  Export Excel
+                </Button>
+              </div>
             </div>
           </CardHeader>
 

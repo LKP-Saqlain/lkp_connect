@@ -10928,8 +10928,8 @@ export const DPTransactionColumns: GridColDef[] = [
   {
     field: "zone",
     headerName: "Zone",
-    flex: 1,
-    minWidth: 100,
+    flex: 0.5,
+    minWidth: 70,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -10938,8 +10938,8 @@ export const DPTransactionColumns: GridColDef[] = [
   {
     field: "branch",
     headerName: "Branch ",
-    flex: 1,
-    minWidth: 100,
+    flex: 0.5,
+    minWidth: 70,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -10948,8 +10948,8 @@ export const DPTransactionColumns: GridColDef[] = [
   {
     field: "branchType",
     headerName: "Branch Type",
-    flex: 1,
-    minWidth: 100,
+    flex: 0.7,
+    minWidth: 80,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -11014,8 +11014,8 @@ export const DPTransactionColumns: GridColDef[] = [
   {
     field: "schemeStatus",
     headerName: "Scheme Status",
-    flex: 1,
-    minWidth: 150,
+    flex: 0.8,
+    minWidth: 120,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -11025,7 +11025,7 @@ export const DPTransactionColumns: GridColDef[] = [
   {
     field: "order_Id",
     headerName: "Order ID",
-    flex: 1,
+    flex: 0.5,
     minWidth: 100,
     align: "center",
     headerAlign: "center",
