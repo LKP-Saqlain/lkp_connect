@@ -230,7 +230,6 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
   const handleMTFRow = (selectedRow: any) => {
     console.log("TestSelectedRow", selectedRow);
     setSelectedMtfRow(selectedRow);
-    fetchMTFStockAgeingRecords();
   };
 
   const closeNudgeTable = () => {
@@ -244,34 +243,40 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
     setIsNudgeTableOpen(true);
   };
 
-  const fetchMTFStockAgeingRecords = () => {
-    let payload = {
-      user_id: user_id,
-      clientCode: selectedMtfRow?.clientcode,
+  useEffect(() => {
+    if (!selectedMtfRow?.clientcode) return;
+
+    const fetchMTFStockAgeingRecords = () => {
+      const payload = {
+        user_id: user_id,
+        clientCode: selectedMtfRow.clientcode,
+      };
+      dispatch(showLoader(""));
+
+      apiServices
+        .ViewMTFStockAgeingReport(payload)
+        .then((response) => {
+          dispatch(hideLoader());
+          const data = response?.data?.data;
+
+          if (response?.status === 200 && Array.isArray(data)) {
+            const recordsWithId = data.map((item: any, index: number) => ({
+              id: index + 1,
+              ...item,
+            }));
+
+            setMTFStockAgeingRecords(recordsWithId);
+            console.log("MTF_Ageing_Records-->", recordsWithId);
+          }
+        })
+        .catch((error) => {
+          console.log("Error", error);
+          dispatch(hideLoader());
+        });
     };
-    dispatch(showLoader(""));
 
-    apiServices
-      .ViewMTFStockAgeingReport(payload)
-      .then((response) => {
-        dispatch(hideLoader());
-        const data = response?.data?.data;
-        if (response?.status === 200 && Array.isArray(data)) {
-          const recordsWithId = data.map((item: any, index: number) => ({
-            id: index + 1,
-            ...item,
-          }));
-
-          setMTFStockAgeingRecords(recordsWithId);
-
-          console.log("MTF_Ageing_Records-->", recordsWithId);
-        }
-      })
-      .catch((error) => {
-        console.log("Error", error);
-        dispatch(hideLoader());
-      });
-  };
+    fetchMTFStockAgeingRecords();
+  }, [selectedMtfRow?.clientcode]);
 
   useEffect(() => {
     console.log("stateUpdate", selectedMtfRow);
