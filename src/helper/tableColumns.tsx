@@ -11361,6 +11361,14 @@ export const MTFStockAgeingColumns: GridColDef[] = [
 
 export const extendedAmcReport: GridColDef[] = [
   {
+    field: "id",
+    headerName: "Sr. No.",
+    flex: 1,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
     field: "clientCode",
     headerName: "Client Code",
     flex: 1,
