@@ -5,10 +5,7 @@ import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import "./style.css";
-// import UserInfoDetail from "./IndUserInfoDetails";
 import UserInfo from "./IndUserDetailsModal";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
 import { Card, CardBody, Container } from "reactstrap";
 import ShowToast from "../../utils/toastUtils";
 import { RootState, AppDispatch } from "../../redux/store";
@@ -47,11 +44,6 @@ any) => {
   const [tableData, setTableData] = useState<[]>([]);
   const [userDetails, setUserDetails] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [totalCount, setTotalCount] = useState(0);
-  const [activeClients, setActiveClients] = useState(0);
-  const [inactiveClients, setinActiveClients] = useState(0);
-  const [dormantCount, setDormantCount] = useState(0);
-  // const [groupedClients, setGroupedClients] = useState<any[][]>([]);
   const [activeGroupedClients, setActiveGroupedClients] = useState<any[][]>([]);
   const [inactiveGroupedClients, setInactiveGroupedClients] = useState<any[][]>(
     []
@@ -60,16 +52,20 @@ any) => {
   const [responseStatus, setResponseStatus] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [branchCode, setBranchCode] = useState("");
-  const [totalEntries, setTotalEntries] = useState(null);
-  const [filter, setFilter] = useState<string>("ALL");
   const [selectedUserInfo, setSelectedUserInfo] = useState<ClientRow | null>(
     null
   );
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [fileExtension, setFileExtension] = useState("");
-  // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [fileBase64, setFileBase64] = useState<string | null>(null);
   const [uploadedFileName, setUploadFileName] = useState("");
+  // const [totalEntries, setTotalEntries] = useState(null);
+  // const [filter, setFilter] = useState<string>("ALL");
+  // const [totalCount, setTotalCount] = useState(0);
+  // const [activeClients, setActiveClients] = useState(0);
+  // const [inactiveClients, setinActiveClients] = useState(0);
+  // const [dormantCount, setDormantCount] = useState(0);
+  // const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  // const [fileExtension, setFileExtension] = useState("");
+  // const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  // const [fileBase64, setFileBase64] = useState<string | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -78,100 +74,11 @@ any) => {
   );
 
   useEffect(() => {
-    console.log(
-      "activeItemCheck->",
-      uploadedFile,
-      fileExtension,
-      fileBase64,
-      selectedCapsule
-    );
-  }, [selectedCapsule, uploadedFile, fileExtension, fileBase64]);
-
-  useEffect(() => {
-    console.log("test12345", totalEntries, filter, selectedUserInfo?.ctermcode);
-  }, [selectedUserInfo]);
-  useEffect(() => {
     if (selectedTrading === "Dormant") {
       setSelectedCapsule("Upcoming Dormant Client");
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [selectedTrading]);
-  useEffect(() => {
-    if (selectedCapsule === "Total Clients") {
-      dispatch(showLoader("Please wait, we are processing your request..."));
-      const fetchClientCash = async () => {
-        if (apiStatus) {
-          const Id = localStorage.getItem("Id");
-          const payload = {
-            loginName: Id,
-            branchCode: "ALL",
-            zone: "ALL",
-            clientStatus: "ALL",
-            start: 0,
-            pageSize: 0,
-            searchkey: "",
-          };
-          try {
-            dispatch(
-              showLoader("Please wait, we are processing your request...")
-            );
-            const response = await apiServices.ClientDetails(payload);
-            console.log(
-              "ClientClientDetailsResponse",
-              response?.data[0].RecordsTotal
-            );
-
-            if (response?.status === 200) {
-              dispatch(hideLoader());
-              setResponseStatus(true);
-              setTableData(response?.data);
-
-              const totalCount = response?.data[0].RecordsTotal;
-              setTotalCount(totalCount);
-
-              const activeClients = response?.data.filter(
-                (client: any) => client.ClientStatus === "Active"
-              ).length;
-              const inactiveClients = response?.data.filter(
-                (client: any) => client.ClientStatus === "Inactive"
-              ).length;
-              setActiveClients(activeClients);
-              setinActiveClients(inactiveClients);
-              console.log("Active Clients:", activeClients);
-              console.log("Inactive Clients:", inactiveClients);
-
-              const activeGroupedClients: any[] = [];
-              const inactiveGroupedClients: any[] = [];
-
-              // Loop through the data and categorize clients as active or inactive
-              response?.data.forEach((client: any) => {
-                if (client.ClientStatus === "Active") {
-                  activeGroupedClients.push(client);
-                } else if (client.ClientStatus === "Inactive") {
-                  inactiveGroupedClients.push(client);
-                }
-              });
-
-              console.log("Active Clients:", activeGroupedClients);
-              console.log("Inactive Clients:", inactiveGroupedClients);
-
-              // Optionally, set the grouped data to state
-              // setGroupedClients(groupedClients);
-              setActiveGroupedClients(activeGroupedClients);
-              setInactiveGroupedClients(inactiveGroupedClients);
-            }
-          } catch (error) {
-            dispatch(hideLoader());
-            // console.error(
-            //   "Error fetching data:",
-            //   error?.response || error?.message || error
-            // );
-          }
-        }
-      };
-      fetchClientCash();
-    }
-  }, [dispatch]);
 
   useEffect(() => {
     console.log("selected Capsules", selectedCapsule);
@@ -198,25 +105,13 @@ any) => {
               "getDormantTotalClient",
               response?.data[0].recordsTotal
             );
-            setDormantCount(response?.data[0].recordsTotal);
+            // setDormantCount(response?.data[0].recordsTotal);
 
             if (response?.status === 200) {
               setResponseStatus(true);
-              let { recordsTotal } = response?.data[0];
+              // let { recordsTotal } = response?.data[0];
               console.log("getDormantReport_response_1", response?.status);
-              setTotalEntries(recordsTotal);
-              const seven_day_duration = response?.data.filter(
-                (item: any) => item.dayCount <= 7
-              );
-              const fifteen_day_duration = response?.data.filter(
-                (item: any) => item.dayCount <= 15
-              );
-              const one_months_duration = response?.data.filter(
-                (item: any) => item.dayCount <= 30
-              );
-              console.log("seven_day_duration", seven_day_duration);
-              console.log("fifteen_day_duration", fifteen_day_duration);
-              console.log("one_months_duration", one_months_duration);
+              // setTotalEntries(recordsTotal);
               setTableData(response?.data);
             }
           })
@@ -241,15 +136,6 @@ any) => {
     };
     getUpcomingDormants();
   }, [selectedCapsule]);
-
-  // useEffect(() => {
-  //   if (searchValue.length === 0) {
-  //     setTotalCount(0);
-  //     setActiveClients(0);
-  //     setinActiveClients(0);
-  //     // handleSearchUser();
-  //   }
-  // }, [searchValue]);
 
   useEffect(() => {
     const fetchClientCash = async () => {
@@ -279,17 +165,13 @@ any) => {
             setResponseStatus(true);
             setTableData(response?.data);
 
-            const totalCount = response?.data[0].RecordsTotal;
-            setTotalCount(totalCount);
-
             const activeClients = response?.data.filter(
               (client: any) => client.ClientStatus === "Active"
             ).length;
             const inactiveClients = response?.data.filter(
               (client: any) => client.ClientStatus === "Inactive"
             ).length;
-            setActiveClients(activeClients);
-            setinActiveClients(inactiveClients);
+
             console.log("Active Clients:", activeClients);
             console.log("Inactive Clients:", inactiveClients);
 
@@ -325,79 +207,6 @@ any) => {
 
     fetchClientCash(); // Call the async function
   }, [apiStatus, dispatch, selectedCapsule]);
-
-  const handleExcel = async () => {
-    const Id = localStorage.getItem("Id");
-    const payload = {
-      loginName: Id,
-      branchCode: "ALL",
-      zone: "ALL",
-      clientStatus: "ALL",
-      start: 0,
-      pageSize: 0,
-      searchkey: "",
-    };
-    try {
-      dispatch(showLoader("Please wait, we are processing your request..."));
-      const response = await apiServices.ClientDetails(payload);
-      console.log("ClientClientDetailsResponse", response?.data);
-
-      if (response?.status === 200) {
-        dispatch(hideLoader());
-        setTableData(response?.data);
-
-        const totalCount = response?.data[0].RecordsTotal;
-        setTotalCount(totalCount);
-        const activeGroupedClients: any[] = [];
-        const inactiveGroupedClients: any[] = [];
-
-        // Loop through the data and categorize clients as active or inactive
-        response?.data.forEach((client: any) => {
-          if (client.ClientStatus === "Active") {
-            activeGroupedClients.push(client); // Add to active clients
-          } else if (client.ClientStatus === "Inactive") {
-            inactiveGroupedClients.push(client); // Add to inactive clients
-          }
-        });
-
-        console.log("", activeGroupedClients);
-        console.log("Inactive Clients:", inactiveGroupedClients);
-
-        const data: any[] =
-          selectedCapsule === "Total Clients"
-            ? response?.data
-            : selectedCapsule === "Active Clients"
-            ? activeGroupedClients
-            : selectedCapsule === "Inactive Clients"
-            ? inactiveClients
-            : [];
-
-        // Convert data to a worksheet
-        const worksheet = XLSX.utils.json_to_sheet(data);
-        // Create a workbook and append the worksheet
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(
-          workbook,
-          worksheet,
-          "Clients Ageing Report Data"
-        );
-        // Convert the workbook to a binary file
-        const excelBuffer = XLSX.write(workbook, {
-          bookType: "xlsx",
-          type: "array",
-        });
-        const excelFile = new Blob([excelBuffer], {
-          type: "application/octet-stream",
-        });
-        saveAs(excelFile, "ClientDetails.xlsx");
-
-        // Optionally, set the grouped data to state
-        // setGroupedClients(groupedClients);
-      }
-    } catch (error) {
-      dispatch(hideLoader());
-    }
-  };
 
   const getUserBrokergageModificationDetails = (value: any) => {
     setBranchCode(value.BranchCode);
@@ -488,11 +297,6 @@ any) => {
         reader.onload = () => {
           const base64String = reader.result as string;
           const base64Only = base64String.split(",")[1] || base64String;
-
-          setUploadedFile(file);
-          setFileBase64(base64Only); // Store base64
-          setFileExtension(fileExt);
-
           dispatch(showLoader("Uploading file..."));
 
           let payload = {
@@ -555,10 +359,7 @@ any) => {
         ShowToast("error", "Failed to process the file.");
         return;
       }
-      // const fileNameWithoutExtension = file.name.substring(
-      //   0,
-      //   file.name.lastIndexOf(".")
-      // );
+
       const fullFileNameWithExtension = file.name;
       const currentTime = dayjs().format("DD/MM/YYYY_hh:mmA");
 
@@ -568,33 +369,6 @@ any) => {
 
       try {
         await handleFileUploadAsync(file, communicationProofPath);
-
-        // const payload = {
-        //   rowId: "",
-        //   fileName: communicationProofPath,
-        //   uploadedBy: user_id,
-        //   uploadedDate: new Date().toISOString(),
-        //   remarks: "",
-        // };
-
-        // console.log("Payload to send:", payload);
-        // dispatch(showLoader("Please wait for a moment"));
-        // apiServices
-        //   .UploadTradeFile(payload)
-        //   .then((response) => {
-        //     if (response?.status === 200) {
-        //       dispatch(hideLoader());
-        //       console.log("Response------>", response?.data);
-        //       // setUploadApiStatus(true);
-
-        //       // ShowToast("success", response?.data?.message);
-        //     }
-        //   })
-        //   .catch((error) => {
-        //     console.log("error", error);
-        //     dispatch(hideLoader());
-        //     // setUploadApiStatus(false);
-        //   });
       } catch (error) {
         console.error("Compliance Upload Failed:", error);
         ShowToast("error", "Compliance upload failed.");
@@ -611,7 +385,7 @@ any) => {
 
   const handleFilterChange = (selectedFilter: string) => {
     console.log("Selected Filter:", selectedFilter);
-    setFilter(selectedFilter);
+    // setFilter(selectedFilter);
 
     if (selectedCapsule === "Upcoming Dormant Client") {
       setTableData([]); // Clear existing data before fetching new data
@@ -687,9 +461,9 @@ any) => {
             <UserCapsules
               selectedCapsule={selectedCapsule}
               handleClick={handleClick}
-              totalCount={totalCount}
-              activeClient={activeClients}
-              inactiveClient={inactiveClients}
+              // totalCount={totalCount}
+              // activeClient={activeClients}
+              // inactiveClient={inactiveClients}
               capsuleType="ClientDetails"
             />
             <Card
@@ -717,16 +491,10 @@ any) => {
                     getUserBrokergageModificationDetails
                   }
                   apiStatus={apiStatus}
-                  handleExcel={handleExcel}
                   showSearch={responseStatus}
                   handleSearchBasedOnInput={handleSearchBasedOnInput}
-                  // handleSearchUser={handleSearchUser}
                   searchValue={searchValue}
                   onFilterChange={handleFilterChange}
-                  totalCount={totalCount}
-                  activeClient={activeClients}
-                  inactiveClient={inactiveClients}
-                  dormantCount={dormantCount}
                 />
               </CardBody>
             </Card>

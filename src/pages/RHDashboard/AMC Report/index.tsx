@@ -130,6 +130,7 @@ const AmcReport = ({ activeSubItem }: any) => {
   };
 
   const handleExtendedVersion = (row: any, type: any) => {
+    setExtendedData(null);
     fetchAmcExtended(row);
     setSelectedType(type);
     setIsNudgeTableOpen(true);
