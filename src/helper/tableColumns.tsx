@@ -11116,13 +11116,17 @@ export const pledgeReportColumns: GridColDef[] = [
     field: "value",
     headerName: "Amount",
     headerClassName: "header-wrap-custom",
-    align: "center",
+    align: "right",
     headerAlign: "center",
     minWidth: 180,
     flex: 1.2,
-    renderCell: (params) => {
-      const value = params.value;
-      return value ? value : "—";
+
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
     },
   },
   {
@@ -11140,7 +11144,7 @@ export const pledgeReportColumns: GridColDef[] = [
   },
   {
     field: "pledgorintref",
-    headerName: "Pledge Or Intref",
+    headerName: "PledgeOrIntRef",
     headerClassName: "header-wrap-custom",
     align: "center",
     headerAlign: "center",
