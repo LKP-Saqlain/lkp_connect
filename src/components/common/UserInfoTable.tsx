@@ -2622,11 +2622,11 @@ const DataTable = ({
                 : commonLedgerData
               : selectedWidget === "Total Clients"
               ? T6Data
-              : selectedWidget === "Active Clients"
-              ? activeGroupedClients
-              : selectedWidget === "Inactive Clients"
-              ? inactiveGroupedClients
-              : selectedWidget === "Active Clients" &&
+              : // : selectedWidget === "Active Clients"
+              // ? activeGroupedClients
+              // : selectedWidget === "Inactive Clients"
+              // ? inactiveGroupedClients
+              selectedWidget === "Active Clients" &&
                 activeSubItem === "DP Debit Recovery"
               ? activeGroupedClients
               : selectedWidget === "Inactive Clients" &&
