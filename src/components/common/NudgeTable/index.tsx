@@ -146,12 +146,19 @@ const NudgeTable = ({
     400
   );
 
+  const reportDataCustom = filteredData?.[selectedReport]?.[0];
+  console.log("reportDataCustom", reportDataCustom);
+
   return (
     <Modal size="xl" isOpen={isOpen} toggle={onClose} centered>
       <ModalHeader
         className="modal-title"
         id="myExtraLargeModalLabel"
         toggle={onClose}
+        style={{
+          padding: "8px 16px",
+          marginBottom: "0px",
+        }}
       >
         {selectedReport === "AMC Contest Report" ? (
           <div
@@ -225,11 +232,17 @@ const NudgeTable = ({
             </div>
           </div>
         ) : (
-          <span>{selectedReport}</span> // Normal title for other reports
+          <>
+            <span style={{ marginLeft: "1.5rem" }}>{selectedReport}</span>
+          </>
         )}
       </ModalHeader>
 
-      <ModalBody>
+      <ModalBody
+        style={{
+          paddingTop: "8px",
+        }}
+      >
         <Card className="main-card">
           <CardBody
             className="main-card-body"
@@ -242,6 +255,39 @@ const NudgeTable = ({
               padding: "10px",
             }}
           >
+            {selectedReport === "MTF Stock Ageing Report" && (
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "130px auto",
+                  alignItems: "center",
+                  marginBottom: ".1rem",
+                }}
+              >
+                <div
+                  style={{
+                    fontWeight: 200,
+                    fontSize: "12px",
+                    color: "grey",
+                  }}
+                >
+                  Client Name / Code :
+                </div>
+
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: "grey",
+                    fontWeight: 600,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {reportDataCustom?.clientname || "-"} /{" "}
+                  {reportDataCustom?.clientcode || "-"}
+                </div>
+              </div>
+            )}
+
             <DataGrid
               rows={reportData.map((row: any, index: any) => ({
                 id: index,
