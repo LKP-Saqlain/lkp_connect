@@ -58,7 +58,6 @@ interface SearchAppBarProps {
   showExcel?: any;
   handleExcelDownload?: () => void;
   selectedWidget?: any;
-  onFilterChange?: (filter: string) => void;
   totalCount?: any;
   activeClient?: any;
   inactiveClient?: any;

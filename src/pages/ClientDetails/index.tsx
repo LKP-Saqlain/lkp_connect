@@ -53,8 +53,6 @@ const ClientDetails = ({
     null
   );
   const [uploadedFileName, setUploadFileName] = useState("");
-
-  // 👉 NEW minimal state to avoid duplicate API calls
   const [clientDataLoaded, setClientDataLoaded] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -156,16 +154,15 @@ const ClientDetails = ({
       }
     }
   };
-  let mainTableData =
-    filteredData.length > 0
-      ? filteredData
-      : selectedCapsule === "Active Clients"
-      ? activeClients
-      : selectedCapsule === "Inactive Clients"
-      ? inactiveClients
-      : selectedCapsule === "Total Clients"
-      ? totalClients
-      : tableData;
+  let mainTableData = searchValue
+    ? filteredData
+    : selectedCapsule === "Active Clients"
+    ? activeClients
+    : selectedCapsule === "Inactive Clients"
+    ? inactiveClients
+    : selectedCapsule === "Total Clients"
+    ? totalClients
+    : tableData;
 
   const getUserBrokergageModificationDetails = (value: any) => {
     setBranchCode(value.BranchCode);
@@ -315,57 +312,6 @@ const ClientDetails = ({
     reader.readAsDataURL(file);
   };
 
-  const handleFilterChange = (selectedFilter: string) => {
-    if (selectedCapsule === "Upcoming Dormant Client") {
-      setTableData([]);
-
-      const payload = {
-        start: 0,
-        pageSize: 5000,
-        searchKey: searchValue || "",
-        loginName: user_id,
-        zone: "ALL",
-        branchCode: "ALL",
-        clientStatus: "ALL",
-      };
-
-      dispatch(showLoader("Please wait, we are processing your request..."));
-
-      apiServices
-        .getUpcompingDormantReport(payload)
-        .then((response) => {
-          if (response?.status === 200) {
-            const data = response?.data || [];
-            let filteredData = [];
-
-            if (selectedFilter === "7D") {
-              filteredData = data
-                .filter((i: any) => i.dayCount <= 7)
-                .sort((a: any, b: any) => b.dayCount - a.dayCount);
-            } else if (selectedFilter === "15D") {
-              filteredData = data
-                .filter((i: any) => i.dayCount <= 15)
-                .sort((a: any, b: any) => b.dayCount - a.dayCount);
-            } else if (selectedFilter === "1M") {
-              filteredData = data
-                .filter((i: any) => i.dayCount <= 30)
-                .sort((a: any, b: any) => b.dayCount - a.dayCount);
-            } else {
-              filteredData = data;
-            }
-
-            setTableData(filteredData);
-          }
-        })
-        .catch((error) => {
-          ShowToast("error", error?.response?.data?.message);
-        })
-        .finally(() => {
-          dispatch(hideLoader());
-        });
-    }
-  };
-
   document.title = "LKP Securities | Client Details";
 
   return (
@@ -396,7 +342,6 @@ const ClientDetails = ({
                   showSearch={responseStatus}
                   handleSearchBasedOnInput={handleSearchBasedOnInput}
                   searchValue={searchValue}
-                  onFilterChange={handleFilterChange}
                 />
               </CardBody>
             </Card>
