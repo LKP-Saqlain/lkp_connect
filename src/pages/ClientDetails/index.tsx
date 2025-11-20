@@ -28,7 +28,6 @@ interface ClientRow {
   POAStatus?: string;
   MTFStatus?: string;
   RecordsTotal?: number;
-  // activeMenu?: any;
 }
 
 const ClientDetails = ({
@@ -36,8 +35,7 @@ const ClientDetails = ({
   handleDrawerOpen,
   apiStatus,
   selectedTrading,
-}: // activeMenu,
-any) => {
+}: any) => {
   const [selectedCapsule, setSelectedCapsule] = useState<any>(
     "Upcoming Dormant Client"
   );
@@ -46,6 +44,7 @@ any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeClients, setActiveClients] = useState<any[]>([]);
   const [inactiveClients, setInactiveClients] = useState<any[]>([]);
+  const [totalClients, setTotalClients] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [responseStatus, setResponseStatus] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -54,6 +53,9 @@ any) => {
     null
   );
   const [uploadedFileName, setUploadFileName] = useState("");
+
+  // 👉 NEW minimal state to avoid duplicate API calls
+  const [clientDataLoaded, setClientDataLoaded] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -69,13 +71,15 @@ any) => {
   }, [selectedTrading]);
 
   useEffect(() => {
-    console.log("selected Capsules", selectedCapsule);
     const getUpcomingDormants = async () => {
-      if (selectedCapsule === "Upcoming Dormant Client") {
+      if (
+        selectedCapsule === "Upcoming Dormant Client" &&
+        tableData.length === 0
+      ) {
         setTableData([]);
-        // alert(selectedCapsule);
+
         const payload = {
-          start: 0, // Calculate start based on the new page
+          start: 0,
           pageSize: 5000,
           searchKey: "",
           loginName: user_id,
@@ -83,53 +87,39 @@ any) => {
           branchCode: "ALL",
           clientStatus: "ALL",
         };
+
         dispatch(showLoader("Please wait, we are processing your request..."));
+
         await apiServices
           .getUpcompingDormantReport(payload)
           .then((response) => {
             dispatch(hideLoader());
-            console.log("getUpcomingDormantReport_response_1", response?.data);
-            console.log(
-              "getDormantTotalClient",
-              response?.data[0].recordsTotal
-            );
-            // setDormantCount(response?.data[0].recordsTotal);
 
             if (response?.status === 200) {
               setResponseStatus(true);
-              // let { recordsTotal } = response?.data[0];
-              console.log("getDormantReport_response_1", response?.status);
-              // setTotalEntries(recordsTotal);
               setTableData(response?.data);
             }
           })
           .catch((error) => {
             console.error("error", error.status);
-            if (error.status === 400) {
-              ShowToast("error", error?.response?.data?.message);
-            } else {
-              console.log("Error->", error.response.data.errors.Zone["0"]);
-              const zoneError = error.response.data.errors.Zone["0"];
-              const branchCodeError =
-                error.response.data.errors.BranchCode["0"];
-              dispatch(hideLoader());
-              ShowToast("error", zoneError);
-              ShowToast("error", branchCodeError);
-            }
-          })
-          .finally(() => {
             dispatch(hideLoader());
+            ShowToast("error", error?.response?.data?.message);
           });
       }
     };
     getUpcomingDormants();
   }, [selectedCapsule]);
 
+  // ✅ Only call client details API ONCE unless capsule changes
   useEffect(() => {
-    fetchClientCash();
-  }, [apiStatus, dispatch, selectedCapsule]);
+    if (selectedCapsule !== "Upcoming Dormant Client" && !clientDataLoaded) {
+      fetchClientCash();
+    }
+  }, [apiStatus, selectedCapsule]);
 
   const fetchClientCash = async () => {
+    if (clientDataLoaded) return; // ⛔ prevent repeated calls
+
     if (selectedCapsule !== "Upcoming Dormant Client") {
       const Id = localStorage.getItem("Id");
       const payload = {
@@ -144,56 +134,43 @@ any) => {
       try {
         dispatch(showLoader("Please wait, we are processing your request..."));
         const response = await apiServices.ClientDetails(payload);
-        console.log(
-          "ClientClientDetailsResponse",
-          response?.data[0].RecordsTotal
-        );
 
         if (response?.status === 200) {
           dispatch(hideLoader());
           setResponseStatus(true);
-          setTableData(response?.data);
-
+          setTotalClients(response?.data);
+          setClientDataLoaded(true);
           const activeClients = response?.data.filter(
             (client: any) => client.ClientStatus === "Active"
-          ).length;
+          );
+
           const inactiveClients = response?.data.filter(
             (client: any) => client.ClientStatus === "Inactive"
-          ).length;
+          );
+
           setActiveClients(activeClients);
           setInactiveClients(inactiveClients);
-          console.log("Active Clients:", activeClients);
-          console.log("Inactive Clients:", inactiveClients);
-
-          const activeGroupedClients: any[] = [];
-          const inactiveGroupedClients: any[] = [];
-
-          // Loop through the data and categorize clients as active or inactive
-          response?.data.forEach((client: any) => {
-            if (client.ClientStatus === "Active") {
-              activeGroupedClients.push(client);
-            } else if (client.ClientStatus === "Inactive") {
-              inactiveGroupedClients.push(client);
-            }
-          });
-
-          console.log("Active Clients:", activeGroupedClients);
-          console.log("Inactive Clients:", inactiveGroupedClients);
-
-          setActiveClients(activeGroupedClients);
-          setInactiveClients(inactiveGroupedClients);
         }
       } catch (error) {
         dispatch(hideLoader());
       }
     }
   };
+  let mainTableData =
+    filteredData.length > 0
+      ? filteredData
+      : selectedCapsule === "Active Clients"
+      ? activeClients
+      : selectedCapsule === "Inactive Clients"
+      ? inactiveClients
+      : selectedCapsule === "Total Clients"
+      ? totalClients
+      : tableData;
 
   const getUserBrokergageModificationDetails = (value: any) => {
     setBranchCode(value.BranchCode);
-    console.log("useDetails_value branchbranch", value, branchCode);
+
     if (Object.keys(value).length > 0) {
-      console.log("The object is not empty.");
       setSelectedUserInfo(value);
       setUserDetails(true);
       handleDrawerClose();
@@ -203,8 +180,8 @@ any) => {
       setSelectedUserInfo(null);
     }
   };
+
   const handleModalClose = (value: any) => {
-    console.log("value", value);
     if (value) {
       setBranchCode("");
       setUserDetails(false);
@@ -214,37 +191,40 @@ any) => {
   };
 
   const handleClick = (value: string) => {
-    console.log("You clicked the Chip.", value);
     setSelectedCapsule(value);
     setFilteredData([]);
   };
 
   const handleSearchBasedOnInput = (value: string) => {
-    console.log(
-      "handleSearchBasedOnInputValue",
-      selectedCapsule,
-      value.toUpperCase()
-    );
     setSearchValue(value);
-    let filteredAllClients: any[] = [];
+
+    let baseData: any[] = [];
 
     if (selectedCapsule === "Upcoming Dormant Client") {
-      filteredAllClients = tableData.filter(
-        (item: any) =>
-          item.clientName.toLowerCase().includes(value.toLowerCase()) ||
-          item.ctermcode?.toLowerCase().includes(value.toLowerCase())
-      );
+      baseData = tableData;
+    } else if (selectedCapsule === "Active Clients") {
+      baseData = activeClients;
+    } else if (selectedCapsule === "Inactive Clients") {
+      baseData = inactiveClients;
+    } else if (selectedCapsule === "Total Clients") {
+      baseData = totalClients;
     } else {
-      filteredAllClients = tableData.filter(
-        (item: any) =>
-          item.ClientName.toLowerCase().includes(value.toLowerCase()) ||
-          item.ClientCode?.toLowerCase().includes(value.toLowerCase())
-      );
+      baseData = tableData;
     }
 
-    setFilteredData(filteredAllClients);
+    const searchVal = value.toLowerCase();
 
-    console.log("handleSearchBasedOnInputValue", filteredData);
+    const filteredAllClients = baseData.filter((item: any) => {
+      const name = item.clientName || item.ClientName;
+      const code = item.ctermcode || item.ClientCode;
+
+      return (
+        name?.toLowerCase().includes(searchVal) ||
+        code?.toLowerCase().includes(searchVal)
+      );
+    });
+
+    setFilteredData(filteredAllClients);
   };
 
   const handleFileUploadAsync = (
@@ -253,12 +233,7 @@ any) => {
   ): Promise<string> => {
     return new Promise((resolve, reject) => {
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
-      // debugger;
       if (allowedFormats.includes(fileExt)) {
-        const { name } = file;
-        const fileName = name.substring(0, name.lastIndexOf("."));
-        console.log("fileName", fileName);
-
         const reader = new FileReader();
 
         reader.readAsDataURL(file);
@@ -280,23 +255,20 @@ any) => {
             .then((response) => {
               dispatch(hideLoader());
               if (response?.status === 200) {
-                // ShowToast("success", "File Successfully Uploaded");
-                resolve(fileExt); // Resolve the promise on success
+                resolve(fileExt);
               } else {
                 reject(new Error("File upload failed"));
               }
             })
             .catch((error) => {
               dispatch(hideLoader());
-              console.error("ERROR-->", error);
-              reject(error); // Reject the promise on error
+              reject(error);
             });
         };
 
         reader.onerror = (error) => {
-          console.error("Error reading file:", error);
           dispatch(hideLoader());
-          reject(error); // Reject the promise on error
+          reject(error);
         };
       } else {
         alert("Invalid file format! Allowed: DOC, PDF, XLS, XLSX, JPG, JPEG");
@@ -306,7 +278,6 @@ any) => {
   };
 
   const handleFileUpload = async (file: File, type: any) => {
-    console.log("Uploading file for", file, type);
     const allowedExtensions = ["jpg", "jpeg", "png", "pdf"];
     const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
 
@@ -329,106 +300,73 @@ any) => {
         return;
       }
 
-      const fullFileNameWithExtension = file.name;
       const currentTime = dayjs().format("DD/MM/YYYY_hh:mmA");
+      const communicationProofPath = `${user_id}_${type}_${currentTime}_${file.name}`;
 
-      const communicationProofPath = `${user_id}_${type}_${currentTime}_${fullFileNameWithExtension}`;
-      console.log("communicationProofPath", communicationProofPath);
       setUploadFileName(communicationProofPath);
 
       try {
         await handleFileUploadAsync(file, communicationProofPath);
       } catch (error) {
-        console.error("Compliance Upload Failed:", error);
         ShowToast("error", "Compliance upload failed.");
       }
-    };
-
-    reader.onerror = (error) => {
-      console.error("Error reading file:", error);
-      ShowToast("error", "Error reading the file.");
     };
 
     reader.readAsDataURL(file);
   };
 
   const handleFilterChange = (selectedFilter: string) => {
-    console.log("Selected Filter:", selectedFilter);
-    // setFilter(selectedFilter);
-
     if (selectedCapsule === "Upcoming Dormant Client") {
-      setTableData([]); // Clear existing data before fetching new data
+      setTableData([]);
 
       const payload = {
         start: 0,
         pageSize: 5000,
-        searchKey: searchValue !== "" ? searchValue : "",
+        searchKey: searchValue || "",
         loginName: user_id,
         zone: "ALL",
         branchCode: "ALL",
         clientStatus: "ALL",
       };
 
-      dispatch(showLoader("Please wait, we are processing your request...")); // Show loader while fetching data
+      dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .getUpcompingDormantReport(payload)
         .then((response) => {
-          console.log("API Response:", response?.data);
-
           if (response?.status === 200) {
-            setResponseStatus(true);
             const data = response?.data || [];
-
-            // Filter data based on the selected filter
             let filteredData = [];
+
             if (selectedFilter === "7D") {
               filteredData = data
-                .filter((item: any) => item.dayCount <= 7)
-                .sort((a: any, b: any) => b.dayCount - a.dayCount); // Reverse order
+                .filter((i: any) => i.dayCount <= 7)
+                .sort((a: any, b: any) => b.dayCount - a.dayCount);
             } else if (selectedFilter === "15D") {
               filteredData = data
-                .filter((item: any) => item.dayCount <= 15)
+                .filter((i: any) => i.dayCount <= 15)
                 .sort((a: any, b: any) => b.dayCount - a.dayCount);
             } else if (selectedFilter === "1M") {
               filteredData = data
-                .filter((item: any) => item.dayCount <= 30)
+                .filter((i: any) => i.dayCount <= 30)
                 .sort((a: any, b: any) => b.dayCount - a.dayCount);
             } else {
-              filteredData = data; // Use all data for "ALL"
+              filteredData = data;
             }
 
-            // Update the table data with the filtered results
             setTableData(filteredData);
-
-            // Log filtered results for debugging
-            console.log(`Filtered Data for ${selectedFilter}:`, filteredData);
           }
         })
         .catch((error) => {
-          console.error("Error fetching data:", error);
-          if (error.status === 400) {
-            ShowToast("error", error?.response?.data?.message);
-          } else {
-            const zoneError = error.response.data.errors.Zone?.[0];
-            const branchCodeError = error.response.data.errors.BranchCode?.[0];
-            ShowToast("error", zoneError || "Unknown zone error");
-            ShowToast("error", branchCodeError || "Unknown branch code error");
-          }
+          ShowToast("error", error?.response?.data?.message);
         })
         .finally(() => {
-          dispatch(hideLoader()); // Hide loader after fetching
+          dispatch(hideLoader());
         });
     }
   };
-  document.title = document.title = "LKP Securities | Client Details";
 
-  let mainTableData =
-    selectedCapsule === "Active Clients"
-      ? activeClients
-      : selectedCapsule === "Inactive Clients"
-      ? inactiveClients
-      : tableData;
+  document.title = "LKP Securities | Client Details";
 
   return (
     <div className="page-content page-view">
@@ -438,11 +376,9 @@ any) => {
             <UserCapsules
               selectedCapsule={selectedCapsule}
               handleClick={handleClick}
-              // totalCount={totalCount}
-              // activeClient={activeClients}
-              // inactiveClient={inactiveClients}
               capsuleType="ClientDetails"
             />
+
             <Card
               style={{
                 borderRadius: "15px",
@@ -453,17 +389,6 @@ any) => {
                 <UserInfoTable
                   selectedWidget={selectedCapsule}
                   T6Data={mainTableData}
-                  // upcomingDormantTableData={upcomingDormantTableData}
-                  // activeGroupedClients={
-                  //   filteredData.length > 0
-                  //     ? filteredData
-                  //     : activeGroupedClients
-                  // }
-                  // inactiveGroupedClients={
-                  //   filteredData.length > 0
-                  //     ? filteredData
-                  //     : inactiveGroupedClients
-                  // }
                   getUserBrokergageModificationDetails={
                     getUserBrokergageModificationDetails
                   }
@@ -477,7 +402,6 @@ any) => {
             </Card>
           </>
         ) : (
-          // <UserInfoDetail />
           <UserInfo
             isOpen={isModalOpen}
             onClose={getUserBrokergageModificationDetails}
@@ -494,4 +418,5 @@ any) => {
     </div>
   );
 };
+
 export default ClientDetails;
