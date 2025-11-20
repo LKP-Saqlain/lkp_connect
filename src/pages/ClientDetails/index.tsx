@@ -189,25 +189,21 @@ const ClientDetails = ({
 
   const handleClick = (value: string) => {
     setSelectedCapsule(value);
+    setSearchValue("");
     setFilteredData([]);
   };
 
   const handleSearchBasedOnInput = (value: string) => {
     setSearchValue(value);
 
-    let baseData: any[] = [];
+    const capsuleDataMap: any = {
+      "Upcoming Dormant Client": tableData,
+      "Active Clients": activeClients,
+      "Inactive Clients": inactiveClients,
+      "Total Clients": totalClients,
+    };
 
-    if (selectedCapsule === "Upcoming Dormant Client") {
-      baseData = tableData;
-    } else if (selectedCapsule === "Active Clients") {
-      baseData = activeClients;
-    } else if (selectedCapsule === "Inactive Clients") {
-      baseData = inactiveClients;
-    } else if (selectedCapsule === "Total Clients") {
-      baseData = totalClients;
-    } else {
-      baseData = tableData;
-    }
+    const baseData = capsuleDataMap[selectedCapsule] || [];
 
     const searchVal = value.toLowerCase();
 
