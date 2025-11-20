@@ -54,7 +54,7 @@ export const getClientActivityStatusColumns = (
         const parsedDate = new Date(
           rawDate.replace(
             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
+            (_match: any, day: any, month: any, year: any) => {
               const monthMap: any = {
                 Jan: "01",
                 Feb: "02",
@@ -69,7 +69,7 @@ export const getClientActivityStatusColumns = (
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(handleViewDetails, match);
+              console.log(handleViewDetails);
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -204,7 +204,7 @@ export const getClientActivityStatusColumns = (
     //     const parsedDate = new Date(
     //       rawDate.replace(
     //         /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-    //         (match: any, day: any, month: any, year: any) => {
+    //         (_match: any, day: any, month: any, year: any) => {
     //           const monthMap: any = {
     //             Jan: "01",
     //             Feb: "02",
@@ -461,7 +461,7 @@ export const getCommChecker: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -476,7 +476,7 @@ export const getCommChecker: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -571,7 +571,7 @@ export const getClientDormantStatus = (
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -586,7 +586,7 @@ export const getClientDormantStatus = (
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -887,7 +887,7 @@ export const clientNotTradedColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -902,7 +902,7 @@ export const clientNotTradedColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -933,7 +933,7 @@ export const clientNotTradedColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -948,7 +948,7 @@ export const clientNotTradedColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1014,7 +1014,7 @@ export const newClientAddFiveDays: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1029,7 +1029,7 @@ export const newClientAddFiveDays: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1068,7 +1068,7 @@ export const newClientAddFiveDays: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1083,7 +1083,7 @@ export const newClientAddFiveDays: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1181,7 +1181,7 @@ export const spipRenewalColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1196,7 +1196,7 @@ export const spipRenewalColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1228,7 +1228,7 @@ export const spipRenewalColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1243,7 +1243,7 @@ export const spipRenewalColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1301,7 +1301,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1316,7 +1316,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1526,7 +1526,7 @@ export const ClientCashColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1541,7 +1541,7 @@ export const ClientCashColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -2325,7 +2325,7 @@ export const DormantOverViewColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -2340,7 +2340,7 @@ export const DormantOverViewColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -2390,7 +2390,7 @@ export const QPayoutColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -2405,7 +2405,7 @@ export const QPayoutColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -2541,7 +2541,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         const parsedDate = new Date(
           rawDate.replace(
             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
+            (_match: any, day: any, month: any, year: any) => {
               const monthMap: any = {
                 Jan: "01",
                 Feb: "02",
@@ -2556,7 +2556,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(match);
+
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -2627,7 +2627,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         const parsedDate = new Date(
           rawDate.replace(
             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
+            (_match: any, day: any, month: any, year: any) => {
               const monthMap: any = {
                 Jan: "01",
                 Feb: "02",
@@ -2642,7 +2642,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(match);
+
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -2835,7 +2835,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         const parsedDate = new Date(
           rawDate.replace(
             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
+            (_match: any, day: any, month: any, year: any) => {
               const monthMap: any = {
                 Jan: "01",
                 Feb: "02",
@@ -2850,7 +2850,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(match);
+
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -2884,7 +2884,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         const parsedDate = new Date(
           rawDate.replace(
             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
+            (_match: any, day: any, month: any, year: any) => {
               const monthMap: any = {
                 Jan: "01",
                 Feb: "02",
@@ -2899,7 +2899,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(match);
+
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -6642,7 +6642,7 @@ export const ClientPledgeRequest: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -6657,7 +6657,7 @@ export const ClientPledgeRequest: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -9491,7 +9491,7 @@ export const AmcLifeMembership: GridColDef[] = [
   //     const parsedDate = new Date(
   //       rawDate.replace(
   //         /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-  //         (match: any, day: any, month: any, year: any) => {
+  //         (_match: any, day: any, month: any, year: any) => {
   //           const monthMap: any = {
   //             Jan: "01",
   //             Feb: "02",
@@ -9828,7 +9828,7 @@ export const AmcLedgerReport: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -9843,7 +9843,7 @@ export const AmcLedgerReport: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -11315,7 +11315,7 @@ export const MTFStockAgeingColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -11330,7 +11330,7 @@ export const MTFStockAgeingColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
