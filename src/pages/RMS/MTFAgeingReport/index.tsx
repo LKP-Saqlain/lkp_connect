@@ -523,6 +523,20 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
                 }}
               >
                 <CardBody>
+                  <div
+                    style={{
+                      marginBottom: "6px",
+                      fontSize: "12px",
+                      color: "grey",
+                      fontStyle: "italic",
+                    }}
+                  >
+                    * Click on the{" "}
+                    <span style={{ fontWeight: 900, fontStyle: "italic" }}>
+                      Client Code
+                    </span>{" "}
+                    for more details
+                  </div>
                   <UserInfoTable
                     activeSubItem={activeSubItem}
                     T6Data={ageingRecords}

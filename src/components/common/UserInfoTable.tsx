@@ -94,6 +94,7 @@ import { RootState } from "../../redux/store.ts";
 import { useSelector } from "react-redux";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import InfoIcon from "@mui/icons-material/Info";
 // import { useNavigate } from "react-router-dom";
 
 interface Trade {
@@ -2262,7 +2263,25 @@ const DataTable = ({
                     openNudgeTable?.();
                   }}
                 >
-                  {params.value}
+                  <Tooltip
+                    title={
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "6px",
+                        }}
+                      >
+                        {" "}
+                        <InfoIcon sx={{ fontSize: "14px" }} />
+                        Click here for more details{" "}
+                      </span>
+                    }
+                    arrow
+                    placement="top"
+                  >
+                    {params.value}
+                  </Tooltip>
                 </span>
               );
             },
