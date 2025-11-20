@@ -2001,30 +2001,30 @@ export const DPDebitRecovery: GridColDef[] = [
       return <CopyToClipboardCell fullLink={fullLink} field={"payment"} />;
     },
   },
-  // {
-  //   field: "dpMandate_Link",
-  //   headerName: "Mandate\nLink",
-  //   headerClassName: "header-wrap-custom",
-  //   minWidth: 75,
-  //   flex: 0.3,
-  //   align: "center",
-  //   headerAlign: "center",
-  //   disableColumnMenu: true,
-  //   renderCell: (params: any) => {
-  //     const { Payment_link, EnCAccountCode } = params.row;
-  //     if (!Payment_link || !EnCAccountCode)
-  //       return <span>No Link Available</span>;
+  {
+    field: "dpMandate_Link",
+    headerName: "Mandate\nLink",
+    headerClassName: "header-wrap-custom",
+    minWidth: 75,
+    flex: 0.3,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const { Payment_link, EnCAccountCode } = params.row;
+      if (!Payment_link || !EnCAccountCode)
+        return <span>No Link Available</span>;
 
-  //     const fullLink = `${Payment_link}${EnCAccountCode}`;
-  //     return (
-  //       <CopyToClipboardCell
-  //         fullLink={fullLink}
-  //         field={"dpMandate"}
-  //         selectedRow={params?.row}
-  //       />
-  //     );
-  //   },
-  // },
+      const fullLink = `${Payment_link}${EnCAccountCode}`;
+      return (
+        <CopyToClipboardCell
+          fullLink={fullLink}
+          field={"dpMandate"}
+          selectedRow={params?.row}
+        />
+      );
+    },
+  },
   {
     field: "ClientCode",
     headerName: "Client Code",
@@ -3194,11 +3194,11 @@ export const topBirthdays: GridColDef[] = [
 ];
 
 export const cyptoWidgets = [
-  // {
-  //   id: 1,
-  //   label: "Research Calls",
-  //   color: "primary",
-  // },
+  {
+    id: 1,
+    label: "Research Calls",
+    color: "primary",
+  },
   {
     id: 2,
     label: "Clients With Ledger Balance",
