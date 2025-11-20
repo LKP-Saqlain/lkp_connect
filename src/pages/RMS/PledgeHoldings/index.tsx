@@ -1,4 +1,5 @@
 // import React from "react";
+import { useEffect } from "react";
 import {
   Button,
   Card,
@@ -9,13 +10,16 @@ import {
   Input,
   Row,
 } from "reactstrap";
-import DataTable from "../../../components/common/UserInfoTable";
-import { useRef, useState } from "react";
+// import DataTable from "../../../components/common/UserInfoTable";
+// import { useRef, useState } from "react";
 
 const PledgeHolding = (activeSubItem: any) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [data, setdata] = useState<any[]>([]);
+  // const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  // const fileInputRef = useRef<HTMLInputElement | null>(null);
+  // const [data, setdata] = useState<any[]>([]);
+  useEffect(() => {
+    console.log("Tttt", activeSubItem);
+  }, [activeSubItem]);
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -77,7 +81,7 @@ const PledgeHolding = (activeSubItem: any) => {
                     Upload
                   </Button>
 
-                  {selectedFile && (
+                  {/* {selectedFile && (
                     <>
                       <span style={{ fontSize: "14px", whiteSpace: "nowrap" }}>
                         Uploaded File: {selectedFile.name}
@@ -96,11 +100,11 @@ const PledgeHolding = (activeSubItem: any) => {
                         Delete
                       </Button>
                     </>
-                  )}
+                  )} */}
                 </div>
               </Col>
             </Row>
-            {data.length > 0 && (
+            {/* {data.length > 0 && (
               <>
                 <DataTable
                   activeSubItem={activeSubItem}
@@ -109,7 +113,7 @@ const PledgeHolding = (activeSubItem: any) => {
                   customHide={true}
                 />
               </>
-            )}
+            )} */}
           </CardBody>
         </Card>
       </Container>
