@@ -121,7 +121,6 @@ interface SelectedWidgetProps {
   handleSearchUser?: () => void;
   customHide?: any;
   searchValue?: any;
-  onFilterChange?: (filter: string) => void;
   tradeCWCBData?: any;
   handleEmailSend?: (
     Payment_link: string,
@@ -182,7 +181,6 @@ const DataTable = ({
   showSearch = false,
   customHide,
   searchValue,
-  onFilterChange,
   tradeCWCBData,
   emailSentStatus,
   activeSubItem,
@@ -2610,7 +2608,6 @@ const DataTable = ({
           handleSearchUser={handleSearchUser}
           searchTableValue={searchValue}
           selectedWidget={selectedWidget}
-          onFilterChange={onFilterChange}
           showExcel={showExcel}
           handleExcelDownload={handleExcelDownload}
           totalCount={totalCount}
@@ -2641,11 +2638,11 @@ const DataTable = ({
                 : commonLedgerData
               : selectedWidget === "Total Clients"
               ? T6Data
-              : selectedWidget === "Active Clients"
-              ? activeGroupedClients
-              : selectedWidget === "Inactive Clients"
-              ? inactiveGroupedClients
-              : selectedWidget === "Active Clients" &&
+              : // : selectedWidget === "Active Clients"
+              // ? activeGroupedClients
+              // : selectedWidget === "Inactive Clients"
+              // ? inactiveGroupedClients
+              selectedWidget === "Active Clients" &&
                 activeSubItem === "DP Debit Recovery"
               ? activeGroupedClients
               : selectedWidget === "Inactive Clients" &&
