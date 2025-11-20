@@ -113,6 +113,7 @@ import T6SellingReport from "../../pages/RMS/T6SellingReport";
 import RegFileUpload from "../../pages/RMS/REGFileUpload";
 import RegMaster from "../../pages/RMS/RegMaster";
 import PledgeReport from "../../pages/Reports/pledgeReqReport";
+import ResearchCalls from "../../pages/researchCalls";
 
 const drawerWidth = 260;
 
@@ -873,6 +874,7 @@ const SideBar = () => {
       33: () => getSubItemComponent(AccountSubItems),
       34: () => <PledgeRequest activeMenu={activeMenu} />,
       35: () => <AmcMembership activeMenu={activeMenu} />,
+      36: () => <ResearchCalls />,
     };
 
     return dynamicMap[menu_order]?.() || null;
