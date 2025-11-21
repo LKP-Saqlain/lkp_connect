@@ -66,11 +66,28 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
     fieldName: "shortfallFile" | "ageingFile"
   ) => {
     const file = e.currentTarget.files?.[0];
-    if (file && /\.(xlsx|xls)$/i.test(file.name)) {
-      formik.setFieldValue(fieldName, file);
-    } else {
-      formik.setFieldError(fieldName, "Only .xlsx or .xls files are accepted");
+
+    if (!file) return;
+
+    if (fieldName === "shortfallFile") {
+      // ONLY CSV
+      if (/\.csv$/i.test(file.name)) {
+        formik.setFieldValue(fieldName, file);
+      } else {
+        formik.setFieldError(fieldName, "Only .csv file is accepted");
+      }
+    } else if (fieldName === "ageingFile") {
+      // XLS / XLSX
+      if (/\.(xlsx|xls)$/i.test(file.name)) {
+        formik.setFieldValue(fieldName, file);
+      } else {
+        formik.setFieldError(
+          fieldName,
+          "Only .xlsx or .xls files are accepted"
+        );
+      }
     }
+
     e.target.value = "";
   };
 
@@ -132,7 +149,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
         type="file"
         id={fieldName}
         name={fieldName}
-        accept=".xlsx,.xls"
+        accept={fieldName === "shortfallFile" ? ".csv" : ".xlsx,.xls"}
         style={{ display: "none" }}
         onChange={(e) => handleFileChange(e, fieldName)}
       />
@@ -164,14 +181,24 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
       ) : (
         <span style={{ fontSize: "13px" }}>
           <strong>Click to upload</strong> or drag and drop your{" "}
-          <strong>.xlsx / .xls</strong> file here
+          <strong>
+            {fieldName === "shortfallFile" ? ".csv" : ".xlsx / .xls"}
+          </strong>{" "}
+          file here
         </span>
       )}
 
       <div className="mt-1">
         <small className="text-muted d-block" style={{ fontSize: "12px" }}>
-          • Only <strong>.xlsx</strong> or <strong>.xls</strong> files are
-          accepted.
+          • Only{" "}
+          {fieldName === "shortfallFile" ? (
+            <strong>.csv</strong>
+          ) : (
+            <>
+              <strong>.xlsx</strong> or <strong>.xls</strong>
+            </>
+          )}{" "}
+          files are accepted.
         </small>
       </div>
 
