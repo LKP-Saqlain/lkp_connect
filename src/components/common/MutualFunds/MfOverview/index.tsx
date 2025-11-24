@@ -9,7 +9,14 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import TypeMFModal from "../MfModal/TypeMF";
 
-const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
+const MfOverview = ({
+  schemeCode,
+  onBack,
+  hasToken,
+  onOrderSuccess,
+  ClientCode,
+  onPhysicalOnboard,
+}: any) => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<any>(null);
   const [modalType, setModalType] = useState<"oneTime" | "sip" | null>(null);
@@ -88,6 +95,8 @@ const MfOverview = ({ schemeCode, onBack, hasToken, onOrderSuccess }: any) => {
           setIsTypeModalOpen(false); // close Type modal
           setOpen(true); // NOW open main MF modal
         }}
+        ClientCode={ClientCode}
+        onPhysicalOnboard={onPhysicalOnboard}
       />
 
       {/* Modal */}

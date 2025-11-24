@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import {
   Modal,
   ModalHeader,
@@ -9,86 +10,186 @@ import {
   Input,
   Button,
 } from "reactstrap";
+import { AppDispatch } from "../../../../../redux/store";
+import {
+  hideLoader,
+  showLoader,
+} from "../../../../../redux/slices/loaderSlice";
+import ShowToast from "../../../../../utils/toastUtils";
 
 type MFType = "physical" | "demat" | "";
 
-interface TypeMFModalProps {
+interface Props {
   isOpen: boolean;
   toggle: () => void;
   selectedType: MFType;
   onTypeSelect: (type: "physical" | "demat") => void;
+  ClientCode: string;
+  onPhysicalOnboard: () => void;
 }
 
-const TypeMFModal: React.FC<TypeMFModalProps> = ({
+const TypeMFModal: React.FC<Props> = ({
   isOpen,
   toggle,
   selectedType,
   onTypeSelect,
+  onPhysicalOnboard,
+  ClientCode,
 }) => {
   const [type, setType] = useState<MFType>("");
+  const [physicalAllowed, setPhysicalAllowed] = useState<boolean | null>(null);
 
-  // Sync the local state when modal opens or selectedType changes
+  const dispatch = useDispatch<AppDispatch>();
+
+  // Reset when modal opens + sync with selectedType from parent
   useEffect(() => {
-    setType(selectedType);
-  }, [selectedType, isOpen]);
+    if (isOpen) {
+      setType(selectedType || "");
+      setPhysicalAllowed(null);
+    }
+  }, [isOpen, selectedType]);
 
-  const confirmSelection = () => {
-    if (type === "physical" || type === "demat") {
-      onTypeSelect(type);
-      toggle();
+  // API call – Only when user selects PHYSICAL
+  const verifyPhysical = async () => {
+    try {
+      dispatch(showLoader("Verifying Client Code..."));
+
+      const response = await fetch(
+        `https://middlewareapi.lkp.net.in/api/Client/GetClientsCodeAndName?SearchKey=${ClientCode}`,
+        { method: "POST", headers: { "Content-Type": "application/json" } }
+      );
+
+      const data = await response.json();
+      dispatch(hideLoader());
+
+      if (!data?.isSuccess || !data?.data?.length) {
+        ShowToast("error", "Unable to verify client type");
+        setPhysicalAllowed(false);
+        return;
+      }
+
+      const clientType = data.data[0].physicaldemat; // "PHYSICAL" / "DEMAT"
+
+      if (clientType === "PHYSICAL") {
+        setPhysicalAllowed(true);
+      } else {
+        setPhysicalAllowed(false);
+        ShowToast("error", "This client is not eligible for Physical mode.");
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch(hideLoader());
+      setPhysicalAllowed(false);
     }
   };
+
+  const handleTypeChange = (value: MFType) => {
+    setType(value);
+    if (value === "physical") verifyPhysical();
+  };
+
+  const confirmSelection = () => {
+    if (type === "physical" && !physicalAllowed) return;
+    onTypeSelect(type as "physical" | "demat");
+    toggle();
+  };
+
+  const isConfirmDisabled =
+    type === "" || (type === "physical" && physicalAllowed === false);
 
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered size="sm">
       <ModalHeader toggle={toggle}>Select MF Type</ModalHeader>
 
       <ModalBody>
-        <Label style={{ fontWeight: 600, marginBottom: "10px" }}>
-          Choose Investment Type:
-        </Label>
+        <Label className="fw-bold mb-3">Choose Investment Type:</Label>
 
-        {/* Physical */}
         <FormGroup check className="mb-2">
           <Input
             type="radio"
             name="mfType"
             value="physical"
             checked={type === "physical"}
-            onChange={() => setType("physical")}
+            onChange={() => handleTypeChange("physical")}
           />
           <Label check className="ms-2 fw-medium">
             Physical
           </Label>
         </FormGroup>
 
-        {/* Demat */}
         <FormGroup check>
           <Input
             type="radio"
             name="mfType"
             value="demat"
             checked={type === "demat"}
-            onChange={() => setType("demat")}
+            onChange={() => handleTypeChange("demat")}
           />
           <Label check className="ms-2 fw-medium">
             Demat
           </Label>
         </FormGroup>
+
+        {/* ---- NOT ELIGIBLE UI ---- */}
+        {type === "physical" && physicalAllowed === false && (
+          <div
+            style={{
+              marginTop: "20px",
+              padding: "12px",
+              background: "#fff3cd",
+              borderRadius: "8px",
+              border: "1px solid #ffeeba",
+            }}
+          >
+            <p className="text-dark fw-bold mb-1">
+              Physical investment is not enabled for this client.
+            </p>
+
+            <p className="text-muted mb-2">
+              You can continue with Demat or proceed with Physical onboarding.
+            </p>
+
+            <div className="d-flex gap-2">
+              <Button
+                color="primary"
+                onClick={() => {
+                  onTypeSelect("demat");
+                  toggle();
+                  // setPhysicalAllowed(false)
+                }}
+              >
+                Continue with Demat
+              </Button>
+
+              <Button
+                color="warning"
+                onClick={() => {
+                  toggle();
+                  onPhysicalOnboard();
+                }}
+              >
+                Physical Onboarding
+              </Button>
+            </div>
+          </div>
+        )}
       </ModalBody>
 
-      <ModalFooter>
-        <Button color="secondary" onClick={toggle}>
-          Cancel
-        </Button>
-        <Button
-          style={{ backgroundColor: "#1c517f" }}
-          onClick={confirmSelection}
-          disabled={!type}
-        >
-          Confirm
-        </Button>
-      </ModalFooter>
+      {/* Hide footer when PHYSICAL is not allowed */}
+      {!(type === "physical" && physicalAllowed === false) && (
+        <ModalFooter>
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+          <Button
+            style={{ backgroundColor: "#1c517f" }}
+            onClick={confirmSelection}
+            disabled={isConfirmDisabled}
+          >
+            Confirm
+          </Button>
+        </ModalFooter>
+      )}
     </Modal>
   );
 };

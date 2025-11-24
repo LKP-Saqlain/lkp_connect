@@ -27,6 +27,7 @@ import { apiServices } from "../../services";
 import { setEncryptedValue } from "../../utils/loocalEncrypt";
 import ShowToast from "../../utils/toastUtils";
 import { capitalizeEachWord } from "../../utils";
+import PhysicalOnboard from "./PhysicalOnboard";
 
 const MutualFundIndex = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -39,6 +40,7 @@ const MutualFundIndex = () => {
 
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showPhysicalOnboard, setShowPhysicalOnboard] = useState(false);
 
   // Debounce typing (to avoid too many API calls)
   useEffect(() => {
@@ -151,7 +153,8 @@ const MutualFundIndex = () => {
   const handleSubmit = async () => {
     // setClientCode("");
     setHasToken(false);
-    if (!clientCode.trim()) return;
+    if (!clientCode || !clientCode.trim()) return;
+
     try {
       const payload = {
         clientcode: clientCode,
@@ -211,7 +214,6 @@ const MutualFundIndex = () => {
             }}
           />
         )}
-
         {/* 🔒 Modal for client code entry */}
         <Modal
           isOpen={showClientCodeModal}
@@ -250,12 +252,22 @@ const MutualFundIndex = () => {
               getOptionLabel={(option: any) =>
                 `${option.clientCode} - ${option.clientName}`
               }
-              onChange={(event, value) => {
-                if (value) {
+              onChange={(_event, value) => {
+                // Case 1: User pressed ENTER on typed text
+                if (typeof value === "string") {
+                  setClientCode(value);
+                  return;
+                }
+
+                // Case 2: User selected an option from dropdown
+                if (value && typeof value === "object") {
                   setClientCode(value.clientCode);
                   setClientName(value.clientName);
-                  console.log(event, "Selected:", value);
+                  return;
                 }
+
+                // Case 3: Cleared
+                setClientCode("");
               }}
               renderInput={(params) => (
                 <TextField
@@ -310,7 +322,7 @@ const MutualFundIndex = () => {
 
             <Button
               onClick={() => verifyClientCode(clientCode)}
-              disabled={!clientCode.trim()}
+              disabled={!clientCode || !clientCode.trim()}
               style={{
                 backgroundColor: "#11395C",
                 fontSize: "11px",
@@ -323,7 +335,6 @@ const MutualFundIndex = () => {
             </Button>
           </ModalFooter>
         </Modal>
-
         {/* The rest of the UI (tabs, etc.) */}
         <Card
           style={{
@@ -336,14 +347,17 @@ const MutualFundIndex = () => {
           }}
         >
           <Box display="flex" justifyContent="space-between" gap={2}>
-            <BasicTabs
-              tabs={mainMenu.map((m) => ({ label: m.label }))}
-              value={activeTab}
-              onChange={(_e, newValue) => {
-                setActiveTab(newValue);
-                setSelectedMutualFund("");
-              }}
-            />
+            {showPhysicalOnboard || (
+              <BasicTabs
+                tabs={mainMenu.map((m) => ({ label: m.label }))}
+                value={activeTab}
+                onChange={(_e, newValue) => {
+                  setActiveTab(newValue);
+                  setSelectedMutualFund("");
+                  setShowPhysicalOnboard(false);
+                }}
+              />
+            )}
             {hasToken && !showClientCodeModal && (
               <Box
                 display="flex"
@@ -364,20 +378,30 @@ const MutualFundIndex = () => {
             )}
           </Box>
         </Card>
-        {selectedMutualFund ? (
-          <MfOverview
-            schemeCode={selectedMutualFund}
-            onBack={handleBack}
-            hasToken={hasToken}
-            onOrderSuccess={handleSetOrderTab}
+        {showPhysicalOnboard ? (
+          <PhysicalOnboard
+            ClientCode={clientCode}
+            onPhysicalOnboard={() => setShowPhysicalOnboard(false)}
           />
         ) : (
-          mainMenu[activeTab]?.content({
-            onSelectFund: setSelectedMutualFund,
-            clientCode,
-            hasToken,
-            // onOrderSuccess: handleSetOrderTab,
-          })
+          <>
+            {selectedMutualFund ? (
+              <MfOverview
+                schemeCode={selectedMutualFund}
+                onBack={handleBack}
+                hasToken={hasToken}
+                onOrderSuccess={handleSetOrderTab}
+                ClientCode={clientCode}
+                onPhysicalOnboard={() => setShowPhysicalOnboard(true)}
+              />
+            ) : (
+              mainMenu[activeTab]?.content({
+                onSelectFund: setSelectedMutualFund,
+                clientCode,
+                hasToken,
+              })
+            )}
+          </>
         )}
       </Container>
     </div>
