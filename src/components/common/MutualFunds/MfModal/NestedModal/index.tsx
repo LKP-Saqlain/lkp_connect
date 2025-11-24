@@ -26,6 +26,7 @@ interface NestedModalProps {
   title?: string;
   confirmLabel?: string;
   cancelLabel?: string;
+  selectedType?: string;
   onConfirm?: (selectedMandate: MandateDetail | null) => void;
   banks: any;
   clientNo: string;
@@ -52,6 +53,7 @@ const NestedModal = ({
   dateSelected,
   amount,
   selectedBank,
+  selectedType,
 }: NestedModalProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const [mandateDetails, setMandateDetails] = useState<MandateDetail[]>([]);
@@ -206,7 +208,7 @@ const NestedModal = ({
       mandateId: mandateId || selectedMandateId, //
       ipAdd: "",
       transMode: "D",
-      dpTxnMode: "C",
+      dpTxnMode: selectedType === "physical" ? "P" : "C",
       frequencyAllowed: "1",
       dpc: "Y",
       internalRefNo: "",
@@ -250,7 +252,7 @@ const NestedModal = ({
   };
 
   const triggerENachLoop = async (mandateId?: any, retryCount = 0) => {
-    if (retryCount > 8) {
+    if (retryCount > 12) {
       console.warn("triggerENachLoop Max retry limit reached.");
       return;
     }
@@ -263,7 +265,7 @@ const NestedModal = ({
     };
     if (!payload.clientCode || !payload.mandateID || !payload.loopbackurl) {
       console.warn("cechke payload cechke console", payload);
-      return; // ⛔ Stop execution
+      return; //  Stop execution
     }
     dispatch(showLoader("Handling Enach..."));
 

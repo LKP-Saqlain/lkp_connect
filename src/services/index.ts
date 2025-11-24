@@ -1052,4 +1052,33 @@ export const apiServices = {
   GetAPContestDashboard: async (payload: any) => {
     return await apiService("POST", endpoints.GetAPContestDashboard, payload);
   },
+  GetAMCZoneReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetAMCZoneReport, payload);
+  },
+  GetDPTransactionDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetDPTransactionDetails, payload);
+  },
+  GetPledgeReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetPledgeReport, payload);
+  },
+  DPAMCDownloadFile: async (payload: any) => {
+    return await apiService("POST", endpoints.DPAMCDownloadFile, payload);
+  },
+  GetFileuploadDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetFileuploadDetails, payload);
+  },
+  ViewMTFStockAgeingReport: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ViewMTFStockAgeingReport,
+      payload
+    );
+  },
+  GetDPAMCZoneReportDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetDPAMCZoneReportDetails,
+      payload
+    );
+  },
 };

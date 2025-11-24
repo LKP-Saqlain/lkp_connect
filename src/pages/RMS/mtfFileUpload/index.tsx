@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Container, Card, CardHeader, CardBody } from "reactstrap";
@@ -9,8 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import ShowToast from "../../../utils/toastUtils";
+import { formatDateTime } from "../../../helper/commmon";
+
+interface UploadDetail {
+  type: string;
+  uploadedon: string;
+  uploadedBy: string;
+}
 
 const MTFFileUpload = ({ activeSubItem }: any) => {
+  const [uploadDetails, setUploadDetails] = useState<UploadDetail[]>([]);
+
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -30,16 +39,55 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
     },
   });
 
+  useEffect(() => {
+    let payload = {
+      option: "MTFAgeing",
+    };
+    dispatch(showLoader(""));
+
+    apiServices
+      .GetFileuploadDetails(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          console.log("ResponseeeGetFileuploadDetails", response?.data?.data);
+          const data = response?.data?.data || [];
+          setUploadDetails(data);
+        }
+      })
+      .catch((error) => {
+        console.log("errror", error);
+        dispatch(hideLoader());
+      });
+  }, [dispatch]);
+
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldName: "shortfallFile" | "ageingFile"
   ) => {
     const file = e.currentTarget.files?.[0];
-    if (file && /\.(xlsx|xls)$/i.test(file.name)) {
-      formik.setFieldValue(fieldName, file);
-    } else {
-      formik.setFieldError(fieldName, "Only .xlsx or .xls files are accepted");
+
+    if (!file) return;
+
+    if (fieldName === "shortfallFile") {
+      // ONLY CSV
+      if (/\.csv$/i.test(file.name)) {
+        formik.setFieldValue(fieldName, file);
+      } else {
+        formik.setFieldError(fieldName, "Only .csv file is accepted");
+      }
+    } else if (fieldName === "ageingFile") {
+      // XLS / XLSX
+      if (/\.(xlsx|xls)$/i.test(file.name)) {
+        formik.setFieldValue(fieldName, file);
+      } else {
+        formik.setFieldError(
+          fieldName,
+          "Only .xlsx or .xls files are accepted"
+        );
+      }
     }
+
     e.target.value = "";
   };
 
@@ -101,7 +149,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
         type="file"
         id={fieldName}
         name={fieldName}
-        accept=".xlsx,.xls"
+        accept={fieldName === "shortfallFile" ? ".csv" : ".xlsx,.xls"}
         style={{ display: "none" }}
         onChange={(e) => handleFileChange(e, fieldName)}
       />
@@ -133,14 +181,24 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
       ) : (
         <span style={{ fontSize: "13px" }}>
           <strong>Click to upload</strong> or drag and drop your{" "}
-          <strong>.xlsx / .xls</strong> file here
+          <strong>
+            {fieldName === "shortfallFile" ? ".csv" : ".xlsx / .xls"}
+          </strong>{" "}
+          file here
         </span>
       )}
 
       <div className="mt-1">
         <small className="text-muted d-block" style={{ fontSize: "12px" }}>
-          • Only <strong>.xlsx</strong> or <strong>.xls</strong> files are
-          accepted.
+          • Only{" "}
+          {fieldName === "shortfallFile" ? (
+            <strong>.csv</strong>
+          ) : (
+            <>
+              <strong>.xlsx</strong> or <strong>.xls</strong>
+            </>
+          )}{" "}
+          files are accepted.
         </small>
       </div>
 
@@ -150,6 +208,13 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
         </div>
       )}
     </div>
+  );
+
+  const MTFStockAgeing = uploadDetails.find(
+    (item: any) => item.type === "MTFStockAgeing"
+  );
+  const MTFAgeing = uploadDetails.find(
+    (item: any) => item.type === "MTFAgeing"
   );
 
   return (
@@ -203,6 +268,9 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                     <Button
                       variant="contained"
                       size="small"
+                      disabled={
+                        formik.values.shortfallFile === null ? true : false
+                      }
                       sx={{
                         fontSize: "12px",
                         color: "#fff",
@@ -218,6 +286,24 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                     >
                       Upload MTF Stock Ageing File
                     </Button>
+                    {MTFStockAgeing && (
+                      <div
+                        style={{
+                          marginTop: "8px",
+                          fontSize: "11px",
+                          color: "#444",
+                        }}
+                      >
+                        <div>
+                          <strong>Last Uploaded By:</strong>{" "}
+                          {MTFStockAgeing.uploadedBy}
+                        </div>
+                        <div>
+                          <strong>Last Uploaded On:</strong>{" "}
+                          {formatDateTime(MTFStockAgeing?.uploadedon)}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -236,6 +322,9 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                     <Button
                       variant="contained"
                       size="small"
+                      disabled={
+                        formik.values.ageingFile === null ? true : false
+                      }
                       sx={{
                         fontSize: "12px",
                         color: "#fff",
@@ -251,6 +340,24 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                     >
                       Upload MTF Ageing File
                     </Button>
+                    {MTFAgeing && (
+                      <div
+                        style={{
+                          marginTop: "8px",
+                          fontSize: "11px",
+                          color: "#444",
+                        }}
+                      >
+                        <div>
+                          <strong>Last Uploaded By:</strong>{" "}
+                          {MTFAgeing.uploadedBy}
+                        </div>
+                        <div>
+                          <strong>Last Uploaded On:</strong>{" "}
+                          {formatDateTime(MTFAgeing?.uploadedon)}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

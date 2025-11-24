@@ -42,6 +42,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // import StarBurst1 from "../../assets/images/starburst1.png";
 // import StarBurst2 from "../../assets/images/starburst2.png";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import TroubleshootIcon from "@mui/icons-material/Troubleshoot";
 import Lottie from "react-lottie-player";
 import newIcon from "../../assets/images/new.json";
 
@@ -116,6 +117,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "Client Request": <PublishedWithChangesIcon />,
     "Mutual Fund": <AttachMoneyIcon />,
     "DP AMC Contest": <AssignmentTurnedInIcon />,
+    "Research Calls": <TroubleshootIcon />,
   };
 
   const getIcon = (title: string) => {
@@ -207,12 +209,10 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
 
         {(title === "Zone Overview" ||
           title === "Account" ||
-          title === "Employee Target" ||
-          title === "Client Request" ||
-          title === "Back Office Report" ||
           title === "Mutual Fund" ||
           title === "Partner Contest" ||
-          title === "DP AMC Contest") && (
+          title === "DP AMC Contest" ||
+          title === "Research Calls") && (
           <div className="starburst-bg">
             <Lottie
               loop

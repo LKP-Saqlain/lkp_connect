@@ -42,6 +42,7 @@ export interface MutualFundModalProps {
   title?: string;
   bseSchemeCode?: string;
   hasToken?: string;
+  selectedType?: string;
   onOrderSuccess?: any;
   onBack?: any;
 }

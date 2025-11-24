@@ -54,7 +54,7 @@ export const getClientActivityStatusColumns = (
         const parsedDate = new Date(
           rawDate.replace(
             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
+            (_match: any, day: any, month: any, year: any) => {
               const monthMap: any = {
                 Jan: "01",
                 Feb: "02",
@@ -69,7 +69,7 @@ export const getClientActivityStatusColumns = (
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(handleViewDetails, match);
+              console.log(handleViewDetails);
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -204,7 +204,7 @@ export const getClientActivityStatusColumns = (
     //     const parsedDate = new Date(
     //       rawDate.replace(
     //         /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-    //         (match: any, day: any, month: any, year: any) => {
+    //         (_match: any, day: any, month: any, year: any) => {
     //           const monthMap: any = {
     //             Jan: "01",
     //             Feb: "02",
@@ -461,7 +461,7 @@ export const getCommChecker: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -476,7 +476,7 @@ export const getCommChecker: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -571,7 +571,7 @@ export const getClientDormantStatus = (
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -586,7 +586,7 @@ export const getClientDormantStatus = (
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -887,7 +887,7 @@ export const clientNotTradedColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -902,7 +902,7 @@ export const clientNotTradedColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -933,7 +933,7 @@ export const clientNotTradedColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -948,7 +948,7 @@ export const clientNotTradedColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1014,7 +1014,7 @@ export const newClientAddFiveDays: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1029,7 +1029,7 @@ export const newClientAddFiveDays: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1068,7 +1068,7 @@ export const newClientAddFiveDays: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1083,7 +1083,7 @@ export const newClientAddFiveDays: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1181,7 +1181,7 @@ export const spipRenewalColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1196,7 +1196,7 @@ export const spipRenewalColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1228,7 +1228,7 @@ export const spipRenewalColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1243,7 +1243,7 @@ export const spipRenewalColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1301,7 +1301,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1316,7 +1316,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -1526,7 +1526,7 @@ export const ClientCashColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -1541,7 +1541,7 @@ export const ClientCashColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -2325,7 +2325,7 @@ export const DormantOverViewColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -2340,7 +2340,7 @@ export const DormantOverViewColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -2390,7 +2390,7 @@ export const QPayoutColumns: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -2405,7 +2405,7 @@ export const QPayoutColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -2541,7 +2541,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         const parsedDate = new Date(
           rawDate.replace(
             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
+            (_match: any, day: any, month: any, year: any) => {
               const monthMap: any = {
                 Jan: "01",
                 Feb: "02",
@@ -2556,7 +2556,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(match);
+
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -2627,7 +2627,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         const parsedDate = new Date(
           rawDate.replace(
             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
+            (_match: any, day: any, month: any, year: any) => {
               const monthMap: any = {
                 Jan: "01",
                 Feb: "02",
@@ -2642,7 +2642,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(match);
+
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -2835,7 +2835,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         const parsedDate = new Date(
           rawDate.replace(
             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
+            (_match: any, day: any, month: any, year: any) => {
               const monthMap: any = {
                 Jan: "01",
                 Feb: "02",
@@ -2850,7 +2850,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(match);
+
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -2884,7 +2884,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         const parsedDate = new Date(
           rawDate.replace(
             /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-            (match: any, day: any, month: any, year: any) => {
+            (_match: any, day: any, month: any, year: any) => {
               const monthMap: any = {
                 Jan: "01",
                 Feb: "02",
@@ -2899,7 +2899,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(match);
+
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -6642,7 +6642,7 @@ export const ClientPledgeRequest: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -6657,7 +6657,7 @@ export const ClientPledgeRequest: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -6791,41 +6791,12 @@ export const clientAPBrokerageColumns: GridColDef[] = [
     valueFormatter: (params: any) => {
       const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
       }).format(value);
     },
   },
-  // {
-  //   field: "sbBrokerage",
-  //   headerName: "Sub-Broker Brokerage",
-  //   width: 160,
-  //   headerAlign: "center",
-  //   align: "right",
-  //   disableColumnMenu: true,
-  //   valueFormatter: (params: any) => {
-  //     const value = parseFloat(params);
-  //     return new Intl.NumberFormat("en-IN", {
-  //       minimumFractionDigits: 2,
-  //       maximumFractionDigits: 2,
-  //     }).format(value);
-  //   },
-  // },
-  // {
-  //   field: "netBrokerage",
-  //   headerName: "Net Brokerage",
-  //   width: 140,
-  //   headerAlign: "center",
-  //   align: "right",
-  //   disableColumnMenu: true,
-  //   valueFormatter: (params: any) => {
-  //     const value = parseFloat(params);
-  //     return new Intl.NumberFormat("en-IN", {
-  //       minimumFractionDigits: 2,
-  //       maximumFractionDigits: 2,
-  //     }).format(value);
-  //   },
-  // },
+
   {
     field: "contribution",
     headerName: "Contribution %",
@@ -6879,8 +6850,8 @@ export const APTopClientsFields: GridColDef[] = [
     valueFormatter: (params: any) => {
       const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
       }).format(value);
     },
   },
@@ -9520,7 +9491,7 @@ export const AmcLifeMembership: GridColDef[] = [
   //     const parsedDate = new Date(
   //       rawDate.replace(
   //         /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-  //         (match: any, day: any, month: any, year: any) => {
+  //         (_match: any, day: any, month: any, year: any) => {
   //           const monthMap: any = {
   //             Jan: "01",
   //             Feb: "02",
@@ -9857,7 +9828,7 @@ export const AmcLedgerReport: GridColDef[] = [
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
+          (_match: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -9872,7 +9843,7 @@ export const AmcLedgerReport: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-            console.log(match);
+
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -10306,35 +10277,33 @@ export const ageingColumns: GridColDef[] = [
   {
     field: "branchcode",
     headerName: "Branch Code",
-    headerClassName: "header-wrap-custom",
-    flex: 0.8,
-    minWidth: 60,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "branchType",
-    headerName: "Branch Type",
-    headerClassName: "header-wrap-custom",
     flex: 0.8,
     minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "clientType",
+    headerName: "Client Type",
+    flex: 0.8,
+    minWidth: 100,
     align: "center",
     headerAlign: "center",
   },
   {
     field: "clientcode",
     headerName: "Client Code",
-    headerClassName: "header-wrap-custom",
     flex: 0.8,
     minWidth: 90,
     align: "center",
     headerAlign: "center",
   },
   {
-    field: "clientname",
+    field: "clientName",
     headerName: "Client Name",
     flex: 1.4,
-    minWidth: 220,
+    minWidth: 240,
     align: "left",
     headerAlign: "center",
   },
@@ -10342,25 +10311,26 @@ export const ageingColumns: GridColDef[] = [
     field: "rmCode",
     headerName: "RM Code",
     flex: 0.6,
-    minWidth: 60,
-    headerClassName: "header-wrap-custom",
+    minWidth: 70,
     align: "center",
     headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
     field: "rmName",
     headerName: "RM Name",
     flex: 1.2,
-    minWidth: 240,
+    minWidth: 200,
     align: "left",
     headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
     field: "dealerCode",
     headerName: "Dealer Code",
     headerClassName: "header-wrap-custom",
-    flex: 0.8,
-    minWidth: 60,
+    flex: 0.7,
+    minWidth: 70,
     align: "center",
     headerAlign: "center",
     renderCell: (params) => (params.value ? params.value : "—"),
@@ -10398,119 +10368,114 @@ export const ageingColumns: GridColDef[] = [
     minWidth: 180,
     align: "left",
     headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  // Numeric fields with formatting
+  {
+    field: "mtfFunded",
+    headerName: "MTF Funded",
+    flex: 1,
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
-    field: "fundingAmount",
-    headerName: "Funding Amount",
-    flex: 1,
+    field: "lessOrEqual30Days",
+    headerName: "<= 30 Days",
+    flex: 0.9,
     minWidth: 140,
     align: "right",
     headerAlign: "center",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return isNaN(value)
-        ? "-"
-        : new Intl.NumberFormat("en-IN", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }).format(value);
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
     },
   },
   {
-    field: "marketRate",
-    headerName: "Market Rate",
+    field: "lessOrEqual60Days",
+    headerName: "<= 60 Days",
+    flex: 0.9,
+    minWidth: 120,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "lessOrEqual88Days",
+    headerName: "<= 88 Days",
+    flex: 0.9,
+    minWidth: 110,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "lessOrEqual89Days",
+    headerName: "<= 89 Days",
+    flex: 0.9,
+    minWidth: 110,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "lessOrEqual90Days",
+    headerName: "<= 90 Days",
+    flex: 0.9,
+    minWidth: 110,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "greaterThan90Days",
+    headerName: "> 90 Days",
     flex: 1,
     minWidth: 120,
     align: "right",
     headerAlign: "center",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return isNaN(value)
-        ? "-"
-        : new Intl.NumberFormat("en-IN", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          }).format(value);
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
     },
-  },
-  {
-    field: "varPerc",
-    headerName: "VAR %",
-    flex: 0.6,
-    minWidth: 90,
-    align: "right",
-    headerAlign: "center",
-    valueFormatter: (params: any) => `${parseFloat(params).toFixed(2)}%`,
-  },
-  {
-    field: "elmPerc",
-    headerName: "ELM %",
-    flex: 0.6,
-    minWidth: 90,
-    align: "right",
-    headerAlign: "center",
-    valueFormatter: (params: any) => `${parseFloat(params).toFixed(2)}%`,
-  },
-  {
-    field: "marginPerc",
-    headerName: "Margin %",
-    flex: 0.6,
-    minWidth: 90,
-    align: "right",
-    headerAlign: "center",
-    valueFormatter: (params: any) => `${parseFloat(params).toFixed(2)}%`,
-  },
-  {
-    field: "tradeDATE",
-    headerName: "Trade Date",
-    flex: 0.8,
-    minWidth: 130,
-    align: "center",
-    headerAlign: "center",
-    valueGetter: (params: any) => {
-      const rawDate = params;
-      if (!rawDate) return null;
-      const parsedDate = new Date(
-        rawDate.replace(
-          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (match: any, day: any, month: any, year: any) => {
-            const monthMap: any = {
-              Jan: "01",
-              Feb: "02",
-              Mar: "03",
-              Apr: "04",
-              May: "05",
-              Jun: "06",
-              Jul: "07",
-              Aug: "08",
-              Sep: "09",
-              Oct: "10",
-              Nov: "11",
-              Dec: "12",
-            };
-            console.log(match);
-            return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
-      );
-      return parsedDate;
-    },
-    sortComparator: (v1, v2) => {
-      if (!v1 || !v2) return 0; // Handle missing values
-      return v1 - v2; // Sort in ascending order
-    },
-    valueFormatter: (params: any) => {
-      if (!params) return "";
-      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
-    },
-  },
-  {
-    field: "days",
-    headerName: "Days",
-    flex: 0.5,
-    minWidth: 80,
-    align: "right",
-    headerAlign: "center",
   },
 ];
 
@@ -10853,5 +10818,588 @@ export const regMasterColumns: GridColDef[] = [
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params) => params.value || "—",
+  },
+];
+
+export const AmcZoneReportDirect: GridColDef[] = [
+  {
+    field: "empOrAPCode",
+    headerName: "Employee Code",
+    flex: 1,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "empOrAPName",
+    headerName: "Employee Name",
+    flex: 1.5,
+    minWidth: 160,
+    align: "left",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "cunl",
+    headerName: "Code Under Non Lifetime",
+    flex: 1,
+    minWidth: 160,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "submitted",
+    headerName: "Submitted",
+    flex: 0.8,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? 0,
+  },
+  {
+    field: "completed",
+    headerName: "Completed",
+    flex: 0.8,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? 0,
+  },
+  {
+    field: "incentive_Earned",
+    headerName: "Incentive Earned",
+    flex: 1,
+    minWidth: 140,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    renderCell: (params) =>
+      params.value !== undefined && params.value !== null
+        ? params.value.toLocaleString()
+        : "0",
+  },
+];
+
+export const AmcZoneReportIndirect: GridColDef[] = [
+  {
+    field: "empOrAPCode",
+    headerName: "Partner Code",
+    flex: 1,
+    minWidth: 120,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "empOrAPName",
+    headerName: "Partner Name",
+    flex: 1.5,
+    minWidth: 160,
+    disableColumnMenu: true,
+    align: "left",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  ...AmcZoneReportDirect.filter(
+    (col) => col.field !== "empOrAPName" && col.field !== "empOrAPCode"
+  ),
+];
+
+export const DPTransactionColumns: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 0.5,
+    minWidth: 70,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "branch",
+    headerName: "Branch ",
+    flex: 0.5,
+    minWidth: 70,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "branchType",
+    headerName: "Branch Type",
+    flex: 0.7,
+    minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "clientId",
+    headerName: "Client ID",
+    flex: 1,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "dP_ID",
+    headerName: "DP ID",
+    flex: 1,
+    minWidth: 160,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1.5,
+    minWidth: 180,
+    align: "left",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "schemeName",
+    headerName: "Scheme Name",
+    flex: 1,
+    minWidth: 120,
+    align: "left",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+
+  {
+    field: "requestDate",
+    headerName: "Request Date",
+    flex: 1,
+    minWidth: 180,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "schemeStatus",
+    headerName: "Scheme Status",
+    flex: 0.8,
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "order_Id",
+    headerName: "Order ID",
+    flex: 0.5,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    // flex: 1,
+    minWidth: 120,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    // renderCell: (params) =>
+    //   params.value ? parseFloat(params.value).toFixed(2) : "—",
+    renderCell: (params: any) => {
+      const value = params.value;
+      return value?.toLocaleString("en-IN");
+    },
+  },
+  {
+    field: "downloadAMC",
+    headerName: "Esign File",
+    flex: 0.7,
+    minWidth: 70,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    // renderCell: (params) => params.value || "—",
+  },
+];
+
+export const pledgeReportColumns: GridColDef[] = [
+  {
+    field: "ucc",
+    headerName: "UCC",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 120,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "symbol",
+    headerName: "Symbol",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 150,
+    flex: 1,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "isin",
+    headerName: "ISIN",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "pledgeQuantity",
+    headerName: "Pledge Quantity",
+    headerClassName: "header-wrap-custom",
+    align: "right",
+    headerAlign: "center",
+    minWidth: 130,
+    renderCell: (params) => {
+      const value = params.value;
+
+      // Handle empty/null/undefined
+      if (value === null || value === undefined || value === "") {
+        return "—";
+      }
+
+      // Format the number with Indian locale and 2 decimal places
+      const formattedValue = new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(Number(value));
+
+      return formattedValue;
+    },
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 110,
+    renderCell: (params) => {
+      const value = params.value?.toString().trim() || "";
+      return value ? value : "—";
+    },
+  },
+  {
+    field: "lastUpdate",
+    headerName: "Last Updated",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => {
+      const value = params.value;
+      return value ? value : "—";
+    },
+  },
+  {
+    field: "value",
+    headerName: "Amount",
+    headerClassName: "header-wrap-custom",
+    align: "right",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "prfnumber",
+    headerName: "PRF Number",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => {
+      const value = params.value;
+      return value ? value : "—";
+    },
+  },
+  {
+    field: "pledgorintref",
+    headerName: "PledgeOrIntRef",
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    minWidth: 180,
+    flex: 1.2,
+    renderCell: (params) => {
+      const value = params.value;
+      return value ? value : "—";
+    },
+  },
+];
+
+export const MTFStockAgeingColumns: GridColDef[] = [
+  // {
+  //   field: "clientcode",
+  //   headerName: "Client Code",
+  //   flex: 1,
+  //   minWidth: 120,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   disableColumnMenu: true,
+  //   renderCell: (params) => params.value || "—",
+  // },
+  // {
+  //   field: "clientname",
+  //   headerName: "Client Name",
+  //   flex: 1.5,
+  //   minWidth: 220,
+  //   align: "left",
+  //   headerAlign: "center",
+  //   disableColumnMenu: true,
+  //   renderCell: (params) => params.value || "—",
+  // },
+  {
+    field: "nseScrip",
+    headerName: "NSE Scrip",
+    flex: 1,
+    minWidth: 140,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "isin",
+    headerName: "ISIN",
+    flex: 1,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "qty",
+    headerName: "Quantity",
+    flex: 1,
+    minWidth: 120,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params) =>
+      params.value !== undefined ? params.value.toLocaleString() : "0",
+  },
+  {
+    field: "fundingAmount",
+    headerName: "Funding Amount",
+    flex: 1.2,
+    minWidth: 120,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params) =>
+      params.value
+        ? params.value.toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+        : "0.00",
+  },
+  {
+    field: "marketRate",
+    headerName: "Market Rate",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "0",
+  },
+  {
+    field: "varPerc",
+    headerName: "VAR %",
+    flex: 0.8,
+    minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    renderCell: (params) =>
+      params.value !== undefined ? params.value.toFixed(2) + "%" : "—",
+  },
+  {
+    field: "elmPerc",
+    headerName: "ELM %",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params) =>
+      params.value !== undefined ? params.value.toFixed(2) + "%" : "—",
+  },
+  {
+    field: "marginPerc",
+    headerName: "Margin %",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params) =>
+      params.value !== undefined ? params.value.toFixed(2) + "%" : "—",
+  },
+  {
+    field: "tradeDATE",
+    headerName: "Trade Date",
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    // renderCell: (params) =>
+    //   params.value ? dayjs(params.value).format("DD-MMM-YYYY") : "—",
+    valueGetter: (params: any) => {
+      const rawDate = params;
+      if (!rawDate) return null; // Handle missing data
+
+      const parsedDate = new Date(
+        rawDate.replace(
+          /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+          (_match: any, day: any, month: any, year: any) => {
+            const monthMap: any = {
+              Jan: "01",
+              Feb: "02",
+              Mar: "03",
+              Apr: "04",
+              May: "05",
+              Jun: "06",
+              Jul: "07",
+              Aug: "08",
+              Sep: "09",
+              Oct: "10",
+              Nov: "11",
+              Dec: "12",
+            };
+
+            return `20${year}-${monthMap[month]}-${day}`;
+          }
+        )
+      );
+
+      return parsedDate;
+    },
+    sortComparator: (v1, v2) => {
+      if (!v1 || !v2) return 0; // Handle missing values
+      return v1 - v2; // Sort in ascending order
+    },
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+  },
+  {
+    field: "days",
+    headerName: "Days",
+    headerClassName: "header-wrap-custom",
+    flex: 0.7,
+    minWidth: 70,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "0",
+  },
+];
+
+export const extendedAmcReport: GridColDef[] = [
+  {
+    field: "id",
+    headerName: "Sr. No.",
+    flex: 1,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "dP_ID",
+    headerName: "DP ID",
+    flex: 1,
+    minWidth: 180,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "primary_Holder",
+    headerName: "Primary Holder",
+    flex: 1.5,
+    minWidth: 220,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "schemeName",
+    headerName: "Scheme Name",
+    flex: 1.2,
+    minWidth: 200,
+    align: "center",
+    headerAlign: "center",
   },
 ];

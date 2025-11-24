@@ -538,7 +538,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
   }, [dispatch, user_id, formik.values.selectedZone?.value]);
 
   const metrics = [
-    { title: "Active Clients", data: activeClientsData },
+    { title: "Active Clients ", data: activeClientsData },
     { title: "Unique Traded Clients", data: uniqueTradedClientsData },
     { title: "New Accounts Added", data: newAccountsData },
     { title: "Upcoming Dormant Account", data: upcomingDormantAccountsData },

@@ -165,8 +165,13 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
             <strong>${client.fullName}</strong><br/>
             <span style="color:#777">Code:</span> ${client.clientCode}<br/>
             <span style="color:#777">Gross Brokerage:</span> ₹${client.grossBrokerage.toLocaleString(
-              "en-IN"
+              "en-IN",
+              {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              }
             )}
+
           </div>
         `;
       },

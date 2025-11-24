@@ -382,3 +382,35 @@ export const formatTime = (totalSeconds: number) => {
   const seconds = String(totalSeconds % 60).padStart(2, "0");
   return `${minutes}:${seconds}`;
 };
+
+export const formatDateTime = (dateStr: string) => {
+  const date = new Date(dateStr);
+
+  const day = String(date.getDate()).padStart(2, "0");
+
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const month = monthNames[date.getMonth()];
+
+  const year = String(date.getFullYear()).slice(-2); // last 2 digits
+
+  const time = date.toLocaleTimeString("en-IN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  return `${day}-${month}-${year} ${time}`;
+};
