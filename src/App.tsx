@@ -31,16 +31,16 @@ const App = () => {
       const res = await fetch("/favicon.png", { cache: "no-store" });
       if (res.ok) {
         if (!serverOnline) {
-          console.log("✅ Server back online — reloading...");
+          console.log(" Server back online — reloading...");
           setServerOnline(true);
           window.location.reload();
         }
       } else {
-        console.warn("⚠️ Server returned bad status");
+        console.warn(" Server returned bad status");
         setServerOnline(false);
       }
     } catch (err) {
-      console.error("❌ Server unreachable:", err);
+      console.error(" Server unreachable:", err);
       setServerOnline(false);
     }
   };
