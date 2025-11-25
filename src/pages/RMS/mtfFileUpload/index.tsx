@@ -40,6 +40,10 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
   });
 
   useEffect(() => {
+    fetchFileUploadedDetails();
+  }, []);
+
+  const fetchFileUploadedDetails = () => {
     let payload = {
       option: "MTFAgeing",
     };
@@ -59,7 +63,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
         console.log("errror", error);
         dispatch(hideLoader());
       });
-  }, [dispatch]);
+  };
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -115,6 +119,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
       if (response?.status === 200) {
         console.log(`${type} upload response:`, response?.data);
         ShowToast("success", response?.data?.message);
+        fetchFileUploadedDetails();
       }
       formik.setFieldValue(
         type === "shortfall" ? "shortfallFile" : "ageingFile",
