@@ -20,6 +20,9 @@ const ForgotPassword = lazy(
 );
 const SideBar = lazy(() => import("./components/sideBar"));
 const DpMandate = lazy(() => import("./pages/Masters/MandateCall"));
+const FetchMTFActivation = lazy(() => import("./pages/MTF"));
+const ConsentOtp = lazy(() => import("./pages/MTF/consentOtp"));
+const CongratsPage = lazy(() => import("./pages/MTF/congratsScreen"));
 
 const App = () => {
   const [serverOnline, setServerOnline] = useState(true);
@@ -121,6 +124,30 @@ const App = () => {
           <Route path="/DPMandate" element={<DpMandate />} />
           <Route path="/DPMandate/:encryptedCode" element={<DpMandate />} />
           <Route path="/AMCLink" element={<AmcMembershipSteps />} />
+          <Route
+            path="/MTFSegmentActivation"
+            element={
+              <PrivateRoute
+                customLogin={false}
+                dashElement={<FetchMTFActivation />}
+              />
+            }
+          />
+          <Route
+            path="/otp"
+            element={
+              <PrivateRoute customLogin={false} dashElement={<ConsentOtp />} />
+            }
+          />
+          <Route
+            path="/congratulations"
+            element={
+              <PrivateRoute
+                customLogin={false}
+                dashElement={<CongratsPage />}
+              />
+            }
+          />
         </Routes>
       </Suspense>
     </Router>
