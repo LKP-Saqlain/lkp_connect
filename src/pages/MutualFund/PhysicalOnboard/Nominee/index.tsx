@@ -36,7 +36,7 @@ const Nominee = ({ index, data, onChange }: any) => {
           variant="h6"
           sx={{ mb: 2, fontSize: "16px", fontWeight: 600 }}
         >
-          {title}
+          {title + (index == 1 ? " *" : "")}
         </Typography>
 
         {Object.entries(nominee).map(([key, value]) => {

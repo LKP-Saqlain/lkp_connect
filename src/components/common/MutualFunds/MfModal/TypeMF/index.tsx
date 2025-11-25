@@ -74,7 +74,7 @@ const TypeMFModal: React.FC<Props> = ({
         setPhysicalAllowed(true);
       } else {
         setPhysicalAllowed(false);
-        ShowToast("error", "This client is not eligible for Physical mode.");
+        // ShowToast("error", "This client is not eligible for Physical mode.");
       }
     } catch (error) {
       console.error(error);
