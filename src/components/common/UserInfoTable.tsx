@@ -1920,6 +1920,7 @@ const DataTable = ({
               return (
                 <button
                   onClick={() => {
+                    console.log("rowCheck-->", params?.row);
                     handleDownload(params.row, "PAN"); // This will trigger the download function
                   }}
                   style={{
