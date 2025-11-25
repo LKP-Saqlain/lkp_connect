@@ -23,7 +23,7 @@ const Nominee = ({ index, data, onChange }: any) => {
   const title = `Nominee ${index}`;
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{}}>
       <Paper
         elevation={1}
         sx={{

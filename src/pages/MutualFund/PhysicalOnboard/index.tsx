@@ -79,7 +79,6 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
       payload[`nominee${i}DOB`] = data[`nominee${i}DOB`] || "";
       payload[`nominee${i}MinorFlag`] = data[`nominee${i}MinorFlag`] || "";
       payload[`nominee${i}Guardian`] = data[`nominee${i}Guardian`] || "";
-
       payload[`noM${i}_IDNO`] = data[`noM${i}_IDNO`] || "";
       payload[`noM${i}_EMAIL`] = data[`noM${i}_EMAIL`] || "";
       payload[`noM${i}_MOB`] = data[`noM${i}_MOB`] || "";
@@ -95,28 +94,91 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
   };
 
   return (
-    <Card sx={{ borderRadius: 4, p: 2, mb: 3 }}>
-      <Button onClick={onPhysicalOnboard}>back</Button>
-      <PrimaryHolder data={data} />
-      <h3 style={{ padding: "20px" }}>Nominee Details</h3>
+    <Card style={{ padding: "20px", height: "77vh" }}>
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "18px",
+          maxHeight: "70vh",
+          overflowY: "auto",
+          paddingRight: "8px",
         }}
       >
-        {[1, 2, 3].map((i) => (
-          <Nominee key={i} index={i} data={data} onChange={updateNominee} />
-        ))}
+        {/* STICKY HEADER */}
+        <div
+          style={{
+            position: "sticky",
+            top: 0,
+            background: "#FFF",
+            zIndex: 10,
+            padding: "10px 0",
+
+            display: "flex",
+            alignItems: "center",
+            marginBottom: "1rem",
+          }}
+        >
+          <h4
+            style={{
+              margin: 0,
+              position: "absolute",
+              left: "50%",
+              transform: "translateX(-50%)",
+            }}
+          >
+            Physical Onboarding
+          </h4>
+
+          <Button
+            style={{
+              marginLeft: "auto",
+              backgroundColor: "#11395C",
+              color: "#FFF",
+            }}
+            onClick={onPhysicalOnboard}
+          >
+            Back
+          </Button>
+        </div>
+
+        {/* CONTENT */}
+        <h4 style={{ marginBottom: "15px" }}>Primary Holder Details</h4>
+        <PrimaryHolder data={data} />
+
+        <h4 style={{ margin: "15px 0" }}>Nominee Details</h4>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "18px",
+          }}
+        >
+          {[1, 2, 3].map((i) => (
+            <Nominee key={i} index={i} data={data} onChange={updateNominee} />
+          ))}
+        </div>
+
+        <div
+          style={{
+            position: "sticky",
+            bottom: 0,
+            background: "#FFF",
+            padding: "10px 0",
+            display: "flex",
+            justifyContent: "flex-end",
+            zIndex: 10,
+          }}
+        >
+          <Button
+            style={{
+              backgroundColor: "#11395C",
+              color: "#FFF",
+            }}
+            onClick={buildPayload}
+          >
+            Save
+          </Button>
+        </div>
       </div>
-      <Button
-        onClick={() => {
-          buildPayload();
-        }}
-      >
-        Save
-      </Button>
     </Card>
   );
 };

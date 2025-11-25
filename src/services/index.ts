@@ -1081,4 +1081,7 @@ export const apiServices = {
       payload
     );
   },
+  NomineeInsertPhysical: async (payload: any) => {
+    return await apiService("POST", endpoints.NomineeInsertPhysical, payload);
+  },
 };

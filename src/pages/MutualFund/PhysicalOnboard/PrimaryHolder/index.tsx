@@ -25,8 +25,8 @@ const PrimaryHolder = ({ data }: any) => {
   ];
 
   return (
-    <div style={{ padding: "0 20px" }}>
-      <h3 style={{ marginBottom: "15px" }}>Primary Holder Details</h3>
+    <div>
+      {/* <h3 style={{ marginBottom: "15px" }}>Primary Holder Details</h3> */}
       <div
         style={{
           display: "grid",
@@ -46,7 +46,7 @@ const PrimaryHolder = ({ data }: any) => {
           >
             <div style={{ fontSize: "12px", color: "#666" }}>{item.label}</div>
             <div
-              style={{ fontSize: "14px", fontWeight: 600, marginTop: "4px" }}
+              style={{ fontSize: "12px", fontWeight: 600, marginTop: "2px" }}
             >
               {item.value || "-"}
             </div>
