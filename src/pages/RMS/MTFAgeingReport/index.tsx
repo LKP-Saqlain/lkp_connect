@@ -19,6 +19,13 @@ import ShowToast from "../../../utils/toastUtils";
 import { TextField } from "@mui/material";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import NudgeTable from "../../../components/common/NudgeTable";
+import { formatDateTime } from "../../../helper/commmon";
+
+interface UploadDetail {
+  type: string;
+  uploadedon: string;
+  uploadedBy: string;
+}
 
 const MTFAgeingReport = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
@@ -28,6 +35,7 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
   const [selectedMtfRow, setSelectedMtfRow] = useState<any | null>(null);
   const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState("");
+  const [uploadDetails, setUploadDetails] = useState<UploadDetail[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -282,6 +290,36 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
     console.log("stateUpdate", selectedMtfRow);
   }, [dispatch, selectedMtfRow]);
 
+  useEffect(() => {
+    fetchFileUploadedDetails();
+  }, []);
+
+  const fetchFileUploadedDetails = () => {
+    let payload = {
+      option: "MTFAgeing",
+    };
+    dispatch(showLoader(""));
+
+    apiServices
+      .GetFileuploadDetails(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          console.log("ResponseeeGetFileuploadDetails", response?.data?.data);
+          const data = response?.data?.data || [];
+          setUploadDetails(data);
+        }
+      })
+      .catch((error) => {
+        console.log("errror", error);
+        dispatch(hideLoader());
+      });
+  };
+
+  const MTFAgeing = uploadDetails.find(
+    (item: any) => item.type === "MTFAgeing"
+  );
+
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -525,18 +563,49 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
                 <CardBody>
                   <div
                     style={{
-                      marginBottom: "6px",
-                      fontSize: "12px",
-                      color: "grey",
-                      fontStyle: "italic",
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      marginBottom: "2px",
+                      width: "100%",
                     }}
                   >
-                    * Click on the{" "}
-                    <span style={{ fontWeight: 900, fontStyle: "italic" }}>
-                      Client Code
-                    </span>{" "}
-                    for more details
+                    {/* LEFT SIDE */}
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: "grey",
+                        fontStyle: "italic",
+                      }}
+                    >
+                      * Click on the{" "}
+                      <span style={{ fontWeight: 900, fontStyle: "italic" }}>
+                        Client Code
+                      </span>{" "}
+                      for more details
+                    </div>
+
+                    {/* RIGHT SIDE */}
+                    {MTFAgeing && (
+                      <div
+                        style={{
+                          fontSize: "11px",
+                          color: "#444",
+                          textAlign: "left",
+                        }}
+                      >
+                        <div>
+                          <strong>Last Uploaded By :</strong>{" "}
+                          {MTFAgeing.uploadedBy}
+                        </div>
+                        <div>
+                          <strong>Last Uploaded On :</strong>{" "}
+                          {formatDateTime(MTFAgeing?.uploadedon)}
+                        </div>
+                      </div>
+                    )}
                   </div>
+
                   <UserInfoTable
                     activeSubItem={activeSubItem}
                     T6Data={ageingRecords}
