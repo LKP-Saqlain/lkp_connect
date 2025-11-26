@@ -49,12 +49,18 @@ const RegFileUpload = ({ activeSubItem }: any) => {
     fieldName: "regNse" | "regBse"
   ) => {
     const file = e.currentTarget.files?.[0];
+
     if (file && /\.csv$/i.test(file.name)) {
+      // valid .csv file
       formik.setFieldValue(fieldName, file);
-      formik.setFieldError(fieldName, ""); // clear old error if any
+      formik.setFieldError(fieldName, ""); // clear old error
     } else {
-      formik.setFieldError(fieldName, "Only .csv files are accepted");
+      const errorMsg = "Only .csv files are accepted";
+      formik.setFieldError(fieldName, errorMsg);
+      ShowToast("error", errorMsg); // <<< SHOW TOAST ERROR
     }
+
+    // allow same file to be selected again
     e.target.value = "";
   };
 
