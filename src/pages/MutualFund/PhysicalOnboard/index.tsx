@@ -6,9 +6,15 @@ import { useEffect, useState } from "react";
 import { Button } from "rsuite";
 import PrimaryHolder from "./PrimaryHolder";
 import Nominee from "./Nominee";
+import { apiServices } from "../../../services";
 
 const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
   const [data, setData] = useState<any>({});
+  const [nomineeStatus, setNomineeStatus] = useState({
+    1: false,
+    2: true, // by default not required
+    3: true,
+  });
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -66,32 +72,320 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
 
   const buildPayload = () => {
     const payload: any = {
-      clientCode: ClientCode,
+      clientCode: data.clientCode || ClientCode,
+
+      // Primary Holder
+      primaryHolderFirstName: data.primaryHolderFirstName || "",
+      primaryHolderMiddleName: data.primaryHolderMiddleName || "",
+      primaryHolderLastName: data.primaryHolderLastName || "",
+      gender: data.gender || "",
+      primaryHolderDOB: data.primaryHolderDOB || "",
+      occupationCode: data.occupationCode || "",
+      primaryHolderPAN: data.primaryHolderPAN || "",
+      primaryHolderPANExempt: data.primaryHolderPANExempt || "",
+      primaryHolderExemptCategory: data.primaryHolderExemptCategory || "",
+      primaryHolderKYCType: data.primaryHolderKYCType || "",
+      primaryHolderCKYCNumber: data.primaryHolderCKYCNumber || "",
+      primaryHolderKRAExemptRefNo: data.primaryHolderKRAExemptRefNo || "",
+
+      taxStatus: data.taxStatus || "",
+      holdingNature: data.holdingNature || "",
+
+      // Second Holder
+      secondHolderFirstName: data.secondHolderFirstName || "",
+      secondHolderMiddleName: data.secondHolderMiddleName || "",
+      secondHolderLastName: data.secondHolderLastName || "",
+      secondHolderDOB: data.secondHolderDOB || "",
+      secondHolderPAN: data.secondHolderPAN || "",
+      secondHolderPANExempt: data.secondHolderPANExempt || "",
+      secondHolderExemptCategory: data.secondHolderExemptCategory || "",
+      secondHolderKYCType: data.secondHolderKYCType || "",
+      secondHolderCKYCNumber: data.secondHolderCKYCNumber || "",
+      secondHolderKRAExemptRefNo: data.secondHolderKRAExemptRefNo || "",
+      secondHolderEmail: data.secondHolderEmail || "",
+      secondHolderEmailDeclaration: data.secondHolderEmailDeclaration || "",
+      secondHolderMobileNo: data.secondHolderMobileNo || "",
+      secondHolderMobileDeclaration: data.secondHolderMobileDeclaration || "",
+
+      // Third Holder
+      thirdHolderFirstName: data.thirdHolderFirstName || "",
+      thirdHolderMiddleName: data.thirdHolderMiddleName || "",
+      thirdHolderLastName: data.thirdHolderLastName || "",
+      thirdHolderDOB: data.thirdHolderDOB || "",
+      thirdHolderPAN: data.thirdHolderPAN || "",
+      thirdHolderPANExempt: data.thirdHolderPANExempt || "",
+      thirdHolderExemptCategory: data.thirdHolderExemptCategory || "",
+      thirdHolderKYCType: data.thirdHolderKYCType || "",
+      thirdHolderCKYCNumber: data.thirdHolderCKYCNumber || "",
+      thirdHolderKRAExemptRefNo: data.thirdHolderKRAExemptRefNo || "",
+      thirdHolderEmail: data.thirdHolderEmail || "",
+      thirdHolderEmailDeclaration: data.thirdHolderEmailDeclaration || "",
+      thirdHolderMobileNo: data.thirdHolderMobileNo || "",
+      thirdHolderMobileDeclaration: data.thirdHolderMobileDeclaration || "",
+
+      // Guardian
+      guardianFirstName: data.guardianFirstName || "",
+      guardianMiddleName: data.guardianMiddleName || "",
+      guardianLastName: data.guardianLastName || "",
+      guardianDOB: data.guardianDOB || "",
+      guardianPAN: data.guardianPAN || "",
+      guardianPANExempt: data.guardianPANExempt || "",
+      guardianExemptCategory: data.guardianExemptCategory || "",
+      guardianKYCType: data.guardianKYCType || "",
+      guardianCKYCNumber: data.guardianCKYCNumber || "",
+      guardianExemptRefNo: data.guardianExemptRefNo || "",
+      guardianRelationship: data.guardianRelationship || "",
+
+      clientType: data.clientType || "",
+      pms: data.pms || "",
+
+      // DP
+      defaultDP: data.defaultDP || "",
+      cdsldpid: data.cdsldpid || "",
+      cdslcltid: data.cdslcltid || "",
+      cmbpId: data.cmbpId || "",
+      nsdldpid: data.nsdldpid || "",
+      nsdlcltid: data.nsdlcltid || "",
+
+      // Bank Accounts
+      accountType1: data.accountType1 || "",
+      accountNo1: data.accountNo1 || "",
+      micrNo1: data.micrNo1 || "",
+      ifscCode1: data.ifscCode1 || "",
+      defaultBankFlag1: data.defaultBankFlag1 || "",
+
+      accountType2: data.accountType2 || "",
+      accountNo2: data.accountNo2 || "",
+      micrNo2: data.micrNo2 || "",
+      ifscCode2: data.ifscCode2 || "",
+      defaultBankFlag2: data.defaultBankFlag2 || "",
+
+      accountType3: data.accountType3 || "",
+      accountNo3: data.accountNo3 || "",
+      micrNo3: data.micrNo3 || "",
+      ifscCode3: data.ifscCode3 || "",
+      defaultBankFlag3: data.defaultBankFlag3 || "",
+
+      accountType4: data.accountType4 || "",
+      accountNo4: data.accountNo4 || "",
+      micrNo4: data.micrNo4 || "",
+      ifscCode4: data.ifscCode4 || "",
+      defaultBankFlag4: data.defaultBankFlag4 || "",
+
+      accountType5: data.accountType5 || "",
+      accountNo5: data.accountNo5 || "",
+      micrNo5: data.micrNo5 || "",
+      ifscCode5: data.ifscCode5 || "",
+      defaultBankFlag5: data.defaultBankFlag5 || "",
+
+      chequeName: data.chequeName || "",
+      divPayMode: data.divPayMode || "",
+
+      // Address
+      address1: data.address1 || "",
+      address2: data.address2 || "",
+      address3: data.address3 || "",
+      city: data.city || "",
+      state: data.state || "",
+      pincode: data.pincode || "",
+      country: data.country || "",
+      resiPhone: data.resiPhone || "",
+      resiFax: data.resiFax || "",
+      officePhone: data.officePhone || "",
+      officeFax: data.officeFax || "",
+      email: data.email || "",
+      communicationMode: data.communicationMode || "",
+      indianMobileNo: data.indianMobileNo || "",
+
+      // Foreign Address
+      foreignAddress1: data.foreignAddress1 || "",
+      foreignAddress2: data.foreignAddress2 || "",
+      foreignAddress3: data.foreignAddress3 || "",
+      foreignAddressCity: data.foreignAddressCity || "",
+      foreignAddressPincode: data.foreignAddressPincode || "",
+      foreignAddressState: data.foreignAddressState || "",
+      foreignAddressCountry: data.foreignAddressCountry || "",
+      foreignAddressResiPhone: data.foreignAddressResiPhone || "",
+      foreignAddressFax: data.foreignAddressFax || "",
+      foreignAddressOfficePhone: data.foreignAddressOfficePhone || "",
+      foreignAddressOfficeFax: data.foreignAddressOfficeFax || "",
+
+      // Nominee 1/2/3
+      nominee1Name: data.nominee1Name || "",
+      nominee1Relationship: data.nominee1Relationship || "",
+      nominee1Applicable: data.nominee1Applicable || "",
+      nominee1DOB: data.nominee1DOB || "",
+      nominee1MinorFlag: data.nominee1MinorFlag || "",
+      nominee1Guardian: data.nominee1Guardian || "",
+
+      nominee2Name: data.nominee2Name || "",
+      nominee2Relationship: data.nominee2Relationship || "",
+      nominee2Applicable: data.nominee2Applicable || "",
+      nominee2DOB: data.nominee2DOB || "",
+      nominee2MinorFlag: data.nominee2MinorFlag || "",
+      nominee2Guardian: data.nominee2Guardian || "",
+
+      nominee3Name: data.nominee3Name || "",
+      nominee3Relationship: data.nominee3Relationship || "",
+      nominee3Applicable: data.nominee3Applicable || "",
+      nominee3DOB: data.nominee3DOB || "",
+      nominee3MinorFlag: data.nominee3MinorFlag || "",
+      nominee3Guardian: data.nominee3Guardian || "",
+
+      // Nominee PAN / Guardian PAN
+      nomineePAN1: data.nomineePAN1 || "",
+      nomineeGuardianPAN1: data.nomineeGuardianPAN1 || "",
+      nomineePAN2: data.nomineePAN2 || "",
+      nomineeGuardianPAN2: data.nomineeGuardianPAN2 || "",
+      nomineePAN3: data.nomineePAN3 || "",
+      nomineeGuardianPAN3: data.nomineeGuardianPAN3 || "",
+
+      // Nominee ID / Address Blocks
+      noM1_ID_TYP: data.noM1_ID_TYP || "",
+      noM1_IDNO: data.noM1_IDNO || "",
+      noM1_EMAIL: data.noM1_EMAIL || "",
+      noM1_MOB: data.noM1_MOB || "",
+      noM1_ADD1: data.noM1_ADD1 || "",
+      noM1_ADD2: data.noM1_ADD2 || "",
+      noM1_ADD3: data.noM1_ADD3 || "",
+      noM1_CITY: data.noM1_CITY || "",
+      noM1_PIN: data.noM1_PIN || "",
+      noM1_CON: data.noM1_CON || "",
+
+      noM2_ID_TYP: data.noM2_ID_TYP || "",
+      noM2_IDNO: data.noM2_IDNO || "",
+      noM2_EMAIL: data.noM2_EMAIL || "",
+      noM2_MOB: data.noM2_MOB || "",
+      noM2_ADD1: data.noM2_ADD1 || "",
+      noM2_ADD2: data.noM2_ADD2 || "",
+      noM2_ADD3: data.noM2_ADD3 || "",
+      noM2_CITY: data.noM2_CITY || "",
+      noM2_PIN: data.noM2_PIN || "",
+      noM2_CON: data.noM2_CON || "",
+
+      noM3_ID_TYP: data.noM3_ID_TYP || "",
+      noM3_IDNO: data.noM3_IDNO || "",
+      noM3_EMAIL: data.noM3_EMAIL || "",
+      noM3_MOB: data.noM3_MOB || "",
+      noM3_ADD1: data.noM3_ADD1 || "",
+      noM3_ADD2: data.noM3_ADD2 || "",
+      noM3_ADD3: data.noM3_ADD3 || "",
+      noM3_CITY: data.noM3_CITY || "",
+      noM3_PIN: data.noM3_PIN || "",
+      noM3_CON: data.noM3_CON || "",
+
+      // Misc
       noM_SOA: data.noM_SOA || "",
+      aadhaarUpdated: data.aadhaarUpdated || "",
+      mapinId: data.mapinId || "",
+      paperlessFlag: data.paperlessFlag || "",
+      leiNumber: data.leiNumber || "",
+      leiValidity: data.leiValidity || "",
+      filler1MobileDeclarationFlag: data.filler1MobileDeclarationFlag || "",
+      filler2EmailDeclarationFlag: data.filler2EmailDeclarationFlag || "",
+      mobileDeclarationFlag: data.mobileDeclarationFlag || "",
+      emailDeclarationFlag: data.emailDeclarationFlag || "",
+      nominationOpt: data.nominationOpt || "",
+      nominationAuthMode: data.nominationAuthMode || "",
+
+      // filler fields
+      filler1: data.filler1 || "",
+      filler2: data.filler2 || "",
+      filler3: data.filler3 || "",
+      filler4: data.filler4 || "",
+      filler5: data.filler5 || "",
+      filler6: data.filler6 || "",
+      filler7: data.filler7 || "",
+      filler8: data.filler8 || "",
     };
 
-    // nominee1/2/3 fields
-    [1, 2, 3].forEach((i) => {
-      payload[`nominee${i}Name`] = data[`nominee${i}Name`] || "";
-      payload[`nominee${i}Relationship`] =
-        data[`nominee${i}Relationship`] || "";
-      payload[`nominee${i}Applicable`] = data[`nominee${i}Applicable`] || "";
-      payload[`nominee${i}DOB`] = data[`nominee${i}DOB`] || "";
-      payload[`nominee${i}MinorFlag`] = data[`nominee${i}MinorFlag`] || "";
-      payload[`nominee${i}Guardian`] = data[`nominee${i}Guardian`] || "";
-      payload[`noM${i}_IDNO`] = data[`noM${i}_IDNO`] || "";
-      payload[`noM${i}_EMAIL`] = data[`noM${i}_EMAIL`] || "";
-      payload[`noM${i}_MOB`] = data[`noM${i}_MOB`] || "";
-      payload[`noM${i}_ADD1`] = data[`noM${i}_ADD1`] || "";
-      payload[`noM${i}_ADD2`] = data[`noM${i}_ADD2`] || "";
-      payload[`noM${i}_ADD3`] = data[`noM${i}_ADD3`] || "";
-      payload[`noM${i}_CITY`] = data[`noM${i}_CITY`] || "";
-      payload[`noM${i}_PIN`] = data[`noM${i}_PIN`] || "";
-      payload[`noM${i}_CON`] = data[`noM${i}_CON`] || "";
-    });
-
-    console.log(payload, "Nominee payload");
+    console.log("FINAL PAYLOAD =", payload);
+    return payload;
   };
+
+  const onNomineeSaveStatus = (index: number, isValid: boolean) => {
+    setNomineeStatus((prev) => ({
+      ...prev,
+      [index]: isValid,
+    }));
+  };
+
+  const sendNomineeData = () => {
+    // Get the final nominee payload
+    const nomineePayload = buildPayload();
+
+    const payload = {
+      clientCode: ClientCode,
+      ...nomineePayload, // merge everything into final API payload
+    };
+
+    console.log("Sending Payload:", payload);
+
+    dispatch(showLoader("Please wait, we are processing your request..."));
+
+    apiServices
+      .NomineeInsertPhysical(payload)
+      .then((response) => {
+        console.log("Nominee Submit Response:", response);
+        FinalApiCalls();
+      })
+      .catch((error) => {
+        console.error("Error saving nominee:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
+  const FinalApiCalls = async () => {
+    try {
+      dispatch(showLoader("Fetching Client Code..."));
+
+      // 1️ FIRST API — PhysicalClientRegistration
+      await fetch(
+        `https://middlewareapi.lkp.net.in/api/MF/PhysicalClientRegistration?ClientCode=${ClientCode}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      console.log("PhysicalClientRegistration done");
+
+      // 2️ SECOND API — run only after first completes
+      await fetch(
+        `https://middlewareapi.lkp.net.in/api/MF/ElogForPhysical?ClientCode=${ClientCode}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      console.log("ElogForPhysical done");
+    } catch (error) {
+      console.error("Error in sequential API calls:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+  const handleSubmit = () => {
+    const sum =
+      Number(data.nominee1Applicable || 0) +
+      Number(data.nominee2Applicable || 0) +
+      Number(data.nominee3Applicable || 0);
+
+    if (sum !== 100) {
+      alert("Total applicable percentage of nominees must be 100%");
+      return; // stop submission
+    }
+
+    // If sum is 100, proceed
+    sendNomineeData();
+    // buildPayload();
+  };
+
+  const isSubmitEnabled =
+    nomineeStatus[1] && nomineeStatus[2] && nomineeStatus[3];
 
   return (
     <Card style={{ padding: "20px", height: "77vh" }}>
@@ -153,7 +447,13 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
           }}
         >
           {[1, 2, 3].map((i) => (
-            <Nominee key={i} index={i} data={data} onChange={updateNominee} />
+            <Nominee
+              key={i}
+              index={i}
+              data={data}
+              onChange={updateNominee}
+              onSaveStatus={onNomineeSaveStatus}
+            />
           ))}
         </div>
 
@@ -169,13 +469,14 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
           }}
         >
           <Button
+            disabled={!isSubmitEnabled}
             style={{
-              backgroundColor: "#11395C",
+              backgroundColor: isSubmitEnabled ? "#11395C" : "#999",
               color: "#FFF",
             }}
-            onClick={buildPayload}
+            onClick={handleSubmit}
           >
-            Save
+            Submit
           </Button>
         </div>
       </div>

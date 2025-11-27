@@ -254,4 +254,6 @@ export const endpoints = {
   GetFileuploadDetails: "/api/RMS/GetFileuploadDetails",
   ViewMTFStockAgeingReport: "/api/RMS/ViewMTFStockAgeingReport",
   NomineeInsertPhysical: "api/MF/NomineeInsertPhysical",
+  PhysicalClientRegistration: "api/MF/PhysicalClientRegistration",
+  ElogForPhysical: "api/MF/ElogForPhysical",
 };
