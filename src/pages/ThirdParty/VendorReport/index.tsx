@@ -16,6 +16,8 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import UserInfoTable from "../../../components/common/UserInfoTable";
+import pako from "pako";
+import ShowToast from "../../../utils/toastUtils";
 
 const VendorReport = ({ activeSubItem }: any) => {
   const [startDate, setStartDate] = useState<string | null>(null);
@@ -58,8 +60,8 @@ const VendorReport = ({ activeSubItem }: any) => {
   const fetchReport = () => {
     let payload = {
       vendorName: formik.values.vendorName || "ALL",
-      startdate: startDate, // "2025-10-30"
-      enddate: endDate, //"2025-10-30"
+      startdate: startDate,
+      enddate: endDate,
     };
 
     dispatch(showLoader(""));
@@ -69,10 +71,10 @@ const VendorReport = ({ activeSubItem }: any) => {
         dispatch(hideLoader());
 
         if (response?.status === 200) {
-          const data = response?.data?.data[0];
+          const rows = response?.data?.data || [];
 
-          if (data) {
-            const formattedRow = {
+          if (rows.length > 0) {
+            const formattedRows = rows.map((data: any) => ({
               id: data.vendorId,
               vendorId: data.vendorId,
               vendorName: data.vendorName,
@@ -91,7 +93,7 @@ const VendorReport = ({ activeSubItem }: any) => {
               bankName: data.bankName,
               bankActNo: data.bankActNo,
               ifscCode: data.ifscCode,
-              bankDoc: data.bankDoc, // base64
+              bankDoc: data.bankDoc,
               chqPrintNameFlag: data.chqPrintNameFlag,
               chqPrintLocFlag: data.chqPrintLocFlag,
               chqPrintLocCode: data.chqPrintLocCode,
@@ -102,19 +104,19 @@ const VendorReport = ({ activeSubItem }: any) => {
               paymentBank: data.paymentBank,
               gstNo: data.gstNo,
               tdsFlag: data.tdsFlag,
-              tdsPath: data.tdsPath, // base64
+              tdsPath: data.tdsPath,
               msmeFlag: data.msmeFlag,
               msmeType: data.msmeType,
-              msmePath: data.msmePath, // base64
+              msmePath: data.msmePath,
               bankDocExtn: data.bankDocExtn,
               tdsExtn: data.tdsExtn,
               msmseExtn: data.msmseExtn,
               accApproval: data.accApproval,
               accRemark: data.accRemark,
-            };
+            }));
 
-            setVendorRows([formattedRow]); // store entire record
-            console.log("Formatted Vendor Data:", formattedRow);
+            setVendorRows(formattedRows); // store multiple records
+            console.log("Vendor Data:", formattedRows);
           }
         }
       })
@@ -188,6 +190,130 @@ const VendorReport = ({ activeSubItem }: any) => {
       formik.setFieldValue("endDate", "");
       setFormattedDateRange("");
     }
+  };
+
+  const handleDownload = (
+    row: any,
+    docType: "TDS" | "MSME" | "BANK" | "PAN"
+  ) => {
+    let base64Data = "";
+    let fileExt = "";
+    let fileName = "";
+    console.log("row111111", docType, row);
+
+    if (docType === "PAN") {
+      const fileExtension =
+        row && row.panDoc
+          ? `.${row.panDoc.split(".").pop()?.toLowerCase()}`
+          : "";
+
+      const payload = {
+        fileName: row.panDoc,
+        filePath:
+          "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterMSME",
+        fileType: fileExtension,
+        contentType: "",
+      };
+
+      dispatch(showLoader("Loading Preview..."));
+
+      apiServices
+        .ComplianceDownload(payload)
+        .then((response) => {
+          if (response?.status === 200 && response?.data) {
+            const fileBlob = new Blob([response.data], {
+              type:
+                response.headers["content-type"] || "application/octet-stream",
+            });
+
+            const url = URL.createObjectURL(fileBlob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = row.panDoc || `PAN_Document${fileExtension}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+          } else {
+            ShowToast("info", "Error fetching file for preview");
+          }
+        })
+        .catch((error) => {
+          ShowToast("info", error.message || "Preview failed");
+        })
+        .finally(() => {
+          dispatch(hideLoader());
+        });
+
+      return;
+    }
+    switch (docType) {
+      case "TDS":
+        base64Data = row.tdsPath;
+        fileExt = row.tdsExtn?.toLowerCase();
+        fileName = `TDS_Document.${fileExt}`;
+        break;
+
+      case "MSME":
+        base64Data = row.msmePath;
+        fileExt = row.msmseExtn?.toLowerCase();
+        fileName = `MSME_Document.${fileExt}`;
+        break;
+
+      case "BANK":
+        base64Data = row.bankDoc;
+        fileExt = row.bankDocExtn?.toLowerCase();
+        fileName = `Bank_Document.${fileExt}`;
+        break;
+
+      default:
+        console.error("Invalid document type");
+        return;
+    }
+
+    if (!base64Data) {
+      console.error("No document data found");
+      return;
+    }
+
+    // Remove prefix if present (e.g., data:image/png;base64,...)
+    const cleanBase64 = base64Data.includes("base64,")
+      ? base64Data.split("base64,")[1]
+      : base64Data;
+
+    // Decode base64 to binary
+    const binaryString = atob(cleanBase64);
+    let binaryData = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      binaryData[i] = binaryString.charCodeAt(i);
+    }
+
+    // Detect GZIP (first two bytes 0x1F 0x8B)
+    const isGzip = binaryData[0] === 0x1f && binaryData[1] === 0x8b;
+    if (isGzip) {
+      binaryData = pako.ungzip(binaryData);
+    }
+
+    // Map extn to MIME type
+    let mimeType =
+      fileExt === "pdf"
+        ? "application/pdf"
+        : fileExt === "jpg" || fileExt === "jpeg"
+        ? "image/jpeg"
+        : fileExt === "png"
+        ? "image/png"
+        : "application/octet-stream";
+
+    // Create Blob and download
+    const blob = new Blob([binaryData], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url); // Cleanup
   };
 
   return (
@@ -319,6 +445,7 @@ const VendorReport = ({ activeSubItem }: any) => {
                 <UserInfoTable
                   activeSubItem={activeSubItem}
                   T6Data={vendorRows}
+                  handleDownload={handleDownload}
                 />
               </CardBody>
             </Card>

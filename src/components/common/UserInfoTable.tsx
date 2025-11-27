@@ -2227,9 +2227,139 @@ const DataTable = ({
         return column;
       });
     } else if (activeSubItem === "Vendor Details Report") {
-      return TableColumns.vendorApprovalColumns.map((column) => ({
-        ...column,
-      }));
+      // return TableColumns.vendorApprovalColumns.map((column) => ({
+      //   ...column,
+      // }));
+      return TableColumns.vendorApprovalColumns.map((column) => {
+        if (column.field === "tdsPath") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const hasTdsPath =
+                params.row?.tdsPath && params.row.tdsPath.trim() !== "";
+
+              if (!hasTdsPath) {
+                return <span>—</span>;
+              }
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, "TDS"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "msmePath") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const hasMsmePath =
+                params.row?.msmePath && params.row.msmePath.trim() !== "";
+
+              if (!hasMsmePath) {
+                return <span>—</span>;
+              }
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, "MSME"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "bankDoc") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const hasBankPath =
+                params.row?.bankDoc && params.row.bankDoc.trim() !== "";
+
+              if (!hasBankPath) {
+                return <span>—</span>;
+              }
+
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, "BANK"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "panDocument") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const hasPanPath =
+                params.row?.panDoc && params.row.panDoc.trim() !== "";
+
+              if (!hasPanPath) {
+                return <span>—</span>;
+              }
+              return (
+                <button
+                  onClick={() => {
+                    console.log("rowCheck-->", params?.row);
+                    handleDownload(params.row, "PAN"); // This will trigger the download function
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  <Tooltip title="Download File" arrow placement="top">
+                    <DownloadForOfflineIcon />
+                  </Tooltip>
+                </button>
+              );
+            },
+          };
+        }
+
+        return column;
+      });
     } else if (activeSubItem === "T6 Selling Report") {
       return TableColumns.t6SellingReportColumns.map((column) => ({
         ...column,
