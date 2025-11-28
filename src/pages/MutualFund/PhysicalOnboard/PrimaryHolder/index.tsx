@@ -1,5 +1,3 @@
-import React from "react";
-
 const PrimaryHolder = ({ data }: any) => {
   if (!data) return null;
 

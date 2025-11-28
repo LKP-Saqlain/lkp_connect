@@ -7,12 +7,13 @@ import { Button } from "rsuite";
 import PrimaryHolder from "./PrimaryHolder";
 import Nominee from "./Nominee";
 import { apiServices } from "../../../services";
+type NomStatus = { [k: number]: boolean };
 
 const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
   const [data, setData] = useState<any>({});
-  const [nomineeStatus, setNomineeStatus] = useState({
+  const [nomineeStatus, setNomineeStatus] = useState<NomStatus>({
     1: false,
-    2: true, // by default not required
+    2: true,
     3: true,
   });
 
@@ -21,16 +22,12 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
   const ClientInfo = async () => {
     try {
       dispatch(showLoader("Fetching Client Code..."));
-
       const response = await fetch(
         `https://middlewareapi.lkp.net.in/api/MF/PhysicalClientInfo?ClientCode=${ClientCode}`,
         { method: "POST", headers: { "Content-Type": "application/json" } }
       );
-
-      const data = await response.json();
-      setData(data?.data);
-      console.log(data?.data, "PhysicalOnboard Data");
-
+      const json = await response.json();
+      setData(json?.data || {});
       dispatch(hideLoader());
     } catch (error) {
       console.error(error);
@@ -40,32 +37,18 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
 
   useEffect(() => {
     if (ClientCode) ClientInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ClientCode]);
 
-  const updateNominee = ({ index, field, value }: any) => {
+  // updateNominee expects parent key names (e.g. nominee1Name, noM1_ID_TYP, ...)
+  const updateNominee = ({
+    // _index,
+    field,
+    value,
+  }: any) => {
     setData((prev: any) => {
       const updated = { ...prev };
-
-      const map: any = {
-        name: `nominee${index}Name`,
-        relationship: `nominee${index}Relationship`,
-        applicable: `nominee${index}Applicable`,
-        dob: `nominee${index}DOB`,
-        minor: `nominee${index}MinorFlag`,
-        guardian: `nominee${index}Guardian`,
-        idType: `noM${index}_ID_TYP`,
-        idNo: `noM${index}_IDNO`,
-        email: `noM${index}_EMAIL`,
-        mobile: `noM${index}_MOB`,
-        address1: `noM${index}_ADD1`,
-        address2: `noM${index}_ADD2`,
-        address3: `noM${index}_ADD3`,
-        city: `noM${index}_CITY`,
-        pin: `noM${index}_PIN`,
-        country: `noM${index}_CON`,
-      };
-
-      updated[map[field]] = value;
+      updated[field] = value;
       return updated;
     });
   };
@@ -304,21 +287,12 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
   };
 
   const onNomineeSaveStatus = (index: number, isValid: boolean) => {
-    setNomineeStatus((prev) => ({
-      ...prev,
-      [index]: isValid,
-    }));
+    setNomineeStatus((prev) => ({ ...prev, [index]: isValid }));
   };
 
   const sendNomineeData = () => {
-    // Get the final nominee payload
     const nomineePayload = buildPayload();
-
-    const payload = {
-      clientCode: ClientCode,
-      ...nomineePayload, // merge everything into final API payload
-    };
-
+    const payload = { clientCode: ClientCode, ...nomineePayload };
     console.log("Sending Payload:", payload);
 
     dispatch(showLoader("Please wait, we are processing your request..."));
@@ -339,10 +313,10 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
 
   const FinalApiCalls = async () => {
     try {
-      dispatch(showLoader("Fetching Client Code..."));
+      dispatch(showLoader("Processing..."));
 
-      // 1️ FIRST API — PhysicalClientRegistration
-      await fetch(
+      //  FIRST API — PhysicalClientRegistration
+      const regRes = await fetch(
         `https://middlewareapi.lkp.net.in/api/MF/PhysicalClientRegistration?ClientCode=${ClientCode}`,
         {
           method: "POST",
@@ -350,10 +324,21 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
         }
       );
 
-      console.log("PhysicalClientRegistration done");
+      const regData = await regRes.json();
+      console.log("Registration Response:", regData);
 
-      // 2️ SECOND API — run only after first completes
-      await fetch(
+      //  CHECK → message contains "Registered Successfully"
+      const message = String(regData?.message || "").toLowerCase();
+      const isRegistered = message.includes("registered successfully");
+      console.log(isRegistered);
+
+      if (!isRegistered) {
+        console.warn("Registration NOT successful → skipping Elog");
+        return;
+      }
+
+      //  SECOND API — Elog ONLY after success
+      const elogRes = await fetch(
         `https://middlewareapi.lkp.net.in/api/MF/ElogForPhysical?ClientCode=${ClientCode}`,
         {
           method: "POST",
@@ -361,24 +346,34 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
         }
       );
 
-      console.log("ElogForPhysical done");
+      const elogData = await elogRes.json();
+      console.log("ElogForPhysical Response:", elogData);
+
+      alert("Registration & Elog completed successfully!");
     } catch (error) {
-      console.error("Error in sequential API calls:", error);
+      console.error("Error in FinalApiCalls:", error);
+      alert("Something went wrong!");
     } finally {
       dispatch(hideLoader());
     }
   };
+
   const handleSubmit = () => {
+    const parseIntSafe = (v: any) => {
+      if (!v && v !== 0) return 0;
+      const n = Number(String(v).replace(/\D/g, ""));
+      return isNaN(n) ? 0 : n;
+    };
+
     const sum =
-      Number(data.nominee1Applicable || 0) +
-      Number(data.nominee2Applicable || 0) +
-      Number(data.nominee3Applicable || 0);
+      parseIntSafe(data.nominee1Applicable) +
+      parseIntSafe(data.nominee2Applicable) +
+      parseIntSafe(data.nominee3Applicable);
 
     if (sum !== 100) {
       alert("Total applicable percentage of nominees must be 100%");
-      return; // stop submission
+      return;
     }
-
     // If sum is 100, proceed
     sendNomineeData();
     // buildPayload();
@@ -390,11 +385,7 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
   return (
     <Card style={{ padding: "20px", height: "77vh" }}>
       <div
-        style={{
-          maxHeight: "70vh",
-          overflowY: "auto",
-          paddingRight: "8px",
-        }}
+        style={{ maxHeight: "70vh", overflowY: "auto", paddingRight: "8px" }}
       >
         {/* STICKY HEADER */}
         <div
@@ -404,7 +395,6 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
             background: "#FFF",
             zIndex: 10,
             padding: "10px 0",
-
             display: "flex",
             alignItems: "center",
             marginBottom: "1rem",
@@ -465,7 +455,7 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
             padding: "10px 0",
             display: "flex",
             justifyContent: "flex-end",
-            zIndex: 10,
+            zIndex: 5,
           }}
         >
           <Button

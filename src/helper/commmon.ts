@@ -414,3 +414,41 @@ export const formatDateTime = (dateStr: string) => {
 
   return `${day}-${month}-${year} ${time}`;
 };
+
+export const relationshipOptions = [
+  { label: "Aunt", value: "01" },
+  { label: "Brother-In-Law", value: "02" },
+  { label: "Brother", value: "03" },
+  { label: "Daughter", value: "04" },
+  { label: "Daughter-In-Law", value: "05" },
+  { label: "Father", value: "06" },
+  { label: "Father-In-Law", value: "07" },
+  { label: "Grand Daughter", value: "08" },
+  { label: "Grand Father", value: "09" },
+  { label: "Grand Mother", value: "10" },
+  { label: "Grand Son", value: "11" },
+  { label: "Mother-In-Law", value: "12" },
+  { label: "Mother", value: "13" },
+  { label: "Nephew", value: "14" },
+  { label: "Niece", value: "15" },
+  { label: "Sister", value: "16" },
+  { label: "Sister-In-Law", value: "17" },
+  { label: "Son", value: "18" },
+  { label: "Son-In-Law", value: "19" },
+  { label: "Spouse", value: "20" },
+  { label: "Uncle", value: "21" },
+  { label: "Others", value: "22" },
+  { label: "Court Appointed Legal Guardian", value: "23" },
+];
+
+export const idTypes = [
+  { label: "PAN", value: "1" },
+  { label: "Aadhaar", value: "2" },
+  { label: "Driving Licence", value: "3" },
+  { label: "Passport Number", value: "4" },
+];
+
+export const minorOptions = [
+  { label: "Yes", value: "Y" },
+  { label: "No", value: "N" },
+];
