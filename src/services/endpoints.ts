@@ -253,4 +253,5 @@ export const endpoints = {
   GetPledgeReport: "/api/Dashboard/GetPledgeReport",
   GetFileuploadDetails: "/api/RMS/GetFileuploadDetails",
   ViewMTFStockAgeingReport: "/api/RMS/ViewMTFStockAgeingReport",
+  GetAPGrossBrokeragePerQuarter: "/api/MIS/GetAPGrossBrokeragePerQuarter",
 };

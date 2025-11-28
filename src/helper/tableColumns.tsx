@@ -10544,6 +10544,26 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
+    field: "bankDoc",
+    headerName: "Bank Document",
+    minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "panDocument",
+    headerName: "Pan Document",
+    minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
     field: "ifscCode",
     headerName: "IFSC Code",
     headerClassName: "header-wrap-custom",
@@ -10563,6 +10583,16 @@ export const vendorApprovalColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? "Yes" : "No"),
   },
   {
+    field: "tdsPath",
+    headerName: "TDS Document",
+    minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
     field: "msmeFlag",
     headerName: "MSME Flag",
     headerClassName: "header-wrap-custom",
@@ -10571,6 +10601,16 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     renderCell: (params) => (params.value ? "Yes" : "No"),
+  },
+  {
+    field: "msmePath",
+    headerName: "MSME Document",
+    minWidth: 120,
+    flex: 0.6,
+    sortable: false,
+    filterable: false,
+    headerAlign: "center",
+    align: "center",
   },
   {
     field: "accApproval",
@@ -11403,3 +11443,78 @@ export const extendedAmcReport: GridColDef[] = [
     headerAlign: "center",
   },
 ];
+
+export const apGrossBrokerageColumns: GridColDef[] = [
+  {
+    field: "apCode",
+    headerName: "AP Code",
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "apName",
+    headerName: "AP Name",
+    flex: 1,
+    minWidth: 180,
+    align: "left",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+
+  // Q1
+  {
+    field: "q1",
+    headerName: "Q1 Gross Brokerage",
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => formatNumber(params.value),
+  },
+
+  // Q2
+  {
+    field: "q2",
+    headerName: "Q2 Gross Brokerage",
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => formatNumber(params.value),
+  },
+
+  // Q3
+  {
+    field: "q3",
+    headerName: "Q3 Gross Brokerage",
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => formatNumber(params.value),
+  },
+
+  // Q4
+  {
+    field: "q4",
+    headerName: "Q4 Gross Brokerage",
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => formatNumber(params.value),
+  },
+];
+
+const formatNumber = (value: number) => {
+  if (!value && value !== 0) return "—";
+
+  return new Intl.NumberFormat("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value));
+};

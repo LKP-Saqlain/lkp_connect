@@ -274,7 +274,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
   };
 
   const fetchVendorMasterDetails = () => {
-    const payload = { vendorName: "ALL" };
+    const payload = { vendorName: "ALL", User_id: user_id };
     dispatch(showLoader(""));
 
     apiServices

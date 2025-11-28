@@ -40,6 +40,10 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
   });
 
   useEffect(() => {
+    fetchFileUploadedDetails();
+  }, []);
+
+  const fetchFileUploadedDetails = () => {
     let payload = {
       option: "MTFAgeing",
     };
@@ -59,7 +63,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
         console.log("errror", error);
         dispatch(hideLoader());
       });
-  }, [dispatch]);
+  };
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -69,25 +73,31 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
 
     if (!file) return;
 
+    const fileName = file.name.toLowerCase();
+
     if (fieldName === "shortfallFile") {
       // ONLY CSV
-      if (/\.csv$/i.test(file.name)) {
+      if (fileName.endsWith(".csv")) {
         formik.setFieldValue(fieldName, file);
       } else {
-        formik.setFieldError(fieldName, "Only .csv file is accepted");
-      }
-    } else if (fieldName === "ageingFile") {
-      // XLS / XLSX
-      if (/\.(xlsx|xls)$/i.test(file.name)) {
-        formik.setFieldValue(fieldName, file);
-      } else {
-        formik.setFieldError(
-          fieldName,
-          "Only .xlsx or .xls files are accepted"
-        );
+        const errorMsg = "Only .csv file is accepted";
+        formik.setFieldError(fieldName, errorMsg);
+        ShowToast("error", errorMsg); // <<< SHOW TOAST
       }
     }
 
+    if (fieldName === "ageingFile") {
+      // ONLY XLS / XLSX
+      if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+        formik.setFieldValue(fieldName, file);
+      } else {
+        const errorMsg = "Only .xlsx or .xls files are accepted";
+        formik.setFieldError(fieldName, errorMsg);
+        ShowToast("error", errorMsg); // <<< SHOW TOAST
+      }
+    }
+
+    // Reset the input value so same file can be re-selected
     e.target.value = "";
   };
 
@@ -115,6 +125,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
       if (response?.status === 200) {
         console.log(`${type} upload response:`, response?.data);
         ShowToast("success", response?.data?.message);
+        fetchFileUploadedDetails();
       }
       formik.setFieldValue(
         type === "shortfall" ? "shortfallFile" : "ageingFile",

@@ -1081,4 +1081,11 @@ export const apiServices = {
       payload
     );
   },
+  GetAPGrossBrokeragePerQuarter: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetAPGrossBrokeragePerQuarter,
+      payload
+    );
+  },
 };

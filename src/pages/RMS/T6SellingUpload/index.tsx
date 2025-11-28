@@ -66,11 +66,17 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
     fieldName: "nseFile" | "bseFile"
   ) => {
     const file = e.currentTarget.files?.[0];
+
     if (file && /\.txt$/i.test(file.name)) {
+      // valid .txt
       formik.setFieldValue(fieldName, file);
     } else {
-      formik.setFieldError(fieldName, "Only .txt files are accepted");
+      const errorMsg = "Only .txt files are accepted";
+      formik.setFieldError(fieldName, errorMsg);
+      ShowToast("error", errorMsg); // <<< SHOW ERROR TOAST
     }
+
+    // Allow selecting the same file again
     e.target.value = "";
   };
 

@@ -30,7 +30,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
   }, []);
 
   const fetchVendorMasterDetails = () => {
-    const payload = { vendorName: "ALL" };
+    const payload = { vendorName: "ALL", User_id: user_id };
     dispatch(showLoader(""));
 
     apiServices
@@ -105,7 +105,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
     let base64Data = "";
     let fileExt = "";
     let fileName = "";
-    console.log("row", docType, row);
+    console.log("row111111", docType, row);
 
     if (docType === "PAN") {
       const fileExtension =
