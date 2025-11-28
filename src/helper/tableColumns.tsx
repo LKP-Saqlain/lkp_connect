@@ -3194,11 +3194,11 @@ export const topBirthdays: GridColDef[] = [
 ];
 
 export const cyptoWidgets = [
-  {
-    id: 1,
-    label: "Research Calls",
-    color: "primary",
-  },
+  // {
+  //   id: 1,
+  //   label: "Research Calls",
+  //   color: "primary",
+  // },
   {
     id: 2,
     label: "Clients With Ledger Balance",
