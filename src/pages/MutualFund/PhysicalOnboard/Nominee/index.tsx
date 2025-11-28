@@ -143,25 +143,26 @@ export default function Nominee({
     } else {
       const num = Number(nominee.applicable);
       if (!Number.isInteger(num) || num < 0 || num > 100) {
-        setErr("applicable", "Integer 0-100 required");
+        setErr("applicable", "Integer 0-100 only");
       }
     }
-
-    // dob required
-    if (!nominee.dob || nominee.dob.toString().trim() === "")
-      setErr("dob", "Required");
 
     // minor required
     if (!nominee.minor || nominee.minor.toString().trim() === "")
       setErr("minor", "Required");
 
-    // guardian only if minor = Y
+    // determine minor flag
     const minorVal = nominee.minor?.toString().toLowerCase();
     const isMinor =
       minorVal === "y" || minorVal === "yes" || minorVal === "minor";
+
+    // guardian + dob required only if minor is Yes
     if (isMinor) {
       if (!nominee.guardian.toString().trim())
         setErr("guardian", "Required for minor");
+
+      if (!nominee.dob || nominee.dob.toString().trim() === "")
+        setErr("dob", "Required for minor");
     }
 
     // idType required
@@ -190,7 +191,6 @@ export default function Nominee({
     if (!nominee.pin.toString().trim()) setErr("pin", "Required");
     else {
       const pinDigits = nominee.pin.toString().replace(/\D/g, "");
-      // typical Indian PIN = 6 digits; adjust if you need different rule
       if (!/^\d{6}$/.test(pinDigits)) setErr("pin", "6 digits required");
     }
     if (!nominee.country.toString().trim()) setErr("country", "Required");

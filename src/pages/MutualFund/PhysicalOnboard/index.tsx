@@ -19,20 +19,22 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const ClientInfo = async () => {
-    try {
-      dispatch(showLoader("Fetching Client Code..."));
-      const response = await fetch(
-        `https://middlewareapi.lkp.net.in/api/MF/PhysicalClientInfo?ClientCode=${ClientCode}`,
-        { method: "POST", headers: { "Content-Type": "application/json" } }
-      );
-      const json = await response.json();
-      setData(json?.data || {});
-      dispatch(hideLoader());
-    } catch (error) {
-      console.error(error);
-      dispatch(hideLoader());
-    }
+  const ClientInfo = () => {
+    dispatch(showLoader("Fetching Client Code..."));
+
+    apiServices
+      .PhysicalClientInfo({ ClientCode }) // ⬅ SAME STRUCTURE AS NomineeInsertPhysical
+      .then((response: any) => {
+        console.log("PhysicalClientInfo Response:", response);
+        const data = response?.data?.data || {};
+        setData(data);
+      })
+      .catch((error: any) => {
+        console.error("PhysicalClientInfo Error:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
   };
 
   useEffect(() => {
@@ -311,51 +313,47 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
       });
   };
 
-  const FinalApiCalls = async () => {
-    try {
-      dispatch(showLoader("Processing..."));
+  const FinalApiCalls = () => {
+    dispatch(showLoader("Processing..."));
 
-      //  FIRST API — PhysicalClientRegistration
-      const regRes = await fetch(
-        `https://middlewareapi.lkp.net.in/api/MF/PhysicalClientRegistration?ClientCode=${ClientCode}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+    apiServices
+      .PhysicalClientRegistration({ ClientCode })
+      .then((regResponse: any) => {
+        console.log("Registration Response:", regResponse);
+
+        const regData = regResponse?.data || {};
+        const message = String(regData?.message || "").toLowerCase();
+
+        // SUCCESS CONDITIONS:
+        const isRegistered =
+          message.includes("registered successfully") ||
+          message.includes("save successfully");
+
+        console.log("Registered?", isRegistered);
+
+        if (!isRegistered) {
+          console.warn("Registration NOT successful → skipping Elog");
+          return Promise.reject("Registration failed. Skipping Elog.");
         }
-      );
 
-      const regData = await regRes.json();
-      console.log("Registration Response:", regData);
-
-      //  CHECK → message contains "Registered Successfully"
-      const message = String(regData?.message || "").toLowerCase();
-      const isRegistered = message.includes("registered successfully");
-      console.log(isRegistered);
-
-      if (!isRegistered) {
-        console.warn("Registration NOT successful → skipping Elog");
-        return;
-      }
-
-      //  SECOND API — Elog ONLY after success
-      const elogRes = await fetch(
-        `https://middlewareapi.lkp.net.in/api/MF/ElogForPhysical?ClientCode=${ClientCode}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
+        // if registration OK → call Elog
+        return apiServices.ElogForPhysical({ ClientCode });
+      })
+      .then((elogResponse: any) => {
+        console.log("ElogForPhysical Response:", elogResponse);
+        if (
+          elogResponse?.data?.message === "ELOG Link Generated Successfully"
+        ) {
+          const url = elogResponse?.data?.data;
+          window.open(url, "_blank", "noopener,noreferrer");
         }
-      );
-
-      const elogData = await elogRes.json();
-      console.log("ElogForPhysical Response:", elogData);
-
-      alert("Registration & Elog completed successfully!");
-    } catch (error) {
-      console.error("Error in FinalApiCalls:", error);
-      alert("Something went wrong!");
-    } finally {
-      dispatch(hideLoader());
-    }
+      })
+      .catch((error: any) => {
+        console.error("FinalApiCalls Error:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
   };
 
   const handleSubmit = () => {

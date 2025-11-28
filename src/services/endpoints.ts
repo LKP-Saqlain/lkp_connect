@@ -256,4 +256,5 @@ export const endpoints = {
   NomineeInsertPhysical: "api/MF/NomineeInsertPhysical",
   PhysicalClientRegistration: "api/MF/PhysicalClientRegistration",
   ElogForPhysical: "api/MF/ElogForPhysical",
+  PhysicalClientInfo: "api/MF/PhysicalClientInfo",
 };

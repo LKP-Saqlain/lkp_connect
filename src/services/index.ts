@@ -1084,4 +1084,17 @@ export const apiServices = {
   NomineeInsertPhysical: async (payload: any) => {
     return await apiService("POST", endpoints.NomineeInsertPhysical, payload);
   },
+  PhysicalClientInfo: async (payload: any) => {
+    return await apiService("POST", endpoints.PhysicalClientInfo, payload);
+  },
+  ElogForPhysical: async (payload: any) => {
+    return await apiService("POST", endpoints.ElogForPhysical, payload);
+  },
+  PhysicalClientRegistration: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.PhysicalClientRegistration,
+      payload
+    );
+  },
 };

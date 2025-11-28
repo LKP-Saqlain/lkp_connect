@@ -69,7 +69,7 @@ export const getClientActivityStatusColumns = (
                 Nov: "11",
                 Dec: "12",
               };
-              console.log(handleViewDetails);
+              // console.log(handleViewDetails);
               return `20${year}-${monthMap[month]}-${day}`;
             }
           )
@@ -118,7 +118,7 @@ export const getClientActivityStatusColumns = (
         const maskedMobile = mobile.replace(
           /^(\d{2})(\d+)(\d{2})$/,
           (_: any, prefix: any, middle: any, suffix: any) => {
-            console.log(prefix, suffix, handleViewDetails); // Added only for testing purpose
+            // console.log(prefix, suffix, handleViewDetails); // Added only for testing purpose
             return `${prefix}${"X".repeat(middle.length)}${suffix}`;
           }
         );
@@ -618,7 +618,7 @@ export const getClientDormantStatus = (
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
         (_: any, prefix: any, middle: any, suffix: any) => {
-          console.log(prefix, suffix, handleViewDetails); // Added only for testing purpose
+          // console.log(prefix, suffix, handleViewDetails); // Added only for testing purpose
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
         }
       );
