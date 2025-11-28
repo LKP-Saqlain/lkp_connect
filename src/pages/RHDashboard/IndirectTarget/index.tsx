@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
@@ -22,43 +22,18 @@ interface FormValues {
   selectedZone: { label: string; value: string } | null;
 }
 
-interface APInfo {
-  apCode: string;
-  apName: string;
-}
-
-const randomAPList: APInfo[] = [
-  { apCode: "AP7834", apName: "Radhika Financial Services" },
-  { apCode: "AP9127", apName: "Shree Capital Advisors" },
-  { apCode: "AP4509", apName: "Vertex Wealth Creators" },
-  { apCode: "AP6291", apName: "Prime Equity Solutions" },
-  { apCode: "AP3018", apName: "EverGrow Investments" },
-  { apCode: "AP5582", apName: "BluePeak Securities" },
-  { apCode: "AP8471", apName: "Fortune Trading Hub" },
-  { apCode: "AP1943", apName: "Skyline Investment Partners" },
-  { apCode: "AP6725", apName: "Apex Securities & Traders" },
-  { apCode: "AP2390", apName: "Zenith Capital Associates" },
-];
-
-const randomBrokerage = () =>
-  Number((Math.random() * 500000 + 10000).toFixed(2)); // 10k – 5L
-
-const generateAPRows = () =>
-  randomAPList.map((ap, index) => ({
-    id: index + 1,
-    apCode: ap.apCode,
-    apName: ap.apName,
-    q1: randomBrokerage(),
-    q2: randomBrokerage(),
-    q3: randomBrokerage(),
-    q4: randomBrokerage(),
-  }));
-
 const IndirectTarget = ({ activeSubItem }: { activeSubItem: string }) => {
+  const [quarterlyBrokerage, setQuarterlyBrokerage] = useState({
+    q1: 0,
+    q2: 0,
+    q3: 0,
+    q4: 0,
+  });
+  const [zoneList, setZoneList] = useState([]);
+  const [apBrokerageList, setApBrokerageList] = useState<any[]>([]);
+
   const dispatch = useDispatch<AppDispatch>();
   // const theme = useTheme();
-
-  const [zoneList, setZoneList] = useState([]);
 
   const { accessType } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
@@ -71,6 +46,37 @@ const IndirectTarget = ({ activeSubItem }: { activeSubItem: string }) => {
     initialValues: { selectedZone: null },
     onSubmit: () => {},
   });
+
+  const fetchGrossBrokerageQuarter = () => {
+    let payload = {
+      user_id: user_id,
+      zone: formik.values.selectedZone?.value || "ALL",
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .GetAPGrossBrokeragePerQuarter(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          const apiData = response?.data?.data;
+          console.log("Response →", apiData);
+          setQuarterlyBrokerage(apiData?.quarterlyBrokerage);
+
+          // store array of objects (with id added)
+          const rowsWithId = apiData?.apList?.map((item: any, idx: number) => ({
+            id: idx + 1,
+            ...item,
+          }));
+          console.log("rowsWithId", rowsWithId);
+
+          setApBrokerageList(rowsWithId || []);
+        }
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        console.log("Errror", error);
+      });
+  };
 
   useEffect(() => {
     if (accessType !== "ALL") return;
@@ -115,7 +121,9 @@ const IndirectTarget = ({ activeSubItem }: { activeSubItem: string }) => {
       .finally(() => dispatch(hideLoader()));
   }, [accessType]);
 
-  const apGrossBrokerageRows = useMemo(generateAPRows, []);
+  useEffect(() => {
+    fetchGrossBrokerageQuarter();
+  }, [formik.values.selectedZone?.value]);
 
   return (
     <div className="page-content page-view">
@@ -161,15 +169,32 @@ const IndirectTarget = ({ activeSubItem }: { activeSubItem: string }) => {
 
             <Row className="my-2">
               {[
-                { title: "Q1 Gross Brokerage", value: 150 },
-                { title: "Q2 Gross Brokerage", value: 250 },
-                { title: "Q3 Gross Brokerage", value: 350 },
-                { title: "Q4 Gross Brokerage", value: 450 },
+                {
+                  title: "Gross Brokerage",
+                  value: quarterlyBrokerage.q1,
+                  indirectQuarter: "Q1",
+                },
+                {
+                  title: "Gross Brokerage",
+                  value: quarterlyBrokerage.q2,
+                  indirectQuarter: "Q2",
+                },
+                {
+                  title: "Gross Brokerage",
+                  value: quarterlyBrokerage.q3,
+                  indirectQuarter: "Q3",
+                },
+                {
+                  title: "Gross Brokerage",
+                  value: quarterlyBrokerage.q4,
+                  indirectQuarter: "Q4",
+                },
               ].map((card, i) => (
                 <Col key={i} xxl={3} lg={3} md={6} sm={12}>
                   <DashboardCard
                     title={card.title}
                     value={card.value}
+                    IndirectQuarter={card.indirectQuarter}
                     customClass
                   />
                 </Col>
@@ -197,7 +222,7 @@ const IndirectTarget = ({ activeSubItem }: { activeSubItem: string }) => {
               <CardBody>
                 <UserInfoTable
                   activeSubItem={activeSubItem}
-                  T6Data={apGrossBrokerageRows}
+                  T6Data={apBrokerageList}
                 />
               </CardBody>
             </Card>

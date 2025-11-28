@@ -72,6 +72,7 @@ interface DashboardCardProps {
   mainCustomClass?: any;
   activeMenu?: any;
   customZoneClass?: any;
+  IndirectQuarter?: any;
 }
 
 const DashboardCard: React.FC<DashboardCardProps> = ({
@@ -102,9 +103,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   mainCustomClass,
   activeMenu,
   customZoneClass,
+  IndirectQuarter,
 }) => {
-  // const theme = useTheme();
-  // const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const goldOptions: any = [
     "1 GM Gold Coin",
     "2 GM Gold Coin",
@@ -149,10 +149,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   ]);
 
   const allowedTitles = [
-    "Q1 Gross Brokerage",
-    "Q2 Gross Brokerage",
-    "Q3 Gross Brokerage",
-    "Q4 Gross Brokerage",
+    "Gross Brokerage",
+    "Gross Brokerage",
+    "Gross Brokerage",
+    "Gross Brokerage",
   ];
 
   return (
@@ -167,8 +167,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           height:
             title === "Prize*"
               ? "100px"
-              : allowedTitles.includes(title) ||
-                [
+              : [
                   "Revenue Achieved*",
                   "Client Count",
                   "Active Clients",
@@ -180,6 +179,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                   "Clients Achieved*",
                 ].includes(title)
               ? "3.5rem"
+              : allowedTitles.includes(title)
+              ? "4.5rem"
               : "6.8rem",
 
           minHeight: title === "Prize*" ? "110px" : "auto",
@@ -215,41 +216,55 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
               </h6>
             </div>
           ) : (
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between">
               {/* Left side heading */}
-              <h6
-                className={
-                  title === "Fresh Cash Margin*" ? "fs-12 mb-0" : "fs-12 mb-0"
-                }
-                style={{
-                  textAlign: "left",
-                  color: "#1B1B1B",
-                  fontWeight: "bold",
-                }}
-              >
-                {title}
-              </h6>
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <h6>{IndirectQuarter}</h6>
+                <h6
+                  className={
+                    title === "Fresh Cash Margin*" ? "fs-12 mb-0" : "fs-12 mb-0"
+                  }
+                  style={{
+                    textAlign: "left",
+                    color: "#1B1B1B",
+                    // border: "1px solid black",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {title}
+                </h6>
+              </div>
               {allowedTitles.includes(title) && (
-                <h5
+                <h6
                   className="mb-0"
                   style={{
                     color: "#1B1B1B",
                     fontSize: "17px",
                     fontWeight: "bold",
                     width: rightValue === "Coming Soon" ? "6rem" : undefined,
+                    marginTop: [
+                      "Gross Brokerage",
+                      "Gross Brokerage",
+                      "Gross Brokerage",
+                      "Gross Brokerage",
+                    ].includes(title)
+                      ? "1.3rem"
+                      : "0px",
                   }}
                 >
                   {prefix}
                   {typeof value === "number" ? (
-                    <CountUp
-                      start={0}
-                      end={value ?? 0}
-                      separator=","
-                      decimals={decimals}
-                      prefix=""
-                      duration={1}
-                      formattingFn={formatIndianNumber}
-                    />
+                    <span style={{ fontSize: "15px", fontWeight: "bold" }}>
+                      <CountUp
+                        start={0}
+                        end={value ?? 0}
+                        separator=","
+                        decimals={decimals}
+                        prefix=""
+                        duration={1}
+                        formattingFn={formatIndianNumber}
+                      />
+                    </span>
                   ) : (
                     title !== "Prize*" && <span>{value}</span>
                   )}
@@ -261,7 +276,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                   >
                     {suffix}
                   </small>
-                </h5>
+                </h6>
               )}
               {[
                 "Revenue Achieved*",
@@ -506,10 +521,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                   title !== "Upcoming Dormant Clients" &&
                   title !== "Active Clients" &&
                   title !== "Incentive Earned" &&
-                  title !== "Q1 Gross Brokerage" &&
-                  title !== "Q2 Gross Brokerage" &&
-                  title !== "Q3 Gross Brokerage" &&
-                  title !== "Q4 Gross Brokerage" && (
+                  title !== "Gross Brokerage" &&
+                  title !== "Gross Brokerage" &&
+                  title !== "Gross Brokerage" &&
+                  title !== "Gross Brokerage" && (
                     <div>
                       <h5
                         className="mb-0"
@@ -767,8 +782,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                       >
                         {badge.label}
                       </Link>
-
-                      {/* Keep default tight spacing when customClass is false */}
                       {index < badges.length - 1 && <span>&nbsp;</span>}
                     </React.Fragment>
                   ))}
