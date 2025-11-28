@@ -11417,3 +11417,78 @@ export const extendedAmcReport: GridColDef[] = [
     headerAlign: "center",
   },
 ];
+
+export const apGrossBrokerageColumns: GridColDef[] = [
+  {
+    field: "apCode",
+    headerName: "AP Code",
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "apName",
+    headerName: "AP Name",
+    flex: 1,
+    minWidth: 180,
+    align: "left",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+
+  // Q1
+  {
+    field: "q1",
+    headerName: "Q1 Gross Brokerage",
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => formatNumber(params.value),
+  },
+
+  // Q2
+  {
+    field: "q2",
+    headerName: "Q2 Gross Brokerage",
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => formatNumber(params.value),
+  },
+
+  // Q3
+  {
+    field: "q3",
+    headerName: "Q3 Gross Brokerage",
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => formatNumber(params.value),
+  },
+
+  // Q4
+  {
+    field: "q4",
+    headerName: "Q4 Gross Brokerage",
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => formatNumber(params.value),
+  },
+];
+
+const formatNumber = (value: number) => {
+  if (!value && value !== 0) return "—";
+
+  return new Intl.NumberFormat("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value));
+};

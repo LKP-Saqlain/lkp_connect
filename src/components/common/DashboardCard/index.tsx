@@ -148,6 +148,13 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
     upcomingDormantAccountData,
   ]);
 
+  const allowedTitles = [
+    "Q1 Gross Brokerage",
+    "Q2 Gross Brokerage",
+    "Q3 Gross Brokerage",
+    "Q4 Gross Brokerage",
+  ];
+
   return (
     <>
       <Card
@@ -160,19 +167,21 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
           height:
             title === "Prize*"
               ? "100px"
-              : title === "Revenue Achieved*" ||
-                title === "Client Count" ||
-                title === "Active Clients" ||
-                title === "Unique Traded Clients*" ||
-                title === "New Accounts Added*" ||
-                title === "Upcoming Dormant Clients" ||
-                title === "Incentive Earned"
-              ? "3.5rem"
-              : title === "Client Target*"
-              ? "3.5rem"
-              : title === "Clients Achieved*"
+              : allowedTitles.includes(title) ||
+                [
+                  "Revenue Achieved*",
+                  "Client Count",
+                  "Active Clients",
+                  "Unique Traded Clients*",
+                  "New Accounts Added*",
+                  "Upcoming Dormant Clients",
+                  "Incentive Earned",
+                  "Client Target*",
+                  "Clients Achieved*",
+                ].includes(title)
               ? "3.5rem"
               : "6.8rem",
+
           minHeight: title === "Prize*" ? "110px" : "auto",
           ...cardStyle,
         }}
@@ -220,6 +229,40 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
               >
                 {title}
               </h6>
+              {allowedTitles.includes(title) && (
+                <h5
+                  className="mb-0"
+                  style={{
+                    color: "#1B1B1B",
+                    fontSize: "17px",
+                    fontWeight: "bold",
+                    width: rightValue === "Coming Soon" ? "6rem" : undefined,
+                  }}
+                >
+                  {prefix}
+                  {typeof value === "number" ? (
+                    <CountUp
+                      start={0}
+                      end={value ?? 0}
+                      separator=","
+                      decimals={decimals}
+                      prefix=""
+                      duration={1}
+                      formattingFn={formatIndianNumber}
+                    />
+                  ) : (
+                    title !== "Prize*" && <span>{value}</span>
+                  )}
+                  <small
+                    className="fs-12"
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {suffix}
+                  </small>
+                </h5>
+              )}
               {[
                 "Revenue Achieved*",
                 "Client Target*",
@@ -462,7 +505,11 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                   title !== "Unique Traded Clients*" &&
                   title !== "Upcoming Dormant Clients" &&
                   title !== "Active Clients" &&
-                  title !== "Incentive Earned" && (
+                  title !== "Incentive Earned" &&
+                  title !== "Q1 Gross Brokerage" &&
+                  title !== "Q2 Gross Brokerage" &&
+                  title !== "Q3 Gross Brokerage" &&
+                  title !== "Q4 Gross Brokerage" && (
                     <div>
                       <h5
                         className="mb-0"

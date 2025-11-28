@@ -10,6 +10,7 @@ import PartnerContestReport from "./partnerContest";
 import EmployeeTargetReport from "./EmployeeTarget";
 import ZoneTarget from "./zoneTarget";
 import AmcReport from "./AMC Report";
+import IndirectTarget from "./IndirectTarget";
 
 interface RH {
   activeSubItem: string;
@@ -32,6 +33,9 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
       <PartnerContestReport activeSubItem={activeSubItem} />
     ),
     [SubItemKeys.RH_AMC_REPORT]: <AmcReport activeSubItem={activeSubItem} />,
+    [SubItemKeys.INDIRECT_CHANNEL_TARGET]: (
+      <IndirectTarget activeSubItem={activeSubItem} />
+    ),
   };
 
   const getComponent = () => {
