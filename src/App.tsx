@@ -21,6 +21,9 @@ const ForgotPassword = lazy(
 );
 const SideBar = lazy(() => import("./components/sideBar"));
 const DpMandate = lazy(() => import("./pages/Masters/MandateCall"));
+const FetchMTFActivation = lazy(() => import("./pages/MTF"));
+const ConsentOtp = lazy(() => import("./pages/MTF/consentOtp"));
+const CongratsPage = lazy(() => import("./pages/MTF/congratsScreen"));
 
 const App = () => {
   const [serverOnline, setServerOnline] = useState(true);
@@ -32,16 +35,16 @@ const App = () => {
       const res = await fetch("/favicon.png", { cache: "no-store" });
       if (res.ok) {
         if (!serverOnline) {
-          console.log("✅ Server back online — reloading...");
+          console.log(" Server back online — reloading...");
           setServerOnline(true);
           window.location.reload();
         }
       } else {
-        console.warn("⚠️ Server returned bad status");
+        console.warn(" Server returned bad status");
         setServerOnline(false);
       }
     } catch (err) {
-      console.error("❌ Server unreachable:", err);
+      console.error(" Server unreachable:", err);
       setServerOnline(false);
     }
   };
@@ -125,6 +128,30 @@ const App = () => {
           <Route
             path="/PhysicalStats/:encryptedCode"
             element={<StatusCard />}
+          />
+          <Route
+            path="/MTFSegmentActivation"
+            element={
+              <PrivateRoute
+                customLogin={false}
+                dashElement={<FetchMTFActivation />}
+              />
+            }
+          />
+          <Route
+            path="/otp"
+            element={
+              <PrivateRoute customLogin={false} dashElement={<ConsentOtp />} />
+            }
+          />
+          <Route
+            path="/congratulations"
+            element={
+              <PrivateRoute
+                customLogin={false}
+                dashElement={<CongratsPage />}
+              />
+            }
           />
         </Routes>
       </Suspense>

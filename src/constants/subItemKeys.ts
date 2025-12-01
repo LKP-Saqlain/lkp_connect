@@ -15,6 +15,7 @@ export const SubItemKeys = {
   RH_ZONE_TARGET: "Zone Target Q3",
   RH_AMC_REPORT: "Client DP AMC Report",
   SPIP_CLIENT_MIS: "SPIP Client MIS",
+  INDIRECT_CHANNEL_TARGET: "Indirect Channel Target",
 } as const;
 
 export type SubItemKey = (typeof SubItemKeys)[keyof typeof SubItemKeys];

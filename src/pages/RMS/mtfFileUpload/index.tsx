@@ -40,6 +40,10 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
   });
 
   useEffect(() => {
+    fetchFileUploadedDetails();
+  }, []);
+
+  const fetchFileUploadedDetails = () => {
     let payload = {
       option: "MTFAgeing",
     };
@@ -59,18 +63,41 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
         console.log("errror", error);
         dispatch(hideLoader());
       });
-  }, [dispatch]);
+  };
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     fieldName: "shortfallFile" | "ageingFile"
   ) => {
     const file = e.currentTarget.files?.[0];
-    if (file && /\.(xlsx|xls)$/i.test(file.name)) {
-      formik.setFieldValue(fieldName, file);
-    } else {
-      formik.setFieldError(fieldName, "Only .xlsx or .xls files are accepted");
+
+    if (!file) return;
+
+    const fileName = file.name.toLowerCase();
+
+    if (fieldName === "shortfallFile") {
+      // ONLY CSV
+      if (fileName.endsWith(".csv")) {
+        formik.setFieldValue(fieldName, file);
+      } else {
+        const errorMsg = "Only .csv file is accepted";
+        formik.setFieldError(fieldName, errorMsg);
+        ShowToast("error", errorMsg); // <<< SHOW TOAST
+      }
     }
+
+    if (fieldName === "ageingFile") {
+      // ONLY XLS / XLSX
+      if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
+        formik.setFieldValue(fieldName, file);
+      } else {
+        const errorMsg = "Only .xlsx or .xls files are accepted";
+        formik.setFieldError(fieldName, errorMsg);
+        ShowToast("error", errorMsg); // <<< SHOW TOAST
+      }
+    }
+
+    // Reset the input value so same file can be re-selected
     e.target.value = "";
   };
 
@@ -98,6 +125,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
       if (response?.status === 200) {
         console.log(`${type} upload response:`, response?.data);
         ShowToast("success", response?.data?.message);
+        fetchFileUploadedDetails();
       }
       formik.setFieldValue(
         type === "shortfall" ? "shortfallFile" : "ageingFile",
@@ -132,7 +160,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
         type="file"
         id={fieldName}
         name={fieldName}
-        accept=".xlsx,.xls"
+        accept={fieldName === "shortfallFile" ? ".csv" : ".xlsx,.xls"}
         style={{ display: "none" }}
         onChange={(e) => handleFileChange(e, fieldName)}
       />
@@ -164,14 +192,24 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
       ) : (
         <span style={{ fontSize: "13px" }}>
           <strong>Click to upload</strong> or drag and drop your{" "}
-          <strong>.xlsx / .xls</strong> file here
+          <strong>
+            {fieldName === "shortfallFile" ? ".csv" : ".xlsx / .xls"}
+          </strong>{" "}
+          file here
         </span>
       )}
 
       <div className="mt-1">
         <small className="text-muted d-block" style={{ fontSize: "12px" }}>
-          • Only <strong>.xlsx</strong> or <strong>.xls</strong> files are
-          accepted.
+          • Only{" "}
+          {fieldName === "shortfallFile" ? (
+            <strong>.csv</strong>
+          ) : (
+            <>
+              <strong>.xlsx</strong> or <strong>.xls</strong>
+            </>
+          )}{" "}
+          files are accepted.
         </small>
       </div>
 

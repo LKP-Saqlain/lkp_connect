@@ -257,4 +257,5 @@ export const endpoints = {
   PhysicalClientRegistration: "api/MF/PhysicalClientRegistration",
   ElogForPhysical: "api/MF/ElogForPhysical",
   PhysicalClientInfo: "api/MF/PhysicalClientInfo",
+  GetAPGrossBrokeragePerQuarter: "/api/MIS/GetAPGrossBrokeragePerQuarter",
 };

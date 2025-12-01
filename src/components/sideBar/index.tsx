@@ -708,7 +708,9 @@ const SideBar = () => {
       <ClientTradingReport activeSubItem={activeSubItem} />
     ),
     "CTCL Wise Activity Report": <CTCLReport activeSubItem={activeSubItem} />,
-    "Unpledge Report": <UnpledgeRequest activeSubItem={activeSubItem} />,
+    "Unpledge Request Report": (
+      <UnpledgeRequest activeSubItem={activeSubItem} />
+    ),
     "DP AMC Transaction": <DPTransactionIndex activeSubItem={activeSubItem} />,
     "Pledge Request Report": <PledgeReport activeSubItem={activeSubItem} />,
   };
