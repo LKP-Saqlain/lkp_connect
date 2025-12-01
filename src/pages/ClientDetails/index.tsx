@@ -132,6 +132,7 @@ const ClientDetails = ({
       try {
         dispatch(showLoader("Please wait, we are processing your request..."));
         const response = await apiServices.ClientDetails(payload);
+        console.log("ClientDetailsResponse-->", response?.data);
 
         if (response?.status === 200) {
           dispatch(hideLoader());

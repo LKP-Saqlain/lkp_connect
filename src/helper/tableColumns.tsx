@@ -31,23 +31,24 @@ export const getClientActivityStatusColumns = (
       headerName: "Client Code",
       align: "left",
       flex: 1,
-      minWidth: 100, // Reasonable on all screens
+      minWidth: 90,
     },
     {
       disableColumnMenu: true,
       field: "ClientName",
       headerName: "Client Name",
       flex: 2,
-      minWidth: 160, // Names can be long; ensure space
+      minWidth: 190,
     },
     {
       field: "LastTradeDate",
       headerClassName: "header-wrap-custom",
       headerName: "Last Trade Date",
       flex: 1.5,
-      minWidth: 120, // Date format requires a bit more space
+      minWidth: 100,
       disableColumnMenu: true,
       align: "center",
+      headerAlign: "center",
       valueGetter: (params: any) => {
         const rawDate = params;
         if (!rawDate) return null;
@@ -86,6 +87,22 @@ export const getClientActivityStatusColumns = (
       },
     },
     {
+      disableColumnMenu: true,
+      field: "RMName",
+      headerName: "RM Name",
+      flex: 2,
+      minWidth: 200, // Names can be long; ensure space
+      renderCell: (params) => params.value || "—",
+    },
+    {
+      disableColumnMenu: true,
+      field: "DealerName",
+      headerName: "Dealer Name",
+      flex: 2,
+      minWidth: 160, // Names can be long; ensure space
+      renderCell: (params) => params.value || "—",
+    },
+    {
       field: "ClientStatus",
       headerName: "Status",
       flex: 0.8,
@@ -99,7 +116,7 @@ export const getClientActivityStatusColumns = (
       headerName: "Branch Code",
       headerClassName: "header-wrap-custom",
       flex: 0.8,
-      minWidth: 80,
+      minWidth: 65,
       align: "center",
       headerAlign: "center",
       disableColumnMenu: true,
@@ -109,7 +126,7 @@ export const getClientActivityStatusColumns = (
       field: "MobileNo",
       headerName: "Mobile No",
       flex: 1,
-      minWidth: 120,
+      minWidth: 110,
       align: "center",
       headerAlign: "center",
       disableColumnMenu: true,
@@ -140,7 +157,7 @@ export const getClientActivityStatusColumns = (
             headerName: "MTF Status",
             headerClassName: "header-wrap-custom",
             flex: 1,
-            minWidth: 70, // Increased to prevent overlap on smaller devices
+            minWidth: 60, // Increased to prevent overlap on smaller devices
             align: "center",
             headerAlign: "center",
             disableColumnMenu: true,
@@ -155,7 +172,7 @@ export const getClientActivityStatusColumns = (
       field: "POAStatus",
       headerName: "POA Status",
       flex: 1,
-      minWidth: 70, // Slightly wider for better label display
+      minWidth: 60, // Slightly wider for better label display
       align: "center",
       headerAlign: "center",
       disableColumnMenu: true,
@@ -164,7 +181,7 @@ export const getClientActivityStatusColumns = (
     {
       field: "viewDetails",
       headerName: "Details",
-      minWidth: 80, // Use minWidth instead of fixed width for better responsiveness
+      minWidth: 60, // Use minWidth instead of fixed width for better responsiveness
       flex: 1,
       align: "center",
       headerAlign: "center",
@@ -564,6 +581,7 @@ export const getClientDormantStatus = (
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
+
     valueGetter: (params: any) => {
       const rawDate = params;
       if (!rawDate) return null; // Handle missing data

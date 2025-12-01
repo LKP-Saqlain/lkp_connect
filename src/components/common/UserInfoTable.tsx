@@ -2112,7 +2112,7 @@ const DataTable = ({
         }
         return column;
       });
-    } else if (activeSubItem === "Unpledge Report") {
+    } else if (activeSubItem === "Unpledge Request Report") {
       return TableColumns.clientUnpledgeReport.map((column) => ({
         ...column,
       }));
