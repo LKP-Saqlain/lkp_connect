@@ -368,12 +368,14 @@ const MutualFundIndex = () => {
                 <Typography fontWeight={500}>
                   Client: {clientCode} - {capitalizeEachWord(clientName)}
                 </Typography>
-                <IconButton
-                  size="small"
-                  onClick={() => setShowClientCodeModal(true)}
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
+                {showPhysicalOnboard || (
+                  <IconButton
+                    size="small"
+                    onClick={() => setShowClientCodeModal(true)}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                )}
               </Box>
             )}
           </Box>

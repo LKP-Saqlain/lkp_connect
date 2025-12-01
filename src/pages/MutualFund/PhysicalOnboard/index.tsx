@@ -7,6 +7,7 @@ import { Button } from "rsuite";
 import PrimaryHolder from "./PrimaryHolder";
 import Nominee from "./Nominee";
 import { apiServices } from "../../../services";
+import { encryptAES } from "../../../utils/encryptDecrypt";
 type NomStatus = { [k: number]: boolean };
 
 const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
@@ -313,47 +314,51 @@ const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {
       });
   };
 
-  const FinalApiCalls = () => {
-    dispatch(showLoader("Processing..."));
+  const FinalApiCalls = async () => {
+    try {
+      dispatch(showLoader("Processing..."));
 
-    apiServices
-      .PhysicalClientRegistration({ ClientCode })
-      .then((regResponse: any) => {
-        console.log("Registration Response:", regResponse);
-
-        const regData = regResponse?.data || {};
-        const message = String(regData?.message || "").toLowerCase();
-
-        // SUCCESS CONDITIONS:
-        const isRegistered =
-          message.includes("registered successfully") ||
-          message.includes("save successfully");
-
-        console.log("Registered?", isRegistered);
-
-        if (!isRegistered) {
-          console.warn("Registration NOT successful → skipping Elog");
-          return Promise.reject("Registration failed. Skipping Elog.");
-        }
-
-        // if registration OK → call Elog
-        return apiServices.ElogForPhysical({ ClientCode });
-      })
-      .then((elogResponse: any) => {
-        console.log("ElogForPhysical Response:", elogResponse);
-        if (
-          elogResponse?.data?.message === "ELOG Link Generated Successfully"
-        ) {
-          const url = elogResponse?.data?.data;
-          window.open(url, "_blank", "noopener,noreferrer");
-        }
-      })
-      .catch((error: any) => {
-        console.error("FinalApiCalls Error:", error);
-      })
-      .finally(() => {
-        dispatch(hideLoader());
+      // 1️⃣ Registration
+      const regResponse = await apiServices.PhysicalClientRegistration({
+        ClientCode,
       });
+      console.log("Registration Response:", regResponse);
+
+      const regData = regResponse?.data || {};
+      const message = String(regData?.message || "").toLowerCase();
+
+      const isRegistered =
+        message.includes("registered successfully") ||
+        message.includes("save successfully");
+
+      console.log("Registered?", isRegistered);
+
+      if (!isRegistered) {
+        console.warn("Registration NOT successful → skipping Elog");
+        return; // stop further execution
+      }
+
+      // 2️⃣ Call Elog API
+      let loopBackUrl = encryptAES(ClientCode);
+      loopBackUrl = encodeURIComponent(loopBackUrl);
+      loopBackUrl = `${window.location.origin}/PhysicalStats/${loopBackUrl}`;
+
+      const elogResponse = await apiServices.ElogForPhysical({
+        ClientCode,
+        loopBackUrl,
+      });
+
+      console.log("ElogForPhysical Response:", elogResponse);
+
+      if (elogResponse?.data?.message === "ELOG Link Generated Successfully") {
+        const url = elogResponse?.data?.data;
+        window.open(url, "_blank", "noopener,noreferrer");
+      }
+    } catch (error) {
+      console.error("FinalApiCalls Error:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
   };
 
   const handleSubmit = () => {

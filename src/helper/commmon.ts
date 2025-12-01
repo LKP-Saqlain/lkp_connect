@@ -452,3 +452,20 @@ export const minorOptions = [
   { label: "Yes", value: "Y" },
   { label: "No", value: "N" },
 ];
+
+export const ELOG_STATUS_LIST = [
+  { code: "100", message: "Only Primary Holder Elog Approved." },
+  { code: "111", message: "All Holders Elog Approved." },
+  {
+    code: "101",
+    message: "Only Primary Holder and Third Holder Elog Approved.",
+  },
+  { code: "110", message: "Primary Holder and Second Holder Elog Approved." },
+  {
+    code: "011",
+    message: "Only Secondary Holder and Third Holder Elog Approved.",
+  },
+  { code: "010", message: "Only Secondary Elog Approved." },
+  { code: "001", message: "Only Third Elog Approved." },
+  { code: "000", message: "All Holder Elog not approved." },
+];
