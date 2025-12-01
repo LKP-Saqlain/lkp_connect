@@ -292,7 +292,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                   </Col>
                   <Col xxl={3} lg={3} md={6} sm={12}>
                     <DashboardCard
-                      title="Unique Traded Clients*"
+                      title="Unique Clients Traded*"
                       value={tradedClientCount}
                       animationData={ActiveClient}
                       activeClients={activeClients}

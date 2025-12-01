@@ -60,7 +60,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
     selectedBranchCode: Yup.object()
       .nullable()
       .required("Branch code is required"),
-    // isInValue: Yup.string().required("SYMBOL / ISIN is required"),
+    isInValue: Yup.string().required("SYMBOL / ISIN is required"),
   });
 
   interface FormValues {
@@ -585,7 +585,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                                 formik.errors.selectedBranchCode) ||
                               (formik.touched.isInValue &&
                                 formik.errors.isInValue)
-                                ? "-18px"
+                                ? "-25px"
                                 : "",
                           }}
                         >
@@ -614,7 +614,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                                 formik.errors.selectedBranchCode) ||
                               (formik.touched.isInValue &&
                                 formik.errors.isInValue)
-                                ? "-18px"
+                                ? "-25px"
                                 : "",
                           }}
                         >

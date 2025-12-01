@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Container, Card, CardHeader, CardBody } from "reactstrap";
@@ -9,8 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import ShowToast from "../../../utils/toastUtils";
+import { formatDateTime } from "../../../helper/commmon";
+
+interface UploadDetail {
+  type: string;
+  uploadedon: string;
+  uploadedBy: string;
+}
 
 const T6SellingFileUpload = ({ activeSubItem }: any) => {
+  const [uploadDetails, setUploadDetails] = useState<UploadDetail[]>([]);
+
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -29,6 +38,28 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
       console.log("Form Values:", values);
     },
   });
+
+  useEffect(() => {
+    let payload = {
+      option: "T6Selling",
+    };
+    dispatch(showLoader(""));
+
+    apiServices
+      .GetFileuploadDetails(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          console.log("ResponseeeGetFileuploadDetails", response?.data?.data);
+          const data = response?.data?.data || [];
+          setUploadDetails(data);
+        }
+      })
+      .catch((error) => {
+        console.log("errror", error);
+        dispatch(hideLoader());
+      });
+  }, [dispatch]);
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -144,6 +175,9 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
     </div>
   );
 
+  const nseDetails = uploadDetails.find((item: any) => item.type === "NSE");
+  const bseDetails = uploadDetails.find((item: any) => item.type === "BSE");
+
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -186,6 +220,7 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
                   <label className="form-label mb-1">
                     T6 NSE Selling File Upload
                   </label>
+
                   {renderUploadBox("nseFile", formik.values.nseFile)}
                   <div style={{ marginTop: "10px" }}>
                     <Button
@@ -211,6 +246,24 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
                     >
                       Upload T6 NSE Selling File
                     </Button>
+                    {nseDetails && (
+                      <div
+                        style={{
+                          marginTop: "8px",
+                          fontSize: "11px",
+                          color: "#444",
+                        }}
+                      >
+                        <div>
+                          <strong>Last Uploaded By:</strong>{" "}
+                          {nseDetails.uploadedBy}
+                        </div>
+                        <div>
+                          <strong>Last Uploaded On:</strong>{" "}
+                          {formatDateTime(nseDetails?.uploadedon)}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -251,6 +304,24 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
                     >
                       Upload T6 BSE Selling File
                     </Button>
+                    {bseDetails && (
+                      <div
+                        style={{
+                          marginTop: "8px",
+                          fontSize: "11px",
+                          color: "#444",
+                        }}
+                      >
+                        <div>
+                          <strong>Last Uploaded By:</strong>{" "}
+                          {bseDetails.uploadedBy}
+                        </div>
+                        <div>
+                          <strong>Last Uploaded On:</strong>{" "}
+                          {formatDateTime(bseDetails?.uploadedon)}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

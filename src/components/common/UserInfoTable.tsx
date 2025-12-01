@@ -6,6 +6,9 @@ import {
   ClientCashColumns,
   DormantOverViewColumns,
   T6Columns,
+  AmcZoneReportDirect,
+  AmcZoneReportIndirect,
+  DPTransactionColumns,
   T6OverViewColumns,
   topBirthdays,
   DPDebitRecovery,
@@ -72,6 +75,7 @@ import {
   t6SellingReportColumns,
   regMasterColumns,
   APTopClientsFields,
+  pledgeReportColumns,
 } from "../../helper/tableColumns.tsx";
 // import { Box, Button } from "@mui/material";
 import SearchAppBar from "../../components/common/SearchBar";
@@ -90,6 +94,7 @@ import { RootState } from "../../redux/store.ts";
 import { useSelector } from "react-redux";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import InfoIcon from "@mui/icons-material/Info";
 // import { useNavigate } from "react-router-dom";
 
 interface Trade {
@@ -116,7 +121,6 @@ interface SelectedWidgetProps {
   handleSearchUser?: () => void;
   customHide?: any;
   searchValue?: any;
-  onFilterChange?: (filter: string) => void;
   tradeCWCBData?: any;
   handleEmailSend?: (
     Payment_link: string,
@@ -159,6 +163,8 @@ interface SelectedWidgetProps {
   beneficiaryName?: any;
   handleUpdate?: (data: any) => void;
   onViewAmcDetails?: (row: any) => void;
+  handleMTFRow?: (row: any) => void;
+  openNudgeTable?: () => void;
 }
 
 const DataTable = ({
@@ -175,7 +181,6 @@ const DataTable = ({
   showSearch = false,
   customHide,
   searchValue,
-  onFilterChange,
   tradeCWCBData,
   emailSentStatus,
   activeSubItem,
@@ -211,6 +216,8 @@ const DataTable = ({
   setSegmentRow,
   onViewAmcDetails,
   beneficiaryName,
+  handleMTFRow,
+  openNudgeTable,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -548,80 +555,6 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "KYC Approval") {
-      // return BrokerageKyc.map((column) => {
-      //   if (column.field === "remark") {
-      //     return {
-      //       ...column,
-      //       renderCell: (params: any) => (
-      //         <div style={{ display: "flex", justifyContent: "center" }}>
-      //           <div
-      //             onClick={() => {
-      //               setSelectedRow(params.row);
-      //               HandleApprovalModal("approve");
-      //               // HandleApprovalModal("approve", params);
-      //               console.log(params.row.rowId, "selectedrow approve");
-      //             }}
-      //             style={{
-      //               cursor: "pointer",
-      //               display: "flex",
-      //               alignItems: "center",
-      //               marginRight: 5,
-      //             }}
-      //           >
-      //             <Tooltip title="Approve" arrow placement="top">
-      //               <CheckCircleIcon
-      //                 style={{ color: "green", marginLeft: 4 }}
-      //               />
-      //             </Tooltip>
-      //           </div>
-      //           <div style={{ fontSize: 20, color: "gray" }}>|</div>
-      //           <div
-      //             onClick={() => {
-      //               setSelectedRow(params.row);
-      //               HandleApprovalModal("reject");
-      //             }}
-      //             style={{
-      //               cursor: "pointer",
-      //               display: "flex",
-      //               alignItems: "center",
-      //               marginLeft: 5,
-      //             }}
-      //           >
-      //             <Tooltip title="Reject" arrow placement="top">
-      //               <CancelIcon style={{ color: "red", marginLeft: 4 }} />
-      //             </Tooltip>
-      //           </div>
-      //         </div>
-      //       ),
-      //     };
-      //   }
-      //   if (column.field === "consentfilename") {
-      //     return {
-      //       ...column,
-      //       renderCell: (params: any) => {
-      //         const fileName = params.row?.consentfilename;
-
-      //         return fileName ? (
-      //           <button
-      //             onClick={() => handleDownload(params.row)}
-      //             style={{
-      //               color: "#11395C",
-      //               textDecoration: "underline",
-      //               background: "none",
-      //               border: "none",
-      //               cursor: "pointer",
-      //             }}
-      //           >
-      //             <DownloadForOfflineIcon />
-      //           </button>
-      //         ) : (
-      //           "╶─"
-      //         );
-      //       },
-      //     };
-      //   }
-      //   return column;
-      // });
       return BrokerageKyc.map((column) => {
         if (column.field === "More Details") {
           return {
@@ -2313,9 +2246,49 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "MTF Ageing Report") {
-      return ageingColumns.map((column) => ({
-        ...column,
-      }));
+      return ageingColumns.map((column) => {
+        if (column.field === "clientcode") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <span
+                  style={{
+                    color: "#1976d2",
+                    cursor: "pointer",
+                    // textDecoration: "underline",
+                  }}
+                  onClick={() => {
+                    handleMTFRow?.(params?.row);
+                    openNudgeTable?.();
+                  }}
+                >
+                  <Tooltip
+                    title={
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "6px",
+                        }}
+                      >
+                        {" "}
+                        <InfoIcon sx={{ fontSize: "14px" }} />
+                        Click here for more details{" "}
+                      </span>
+                    }
+                    arrow
+                    placement="top"
+                  >
+                    {params.value}
+                  </Tooltip>
+                </span>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else if (activeSubItem === "Vendor Details Report") {
       return vendorApprovalColumns.map((column) => ({
         ...column,
@@ -2326,6 +2299,156 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "REG Master Records") {
       return regMasterColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client DP AMC Report direct") {
+      return AmcZoneReportDirect.map((column) => {
+        if (column.field === "submitted") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              // Otherwise, show the download button
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, column.field); // trigger download
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.submitted}
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "completed") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              // Otherwise, show the download button
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, column.field); // trigger download
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.completed}
+                </button>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
+    } else if (activeSubItem === "Client DP AMC Report indirect") {
+      return AmcZoneReportIndirect.map((column) => {
+        if (column.field === "submitted") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              // Otherwise, show the download button
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, column.field); // trigger download
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.submitted}
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "completed") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              // Otherwise, show the download button
+              return (
+                <button
+                  onClick={() => {
+                    handleDownload(params.row, column.field); // trigger download
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.completed}
+                </button>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
+    } else if (activeSubItem === "DP AMC Transaction") {
+      return DPTransactionColumns.map((column) => {
+        if (column.field === "downloadAMC") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const status = params.row?.schemeStatus;
+
+              // Show dash if EsignPending or null/undefined
+              if (status === "Submitted" || status === "Completed") {
+                // Otherwise, show the download button
+                return (
+                  <button
+                    onClick={() => {
+                      handleDownload(params.row); // trigger download
+                      console.log(
+                        "DP AMC Transaction row",
+                        params.row.schemeStatus
+                      );
+                    }}
+                    style={{
+                      color: "#11395C",
+                      textDecoration: "underline",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <DownloadForOfflineIcon />
+                  </button>
+                );
+              } else {
+                return <>—</>;
+              }
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
+    } else if (activeSubItem === "Pledge Request Report") {
+      return pledgeReportColumns.map((column) => ({
         ...column,
       }));
     } else {
@@ -2373,20 +2496,6 @@ const DataTable = ({
       : T6Data;
   console.log("rowName from userinfo", rowName);
 
-  // const rowHeight = 200;
-  // const headerHeight = 80;
-  // const padding = 60;
-  // const minHeight = activeMenu === "Regulatory Announcement" ? 800 : 200;
-  // papper height
-  // const OFFSET = 120;
-  // const fullAvailableHeight = screenHeight - OFFSET;
-  // const calculatedHeight = Math.min(
-  //   Math.max(
-  //     rowName && rowName.length * rowHeight + headerHeight + padding,
-  //     minHeight
-  //   ),
-  //   fullAvailableHeight
-  // );
   useEffect(() => {
     console.log("childData", customLedgerData, selectedWidget);
   }, [customLedgerData, selectedWidget]);
@@ -2499,7 +2608,6 @@ const DataTable = ({
           handleSearchUser={handleSearchUser}
           searchTableValue={searchValue}
           selectedWidget={selectedWidget}
-          onFilterChange={onFilterChange}
           showExcel={showExcel}
           handleExcelDownload={handleExcelDownload}
           totalCount={totalCount}
@@ -2530,11 +2638,11 @@ const DataTable = ({
                 : commonLedgerData
               : selectedWidget === "Total Clients"
               ? T6Data
-              : selectedWidget === "Active Clients"
-              ? activeGroupedClients
-              : selectedWidget === "Inactive Clients"
-              ? inactiveGroupedClients
-              : selectedWidget === "Active Clients" &&
+              : // : selectedWidget === "Active Clients"
+              // ? activeGroupedClients
+              // : selectedWidget === "Inactive Clients"
+              // ? inactiveGroupedClients
+              selectedWidget === "Active Clients" &&
                 activeSubItem === "DP Debit Recovery"
               ? activeGroupedClients
               : selectedWidget === "Inactive Clients" &&

@@ -94,6 +94,7 @@ const pdfDownloadEndpoints = [
   endpoints.GenerateAndDownloadInvoice,
   endpoints.GenerateClientPerformancePdf,
   endpoints.GenerateTPInvoice,
+  endpoints.DPAMCDownloadFile,
 ];
 
 const multipartEndpoints = [

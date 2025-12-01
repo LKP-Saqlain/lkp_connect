@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import BasicTabs from "../../components/common/MutualFunds/NavTabs";
 import { mainMenu } from "../../pages/MutualFund/mfTypes";
 import {
@@ -10,7 +10,15 @@ import {
   ModalFooter,
 } from "reactstrap";
 import MfOverview from "../../components/common/MutualFunds/MfOverview";
-import { TextField, Typography, IconButton, Box, Button } from "@mui/material";
+import {
+  TextField,
+  Typography,
+  IconButton,
+  Box,
+  Button,
+  Autocomplete,
+  CircularProgress,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
@@ -18,6 +26,8 @@ import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { apiServices } from "../../services";
 import { setEncryptedValue } from "../../utils/loocalEncrypt";
 import ShowToast from "../../utils/toastUtils";
+import { capitalizeEachWord } from "../../utils";
+import PhysicalOnboard from "./PhysicalOnboard";
 
 const MutualFundIndex = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -26,6 +36,21 @@ const MutualFundIndex = () => {
   const [hasToken, setHasToken] = useState(false);
   const [autoReopen, setAutoReopen] = useState(false);
   const [showClientCodeModal, setShowClientCodeModal] = useState(true);
+  const [clientName, setClientName] = useState<string>("");
+
+  const [suggestions, setSuggestions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [showPhysicalOnboard, setShowPhysicalOnboard] = useState(false);
+
+  // Debounce typing (to avoid too many API calls)
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      if (clientCode.length >= 4) ClientList(clientCode);
+      else setSuggestions([]);
+    }, 500);
+
+    return () => clearTimeout(delay);
+  }, [clientCode]); // No need for dispatch dependency
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -37,16 +62,28 @@ const MutualFundIndex = () => {
     localStorage.removeItem(mfToken);
   }, []);
 
+  // Periodic token check
   useEffect(() => {
-    const interval = setInterval(() => {
-      const token = localStorage.getItem("mfToken");
-      if (!token) {
+    if (showClientCodeModal) return;
+    const intervalId = setInterval(() => {
+      if (!localStorage.getItem(mfToken)) {
         setShowClientCodeModal(true);
       }
-    }, 5000); // check every second
+    }, 5000);
+    return () => clearInterval(intervalId);
+  }, [showClientCodeModal]);
 
-    return () => clearInterval(interval);
-  }, []);
+  // Auto reopen after temporary close
+  useEffect(() => {
+    if (autoReopen && !showClientCodeModal) {
+      const timeoutId = setTimeout(() => {
+        setClientCode("");
+        setShowClientCodeModal(true);
+        setAutoReopen(false);
+      }, 3000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [autoReopen, showClientCodeModal]);
 
   const verifyClientCode = async (clientCode: any) => {
     // if (!clientCode?.trim()) return;
@@ -76,11 +113,48 @@ const MutualFundIndex = () => {
       dispatch(hideLoader());
     }
   };
+  const ClientList = useCallback(
+    async (code: string) => {
+      try {
+        setLoading(true);
+        dispatch(showLoader("Verifying Client Code..."));
 
+        const response = await fetch(
+          `https://middlewareapi.lkp.net.in/api/Client/GetClientsCodeAndName?SearchKey=${code}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const data = await response.json();
+        dispatch(hideLoader());
+        setLoading(false);
+
+        if (data?.isSuccess && Array.isArray(data.data)) {
+          setSuggestions(data.data);
+        } else {
+          setSuggestions([]);
+          ShowToast("error", data?.message || "No clients found");
+        }
+      } catch (error) {
+        console.error("ClientList error:", error);
+        dispatch(hideLoader());
+        setLoading(false);
+      } finally {
+        setLoading(false);
+        dispatch(hideLoader());
+      }
+    },
+    [dispatch]
+  );
   const handleSubmit = async () => {
     // setClientCode("");
     setHasToken(false);
-    if (!clientCode.trim()) return;
+    if (!clientCode || !clientCode.trim()) return;
+
     try {
       const payload = {
         clientcode: clientCode,
@@ -117,16 +191,6 @@ const MutualFundIndex = () => {
   };
 
   // watch for auto-reopen trigger
-  useEffect(() => {
-    if (autoReopen) {
-      const timer = setTimeout(() => {
-        setClientCode("");
-        setShowClientCodeModal(true);
-        setAutoReopen(false);
-      }, 3000); // 5 seconds
-      return () => clearTimeout(timer);
-    }
-  }, [autoReopen]);
 
   const handleSetOrderTab = () => {
     const orderIndex = mainMenu.findIndex((m) => m.label === "Order");
@@ -150,7 +214,6 @@ const MutualFundIndex = () => {
             }}
           />
         )}
-
         {/* 🔒 Modal for client code entry */}
         <Modal
           isOpen={showClientCodeModal}
@@ -183,19 +246,56 @@ const MutualFundIndex = () => {
               gap: "1rem",
             }}
           >
-            <TextField
-              fullWidth
-              label="Client Code"
-              value={clientCode}
-              onChange={(e) => setClientCode(e.target.value)}
-              autoFocus
-              variant="outlined"
-              size="small"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "10px",
-                },
+            <Autocomplete
+              freeSolo
+              options={suggestions}
+              getOptionLabel={(option: any) =>
+                `${option.clientCode} - ${option.clientName}`
+              }
+              onChange={(_event, value) => {
+                // Case 1: User pressed ENTER on typed text
+                if (typeof value === "string") {
+                  setClientCode(value);
+                  return;
+                }
+
+                // Case 2: User selected an option from dropdown
+                if (value && typeof value === "object") {
+                  setClientCode(value.clientCode);
+                  setClientName(value.clientName);
+                  return;
+                }
+
+                // Case 3: Cleared
+                setClientCode("");
               }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Client Code"
+                  value={clientCode}
+                  onChange={(e) => setClientCode(e.target.value)}
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  autoFocus
+                  InputProps={{
+                    ...params.InputProps,
+                    endAdornment: (
+                      <>
+                        {loading ? <CircularProgress size={20} /> : null}
+                        {params.InputProps.endAdornment}
+                      </>
+                    ),
+                  }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "10px",
+                      width: "22rem",
+                    },
+                  }}
+                />
+              )}
             />
           </ModalBody>
 
@@ -222,7 +322,7 @@ const MutualFundIndex = () => {
 
             <Button
               onClick={() => verifyClientCode(clientCode)}
-              disabled={!clientCode.trim()}
+              disabled={!clientCode || !clientCode.trim()}
               style={{
                 backgroundColor: "#11395C",
                 fontSize: "11px",
@@ -235,7 +335,6 @@ const MutualFundIndex = () => {
             </Button>
           </ModalFooter>
         </Modal>
-
         {/* The rest of the UI (tabs, etc.) */}
         <Card
           style={{
@@ -248,14 +347,17 @@ const MutualFundIndex = () => {
           }}
         >
           <Box display="flex" justifyContent="space-between" gap={2}>
-            <BasicTabs
-              tabs={mainMenu.map((m) => ({ label: m.label }))}
-              value={activeTab}
-              onChange={(_e, newValue) => {
-                setActiveTab(newValue);
-                setSelectedMutualFund("");
-              }}
-            />
+            {showPhysicalOnboard || (
+              <BasicTabs
+                tabs={mainMenu.map((m) => ({ label: m.label }))}
+                value={activeTab}
+                onChange={(_e, newValue) => {
+                  setActiveTab(newValue);
+                  setSelectedMutualFund("");
+                  setShowPhysicalOnboard(false);
+                }}
+              />
+            )}
             {hasToken && !showClientCodeModal && (
               <Box
                 display="flex"
@@ -264,32 +366,44 @@ const MutualFundIndex = () => {
                 minWidth="fit-content"
               >
                 <Typography fontWeight={500}>
-                  Client Code: <b>{clientCode}</b>
+                  Client: {clientCode} - {capitalizeEachWord(clientName)}
                 </Typography>
-                <IconButton
-                  size="small"
-                  onClick={() => setShowClientCodeModal(true)}
-                >
-                  <EditIcon fontSize="small" />
-                </IconButton>
+                {showPhysicalOnboard || (
+                  <IconButton
+                    size="small"
+                    onClick={() => setShowClientCodeModal(true)}
+                  >
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                )}
               </Box>
             )}
           </Box>
         </Card>
-        {selectedMutualFund ? (
-          <MfOverview
-            schemeCode={selectedMutualFund}
-            onBack={handleBack}
-            hasToken={hasToken}
-            onOrderSuccess={handleSetOrderTab}
+        {showPhysicalOnboard ? (
+          <PhysicalOnboard
+            ClientCode={clientCode}
+            onPhysicalOnboard={() => setShowPhysicalOnboard(false)}
           />
         ) : (
-          mainMenu[activeTab]?.content({
-            onSelectFund: setSelectedMutualFund,
-            clientCode,
-            hasToken,
-            // onOrderSuccess: handleSetOrderTab,
-          })
+          <>
+            {selectedMutualFund ? (
+              <MfOverview
+                schemeCode={selectedMutualFund}
+                onBack={handleBack}
+                hasToken={hasToken}
+                onOrderSuccess={handleSetOrderTab}
+                ClientCode={clientCode}
+                onPhysicalOnboard={() => setShowPhysicalOnboard(true)}
+              />
+            ) : (
+              mainMenu[activeTab]?.content({
+                onSelectFund: setSelectedMutualFund,
+                clientCode,
+                hasToken,
+              })
+            )}
+          </>
         )}
       </Container>
     </div>

@@ -58,7 +58,6 @@ interface SearchAppBarProps {
   showExcel?: any;
   handleExcelDownload?: () => void;
   selectedWidget?: any;
-  onFilterChange?: (filter: string) => void;
   totalCount?: any;
   activeClient?: any;
   inactiveClient?: any;
@@ -177,10 +176,10 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
           </ReactstrapButton>
         )}
         {[
-          "Total Clients",
-          "Active Clients",
-          "Inactive Clients",
-          "Upcoming Dormant Client",
+          // "Total Clients",
+          // "Active Clients",
+          // "Inactive Clients",
+          // "Upcoming Dormant Client",
           "Dormant Client",
         ].includes(selectedWidget) &&
           selectedWidget !== "DP Debit Recovery" && (

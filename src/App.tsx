@@ -10,6 +10,7 @@ import "./Global.css";
 import ChangePassword from "./pages/Authentication/ChangePassword";
 import Maintenance from "./pages/Maintenance";
 import AmcMembershipSteps from "./pages/AmcMembership/Steps";
+import StatusCard from "./pages/MutualFund/PhysicalOnboard/StatusPage";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(
@@ -121,6 +122,10 @@ const App = () => {
           <Route path="/DPMandate" element={<DpMandate />} />
           <Route path="/DPMandate/:encryptedCode" element={<DpMandate />} />
           <Route path="/AMCLink" element={<AmcMembershipSteps />} />
+          <Route
+            path="/PhysicalStats/:encryptedCode"
+            element={<StatusCard />}
+          />
         </Routes>
       </Suspense>
     </Router>

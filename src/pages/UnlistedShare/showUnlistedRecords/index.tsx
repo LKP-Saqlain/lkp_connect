@@ -356,7 +356,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                   }}
                 >
                   {" "}
-                  <h4 className="card-title mb-0">Unlisted Shares Entry</h4>
+                  <h4 className="card-title mb-0">Unlisted Shares Status</h4>
                   {activeSubItem === "Unlisted Shares Entry" && (
                     <Button
                       type="submit"
