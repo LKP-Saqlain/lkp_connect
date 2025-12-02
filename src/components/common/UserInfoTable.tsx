@@ -2518,7 +2518,7 @@ const DataTable = ({
       return TableColumns.pledgeReportColumns.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Indirect Channel Target") {
+    } else if (activeSubItem === "Indirect Channel") {
       return TableColumns.apGrossBrokerageColumns.map((column) => ({
         ...column,
       }));

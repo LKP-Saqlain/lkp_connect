@@ -9,14 +9,14 @@ import {
   Label,
   Row,
 } from "reactstrap";
-import { AppDispatch, RootState } from "../../../redux/store";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { apiServices } from "../../../services";
-import ShowToast from "../../../utils/toastUtils";
+import { AppDispatch, RootState } from "../../../../redux/store";
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../../services";
+import ShowToast from "../../../../utils/toastUtils";
 import { useFormik } from "formik";
-import DashboardCard from "../../../components/common/DashboardCard";
+import DashboardCard from "../../../../components/common/DashboardCard";
 // import { useTheme } from "@mui/material";
-import UserInfoTable from "../../../components/common/UserInfoTable";
+import UserInfoTable from "../../../../components/common/UserInfoTable";
 
 interface FormValues {
   selectedZone: { label: string; value: string } | null;
@@ -131,8 +131,18 @@ const IndirectTarget = ({ activeSubItem }: { activeSubItem: string }) => {
         <Row>
           <Col lg={12}>
             {accessType === "ALL" && (
-              <Card style={{ marginBottom: "0.6rem" }}>
-                <Row style={{ margin: "5px", minWidth: "100%" }}>
+              <Card
+                style={{
+                  marginBottom: "0.6rem",
+                  // width: "fit-content",
+                }}
+              >
+                <Row
+                  style={{
+                    margin: "5px",
+                    minWidth: "100%",
+                  }}
+                >
                   <Col
                     xs={12}
                     style={{
