@@ -114,6 +114,7 @@ import RegFileUpload from "../../pages/RMS/REGFileUpload";
 import RegMaster from "../../pages/RMS/RegMaster";
 import PledgeReport from "../../pages/Reports/pledgeReqReport";
 import ResearchCalls from "../../pages/researchCalls";
+import { decryptAES } from "../../utils/encryptDecrypt";
 
 const drawerWidth = 260;
 
@@ -620,6 +621,7 @@ const SideBar = () => {
       localStorage.removeItem("AdminId");
       localStorage.removeItem("activeSubItem");
       sessionStorage.removeItem("dashboardNudgeFetched");
+      sessionStorage.removeItem("authPan");
       navigate("/");
     } else if (value === "Change User") {
       setmodal_center(true); // Open the CustomModal
@@ -946,9 +948,11 @@ const SideBar = () => {
 
   const handleWebPortalLogin = () => {
     console.log("TestSSOLogin");
+
+    const userPan = decryptAES(localStorage.getItem("authPan") || "");
     let payload = {
       user_id: user_id,
-      panNo: authenticationValue,
+      panNo: (authenticationValue && authenticationValue) || userPan,
     };
 
     dispatch(showLoader(""));

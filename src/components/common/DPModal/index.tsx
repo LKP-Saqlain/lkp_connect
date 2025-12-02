@@ -13,8 +13,11 @@ import {
   FormControlLabel,
   FormHelperText,
   FormLabel,
+  InputAdornment,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -70,6 +73,8 @@ interface CustomModalProps {
   setIsBankVerified?: any;
   beneficiaryName?: any;
 }
+
+const prefixOptions = ["EMP-", "APN-"];
 
 const CustomModal = ({
   tog_center,
@@ -173,6 +178,7 @@ const CustomModal = ({
       dropdownOption: "",
       tdsFlag: "Yes",
       uploadProof: null,
+      prefix: "EMP-",
     },
     validationSchema: Yup.object({
       // For Vendor Approval
@@ -314,11 +320,16 @@ const CustomModal = ({
     }
 
     let payload = {
-      user_id: `EMP-${formik.values.userChangeValue}`,
-      user_type: "Employee",
+      user_id:
+        formik?.values?.prefix === "EMP-"
+          ? `EMP-${formik.values.userChangeValue}`
+          : `APN-${formik.values.userChangeValue}`,
+      user_type: formik?.values?.prefix === "EMP-" ? "Employee" : "Partner",
       auth_type: "PAN",
       auth_value: formik.values.userPanValue,
     };
+    console.log("Payload", payload);
+
     dispatch(showLoader("Please wait, we are processing your request..."));
     dispatch(AuthUser(payload))
       .unwrap()
@@ -771,10 +782,9 @@ const CustomModal = ({
           value={formik.values.userChangeValue}
           onChange={handleCustomChange}
           onBlur={formik.handleBlur}
-          InputProps={{ startAdornment: "EMP- " }}
           fullWidth
-          inputProps={{ maxLength: 4 }}
           sx={{ width: isMobile ? "100%" : "50%" }}
+          inputProps={{ maxLength: 4 }}
           error={
             formik.touched.userChangeValue &&
             Boolean(formik.errors.userChangeValue)
@@ -782,6 +792,28 @@ const CustomModal = ({
           helperText={
             formik.touched.userChangeValue && formik.errors.userChangeValue
           }
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <Select
+                  value={formik.values.prefix}
+                  onChange={(e) =>
+                    formik.setFieldValue("prefix", e.target.value)
+                  }
+                  size="small"
+                  variant="standard"
+                  disableUnderline
+                  sx={{ minWidth: 60 }}
+                >
+                  {prefixOptions.map((item) => (
+                    <MenuItem key={item} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </InputAdornment>
+            ),
+          }}
         />
       </Col>
       <Col xs={12}>
