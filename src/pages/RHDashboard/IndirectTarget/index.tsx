@@ -131,57 +131,81 @@ const IndirectTarget = ({ activeSubItem }: { activeSubItem: string }) => {
         <Row>
           <Col lg={12}>
             {accessType === "ALL" && (
-              // <Card style={{ marginBottom: "1px" }}>
-              <Row>
-                <Col
-                  xs={12}
-                  className="d-flex align-items-center"
-                  style={{
-                    // border: "1px solid black",
-                    display: "flex",
-                    justifyContent: "space-evenly",
-                    // gap: 6,
-                  }}
-                >
-                  <Label
-                    className="mb-0 me-2"
-                    // style={{ border: "1px solid black" }}
+              <Card style={{ marginBottom: "0.6rem" }}>
+                <Row style={{ margin: "5px", minWidth: "100%" }}>
+                  <Col
+                    xs={12}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-start", // or "center" if you want horizontal centering
+                    }}
                   >
-                    Zone
-                  </Label>
-
-                  <div
-                    className="d-flex gap-2 overflow-auto flex-nowrap"
-                    // style={{ border: "1px solid black" }}
-                  >
-                    {zoneList.map((zone: any) => {
-                      const selected =
-                        formik.values.selectedZone?.value === zone.value;
-
-                      return (
-                        <Button
-                          key={zone.value}
-                          size="sm"
-                          style={{
-                            minWidth: 85,
-                            whiteSpace: "nowrap",
-                            border: "1px solid #11395c",
-                            borderRadius: "6px",
-                            backgroundColor: selected ? "#11395c" : "#fff",
-                            color: selected ? "#fff" : "#11395c",
-                          }}
-                          onClick={() =>
-                            formik.setFieldValue("selectedZone", zone)
-                          }
+                    <div className="m-1">
+                      <div className="d-flex align-items-center gap-2">
+                        {/* Label (not scrollable) */}
+                        <Label
+                          htmlFor="zone-select"
+                          className="form-label text-muted label-font mb-0"
+                          style={{ minWidth: "50px" }}
                         >
-                          {zone.label}
-                        </Button>
-                      );
-                    })}
-                  </div>
-                </Col>
-              </Row>
-              // </Card>
+                          Zone
+                        </Label>
+
+                        {/* Scrollable horizontal buttons */}
+                        <div
+                          className="d-flex flex-nowrap gap-2 overflow-auto"
+                          style={{ maxWidth: "100%" }}
+                        >
+                          {zoneList.map((zone: any) => {
+                            const isSelected =
+                              formik.values.selectedZone?.value === zone.value;
+
+                            return (
+                              <Button
+                                key={zone.value}
+                                type="button"
+                                style={{
+                                  minWidth: "60px",
+                                  whiteSpace: "nowrap",
+                                  fontSize: "12px",
+                                  padding: "2px",
+                                  borderRadius: "6px",
+                                  border: "1px solid #11395c",
+                                  backgroundColor: isSelected
+                                    ? "#11395c"
+                                    : "#ffffff",
+                                  color: isSelected ? "#ffffff" : "#11395c",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() =>
+                                  formik.setFieldValue("selectedZone", zone)
+                                }
+                                onBlur={() =>
+                                  formik.setFieldTouched("selectedZone", true)
+                                }
+                              >
+                                {zone.label}
+                              </Button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Validation error message */}
+                      {formik.touched.selectedZone &&
+                        formik.errors.selectedZone && (
+                          <div
+                            className="text-danger"
+                            style={{ fontSize: "12px" }}
+                          >
+                            {formik.errors.selectedZone}
+                          </div>
+                        )}
+                    </div>
+                  </Col>
+                </Row>
+              </Card>
             )}
 
             <Row className="my-2">
