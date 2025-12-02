@@ -74,7 +74,7 @@ interface CustomModalProps {
   beneficiaryName?: any;
 }
 
-const prefixOptions = ["EMP-", "APN-"];
+const prefixOptions = ["EMP", "APN"];
 
 const CustomModal = ({
   tog_center,
@@ -178,7 +178,7 @@ const CustomModal = ({
       dropdownOption: "",
       tdsFlag: "Yes",
       uploadProof: null,
-      prefix: "EMP-",
+      prefix: "EMP",
     },
     validationSchema: Yup.object({
       // For Vendor Approval
@@ -321,10 +321,10 @@ const CustomModal = ({
 
     let payload = {
       user_id:
-        formik?.values?.prefix === "EMP-"
+        formik?.values?.prefix === "EMP"
           ? `EMP-${formik.values.userChangeValue}`
           : `APN-${formik.values.userChangeValue}`,
-      user_type: formik?.values?.prefix === "EMP-" ? "Employee" : "Partner",
+      user_type: formik?.values?.prefix === "EMP" ? "Employee" : "Partner",
       auth_type: "PAN",
       auth_value: formik.values.userPanValue,
     };
