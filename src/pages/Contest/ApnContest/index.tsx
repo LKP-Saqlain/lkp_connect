@@ -57,27 +57,27 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
         dispatch(showLoader(""));
         const response = await apiServices.GetAPContestTargetDetails(payload);
 
-        // if (response?.status === 200) {
-        //   const list = response?.data?.data || [];
+        if (response?.status === 200) {
+          const list = response?.data?.data || [];
 
-        //   // Add Id to each item
-        //   const mappedList = list.map((item: any, index: number) => ({
-        //     Id: index + 1,
-        //     ...item,
-        //   }));
+          // Add Id to each item
+          const mappedList = list.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
 
-        //   // Store the first item after mapping
-        //   const firstItem = mappedList[0] || {};
+          // Store the first item after mapping
+          const firstItem = mappedList[0] || {};
 
-        //   console.log(
-        //     "GetAPContestTargetDetails",
-        //     firstItem,
-        //     activeMenu,
-        //     userData
-        //   );
+          console.log(
+            "GetAPContestTargetDetails",
+            firstItem,
+            activeMenu,
+            userData
+          );
 
-        //   setTargetData(firstItem);
-        // }
+          setTargetData(firstItem);
+        }
       } catch (error) {
         console.error("Error fetching AP Contest Target Details", error);
       } finally {
