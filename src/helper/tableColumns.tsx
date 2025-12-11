@@ -1977,7 +1977,7 @@ export const T6OverViewColumns: GridColDef[] = [
 
 export const DPDebitRecovery: GridColDef[] = [
   {
-    field: "Email_link",
+    field: "elnk",
     headerName: "Send Email",
     headerClassName: "header-wrap-custom",
     minWidth: 75,
@@ -1997,38 +1997,36 @@ export const DPDebitRecovery: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
-      const { Payment_link, EnCAccountCode } = params.row;
-      if (!Payment_link || !EnCAccountCode)
-        return <span>No Link Available</span>;
+      const { paylnk, enc } = params.row;
+      if (!paylnk || !enc) return <span>No Link Available</span>;
 
-      const fullLink = `${Payment_link}${EnCAccountCode}`;
+      const fullLink = `${paylnk}${enc}`;
       return <CopyToClipboardCell fullLink={fullLink} field={"payment"} />;
     },
   },
-  {
-    field: "dpMandate_Link",
-    headerName: "Mandate\nLink",
-    headerClassName: "header-wrap-custom",
-    minWidth: 75,
-    flex: 0.3,
-    align: "center",
-    headerAlign: "center",
-    disableColumnMenu: true,
-    renderCell: (params: any) => {
-      const { Payment_link, EnCAccountCode } = params.row;
-      if (!Payment_link || !EnCAccountCode)
-        return <span>No Link Available</span>;
+  // {
+  //   field: "dpMandate_Link",
+  //   headerName: "Mandate\nLink",
+  //   headerClassName: "header-wrap-custom",
+  //   minWidth: 75,
+  //   flex: 0.3,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   disableColumnMenu: true,
+  //   renderCell: (params: any) => {
+  //     const { paylnk, enc } = params.row;
+  //     if (!paylnk || !enc) return <span>No Link Available</span>;
 
-      const fullLink = `${Payment_link}${EnCAccountCode}`;
-      return (
-        <CopyToClipboardCell
-          fullLink={fullLink}
-          field={"dpMandate"}
-          selectedRow={params?.row}
-        />
-      );
-    },
-  },
+  //     const fullLink = `${paylnk}${enc}`;
+  //     return (
+  //       <CopyToClipboardCell
+  //         fullLink={fullLink}
+  //         field={"dpMandate"}
+  //         selectedRow={params?.row}
+  //       />
+  //     );
+  //   },
+  // },
   {
     field: "cc",
     headerName: "Client Code",
@@ -2169,7 +2167,7 @@ export const DPDebitRecovery: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "AcStatus",
+    field: "asts",
     headerName: "Category",
     minWidth: 100,
     flex: 0.6,

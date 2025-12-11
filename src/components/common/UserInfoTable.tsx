@@ -252,12 +252,12 @@ const DataTable = ({
       // return [];
       // Inject handleEmailSend into the column definition
       return TableColumns.DPDebitRecovery.map((column) => {
-        if (column.field === "Email_link") {
+        if (column.field === "elnk") {
           return {
             ...column,
             renderCell: (params: any) => {
-              const emailID = params.row.Client_Mail_ID;
-              const isEmailSent = emailSentStatus[params.row.BOID]; // Check status for this BOID
+              const emailID = params.row.em;
+              const isEmailSent = emailSentStatus[params.row.boid]; // Check status for this BOID
 
               if (!emailID) {
                 return <span style={{ color: "gray" }}></span>; // Placeholder if no email ID
