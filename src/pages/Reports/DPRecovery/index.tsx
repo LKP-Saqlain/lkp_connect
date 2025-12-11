@@ -82,6 +82,7 @@ const DPRecovery = ({ activeSubItem }: any) => {
 
         // Save updated data in state
         // setUserData(updatedData);
+        console.log("TestLog", setUserData);
         // setFilteredData(updatedData);
         const activeClients = responseData.filter(
           (client: any) => client.bost === "Active"
