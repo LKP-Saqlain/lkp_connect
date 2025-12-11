@@ -64,7 +64,7 @@ const IndirectTarget = ({ activeSubItem }: { activeSubItem: string }) => {
 
           // store array of objects (with id added)
           const rowsWithId = apiData?.apList?.map((item: any, idx: number) => ({
-            id: idx + 1,
+            Id: idx + 1,
             ...item,
           }));
           console.log("rowsWithId", rowsWithId);

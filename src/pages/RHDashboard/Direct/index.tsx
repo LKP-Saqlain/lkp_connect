@@ -185,7 +185,7 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
             const year = String(dateObj.getFullYear()).slice(-2);
             return {
               ...item,
-              id: index + 0,
+              Id: index + 0,
               tradeDate: `${day}-${month}-${year}`,
             };
           });
@@ -211,15 +211,15 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
     };
 
     const sortByDate = (a: any, b: any) =>
-      new Date(a.period).getTime() - new Date(b.period).getTime();
+      new Date(a.prd).getTime() - new Date(b.prd).getTime();
 
     const filterAndFormat = (data: any[], type: string): any[] => {
       return data
-        .filter((item) => item.periodType === type)
+        .filter((item) => item.pt === type)
         .sort(sortByDate)
         .map((item) => ({
           ...item,
-          period: formatDate(item.period),
+          prd: formatDate(item.prd),
         }));
     };
 
@@ -246,15 +246,15 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
       };
 
       setChartSeries({
-        daily: groupedData.daily.map((item) => item.total_Revenue),
-        weekly: groupedData.weekly.map((item) => item.total_Revenue),
-        monthly: groupedData.monthly.map((item) => item.total_Revenue),
+        daily: groupedData.daily.map((item) => item.tr),
+        weekly: groupedData.weekly.map((item) => item.tr),
+        monthly: groupedData.monthly.map((item) => item.tr),
       });
 
       setTradeDates({
-        daily: groupedData.daily.map((item) => item.period),
-        weekly: groupedData.weekly.map((item) => item.period),
-        monthly: groupedData.monthly.map((item) => item.period),
+        daily: groupedData.daily.map((item) => item.prd),
+        weekly: groupedData.weekly.map((item) => item.prd),
+        monthly: groupedData.monthly.map((item) => item.prd),
       });
     } catch (error) {
       console.error("GetBrokRevenue error:", error);
@@ -279,15 +279,15 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
     };
 
     const sortByDate = (a: any, b: any) =>
-      new Date(a.period).getTime() - new Date(b.period).getTime();
+      new Date(a.prd).getTime() - new Date(b.prd).getTime();
 
     const filterAndFormat = (data: any[], type: string): any[] => {
       return data
-        .filter((item) => item.periodType === type)
+        .filter((item) => item.pt === type)
         .sort(sortByDate)
         .map((item) => ({
           ...item,
-          period: formatDate(item.period),
+          prd: formatDate(item.prd),
         }));
     };
 
@@ -311,15 +311,15 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
             monthly: filterAndFormat(rawData, "Monthly"),
           };
           setChartSeries2({
-            daily: groupedData.daily.map((item) => item.unqiue_Bill_count),
-            weekly: groupedData.weekly.map((item) => item.unqiue_Bill_count),
-            monthly: groupedData.monthly.map((item) => item.unqiue_Bill_count),
+            daily: groupedData.daily.map((item) => item.ubc),
+            weekly: groupedData.weekly.map((item) => item.ubc),
+            monthly: groupedData.monthly.map((item) => item.ubc),
           });
 
           setTradeDates2({
-            daily: groupedData.daily.map((item) => item.period),
-            weekly: groupedData.weekly.map((item) => item.period),
-            monthly: groupedData.monthly.map((item) => item.period),
+            daily: groupedData.daily.map((item) => item.prd),
+            weekly: groupedData.weekly.map((item) => item.prd),
+            monthly: groupedData.monthly.map((item) => item.prd),
           });
           console.log("GrouupeedData", groupedData);
         }
@@ -340,15 +340,15 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
     };
 
     const sortByDate = (a: any, b: any) =>
-      new Date(a.period).getTime() - new Date(b.period).getTime();
+      new Date(a.prd).getTime() - new Date(b.prd).getTime();
 
     const filterAndFormat = (data: any[], type: string): any[] => {
       return data
-        .filter((item) => item.periodType === type)
+        .filter((item) => item.pt === type)
         .sort(sortByDate)
         .map((item) => ({
           ...item,
-          period: formatDate(item.period),
+          prd: formatDate(item.prd),
         }));
     };
 
@@ -372,15 +372,15 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
             monthly: filterAndFormat(rawData, "Monthly"),
           };
           setChartSeries3({
-            daily: groupedData.daily.map((item) => item.unqiue_Client_ID),
-            weekly: groupedData.weekly.map((item) => item.unqiue_Client_ID),
-            monthly: groupedData.monthly.map((item) => item.unqiue_Client_ID),
+            daily: groupedData.daily.map((item) => item.ucid),
+            weekly: groupedData.weekly.map((item) => item.ucid),
+            monthly: groupedData.monthly.map((item) => item.ucid),
           });
 
           setTradeDates3({
-            daily: groupedData.daily.map((item) => item.period),
-            weekly: groupedData.weekly.map((item) => item.period),
-            monthly: groupedData.monthly.map((item) => item.period),
+            daily: groupedData.daily.map((item) => item.prd),
+            weekly: groupedData.weekly.map((item) => item.prd),
+            monthly: groupedData.monthly.map((item) => item.prd),
           });
           console.log("GetTradedClientGrouupeedData", groupedData);
         }
@@ -401,15 +401,15 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
     };
 
     const sortByDate = (a: any, b: any) =>
-      new Date(a.period).getTime() - new Date(b.period).getTime();
+      new Date(a.prd).getTime() - new Date(b.prd).getTime();
 
     const filterAndFormat = (data: any[], type: string): any[] => {
       return data
-        .filter((item) => item.periodType === type)
+        .filter((item) => item.pt === type)
         .sort(sortByDate)
         .map((item) => ({
           ...item,
-          period: formatDate(item.period),
+          prd: formatDate(item.prd),
         }));
     };
 
@@ -433,15 +433,15 @@ const Direct = ({ activeSubItem }: OverviewProps) => {
             monthly: filterAndFormat(rawData, "Monthly"),
           };
           setChartSeries4({
-            daily: groupedData.daily.map((item) => item.revenue_Per_Client),
-            weekly: groupedData.weekly.map((item) => item.revenue_Per_Client),
-            monthly: groupedData.monthly.map((item) => item.revenue_Per_Client),
+            daily: groupedData.daily.map((item) => item.rpc),
+            weekly: groupedData.weekly.map((item) => item.rpc),
+            monthly: groupedData.monthly.map((item) => item.rpc),
           });
 
           setTradeDates4({
-            daily: groupedData.daily.map((item) => item.period),
-            weekly: groupedData.weekly.map((item) => item.period),
-            monthly: groupedData.monthly.map((item) => item.period),
+            daily: groupedData.daily.map((item) => item.prd),
+            weekly: groupedData.weekly.map((item) => item.prd),
+            monthly: groupedData.monthly.map((item) => item.prd),
           });
           console.log("GetTradedClientGrouupeedData", groupedData);
         }

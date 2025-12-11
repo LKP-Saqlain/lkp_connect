@@ -55,10 +55,10 @@ const Revenue = ({
       dispatch(DealerPerformance(payload))
         .unwrap()
         .then((response) => {
-          console.log("Resp", response?.data?.data?.Table);
+          console.log("Resp", response?.data?.data?.Table); //need to replace Table this with tbl
           setYearRevenue(response?.data?.data?.Table);
           const fetchRevenueData = response?.data?.data?.Table;
-          const filteredRevenueData = response?.data?.data?.Table1;
+          const filteredRevenueData = response?.data?.data?.Table1; //need to replace Table this with tbl1
 
           if (fetchRevenueData) {
             function getQuarterMonths(quarter: string) {
@@ -122,18 +122,18 @@ const Revenue = ({
             // Extract data for broking and indirect values
             const brokingValues = fetchRevenueData.map(
               (item: any) =>
-                item.Ach_brok_dir +
-                item.Ach_brokslbm_dir + //til here existing Broking flag below 2 inidirect flags added
-                item.Ach_brok_indir +
-                item.Ach_brok_ind_less2yrs
+                item.abrd +
+                item.absl_dir + //til here existing Broking flag below 2 inidirect flags added
+                item.abri +
+                item.abil2
             );
             console.log("testBroking Values", brokingValues);
 
             const indirectValues = fetchRevenueData.map(
               (item: any) =>
-                item.Ach_brokslbm_dir + //below 3 SLBM new flags added in SLBM
-                item.Ach_brokslbm_indir +
-                item.Ach_brokslbm_ind_less2yrs
+                item.absl_dir + //below 3 SLBM new flags added in SLBM
+                item.absl_ind +
+                item.absl_ind2
             );
 
             setBrokingNonBrokingData([
@@ -152,27 +152,26 @@ const Revenue = ({
 
           if (filteredRevenueData) {
             const broking =
-              filteredRevenueData[0]?.Ach_brok_dir +
-              filteredRevenueData[0]?.Ach_brokslbm_dir + //til here existing Broking flag below 2 inidirect flags added
-              filteredRevenueData[0]?.Ach_brok_indir +
-              filteredRevenueData[0]?.Ach_brok_ind_less2yrs +
-              // filteredRevenueData[0]?.Ach_brokslbm_dir + //below 3 SLBM new flags added in SLBM
-              filteredRevenueData[0]?.Ach_brokslbm_indir +
-              filteredRevenueData[0]?.Ach_brokslbm_ind_less2yrs;
+              filteredRevenueData[0]?.abrd +
+              filteredRevenueData[0]?.absl_dir + //til here existing Broking flag below 2 inidirect flags added
+              filteredRevenueData[0]?.abri +
+              filteredRevenueData[0]?.abil2 +
+              // filteredRevenueData[0]?.absl_dir + //below 3 SLBM new flags added in SLBM
+              filteredRevenueData[0]?.absl_ind +
+              filteredRevenueData[0]?.absl_ind2;
 
             const nonBroking =
-              filteredRevenueData[0]?.TPD_Insurance +
-                filteredRevenueData[0]?.TPD_Liq_loans +
-                filteredRevenueData[0]?.TPD_mutualfunds +
-                filteredRevenueData[0]?.UnlistedShares_rev || 0;
+              filteredRevenueData[0]?.tpdins +
+                filteredRevenueData[0]?.tpdll +
+                filteredRevenueData[0]?.tpdmf +
+                filteredRevenueData[0]?.usr || 0;
 
-            // const total = filteredRevenueData[0]?.Net_Rev_Ach || 0; //existing total getting from api
+            // const total = filteredRevenueData[0]?.nra || 0; //existing total getting from api
             const total = broking + nonBroking;
-            const multiRevenueMultiply =
-              filteredRevenueData[0]?.Multi_net_rev_ach || 0;
-            const newClientsAdded = filteredRevenueData[0]?.New_Clients || 0;
+            const multiRevenueMultiply = filteredRevenueData[0]?.mnra || 0;
+            const newClientsAdded = filteredRevenueData[0]?.newc || 0;
 
-            const tradedClient = filteredRevenueData[0]?.TradedClientCount || 0;
+            const tradedClient = filteredRevenueData[0]?.trcc || 0;
             console.log("valueTest", total, broking, nonBroking);
 
             setTradedClientCount(tradedClient);

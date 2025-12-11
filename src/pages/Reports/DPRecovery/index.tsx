@@ -62,7 +62,7 @@ const DPRecovery = ({ activeSubItem }: any) => {
         dispatch(hideLoader());
 
         // Log the response structure
-        console.log("API Response:", response?.data?.data.length);
+        console.log("API Response:", response?.data?.data);
 
         // Extract data safely
         const responseData = response?.data?.data ?? [];
@@ -72,14 +72,22 @@ const DPRecovery = ({ activeSubItem }: any) => {
           return; // Stop execution if responseData is not an array
         }
 
-        setUserData(responseData);
-        setFilteredData(responseData);
+        // ✅ Insert Id = index + 1
+        const updatedData = responseData.map((item: any, index: number) => ({
+          ...item,
+          Id: index + 1,
+        }));
 
+        console.log("Updated Data with Id:", updatedData);
+
+        // Save updated data in state
+        // setUserData(updatedData);
+        // setFilteredData(updatedData);
         const activeClients = responseData.filter(
-          (client: any) => client.BOStatus === "Active"
+          (client: any) => client.bost === "Active"
         ).length;
         const inactiveClients = responseData.filter(
-          (client: any) => client.BOStatus === "Inactive"
+          (client: any) => client.bost === "Inactive"
         ).length;
         setActiveClients(activeClients);
         setinActiveClients(inactiveClients);
@@ -95,15 +103,15 @@ const DPRecovery = ({ activeSubItem }: any) => {
 
         // Calculate total Ledger Debit Amount for Active, Inactive, and Total
         const totalLedgerDebitAmt = responseData.reduce(
-          (sum, client) => sum + (client.Ledger_DebitAmt || 0),
+          (sum, client) => sum + (client.lda || 0),
           0
         );
         const totalLedgerDebitAmtActive = responseData
-          .filter((client) => client.BOStatus === "Active")
-          .reduce((sum, client) => sum + (client.Ledger_DebitAmt || 0), 0);
+          .filter((client) => client.bost === "Active")
+          .reduce((sum, client) => sum + (client.lda || 0), 0);
         const totalLedgerDebitAmtInactive = responseData
-          .filter((client) => client.BOStatus === "Inactive")
-          .reduce((sum, client) => sum + (client.Ledger_DebitAmt || 0), 0);
+          .filter((client) => client.bost === "Inactive")
+          .reduce((sum, client) => sum + (client.lda || 0), 0);
 
         console.log("Total Ledger Debit Amount (All):", totalLedgerDebitAmt);
         console.log(
@@ -122,9 +130,9 @@ const DPRecovery = ({ activeSubItem }: any) => {
         });
 
         responseData.forEach((client: any) => {
-          if (client.BOStatus === "Active") {
+          if (client.bost === "Active") {
             activeGroupedClients.push(client);
-          } else if (client.BOStatus === "Inactive") {
+          } else if (client.bost === "Inactive") {
             inactiveGroupedClients.push(client);
           }
         });
@@ -193,8 +201,8 @@ const DPRecovery = ({ activeSubItem }: any) => {
 
     const filteredAllClients = userData.filter(
       (item: any) =>
-        item.BOName.toLowerCase().includes(value.toLowerCase()) ||
-        item.ClientCode.toLowerCase().includes(value.toLowerCase())
+        item.bonm.toLowerCase().includes(value.toLowerCase()) ||
+        item.cc.toLowerCase().includes(value.toLowerCase())
     );
 
     if (value.trim() === "") {
@@ -205,18 +213,18 @@ const DPRecovery = ({ activeSubItem }: any) => {
         .flat()
         .filter(
           (item: any) =>
-            (item.BOStatus === "Active" &&
-              item.BOName.toLowerCase().includes(value.toLowerCase())) ||
-            item.ClientCode.toLowerCase().includes(value.toLowerCase())
+            (item.bost === "Active" &&
+              item.bonm.toLowerCase().includes(value.toLowerCase())) ||
+            item.cc.toLowerCase().includes(value.toLowerCase())
         );
 
       const filteredInactiveClients = inactiveGroupedClients
         .flat()
         .filter(
           (item: any) =>
-            (item.BOStatus === "Inactive" &&
-              item.BOName.toLowerCase().includes(value.toLowerCase())) ||
-            item.ClientCode.toLowerCase().includes(value.toLowerCase())
+            (item.bost === "Inactive" &&
+              item.bonm.toLowerCase().includes(value.toLowerCase())) ||
+            item.cc.toLowerCase().includes(value.toLowerCase())
         );
 
       setFilteredActiveGroupClients(filteredActiveClients);

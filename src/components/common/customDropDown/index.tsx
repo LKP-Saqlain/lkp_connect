@@ -148,9 +148,11 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
       selectedBranchCode?.value,
       selectedZone?.value
     );
+
     tradeData([]);
 
     const Id = localStorage.getItem("Id");
+
     const payload = {
       user_id: Id,
       zone: accessType === "" ? "ALL" : selectedZone?.value,
@@ -167,9 +169,23 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
 
         if (response?.status === 200 && typeof response?.data === "object") {
           setResponseStatus(true);
-          setUserData(response?.data?.data);
-          setCustomLedgerData(response?.data?.data);
-          handleValues(response?.data?.data, true);
+
+          const responseData = response?.data?.data ?? [];
+
+          // ✅ Add Id = index + 1
+          const updatedData = responseData.map((item: any, index: number) => ({
+            ...item,
+            Id: index + 1,
+          }));
+
+          console.log("Updated Data with Id:", updatedData);
+
+          // Store updated data
+          setUserData(updatedData);
+          setCustomLedgerData(updatedData);
+
+          // Pass updated data
+          handleValues(updatedData, true);
         } else {
           setResponseStatus(false);
           setCustomLedgerData([]);
@@ -179,35 +195,25 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
       })
       .catch((error) => {
         console.error("ClientCash error:", error);
-        // setResponseStatus([])
+
         const errors = error?.response?.data?.errors;
 
-        // ✅ Show Zone error only if it exists
-        if (errors?.Zone && errors.Zone.length > 0) {
-          ShowToast("error", errors.Zone[0]);
-        }
-      })
-      .catch((error) => {
-        console.error("ClientCash error:", error);
-        // setResponseStatus([])
-        const errors = error?.response?.data?.errors;
-
-        // ✅ Show Zone error only if it exists
-        if (errors?.Zone && errors.Zone.length > 0) {
+        // Zone error
+        if (errors?.Zone?.length > 0) {
           ShowToast("error", errors.Zone[0]);
         }
 
-        // ✅ Show BranchCode error only if it exists
-        if (errors?.BranchCode && errors.BranchCode.length > 0) {
+        // BranchCode error
+        if (errors?.BranchCode?.length > 0) {
           ShowToast("error", errors.BranchCode[0]);
         }
 
-        // Optional: handle other errors (network, etc.)
         if (!errors?.Zone && !errors?.BranchCode) {
           ShowToast("error", "Something went wrong. Please try again.");
         }
 
         setCustomLedgerData([]);
+        handleValues([], false);
       })
       .finally(() => {
         dispatch(hideLoader());

@@ -1657,7 +1657,7 @@ const DataTable = ({
                   </div>
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.rowId);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("reject");
                     }}
                     style={{ cursor: "pointer" }}
@@ -1684,7 +1684,7 @@ const DataTable = ({
             ...column,
             renderCell: (params: any) => {
               const isDeleted = params.row.isDeleted;
-              const isApproved = params.row.accApproval === "A";
+              const isApproved = params.row.app === "A";
 
               // ✅ If approved, hide the entire actions (no edit/delete)
               if (isApproved) {
@@ -1764,7 +1764,7 @@ const DataTable = ({
             ...column,
             renderCell: (params: any) => {
               // ✅ Check condition
-              if (params.row.accApproval === "A") {
+              if (params.row.app === "A") {
                 // Already approved — no actions
                 return <span style={{ color: "gray" }}>--</span>;
               }
@@ -1816,11 +1816,11 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "accRemark") {
+        if (column.field === "armk") {
           return {
             ...column,
             renderCell: (params: any) => {
-              if (params.row.accApproval === "A" || "R") {
+              if (params.row.app === "A" || "R") {
                 return (
                   <span style={{ color: "#11395C", fontWeight: 500 }}>
                     {params.row.accRemark || "--"}
@@ -1832,12 +1832,12 @@ const DataTable = ({
           };
         }
 
-        if (column.field === "tdsPath") {
+        if (column.field === "tdsp") {
           return {
             ...column,
             renderCell: (params: any) => {
               const hasTdsPath =
-                params.row?.tdsPath && params.row.tdsPath.trim() !== "";
+                params.row?.tdsp && params.row.tdsp.trim() !== "";
 
               if (!hasTdsPath) {
                 return <span>--</span>;
@@ -1863,7 +1863,7 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "msmePath") {
+        if (column.field === "msmp") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -1888,7 +1888,7 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "bankDoc") {
+        if (column.field === "bdoc") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -1913,7 +1913,7 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "panDocument") {
+        if (column.field === "pdoc") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -2086,7 +2086,7 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "Partner Contest Report") {
       return TableColumns.getAPContestReportColumns.map((column) => {
-        if (column.field === "apCode") {
+        if (column.field === "apc") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -2227,16 +2227,13 @@ const DataTable = ({
         return column;
       });
     } else if (activeSubItem === "Vendor Details Report") {
-      // return TableColumns.vendorApprovalColumns.map((column) => ({
-      //   ...column,
-      // }));
       return TableColumns.vendorApprovalColumns.map((column) => {
-        if (column.field === "tdsPath") {
+        if (column.field === "tdsp") {
           return {
             ...column,
             renderCell: (params: any) => {
               const hasTdsPath =
-                params.row?.tdsPath && params.row.tdsPath.trim() !== "";
+                params.row?.tdsp && params.row.tdsp.trim() !== "";
 
               if (!hasTdsPath) {
                 return <span>—</span>;
@@ -2262,12 +2259,12 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "msmePath") {
+        if (column.field === "msmp") {
           return {
             ...column,
             renderCell: (params: any) => {
               const hasMsmePath =
-                params.row?.msmePath && params.row.msmePath.trim() !== "";
+                params.row?.msmp && params.row.msmp.trim() !== "";
 
               if (!hasMsmePath) {
                 return <span>—</span>;
@@ -2293,12 +2290,12 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "bankDoc") {
+        if (column.field === "bdoc") {
           return {
             ...column,
             renderCell: (params: any) => {
               const hasBankPath =
-                params.row?.bankDoc && params.row.bankDoc.trim() !== "";
+                params.row?.bdoc && params.row.bdoc.trim() !== "";
 
               if (!hasBankPath) {
                 return <span>—</span>;
@@ -2325,12 +2322,12 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "panDocument") {
+        if (column.field === "pdoc") {
           return {
             ...column,
             renderCell: (params: any) => {
               const hasPanPath =
-                params.row?.panDoc && params.row.panDoc.trim() !== "";
+                params.row?.pdoc && params.row.pdoc.trim() !== "";
 
               if (!hasPanPath) {
                 return <span>—</span>;
@@ -2480,7 +2477,7 @@ const DataTable = ({
           return {
             ...column,
             renderCell: (params: any) => {
-              const status = params.row?.schemeStatus;
+              const status = params.row?.sch;
 
               // Show dash if EsignPending or null/undefined
               if (status === "Submitted" || status === "Completed") {
@@ -2489,10 +2486,7 @@ const DataTable = ({
                   <button
                     onClick={() => {
                       handleDownload(params.row); // trigger download
-                      console.log(
-                        "DP AMC Transaction row",
-                        params.row.schemeStatus
-                      );
+                      console.log("DP AMC Transaction row", params.row.sch);
                     }}
                     style={{
                       color: "#11395C",
@@ -2727,33 +2721,7 @@ const DataTable = ({
           columns={columns}
           rowHeight={30}
           hideFooter={customHide ? true : false}
-          getRowId={(row: any) =>
-            row.rowID
-              ? row.rowID
-              : row.id
-              ? row.id
-              : row.rowId
-              ? row.rowId
-              : row.ClientCode
-              ? row.ClientCode
-              : row.clientCode
-              ? row.clientCode
-              : row.ctermcode
-              ? row.ctermcode
-              : row.RowId
-              ? row.RowId
-              : row.dummyId
-              ? row.dummyId
-              : row.RowID
-              ? row.RowID
-              : row.ClientName
-              ? row.ClientName
-              : row.clientName
-              ? row.clientName
-              : row.BOID
-              ? `${row.BOName}-${row.TotalDebit}-${Math.random()}`
-              : row.Name
-          }
+          getRowId={(row: any) => (row.Id ? row?.Id : row?.cc)}
           // Use the correct identifier for rows
           getRowClassName={(params) => {
             if (customCss) {

@@ -234,7 +234,7 @@ const RevenueCharts = ({ series, revenueMonths }: any) => {
 
   useEffect(() => {
     console.log("series", revenueMonths, series);
-    const latestMonths = revenueMonths.map((item: any) => item.MnthYR);
+    const latestMonths = revenueMonths.map((item: any) => item.myr);
     console.log("latestMonts", latestMonths);
     setMnthYRValues(latestMonths);
 
@@ -406,7 +406,7 @@ const RevenueNonBrokingCharts = ({ series, revenueMonths }: any) => {
 
   useEffect(() => {
     console.log("series", revenueMonths, series);
-    const latestMonths = revenueMonths.map((item: any) => item.MnthYR);
+    const latestMonths = revenueMonths.map((item: any) => item.myr);
     console.log("latestMonts", latestMonths);
     setMnthYRValues(latestMonths);
 

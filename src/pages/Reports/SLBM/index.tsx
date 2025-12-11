@@ -305,8 +305,8 @@ const SlbmHoling = ({ activeSubItem }: any) => {
 
         if (errors) {
           // Extract error messages
-          const zoneError = errors?.Zone?.[0];
-          const branchError = errors?.BranchCode?.[0];
+          const zoneError = errors?.zn?.[0];
+          const branchError = errors?.bc?.[0];
 
           // Display the errors in ShowToast
           if (zoneError) {
@@ -498,31 +498,23 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                               getOptionLabel={(option) =>
                                 typeof option === "string"
                                   ? option
-                                  : option.ScripName || ""
+                                  : option.scn || ""
                               }
                               filterOptions={(options, state) =>
                                 options.filter((option) => {
                                   const input = state.inputValue.toLowerCase();
                                   return (
-                                    option.ScripName?.toLowerCase().includes(
-                                      input
-                                    ) ||
-                                    option.BSECode?.toLowerCase().includes(
-                                      input
-                                    ) ||
-                                    option.NSECode?.toLowerCase().includes(
-                                      input
-                                    ) ||
-                                    option.ISINCode?.toLowerCase().includes(
-                                      input
-                                    )
+                                    option.scn?.toLowerCase().includes(input) ||
+                                    option.bse?.toLowerCase().includes(input) ||
+                                    option.nse?.toLowerCase().includes(input) ||
+                                    option.isin?.toLowerCase().includes(input)
                                   );
                                 })
                               }
                               value={
                                 isinRecords.find(
                                   (item) =>
-                                    item.ISINCode === formik.values.isInValue
+                                    item.isin === formik.values.isInValue
                                 ) || null
                               }
                               inputValue={inputText}
@@ -539,17 +531,17 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                                   console.log(event);
                                   formik.setFieldValue(
                                     "isInValue",
-                                    newValue.ISINCode || ""
+                                    newValue.isin || ""
                                   );
-                                  setInputText(newValue.ISINCode || "");
+                                  setInputText(newValue.isin || "");
                                 } else {
                                   formik.setFieldValue("isInValue", "");
                                   setInputText("");
                                 }
                               }}
                               renderOption={(props, option) => (
-                                <li {...props} key={option.ISINCode}>
-                                  {option.ScripName}
+                                <li {...props} key={option.isin}>
+                                  {option.scn}
                                 </li>
                               )}
                               renderInput={(params) => (

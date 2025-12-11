@@ -192,7 +192,7 @@ const DashboardCrypto = ({
         apiServices
           .ClientCash(payload)
           .then((response) => {
-            console.log("ClientCashresponse", response?.data?.data);
+            console.log("ClientCashresponse", response);
             // handleValues(response?.data?.data);
             dispatch(hideLoader());
             if (response?.status === 200) {
@@ -201,7 +201,19 @@ const DashboardCrypto = ({
               // let { recordsTotal } = response?.data[0];
               // setTotalEntries(recordsTotal);
               // setUserData(response.data);
-              setTradeCWCBData(response?.data?.data);
+              const responseData = response?.data?.data ?? [];
+
+              const updatedData = responseData.map(
+                (item: any, index: number) => ({
+                  ...item,
+                  Id: index + 1,
+                })
+              );
+
+              console.log("Updated Data with Id:", updatedData);
+
+              // Store in state
+              setTradeCWCBData(updatedData);
             }
           })
           .catch((error) => {
@@ -233,11 +245,23 @@ const DashboardCrypto = ({
             showLoader("Please wait, we are processing your request...")
           );
           const response = await apiServices.T6Selling(payload);
-          console.log("ClientCashresponse", response?.data?.data?.Table);
+          console.log("ClientCashresponse", response?.data?.data);
           if (response?.status === 200) {
             setResponseStatus(true);
             dispatch(hideLoader());
-            setT6Data(response?.data?.data?.Table);
+            const responseData = response?.data?.data ?? [];
+
+            const updatedData = responseData.map(
+              (item: any, index: number) => ({
+                ...item,
+                Id: index + 1,
+              })
+            );
+
+            console.log("T6 Updated Data with Id:", updatedData);
+
+            // Store updated list
+            setT6Data(updatedData);
             // let { recordsTotal } = response?.data[0]; // Extract the necessary data
             // console.log("Records Total:", recordsTotal);
           }
@@ -260,11 +284,11 @@ const DashboardCrypto = ({
     try {
       dispatch(showLoader("Please wait, we are processing your request..."));
       const response = await apiServices.T6Selling(payload);
-      console.log("ClientCashresponse", response?.data?.data?.Table);
+      console.log("ClientCashresponse", response?.data?.data);
       if (response?.status === 200) {
         dispatch(hideLoader());
         // setT6Data(response?.data?.data?.Table);
-        const data: T6Selling[] = response?.data?.data?.Table;
+        const data: T6Selling[] = response?.data?.data;
 
         // Convert data to a worksheet
         const worksheet = XLSX.utils.json_to_sheet(data);

@@ -23,12 +23,10 @@ const index = ({ activeSubItem }: any) => {
     const fetchApprover1 = async () => {
       const ViewPayload = {
         userID: user_id,
-        // userID: "EMP-5347",
       };
 
       const vendorPayload = {
         userID: user_id,
-        // userID: "EMP-5347",
         status: "",
         remarks: "",
       };
@@ -36,21 +34,33 @@ const index = ({ activeSubItem }: any) => {
       try {
         dispatch(showLoader("Please wait, we are processing your request..."));
 
-        // Example: First call (if needed)
         const response = await apiServices.Approver1ViewUnlisted(ViewPayload);
-
-        // Then actual data fetch
         const vendorResponse = await apiServices.GetUnlistedVendorDropdown(
           vendorPayload
         );
 
-        console.log(
-          "A1 Data",
-          response?.data?.data,
-          vendorResponse?.data?.data
+        const mainData = response?.data?.data || [];
+        const vendorData = vendorResponse?.data?.data || [];
+
+        // ✅ Add Id = index + 1 for mainData
+        const updatedMainData = mainData.map((item: any, index: number) => ({
+          ...item,
+          Id: index + 1,
+        }));
+
+        // ✅ Add Id = index + 1 for vendorData
+        const updatedVendorData = vendorData.map(
+          (item: any, index: number) => ({
+            ...item,
+            Id: index + 1,
+          })
         );
-        setData(response?.data?.data);
-        setVendorList(vendorResponse?.data?.data);
+
+        console.log("A1 Data", updatedMainData, updatedVendorData);
+
+        // ⬅ Store updated data in state
+        setData(updatedMainData);
+        setVendorList(updatedVendorData);
       } catch (error) {
         console.error("Error fetching compliance data:", error);
       } finally {
@@ -85,7 +95,7 @@ const index = ({ activeSubItem }: any) => {
         // setFlag(!flag);
         if (response?.status === 200) {
           setFlag(!flag);
-          ShowToast("success", response?.data?.data?.message);
+          ShowToast("success", response?.data?.data?.msg);
         } else {
           console.log("Error during approval", response);
           ShowToast("error", "Error approving item");

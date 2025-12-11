@@ -161,13 +161,14 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
       .GetAPContestReport(payload)
       .then((response) => {
         const result = response?.data?.data || [];
-        console.log("A1 GetAPContestReport Data", result);
+
         setData(
           result.map((item: any, index: any) => ({
             ...item,
-            id: index + 1,
+            Id: index + 1,
           }))
         );
+        console.log("A1 GetAPContestReport Data", result);
       })
       .catch((error) => {
         console.error("Error fetching compliance data:", error);

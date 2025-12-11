@@ -1,7 +1,14 @@
 // /src/services/baseInstance.ts
 import axios from "axios";
-import { endpoints } from "./endpoints";
 import { getDecryptedValue } from "../utils/loocalEncrypt";
+import {
+  fundamentalEndpoints,
+  multipartEndpoints,
+  mutualFundEndpoints,
+  newDomainEndpoints,
+  pdfDownloadEndpoints,
+  publicEndpoints,
+} from "./fetchendpoints";
 
 // Load environment variables
 const {
@@ -11,9 +18,7 @@ const {
   VITE_BASIC_AUTH_PASSOWORD,
   VITE_FUNDAMENTAL_USERNAME,
   VITE_FUNDAMENTAL_PASSWORD,
-  // VITE_MF_USERNAME,
-  // VITE_MF_PASSWORD,
-  // VITE_MF_SECRETKEY,
+  VITE_NEW_DOMAIN_BASE_URL,
 } = import.meta.env;
 
 // Axios instance
@@ -38,101 +43,6 @@ const privateAuthHeader = createBasicAuthHeader(
   VITE_FUNDAMENTAL_PASSWORD
 );
 
-// const mfAuthHeader = createBasicAuthHeader(
-//   VITE_MF_USERNAME,
-//   VITE_MF_PASSWORD
-//   // VITE_MF_SECRETKEY
-// );
-
-// Lists of endpoints
-const publicEndpoints = [
-  endpoints.Login,
-  endpoints.sendOtp,
-  endpoints.TwoFactorAuthentication,
-  endpoints.forgetPassword,
-  endpoints.UnblockUser,
-  endpoints.GetDpClientDetails,
-  endpoints.checkUpi,
-  endpoints.CreateUpiMandate,
-  endpoints.GetMandateCallBackDetails,
-  endpoints.UpdateUpiMandate,
-  endpoints.RevokeUpiMandate,
-  endpoints.CollectMandatePayment,
-  endpoints.PreDebitMandateNotify,
-  endpoints.ExecuteUpiMandate,
-  endpoints.GetClientModuleDataForAmc,
-  endpoints.GetClientModuleDetails,
-  endpoints.ActivateAMC,
-  endpoints.SendDPAMCEmail,
-  endpoints.GetDPAMCPaymentResponse,
-  endpoints.SendFirstHolderSignature,
-  endpoints.SendSecondHolderSignature,
-  endpoints.SendThirdHolderSignature,
-  endpoints.DownloadSignedPdf,
-  endpoints.SendFinalSignedMail,
-  endpoints.GetAMCActivationStatus,
-];
-
-const fundamentalEndpoints = [
-  endpoints.getFundamentalOverview,
-  endpoints.getFundamentalShareholding,
-  endpoints.getFundamentalDividend,
-  endpoints.getFundamentalBonus,
-  endpoints.getFundamentalSplit,
-  endpoints.getFundamentalBoardMeeting,
-  endpoints.getFundamentalBalanceSheet,
-  endpoints.getFundamentalcashflow,
-  endpoints.getFundamentalAnnualPNL,
-  endpoints.getFundamentalQuaterlyPNL,
-  endpoints.getFundamentalNewsfeed,
-  endpoints.getFundamentalRatios,
-];
-
-const pdfDownloadEndpoints = [
-  endpoints.GetPNLAccountDetailsPdf,
-  endpoints.ComplainceFileDownload,
-  endpoints.GenerateAndDownloadInvoice,
-  endpoints.GenerateClientPerformancePdf,
-  endpoints.GenerateTPInvoice,
-  endpoints.DPAMCDownloadFile,
-];
-
-const multipartEndpoints = [
-  endpoints.UploadUnlistedSharesVendorFile,
-  endpoints.TPInvoiceStaging,
-  endpoints.MergeIntoOdinFile,
-  endpoints.MergeIntoSymphonyFile,
-  endpoints.SLBMHoldingsUploadOdin,
-  endpoints.MTFStockAgeingFileUpload,
-  endpoints.MTFAgeingFileUpload,
-  endpoints.T6BSESellingFileUpload,
-  endpoints.T6NSESellingFileUpload,
-  endpoints.REGNSEFileUpload,
-  endpoints.REGBSEFileUpload,
-];
-
-const mutualFundEndpoints = [
-  endpoints.MF_SchemeDetails,
-  endpoints.BSEStar_MfMandateStatus,
-  endpoints.MF_OngoingSIP,
-  endpoints.MF_PortfolioStatementReport,
-  endpoints.MF_TransactionReport,
-  endpoints.MF_NFODetails,
-  endpoints.ClientProfile,
-  endpoints.MF_BasketDetialedList,
-  endpoints.VerifyUpi,
-  endpoints.MF_FundOverView,
-  endpoints.BSEStar_SinglePayment,
-  endpoints.BSEStar_MfOrderEntry,
-  endpoints.BSEStar_XSIPOrderEntry,
-  endpoints.BSEStar_MfMandateStatus,
-  endpoints.BSEStar_MfMandateEntry,
-  endpoints.MF_TodayOrders,
-  endpoints.EnachEmailToClient,
-  endpoints.SinglePaymentEmail,
-  endpoints.VerifyClientCode,
-];
-
 // Utility functions
 const isEndpointMatched = (url: string | undefined, endpoints: string[]) =>
   !!url && endpoints.some((ep) => url.includes(ep));
@@ -152,9 +62,14 @@ baseInstance.interceptors.request.use(
     const isPdfRequest = isEndpointMatched(url, pdfDownloadEndpoints);
     const isMultipart = isEndpointMatched(url, multipartEndpoints);
     const isMutualFund = isEndpointMatched(url, mutualFundEndpoints);
+    const isNewDomain = isEndpointMatched(url, newDomainEndpoints);
 
     // Set baseURL and authorization
-    config.baseURL = isFundamental ? VITE_FUNDAMENTAL_URL : VITE_BASE_URL;
+    config.baseURL = isFundamental
+      ? VITE_FUNDAMENTAL_URL
+      : isNewDomain
+      ? VITE_NEW_DOMAIN_BASE_URL
+      : VITE_BASE_URL;
     config.headers.Authorization = isFundamental
       ? privateAuthHeader
       : isMutualFund

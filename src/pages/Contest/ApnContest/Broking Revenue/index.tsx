@@ -34,7 +34,7 @@ const ApContestSummaryCard = ({ isCustomRender, row }: any) => {
   //  Fetch Dashboard Data
   const fetchDashboardData = async () => {
     const payload = {
-      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
     };
 
     try {
@@ -45,26 +45,24 @@ const ApContestSummaryCard = ({ isCustomRender, row }: any) => {
         const data = res.data.data;
 
         //  Summary cards
-        setClientData(data.clientData || {});
+        setClientData(data.cdata || {});
 
         //  Brokerage chart data
-        const brokerageData = (data.last15DaysBrokerageData || []).map(
-          (item: any) => ({
-            date: new Date(item.tradeDate).toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-            }),
-            value: item.totalGrossBrokerage,
-          })
-        );
-
-        //  Unique traded clients chart data
-        const uniqueData = (data.apUniqueClientData || []).map((item: any) => ({
-          date: new Date(item.tradeDate).toLocaleDateString("en-GB", {
+        const brokerageData = (data.b15 || []).map((item: any) => ({
+          date: new Date(item.td).toLocaleDateString("en-GB", {
             day: "2-digit",
             month: "short",
           }),
-          value: item.total,
+          value: item.tgb,
+        }));
+
+        //  Unique traded clients chart data
+        const uniqueData = (data.ucd || []).map((item: any) => ({
+          date: new Date(item.td).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+          }),
+          value: item.ttl,
         }));
 
         setBrokerageChartData(brokerageData);
@@ -81,7 +79,7 @@ const ApContestSummaryCard = ({ isCustomRender, row }: any) => {
   };
   const fetchApContestSummary = async () => {
     const payload = {
-      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
     };
 
     try {
@@ -206,23 +204,23 @@ const ApContestSummaryCard = ({ isCustomRender, row }: any) => {
         {[
           {
             title: "Revenue Achieved*",
-            value: formatIndianCurrency(summary?.brokerageNetToLKP),
+            value: formatIndianCurrency(summary?.bnlkp),
             note: isMobile
               ? "* Contest Period - 1st Oct to 31st Dec"
               : undefined,
           },
-          { title: "Active Clients", value: clientData?.activeClients ?? "-" },
+          { title: "Active Clients", value: clientData?.actc ?? "-" },
           {
             title: "Unique Traded Clients*",
-            value: clientData?.uniqueTradedClients ?? "-",
+            value: clientData?.utrc ?? "-",
           },
           {
             title: "New Accounts Added*",
-            value: clientData?.newAccountAdded ?? "-",
+            value: clientData?.naca ?? "-",
           },
           {
             title: "Upcoming Dormant Clients",
-            value: clientData?.dormantClients ?? "-",
+            value: clientData?.dcl ?? "-",
           },
         ].map((item, index) => (
           <Col key={index} xs={12} sm={6} md={4} lg={2}>

@@ -395,8 +395,8 @@ const SideBar = () => {
 
           Object.values(response?.data).forEach((table: any) => {
             table.forEach((entry: any) => {
-              if (entry.ReportType) {
-                reportTypes.add(entry.ReportType);
+              if (entry.rt) {
+                reportTypes.add(entry.rt);
               }
             });
           });
@@ -501,31 +501,32 @@ const SideBar = () => {
       .finally(() => {
         dispatch(hideLoader());
       });
-    const buildMenuHierarchy = (data: any) => {
-      // Create a map of menu items with the `menu_code` as the key
-      const menuMap = new Map();
-      data.forEach((item: any) => {
-        menuMap.set(item.menu_code, { ...item, subItems: [] });
-      });
-
-      // Iterate over the data and find child menus
-      const menuHierarchy: any = [];
-      data.forEach((item: any) => {
-        if (item.parent_menu_code === 0) {
-          menuHierarchy.push(menuMap.get(item.menu_code));
-        } else {
-          // Child menu, add to parent
-          const parentMenu = menuMap.get(item.parent_menu_code);
-          if (parentMenu) {
-            parentMenu.subItems.push(menuMap.get(item.menu_code));
-          }
-        }
-      });
-      console.log("MenuOrder-->", menuHierarchy);
-
-      return menuHierarchy;
-    };
   }, []);
+
+  const buildMenuHierarchy = (data: any) => {
+    // Create a map of menu items with the `menu_code` as the key
+    const menuMap = new Map();
+    data.forEach((item: any) => {
+      menuMap.set(item.menu_code, { ...item, subItems: [] });
+    });
+
+    // Iterate over the data and find child menus
+    const menuHierarchy: any = [];
+    data.forEach((item: any) => {
+      if (item.parent_menu_code === 0) {
+        menuHierarchy.push(menuMap.get(item.menu_code));
+      } else {
+        // Child menu, add to parent
+        const parentMenu = menuMap.get(item.parent_menu_code);
+        if (parentMenu) {
+          parentMenu.subItems.push(menuMap.get(item.menu_code));
+        }
+      }
+    });
+    console.log("MenuOrder-->", menuHierarchy);
+
+    return menuHierarchy;
+  };
 
   useEffect(() => {
     if (!isMobile) {
@@ -815,13 +816,56 @@ const SideBar = () => {
     subItems: Record<string, JSX.Element | null>
   ): JSX.Element | null => subItems[activeSubItem] || null;
 
-  const componentResolver = (menu_order: number): JSX.Element | null => {
-    const dynamicMap: Record<number, () => JSX.Element | null> = {
-      1: () =>
+  const componentResolver = (menu_order: number, menu_name: string) => {
+    console.log("MenuOrder", menu_order, menu_name);
+    const map: Record<string, JSX.Element | null> = {
+      "My Performance":
         user_type === "Employee"
           ? performanceComponents.Employee
           : performanceComponents.Default,
-      2: () => (
+      Trading: (
+        <TradeDashboard
+          selectedTrading={selectedViewMore}
+          showMyPerformance={showMyPerformance}
+        />
+      ),
+      Reports: getSubItemComponent(reportsSubItems),
+      "Zone Overview": (
+        <RHDashboard activeSubItem={activeSubItem} activeMenu={activeMenu} />
+      ),
+      Masters: getSubItemComponent(revenueDetailsSubItems),
+      RMS: getSubItemComponent(rmsSubItems),
+      Compliance: getSubItemComponent(complianceSubItems),
+      "KYC Dashboard": getSubItemComponent(kycSubItems),
+      "Stock Study": <StockStudy />,
+      "Mutual Fund": <MutualFundIndex />,
+      DashBoard: null,
+      "Regulatory Announcement": (
+        <RegulatorAnnouncement activeMenu={activeMenu} />
+      ),
+      "Marketing Materials": <MarketingMaterial />,
+      EKYC: <EkycLinks />,
+      "Back Office Report": <OTDetails />,
+      "Registration Details": <RegisDetails activeSubItem={activeSubItem} />,
+      IVR: getSubItemComponent(ivrSubItems),
+      "SPIP Dashboard": (
+        <SPIPOverview
+          activeSubItem={activeSubItem}
+          handleTradingOpen={handleTradingOpen}
+        />
+      ),
+      SPIP: (
+        <SPIP
+          activeSubItem={activeSubItem}
+          activeMenu={activeMenu}
+          handleTradingOpen={handleTradingOpen}
+          selectedViewMore={selectedViewMore}
+        />
+      ),
+      "TPD Report": getSubItemComponent(tpdSubItems),
+      "Employee Target": <EmpContest activeMenu={activeMenu} />,
+      "Partner Contest": <ApnContest activeMenu={activeMenu} />,
+      "Client Details": (
         <ClientDetails
           handleDrawerClose={handleDrawerClose}
           handleDrawerOpen={handleDrawerOpen}
@@ -830,65 +874,20 @@ const SideBar = () => {
           activeMenu={activeMenu}
         />
       ),
-      3: () => (
-        <TradeDashboard
-          selectedTrading={selectedViewMore}
-          showMyPerformance={showMyPerformance}
-        />
-      ),
-      4: () => getSubItemComponent(reportsSubItems),
-      5: () => (
-        <RHDashboard activeSubItem={activeSubItem} activeMenu={activeMenu} />
-      ),
-      6: () => getSubItemComponent(revenueDetailsSubItems),
-      7: () => getSubItemComponent(rmsSubItems),
-      8: () => getSubItemComponent(complianceSubItems),
-      9: () => getSubItemComponent(kycSubItems),
-      10: () => <StockStudy />,
-      // 11: () => getSubItemComponent(referalSubItems),
-      14: () => (
-        <MutualFundIndex
-        // activeSubItem={activeSubItem}
-        // activeMenu={activeMenu}
-        />
-      ),
-      21: () => <RegulatorAnnouncement activeMenu={activeMenu} />,
-      22: () => <MarketingMaterial />,
-      23: () => <EkycLinks />,
-      24: () => <OTDetails />,
-      25: () => <RegisDetails activeSubItem={activeSubItem} />,
-      26: () => getSubItemComponent(ivrSubItems),
-      28: () => (
-        <SPIPOverview
-          activeSubItem={activeSubItem}
-          handleTradingOpen={handleTradingOpen}
-        />
-      ),
-      29: () => (
-        <SPIP
-          activeSubItem={activeSubItem}
-          activeMenu={activeMenu}
-          handleTradingOpen={handleTradingOpen}
-          selectedViewMore={selectedViewMore}
-        />
-      ),
-      30: () => getSubItemComponent(tpdSubItems),
-      31: () => <EmpContest activeMenu={activeMenu} />,
-      32: () => <ApnContest activeMenu={activeMenu} />,
-      33: () => getSubItemComponent(AccountSubItems),
-      34: () => <PledgeRequest activeMenu={activeMenu} />,
-      35: () => <AmcMembership activeMenu={activeMenu} />,
-      36: () => <ResearchCalls />,
+      Account: getSubItemComponent(AccountSubItems),
+      "Client Request": <PledgeRequest activeMenu={activeMenu} />,
+      "DP AMC Contest": <AmcMembership activeMenu={activeMenu} />,
+      "Research Calls": <ResearchCalls />,
     };
-
-    return dynamicMap[menu_order]?.() || null;
+    return map[menu_name] ?? null;
   };
-
   const renderContent = () => {
     const active = menuItems.find((item) => item.menu_name === activeMenu);
     console.log("activeMenu", active);
 
-    return active ? componentResolver(active.menu_order) : null;
+    return active
+      ? componentResolver(active.menu_order, active.menu_name)
+      : null;
   };
 
   const handleNotificationClick = () => {

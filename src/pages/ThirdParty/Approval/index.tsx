@@ -24,13 +24,21 @@ const ThirdPartyApproval = ({ activeSubItem }: any) => {
         user_id: user_id,
         // user_id: "EMP-0656",
       };
+
       dispatch(showLoader("Please wait, we are processing your request..."));
 
       apiServices
         .ThirdPartyApproverView(payload)
         .then((response) => {
-          console.log("A1 Data", response?.data?.data);
-          setData(response?.data?.data);
+          const apiData = response?.data?.data || [];
+
+          const mappedData = apiData.map((item: any, index: any) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          console.log("A1 Data Mapped →", mappedData);
+          setData(mappedData);
         })
         .catch((error) => {
           console.error("Error fetching compliance data:", error);
@@ -39,6 +47,7 @@ const ThirdPartyApproval = ({ activeSubItem }: any) => {
           dispatch(hideLoader());
         });
     };
+
     fetchApprover();
   }, [dispatch, flag]);
 
@@ -57,7 +66,7 @@ const ThirdPartyApproval = ({ activeSubItem }: any) => {
         // setFlag(!flag);
         if (response?.status === 200) {
           setFlag(!flag);
-          ShowToast("success", response?.data?.data?.message);
+          ShowToast("success", response?.data?.data?.msg);
         } else {
           console.log("Error during approval", response);
           ShowToast("error", "Error approving item");

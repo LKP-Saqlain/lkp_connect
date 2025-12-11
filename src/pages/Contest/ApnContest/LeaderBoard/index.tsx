@@ -7,8 +7,8 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 
 interface UserRank {
-  rank: number;
-  grossBrokerage: number;
+  rnk: number;
+  gb: number;
 }
 
 const index = ({ isCustomRender, row }: any) => {
@@ -29,12 +29,12 @@ const index = ({ isCustomRender, row }: any) => {
 
       const response = await apiServices.APContestLeaderboard(payload);
       const list = response?.data?.data?.list ?? [];
-      const userRank = response?.data?.data?.userRank ?? [];
+      const userRank = response?.data?.data?.urnk ?? [];
 
       if (response?.data?.statusCode === 200 && Array.isArray(list)) {
         const formattedData = list.map((item: any, index: number) => ({
           ...item,
-          id: index + 1, // ✅ safer unique key (starts from 1)
+          Id: index + 1, //
         }));
         setPersonalData(userRank);
         setUserData(formattedData);
@@ -61,7 +61,7 @@ const index = ({ isCustomRender, row }: any) => {
           {" "}
           <DashboardCard
             title="My Rank"
-            value={response?.data?.data?.grossBrokerage}
+            value={response?.data?.data?.gb}
             customClass
           />{" "}
         </Col>
@@ -87,11 +87,11 @@ const index = ({ isCustomRender, row }: any) => {
               <span style={{ fontSize: "12px" }}>(October–December)</span>
             </h4>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span>My Rank: #{personalData?.rank ?? "-"}</span>
+              <span>My Rank: #{personalData?.rnk ?? "-"}</span>
               <span>|</span>
               <span>
                 Gross Brokerage:{" "}
-                {personalData?.grossBrokerage?.toLocaleString("en-IN", {
+                {personalData?.gb?.toLocaleString("en-IN", {
                   maximumFractionDigits: 0,
                 }) ?? "-"}
               </span>

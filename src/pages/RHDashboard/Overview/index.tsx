@@ -69,9 +69,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
     indirectTotal: 0,
   });
   const [newAccountsData, setNewAccountsData] = useState<any>({
-    total: 10,
-    direct: 100,
-    indirect: 1000,
+    total: 0,
+    direct: 0,
+    indirect: 0,
     MonthTotal: 0,
     directTotal: 0,
     indirectTotal: 0,
@@ -118,8 +118,8 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
     indirect: resData.map((item) => item[mapping.indirect] ?? 0),
     total: resData.map((item) => item[mapping.total] ?? 0),
     dates: resData.map((item) =>
-      item.tradeDate
-        ? dayjs(item.tradeDate).format("DD-MMM-YY")
+      item.td
+        ? dayjs(item.td).format("DD-MMM-YY")
         : item.startDate
         ? dayjs(item.startDate).format("DD-MMM-YY")
         : ""
@@ -148,11 +148,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         // create combined fields on each item
         resData = resData.map((item: any) => ({
           ...item,
-          direct_Equity:
-            (item.direct_Delivery ?? 0) + (item.direct_Intraday ?? 0),
-          indirect_Equity:
-            (item.indirect_Delivery ?? 0) + (item.indirect_Intraday ?? 0),
-          total_Equity: (item.total_Delivery ?? 0) + (item.total_Intraday ?? 0),
+          direct_Equity: (item.dd ?? 0) + (item.di ?? 0),
+          indirect_Equity: (item.id ?? 0) + (item.ii ?? 0),
+          total_Equity: (item.tdv ?? 0) + (item.tin ?? 0),
         }));
 
         //  Correct logging
@@ -279,9 +277,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
       if (activeClientsRes?.data?.isSuccess) {
         const d = activeClientsRes?.data?.data;
         setActiveClientsData({
-          total: d.totalActiveClients ?? 0,
-          direct: d.directClients ?? 0,
-          indirect: d.indirectClients ?? 0,
+          total: d.tac ?? 0,
+          direct: d.dc ?? 0,
+          indirect: d.ic ?? 0,
         });
         console.log("d.indirectClients", d);
       }
@@ -289,33 +287,33 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
       if (tradedClientsRes?.data?.isSuccess) {
         const d = tradedClientsRes.data?.data;
         setUniqueTradedClientsData({
-          total: d.yearlyUTC_Total ?? 0,
-          direct: d.yearlyUTC_Direct ?? 0,
-          indirect: d.yearlyUTC_Indirect ?? 0,
-          MonthTotal: d.monthlyUTC_Total ?? 0,
-          directTotal: d.monthlyUTC_Direct ?? 0,
-          indirectTotal: d.monthlyUTC_Indirect ?? 0,
+          total: d.yut ?? 0,
+          direct: d.yud ?? 0,
+          indirect: d.yui ?? 0,
+          MonthTotal: d.mut ?? 0,
+          directTotal: d.mud ?? 0,
+          indirectTotal: d.mui ?? 0,
         });
       }
 
       if (newAccountsRes?.data?.isSuccess) {
         const d = newAccountsRes.data?.data;
         setNewAccountsData({
-          total: d.yearlyNA_Total ?? 0,
-          direct: d.yearlyNA_Direct ?? 0,
-          indirect: d.yearlyNA_Indirect ?? 0,
-          MonthTotal: d.monthlyNA_Total ?? 0,
-          directTotal: d.monthlyNA_Direct ?? 0,
-          indirectTotal: d.monthlyNA_Indirect ?? 0,
+          total: d.ynt ?? 0,
+          direct: d.ynd ?? 0,
+          indirect: d.yni ?? 0,
+          MonthTotal: d.mnt ?? 0,
+          directTotal: d.mnd ?? 0,
+          indirectTotal: d.mni ?? 0,
         });
       }
 
       if (dormantRes?.data?.isSuccess) {
         const d = dormantRes.data?.data;
         setUpcomingDormantAccountsData({
-          total: d.total ?? 0,
-          direct: d.direct ?? 0,
-          indirect: d.indirect ?? 0,
+          total: d.ttl ?? 0,
+          direct: d.dir ?? 0,
+          indirect: d.ind ?? 0,
         });
       }
     } catch (err) {
@@ -335,9 +333,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         apiCall: apiServices.GetOverviewBrokRevReport,
         optionType: "Brok_Details",
         mapping: {
-          direct: "direct_Gross_Brokerage",
-          indirect: "indirect_Gross_Brokerage",
-          total: "total_Gross_Brokerage",
+          direct: "dgb",
+          indirect: "igb",
+          total: "tgb",
         },
         setter: setBrokingRevenue,
       },
@@ -346,9 +344,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         apiCall: apiServices.GetOverviewUniqueTradedClients,
         optionType: "Unique_Traded_Client",
         mapping: {
-          direct: "direct",
-          indirect: "indirect",
-          total: "total",
+          direct: "dir",
+          indirect: "ind",
+          total: "tot",
         },
         setter: setTradedClients,
       },
@@ -357,15 +355,15 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         apiCall: apiServices.GetNewAccountAddedOverview,
         optionType: "New_Account_Added",
         mapping: {
-          direct: "direct_NewAccount",
-          indirect: "indirect_NewAccount",
-          total: "total_NewAccount",
+          direct: "dna",
+          indirect: "ina",
+          total: "tna",
         },
         setter: setNewAccounts,
       },
       {
         title:
-          "Equity (Delivery + Intraday) Segment Brokerage for last 15 Days",
+          "Equity (Delivery + Intraday) Segment Brokerage for last 15 Dayss",
         apiCall: apiServices.GetDeliverySegmentOverview,
         optionType: "Delivery_Segment_Intranet_segment",
         mapping: {
@@ -381,9 +379,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         apiCall: apiServices.GetFuturesRevenueOverview,
         optionType: "Futures_Revenue",
         mapping: {
-          direct: "direct_Futures",
-          indirect: "indirect_Futures",
-          total: "total_Futures",
+          direct: "df",
+          indirect: "inf",
+          total: "tf",
         },
         setter: setFuturesRevenue,
       },
@@ -392,9 +390,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         apiCall: apiServices.GetOptionsRevenueOverview,
         optionType: "Options_Revenue",
         mapping: {
-          direct: "direct_Options",
-          indirect: "indirect_Options",
-          total: "total_Options",
+          direct: "dop",
+          indirect: "iop",
+          total: "top",
         },
         setter: setOptionsRevenue,
       },
@@ -403,9 +401,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         apiCall: apiServices.GetCommodity_FuturesOverview,
         optionType: "Commodity_Futures",
         mapping: {
-          direct: "direct_Commodity_Futures",
-          indirect: "indirect_Commodity_Futures",
-          total: "total_Commodity_Futures",
+          direct: "dcf",
+          indirect: "icf",
+          total: "tcf",
         },
         setter: setCommodityFutures,
       },
@@ -414,9 +412,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         apiCall: apiServices.GetCommodity_OptionsOverview,
         optionType: "Commodity_Options",
         mapping: {
-          direct: "direct_Commodity_Options",
-          indirect: "indirect_Commodity_Options",
-          total: "total_Commodity_Options",
+          direct: "dco",
+          indirect: "ico",
+          total: "tco",
         },
         setter: setCommodityOptions,
       },
@@ -425,9 +423,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         apiCall: apiServices.GetslbmOverview,
         optionType: "SLBM_Segment",
         mapping: {
-          direct: "direct_slbm",
-          indirect: "indirect_slbm",
-          total: "total_slbm",
+          direct: "dslbm",
+          indirect: "islbm",
+          total: "tslbm",
         },
         setter: setSlbmSegment,
       },

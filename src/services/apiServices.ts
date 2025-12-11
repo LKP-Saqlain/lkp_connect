@@ -21,6 +21,7 @@ const apiService = async (
       return response;
     } else if (method === "POST") {
       response = await baseInstance.post(endpoint, payload, config);
+      console.log("Response-->", response?.data);
       return response;
     }
     return response;

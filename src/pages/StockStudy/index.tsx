@@ -172,15 +172,15 @@ const StockStudy = () => {
     let matchedISIN = null;
 
     if (selectedItem) {
-      matchedISIN = selectedItem.ISINCode;
+      matchedISIN = selectedItem.isin;
     } else {
       const matched = fundamentalRecords.find(
         (item) =>
-          item.ScripName?.toLowerCase() === searchValue?.toLowerCase() ||
-          item.BSECode?.toLowerCase() === searchValue?.toLowerCase() ||
-          item.NSECode?.toLowerCase() === searchValue?.toLowerCase()
+          item.scn?.toLowerCase() === searchValue?.toLowerCase() ||
+          item.bse?.toLowerCase() === searchValue?.toLowerCase() ||
+          item.nse?.toLowerCase() === searchValue?.toLowerCase()
       );
-      matchedISIN = matched?.ISINCode;
+      matchedISIN = matched?.isin;
     }
 
     if (matchedISIN) {
@@ -217,16 +217,16 @@ const StockStudy = () => {
                 freeSolo
                 options={fundamentalRecords}
                 getOptionLabel={(option) =>
-                  typeof option === "string" ? option : option.ScripName || ""
+                  typeof option === "string" ? option : option.scn || ""
                 }
                 filterOptions={(options, state) =>
                   options.filter((option) => {
                     const input = state.inputValue.toLowerCase();
                     return (
-                      option.ScripName?.toLowerCase().includes(input) ||
-                      option.BSECode?.toLowerCase().includes(input) ||
-                      option.NSECode?.toLowerCase().includes(input) ||
-                      option.ISINCode?.toLowerCase().includes(input)
+                      option.scn?.toLowerCase().includes(input) ||
+                      option.bse?.toLowerCase().includes(input) ||
+                      option.nse?.toLowerCase().includes(input) ||
+                      option.isin?.toLowerCase().includes(input)
                     );
                   })
                 }
@@ -250,7 +250,7 @@ const StockStudy = () => {
                     console.log(event);
 
                     setPendingSelected(newValue);
-                    setInputValue(newValue.ScripName || "");
+                    setInputValue(newValue.scn || "");
                     fetchISIN(undefined, newValue); // 🔁 Trigger search on select
                   } else {
                     setPendingSelected(null);
@@ -260,8 +260,8 @@ const StockStudy = () => {
                   }
                 }}
                 renderOption={(props, option) => (
-                  <li {...props} key={option.ISINCode}>
-                    <Box>{option.ScripName}</Box>
+                  <li {...props} key={option.isin}>
+                    <Box>{option.scn}</Box>
                   </li>
                 )}
                 renderInput={(params) => (

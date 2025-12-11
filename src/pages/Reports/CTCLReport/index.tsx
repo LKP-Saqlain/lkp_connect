@@ -117,7 +117,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
           ) {
             const formattedData = response?.data?.data.map(
               (item: any, index: any) => ({
-                id: index + 1, // unique ID for DataGrid
+                Id: index + 1, // unique ID for DataGrid
                 zone: item.client_Zone,
                 branchCode: item.client_Branch,
                 ctclTerminalID: item.ctcL_Terminal_ID,
@@ -169,7 +169,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
           ) {
             const formattedData = response?.data?.data.map(
               (item: any, index: any) => ({
-                id: index + 1, // unique ID for DataGrid
+                Id: index + 1, // unique ID for DataGrid
                 zone: item.client_Zone,
                 branchCode: item.client_Branch,
                 ctclTerminalID: item.ctcL_Terminal_ID,

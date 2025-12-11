@@ -30,7 +30,7 @@ const DPTransactionIndex = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     const payload = {
-      user_id,
+      UserId: user_id,
       filterDate: getFormattedDate(),
     };
 
@@ -43,7 +43,7 @@ const DPTransactionIndex = ({ activeSubItem }: any) => {
         console.log("DP Transaction Data:", result, activeSubItem);
 
         const formattedData = result.map((item: any, index: number) => ({
-          id: index + 1,
+          Id: index + 1,
           ...item,
         }));
 

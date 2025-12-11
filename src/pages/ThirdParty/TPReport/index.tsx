@@ -23,8 +23,20 @@ const ThirdPartyStatusReport = ({ activeSubItem }: any) => {
     apiServices
       .ViewThirdPartyMaster(payload)
       .then((response) => {
-        console.log("A1 Data", response?.data?.data);
-        setData(response?.data?.data);
+        dispatch(hideLoader());
+
+        if (response?.status === 200) {
+          const rows = response?.data?.data || [];
+
+          const formattedData = rows.map((item: any, index: any) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          setData(formattedData);
+
+          console.log("Formatted Party Data:", formattedData);
+        }
       })
       .catch((error) => {
         console.error("Error fetching compliance data:", error);

@@ -58,7 +58,7 @@ const index = ({ activeSubItem }: any) => {
         // setFlag(!flag);
         if (response?.status === 200) {
           setFlag(!flag);
-          ShowToast("success", response?.data?.data?.message);
+          ShowToast("success", response?.data?.data?.msg);
         } else {
           console.log("Error during approval", response);
           ShowToast("error", "Error approving item");

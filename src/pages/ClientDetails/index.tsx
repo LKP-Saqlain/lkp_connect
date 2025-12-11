@@ -10,6 +10,7 @@ import { Card, CardBody, Container } from "reactstrap";
 import ShowToast from "../../utils/toastUtils";
 import { RootState, AppDispatch } from "../../redux/store";
 import dayjs from "dayjs";
+// import { normalizeApiData } from "../../utils/normalizeResponse";
 
 const allowedFormats = ["pdf", "png", "jpg", "jpeg"];
 
@@ -23,7 +24,7 @@ interface ClientRow {
   ActivationDate?: string;
   MobileNo?: string;
   EMail?: string;
-  ClientStatus?: string;
+  csts?: string;
   LastTradeDate?: string;
   POAStatus?: string;
   MTFStatus?: string;
@@ -42,8 +43,8 @@ const ClientDetails = ({
   const [tableData, setTableData] = useState<[]>([]);
   const [userDetails, setUserDetails] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeClients, setActiveClients] = useState<any[]>([]);
-  const [inactiveClients, setInactiveClients] = useState<any[]>([]);
+  const [newActiveClients, setActiveClients] = useState<any[]>([]);
+  const [newInactiveClients, setInactiveClients] = useState<any[]>([]);
   const [totalClients, setTotalClients] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [responseStatus, setResponseStatus] = useState(false);
@@ -92,10 +93,25 @@ const ClientDetails = ({
           .getUpcompingDormantReport(payload)
           .then((response) => {
             dispatch(hideLoader());
+            console.log("getUpcompingDormantReportRes", response?.data?.data);
 
             if (response?.status === 200) {
               setResponseStatus(true);
-              setTableData(response?.data);
+              // setTableData(response?.data);
+              // const formatted: any = normalizeApiData(
+              //   response?.data || [],
+              //   "getUpcompingDormantReport"
+              // );
+              // setTableData(formatted);
+
+              const formatted = response?.data?.data.map(
+                (item: any, index: number) => ({
+                  ...item,
+                  Id: index,
+                })
+              );
+
+              setTableData(formatted);
             }
           })
           .catch((error) => {
@@ -108,7 +124,6 @@ const ClientDetails = ({
     getUpcomingDormants();
   }, [selectedCapsule]);
 
-  // ✅ Only call client details API ONCE unless capsule changes
   useEffect(() => {
     if (selectedCapsule !== "Upcoming Dormant Client" && !clientDataLoaded) {
       fetchClientCash();
@@ -116,7 +131,7 @@ const ClientDetails = ({
   }, [apiStatus, selectedCapsule]);
 
   const fetchClientCash = async () => {
-    if (clientDataLoaded) return; // ⛔ prevent repeated calls
+    if (clientDataLoaded) return;
 
     if (selectedCapsule !== "Upcoming Dormant Client") {
       const Id = localStorage.getItem("Id");
@@ -132,38 +147,67 @@ const ClientDetails = ({
       try {
         dispatch(showLoader("Please wait, we are processing your request..."));
         const response = await apiServices.ClientDetails(payload);
-        console.log("ClientDetailsResponse-->", response?.data);
+        console.log("ClientDetailsResponse-->", response?.data?.data);
 
         if (response?.status === 200) {
           dispatch(hideLoader());
           setResponseStatus(true);
-          setTotalClients(response?.data);
-          setClientDataLoaded(true);
-          const activeClients = response?.data.filter(
-            (client: any) => client.ClientStatus === "Active"
-          );
+          const apiData = response?.data?.data || [];
 
-          const inactiveClients = response?.data.filter(
-            (client: any) => client.ClientStatus === "Inactive"
-          );
+          const updatedList = apiData.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          setTotalClients(updatedList);
+          setClientDataLoaded(true);
+          const activeClients = response?.data?.data
+            .filter((client: any) => client.csts === "Active")
+            .map((client: any, index: number) => ({
+              Id: index + 1,
+              ...client,
+            }));
+
+          const inactiveClients = response?.data?.data
+            .filter((client: any) => client.csts === "Inactive")
+            .map((client: any, index: number) => ({
+              Id: index + 1,
+              ...client,
+            }));
+          console.log("InactiveClientts---1", inactiveClients);
 
           setActiveClients(activeClients);
           setInactiveClients(inactiveClients);
+          console.log("activeClients1111", newActiveClients);
         }
       } catch (error) {
         dispatch(hideLoader());
       }
     }
   };
+
+  useEffect(() => {
+    console.log(
+      "stateVar",
+      newActiveClients,
+      "Inactive->",
+      newInactiveClients,
+      "total->",
+      totalClients
+    );
+  }, [newActiveClients, newInactiveClients, totalClients]);
+
   let mainTableData = searchValue
     ? filteredData
     : selectedCapsule === "Active Clients"
-    ? activeClients
+    ? newActiveClients
     : selectedCapsule === "Inactive Clients"
-    ? inactiveClients
+    ? newInactiveClients
     : selectedCapsule === "Total Clients"
     ? totalClients
     : tableData;
+
+  console.log("MainTableData", mainTableData);
 
   const getUserBrokergageModificationDetails = (value: any) => {
     setBranchCode(value.BranchCode);
@@ -199,8 +243,8 @@ const ClientDetails = ({
 
     const capsuleDataMap: any = {
       "Upcoming Dormant Client": tableData,
-      "Active Clients": activeClients,
-      "Inactive Clients": inactiveClients,
+      "Active Clients": newActiveClients,
+      "Inactive Clients": newInactiveClients,
       "Total Clients": totalClients,
     };
 

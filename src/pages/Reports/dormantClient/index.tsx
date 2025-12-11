@@ -156,13 +156,23 @@ const DormantClient = ({ activeSubItem }: any) => {
   }, [formik.values]);
 
   useEffect(() => {
-    // const Id = localStorage.getItem("Id");
     if (accessType === "ALL" || accessType === "ZONE") {
+      const str = user_id;
+      const userType = localStorage.getItem("uIdType");
+      let extractUserId: string | null = null;
+
+      if (str) {
+        const parts = str.split("-");
+        if (parts.length > 1) {
+          extractUserId = parts[1];
+        }
+      }
       let payload = {
-        user_id: user_id,
+        user_id: str === "APN-7161" ? "5376" : extractUserId,
         option: "zone",
-        userType: "EMP",
-        zone: formik.values.selectedZone?.value,
+        userType:
+          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+        zone: "ALL",
       };
 
       const username = "admin";
@@ -187,21 +197,33 @@ const DormantClient = ({ activeSubItem }: any) => {
             }));
             console.log("dropdown value", zoneDropdown);
             setNoSortingGroup(zoneDropdown);
-
+            if (zoneDropdown.length > 0) {
+              formik.setFieldValue("selectedZone", zoneDropdown[0]);
+            }
             // setSelectedNoSortingGroup(selectedNoSortingGroup);
           }
         })
         .catch((Err) => {
-          console.log("Error", Err);
+          const { message } = Err.response.data;
+          console.log("Error->", message);
+          dispatch(hideLoader());
+          // formik.setFieldError("password", message);
+          const errorMessage = Err.response.data.message;
+          ShowToast(
+            "error",
+            errorMessage ||
+              "Sorry for the inconvenience, please try after some time."
+          );
         });
 
       dispatch(hideLoader());
     }
-  }, [dispatch, accessType]);
+  }, [dispatch]);
 
+  const str = user_id;
   useEffect(() => {
     if (formik.values.selectedZone) {
-      const str = user_id;
+      const userType = localStorage.getItem("uIdType");
       let extractUserId: string | null = null;
 
       if (str) {
@@ -211,10 +233,11 @@ const DormantClient = ({ activeSubItem }: any) => {
         }
       }
       const payload = {
-        user_id: extractUserId,
+        user_id: str === "APN-7161" ? "5376" : extractUserId,
         option: "BranchByZone",
-        userType: "EMP",
-        zone: formik.values.selectedZone.value, // Use the selected zone value
+        userType:
+          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+        zone: formik.values.selectedZone.value,
       };
 
       dispatch(showLoader("Please wait, we are processing your request..."));
@@ -225,15 +248,18 @@ const DormantClient = ({ activeSubItem }: any) => {
           console.log("response->", res);
           if (res?.status === 200) {
             let branchDropdown = res?.data.map((item: any) => ({
-              label: item.itemVal, // Display value in dropdown
-              value: item.itemVal, // Actual value of the dropdown item
+              label: item.itemVal,
+              value: item.itemVal,
             }));
             branchDropdown = [
               { label: "ALL", value: "ALL" },
               ...branchDropdown,
             ];
 
-            setBranchCodeOptions(branchDropdown); // Set the updated branch dropdown
+            setBranchCodeOptions(branchDropdown);
+            if (branchDropdown.length > 0) {
+              formik.setFieldValue("selectedBranchCode", branchDropdown[0]);
+            }
           }
           dispatch(hideLoader());
         })
@@ -241,6 +267,7 @@ const DormantClient = ({ activeSubItem }: any) => {
           const { message } = Err.response.data;
           console.log("Error->", message);
           dispatch(hideLoader());
+          // formik.setFieldError("password", message);
           const errorMessage = Err.response.data.message;
           ShowToast(
             "error",

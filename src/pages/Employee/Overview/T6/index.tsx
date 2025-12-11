@@ -88,8 +88,13 @@ const T6Table = ({ handleTradingOpen }: any) => {
             const filterRecords = data
               .filter((item: any) => item.dayCount)
               .slice(0, 5);
+
+            const finalData = filterRecords.map((item: any, index: number) => ({
+              ...item,
+              Id: index + 1, // Add Id here
+            }));
             console.log("DormantfilterData", filterRecords);
-            setUpcomingOverviewDormantTableData(filterRecords);
+            setUpcomingOverviewDormantTableData(finalData);
           }
         } else {
           ShowToast("error", "No Records");
@@ -124,13 +129,21 @@ const T6Table = ({ handleTradingOpen }: any) => {
         if (response?.status === 200) {
           dispatch(hideLoader());
           // Get the data from the API response
-          const data = response?.data?.data?.Table;
+          const data = response?.data?.data;
           // Sort the data: prioritize records with lower T5 values
           const sortedData = data.sort((a: any, b: any) => a.T5 - b.T5);
 
           // Get the first 5 records
           const top5Records = sortedData.slice(0, 5);
+          const updatedTop5 = top5Records.map((item: any, index: number) => ({
+            ...item,
+            Id: index + 1,
+          }));
 
+          console.log("Top 5 with Id:", updatedTop5);
+
+          // Save in state
+          setT6Data(updatedTop5);
           // Remove records with T5 value of 0
           // const filteredRecords = top5Records.filter(
           //   (record: any) => record.T5 !== 0

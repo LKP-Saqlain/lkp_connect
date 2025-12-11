@@ -80,15 +80,23 @@ const T6Table = ({ handleTradingOpen }: any) => {
     apiServices
       .getUpcompingDormantReport(payload)
       .then((response) => {
-        console.log("API Response:", response?.data);
+        console.log("API Response:", response?.data?.data);
         if (response?.status === 200) {
-          const data = response?.data || [];
+          const data = response?.data?.data || [];
 
           const filterRecords = data
-            .filter((item: any) => item.dayCount)
+            .filter((item: any) => item.dcnt)
             .slice(0, 5);
           console.log("DormantfilterData", filterRecords);
-          setUpcomingOverviewDormantTableData(filterRecords);
+          const finalData = filterRecords.map((item: any, index: number) => ({
+            ...item,
+            Id: index + 1, // Add Id here
+          }));
+
+          console.log("Dormant Final Data:", finalData);
+
+          // step 3: update state
+          setUpcomingOverviewDormantTableData(finalData);
         }
       })
       .catch((error) => {
@@ -116,17 +124,25 @@ const T6Table = ({ handleTradingOpen }: any) => {
       try {
         dispatch(showLoader("Please wait, we are processing your request..."));
         const response = await apiServices.T6Selling(payload);
-        console.log("T6SellingResponse", response?.data?.data?.Table);
+        console.log("T6SellingResponse", response?.data?.data);
         if (response?.status === 200) {
           dispatch(hideLoader());
           // Get the data from the API response
-          const data = response?.data?.data?.Table;
+          const data = response?.data?.data;
           // Sort the data: prioritize records with lower T5 values
           const sortedData = data.sort((a: any, b: any) => a.T5 - b.T5);
 
           // Get the first 5 records
           const top5Records = sortedData.slice(0, 5);
+          const updatedTop5 = top5Records.map((item: any, index: number) => ({
+            ...item,
+            Id: index + 1,
+          }));
 
+          console.log("Top 5 with Id:", updatedTop5);
+
+          // Save in state
+          setT6Data(updatedTop5);
           // Remove records with T5 value of 0
           // const filteredRecords = top5Records.filter(
           //   (record: any) => record.T5 !== 0

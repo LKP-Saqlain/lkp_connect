@@ -21,15 +21,15 @@ interface UserData {
   direct: any[];
   inDirect: any[];
   summary: {
-    totalCount?: number;
-    directCount?: number;
-    indirectCount?: number;
+    tcnt?: number;
+    dcnt?: number;
+    icnt?: number;
     submittedTotal?: number;
-    submittedDirect?: number;
-    submittedIndirect?: number;
-    completedTotal?: number;
-    completedDirect?: number;
-    completedIndirect?: number;
+    sub_dir?: number;
+    sub_ind?: number;
+    cmp_tot?: number;
+    cmp_dir?: number;
+    cmp_ind?: number;
   };
 }
 
@@ -77,13 +77,13 @@ const AmcReport = ({ activeSubItem }: any) => {
           const directData =
             data.direct?.map((item: any, index: number) => ({
               ...item,
-              id: index + 1,
+              Id: index + 1,
             })) || [];
 
           const inDirectData =
             data.inDirect?.map((item: any, index: number) => ({
               ...item,
-              id: index + 1,
+              Id: index + 1,
             })) || [];
 
           setUserData({
@@ -169,21 +169,21 @@ const AmcReport = ({ activeSubItem }: any) => {
 
     switch (cardIndex) {
       case 0: // Total Clients
-        if (badge === "total") return data.totalCount || 0;
-        if (badge === "direct") return data.directCount || 0;
-        if (badge === "indirect") return data.indirectCount || 0;
+        if (badge === "total") return data.tcnt || 0;
+        if (badge === "direct") return data.dcnt || 0;
+        if (badge === "indirect") return data.icnt || 0;
         break;
 
       case 1: // Submitted Clients
         if (badge === "total") return data.submittedTotal || 0;
-        if (badge === "direct") return data.submittedDirect || 0;
-        if (badge === "indirect") return data.submittedIndirect || 0;
+        if (badge === "direct") return data.sub_dir || 0;
+        if (badge === "indirect") return data.sub_ind || 0;
         break;
 
       case 2: // Completed Clients
-        if (badge === "total") return data.completedTotal || 0;
-        if (badge === "direct") return data.completedDirect || 0;
-        if (badge === "indirect") return data.completedIndirect || 0;
+        if (badge === "total") return data.cmp_tot || 0;
+        if (badge === "direct") return data.cmp_dir || 0;
+        if (badge === "indirect") return data.cmp_ind || 0;
         break;
 
       default:
@@ -219,10 +219,10 @@ const AmcReport = ({ activeSubItem }: any) => {
                 label: "Direct",
                 value:
                   index === 0
-                    ? userData.summary.directCount || 0
+                    ? userData.summary.dcnt || 0
                     : index === 1
-                    ? userData.summary.submittedDirect || 0
-                    : userData.summary.completedDirect || 0,
+                    ? userData.summary.sub_dir || 0
+                    : userData.summary.cmp_dir || 0,
                 isActive: activeBadges[index] === "direct",
                 onClick: () => handleBadgeClick(index, "direct"),
               },
@@ -231,10 +231,10 @@ const AmcReport = ({ activeSubItem }: any) => {
                 label: "Indirect",
                 value:
                   index === 0
-                    ? userData.summary.indirectCount || 0
+                    ? userData.summary.icnt || 0
                     : index === 1
-                    ? userData.summary.submittedIndirect || 0
-                    : userData.summary.completedIndirect || 0,
+                    ? userData.summary.sub_ind || 0
+                    : userData.summary.cmp_ind || 0,
                 isActive: activeBadges[index] === "indirect",
                 onClick: () => handleBadgeClick(index, "indirect"),
               },
@@ -243,10 +243,10 @@ const AmcReport = ({ activeSubItem }: any) => {
                 label: "Total",
                 value:
                   index === 0
-                    ? userData.summary.totalCount || 0
+                    ? userData.summary.tcnt || 0
                     : index === 1
                     ? userData.summary.submittedTotal || 0
-                    : userData.summary.completedTotal || 0,
+                    : userData.summary.cmp_tot || 0,
                 isActive: activeBadges[index] === "total",
                 onClick: () => handleBadgeClick(index, "total"),
               },

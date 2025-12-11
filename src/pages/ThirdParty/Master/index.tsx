@@ -40,19 +40,30 @@ const ThirdPartyMaster = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     const payload = { user_id };
+
     dispatch(showLoader(""));
+
     apiServices
       .ViewThirdPartyMaster(payload)
       .then((response) => {
+        dispatch(hideLoader());
+
         if (response?.status === 200) {
-          console.log("Response-->", response);
-          dispatch(hideLoader());
-          setdata(response?.data?.data || []);
-          console.log(data, "party");
+          const rows = response?.data?.data || [];
+
+          const formattedData = rows.map((item: any, index: any) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          setdata(formattedData);
+
+          console.log("Formatted Party Data:", formattedData);
         }
       })
       .catch((error) => {
-        console.log("Error", error);
+        dispatch(hideLoader());
+        console.error("Error", error);
       });
   }, [dispatch, flag]);
 
@@ -97,10 +108,7 @@ const ThirdPartyMaster = ({ activeSubItem }: any) => {
         if (response?.status === 200) {
           dispatch(hideLoader());
           setdata(response?.data?.data || []);
-          ShowToast(
-            "success",
-            response?.data?.message || "Operation successful"
-          );
+          ShowToast("success", response?.data?.msg || "Operation successful");
           setFlag(!flag);
           setmodal_grid(false);
         }
@@ -133,10 +141,10 @@ const ThirdPartyMaster = ({ activeSubItem }: any) => {
       console.log("Delete Response →", response);
 
       if (response?.status === 200) {
-        ShowToast("success", response.data?.message || "Deleted successfully.");
+        ShowToast("success", response.data?.msg || "Deleted successfully.");
         setFlag((prev) => !prev); // toggle for refresh
       } else {
-        throw new Error(response?.data?.message || "Deletion failed.");
+        throw new Error(response?.data?.msg || "Deletion failed.");
       }
     } catch (error: any) {
       console.error("Delete Error:", error);

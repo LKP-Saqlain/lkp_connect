@@ -286,7 +286,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
           const formattedVendors = newVendors.map(
             (vendor: any, index: number) => ({
               ...vendor,
-              id: index + 1, // Assign frontend index-based ID
+              Id: index + 1,
             })
           );
 

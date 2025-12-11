@@ -27,7 +27,7 @@ export const getClientActivityStatusColumns = (
   const baseColumns: GridColDef[] = [
     {
       disableColumnMenu: true,
-      field: "ClientCode",
+      field: "cc",
       headerName: "Client Code",
       align: "left",
       flex: 1,
@@ -35,13 +35,13 @@ export const getClientActivityStatusColumns = (
     },
     {
       disableColumnMenu: true,
-      field: "ClientName",
+      field: "cn",
       headerName: "Client Name",
       flex: 2,
       minWidth: 190,
     },
     {
-      field: "LastTradeDate",
+      field: "ltd",
       headerClassName: "header-wrap-custom",
       headerName: "Last Trade Date",
       flex: 1.5,
@@ -103,7 +103,7 @@ export const getClientActivityStatusColumns = (
       renderCell: (params) => params.value || "—",
     },
     {
-      field: "ClientStatus",
+      field: "csts",
       headerName: "Status",
       flex: 0.8,
       minWidth: 80,
@@ -112,7 +112,7 @@ export const getClientActivityStatusColumns = (
       disableColumnMenu: true,
     },
     {
-      field: "BranchCode",
+      field: "bc",
       headerName: "Branch Code",
       headerClassName: "header-wrap-custom",
       flex: 0.8,
@@ -123,7 +123,7 @@ export const getClientActivityStatusColumns = (
     },
 
     {
-      field: "MobileNo",
+      field: "mob",
       headerName: "Mobile No",
       flex: 1,
       minWidth: 110,
@@ -153,7 +153,7 @@ export const getClientActivityStatusColumns = (
     user_type === "Employee"
       ? [
           {
-            field: "MTFStatus",
+            field: "mtf",
             headerName: "MTF Status",
             headerClassName: "header-wrap-custom",
             flex: 1,
@@ -169,7 +169,7 @@ export const getClientActivityStatusColumns = (
     ...baseColumns,
     ...mtfColumn,
     {
-      field: "POAStatus",
+      field: "poa",
       headerName: "POA Status",
       flex: 1,
       minWidth: 60, // Slightly wider for better label display
@@ -559,7 +559,7 @@ export const getClientDormantStatus = (
   handleViewDetails: (row: ClientRow) => void
 ): GridColDef[] => [
   {
-    field: "ctermcode",
+    field: "cc",
     headerName: "Client Code",
     align: "left",
     flex: 1,
@@ -567,14 +567,14 @@ export const getClientDormantStatus = (
     disableColumnMenu: true,
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 2,
     minWidth: 160,
     disableColumnMenu: true,
   },
   {
-    field: "lastTradeDate",
+    field: "ltd",
     headerName: "Last Trade Date",
     flex: 1.5,
     minWidth: 140,
@@ -584,7 +584,7 @@ export const getClientDormantStatus = (
 
     valueGetter: (params: any) => {
       const rawDate = params;
-      if (!rawDate) return null; // Handle missing data
+      if (!rawDate) return null;
 
       const parsedDate = new Date(
         rawDate.replace(
@@ -604,7 +604,6 @@ export const getClientDormantStatus = (
               Nov: "11",
               Dec: "12",
             };
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -612,36 +611,36 @@ export const getClientDormantStatus = (
 
       return parsedDate;
     },
+
     sortComparator: (v1, v2) => {
-      if (!v1 || !v2) return 0; // Handle missing values
-      return v1 - v2; // Sort in ascending order
+      if (!v1 || !v2) return 0;
+      return v1 - v2;
     },
+
     valueFormatter: (params: any) => {
       if (!params) return "";
-      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+      return dayjs(params).format("DD-MMM-YY");
     },
   },
   {
-    field: "mobileNo",
+    field: "mob",
     headerName: "Mobile No",
     flex: 1.2,
     minWidth: 140,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
-    renderCell: (params: any) => {
-      const mobile = params.value || ""; // Extract the mobile number
 
-      // Mask all digits except the first 2 and the last 2
+    renderCell: (params: any) => {
+      const mobile = params.value || "";
+
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
         (_: any, prefix: any, middle: any, suffix: any) => {
-          // console.log(prefix, suffix, handleViewDetails); // Added only for testing purpose
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
         }
       );
 
-      // Return tooltip with the masked mobile number
       return (
         <Tooltip title={mobile} arrow placement="top">
           <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
@@ -650,7 +649,7 @@ export const getClientDormantStatus = (
     },
   },
   {
-    field: "dayCount",
+    field: "dcnt",
     headerName: "Days to Dormant",
     flex: 1,
     minWidth: 120,
@@ -658,6 +657,7 @@ export const getClientDormantStatus = (
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
   },
+
   {
     field: "viewDetails",
     headerName: "Details",
@@ -744,14 +744,14 @@ export const Corecolumns: GridColDef[] = [
 
 export const slbmColumns: GridColDef[] = [
   {
-    field: "zone",
+    field: "zn",
     headerName: "Zone",
     minWidth: 60,
     flex: 0.5,
     disableColumnMenu: true,
   },
   {
-    field: "branchCode",
+    field: "bc",
     headerName: "Branch Code",
     minWidth: 90,
     flex: 0.6,
@@ -759,7 +759,7 @@ export const slbmColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "Client Code",
     minWidth: 110,
     flex: 0.8,
@@ -767,21 +767,19 @@ export const slbmColumns: GridColDef[] = [
     align: "left",
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     minWidth: 200,
     flex: 1.5,
     disableColumnMenu: true,
-    renderCell: (params: any) => {
-      return (
-        <Tooltip title={params.row?.mobileNo} arrow placement="top">
-          <span>{params.value}</span>
-        </Tooltip>
-      );
-    },
+    renderCell: (params: any) => (
+      <Tooltip title={params.row?.mob} arrow placement="top">
+        <span>{params.value}</span>
+      </Tooltip>
+    ),
   },
   {
-    field: "scripName",
+    field: "scn",
     headerName: "Script Name",
     minWidth: 200,
     flex: 1.2,
@@ -795,7 +793,7 @@ export const slbmColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "qtny",
+    field: "qty",
     headerName: "Quantity",
     minWidth: 90,
     flex: 0.7,
@@ -805,52 +803,46 @@ export const slbmColumns: GridColDef[] = [
       new Intl.NumberFormat("en-IN").format(params),
   },
   {
-    field: "rmName",
+    field: "rm",
     headerName: "RM Name",
     minWidth: 260,
     flex: 1,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
-    renderCell: (params: any) => {
-      return (
-        <Tooltip title={params.row?.rmMobileNo} arrow placement="top">
-          <span>{params.value}</span>
-        </Tooltip>
-      );
-    },
+    renderCell: (params: any) => (
+      <Tooltip title={params.row?.rmmob} arrow placement="top">
+        <span>{params.value}</span>
+      </Tooltip>
+    ),
   },
   {
-    field: "dealerName",
+    field: "dlr",
     headerName: "Dealer Name",
     minWidth: 260,
     flex: 1,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
-    renderCell: (params: any) => {
-      return (
-        <Tooltip title={params.row?.dealerMobileNo} arrow placement="top">
-          <span>{params.value}</span>
-        </Tooltip>
-      );
-    },
+    renderCell: (params: any) => (
+      <Tooltip title={params.row?.dlrmob} arrow placement="top">
+        <span>{params.value}</span>
+      </Tooltip>
+    ),
   },
   {
-    field: "apName",
+    field: "apn",
     headerName: "AP Name",
     minWidth: 260,
     flex: 1,
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
-    renderCell: (params: any) => {
-      return (
-        <Tooltip title={params.row?.apMobileNo} arrow placement="top">
-          <span>{params.value}</span>
-        </Tooltip>
-      );
-    },
+    renderCell: (params: any) => (
+      <Tooltip title={params.row?.apmob} arrow placement="top">
+        <span>{params.value}</span>
+      </Tooltip>
+    ),
   },
   {
-    field: "slbmStatus",
+    field: "slsts",
     headerName: "SLBM Status",
     align: "center",
     minWidth: 110,
@@ -862,7 +854,7 @@ export const slbmColumns: GridColDef[] = [
 
 export const clientNotTradedColumns: GridColDef[] = [
   {
-    field: "ClientCode",
+    field: "cc",
     headerName: "Client Code",
     flex: 1.3,
     headerAlign: "center",
@@ -870,7 +862,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ClientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 2.2,
     headerAlign: "center",
@@ -878,7 +870,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "BranchCode",
+    field: "bc",
     headerName: "Branch Code",
     flex: 1,
     headerAlign: "center",
@@ -886,7 +878,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ActivationDate",
+    field: "ad",
     headerName: "Activation Date",
     flex: 1.5,
     headerAlign: "center",
@@ -938,7 +930,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     },
   },
   {
-    field: "LastTradeDate",
+    field: "ltd",
     headerName: "Last Trade Date",
     flex: 1.5,
     headerAlign: "center",
@@ -984,7 +976,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     },
   },
   {
-    field: "Active",
+    field: "avt", //Not in the sheet added from another table reference on 12/05/2025
     headerName: "Active",
     flex: 0.8,
     headerAlign: "center",
@@ -995,7 +987,7 @@ export const clientNotTradedColumns: GridColDef[] = [
 
 export const newClientAddFiveDays: GridColDef[] = [
   {
-    field: "ClientCode",
+    field: "cc",
     headerName: "Client Code",
     flex: 1,
     headerAlign: "center",
@@ -1003,7 +995,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ClientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 2,
     headerAlign: "center",
@@ -1011,7 +1003,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "BranchCode",
+    field: "bc",
     headerName: "Branch Code",
     flex: 0.9,
     headerAlign: "center",
@@ -1019,7 +1011,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ActivationDate",
+    field: "ad",
     headerName: "Activation Date",
     flex: 1.2,
     headerAlign: "center",
@@ -1065,7 +1057,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     },
   },
   {
-    field: "Active",
+    field: "avt",
     headerName: "Active",
     flex: 0.5,
     headerAlign: "center",
@@ -1073,7 +1065,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "LastTradeDate",
+    field: "ltd",
     headerName: "Last Trade Date",
     flex: 1.5,
     headerAlign: "center",
@@ -1122,7 +1114,7 @@ export const newClientAddFiveDays: GridColDef[] = [
 
 export const spipRenewalColumns: GridColDef[] = [
   {
-    field: "IACode",
+    field: "ia",
     headerName: "IA Code",
     width: 90,
     headerAlign: "center",
@@ -1130,7 +1122,7 @@ export const spipRenewalColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ClientName",
+    field: "cn",
     headerName: "Client Name",
     width: 250,
     flex: 1,
@@ -1139,7 +1131,7 @@ export const spipRenewalColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "Backofficecode",
+    field: "bo",
     headerName: "Back Office Code",
     width: 90,
     headerAlign: "center",
@@ -1149,7 +1141,7 @@ export const spipRenewalColumns: GridColDef[] = [
   },
 
   {
-    field: "MobileNo",
+    field: "mn",
     headerName: "Mobile No",
     width: 120,
     headerAlign: "center",
@@ -1177,7 +1169,7 @@ export const spipRenewalColumns: GridColDef[] = [
   },
 
   {
-    field: "Active",
+    field: "avt",
     headerName: "Active",
     width: 90,
     headerAlign: "center",
@@ -1185,7 +1177,7 @@ export const spipRenewalColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ActivationDate",
+    field: "ad",
     headerName: "Start Date",
     width: 120,
     headerAlign: "center",
@@ -1232,7 +1224,7 @@ export const spipRenewalColumns: GridColDef[] = [
     },
   },
   {
-    field: "EndDate",
+    field: "ed",
     headerName: "Renewal due on",
     width: 120,
     headerAlign: "center",
@@ -1279,7 +1271,7 @@ export const spipRenewalColumns: GridColDef[] = [
     },
   },
   {
-    field: "RMCode",
+    field: "rm",
     headerName: "RM Code",
     width: 100,
     headerAlign: "center",
@@ -1290,7 +1282,7 @@ export const spipRenewalColumns: GridColDef[] = [
 
 export const upcomingDormantClientColumns: GridColDef[] = [
   {
-    field: "ClientCode",
+    field: "cc",
     headerName: "Client Code",
     flex: 1.5,
     headerAlign: "center",
@@ -1298,7 +1290,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ClientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 2,
     headerAlign: "center",
@@ -1306,7 +1298,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "LastTradeDate",
+    field: "ltd",
     headerName: "Last Trade Date",
     flex: 1.5,
     headerAlign: "center",
@@ -1352,7 +1344,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     },
   },
   {
-    field: "MobileNo",
+    field: "mn",
     headerName: "Mobile No",
     flex: 1,
     headerAlign: "center",
@@ -1379,7 +1371,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     },
   },
   {
-    field: "DayCount",
+    field: "dc",
     headerName: "Days to Dormant",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -1391,7 +1383,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
 
 export const spipSubscriptionColumns: GridColDef[] = [
   {
-    field: "IACode",
+    field: "ia",
     headerName: "IA Code",
     // flex: 1.5,
     width: 90,
@@ -1400,7 +1392,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ClientName",
+    field: "cn",
     headerName: "Client Name",
     width: 200,
     headerAlign: "center",
@@ -1408,7 +1400,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "Backofficecode",
+    field: "bo",
     headerName: "Backoffice Code",
     // flex: 1.5,
     width: 120,
@@ -1418,7 +1410,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     valueGetter: (params: any) => params || "-", // Show '-' if empty
   },
   {
-    field: "BranchCode",
+    field: "bc",
     headerName: "Branch Code",
     // flex: 1,
     headerAlign: "center",
@@ -1426,7 +1418,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "MobileNo",
+    field: "mn",
     headerName: "Mobile No",
     // flex: 1.5,
     width: 110,
@@ -1451,7 +1443,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     },
   },
   {
-    field: "EmailId",
+    field: "em",
     headerName: "Email ID",
     // flex: 2,
     width: 200,
@@ -1460,7 +1452,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "Active",
+    field: "avt",
     headerName: "Active",
     // flex: 1,
     width: 60,
@@ -1469,7 +1461,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ActivationDate",
+    field: "ad",
     headerName: "Activation Date",
     // flex: 1.5,
     headerAlign: "center",
@@ -1484,7 +1476,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     },
   },
   {
-    field: "RMCode",
+    field: "rm",
     headerName: "RM Code",
     // flex: 1,
     width: 80,
@@ -1493,7 +1485,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "Amount",
+    field: "amt",
     headerName: "Amount",
     // flex: 1.5,
     width: 100,
@@ -1513,7 +1505,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
 
 export const ClientCashColumns: GridColDef[] = [
   {
-    field: "ClientCode",
+    field: "cc",
     headerName: "Client Code",
     flex: 1.2,
     minWidth: 120,
@@ -1522,14 +1514,14 @@ export const ClientCashColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ClientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 2,
     minWidth: 200,
     disableColumnMenu: true,
   },
   {
-    field: "LastTradeDate",
+    field: "ltd",
     headerName: "Last Trade Date",
     flex: 1,
     minWidth: 115,
@@ -1537,9 +1529,10 @@ export const ClientCashColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     align: "center",
     headerAlign: "center",
+
     valueGetter: (params: any) => {
       const rawDate = params;
-      if (!rawDate) return null; // Handle missing data
+      if (!rawDate) return null;
 
       const parsedDate = new Date(
         rawDate.replace(
@@ -1567,34 +1560,38 @@ export const ClientCashColumns: GridColDef[] = [
 
       return parsedDate;
     },
+
     sortComparator: (v1, v2) => {
-      if (!v1 || !v2) return 0; // Handle missing values
-      return v1 - v2; // Sort in ascending order
+      if (!v1 || !v2) return 0;
+      return v1 - v2;
     },
+
     valueFormatter: (params: any) => {
       if (!params) return "";
-      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+      return dayjs(params).format("DD-MMM-YY");
     },
   },
+
   {
-    field: "Cash",
+    field: "cash",
     headerName: "Ledger Balance",
     flex: 1.2,
     minWidth: 120,
     align: "right",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(value);
     },
-    disableColumnMenu: true,
   },
+
   {
-    field: "MobileNo",
+    field: "mob",
     headerName: "Mobile No",
     flex: 1,
     minWidth: 120,
@@ -1602,18 +1599,15 @@ export const ClientCashColumns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     renderCell: (params: any) => {
-      const mobile = params.value || ""; // Extract the mobile number
+      const mobile = params.value || "";
 
-      // Mask all digits except the first 2 and the last 2
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
         (_: any, prefix: any, middle: any, suffix: any) => {
-          console.log(prefix, suffix); // Added only for testing purpose
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
         }
       );
 
-      // Return tooltip with the masked mobile number
       return (
         <Tooltip title={mobile} arrow placement="top">
           <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
@@ -1621,15 +1615,16 @@ export const ClientCashColumns: GridColDef[] = [
       );
     },
   },
+
   {
-    field: "Brokerage_for_currentmonth",
+    field: "brcm",
     headerName: "Current Month Brokerage",
     flex: 1.2,
     minWidth: 140,
     align: "right",
     headerAlign: "center",
-    disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     valueFormatter: (params: any) => {
       const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
@@ -1638,15 +1633,16 @@ export const ClientCashColumns: GridColDef[] = [
       }).format(value);
     },
   },
+
   {
-    field: "Brokerage_for_1month",
+    field: "br1m",
     headerName: "Last Month Brokerage",
     flex: 1.2,
     minWidth: 140,
     align: "right",
     headerAlign: "center",
-    disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     valueFormatter: (params: any) => {
       const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
@@ -1655,15 +1651,16 @@ export const ClientCashColumns: GridColDef[] = [
       }).format(value);
     },
   },
+
   {
-    field: "Brokerage_for_3months",
+    field: "br3m",
     headerName: "3 Month Brokerage",
     flex: 1.2,
     minWidth: 140,
     align: "right",
     headerAlign: "center",
-    disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     valueFormatter: (params: any) => {
       const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
@@ -1673,9 +1670,10 @@ export const ClientCashColumns: GridColDef[] = [
     },
   },
 ];
+
 export const T6Columns: GridColDef[] = [
   {
-    field: "ClientCode",
+    field: "cc",
     headerName: "Client Code",
     flex: 1,
     minWidth: 100,
@@ -1684,14 +1682,14 @@ export const T6Columns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ClientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 2,
     minWidth: 150,
     disableColumnMenu: true,
   },
   {
-    field: "ClosingBal",
+    field: "cbal",
     headerName: "Closing Balance",
     flex: 1.2,
     minWidth: 120,
@@ -1700,7 +1698,7 @@ export const T6Columns: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -1708,7 +1706,7 @@ export const T6Columns: GridColDef[] = [
     },
   },
   {
-    field: "StockValue",
+    field: "stkval",
     headerName: "Stock Value",
     flex: 1.2,
     minWidth: 120,
@@ -1716,7 +1714,7 @@ export const T6Columns: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -1724,17 +1722,15 @@ export const T6Columns: GridColDef[] = [
     },
   },
   {
-    field: "G5",
+    field: "g5",
     headerName: ">T5",
     flex: 1,
     minWidth: 80,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
-    // valueFormatter: (params: number) =>
-    //   new Intl.NumberFormat("en-IN").format(params),
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -1742,17 +1738,15 @@ export const T6Columns: GridColDef[] = [
     },
   },
   {
-    field: "T5",
+    field: "t5",
     headerName: "T5",
     flex: 1,
     minWidth: 80,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
-    // valueFormatter: (params: number) =>
-    //   new Intl.NumberFormat("en-IN").format(params),
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -1760,17 +1754,15 @@ export const T6Columns: GridColDef[] = [
     },
   },
   {
-    field: "T4",
+    field: "t4",
     headerName: "T4",
     flex: 1,
     minWidth: 80,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
-    // valueFormatter: (params: number) =>
-    //   new Intl.NumberFormat("en-IN").format(params),
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -1778,17 +1770,15 @@ export const T6Columns: GridColDef[] = [
     },
   },
   {
-    field: "T3",
+    field: "t3",
     headerName: "T3",
     flex: 1,
     minWidth: 80,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
-    // valueFormatter: (params: number) =>
-    //   new Intl.NumberFormat("en-IN").format(params),
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -1796,17 +1786,15 @@ export const T6Columns: GridColDef[] = [
     },
   },
   {
-    field: "T2",
+    field: "t2",
     headerName: "T2",
     flex: 1,
     minWidth: 80,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
-    // valueFormatter: (params: number) =>
-    //   new Intl.NumberFormat("en-IN").format(params),
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -1814,17 +1802,15 @@ export const T6Columns: GridColDef[] = [
     },
   },
   {
-    field: "T1",
+    field: "t1",
     headerName: "T1",
     flex: 1,
     minWidth: 80,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
-    // valueFormatter: (params: number) =>
-    //   new Intl.NumberFormat("en-IN").format(params),
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -1835,7 +1821,7 @@ export const T6Columns: GridColDef[] = [
 
 export const T6OverViewColumns: GridColDef[] = [
   {
-    field: "ClientCode",
+    field: "cc",
     headerName: "Client Code",
     // flex: 1,
     minWidth: 105,
@@ -1845,7 +1831,7 @@ export const T6OverViewColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ClientName",
+    field: "cn",
     headerName: "Client Name",
     // flex: 2,
     minWidth: 220,
@@ -1854,7 +1840,7 @@ export const T6OverViewColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ClosingBal",
+    field: "cbal",
     headerName: "Closing Balance",
     flex: 0.8,
     minWidth: 120,
@@ -1870,7 +1856,7 @@ export const T6OverViewColumns: GridColDef[] = [
     },
   },
   {
-    field: "StockValue",
+    field: "stkval",
     headerName: "Stock Value",
     // flex: 1,
     width: 100,
@@ -1886,7 +1872,7 @@ export const T6OverViewColumns: GridColDef[] = [
     },
   },
   {
-    field: "G5",
+    field: "g5",
     headerName: ">T5",
     width: 80,
     align: "right",
@@ -1903,7 +1889,7 @@ export const T6OverViewColumns: GridColDef[] = [
     },
   },
   {
-    field: "T5",
+    field: "t5",
     headerName: "T5",
     width: 80,
     align: "right",
@@ -1920,7 +1906,7 @@ export const T6OverViewColumns: GridColDef[] = [
     },
   },
   {
-    field: "T4",
+    field: "t4",
     headerName: "T4",
     width: 80,
     align: "right",
@@ -1937,7 +1923,7 @@ export const T6OverViewColumns: GridColDef[] = [
     },
   },
   {
-    field: "T3",
+    field: "t3",
     headerName: "T3",
     width: 80,
     align: "right",
@@ -1954,7 +1940,7 @@ export const T6OverViewColumns: GridColDef[] = [
     },
   },
   {
-    field: "T2",
+    field: "t2",
     headerName: "T2",
     width: 80,
     align: "right",
@@ -1971,7 +1957,7 @@ export const T6OverViewColumns: GridColDef[] = [
     },
   },
   {
-    field: "T1",
+    field: "t1",
     headerName: "T1",
     width: 80,
     align: "right",
@@ -2002,7 +1988,7 @@ export const DPDebitRecovery: GridColDef[] = [
     sortable: false,
   },
   {
-    field: "payment_link",
+    field: "paylnk",
     headerName: "Payment\nLink",
     headerClassName: "header-wrap-custom",
     minWidth: 75,
@@ -2044,7 +2030,7 @@ export const DPDebitRecovery: GridColDef[] = [
     },
   },
   {
-    field: "ClientCode",
+    field: "cc",
     headerName: "Client Code",
     headerClassName: "header-wrap-custom",
     minWidth: 95,
@@ -2054,7 +2040,7 @@ export const DPDebitRecovery: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "BOID",
+    field: "boid",
     headerName: "BOID",
     minWidth: 160,
     flex: 1.2,
@@ -2063,14 +2049,14 @@ export const DPDebitRecovery: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "BOName",
+    field: "bonm",
     headerName: "Client Name",
     minWidth: 200,
     flex: 1.5,
     disableColumnMenu: true,
   },
   {
-    field: "Ledger_DebitAmt",
+    field: "lda",
     headerName: "Total DP Debit",
     headerClassName: "header-wrap-custom",
     minWidth: 110,
@@ -2102,7 +2088,7 @@ export const DPDebitRecovery: GridColDef[] = [
     // },
   },
   {
-    field: "Holding_value",
+    field: "hval",
     headerName: "Holding Value",
     headerClassName: "header-wrap-custom",
     minWidth: 120,
@@ -2119,7 +2105,7 @@ export const DPDebitRecovery: GridColDef[] = [
     },
   },
   {
-    field: "Client_Mobile_No",
+    field: "mob",
     headerName: "Mobile No",
     minWidth: 130,
     flex: 1,
@@ -2147,7 +2133,7 @@ export const DPDebitRecovery: GridColDef[] = [
     },
   },
   {
-    field: "Client_Mail_ID",
+    field: "em",
     headerName: "Email ID",
     minWidth: 200,
     flex: 1.2,
@@ -2174,7 +2160,7 @@ export const DPDebitRecovery: GridColDef[] = [
     },
   },
   {
-    field: "BOStatus",
+    field: "bost",
     headerName: "Status",
     minWidth: 100,
     flex: 0.6,
@@ -2192,7 +2178,7 @@ export const DPDebitRecovery: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "Last_Trade_date",
+    field: "ltd",
     headerName: "Last Trade Date",
     headerClassName: "header-wrap-custom",
     minWidth: 120,
@@ -2294,7 +2280,7 @@ export const RegisDetails: GridColDef[] = [
 
 export const DormantOverViewColumns: GridColDef[] = [
   {
-    field: "ctermcode",
+    field: "cc",
     headerName: "Client Code",
     flex: 1.2,
     minWidth: 120,
@@ -2303,7 +2289,7 @@ export const DormantOverViewColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 2.5,
     minWidth: 200,
@@ -2319,7 +2305,7 @@ export const DormantOverViewColumns: GridColDef[] = [
     },
   },
   {
-    field: "dayCount",
+    field: "dcnt",
     headerName: "Days to Dormant",
     flex: 1,
     minWidth: 110,
@@ -2329,7 +2315,7 @@ export const DormantOverViewColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "lastTradeDate",
+    field: "ltd",
     headerName: "Last Trade Date",
     flex: 1.5,
     minWidth: 130,
@@ -2379,21 +2365,21 @@ export const DormantOverViewColumns: GridColDef[] = [
 
 export const QPayoutColumns: GridColDef[] = [
   {
-    field: "accountcode",
+    field: "accd",
     headerName: "Client Code",
     minWidth: 100,
     disableColumnMenu: true,
     align: "left",
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     minWidth: 230,
     flex: 2,
     disableColumnMenu: true,
   },
   {
-    field: "lastTradeDate",
+    field: "ltd",
     headerName: "Last Trade Date",
     minWidth: 100,
     align: "center",
@@ -2442,7 +2428,7 @@ export const QPayoutColumns: GridColDef[] = [
   },
 
   {
-    field: "mobileno",
+    field: "mob",
     headerName: "Mobile no.",
     minWidth: 90,
     flex: 1.2,
@@ -2471,7 +2457,7 @@ export const QPayoutColumns: GridColDef[] = [
     },
   },
   {
-    field: "payout_Amt",
+    field: "pay",
     headerName: "Payout Amt",
     minWidth: 150,
     align: "right",
@@ -2487,7 +2473,7 @@ export const QPayoutColumns: GridColDef[] = [
     },
   },
   {
-    field: "receipt_Amt",
+    field: "rct",
     headerName: "Receipt Amt",
     minWidth: 120,
     headerClassName: "header-wrap-custom",
@@ -2506,7 +2492,7 @@ export const QPayoutColumns: GridColDef[] = [
     },
   },
   {
-    field: "extra_Payin",
+    field: "epay",
     headerName: "Extra Payin",
     minWidth: 120,
     align: "right",
@@ -2529,7 +2515,7 @@ export const QPayoutColumns: GridColDef[] = [
 export const dormantColumns = (user_type: string): GridColDef[] => {
   const EmployeeColumns: GridColDef[] = [
     {
-      field: "ctermcode",
+      field: "cc",
       headerName: "Client Code",
       minWidth: 90,
       flex: 0.6,
@@ -2537,14 +2523,14 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       disableColumnMenu: true,
     },
     {
-      field: "clientName",
+      field: "cn",
       headerName: "Client Name",
       minWidth: 170,
       flex: 1.5,
       disableColumnMenu: true,
     },
     {
-      field: "lastTradeDate",
+      field: "ltd",
       headerName: "Last Trade Date",
       minWidth: 120,
       flex: 1,
@@ -2554,7 +2540,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       headerClassName: "header-wrap-custom",
       valueGetter: (params: any) => {
         const rawDate = params;
-        if (!rawDate) return null; // Handle missing data
+        if (!rawDate) return null;
 
         const parsedDate = new Date(
           rawDate.replace(
@@ -2583,16 +2569,16 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         return parsedDate;
       },
       sortComparator: (v1: any, v2: any) => {
-        if (!v1 || !v2) return 0; // Handle missing values
-        return v1 - v2; // Sort in ascending order
+        if (!v1 || !v2) return 0;
+        return v1 - v2;
       },
       valueFormatter: (params: any) => {
         if (!params) return "";
-        return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+        return dayjs(params).format("DD-MMM-YY");
       },
     },
     {
-      field: "active",
+      field: "avt",
       headerName: "Active",
       minWidth: 70,
       flex: 0.4,
@@ -2601,7 +2587,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       disableColumnMenu: true,
     },
     {
-      field: "branchcode",
+      field: "bc",
       headerName: "Branch Code",
       headerClassName: "header-wrap-custom",
       minWidth: 90,
@@ -2611,7 +2597,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       disableColumnMenu: true,
     },
     {
-      field: "zone",
+      field: "zn",
       headerName: "Zone",
       minWidth: 80,
       flex: 0.6,
@@ -2620,7 +2606,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       disableColumnMenu: true,
     },
     {
-      field: "branchtype",
+      field: "bt",
       headerName: "Branch Type",
       minWidth: 110,
       headerClassName: "header-wrap-custom",
@@ -2630,7 +2616,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       disableColumnMenu: true,
     },
     {
-      field: "activationDate",
+      field: "act_dt",
       headerName: "Activation Date",
       minWidth: 120,
       headerClassName: "header-wrap-custom",
@@ -2640,7 +2626,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       headerAlign: "center",
       valueGetter: (params: any) => {
         const rawDate = params;
-        if (!rawDate) return null; // Handle missing data
+        if (!rawDate) return null;
 
         const parsedDate = new Date(
           rawDate.replace(
@@ -2669,33 +2655,28 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         return parsedDate;
       },
       sortComparator: (v1: any, v2: any) => {
-        if (!v1 || !v2) return 0; // Handle missing values
-        return v1 - v2; // Sort in ascending order
+        if (!v1 || !v2) return 0;
+        return v1 - v2;
       },
       valueFormatter: (params: any) => {
         if (!params) return "";
-        return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+        return dayjs(params).format("DD-MMM-YY");
       },
     },
     {
-      field: "mobileNo",
+      field: "mob",
       headerName: "Mobile No",
       minWidth: 120,
       flex: 1,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const mobile = params.value || ""; // Extract the mobile number
-
-        // Mask all digits except the first 2 and the last 2
+        const mobile = params.value || "";
         const maskedMobile = mobile.replace(
           /^(\d{2})(\d+)(\d{2})$/,
-          (_: any, prefix: any, middle: any, suffix: any) => {
-            console.log(prefix, suffix); // Added only for testing purpose
-            return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-          }
+          (_: any, prefix: any, middle: any, suffix: any) =>
+            `${prefix}${"X".repeat(middle.length)}${suffix}`
         );
 
-        // Return tooltip with the masked mobile number
         return (
           <Tooltip title={mobile} arrow placement="top">
             <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
@@ -2704,23 +2685,19 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       },
     },
     {
-      field: "email",
+      field: "em",
       headerName: "Email",
       minWidth: 220,
       flex: 1.5,
       disableColumnMenu: true,
       renderCell: (params: any) => {
-        const email = params.value || ""; // Extract the email ID
-
-        // Mask the email if it exists
+        const email = params.value || "";
         const maskedEmail = email.replace(
-          /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
-          (_: any, firstChar: any, middleChars: any, domain: any) => {
-            return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
-          }
+          /^(.)(.*)(.@.*)$/,
+          (_: any, firstChar: any, middleChars: any, domain: any) =>
+            `${firstChar}${"x".repeat(middleChars.length)}${domain}`
         );
 
-        // Return tooltip with the original email and masked email for display
         return (
           <Tooltip title={email} arrow placement="top">
             <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
@@ -2730,7 +2707,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
     },
 
     {
-      field: "brokerageGeneratedinFY1920",
+      field: "br1920",
       headerName: "Brok FY1920",
       minWidth: 100,
       flex: 0.7,
@@ -2740,7 +2717,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       disableColumnMenu: true,
     },
     {
-      field: "brokerageGeneratedinFY2021",
+      field: "br2021",
       headerName: "Brok FY2021",
       minWidth: 100,
       flex: 0.7,
@@ -2752,7 +2729,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         new Intl.NumberFormat("en-IN").format(params),
     },
     {
-      field: "brokerageGeneratedinFY2122",
+      field: "br2122",
       headerName: "Brok FY2122",
       minWidth: 100,
       flex: 0.7,
@@ -2764,7 +2741,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         new Intl.NumberFormat("en-IN").format(params),
     },
     {
-      field: "brokerageGeneratedinFY2223",
+      field: "br2223",
       headerName: "Brok FY2223",
       minWidth: 100,
       flex: 0.7,
@@ -2776,7 +2753,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         new Intl.NumberFormat("en-IN").format(params),
     },
     {
-      field: "brokerageGeneratedinFY2324",
+      field: "br2324",
       headerName: "Brok FY2324",
       minWidth: 100,
       flex: 0.7,
@@ -2788,14 +2765,14 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         new Intl.NumberFormat("en-IN").format(params),
     },
     {
-      field: "rmname",
+      field: "rm",
       headerName: "RM Name",
       minWidth: 150,
       flex: 1,
       disableColumnMenu: true,
     },
     {
-      field: "rmstatus",
+      field: "rmst",
       headerName: "RM Status",
       minWidth: 110,
       headerClassName: "header-wrap-custom",
@@ -2804,14 +2781,14 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       disableColumnMenu: true,
     },
     {
-      field: "dealerName",
+      field: "dlr",
       headerName: "Dealer Name",
       minWidth: 160,
       flex: 1.2,
       disableColumnMenu: true,
     },
     {
-      field: "dealerSTATUS",
+      field: "dlrst",
       headerName: "Dealer Status",
       minWidth: 110,
       headerClassName: "header-wrap-custom",
@@ -2823,7 +2800,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
 
   const PartnerColumns: GridColDef[] = [
     {
-      field: "ctermcode",
+      field: "cc",
       headerName: "Client Code",
       minWidth: 90,
       flex: 0.6,
@@ -2831,14 +2808,14 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       disableColumnMenu: true,
     },
     {
-      field: "clientName",
+      field: "cn",
       headerName: "Client Name",
       minWidth: 170,
       flex: 1.5,
       disableColumnMenu: true,
     },
     {
-      field: "lastTradeDate",
+      field: "ltd",
       headerName: "Last Trade Date",
       minWidth: 120,
       flex: 1,
@@ -2887,7 +2864,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
     },
 
     {
-      field: "activationDate",
+      field: "act_dt",
       headerName: "Activation Date",
       minWidth: 120,
       headerClassName: "header-wrap-custom",
@@ -2935,7 +2912,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       },
     },
     {
-      field: "mobileNo",
+      field: "mob",
       headerName: "Mobile No",
       minWidth: 120,
       flex: 1,
@@ -2962,7 +2939,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
     },
 
     {
-      field: "brokerageGeneratedinFY1920",
+      field: "br1920",
       headerName: "Brok FY1920",
       minWidth: 100,
       flex: 0.7,
@@ -2972,7 +2949,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
       disableColumnMenu: true,
     },
     {
-      field: "brokerageGeneratedinFY2021",
+      field: "br2021",
       headerName: "Brok FY2021",
       minWidth: 100,
       flex: 0.7,
@@ -2984,7 +2961,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         new Intl.NumberFormat("en-IN").format(params),
     },
     {
-      field: "brokerageGeneratedinFY2122",
+      field: "br2122",
       headerName: "Brok FY2122",
       minWidth: 100,
       flex: 0.7,
@@ -2996,7 +2973,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         new Intl.NumberFormat("en-IN").format(params),
     },
     {
-      field: "brokerageGeneratedinFY2223",
+      field: "br2223",
       headerName: "Brok FY2223",
       minWidth: 100,
       flex: 0.7,
@@ -3008,7 +2985,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         new Intl.NumberFormat("en-IN").format(params),
     },
     {
-      field: "brokerageGeneratedinFY2324",
+      field: "br2324",
       headerName: "Brok FY2324",
       minWidth: 100,
       flex: 0.7,
@@ -4385,7 +4362,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
 ];
 export const clientTradingPatternSummarizedColumns: GridColDef[] = [
   {
-    field: "client_Zone",
+    field: "zn",
     headerName: "Zone",
     flex: 0.5,
     minWidth: 60,
@@ -4394,7 +4371,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "client_Branch",
+    field: "bc",
     headerName: "Branch Code",
     flex: 0.7,
     minWidth: 70,
@@ -4404,7 +4381,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "branch_Type",
+    field: "bt",
     headerName: "Branch Type",
     flex: 0.8,
     minWidth: 120,
@@ -4413,7 +4390,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "client_ID",
+    field: "cc",
     headerName: "Client Code",
     flex: 0.8,
     minWidth: 90,
@@ -4421,8 +4398,8 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     align: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
-      const name = params.row?.rM_Name || "N/A";
-      const mobile = params.row?.rM_Mobile || "N/A";
+      const name = params.row?.rm || "N/A"; // RM_Name → rm
+      const mobile = params.row?.rm_mob || "N/A"; // RM_Mobile → rm_mob
       return (
         <Tooltip
           title={
@@ -4440,7 +4417,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     },
   },
   {
-    field: "client_Name",
+    field: "cn",
     headerName: "Client Name",
     flex: 1.5,
     minWidth: 200,
@@ -4449,7 +4426,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "online_Total_Brokerage",
+    field: "on_tot_brk",
     headerName: "Online Total Brok",
     flex: 1,
     minWidth: 80,
@@ -4466,7 +4443,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     },
   },
   {
-    field: "offline_Total_Brokerage",
+    field: "off_tot_brk",
     headerName: "Offline Total Brok",
     flex: 1,
     minWidth: 80,
@@ -4483,7 +4460,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     },
   },
   {
-    field: "cnT_Total_Brokerage",
+    field: "cnt_tot_brk",
     headerName: "CNT Total Brok",
     flex: 1,
     minWidth: 80,
@@ -4500,7 +4477,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     },
   },
   {
-    field: "online_Last_Trade_Date",
+    field: "on_ltd",
     headerName: "Online Last Trade Date",
     flex: 1,
     minWidth: 90,
@@ -4510,7 +4487,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "offline_Last_Trade_Date",
+    field: "off_ltd",
     headerName: "Offline Last Trade Date",
     flex: 1,
     minWidth: 90,
@@ -4520,7 +4497,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "cnT_Last_Trade_Date",
+    field: "cnt_ltd",
     headerName: "CNT Last Trade Date",
     flex: 1,
     minWidth: 90,
@@ -4530,7 +4507,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "activeStatus",
+    field: "act_sts",
     headerName: "Active Status",
     flex: 0.8,
     minWidth: 70,
@@ -4543,7 +4520,7 @@ export const clientTradingPatternSummarizedColumns: GridColDef[] = [
 
 export const clientTradingPatternDetailedColumns: GridColDef[] = [
   {
-    field: "client_Zone",
+    field: "zn", // client_Zone
     headerName: "Zone",
     flex: 0.5,
     minWidth: 60,
@@ -4552,7 +4529,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "client_Branch",
+    field: "bc", // client_Branch
     headerName: "Branch Code",
     flex: 0.7,
     minWidth: 70,
@@ -4562,7 +4539,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "branch_Type",
+    field: "bt", // branch_Type
     headerName: "Branch Type",
     flex: 0.8,
     minWidth: 120,
@@ -4571,7 +4548,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "client_ID",
+    field: "cc", // client_ID → ClientCode
     headerName: "Client Code",
     flex: 0.8,
     minWidth: 90,
@@ -4579,8 +4556,8 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     align: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
-      const name = params.row?.rM_Name || "N/A";
-      const mobile = params.row?.rM_Mobile || "N/A";
+      const name = params.row?.rm || "N/A"; // RM_Name → rm
+      const mobile = params.row?.rm_mob || "N/A"; // RM_Mobile → rm_mob
 
       return (
         <Tooltip
@@ -4599,7 +4576,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     },
   },
   {
-    field: "client_Name",
+    field: "cn", // client_Name
     headerName: "Client Name",
     flex: 1.3,
     minWidth: 240,
@@ -4607,8 +4584,10 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     align: "left",
     disableColumnMenu: true,
   },
+
+  // CM Brokerage
   {
-    field: "online_CM_Brokerage",
+    field: "on_cm_brk", // online_CM_Brokerage
     headerName: "Online CM Brok",
     flex: 1,
     minWidth: 75,
@@ -4625,7 +4604,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     },
   },
   {
-    field: "offline_CM_Brokerage",
+    field: "off_cm_brk", // offline_CM_Brokerage
     headerName: "Offline CM Brok",
     flex: 1,
     minWidth: 90,
@@ -4642,7 +4621,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     },
   },
   {
-    field: "cnT_CM_Brokerage",
+    field: "cnt_cm_brk", // cnT_CM_Brokerage
     headerName: "CNT CM Brok",
     flex: 1,
     minWidth: 90,
@@ -4658,8 +4637,10 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
       }).format(value);
     },
   },
+
+  // Futures Brokerage
   {
-    field: "online_FUT_Brokerage",
+    field: "on_fut_brk", // online_FUT_Brokerage
     headerName: "Online Futures Brok",
     flex: 1.2,
     minWidth: 80,
@@ -4676,7 +4657,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     },
   },
   {
-    field: "offline_FUT_Brokerage",
+    field: "off_fut_brk", // offline_FUT_Brokerage
     headerName: "Offline Futures Brok",
     flex: 1.2,
     minWidth: 90,
@@ -4693,7 +4674,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     },
   },
   {
-    field: "cnT_FUT_Brokerage",
+    field: "cnt_fut_brk", // cnT_FUT_Brokerage
     headerName: "CNT Futures Brok",
     flex: 1.1,
     minWidth: 90,
@@ -4709,8 +4690,10 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
       }).format(value);
     },
   },
+
+  // Options Brokerage
   {
-    field: "online_OPT_Brokerage",
+    field: "on_opt_brk", // online_OPT_Brokerage
     headerName: "Online Options Brok",
     flex: 1.2,
     minWidth: 90,
@@ -4727,7 +4710,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     },
   },
   {
-    field: "offline_OPT_Brokerage",
+    field: "off_opt_brk", // offline_OPT_Brokerage
     headerName: "Offline Options Brok",
     flex: 1.2,
     minWidth: 90,
@@ -4744,7 +4727,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     },
   },
   {
-    field: "cnT_OPT_Brokerage",
+    field: "cnt_opt_brk", // cnT_OPT_Brokerage
     headerName: "CNT Options Brok",
     flex: 1.1,
     minWidth: 90,
@@ -4760,8 +4743,10 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
       }).format(value);
     },
   },
+
+  // Trade Dates
   {
-    field: "online_Last_Trade_Date",
+    field: "on_ltd", // online_Last_Trade_Date
     headerName: "Online Last Trade Date",
     flex: 1,
     minWidth: 90,
@@ -4771,7 +4756,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "offline_Last_Trade_Date",
+    field: "off_ltd", // offline_Last_Trade_Date
     headerName: "Offline Last Trade Date",
     flex: 1,
     minWidth: 90,
@@ -4781,7 +4766,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "cnT_Last_Trade_Date",
+    field: "cnt_ltd", // cnT_Last_Trade_Date
     headerName: "CNT Last Trade Date",
     flex: 1,
     minWidth: 90,
@@ -4790,8 +4775,9 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
   },
+
   {
-    field: "activeStatus",
+    field: "act_sts", // activeStatus
     headerName: "Active Status",
     flex: 0.8,
     minWidth: 80,
@@ -6005,7 +5991,7 @@ export const spipClientDetails: GridColDef[] = [
 
 export const getApproverOneDetails: GridColDef[] = [
   {
-    field: "dealSheetB64",
+    field: "ds64", // DealSheetB64 → ds64
     headerName: "Deal Sheet",
     headerClassName: "header-wrap-custom",
     minWidth: 50,
@@ -6019,9 +6005,8 @@ export const getApproverOneDetails: GridColDef[] = [
       const today = new Date();
 
       const dd = String(today.getDate()).padStart(2, "0");
-      const mm = String(today.getMonth() + 1).padStart(2, "0"); // January is 0!
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
       const yy = String(today.getFullYear()).slice(-2);
-
       const filename = `Deal_Sheet_${dd}-${mm}-${yy}.pdf`;
 
       const handleDownload = () => {
@@ -6047,6 +6032,7 @@ export const getApproverOneDetails: GridColDef[] = [
       );
     },
   },
+
   {
     field: "Action",
     headerName: "Approve | Reject",
@@ -6057,8 +6043,9 @@ export const getApproverOneDetails: GridColDef[] = [
     disableColumnMenu: true,
     sortable: false,
   },
+
   {
-    field: "transactionDate",
+    field: "tdt", // transactionDate → tdt
     headerName: "Transaction Date",
     minWidth: 100,
     align: "center",
@@ -6067,14 +6054,14 @@ export const getApproverOneDetails: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "clientName",
+    field: "cn", // clientName → cn
     headerName: "Client Name",
     minWidth: 150,
     disableColumnMenu: true,
     headerAlign: "center",
   },
   {
-    field: "clientCategory",
+    field: "ccat", // clientCategory → ccat
     headerName: "Client Category",
     minWidth: 100,
     headerClassName: "header-wrap-custom",
@@ -6083,7 +6070,7 @@ export const getApproverOneDetails: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "rmCode",
+    field: "rmc", // rmCode → rmc
     headerName: "RM Code",
     minWidth: 60,
     align: "center",
@@ -6092,7 +6079,7 @@ export const getApproverOneDetails: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "rmName",
+    field: "rm", // rmName → rm
     headerName: "RM Name",
     minWidth: 160,
     disableColumnMenu: true,
@@ -6100,7 +6087,7 @@ export const getApproverOneDetails: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "nameOfSecurities",
+    field: "nsec", // nameOfSecurities → nsec
     headerName: "Name of Securities",
     headerClassName: "header-wrap-custom",
     minWidth: 130,
@@ -6108,7 +6095,7 @@ export const getApproverOneDetails: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "noOfShares",
+    field: "nsh", // noOfShares → nsh
     headerName: "No of Shares",
     minWidth: 70,
     disableColumnMenu: true,
@@ -6116,148 +6103,158 @@ export const getApproverOneDetails: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     headerAlign: "center",
   },
+
   {
-    field: "clientRate",
+    field: "crt", // clientRate → crt
     headerName: "Client Rate",
     minWidth: 70,
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(value);
     },
   },
+
   {
-    field: "vendorRate",
+    field: "vrt", // vendorRate → vrt
     headerName: "Vendor Rate",
     minWidth: 70,
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(value);
     },
   },
+
   {
-    field: "lkpCommissionPerShare",
-    headerName: "Commision Per Share",
+    field: "lcps", // lkpCommissionPerShare → lcps
+    headerName: "Commission Per Share",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(value);
     },
   },
+
   {
-    field: "brokerageInclusiveGST",
-    headerName: "Commision Inclusive GST",
+    field: "big", // brokerageInclusiveGST → big
+    headerName: "Commission Inclusive GST",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(value);
     },
   },
+
   {
-    field: "gst",
+    field: "gst", // GST → gst
     headerName: "GST",
     minWidth: 70,
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(value);
     },
   },
+
   {
-    field: "brokerageExclusiveGST",
-    headerClassName: "header-wrap-custom",
-    headerName: "Commision Exclusive GST",
+    field: "beg", // brokerageExclusiveGST → beg
+    headerName: "Commission Exclusive GST",
     minWidth: 100,
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(value);
     },
   },
+
   {
-    field: "sbCode",
+    field: "sbc", // SBCode → sbc
     headerName: "SB Code",
     width: 100,
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
   },
+
   {
-    field: "sbRate",
+    field: "sbr", // SBRate → sbr
     headerName: "SB Rate",
     minWidth: 70,
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(value);
     },
   },
+
   {
-    field: "sbCommission",
+    field: "sbcm", // SBCommission → sbcm
     headerName: "SB Commission",
     minWidth: 100,
     align: "right",
-    headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(value);
     },
   },
+
   {
-    field: "netBrokerage",
-    headerName: "Net Commision",
+    field: "nbg", // netBrokerage → nbg
+    headerName: "Net Commission",
     headerClassName: "header-wrap-custom",
     minWidth: 100,
     align: "right",
     disableColumnMenu: true,
     headerAlign: "center",
     valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
+      const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
@@ -6321,7 +6318,7 @@ export const getApproverTwoDetails: GridColDef[] = [
     sortable: false,
   },
   {
-    field: "approver1",
+    field: "ap1",
     headerName: "Approver Code",
     minWidth: 100,
     disableColumnMenu: true,
@@ -6330,7 +6327,7 @@ export const getApproverTwoDetails: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "approver1_Remarks",
+    field: "ap1rmk",
     headerName: "Approver One Remarks",
     headerClassName: "header-wrap-custom",
     minWidth: 120,
@@ -6338,7 +6335,7 @@ export const getApproverTwoDetails: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "vendorName",
+    field: "vnm",
     headerName: "Vendor Name",
     minWidth: 250,
     disableColumnMenu: true,
@@ -6353,15 +6350,13 @@ export const unListedTradeColumns: GridColDef[] = [
   {
     field: "action",
     headerName: "Actions",
-    headerClassName: "header-wrap-custom",
-    // flex: 1,
     width: 90,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
-    field: "rmCode",
+    field: "rmc",
     headerName: "RM Code",
     width: 80,
     headerAlign: "center",
@@ -6369,7 +6364,7 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "transactionDate",
+    field: "tdt",
     headerName: "Transaction Date",
     width: 130,
     headerAlign: "center",
@@ -6377,7 +6372,7 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 1,
     minWidth: 160,
@@ -6386,7 +6381,7 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "nameOfSecurities",
+    field: "nsec",
     headerName: "Securities Name",
     width: 120,
     headerAlign: "center",
@@ -6394,187 +6389,115 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "noOfShares",
+    field: "nsh",
     headerName: "No. of Shares",
-    headerClassName: "header-wrap-custom",
-    width: 70,
+    width: 80,
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
   },
   {
-    field: "clientRate",
+    field: "crt",
     headerName: "Client Rate",
-    headerClassName: "header-wrap-custom",
-    width: 70,
-    headerAlign: "center",
+    width: 90,
     align: "right",
+    headerAlign: "center",
     disableColumnMenu: true,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
+    valueFormatter: (params: any) =>
+      Number(params).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
   },
   {
-    field: "vendorRate",
+    field: "vrt",
     headerName: "Vendor Rate",
-    headerClassName: "header-wrap-custom",
-    width: 70,
-    headerAlign: "center",
+    width: 90,
     align: "right",
+    headerAlign: "center",
     disableColumnMenu: true,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
+    valueFormatter: (params: any) =>
+      Number(params).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
   },
   {
-    field: "lkpCommissionPerShare",
+    field: "lcps",
     headerName: "LKP Commission/Share",
-    headerAlign: "center",
+    width: 110,
     align: "right",
+    headerAlign: "center",
     disableColumnMenu: true,
-    headerClassName: "header-wrap-custom",
-    width: 100,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
+    valueFormatter: (params: any) =>
+      Number(params).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
   },
   {
-    field: "brokerageInclusiveGST",
+    field: "big",
     headerName: "Brokerage (Incl. GST)",
-    width: 100,
-    headerClassName: "header-wrap-custom",
-    headerAlign: "center",
+    width: 110,
     align: "right",
+    headerAlign: "center",
     disableColumnMenu: true,
-    // valueFormatter: (params: any) => {
-    //   const value = parseFloat(params); // Convert the value to a number
-    //   return new Intl.NumberFormat("en-IN", {
-    //     minimumFractionDigits: 2,
-    //     maximumFractionDigits: 2,
-    //   }).format(value);
-    // },
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
+    valueFormatter: (params: any) =>
+      Number(params).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
   },
   {
     field: "gst",
     headerName: "GST",
     width: 90,
-    headerAlign: "center",
     align: "right",
+    headerAlign: "center",
     disableColumnMenu: true,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
+    valueFormatter: (params: any) =>
+      Number(params).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
   },
   {
-    field: "brokerageExclusiveGST",
+    field: "beg",
     headerName: "Brokerage (Excl. GST)",
-    width: 100,
-    headerClassName: "header-wrap-custom",
+    width: 110,
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
   },
   {
-    field: "sbRate",
+    field: "sbr",
     headerName: "SubBroker Rate",
     width: 90,
-    headerClassName: "header-wrap-custom",
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params);
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
   },
   {
-    field: "sbCode",
+    field: "sbc",
     headerName: "SubBroker Code",
     width: 90,
-    headerClassName: "header-wrap-custom",
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
   },
   {
-    field: "sbCommission",
+    field: "sbcm",
     headerName: "SubBroker Commission",
-    width: 100,
-    headerClassName: "header-wrap-custom",
+    width: 110,
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
   },
   {
-    field: "netBrokerage",
+    field: "nbg",
     headerName: "Net Brokerage",
-    width: 90,
-    headerClassName: "header-wrap-custom",
+    width: 100,
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
   },
   {
-    field: "remarks",
+    field: "rmk",
     headerName: "Remark",
-    // flex: 0.8,
     minWidth: 200,
-    align: "center",
+    align: "left",
     headerAlign: "center",
     disableColumnMenu: true,
   },
   {
-    field: "status",
+    field: "sts",
     headerName: "Status",
-    // flex: 0.8,
-    minWidth: 200,
+    minWidth: 150,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
@@ -6775,7 +6698,7 @@ export const ClientPledgeRequest: GridColDef[] = [
 
 export const clientAPBrokerageColumns: GridColDef[] = [
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "Client Code",
     width: 120,
     headerAlign: "center",
@@ -6783,7 +6706,7 @@ export const clientAPBrokerageColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     minWidth: 200,
     flex: 1,
@@ -6800,7 +6723,7 @@ export const clientAPBrokerageColumns: GridColDef[] = [
   //   disableColumnMenu: true,
   // },
   {
-    field: "grossBrokerage",
+    field: "gb",
     headerName: "Gross Brokerage",
     width: 140,
     headerAlign: "center",
@@ -6816,7 +6739,7 @@ export const clientAPBrokerageColumns: GridColDef[] = [
   },
 
   {
-    field: "contribution",
+    field: "contr",
     headerName: "Contribution %",
     width: 140,
     headerAlign: "center",
@@ -6839,7 +6762,7 @@ export const clientAPBrokerageColumns: GridColDef[] = [
 ];
 export const APTopClientsFields: GridColDef[] = [
   {
-    field: "rank",
+    field: "rnk",
     headerName: "Rank",
     width: 100,
     flex: 1,
@@ -6848,7 +6771,7 @@ export const APTopClientsFields: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "zone",
+    field: "zn",
     headerName: "Zone",
     width: 100,
     flex: 1,
@@ -6858,7 +6781,7 @@ export const APTopClientsFields: GridColDef[] = [
   },
 
   {
-    field: "grossBrokerage",
+    field: "gb",
     headerName: "Gross Brokerage",
     width: 180,
     flex: 1,
@@ -6877,7 +6800,7 @@ export const APTopClientsFields: GridColDef[] = [
 
 export const APContestAchievedClients: GridColDef[] = [
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "Client Code",
     width: 130,
     headerAlign: "center",
@@ -6885,7 +6808,7 @@ export const APContestAchievedClients: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     minWidth: 200,
     flex: 1,
@@ -6894,7 +6817,7 @@ export const APContestAchievedClients: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "activationDate",
+    field: "ad",
     headerName: "Activation Date",
     width: 150,
     headerAlign: "center",
@@ -6902,7 +6825,7 @@ export const APContestAchievedClients: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "lastTradeDate",
+    field: "ltd",
     headerName: "Last Trade Date",
     width: 150,
     headerAlign: "center",
@@ -7160,7 +7083,7 @@ export const ClientExclusionColumns: GridColDef[] = [
 
 export const RHTopClientsColumns: GridColDef[] = [
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "Client Code",
     minWidth: 100,
     flex: 0.7,
@@ -7169,7 +7092,7 @@ export const RHTopClientsColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     minWidth: 150,
     flex: 1,
@@ -7178,7 +7101,7 @@ export const RHTopClientsColumns: GridColDef[] = [
     align: "left",
   },
   {
-    field: "revenue",
+    field: "rev",
     headerName: "Revenue",
     minWidth: 100,
     flex: 0.7,
@@ -7194,7 +7117,7 @@ export const RHTopClientsColumns: GridColDef[] = [
     },
   },
   {
-    field: "tradeDate",
+    field: "td",
     headerName: "Last Trade Date",
     minWidth: 130,
     flex: 0.8,
@@ -7205,7 +7128,7 @@ export const RHTopClientsColumns: GridColDef[] = [
     //   params.value ? new Date(params.value).toLocaleDateString("en-GB") : "-",
   },
   {
-    field: "rmName",
+    field: "rmn",
     headerName: "RM Name",
     minWidth: 150,
     flex: 1,
@@ -7216,7 +7139,7 @@ export const RHTopClientsColumns: GridColDef[] = [
 ];
 export const ThirdParty: GridColDef[] = [
   {
-    field: "ledgerCode",
+    field: "ldc",
     headerName: "Ledger Code",
     minWidth: 70,
     flex: 0.4,
@@ -7226,7 +7149,7 @@ export const ThirdParty: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "companyName",
+    field: "cnm",
     headerName: "Company Name",
     minWidth: 180,
     flex: 1.2,
@@ -7236,7 +7159,7 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "sacNumber",
+    field: "sac",
     headerName: "SAC Number",
     minWidth: 75,
     flex: 0.5,
@@ -7246,7 +7169,7 @@ export const ThirdParty: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "state",
+    field: "ste",
     headerName: "State",
     minWidth: 120,
     flex: 0.8,
@@ -7255,7 +7178,7 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "gstStateCode",
+    field: "gsc",
     headerName: "GST State Code",
     minWidth: 60,
     flex: 0.3,
@@ -7265,7 +7188,7 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "gstNumber",
+    field: "gst",
     headerName: "GST Number",
     minWidth: 150,
     flex: 1.2,
@@ -7285,7 +7208,7 @@ export const ThirdParty: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "emailId",
+    field: "em",
     headerName: "Email ID",
     minWidth: 180,
     flex: 1.2,
@@ -7293,17 +7216,15 @@ export const ThirdParty: GridColDef[] = [
     align: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
-      const email = params.value || ""; // Extract the email ID
+      const email = params.value || "";
 
-      // Mask the email if it exists
       const maskedEmail = email.replace(
-        /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
+        /^(.)(.*)(.@.*)$/,
         (_: any, firstChar: any, middleChars: any, domain: any) => {
           return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
         }
       );
 
-      // Return tooltip with the original email and masked email for display
       return (
         <Tooltip title={email} arrow placement="top">
           <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
@@ -7312,7 +7233,7 @@ export const ThirdParty: GridColDef[] = [
     },
   },
   {
-    field: "mobileNo",
+    field: "mob",
     headerName: "Mobile Number",
     minWidth: 120,
     flex: 0.8,
@@ -7321,8 +7242,9 @@ export const ThirdParty: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
   },
+
   {
-    field: "address1",
+    field: "ad1",
     headerName: "Address 1",
     minWidth: 180,
     flex: 1,
@@ -7332,7 +7254,7 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "address2",
+    field: "ad2",
     headerName: "Address 2",
     minWidth: 180,
     flex: 1,
@@ -7342,7 +7264,7 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "address3",
+    field: "ad3",
     headerName: "Address 3",
     minWidth: 180,
     flex: 1,
@@ -7368,7 +7290,7 @@ export const ThirdPartyStatusReport: GridColDef[] = [
   ...ThirdParty.filter((col) => col.field !== "action"),
 
   {
-    field: "approvalStatus",
+    field: "apsts",
     headerName: "Status",
     flex: 1,
     minWidth: 180,
@@ -7674,7 +7596,7 @@ export const TpInvoiceReportColumns: GridColDef[] = [
 ];
 export const VendorMasterColumns: GridColDef[] = [
   {
-    field: "vendorId",
+    field: "vid",
     headerName: "Vendor ID",
     minWidth: 100,
     flex: 0.6,
@@ -7692,7 +7614,7 @@ export const VendorMasterColumns: GridColDef[] = [
   //   align: "center",
   // },
   {
-    field: "vendorName",
+    field: "vnm",
     headerName: "Vendor Name",
     minWidth: 200,
     flex: 1,
@@ -7701,7 +7623,7 @@ export const VendorMasterColumns: GridColDef[] = [
     align: "left",
   },
   {
-    field: "address1",
+    field: "ad1",
     headerName: "Address",
     minWidth: 300,
     flex: 1.2,
@@ -7709,14 +7631,14 @@ export const VendorMasterColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     renderCell: (params: any) => {
-      const address1 = (params.row?.address1 || "").trim();
-      const address2 = (params.row?.address2 || "").trim();
-      const address3 = (params.row?.address3 || "").trim();
-      return `${address1}  ${address2} ${address3}`;
+      const ad1 = (params.row?.ad1 || "").trim();
+      const ad2 = (params.row?.ad2 || "").trim();
+      const ad3 = (params.row?.ad3 || "").trim();
+      return `${ad1} ${ad2} ${ad3}`;
     },
   },
   {
-    field: "city",
+    field: "cty",
     headerName: "City",
     minWidth: 100,
     flex: 0.6,
@@ -7725,7 +7647,7 @@ export const VendorMasterColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "state",
+    field: "ste",
     headerName: "State",
     minWidth: 100,
     flex: 0.6,
@@ -7734,7 +7656,7 @@ export const VendorMasterColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "pincode",
+    field: "pin",
     headerName: "Pin Code",
     minWidth: 100,
     flex: 0.6,
@@ -7743,7 +7665,7 @@ export const VendorMasterColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "teleNo",
+    field: "tele",
     headerName: "Tele No",
     minWidth: 120,
     flex: 0.7,
@@ -7752,7 +7674,7 @@ export const VendorMasterColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "mobileNo",
+    field: "mob",
     headerName: "Mobile No",
     minWidth: 130,
     flex: 0.8,
@@ -7761,7 +7683,7 @@ export const VendorMasterColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "emailID",
+    field: "em",
     headerName: "Email ID",
     minWidth: 180,
     flex: 1,
@@ -7770,7 +7692,7 @@ export const VendorMasterColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "panNo",
+    field: "pan",
     headerName: "PAN No",
     minWidth: 140,
     flex: 0.9,
@@ -7779,7 +7701,7 @@ export const VendorMasterColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "gstNo",
+    field: "gst",
     headerName: "GST No",
     minWidth: 140,
     flex: 0.9,
@@ -7788,17 +7710,16 @@ export const VendorMasterColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "msmeFlag",
+    field: "msmf",
     headerName: "MSME Flag",
     minWidth: 110,
     flex: 0.6,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    // valueFormatter: ({ value }) => (value ? "Yes" : "No"),
   },
   {
-    field: "msmeType",
+    field: "msmt",
     headerName: "MSME Type",
     minWidth: 130,
     flex: 0.8,
@@ -7835,7 +7756,7 @@ export const VendorMasterColumns: GridColDef[] = [
     // ),
   },
   {
-    field: "accRemark",
+    field: "armk",
     headerName: "Remark",
     minWidth: 160,
     flex: 0.6,
@@ -7849,7 +7770,7 @@ export const VendorMasterColumns: GridColDef[] = [
 
 export const VendorMasterApprovalColumns: GridColDef[] = [
   {
-    field: "vendorId",
+    field: "vid",
     headerName: "Vendor ID",
     minWidth: 100,
     flex: 0.6,
@@ -7857,17 +7778,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
-  // {
-  //   field: "vendorCode",
-  //   headerName: "Vendor Code",
-  //   minWidth: 120,
-  //   flex: 0.7,
-  //   disableColumnMenu: true,
-  //   headerAlign: "center",
-  //   align: "center",
-  // },
+
   {
-    field: "vendorName",
+    field: "vnm",
     headerName: "Vendor Name",
     minWidth: 200,
     flex: 1,
@@ -7875,8 +7788,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "left",
   },
+
   {
-    field: "address1",
+    field: "ad1",
     headerName: "Address",
     minWidth: 400,
     flex: 1.2,
@@ -7884,14 +7798,15 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     renderCell: (params: any) => {
-      const address1 = (params.row?.address1 || "").trim();
-      const address2 = (params.row?.address2 || "").trim();
-      const address3 = (params.row?.address3 || "").trim();
-      return `${address1}  ${address2} ${address3}`;
+      const ad1 = (params.row?.ad1 || "").trim();
+      const ad2 = (params.row?.ad2 || "").trim();
+      const ad3 = (params.row?.ad3 || "").trim();
+      return `${ad1} ${ad2} ${ad3}`;
     },
   },
+
   {
-    field: "city",
+    field: "cty",
     headerName: "City",
     minWidth: 100,
     flex: 0.6,
@@ -7899,8 +7814,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "state",
+    field: "ste",
     headerName: "State",
     minWidth: 100,
     flex: 0.6,
@@ -7908,8 +7824,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "pincode",
+    field: "pin",
     headerName: "Pin Code",
     minWidth: 100,
     flex: 0.6,
@@ -7917,8 +7834,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "teleNo",
+    field: "tele",
     headerName: "Telephone No",
     minWidth: 120,
     flex: 0.7,
@@ -7926,8 +7844,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "mobileNo",
+    field: "mob",
     headerName: "Mobile No",
     minWidth: 130,
     flex: 0.8,
@@ -7935,8 +7854,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "emailID",
+    field: "em",
     headerName: "Email ID",
     minWidth: 180,
     flex: 0.8,
@@ -7944,8 +7864,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "panNo",
+    field: "pan",
     headerName: "PAN No",
     minWidth: 140,
     flex: 0.9,
@@ -7953,8 +7874,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "gstNo",
+    field: "gst",
     headerName: "GST No",
     minWidth: 140,
     flex: 0.9,
@@ -7962,18 +7884,19 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "msmeFlag",
+    field: "msmf",
     headerName: "MSME Flag",
     minWidth: 110,
     flex: 0.6,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    // valueFormatter: ({ value }) => (value ? "Yes" : "No"),
   },
+
   {
-    field: "msmeType",
+    field: "msmt",
     headerName: "MSME Type",
     minWidth: 130,
     flex: 0.8,
@@ -7981,18 +7904,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
-  // {
-  //   field: "tdsPath",
-  //   headerName: "TDS Document",
-  //   minWidth: 120,
-  //   flex: 0.6,
-  //   sortable: false,
-  //   filterable: false,
-  //   headerAlign: "center",
-  //   align: "center",
-  // },
+
   {
-    field: "msmePath",
+    field: "msmp",
     headerName: "MSME Document",
     minWidth: 120,
     flex: 0.6,
@@ -8001,8 +7915,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "bankDoc",
+    field: "bdoc",
     headerName: "Bank Document",
     minWidth: 120,
     flex: 0.6,
@@ -8011,8 +7926,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "panDocument",
+    field: "pdoc",
     headerName: "Pan Document",
     minWidth: 120,
     flex: 0.6,
@@ -8033,8 +7949,9 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
     align: "center",
     headerClassName: "header-wrap-custom",
   },
+
   {
-    field: "accRemark",
+    field: "armk",
     headerName: "Remark",
     minWidth: 160,
     flex: 0.6,
@@ -8048,7 +7965,7 @@ export const VendorMasterApprovalColumns: GridColDef[] = [
 
 export const getAPContestReportColumns: GridColDef[] = [
   {
-    field: "apCode",
+    field: "apc",
     headerName: "AP Code",
     flex: 1,
     disableColumnMenu: true,
@@ -8057,7 +7974,7 @@ export const getAPContestReportColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "apName",
+    field: "apn",
     headerName: "AP Name",
     flex: 2,
     disableColumnMenu: true,
@@ -8077,7 +7994,7 @@ export const getAPContestReportColumns: GridColDef[] = [
   //     ),
   // },
   {
-    field: "brokerageAchieved",
+    field: "bga",
     headerName: "Revenue Achieved",
     flex: 1.3,
     disableColumnMenu: true,
@@ -8112,7 +8029,7 @@ export const getAPContestReportColumns: GridColDef[] = [
   //   headerClassName: "header-wrap-custom",
   // },
   {
-    field: "clientsAchieved",
+    field: "cla",
     headerName: "Clients Achieved",
     flex: 1,
     disableColumnMenu: true,
@@ -8144,7 +8061,7 @@ export const getAPContestReportColumns: GridColDef[] = [
 
 export const clientUnpledgeReport: GridColDef[] = [
   {
-    field: "ClientCode",
+    field: "cc",
     headerName: "Client Code",
     width: 120,
     disableColumnMenu: true,
@@ -8152,7 +8069,7 @@ export const clientUnpledgeReport: GridColDef[] = [
     align: "center",
   },
   {
-    field: "ClientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 1,
     minWidth: 160,
@@ -8161,7 +8078,7 @@ export const clientUnpledgeReport: GridColDef[] = [
     align: "left",
   },
   {
-    field: "ISIN",
+    field: "isin",
     headerName: "ISIN",
     width: 160,
     disableColumnMenu: true,
@@ -8169,7 +8086,7 @@ export const clientUnpledgeReport: GridColDef[] = [
     align: "center",
   },
   {
-    field: "Symbol",
+    field: "sym",
     headerName: "Scrip Name",
     flex: 1,
     minWidth: 200,
@@ -8178,7 +8095,7 @@ export const clientUnpledgeReport: GridColDef[] = [
     align: "center",
   },
   {
-    field: "Quantity",
+    field: "qty",
     headerName: "Quantity",
     width: 120,
     disableColumnMenu: true,
@@ -8194,7 +8111,7 @@ export const clientUnpledgeReport: GridColDef[] = [
   //   align: "center",
   // },
   {
-    field: "RequestedDate",
+    field: "rqd",
     headerName: "Requested Date",
     width: 160,
     disableColumnMenu: true,
@@ -10498,7 +10415,7 @@ export const ageingColumns: GridColDef[] = [
 
 export const vendorApprovalColumns: GridColDef[] = [
   {
-    field: "vendorName",
+    field: "vnm",
     headerName: "Vendor Name",
     headerClassName: "header-wrap-custom",
     flex: 1.5,
@@ -10507,7 +10424,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "city",
+    field: "cty",
     headerName: "City",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10516,7 +10433,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "state",
+    field: "ste",
     headerName: "State",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10525,7 +10442,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "mobileNo",
+    field: "mob",
     headerName: "Mobile No",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10534,7 +10451,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "emailID",
+    field: "em",
     headerName: "Email ID",
     headerClassName: "header-wrap-custom",
     flex: 1.5,
@@ -10543,7 +10460,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "bankName",
+    field: "bnk",
     headerName: "Bank Name",
     headerClassName: "header-wrap-custom",
     flex: 1.2,
@@ -10552,7 +10469,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "bankActNo",
+    field: "actn",
     headerName: "A/C No",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10561,7 +10478,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "bankDoc",
+    field: "bdoc",
     headerName: "Bank Document",
     minWidth: 120,
     flex: 0.6,
@@ -10571,7 +10488,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "panDocument",
+    field: "pdoc",
     headerName: "Pan Document",
     minWidth: 120,
     flex: 0.6,
@@ -10581,7 +10498,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "ifscCode",
+    field: "ifsc",
     headerName: "IFSC Code",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10590,7 +10507,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "tdsFlag",
+    field: "tdsf",
     headerName: "TDS Flag",
     headerClassName: "header-wrap-custom",
     flex: 0.8,
@@ -10600,7 +10517,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? "Yes" : "No"),
   },
   {
-    field: "tdsPath",
+    field: "tdsp",
     headerName: "TDS Document",
     minWidth: 120,
     flex: 0.6,
@@ -10610,7 +10527,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "msmeFlag",
+    field: "msmf",
     headerName: "MSME Flag",
     headerClassName: "header-wrap-custom",
     flex: 0.8,
@@ -10620,7 +10537,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? "Yes" : "No"),
   },
   {
-    field: "msmePath",
+    field: "msmp",
     headerName: "MSME Document",
     minWidth: 120,
     flex: 0.6,
@@ -10630,7 +10547,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "accApproval",
+    field: "app",
     headerName: "Approval Status",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10639,7 +10556,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "accRemark",
+    field: "armk",
     headerName: "Account Remark",
     headerClassName: "header-wrap-custom",
     flex: 1.5,
@@ -10648,7 +10565,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "createdDate",
+    field: "cdt",
     headerName: "Created Date",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10880,7 +10797,7 @@ export const regMasterColumns: GridColDef[] = [
 
 export const AmcZoneReportDirect: GridColDef[] = [
   {
-    field: "empOrAPCode",
+    field: "emp",
     headerName: "Employee Code",
     flex: 1,
     minWidth: 120,
@@ -10891,7 +10808,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "empOrAPName",
+    field: "emp_nm",
     headerName: "Employee Name",
     flex: 1.5,
     minWidth: 160,
@@ -10913,7 +10830,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "submitted",
+    field: "sub",
     headerName: "Submitted",
     flex: 0.8,
     minWidth: 100,
@@ -10924,7 +10841,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
     renderCell: (params) => params.value ?? 0,
   },
   {
-    field: "completed",
+    field: "cmp",
     headerName: "Completed",
     flex: 0.8,
     minWidth: 100,
@@ -10935,7 +10852,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
     renderCell: (params) => params.value ?? 0,
   },
   {
-    field: "incentive_Earned",
+    field: "inc",
     headerName: "Incentive Earned",
     flex: 1,
     minWidth: 140,
@@ -10952,7 +10869,7 @@ export const AmcZoneReportDirect: GridColDef[] = [
 
 export const AmcZoneReportIndirect: GridColDef[] = [
   {
-    field: "empOrAPCode",
+    field: "emp",
     headerName: "Partner Code",
     flex: 1,
     minWidth: 120,
@@ -10963,7 +10880,7 @@ export const AmcZoneReportIndirect: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "empOrAPName",
+    field: "emp_nm",
     headerName: "Partner Name",
     flex: 1.5,
     minWidth: 160,
@@ -10974,13 +10891,13 @@ export const AmcZoneReportIndirect: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   ...AmcZoneReportDirect.filter(
-    (col) => col.field !== "empOrAPName" && col.field !== "empOrAPCode"
+    (col) => col.field !== "emp" && col.field !== "emp_nm"
   ),
 ];
 
 export const DPTransactionColumns: GridColDef[] = [
   {
-    field: "zone",
+    field: "zn", // zone
     headerName: "Zone",
     flex: 0.5,
     minWidth: 70,
@@ -10990,8 +10907,8 @@ export const DPTransactionColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "branch",
-    headerName: "Branch ",
+    field: "br", // branch
+    headerName: "Branch",
     flex: 0.5,
     minWidth: 70,
     align: "center",
@@ -11000,7 +10917,7 @@ export const DPTransactionColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "branchType",
+    field: "bt", // branchType
     headerName: "Branch Type",
     flex: 0.7,
     minWidth: 80,
@@ -11010,7 +10927,7 @@ export const DPTransactionColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "clientId",
+    field: "cid", // clientId
     headerName: "Client ID",
     flex: 1,
     minWidth: 100,
@@ -11021,7 +10938,7 @@ export const DPTransactionColumns: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "dP_ID",
+    field: "dpid", // dP_ID
     headerName: "DP ID",
     flex: 1,
     minWidth: 160,
@@ -11032,7 +10949,7 @@ export const DPTransactionColumns: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "clientName",
+    field: "cn", // clientName
     headerName: "Client Name",
     flex: 1.5,
     minWidth: 180,
@@ -11043,7 +10960,7 @@ export const DPTransactionColumns: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "schemeName",
+    field: "sch_nm", // schemeName
     headerName: "Scheme Name",
     flex: 1,
     minWidth: 120,
@@ -11055,7 +10972,7 @@ export const DPTransactionColumns: GridColDef[] = [
   },
 
   {
-    field: "requestDate",
+    field: "req_dt", // requestDate
     headerName: "Request Date",
     flex: 1,
     minWidth: 180,
@@ -11066,7 +10983,7 @@ export const DPTransactionColumns: GridColDef[] = [
   },
 
   {
-    field: "schemeStatus",
+    field: "sch", // schemeStatus
     headerName: "Scheme Status",
     flex: 0.8,
     minWidth: 120,
@@ -11076,8 +10993,9 @@ export const DPTransactionColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params) => params.value || "—",
   },
+
   {
-    field: "order_Id",
+    field: "ord", // order_Id
     headerName: "Order ID",
     flex: 0.5,
     minWidth: 100,
@@ -11087,22 +11005,21 @@ export const DPTransactionColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params) => params.value || "—",
   },
+
   {
-    field: "amount",
+    field: "amt", // amount
     headerName: "Amount",
-    // flex: 1,
     minWidth: 120,
     align: "right",
     headerAlign: "center",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
-    // renderCell: (params) =>
-    //   params.value ? parseFloat(params.value).toFixed(2) : "—",
     renderCell: (params: any) => {
       const value = params.value;
       return value?.toLocaleString("en-IN");
     },
   },
+
   {
     field: "downloadAMC",
     headerName: "Esign File",
@@ -11112,7 +11029,6 @@ export const DPTransactionColumns: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
-    // renderCell: (params) => params.value || "—",
   },
 ];
 
@@ -11463,19 +11379,19 @@ export const extendedAmcReport: GridColDef[] = [
 
 export const apGrossBrokerageColumns: GridColDef[] = [
   {
-    field: "apCode",
+    field: "apn",
     headerName: "AP Code",
-    minWidth: 120,
+    minWidth: 200,
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "apName",
+    field: "apc",
     headerName: "AP Name",
     flex: 1,
-    minWidth: 180,
+    minWidth: 50,
     align: "left",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",

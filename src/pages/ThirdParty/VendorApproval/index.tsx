@@ -42,11 +42,11 @@ const VendorApproval = ({ activeSubItem }: any) => {
           const formattedVendors = newVendors.map(
             (vendor: any, index: number) => ({
               ...vendor,
-              id: index + 1, // Assign frontend index-based ID
+              Id: index + 1,
             })
           );
 
-          setVendorData(formattedVendors); // Replace existing data
+          setVendorData(formattedVendors);
           dispatch(hideLoader());
 
           console.log("Mapped Vendor Data:", formattedVendors);

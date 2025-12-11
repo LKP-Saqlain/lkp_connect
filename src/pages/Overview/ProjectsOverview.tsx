@@ -43,10 +43,10 @@ const ProjectsOverview = () => {
           if (fetchedBrokerageData) {
             // Extract GrossBrokerage and APbrokerage data from the API response
             const grossBrokerageData = fetchedBrokerageData.map(
-              (item: any) => item.GrossBrokerage
+              (item: any) => item.gb
             );
             // const apShareData = fetchedBrokerageData.map(
-            //   (item: any) => item.APbrokerage
+            //   (item: any) => item.APBrokerage
             // );
 
             // Update the monthProjectData array

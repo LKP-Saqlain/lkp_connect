@@ -20,13 +20,13 @@ import UserCapsules from "../../ClientDetails/UserCapsules";
 // import ShowToast from "../../../utils/toastUtils";
 
 interface APContestData {
-  rowId: number;
-  apCode: string;
-  apName: string;
-  zone: string;
-  qtarget: number;
-  newClientCount: number;
-  prize: string;
+  rid: number;
+  apc: string;
+  apn: string;
+  zn: string;
+  qtrg: number;
+  nccnt: number;
+  prze: string;
 }
 
 const APContest = ({ activeMenu, isCustomRender, row }: any) => {
@@ -37,8 +37,8 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
     any[]
   >([]);
   const [apContestSummary, setApContestSummary] = useState<{
-    brokerageNetToLKP: number;
-    newClients: number;
+    bnlkp: number;
+    newc: number;
   } | null>(null);
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -49,7 +49,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
 
   useEffect(() => {
     const payload = {
-      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
     };
 
     const fetchContestTargetDetails = async () => {
@@ -57,11 +57,27 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
         dispatch(showLoader(""));
         const response = await apiServices.GetAPContestTargetDetails(payload);
 
-        if (response?.status === 200) {
-          const data = response?.data?.data?.[0];
-          console.log("GetAPContestTargetDetails", data, activeMenu, userData);
-          setTargetData(data);
-        }
+        // if (response?.status === 200) {
+        //   const list = response?.data?.data || [];
+
+        //   // Add Id to each item
+        //   const mappedList = list.map((item: any, index: number) => ({
+        //     Id: index + 1,
+        //     ...item,
+        //   }));
+
+        //   // Store the first item after mapping
+        //   const firstItem = mappedList[0] || {};
+
+        //   console.log(
+        //     "GetAPContestTargetDetails",
+        //     firstItem,
+        //     activeMenu,
+        //     userData
+        //   );
+
+        //   setTargetData(firstItem);
+        // }
       } catch (error) {
         console.error("Error fetching AP Contest Target Details", error);
       } finally {
@@ -73,11 +89,11 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
     // fetchAPachievedBrokerage();
     // fetchAPContestAchClients();
     fetchAPContestSummary();
-  }, [row?.apCode]);
+  }, [row?.apc]);
 
   // const fetchAPachievedBrokerage = () => {
   //   let payload = {
-  //     user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+  //     user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
   //   };
   //   dispatch(showLoader(""));
 
@@ -103,7 +119,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
 
   const fetchAPContestAchClients = () => {
     let payload = {
-      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
       // user_id: user_id,
     };
     dispatch(showLoader(""));
@@ -114,10 +130,17 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
         if (response?.status === 200) {
           dispatch(hideLoader());
           console.log("ResponseAPContestAchClients", response?.data);
-          if (response?.data?.data.length === 0) {
-            // ShowToast("error", response?.data?.message);
-          }
-          setApContestAchSummaryRecord(response?.data?.data);
+
+          const list = response?.data?.data || [];
+
+          // Map and add Id field
+          const mappedList = list.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          // Store mapped list in state
+          setApContestAchSummaryRecord(mappedList);
         }
       })
       .catch((error) => {
@@ -127,7 +150,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
 
   const fetchAPContestSummary = () => {
     let payload = {
-      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
       // user_id: user_id,
     };
     dispatch(showLoader(""));
@@ -230,8 +253,8 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                       <DashboardCard
                         title="Clients Achieved*"
                         value={
-                          apContestSummary?.newClients != null
-                            ? apContestSummary.newClients
+                          apContestSummary?.newc != null
+                            ? apContestSummary.newc
                             : "-"
                         }
                         customClass={true}
@@ -256,7 +279,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                       }}
                     >
                       <h4 className="card-title mb-0">
-                        AP Contest Achieved Clients{" "}
+                        AP Contest Achieved Clientssss{" "}
                         <span style={{ fontSize: "12px" }}>
                           (October–December)
                         </span>

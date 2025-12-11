@@ -15,7 +15,7 @@ import { apiServices } from "../../../services";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import ShowToast from "../../../utils/toastUtils";
 import DashboardCard from "../../../components/common/DashboardCard";
-import { extractBarModelData } from "../../../helper/method";
+import { extractBarModelData, keyMapping } from "../../../helper/method";
 import ZoneTargetChart from "../../../components/common/zoneTargetChart";
 import { Button as MuiButton } from "@mui/material";
 
@@ -31,30 +31,30 @@ interface MetricData {
 const ZoneTarget = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [zoneTargetData, setZoneTargetData] = useState({
-    total: 10,
-    direct: 100,
-    indirect: 1000,
+    total: 0,
+    direct: 0,
+    indirect: 0,
   });
   const [zoneTargetAchievedData, setZoneTargetAchievedData] = useState({
-    total: 20,
-    direct: 200,
-    indirect: 2000,
+    total: 0,
+    direct: 0,
+    indirect: 0,
   });
   const [
     zoneTargetAchievedPercentageData,
     setZoneTargetAchievedPercentageData,
   ] = useState({
-    total: 30,
-    direct: 300,
-    indirect: 3000,
+    total: 0,
+    direct: 0,
+    indirect: 0,
   });
   const [activeBadges, setActiveBadges] = useState<string[]>(
     Array(4).fill("total")
   );
   const [zoneBarData, setZoneBarData] = useState({
-    barDirectModel: null,
-    barInDirectModel: null,
-    barInTotalModel: null,
+    bdm: null,
+    bidm: null,
+    btm: null,
   });
   const [selectedType, setSelectedType] = useState<
     "both" | "target" | "achieved"
@@ -168,33 +168,31 @@ const ZoneTarget = ({ activeSubItem }: any) => {
           if (data) {
             const targets = data.targets?.[0] || {};
             setZoneTargetData({
-              total: targets.target_TotalBrokerage || 0,
-              direct: targets.target_DirectTotalBrokerage || 0,
-              indirect: targets.target_InDirectTotalBrokerage || 0,
+              total: targets.ttb || 0,
+              direct: targets.tdb || 0,
+              indirect: targets.tidb || 0,
             });
 
             const actuals = data.actuals?.[0] || {};
             setZoneTargetAchievedData({
-              total: actuals.total_Achieved_Brokerage || 0,
-              direct: actuals.zone_Achieved_DirectBrokerage || 0,
-              indirect: actuals.zone_Achieved_InDirect_Brokerage || 0,
+              total: actuals.t_ach_b || 0,
+              direct: actuals.z_ach_db || 0,
+              indirect: actuals.z_ach_idb || 0,
             });
 
             const percentages = data.percentages?.[0] || {};
             setZoneTargetAchievedPercentageData({
-              total: parseFloat(percentages.total_Achieved_Percentage) || 0,
-              direct: parseFloat(percentages.direct_Achieved_Percentage) || 0,
-              indirect:
-                parseFloat(percentages.indirect_Achieved_Percentage) || 0,
+              total: parseFloat(percentages.t_ach_pct) || 0,
+              direct: parseFloat(percentages.d_ach_pct) || 0,
+              indirect: parseFloat(percentages.id_ach_pct) || 0,
             });
 
             const zonebarData = data.zonebarData?.[0];
             if (zonebarData) {
-              // 👇 store zonebarData in local state
               setZoneBarData({
-                barDirectModel: zonebarData.barDirectModel,
-                barInDirectModel: zonebarData.barInDirectModel,
-                barInTotalModel: zonebarData.barInTotalModel,
+                bdm: transformModelKeys(zonebarData.bdm),
+                bidm: transformModelKeys(zonebarData.bidm),
+                btm: transformModelKeys(zonebarData.btm),
               });
             }
           }
@@ -233,18 +231,22 @@ const ZoneTarget = ({ activeSubItem }: any) => {
     });
   };
 
-  const directChartData = extractBarModelData(
-    zoneBarData.barDirectModel,
-    "Direct"
-  );
-  const indirectChartData = extractBarModelData(
-    zoneBarData.barInDirectModel,
-    "Indirect"
-  );
-  const totalChartData = extractBarModelData(
-    zoneBarData.barInTotalModel,
-    "Total"
-  );
+  const transformModelKeys = (model: any) => {
+    if (!model) return model;
+
+    const transformed: any = {};
+
+    Object.keys(model).forEach((key) => {
+      const mappedKey = keyMapping[key] || key; // fallback to original
+      transformed[mappedKey] = model[key];
+    });
+
+    return transformed;
+  };
+
+  const directChartData = extractBarModelData(zoneBarData.bdm, "Direct");
+  const indirectChartData = extractBarModelData(zoneBarData.bidm, "Indirect");
+  const totalChartData = extractBarModelData(zoneBarData.btm, "Total");
 
   // const allValues = [
   //   ...directChartData.series.flatMap((s) => s.data),

@@ -29,10 +29,12 @@ const StoreVisits = ({ getActiveClients }: any) => {
       dispatch(ClientSummary(payload))
         .unwrap()
         .then((response) => {
+          console.log("TestData", response?.data?.data);
+
           const clientData = response?.data?.data?.[0] || {};
 
-          const active = Number(clientData?.Active ?? 0); // Handle null -> 0
-          const inactive = Number(clientData?.Inactive ?? 0); // Handle null -> 0
+          const active = Number(clientData?.act ?? 0); // Handle null -> 0
+          const inactive = Number(clientData?.act ?? 0); // Handle null -> 0
 
           console.log("ChartData Debug:", { active, inactive });
 

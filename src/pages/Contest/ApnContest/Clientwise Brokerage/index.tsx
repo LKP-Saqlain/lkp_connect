@@ -58,7 +58,13 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
       dispatch(showLoader("Fetching top clients..."));
       const res = await apiServices.GetAPTop10ClientBrokerage(payload);
       if (res?.status === 200 && Array.isArray(res?.data?.data)) {
-        setBrokerageData(res?.data?.data);
+        const apiData = res?.data?.data || [];
+
+        const updatedList = apiData.map((item: any, index: number) => ({
+          Id: index + 1,
+          ...item,
+        }));
+        setBrokerageData(updatedList);
       } else {
         ShowToast("error", "No data found for this period.");
         console.log(res?.data?.data);
@@ -88,7 +94,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
           setUserData(
             response?.data?.data?.map((item: any, index: number) => ({
               ...item,
-              id: index,
+              Id: index,
             }))
           );
           console.log(userData);
@@ -141,7 +147,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
       },
     },
     xaxis: {
-      categories: brokerageData.map((item) => item.clientName), // ✅ show client name on x-axis
+      categories: brokerageData.map((item) => item.cn), // ✅ show client name on x-axis
       labels: {
         style: {
           fontSize: "11px",
@@ -162,9 +168,9 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
         const client = brokerageData[dataPointIndex];
         return `
           <div style="padding:8px; font-size:12px;">
-            <strong>${client.fullName}</strong><br/>
-            <span style="color:#777">Code:</span> ${client.clientCode}<br/>
-            <span style="color:#777">Gross Brokerage:</span> ₹${client.grossBrokerage.toLocaleString(
+            <strong>${client.fcn}</strong><br/>
+            <span style="color:#777">Code:</span> ${client.cc}<br/>
+            <span style="color:#777">Gross Brokerage:</span> ₹${client.gb.toLocaleString(
               "en-IN",
               {
                 minimumFractionDigits: 0,
@@ -179,7 +185,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
     series: [
       {
         name: "Gross Brokerage",
-        data: brokerageData.map((item) => item.grossBrokerage),
+        data: brokerageData.map((item) => item.gb),
       },
     ],
   };
@@ -187,7 +193,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
   const chartSeries = [
     {
       name: "Gross Brokerage",
-      data: brokerageData.map((item) => item.grossBrokerage),
+      data: brokerageData.map((item) => item.gb),
     },
   ];
 

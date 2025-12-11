@@ -58,17 +58,17 @@ const NonBrokingRevenue = () => {
           const fetchRevenueData = response?.data?.data?.Table;
           if (fetchRevenueData) {
             const tpd_Insurance = fetchRevenueData.map(
-              (item: any) => item.TPD_Insurance
+              (item: any) => item.tpdins
             );
             const TPD_Liq_loans = fetchRevenueData.map(
-              (item: any) => item.TPD_Liq_loans
+              (item: any) => item.tpdll
             );
-            const spIp = fetchRevenueData.map((item: any) => item.RA_Rev);
+            const spIp = fetchRevenueData.map((item: any) => item.rarev);
             const TPD_mutualfunds = fetchRevenueData.map(
-              (item: any) => item.TPD_mutualfunds
+              (item: any) => item.tpdmf
             );
             const unlistedShares = fetchRevenueData.map(
-              (item: any) => item.UnlistedShares_rev
+              (item: any) => item.usr
             );
             // Update the monthProjectData array
             setNonBrokingValues([
