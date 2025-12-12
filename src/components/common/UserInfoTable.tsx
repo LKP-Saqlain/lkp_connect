@@ -2721,7 +2721,38 @@ const DataTable = ({
           columns={columns}
           rowHeight={30}
           hideFooter={customHide ? true : false}
-          getRowId={(row: any) => (row.Id ? row?.Id : row?.cc)}
+          // getRowId={(row: any) => (row.Id ? row?.Id : row?.cc)}
+          getRowId={(row: any) =>
+            row.Id
+              ? row?.Id
+              : row?.cc
+              ? row?.cc
+              : row.rowID
+              ? row.rowID
+              : row.id
+              ? row.id
+              : row.rowId
+              ? row.rowId
+              : row.ClientCode
+              ? row.ClientCode
+              : row.clientCode
+              ? row.clientCode
+              : row.ctermcode
+              ? row.ctermcode
+              : row.RowId
+              ? row.RowId
+              : row.dummyId
+              ? row.dummyId
+              : row.RowID
+              ? row.RowID
+              : row.ClientName
+              ? row.ClientName
+              : row.clientName
+              ? row.clientName
+              : row.BOID
+              ? `${row.BOName}-${row.TotalDebit}-${Math.random()}`
+              : row.Name
+          }
           // Use the correct identifier for rows
           getRowClassName={(params) => {
             if (customCss) {
