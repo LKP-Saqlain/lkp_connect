@@ -170,22 +170,29 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
       setResponseStatus(false);
 
       const currentDate = new Date();
-      const currentMonth = currentDate.getMonth() + 1;
       let year = currentDate.getFullYear();
-      let previousQuarter;
+      const currentMonth = currentDate.getMonth() + 1;
+      let currentQuarter;
+      if (currentMonth >= 4 && currentMonth <= 6) {
+        currentQuarter = 1;
+      } else if (currentMonth >= 7 && currentMonth <= 9) {
+        currentQuarter = 2;
+      } else if (currentMonth >= 10 && currentMonth <= 12) {
+        currentQuarter = 3;
+      } else {
+        currentQuarter = 4;
+      }
 
-      if (currentMonth >= 3 && currentMonth <= 5) {
+      let previousQuarter = currentQuarter - 1;
+
+      if (previousQuarter === 0) {
         previousQuarter = 4;
         year -= 1;
-      } else if (currentMonth >= 6 && currentMonth <= 8) {
-        previousQuarter = 1;
-      } else if (currentMonth >= 9 && currentMonth <= 11) {
-        previousQuarter = 2;
-      } else {
-        previousQuarter = 3;
       }
 
       const financialQtr = `${year}-Q${previousQuarter}`;
+
+      console.log("financialQtr", financialQtr);
 
       const payload = {
         start: 0,

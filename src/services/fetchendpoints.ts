@@ -149,10 +149,10 @@ export const newDomainEndpoints = [
   endpoints.GetOverviewUniqueTradedClients,
   endpoints.GetAMCZoneReport,
   endpoints.GetZoneTargetdata,
-  endpoints.GetPNLAccountDetailsPdf,
+  // endpoints.GetPNLAccountDetailsPdf,
   endpoints.GetQuaterlyPayoutGrid,
-  endpoints.lastTradeDate,
-  endpoints.GetCoreAlertsReport,
+  // endpoints.lastTradeDate,
+  // endpoints.GetCoreAlertsReport,
   //11/12/2025
 
   // endpoints.GetQuaterlyPayoutGrid, //   columns n all binding is fully pending
