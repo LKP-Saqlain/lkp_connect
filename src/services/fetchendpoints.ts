@@ -151,7 +151,8 @@ export const newDomainEndpoints = [
   endpoints.GetZoneTargetdata,
   endpoints.GetPNLAccountDetailsPdf,
   endpoints.GetQuaterlyPayoutGrid,
-
+  endpoints.lastTradeDate,
+  endpoints.GetCoreAlertsReport,
   //11/12/2025
 
   // endpoints.GetQuaterlyPayoutGrid, //   columns n all binding is fully pending

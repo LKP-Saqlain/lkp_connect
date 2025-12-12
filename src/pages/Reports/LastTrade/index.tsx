@@ -101,7 +101,7 @@ const LastTrade = () => {
 
       // Make the API call
       const response = await axios.post(
-        `https://middlewareapi.lkp.net.in${endpoints.lastTradeDate}`,
+        `http://api.lkpconnect.net.in${endpoints.lastTradeDate}`,
         payload,
         {
           responseType: "blob",
