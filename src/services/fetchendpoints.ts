@@ -149,6 +149,8 @@ export const newDomainEndpoints = [
   endpoints.GetOverviewUniqueTradedClients,
   endpoints.GetAMCZoneReport,
   endpoints.GetZoneTargetdata,
+  endpoints.GetPNLAccountDetailsPdf,
+  endpoints.GetQuaterlyPayoutGrid,
 
   //11/12/2025
 

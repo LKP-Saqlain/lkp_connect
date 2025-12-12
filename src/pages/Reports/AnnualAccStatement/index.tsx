@@ -98,9 +98,9 @@ const AnnualAccStatement = () => {
   };
 
   const handleError = (error: any) => {
-    console.error("Error -->", error);
+    console.error("Error -->", error.response?.data?.message);
     const errorMessage =
-      error.response?.data?.message ||
+      error.response?.data?.statusText ||
       "Sorry for the inconvenience, please try again later.";
     ShowToast("error", errorMessage);
   };
