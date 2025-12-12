@@ -138,9 +138,7 @@ const DashboardCrypto = ({
         };
         // debugger;
         try {
-          dispatch(
-            showLoader("Please wait, we are processing your request...")
-          );
+          dispatch(showLoader(""));
           const response = await apiServices.DashboardNudge(payload);
           console.log("dashBoardNudgeData", typeof response?.data);
 

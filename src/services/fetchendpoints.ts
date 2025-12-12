@@ -112,7 +112,7 @@ export const newDomainEndpoints = [
   endpoints.DPDebitRecovery, //
   endpoints.DealerPerformance,
   //
-  // endpoints.ScripSearch,   //Pending
+  endpoints.ScripSearch, //Pending
   endpoints.SLBMHoldingsReport,
 
   endpoints.GetAPContestTargetDetails,

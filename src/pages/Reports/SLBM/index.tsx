@@ -36,7 +36,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [userData, setUserData] = useState([]);
-  const [totalEntries, setTotalEntries] = useState(null);
+  // const [totalEntries, setTotalEntries] = useState(null);
   const [responseStatus, setResponseStatus] = useState(false);
   // const [searchValue, setSearchValue] = React.useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -97,9 +97,9 @@ const SlbmHoling = ({ activeSubItem }: any) => {
       .ScripSearch()
       .then((response) => {
         dispatch(hideLoader());
-        console.log("scriptSearchResponse", response?.data?.Table);
+        console.log("scriptSearchResponse", response?.data?.data);
 
-        setIsinRecords(response?.data?.Table || []);
+        setIsinRecords(response?.data?.data || []);
       })
       .catch((error) => {
         dispatch(hideLoader());
@@ -255,9 +255,6 @@ const SlbmHoling = ({ activeSubItem }: any) => {
 
   const handleSubmit = async (event?: any, value?: any) => {
     console.log("newPage", event, value);
-    // formik.setFieldValue("selectedZone", {});
-    // formik.setFieldValue("selectedBranchCode", {});
-    // formik.setFieldValue("isInValue", "");
 
     const payload = {
       loginName: user_id,
@@ -278,45 +275,48 @@ const SlbmHoling = ({ activeSubItem }: any) => {
           : formik.values.selectedBranchCode?.value,
       symbolISIN: formik.values.isInValue,
     };
+
     dispatch(showLoader("Please wait, we are processing your request..."));
+
     await apiServices
       .SLBMHoldingsReport(payload)
       .then((response) => {
-        console.log("response", response?.data);
-        console.log(
-          "SLBMHoldingsReportResponse",
-          response?.data?.sLBMHoldings[0]
-        );
-        response?.data?.sLBMHoldings[0];
-        setTotalEntries(response?.data?.sLBMHoldings[0]?.recordsTotal);
-        console.log(totalEntries, "totalEntries slbm");
+        console.log("SLBMHoldingsReportResponse", response?.data?.data);
+
+        // setTotalEntries(response?.data?.sLBMHoldings?.[0]?.recordsTotal);
 
         dispatch(hideLoader());
+
         if (response?.status === 200) {
           setResponseStatus(true);
-          setUserData(response.data?.sLBMHoldings || []);
-          setFilteredData(response.data?.sLBMHoldings || []);
+
+          const apiData = response?.data?.data || [];
+
+          // ADD Id:index+1
+          const processedData = apiData.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
+          console.log("ProcessesData", processedData);
+
+          setUserData(processedData);
+          setFilteredData(processedData);
         }
       })
       .catch((error) => {
         dispatch(hideLoader());
+
         console.error("errorMsg", error?.response?.data?.message);
+
         const errors = error?.response?.data?.errors;
 
         if (errors) {
-          // Extract error messages
           const zoneError = errors?.zn?.[0];
           const branchError = errors?.bc?.[0];
 
-          // Display the errors in ShowToast
-          if (zoneError) {
-            ShowToast("error", zoneError);
-          }
-          if (branchError) {
-            ShowToast("error", branchError);
-          }
+          if (zoneError) ShowToast("error", zoneError);
+          if (branchError) ShowToast("error", branchError);
         } else {
-          // Default error message for unexpected errors
           ShowToast("error", error?.response?.data?.message);
         }
       })

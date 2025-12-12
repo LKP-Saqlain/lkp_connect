@@ -385,9 +385,7 @@ const SideBar = () => {
         };
 
         try {
-          dispatch(
-            showLoader("Please wait, we are processing your request...")
-          );
+          dispatch(showLoader(""));
           const response = await apiServices.DashboardNudge(payload);
           console.log("dashBoardNudgeData", response?.data);
 
