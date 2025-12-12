@@ -144,8 +144,8 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
 
         setData(
           result.map((item: any, index: number) => {
-            const totalAchieved = parseFloat(item.totalRevnAchieved) || 0;
-            const totalTarget = parseFloat(item.totalRevnTarget) || 0;
+            const totalAchieved = parseFloat(item.tra) || 0;
+            const totalTarget = parseFloat(item.trt) || 0;
 
             const percentage =
               totalTarget !== 0 ? (totalAchieved / totalTarget) * 100 : 0;
@@ -154,7 +154,7 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
 
             return {
               ...item,
-              id: index + 1,
+              Id: index + 1,
               perRevAch: percentageRounded,
             };
           })

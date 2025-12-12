@@ -8147,7 +8147,7 @@ export const clientUnpledgeReport: GridColDef[] = [
 ];
 export const EmployeeTargetReportColumns: GridColDef[] = [
   {
-    field: "empCode",
+    field: "emp",
     headerName: "Emp Code",
     minWidth: 100,
     flex: 1,
@@ -8155,8 +8155,9 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "empName",
+    field: "emp_nm",
     headerName: "Emp Name",
     minWidth: 130,
     flex: 1,
@@ -8164,8 +8165,9 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     headerAlign: "center",
     align: "left",
   },
+
   {
-    field: "brokingRevnTarget",
+    field: "brt",
     headerName: "Broking Revenue Target",
     minWidth: 120,
     flex: 1,
@@ -8173,13 +8175,14 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
         params
       ),
   },
+
   {
-    field: "brokingRevnAchieved",
+    field: "bgra",
     headerName: "Broking Revenue Achieved",
     minWidth: 120,
     flex: 1,
@@ -8187,14 +8190,15 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", {
         maximumFractionDigits: 0,
         minimumFractionDigits: 0,
       }).format(params),
   },
+
   {
-    field: "nonBrokingRevnTarget",
+    field: "nbrt",
     headerName: "Non-Broking Revenue Target",
     minWidth: 120,
     flex: 1,
@@ -8202,13 +8206,14 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
         params
       ),
   },
+
   {
-    field: "nonBrokingRevnAchieved",
+    field: "nbra",
     headerName: "Non-Broking Revenue Achieved",
     minWidth: 120,
     flex: 1,
@@ -8216,14 +8221,15 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", {
         maximumFractionDigits: 0,
         minimumFractionDigits: 0,
       }).format(params),
   },
+
   {
-    field: "totalRevnTarget",
+    field: "trt",
     headerName: "Total Revenue Target",
     minWidth: 120,
     flex: 1,
@@ -8231,13 +8237,14 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
         params
       ),
   },
+
   {
-    field: "totalRevnAchieved",
+    field: "tra",
     headerName: "Total Revenue Achieved",
     minWidth: 120,
     flex: 1,
@@ -8245,12 +8252,13 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", {
         maximumFractionDigits: 0,
         minimumFractionDigits: 0,
       }).format(params),
   },
+
   {
     field: "perRevAch",
     headerName: " % Revenue Achieved ",
@@ -8260,31 +8268,23 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    renderCell: (params: any) => {
-      const value1 = params.row?.totalRevnAchieved || 0;
-      const value2 = params.row?.totalRevnTarget || 0;
-
-      // Convert to numbers
+    renderCell: (params) => {
+      const value1 = params.row?.tra || 0;
+      const value2 = params.row?.trt || 0;
       const num1 = parseFloat(value1) || 0;
       const num2 = parseFloat(value2) || 0;
-
-      // Calculate percentage safely (avoid division by zero)
       const percentage = num2 !== 0 ? (num1 / num2) * 100 : 0;
-
-      // Optionally round to 2 decimals
-      const percentageRounded = Math.round(percentage * 100) / 100;
-
-      console.log("percentageRounded", percentageRounded);
-      return `${percentageRounded}%`;
+      return `${Math.round(percentage * 100) / 100}%`;
     },
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", {
         maximumFractionDigits: 2,
         minimumFractionDigits: 2,
       }).format(params),
   },
+
   {
-    field: "targetMF",
+    field: "tmf",
     headerName: "Target MF AUM",
     minWidth: 110,
     flex: 1,
@@ -8292,13 +8292,14 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
         params
       ),
   },
+
   {
-    field: "achievedMF",
+    field: "amf",
     headerName: "Achieved MF AUM",
     minWidth: 100,
     flex: 1,
@@ -8306,18 +8307,14 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    // valueFormatter: (params: any) =>
-    //   new Intl.NumberFormat("en-IN", {
-    //     maximumFractionDigits: 2,
-    //     minimumFractionDigits: 2,
-    //   }).format(params),
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
         params
       ),
   },
+
   {
-    field: "freshCashTarget",
+    field: "fct",
     headerName: "Fresh Cash Margin Target",
     minWidth: 120,
     flex: 1,
@@ -8325,13 +8322,14 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
         params
       ),
   },
+
   {
-    field: "freshCashAchieved",
+    field: "fca",
     headerName: "Fresh Cash Margin Achieved",
     minWidth: 120,
     flex: 1,
@@ -8339,14 +8337,15 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    valueFormatter: (params: any) =>
+    valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", {
         maximumFractionDigits: 0,
         minimumFractionDigits: 0,
       }).format(params),
   },
+
   {
-    field: "newAccountCount",
+    field: "nac",
     headerName: "New Account Target",
     minWidth: 80,
     flex: 1,
@@ -8355,8 +8354,9 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "newClientsAchieved",
+    field: "nca",
     headerName: "New Clients Achieved",
     minWidth: 80,
     flex: 1,
@@ -8365,8 +8365,9 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "reactivationCount",
+    field: "rac",
     headerName: "Reactivation Target",
     minWidth: 80,
     flex: 1,
@@ -8375,8 +8376,9 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "reactivatedClientsAchieved",
+    field: "rca",
     headerName: "Reactivated Clients Achieved",
     minWidth: 100,
     flex: 1,
@@ -8385,8 +8387,9 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "spipClientsTarget",
+    field: "spip_t",
     headerName: "SPIP Clients Target",
     minWidth: 100,
     flex: 1,
@@ -8395,8 +8398,9 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "spipClientsAchieved",
+    field: "spip_a",
     headerName: "SPIP Clients Achieved",
     minWidth: 100,
     flex: 1,
@@ -8405,8 +8409,9 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+
   {
-    field: "insurancePremTarget",
+    field: "ins_t",
     headerName: "Insurance Premium Target",
     minWidth: 120,
     flex: 1,
@@ -8414,11 +8419,11 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params) => new Intl.NumberFormat("en-IN").format(params),
   },
+
   {
-    field: "insurancePremAchieved",
+    field: "ins_a",
     headerName: "Insurance Premium Achieved",
     minWidth: 120,
     flex: 1,
@@ -8426,10 +8431,10 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    valueFormatter: (params: number) =>
-      new Intl.NumberFormat("en-IN").format(params),
+    valueFormatter: (params) => new Intl.NumberFormat("en-IN").format(params),
   },
 ];
+
 export const MutualFundList: GridColDef[] = [
   {
     field: "fundName",

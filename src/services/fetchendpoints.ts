@@ -114,7 +114,7 @@ export const newDomainEndpoints = [
   //
   endpoints.ScripSearch, //Pending
   endpoints.SLBMHoldingsReport,
-
+  endpoints.GetEmpContestReport,
   endpoints.GetAPContestTargetDetails,
 
   endpoints.APContestLeaderboard,

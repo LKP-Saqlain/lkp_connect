@@ -168,22 +168,15 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
       console.log(event);
       setQpayoutData([]);
       setResponseStatus(false);
-      // const Id = localStorage.getItem("Id");
-      // const pageSize = 10; // Define pageSize
 
-      // Calculate start based on the new page (0-indexed)
-      // const start = (value - 1) * pageSize;
-
-      // Get the current month and year
       const currentDate = new Date();
-      const currentMonth = currentDate.getMonth() + 1; // JavaScript months are 0-indexed
+      const currentMonth = currentDate.getMonth() + 1;
       let year = currentDate.getFullYear();
       let previousQuarter;
 
-      // Determine the current quarter based on your custom mapping
       if (currentMonth >= 3 && currentMonth <= 5) {
         previousQuarter = 4;
-        year -= 1; // Q4 belongs to the previous year
+        year -= 1;
       } else if (currentMonth >= 6 && currentMonth <= 8) {
         previousQuarter = 1;
       } else if (currentMonth >= 9 && currentMonth <= 11) {
@@ -192,9 +185,7 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
         previousQuarter = 3;
       }
 
-      // Construct the financial quarter string
-      const financialQtr = `${year}-Q${previousQuarter}`; //no data in 2025 so added 2024
-      // const financialQtr = `${2024}-Q${previousQuarter}`;
+      const financialQtr = `${year}-Q${previousQuarter}`;
 
       const payload = {
         start: 0,
@@ -203,26 +194,31 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
         userId: user_id,
         financialQtr: financialQtr,
       };
+
       dispatch(showLoader("Please wait, we are processing your request..."));
+
       await apiServices
         .GetQuaterlyPayoutGrid(payload)
         .then((response) => {
-          console.log("responseQpayout", response?.data);
-          // const { recordsTotal } = response?.data[0];
-          // setTotalEntries(recordsTotal);
           dispatch(hideLoader());
+          console.log("QPayoutResponse", response?.data?.data);
+
+          const data = response?.data?.data || [];
+
+          const dataWithId = data.map((item: any, index: number) => ({
+            ...item,
+            Id: index + 1,
+          }));
+
           if (response?.status === 200) {
             setResponseStatus(true);
-            setQpayoutData(response?.data || []);
-            setFilteredData(response?.data || []);
+            setQpayoutData(dataWithId);
+            setFilteredData(dataWithId);
           }
         })
         .catch((Err) => {
-          const { message } = Err.response.data;
-          console.log("Error->", message);
           dispatch(hideLoader());
-          // formik.setFieldError("password", message);
-          const errorMessage = Err.response.data.message;
+          const errorMessage = Err?.response?.data?.message;
           ShowToast(
             "error",
             errorMessage ||
@@ -233,6 +229,7 @@ const QuarterlyPayout = ({ activeSubItem }: any) => {
           dispatch(hideLoader());
         });
     };
+
     fetchQPayout();
   }, [dispatch]);
 
