@@ -94,9 +94,9 @@ const UnpledgeRequest = ({ activeSubItem }: Unpledge) => {
       .then((response) => {
         if (response?.status === 200) {
           dispatch(hideLoader());
-          console.log("GetUnPledgeReportResponse", response?.data);
+          console.log("GetUnPledgeReportResponse", response?.data?.data);
 
-          const result = response?.data?.Table || [];
+          const result = response?.data?.data || [];
           console.log("A1 GetAPContestReport Data", result);
           setUnpledgeData(
             result.map((item: any, index: any) => ({
@@ -104,9 +104,8 @@ const UnpledgeRequest = ({ activeSubItem }: Unpledge) => {
               Id: index + 1,
             }))
           );
-          console.log("====================================");
+
           console.log("filteteredData", result);
-          console.log("====================================");
         }
       })
       .then((error) => {

@@ -88,7 +88,7 @@ export const getClientActivityStatusColumns = (
     },
     {
       disableColumnMenu: true,
-      field: "RMName",
+      field: "rm",
       headerName: "RM Name",
       flex: 2,
       minWidth: 200, // Names can be long; ensure space
@@ -96,7 +96,7 @@ export const getClientActivityStatusColumns = (
     },
     {
       disableColumnMenu: true,
-      field: "DealerName",
+      field: "dlr",
       headerName: "Dealer Name",
       flex: 2,
       minWidth: 160, // Names can be long; ensure space
@@ -657,7 +657,24 @@ export const getClientDormantStatus = (
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
   },
-
+  {
+    field: "rm",
+    headerName: "RM Name",
+    flex: 1,
+    minWidth: 120,
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "dlr",
+    headerName: "Dealer Name",
+    flex: 1,
+    minWidth: 120,
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
   {
     field: "viewDetails",
     headerName: "Details",
@@ -8109,7 +8126,7 @@ export const clientUnpledgeReport: GridColDef[] = [
   //   align: "center",
   // },
   {
-    field: "rqd",
+    field: "rqdt",
     headerName: "Requested Date",
     width: 160,
     disableColumnMenu: true,

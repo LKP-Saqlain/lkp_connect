@@ -364,14 +364,14 @@ const SideBar = () => {
     //this is for Employee user last date
     if (EmployeeLastBrokingDate && EmployeeLastBrokingDate.length > 0) {
       const EmpLastDate =
-        EmployeeLastBrokingDate[EmployeeLastBrokingDate.length - 1]?.Dtrandate;
+        EmployeeLastBrokingDate[EmployeeLastBrokingDate.length - 1]?.dt;
       setDataStatus(EmpLastDate || "No date available"); // Set default value if empty
       console.log("LASTDATE_Employee-->", EmpLastDate);
     } else {
       // this is for Partner user last date
       const apLastDate =
         apBrokingLastDate &&
-        apBrokingLastDate[apBrokingLastDate.length - 1]?.Dtrandate;
+        apBrokingLastDate[apBrokingLastDate.length - 1]?.dt;
       console.log("LASTDATE-->", apLastDate);
       setDataStatus(apLastDate || "No date available");
     }
@@ -395,8 +395,8 @@ const SideBar = () => {
 
           Object.values(response?.data).forEach((table: any) => {
             table.forEach((entry: any) => {
-              if (entry.rt) {
-                reportTypes.add(entry.rt);
+              if (entry.ReportType) {
+                reportTypes.add(entry.ReportType);
               }
             });
           });

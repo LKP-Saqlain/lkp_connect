@@ -12,7 +12,7 @@ const ProjectsOverviewCharts = ({ series, brokerageData }: any) => {
     console.log("brokData", brokerageData);
 
     const categories =
-      brokerageData && brokerageData.map((item: any) => item.Dtrandate);
+      brokerageData && brokerageData.map((item: any) => item.dt);
     setLatestDates(categories);
     console.log("categories", categories);
   }, [brokerageData]);

@@ -31,7 +31,7 @@ const Nudge = ({
   sideBarNudge,
 }: any) => {
   const [reportData, setReportData] = useState<
-    { rt: string; cc: number; lw?: number }[]
+    { ReportType: string; ClientCount: number; LastWeekBrok?: number }[]
   >([]);
   const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
@@ -44,25 +44,25 @@ const Nudge = ({
     const NudgeData = dashBoardNudgeData ? dashBoardNudgeData : sideBarNudge;
     if (NudgeData) {
       const extractedData: {
-        rt: string;
-        cc: number;
-        lw: number;
+        ReportType: string;
+        ClientCount: number;
+        LastWeekBrok: number;
       }[] = [];
 
       Object.keys(NudgeData).forEach((tableKey) => {
         NudgeData[tableKey].forEach((entry: any) => {
           if (
-            entry.rt &&
-            (entry.cc !== undefined ||
-              entry.cw !== undefined ||
-              entry.rt === "Brokerage Last week vs Current week")
+            entry.ReportType &&
+            (entry.ClientCount !== undefined ||
+              entry.CurrentWeekBrok !== undefined ||
+              entry.ReportType === "Brokerage Last week vs Current week")
           ) {
             extractedData.push({
-              rt: entry.rt,
-              cc: entry.cc ?? entry.cw ?? 0,
-              lw:
-                entry.rt === "Brokerage Last week vs Current week"
-                  ? entry.lw
+              ReportType: entry.ReportType,
+              ClientCount: entry.ClientCount ?? entry.CurrentWeekBrok ?? 0,
+              LastWeekBrok:
+                entry.ReportType === "Brokerage Last week vs Current week"
+                  ? entry.LastWeekBrok
                   : 0,
             });
           }
@@ -80,9 +80,9 @@ const Nudge = ({
 
     Object.values(dashBoardNudgeData).forEach((table: any) => {
       if (Array.isArray(table)) {
-        // Extract rt from the first valid item if available
+        // Extract ReportType from the first valid item if available
         const firstItem = table[0];
-        const reportType = firstItem?.rt;
+        const reportType = firstItem?.ReportType;
 
         if (reportType === "Brokerage Last week vs Current week") return;
 
@@ -91,14 +91,14 @@ const Nudge = ({
           groupedData[reportType] = [];
         }
 
-        // Check if 0th index has `cc` with a number value
-        const shouldSkipFirst = typeof firstItem?.cc === "number";
+        // Check if 0th index has `ClientCount` with a number value
+        const shouldSkipFirst = typeof firstItem?.ClientCount === "number";
 
         table.forEach((item, index) => {
-          if (shouldSkipFirst && index === 0) return; // Skip 0th index if cc is a number
+          if (shouldSkipFirst && index === 0) return; // Skip 0th index if ClientCount is a number
 
-          if (item.rt) {
-            groupedData[item.rt].push(item);
+          if (item.ReportType) {
+            groupedData[item.ReportType].push(item);
           }
         });
       }
@@ -115,9 +115,9 @@ const Nudge = ({
 
     Object.values(sideBarNudge).forEach((table: any) => {
       if (Array.isArray(table)) {
-        // Extract rt from the first valid item if available
+        // Extract ReportType from the first valid item if available
         const firstItem = table[0];
-        const reportType = firstItem?.rt;
+        const reportType = firstItem?.ReportType;
 
         if (reportType === "Brokerage Last week vs Current week") return;
 
@@ -126,14 +126,14 @@ const Nudge = ({
           groupedData[reportType] = [];
         }
 
-        // Check if 0th index has `cc` with a number value
-        const shouldSkipFirst = typeof firstItem?.cc === "number";
+        // Check if 0th index has `ClientCount` with a number value
+        const shouldSkipFirst = typeof firstItem?.ClientCount === "number";
 
         table.forEach((item, index) => {
-          if (shouldSkipFirst && index === 0) return; // Skip 0th index if cc is a number
+          if (shouldSkipFirst && index === 0) return; // Skip 0th index if ClientCount is a number
 
-          if (item.rt) {
-            groupedData[item.rt].push(item);
+          if (item.ReportType) {
+            groupedData[item.ReportType].push(item);
           }
         });
       }
@@ -214,8 +214,8 @@ const Nudge = ({
               >
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <h5 className="fs-15">
-                    {report.rt}{" "}
-                    {report.cc === 0 && (
+                    {report.ReportType}{" "}
+                    {report.ClientCount === 0 && (
                       <IoWarningOutline
                         style={{
                           fontSize: "24px",
@@ -225,7 +225,8 @@ const Nudge = ({
                       />
                     )}
                   </h5>
-                  {report.rt === "Brokerage Last week vs Current week" ? (
+                  {report.ReportType ===
+                  "Brokerage Last week vs Current week" ? (
                     <Box
                       sx={{
                         fontSize: "12px",
@@ -235,7 +236,7 @@ const Nudge = ({
                     >
                       <CountUp
                         start={0}
-                        end={report.lw ?? 0}
+                        end={report.LastWeekBrok ?? 0}
                         formattingFn={formatIndianNumber}
                         style={{
                           fontSize: "24px",
@@ -245,7 +246,7 @@ const Nudge = ({
                       <span className="fs-15"> {"  vs  "}</span>
                       <CountUp
                         start={0}
-                        end={report.cc} //this is Current week brokerage
+                        end={report.ClientCount} //this is Current week brokerage
                         formattingFn={formatIndianNumber}
                         style={{
                           fontSize: "24px",
@@ -261,18 +262,19 @@ const Nudge = ({
                         alignSelf: "flex-start",
                         fontFamily: "Public Sans",
                       }}
-                      onClick={() => openNudgeTable(report.rt)}
+                      onClick={() => openNudgeTable(report.ReportType)}
                     >
                       View Details
                     </Button>
                   )}
                 </Box>
 
-                {report.rt !== "Brokerage Last week vs Current week" && (
+                {report.ReportType !==
+                  "Brokerage Last week vs Current week" && (
                   <Box>
                     <CountUp
                       start={0}
-                      end={report.cc}
+                      end={report.ClientCount}
                       separator=","
                       style={{ fontSize: "24px", fontWeight: "bold" }}
                     />

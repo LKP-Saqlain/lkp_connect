@@ -34,7 +34,7 @@ const StoreVisits = ({ getActiveClients }: any) => {
           const clientData = response?.data?.data?.[0] || {};
 
           const active = Number(clientData?.act ?? 0); // Handle null -> 0
-          const inactive = Number(clientData?.act ?? 0); // Handle null -> 0
+          const inactive = Number(clientData?.inact ?? 0); // Handle null -> 0
 
           console.log("ChartData Debug:", { active, inactive });
 

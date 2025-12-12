@@ -75,7 +75,7 @@ const DormantClient = ({ activeSubItem }: any) => {
   useEffect(() => {
     const fetchDormantData = async () => {
       const payload = {
-        start: 0, // Calculate start based on the new page
+        start: 0,
         pageSize: 1000,
         searchKey: "",
         loginName: user_id,
@@ -89,38 +89,37 @@ const DormantClient = ({ activeSubItem }: any) => {
             ? "N"
             : "ALL",
       };
+
       dispatch(showLoader("Please wait, we are processing your request..."));
-      // const test = dispatch(fetchDormantReport(payload));
-      // console.log("testReduxThnk", test);
-      await apiServices
-        .getDormantReport(payload)
-        .then((response) => {
-          dispatch(hideLoader());
-          if (response?.status === 200) {
-            setResponseStatus(true);
-            // let { recordsTotal } = response?.data[0];
-            console.log("getDormantReport_response_1", response?.data);
-            // setTotalEntries(recordsTotal);
-            setUserData(response?.data || []);
-            setFilteredData(response?.data || []);
-          } else if (response?.status == 400) {
-            console.log("getDormantReport_response", response);
-          }
-        })
-        .catch((error) => {
-          // console.log("Error->", error.response.data.errors.Zone["0"]);
-          console.log("Error->", error?.response?.data?.message);
-          // const zoneError = error.response.data.errors.Zone["0"];
-          // const branchCodeError = error.response.data.errors.BranchCode["0"];
-          dispatch(hideLoader());
-          ShowToast("error", error?.response?.data?.message);
-          // ShowToast("error", zoneError);
-          // ShowToast("error", branchCodeError);
-        })
-        .finally(() => {
-          dispatch(hideLoader());
-        });
+
+      try {
+        const response = await apiServices.getDormantReport(payload);
+        dispatch(hideLoader());
+
+        if (response?.status === 200) {
+          setResponseStatus(true);
+
+          console.log("getDormantReport_response_1", response?.data?.data);
+          const processedData = (response?.data.data || []).map(
+            (item: any, index: number) => ({
+              Id: index + 1, // <= UNIQUE ID
+              ...item,
+            })
+          );
+
+          setUserData(processedData);
+          setFilteredData(processedData);
+        } else if (response?.status === 400) {
+          console.log("getDormantReport_response", response);
+        }
+      } catch (error: any) {
+        console.log("Error->", error?.response?.data?.message);
+        ShowToast("error", error?.response?.data?.message);
+      } finally {
+        dispatch(hideLoader());
+      }
     };
+
     if (accessType === "") {
       fetchDormantData();
     }
@@ -377,13 +376,13 @@ const DormantClient = ({ activeSubItem }: any) => {
 
   const handleSubmit = async (event?: any, value?: any) => {
     console.log("newPage", event, value);
-    // let Id = localStorage.getItem("Id");
-    const pageSize = 1000; // Define pageSize
 
-    // Calculate start based on the new page (0-indexed)
+    const pageSize = 1000;
+
     const start = (value - 1) * pageSize;
+
     const payload = {
-      start: value === undefined ? 0 : start, // Calculate start based on the new page
+      start: value === undefined ? 0 : start,
       pageSize: 35000,
       searchKey: "",
       loginName: user_id,
@@ -397,51 +396,40 @@ const DormantClient = ({ activeSubItem }: any) => {
           ? "N"
           : "ALL",
     };
+
     dispatch(showLoader("Please wait, we are processing your request..."));
-    // const test = dispatch(fetchDormantReport(payload));
-    // console.log("testReduxThnk", test);
-    await apiServices
-      .getDormantReport(payload)
-      .then((response) => {
-        dispatch(hideLoader());
-        if (response?.status === 200) {
-          setResponseStatus(true);
-          // let { recordsTotal } = response?.data[0];
-          console.log("getDormantReport_response_1", response?.data);
-          // setTotalEntries(recordsTotal);
-          setUserData(response?.data || []);
-          setFilteredData(response?.data || []);
-        } else if (response?.status == 400) {
-          console.log("getDormantReport_response", response);
-        }
-      })
-      .catch((error) => {
-        dispatch(hideLoader());
 
-        const errors = error?.response?.data;
-        console.log("ERRORS", errors);
-        ShowToast("error", error?.response?.data?.message);
-        // if (errors) {
+    try {
+      const response = await apiServices.getDormantReport(payload);
+      dispatch(hideLoader());
 
-        //   // Extract error messages
-        //   const zoneError = errors?.Zone?.[0];
-        //   const branchError = errors?.BranchCode?.[0];
+      if (response?.status === 200) {
+        setResponseStatus(true);
 
-        //   // Display the errors in ShowToast
-        //   if (zoneError) {
-        //     ShowToast("error", zoneError);
-        //   }
-        //   if (branchError) {
-        //     ShowToast("error", branchError);
-        //   }
-        // } else {
-        //   // Default error message for unexpected errors
-        //   ShowToast("error", "An unexpected error occurred. Please try again.");
-        // }
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
+        console.log("getDormantReport_response_1", response?.data?.data);
+
+        // ***** ADD ID TO EACH ROW *****
+        const processedData = (response?.data?.data).map(
+          (item: any, index: number) => ({
+            Id: index + 1, // Ensure DataGrid always has a unique ID
+            ...item,
+          })
+        );
+        console.log("processedData", processedData);
+
+        setUserData(processedData);
+        setFilteredData(processedData);
+      } else if (response?.status === 400) {
+        console.log("getDormantReport_response", response);
+      }
+    } catch (error: any) {
+      dispatch(hideLoader());
+
+      console.log("ERRORS", error?.response?.data);
+      ShowToast("error", error?.response?.data?.message);
+    } finally {
+      dispatch(hideLoader());
+    }
   };
 
   const handleExcelDownload = () => {

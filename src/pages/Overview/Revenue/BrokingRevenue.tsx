@@ -55,10 +55,11 @@ const Revenue = ({
       dispatch(DealerPerformance(payload))
         .unwrap()
         .then((response) => {
-          console.log("Resp", response?.data?.data?.Table); //need to replace Table this with tbl
-          setYearRevenue(response?.data?.data?.Table);
-          const fetchRevenueData = response?.data?.data?.Table;
-          const filteredRevenueData = response?.data?.data?.Table1; //need to replace Table this with tbl1
+          console.log("Dashboard_nudge", response?.data?.data?.tbl); //need to replace tbl this with tbl
+          setYearRevenue(response?.data?.data?.tbl);
+          const fetchRevenueData = response?.data?.data?.tbl;
+          const filteredRevenueData = response?.data?.data?.tbl1; //need to replace tbl this with tbl1
+          console.log("Test1111", filteredRevenueData);
 
           if (fetchRevenueData) {
             function getQuarterMonths(quarter: string) {
@@ -152,26 +153,26 @@ const Revenue = ({
 
           if (filteredRevenueData) {
             const broking =
-              filteredRevenueData[0]?.abrd +
-              filteredRevenueData[0]?.absl_dir + //til here existing Broking flag below 2 inidirect flags added
-              filteredRevenueData[0]?.abri +
-              filteredRevenueData[0]?.abil2 +
-              // filteredRevenueData[0]?.absl_dir + //below 3 SLBM new flags added in SLBM
-              filteredRevenueData[0]?.absl_ind +
-              filteredRevenueData[0]?.absl_ind2;
+              filteredRevenueData?.abrd +
+              filteredRevenueData?.absl_dir + //til here existing Broking flag below 2 inidirect flags added
+              filteredRevenueData?.abri +
+              filteredRevenueData?.abil2 +
+              // filteredRevenueData?.absl_dir + //below 3 SLBM new flags added in SLBM
+              filteredRevenueData?.absl_ind +
+              filteredRevenueData?.absl_ind2;
 
             const nonBroking =
-              filteredRevenueData[0]?.tpdins +
-                filteredRevenueData[0]?.tpdll +
-                filteredRevenueData[0]?.tpdmf +
-                filteredRevenueData[0]?.usr || 0;
+              filteredRevenueData?.tpdins +
+                filteredRevenueData?.tpdll +
+                filteredRevenueData?.tpdmf +
+                filteredRevenueData?.usr || 0;
 
-            // const total = filteredRevenueData[0]?.nra || 0; //existing total getting from api
+            // const total = filteredRevenueData?.nra || 0; //existing total getting from api
             const total = broking + nonBroking;
-            const multiRevenueMultiply = filteredRevenueData[0]?.mnra || 0;
-            const newClientsAdded = filteredRevenueData[0]?.newc || 0;
+            const multiRevenueMultiply = filteredRevenueData?.mnra || 0;
+            const newClientsAdded = filteredRevenueData?.newc || 0;
 
-            const tradedClient = filteredRevenueData[0]?.trcc || 0;
+            const tradedClient = filteredRevenueData?.trcc || 0;
             console.log("valueTest", total, broking, nonBroking);
 
             setTradedClientCount(tradedClient);

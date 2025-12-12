@@ -110,7 +110,7 @@ export const newDomainEndpoints = [
   endpoints.GetClientStatusCnt, //
   endpoints.Last7dayBrokerage, //
   endpoints.DPDebitRecovery, //
-  // endpoints.DealerPerformance,
+  endpoints.DealerPerformance,
   //
   // endpoints.ScripSearch,   //Pending
   endpoints.SLBMHoldingsReport,
@@ -124,6 +124,8 @@ export const newDomainEndpoints = [
   //from new sheeets
   endpoints.GetAPContestAchievedBrokerage,
   endpoints.GetAPContestAchievedClients,
+  // endpoints.DashboardNudge,
+  endpoints.GetPledgeReport,
 
   //RH DASHBOARD/OVERVIEW
   endpoints.GetMonthlyClient,

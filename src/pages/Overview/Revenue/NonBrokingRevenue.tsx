@@ -53,9 +53,9 @@ const NonBrokingRevenue = () => {
       dispatch(DealerPerformance(payload))
         .unwrap()
         .then((response) => {
-          console.log("Resp", response);
-          setYearRevenue(response?.data?.data?.Table);
-          const fetchRevenueData = response?.data?.data?.Table;
+          console.log("NonBrokingResponseApi", response?.data?.data?.tbl);
+          setYearRevenue(response?.data?.data?.tbl);
+          const fetchRevenueData = response?.data?.data?.tbl;
           if (fetchRevenueData) {
             const tpd_Insurance = fetchRevenueData.map(
               (item: any) => item.tpdins

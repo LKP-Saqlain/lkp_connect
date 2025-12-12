@@ -58,9 +58,9 @@ const AnnualPNL = () => {
       dispatch(showLoader("Please wait, we are processing your request..."));
       let apiUrl = "";
       if (finYear === "2023-2024") {
-        apiUrl = `https://middlewareapi.lkp.net.in${endpoints.GetPNL}`; // Old API
+        apiUrl = `http://api.lkpconnect.net.in${endpoints.GetPNL}`; // Old API
       } else {
-        apiUrl = `https://middlewareapi.lkp.net.in${endpoints.GetPNLStatement}`; // New API
+        apiUrl = `http://api.lkpconnect.net.in${endpoints.GetPNLStatement}`; // New API
       }
 
       axios

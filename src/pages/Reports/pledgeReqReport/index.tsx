@@ -74,7 +74,7 @@ const PledgeReport = ({ activeSubItem }: any) => {
 
         if (response?.status === 200 && Array.isArray(response?.data)) {
           const dataWithId = response.data.map((item, index) => ({
-            id: index + 1,
+            Id: index + 1,
             ...item,
             lastUpdate: formatDate(item.lastUpdate),
           }));
