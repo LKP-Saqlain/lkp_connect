@@ -100,9 +100,9 @@ export const newDomainEndpoints = [
   endpoints.GetAPGrossBrokeragePerQuarter,
   endpoints.ClientDetails,
   endpoints.FetchPinLocation,
-  endpoints.InsertThirdPartyMasterRecord,
-  endpoints.UpdateThirdPartyMasterRecord,
-  endpoints.DeleteThirdPartyMasterRecord,
+  // endpoints.InsertThirdPartyMasterRecord,
+  // endpoints.UpdateThirdPartyMasterRecord,
+  // endpoints.DeleteThirdPartyMasterRecord,
   endpoints.GetActiveClients,
   endpoints.GetUniqueTradedClient,
   endpoints.UpcomingDormantAccount,
@@ -119,7 +119,7 @@ export const newDomainEndpoints = [
 
   endpoints.APContestLeaderboard,
   endpoints.getDormantReport, //1
-  endpoints.ViewUnlistedSharesRecord,
+  // endpoints.ViewUnlistedSharesRecord,
 
   //from new sheeets
   endpoints.GetAPContestAchievedBrokerage,
