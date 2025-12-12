@@ -120,8 +120,8 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
     dates: resData.map((item) =>
       item.td
         ? dayjs(item.td).format("DD-MMM-YY")
-        : item.startDate
-        ? dayjs(item.startDate).format("DD-MMM-YY")
+        : item.sd
+        ? dayjs(item.sd).format("DD-MMM-YY")
         : ""
     ),
     // startDate: resData.map((item) =>
