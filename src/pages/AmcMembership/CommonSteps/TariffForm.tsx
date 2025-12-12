@@ -60,7 +60,9 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
             fontSize: isMobile ? "1.2rem" : "1.4rem",
           }}
         >
-          Lifetime–1500 Tariff for Non–Corporate Clients
+          {selectedRow.module_No === 12
+            ? "DP Lifetime AMC-1500 Tariff for Non–Corporate Clients"
+            : " Lifetime–1500 Tariff for Non–Corporate Clients"}
         </h5>
 
         <div
@@ -98,7 +100,11 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
             <thead style={{ backgroundColor: "#dbdbdb" }}>
               <tr>
                 <th style={thStyle}>Particulars</th>
-                <th style={thStyle}>Lifetime–1500</th>
+                <th style={thStyle}>
+                  {selectedRow.module_No === 12
+                    ? "DP LIFETIME AMC-1500"
+                    : "Lifetime–1500"}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -142,7 +148,11 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
             <thead style={{ backgroundColor: "#dbdbdb" }}>
               <tr>
                 <th style={thStyle}>Particulars</th>
-                <th style={thStyle}>Lifetime–1500</th>
+                <th style={thStyle}>
+                  {selectedRow.module_No === 12
+                    ? "DP LIFETIME AMC-1500"
+                    : "Lifetime–1500"}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -152,11 +162,19 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
               </tr>
               <tr>
                 <td>On-Market transactions</td>
-                <td style={tdStyle}>₹25 per debit transaction</td>
+                <td style={tdStyle}>
+                  {selectedRow.module_No === 12
+                    ? "0.02% of trans value or Rs.25/trans which is higher"
+                    : "₹25 per debit transaction"}
+                </td>
               </tr>
               <tr>
                 <td>Off-Market transactions</td>
-                <td style={tdStyle}>₹25 per debit transaction</td>
+                <td style={tdStyle}>
+                  {selectedRow.module_No === 12
+                    ? "0.02% of trans value or Rs.25/trans which is higher"
+                    : "₹25 per debit transaction"}
+                </td>
               </tr>
               <tr>
                 <td>Pledge Creation / Pledge Closure / Pledge Invocation</td>
