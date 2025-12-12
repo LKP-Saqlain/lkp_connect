@@ -103,6 +103,15 @@ export const getClientActivityStatusColumns = (
       renderCell: (params) => params.value || "—",
     },
     {
+      field: "hval",
+      headerName: "HoldingValue",
+      flex: 1,
+      minWidth: 120,
+      align: "right",
+      disableColumnMenu: true,
+      headerClassName: "header-wrap-custom",
+    },
+    {
       field: "csts",
       headerName: "Status",
       flex: 0.8,
@@ -669,6 +678,15 @@ export const getClientDormantStatus = (
   {
     field: "dlr",
     headerName: "Dealer Name",
+    flex: 1,
+    minWidth: 120,
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "hval",
+    headerName: "HoldingValue",
     flex: 1,
     minWidth: 120,
     align: "right",
