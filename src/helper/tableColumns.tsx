@@ -9440,7 +9440,7 @@ export const AmcLifeMembership: GridColDef[] = [
   },
   {
     field: "module_Description",
-    headerName: "Scheme Name",
+    headerName: "Scheme Category",
     flex: 1,
     minWidth: 180,
     disableColumnMenu: true,
@@ -9722,7 +9722,7 @@ export const AmcContest: GridColDef[] = [
   // },
   {
     field: "module_Narr",
-    headerName: "Scheme Name",
+    headerName: "Scheme Category",
     flex: 1,
     minWidth: 150,
     disableColumnMenu: true,
