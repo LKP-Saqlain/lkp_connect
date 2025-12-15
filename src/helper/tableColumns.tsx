@@ -6390,13 +6390,15 @@ export const unListedTradeColumns: GridColDef[] = [
   {
     field: "action",
     headerName: "Actions",
+    headerClassName: "header-wrap-custom",
+    // flex: 1,
     width: 90,
+    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    disableColumnMenu: true,
   },
   {
-    field: "rmc",
+    field: "rmCode",
     headerName: "RM Code",
     width: 80,
     headerAlign: "center",
@@ -6404,7 +6406,7 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "tdt",
+    field: "transactionDate",
     headerName: "Transaction Date",
     width: 130,
     headerAlign: "center",
@@ -6412,7 +6414,7 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "cn",
+    field: "clientName",
     headerName: "Client Name",
     flex: 1,
     minWidth: 160,
@@ -6421,7 +6423,7 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "nsec",
+    field: "nameOfSecurities",
     headerName: "Securities Name",
     width: 120,
     headerAlign: "center",
@@ -6429,115 +6431,187 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "nsh",
+    field: "noOfShares",
     headerName: "No. of Shares",
-    width: 80,
+    headerClassName: "header-wrap-custom",
+    width: 70,
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
   },
   {
-    field: "crt",
+    field: "clientRate",
     headerName: "Client Rate",
-    width: 90,
-    align: "right",
+    headerClassName: "header-wrap-custom",
+    width: 70,
     headerAlign: "center",
+    align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) =>
-      Number(params).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
-    field: "vrt",
+    field: "vendorRate",
     headerName: "Vendor Rate",
-    width: 90,
-    align: "right",
+    headerClassName: "header-wrap-custom",
+    width: 70,
     headerAlign: "center",
+    align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) =>
-      Number(params).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
-    field: "lcps",
+    field: "lkpCommissionPerShare",
     headerName: "LKP Commission/Share",
-    width: 110,
-    align: "right",
     headerAlign: "center",
+    align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) =>
-      Number(params).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
+    headerClassName: "header-wrap-custom",
+    width: 100,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
-    field: "big",
+    field: "brokerageInclusiveGST",
     headerName: "Brokerage (Incl. GST)",
-    width: 110,
-    align: "right",
+    width: 100,
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
+    align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) =>
-      Number(params).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
+    // valueFormatter: (params: any) => {
+    //   const value = parseFloat(params); // Convert the value to a number
+    //   return new Intl.NumberFormat("en-IN", {
+    //     minimumFractionDigits: 2,
+    //     maximumFractionDigits: 2,
+    //   }).format(value);
+    // },
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
     field: "gst",
     headerName: "GST",
     width: 90,
-    align: "right",
     headerAlign: "center",
+    align: "right",
     disableColumnMenu: true,
-    valueFormatter: (params: any) =>
-      Number(params).toLocaleString("en-IN", { minimumFractionDigits: 2 }),
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
-    field: "beg",
+    field: "brokerageExclusiveGST",
     headerName: "Brokerage (Excl. GST)",
-    width: 110,
+    width: 100,
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
-    field: "sbr",
+    field: "sbRate",
     headerName: "SubBroker Rate",
     width: 90,
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
-    field: "sbc",
+    field: "sbCode",
     headerName: "SubBroker Code",
     width: 90,
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
   },
   {
-    field: "sbcm",
+    field: "sbCommission",
     headerName: "SubBroker Commission",
-    width: 110,
-    headerAlign: "center",
-    align: "right",
-    disableColumnMenu: true,
-  },
-  {
-    field: "nbg",
-    headerName: "Net Brokerage",
     width: 100,
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
     align: "right",
     disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
   },
   {
-    field: "rmk",
+    field: "netBrokerage",
+    headerName: "Net Brokerage",
+    width: 90,
+    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "remarks",
     headerName: "Remark",
+    // flex: 0.8,
     minWidth: 200,
-    align: "left",
+    align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
   },
   {
-    field: "sts",
+    field: "status",
     headerName: "Status",
-    minWidth: 150,
+    // flex: 0.8,
+    minWidth: 200,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,

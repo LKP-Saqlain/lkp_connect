@@ -73,7 +73,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
               ...item,
               Id: index + 1,
               transactionDate: item.transactionDate?.split(" ")[0],
-              dealSheetB64: item.ds64 ? item.ds64 : null,
+              dealSheetB64: item.DealSheetB64 ? item.DealSheetB64 : null,
             })
           );
           console.log("ViewListedShareRecord", filteredResponse);
