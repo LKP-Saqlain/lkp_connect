@@ -141,9 +141,9 @@ export const newDomainEndpoints = [
   // endpoints.Approver2ViewUnlisted, //revert
   // endpoints.ViewVendorDetails, //revert
 
-  // endpoints.ViewVendorDetailsReport,
-  // endpoints.ViewThirdPartyMaster,
-  // endpoints.ThirdPartyApproverView,
+  // endpoints.ViewVendorDetailsReport,   //revert
+  // endpoints.ViewThirdPartyMaster, //revert
+  // endpoints.ThirdPartyApproverView,  //revert
   endpoints.GetslbmOverview,
   endpoints.GetOverviewBrokRevReport,
   endpoints.GetOverviewUniqueTradedClients,

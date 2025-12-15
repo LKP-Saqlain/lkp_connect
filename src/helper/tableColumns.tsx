@@ -7179,7 +7179,7 @@ export const RHTopClientsColumns: GridColDef[] = [
 ];
 export const ThirdParty: GridColDef[] = [
   {
-    field: "ldc",
+    field: "ledgerCode",
     headerName: "Ledger Code",
     minWidth: 70,
     flex: 0.4,
@@ -7189,7 +7189,7 @@ export const ThirdParty: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "cnm",
+    field: "companyName",
     headerName: "Company Name",
     minWidth: 180,
     flex: 1.2,
@@ -7199,7 +7199,7 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "sac",
+    field: "sacNumber",
     headerName: "SAC Number",
     minWidth: 75,
     flex: 0.5,
@@ -7209,7 +7209,7 @@ export const ThirdParty: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "ste",
+    field: "state",
     headerName: "State",
     minWidth: 120,
     flex: 0.8,
@@ -7218,7 +7218,7 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "gsc",
+    field: "gstStateCode",
     headerName: "GST State Code",
     minWidth: 60,
     flex: 0.3,
@@ -7228,7 +7228,7 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "gst",
+    field: "gstNumber",
     headerName: "GST Number",
     minWidth: 150,
     flex: 1.2,
@@ -7248,7 +7248,7 @@ export const ThirdParty: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "em",
+    field: "emailId",
     headerName: "Email ID",
     minWidth: 180,
     flex: 1.2,
@@ -7256,15 +7256,17 @@ export const ThirdParty: GridColDef[] = [
     align: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
-      const email = params.value || "";
+      const email = params.value || ""; // Extract the email ID
 
+      // Mask the email if it exists
       const maskedEmail = email.replace(
-        /^(.)(.*)(.@.*)$/,
+        /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
         (_: any, firstChar: any, middleChars: any, domain: any) => {
           return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
         }
       );
 
+      // Return tooltip with the original email and masked email for display
       return (
         <Tooltip title={email} arrow placement="top">
           <span style={{ cursor: "pointer" }}>{maskedEmail}</span>
@@ -7273,7 +7275,7 @@ export const ThirdParty: GridColDef[] = [
     },
   },
   {
-    field: "mob",
+    field: "mobileNo",
     headerName: "Mobile Number",
     minWidth: 120,
     flex: 0.8,
@@ -7282,9 +7284,8 @@ export const ThirdParty: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
   },
-
   {
-    field: "ad1",
+    field: "address1",
     headerName: "Address 1",
     minWidth: 180,
     flex: 1,
@@ -7294,7 +7295,7 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ad2",
+    field: "address2",
     headerName: "Address 2",
     minWidth: 180,
     flex: 1,
@@ -7304,7 +7305,7 @@ export const ThirdParty: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ad3",
+    field: "address3",
     headerName: "Address 3",
     minWidth: 180,
     flex: 1,
@@ -7330,7 +7331,7 @@ export const ThirdPartyStatusReport: GridColDef[] = [
   ...ThirdParty.filter((col) => col.field !== "action"),
 
   {
-    field: "apsts",
+    field: "approvalStatus",
     headerName: "Status",
     flex: 1,
     minWidth: 180,
@@ -10461,7 +10462,7 @@ export const ageingColumns: GridColDef[] = [
 
 export const vendorApprovalColumns: GridColDef[] = [
   {
-    field: "vnm",
+    field: "vendorName",
     headerName: "Vendor Name",
     headerClassName: "header-wrap-custom",
     flex: 1.5,
@@ -10470,7 +10471,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "cty",
+    field: "city",
     headerName: "City",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10479,7 +10480,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "ste",
+    field: "state",
     headerName: "State",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10488,7 +10489,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "mob",
+    field: "mobileNo",
     headerName: "Mobile No",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10497,7 +10498,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "em",
+    field: "emailID",
     headerName: "Email ID",
     headerClassName: "header-wrap-custom",
     flex: 1.5,
@@ -10506,7 +10507,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "bnk",
+    field: "bankName",
     headerName: "Bank Name",
     headerClassName: "header-wrap-custom",
     flex: 1.2,
@@ -10515,7 +10516,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "actn",
+    field: "bankActNo",
     headerName: "A/C No",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10524,7 +10525,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "bdoc",
+    field: "bankDoc",
     headerName: "Bank Document",
     minWidth: 120,
     flex: 0.6,
@@ -10534,7 +10535,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "pdoc",
+    field: "panDocument",
     headerName: "Pan Document",
     minWidth: 120,
     flex: 0.6,
@@ -10544,7 +10545,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "ifsc",
+    field: "ifscCode",
     headerName: "IFSC Code",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10553,7 +10554,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "tdsf",
+    field: "tdsFlag",
     headerName: "TDS Flag",
     headerClassName: "header-wrap-custom",
     flex: 0.8,
@@ -10563,7 +10564,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? "Yes" : "No"),
   },
   {
-    field: "tdsp",
+    field: "tdsPath",
     headerName: "TDS Document",
     minWidth: 120,
     flex: 0.6,
@@ -10573,7 +10574,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "msmf",
+    field: "msmeFlag",
     headerName: "MSME Flag",
     headerClassName: "header-wrap-custom",
     flex: 0.8,
@@ -10583,7 +10584,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? "Yes" : "No"),
   },
   {
-    field: "msmp",
+    field: "msmePath",
     headerName: "MSME Document",
     minWidth: 120,
     flex: 0.6,
@@ -10593,7 +10594,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "app",
+    field: "accApproval",
     headerName: "Approval Status",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10602,7 +10603,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "armk",
+    field: "accRemark",
     headerName: "Account Remark",
     headerClassName: "header-wrap-custom",
     flex: 1.5,
@@ -10611,7 +10612,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "cdt",
+    field: "createdDate",
     headerName: "Created Date",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10620,7 +10621,6 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
 ];
-
 export const t6SellingReportColumns: GridColDef[] = [
   {
     field: "zone",
