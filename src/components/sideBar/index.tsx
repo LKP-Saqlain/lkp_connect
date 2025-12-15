@@ -66,6 +66,7 @@ import PreProofUpload from "../../pages/preTrade/preProofUpload";
 import PreTradeReport from "../../pages/preTrade/preTradeReport";
 import PreTradeApproval from "../../pages/preTrade/Approval";
 import IVR from "../../pages/preTrade/IVR";
+import IVRComm from "../../pages/preTrade/IVRCOMM";
 import CommEntry from "../../pages/Compilance/commEntry";
 import ComChecker from "../../pages/Compilance/commChecker";
 import AnnualPNL from "../../pages/Reports/annualPNL";
@@ -245,7 +246,8 @@ const SideBar = () => {
   const [userAccess, setUserAccess] = useState<string[]>([]);
   const [menuItems, setMenuItems] = useState<MenuItems[]>([]);
   const [showMyPerformance, setShowMyPerformance] = useState<boolean>(false);
-  const [activeClickCount, setActiveClickCount] = useState(0);
+  const [activeClickCountIvrEq, setActiveClickCountIvrEq] = useState(0);
+  const [activeClickCountIvrComm, setActiveClickCountIvrComm] = useState(0);
   // const [showStarburst, setShowStarburst] = useState(true);
   const [copied, setCopied] = useState(false);
 
@@ -539,7 +541,10 @@ const SideBar = () => {
   }, [activeMenu]);
 
   useEffect(() => {
-    if (activeMenu === "IVR" && activeSubItem === "IVR Mapping") {
+    if (activeMenu === "IVR" && activeSubItem === "IVR Mapping EQ") {
+      setActiveSubItem("");
+    }
+    if (activeMenu === "IVR" && activeSubItem === "IVR Mapping COMM") {
       setActiveSubItem("");
     }
   }, [activeMenu, activeSubItem]);
@@ -636,10 +641,12 @@ const SideBar = () => {
     // setActiveSubItem(subItem); // Set active sub-item
     if (activeSubItem === subItem) {
       // user clicked same tab again
-      setActiveClickCount((prev) => prev + 1);
+      setActiveClickCountIvrEq((prev) => prev + 1);
+      setActiveClickCountIvrComm((prev) => prev + 1);
     } else {
       setActiveSubItem(subItem);
-      setActiveClickCount(1); // reset count for new tab
+      setActiveClickCountIvrEq(1); // reset count for new tab
+      setActiveClickCountIvrComm(1); // reset count for new tab
     }
     if (isMobile) {
       setTimeout(() => {
@@ -739,11 +746,18 @@ const SideBar = () => {
     "Pre Trade Proof Upload": <PreProofUpload activeSubItem={activeSubItem} />,
     "Pre Trade Report": <PreTradeReport activeSubItem={activeSubItem} />,
     "Pre Trade Approval": <PreTradeApproval activeSubItem={activeSubItem} />,
-    "IVR Mapping": (
+    "IVR Mapping EQ": (
       <IVR
         activeMenu={activeMenu}
         activeSubItem={activeSubItem}
-        activeClickCount={activeClickCount}
+        activeClickCount={activeClickCountIvrEq}
+      />
+    ),
+    "IVR Mapping COMM": (
+      <IVRComm
+        activeMenu={activeMenu}
+        activeSubItem={activeSubItem}
+        activeClickCount={activeClickCountIvrComm}
       />
     ),
     "Referal Product Wise MIS Report": (
