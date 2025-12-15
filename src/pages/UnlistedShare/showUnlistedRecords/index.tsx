@@ -139,7 +139,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
           console.log("UpdateResponse", response?.data);
           dispatch(hideLoader());
           if (response?.data?.statusCode === 400) {
-            ShowToast("error", response?.data?.msg);
+            ShowToast("error", response?.data?.message);
             return;
           }
           setmodal_grid(false);
@@ -240,9 +240,9 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
           console.log("InsertResponse", respones?.status);
 
           if (respones?.data?.data === null) {
-            ShowToast("error", respones?.data?.msg);
+            ShowToast("error", respones?.data?.message);
           } else {
-            ShowToast("success", respones?.data?.msg);
+            ShowToast("success", respones?.data?.message);
           }
           dispatch(hideLoader());
           setmodal_grid(false);
@@ -308,7 +308,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
 
     if (response?.status === 200) {
       dispatch(hideLoader());
-      ShowToast("success", response.data?.msg);
+      ShowToast("success", response.data?.message);
       setmodal_grid(false);
 
       let payload = {

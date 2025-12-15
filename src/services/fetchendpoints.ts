@@ -134,16 +134,16 @@ export const newDomainEndpoints = [
   endpoints.GetTradedClient,
   endpoints.GetRevTradedClient,
 
-  // endpoints.InsertUnlistedSharesRecord,
-  // endpoints.UpdateUnlistedSharesRecord,
-  // endpoints.DeleteUnlistedSharesRecord,
-  // endpoints.Approver1ViewUnlisted,
-  // endpoints.Approver2ViewUnlisted,
-  // endpoints.ViewVendorDetails,
+  // endpoints.InsertUnlistedSharesRecord,  //revert
+  // endpoints.UpdateUnlistedSharesRecord,//revert
+  // endpoints.DeleteUnlistedSharesRecord,//revert
+  // endpoints.Approver1ViewUnlisted,//revert
+  // endpoints.Approver2ViewUnlisted, //revert
+  // endpoints.ViewVendorDetails, //revert
 
-  endpoints.ViewVendorDetailsReport,
-  endpoints.ViewThirdPartyMaster,
-  endpoints.ThirdPartyApproverView,
+  // endpoints.ViewVendorDetailsReport,
+  // endpoints.ViewThirdPartyMaster,
+  // endpoints.ThirdPartyApproverView,
   endpoints.GetslbmOverview,
   endpoints.GetOverviewBrokRevReport,
   endpoints.GetOverviewUniqueTradedClients,
