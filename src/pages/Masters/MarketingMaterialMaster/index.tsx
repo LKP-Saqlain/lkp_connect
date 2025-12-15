@@ -13,7 +13,7 @@ import ModalComponent from "../../../components/common/masterModal";
 
 const MasterMenuMarketing = ({ activeSubItem }: any) => {
   interface MarketingEditData {
-    RowId: number;
+    rid: number;
     UploadImages: string;
     Description: string;
     UploadDocuments: string;
@@ -31,8 +31,17 @@ const MasterMenuMarketing = ({ activeSubItem }: any) => {
       dispatch(showLoader("Please wait..."));
       try {
         const response = await apiServices.ViewMarketingMaterials({});
-        const data = response?.data?.Table || [];
-        setUserData(data);
+        console.log("ViewMarketingMaterialsResponse", response?.data?.data);
+
+        const data = response?.data?.data || [];
+        const mappedRows = data.map((item: any, index: number) => ({
+          // id: index + 1, // MUI DataGrid safe
+          Id: index + 1,
+          ...item,
+        }));
+        console.log("aFTERmAPPED", mappedRows);
+
+        setUserData(mappedRows);
         console.log("marketing data", data);
       } catch (error) {
         console.error("Error fetching marketing materials:", error);
@@ -55,8 +64,8 @@ const MasterMenuMarketing = ({ activeSubItem }: any) => {
 
     try {
       const payload = {
-        options: editData && editData.RowId > 0 ? "UPDATE" : "INSERT",
-        rowId: editData && editData.RowId > 0 ? editData.RowId : 0,
+        options: editData && editData.rid > 0 ? "UPDATE" : "INSERT",
+        rowId: editData && editData.rid > 0 ? editData.rid : 0,
 
         uploadDocumentsBase64: formData.documentBase64,
         documentFileName: getFileName(formData.fileUpload),
@@ -81,10 +90,10 @@ const MasterMenuMarketing = ({ activeSubItem }: any) => {
   };
 
   const handleDeleteClick = async (row: any) => {
-    console.log("handleDeleteClick confirmation", row.RowId);
+    console.log("handleDeleteClick confirmation", row.rid);
 
     const payload = {
-      RowId: row.RowId, // Ensure the correct casing matches API expectations
+      RowId: row.rid, // Ensure the correct casing matches API expectations
     };
 
     try {

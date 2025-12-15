@@ -730,20 +730,20 @@ const ModalComponent = ({
     if (editData) {
       if (isRegulatoryContent) {
         formik.setValues({
-          dateOfCommunication: editData.Dates
-            ? dayjs(editData.Dates).format("YYYY/MM/DD") // Convert to string
+          dateOfCommunication: editData.dt
+            ? dayjs(editData.dt).format("YYYY/MM/DD") // Convert to string
             : "",
-          TypeOfDepartment: editData.Department || "",
-          SubjectType: editData.Subject || "",
-          LkpComments: editData.LKPComments || "",
-          uploadProof: editData.CircularFilePath || "",
+          TypeOfDepartment: editData.dept || "",
+          SubjectType: editData.sub || "",
+          LkpComments: editData.cmt || "",
+          uploadProof: editData.cfp || "",
         });
       }
       if (isMarketingMaterial) {
         formik.setValues({
-          fileUpload: editData.UploadDocuments || "",
-          description: editData.Description || "",
-          image: editData.UploadImages || "",
+          fileUpload: editData.docs || "",
+          description: editData.desc || "",
+          image: editData.imgs || "",
         });
       }
       if (isThirdPartyMaster) {

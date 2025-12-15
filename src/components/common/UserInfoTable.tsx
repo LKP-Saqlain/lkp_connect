@@ -600,7 +600,7 @@ const DataTable = ({
       return TableColumns.getRegulatorAnnouncement
         .filter((column) => column.field !== "action")
         .map((column) => {
-          if (column.field === "CircularFilePath") {
+          if (column.field === "cfp") {
             return {
               ...column,
               renderCell: (params: any) => (
@@ -617,7 +617,7 @@ const DataTable = ({
         });
     } else if (activeSubItem === "Regulatory Announcement") {
       return TableColumns.getRegulatorAnnouncement.map((column) => {
-        if (column.field === "CircularFilePath") {
+        if (column.field === "cfp") {
           return {
             ...column,
             renderCell: (params: any) => {

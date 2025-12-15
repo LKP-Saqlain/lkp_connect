@@ -66,6 +66,7 @@ const Index = ({ activeMenu }: any) => {
             ...item,
           }))
         );
+        console.log("aTASDASD", withLifetime);
 
         setNonLifetimeData(
           withoutLifetime.map((item: any, index: number) => ({

@@ -149,7 +149,7 @@ export const newDomainEndpoints = [
   endpoints.GetOverviewUniqueTradedClients,
   endpoints.GetAMCZoneReport,
   endpoints.GetZoneTargetdata,
-  // endpoints.GetPNLAccountDetailsPdf,
+  endpoints.GetPNLAccountDetailsPdf,
   endpoints.GetQuaterlyPayoutGrid,
   // endpoints.lastTradeDate,
   // endpoints.GetCoreAlertsReport,
@@ -169,4 +169,17 @@ export const newDomainEndpoints = [
   endpoints.GetCommodity_FuturesOverview,
   endpoints.GetCommodity_OptionsOverview,
   endpoints.GetDPTransactionDetails,
+
+  //Marketing Materials
+  endpoints.ViewMarketingMaterials,
+  endpoints.DeleteMarketingMaterials,
+  endpoints.getInUpMarketMaterial,
+  //reg announcement
+  endpoints.viewRegAnnoucement,
+  endpoints.DeleteRegulatoryAnnoucement,
+  endpoints.getInUpRegAnnoucement, //insert update RegulatoryAnnoucement
+
+  //back office
+  endpoints.GetClientAccessLink,
+  // endpoints.GetClientModuleDataForAmc,
 ];

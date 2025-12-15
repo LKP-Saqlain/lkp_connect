@@ -118,17 +118,17 @@ const CTCLReport = ({ activeSubItem }: any) => {
             const formattedData = response?.data?.data.map(
               (item: any, index: any) => ({
                 Id: index + 1, // unique ID for DataGrid
-                zone: item.client_Zone,
-                branchCode: item.client_Branch,
-                ctclTerminalID: item.ctcL_Terminal_ID,
-                CTCLLoginID: item.ctcL_Login_ID,
-                CTCLUserName: item.ctcL_Username,
-                exchangeSegment: item.segment,
-                turnover: parseFloat(item.turnover),
-                grossBrokerage: parseFloat(item.gross_Brokerage),
-                netBrokerage: parseFloat(item.net_Brokerage),
-                last_Trade_Date: item.last_Trade_Date,
-                branch_Type: item.branch_Type,
+                zn: item.zn,
+                bc: item.bc,
+                ctid: item.ctid,
+                clid: item.clid,
+                cusr: item.cusr,
+                seg: item.seg,
+                tov: parseFloat(item.tov),
+                gbrok: parseFloat(item.gbrok),
+                nbrok: parseFloat(item.nbrok),
+                ltd: item.ltd,
+                bt: item.bt,
               })
             );
 
@@ -170,17 +170,17 @@ const CTCLReport = ({ activeSubItem }: any) => {
             const formattedData = response?.data?.data.map(
               (item: any, index: any) => ({
                 Id: index + 1, // unique ID for DataGrid
-                zone: item.client_Zone,
-                branchCode: item.client_Branch,
-                ctclTerminalID: item.ctcL_Terminal_ID,
-                CTCLLoginID: item.ctcL_Login_ID,
-                CTCLUserName: item.ctcL_Username,
-                exchangeSegment: item.segment,
-                turnover: parseFloat(item.turnover),
-                grossBrokerage: parseFloat(item.gross_Brokerage),
-                netBrokerage: parseFloat(item.net_Brokerage),
-                last_Trade_Date: item.last_Trade_Date,
-                branch_Type: item.branch_Type,
+                zn: item.zn,
+                bc: item.bc,
+                ctid: item.ctid,
+                clid: item.clid,
+                cusr: item.cusr,
+                seg: item.seg,
+                tov: parseFloat(item.tov),
+                gbrok: parseFloat(item.gbrok),
+                nbrok: parseFloat(item.nbrok),
+                item: item.ltd,
+                bt: item.bt,
               })
             );
 
@@ -336,7 +336,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
             "Turnover (Cr.)": item.turnover,
             "Gross Brokerage": item.grossBrokerage,
             "Net Brokerage": item.netBrokerage,
-            "Last Trade Date": item.last_Trade_Date,
+            "Last Trade Date": item.ltd,
           }))
         : selectedData.map((item) => ({
             Zone: item.zone,
@@ -348,7 +348,7 @@ const CTCLReport = ({ activeSubItem }: any) => {
             "Turnover (Cr.)": item.turnover,
             "Gross Brokerage": item.grossBrokerage,
             "Net Brokerage": item.netBrokerage,
-            "Last Trade Date": item.last_Trade_Date,
+            "Last Trade Date": item.ltd,
           }));
 
     // Convert data to a worksheet

@@ -38,14 +38,14 @@ const MarketingMaterial = () => {
       dispatch(showLoader("Please wait..."));
       try {
         const response = await apiServices.ViewMarketingMaterials({});
-        const data = response?.data?.Table || [];
+        console.log("ViewMarketingMaterialsResponse", response?.data?.data);
+
+        const data = response?.data?.data || [];
 
         const transformed: MaterialItem[] = await Promise.all(
           data.map(async (item: any, index: number) => {
-            const [imgFileName = ""] =
-              item.UploadImages?.split("\\").slice(-1) || [];
-            const [docFileName = ""] =
-              item.UploadDocuments?.split("\\").slice(-1) || [];
+            const [imgFileName = ""] = item.imgs?.split("\\").slice(-1) || [];
+            const [docFileName = ""] = item.docs?.split("\\").slice(-1) || [];
 
             let imageUrl = "";
             if (imgFileName) {
@@ -71,8 +71,8 @@ const MarketingMaterial = () => {
             }
 
             return {
-              id: item.RowId || index,
-              title: item.Description || "Untitled",
+              id: item.rid || index,
+              title: item.desc || "Untitled",
               imageUrl,
               pdfUrl: docFileName,
             };

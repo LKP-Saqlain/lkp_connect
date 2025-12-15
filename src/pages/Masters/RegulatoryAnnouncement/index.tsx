@@ -28,13 +28,13 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 
 interface EditData {
-  RowID: number;
+  rid: number;
   Dates: string;
   Department: string;
   Subject: string;
   LKPComments: string;
   CircularFilePath: string;
-  IsDELETE: number;
+  del: number;
   InsertedOn: string;
   UpdatedOn: string | null;
 }
@@ -79,7 +79,15 @@ const RegAnnMaster = ({ activeSubItem }: any) => {
         if (response?.status === 200) {
           console.log("Response-->", response);
           dispatch(hideLoader());
-          setdata(response?.data?.Table || []);
+          // setdata(response?.data?.Table || []);
+          const rows = response?.data.data || [];
+
+          const mappedRows = rows.map((item: any, index: number) => ({
+            Id: index + 1, // REQUIRED if using MUI DataGrid
+            ...item,
+          }));
+          console.log("Regulatory AnnouncementsResponse", mappedRows);
+          setdata(mappedRows);
         }
       })
       .catch((error) => {
@@ -113,9 +121,12 @@ const RegAnnMaster = ({ activeSubItem }: any) => {
           reader.onerror = reject;
         });
       }
+
+      console.log("EditData", editData);
+
       const payload = {
-        options: editData && editData?.RowID > 0 ? "UPDATE" : "INSERT",
-        rowId: editData && editData?.RowID > 0 ? editData?.RowID : 0,
+        options: editData && editData?.rid > 0 ? "UPDATE" : "INSERT",
+        rowId: editData && editData?.rid > 0 ? editData?.rid : 0,
         date: data.dateOfCommunication,
         department: data.TypeOfDepartment,
         subject: data.SubjectType,
@@ -137,8 +148,19 @@ const RegAnnMaster = ({ activeSubItem }: any) => {
           fileInputRef.current.value = "";
         }
         const viewResponse = await apiServices.viewRegAnnoucement({});
-        console.log("viewResponse123", viewResponse?.data);
-        setdata(viewResponse?.data?.Table);
+        console.log("viewResponse123", viewResponse?.data?.data);
+        // setdata(viewResponse?.data?.data);
+
+        const rows = viewResponse?.data?.data || [];
+
+        const mappedRows = rows.map((item: any, index: number) => ({
+          id: index + 1, // MUI DataGrid safe
+          Id: index + 1,
+          ...item,
+        }));
+        console.log("Testtestasdasd", mappedRows);
+
+        setdata(mappedRows);
       } else {
         throw new Error("Submission failed.");
       }
@@ -165,7 +187,7 @@ const RegAnnMaster = ({ activeSubItem }: any) => {
     console.log("selectedRowwww", row);
     dispatch(showLoader(""));
     let payload = {
-      Rowid: row?.RowID,
+      Rowid: row?.rid,
     };
 
     const response = await apiServices.DeleteRegulatoryAnnoucement(payload);
@@ -180,8 +202,16 @@ const RegAnnMaster = ({ activeSubItem }: any) => {
         fileInputRef.current.value = "";
       }
       const viewResponse = await apiServices.viewRegAnnoucement({});
-      console.log("viewResponse123", viewResponse?.data);
-      setdata(viewResponse?.data?.Table);
+      // console.log("viewResponse123", viewResponse?.data);
+      // setdata(viewResponse?.data?.data);
+      const rows = viewResponse?.data?.data || [];
+
+      const mappedRows = rows.map((item: any, index: number) => ({
+        id: index + 1, // MUI DataGrid safe
+        Id: index + 1,
+        ...item,
+      }));
+      setdata(mappedRows);
     } else {
       throw new Error("Submission failed.");
     }

@@ -289,7 +289,7 @@ export const PaymentType = [
 
 export const getRegulatorAnnouncement: GridColDef[] = [
   {
-    field: "Dates",
+    field: "dt",
     headerName: "Date",
     flex: 1,
     disableColumnMenu: true,
@@ -297,14 +297,14 @@ export const getRegulatorAnnouncement: GridColDef[] = [
     align: "center",
   },
   {
-    field: "Department",
+    field: "dept",
     headerName: "Department",
     flex: 0.8,
     disableColumnMenu: true,
     headerAlign: "center",
   },
   {
-    field: "Subject",
+    field: "sub",
     headerName: "Subject",
     flex: 1.5,
     disableColumnMenu: true,
@@ -314,7 +314,7 @@ export const getRegulatorAnnouncement: GridColDef[] = [
     // ),
   },
   {
-    field: "LKPComments",
+    field: "cmt",
     headerName: "LKP Comments",
     flex: 3,
     disableColumnMenu: true,
@@ -331,7 +331,7 @@ export const getRegulatorAnnouncement: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "CircularFilePath",
+    field: "cfp",
     headerName: "Circular",
     flex: 0.8,
     disableColumnMenu: true,
@@ -341,8 +341,8 @@ export const getRegulatorAnnouncement: GridColDef[] = [
 ];
 export const getMarketingMaterials: GridColDef[] = [
   {
-    field: "UploadImages",
-    headerName: "Image",
+    field: "imgs",
+    headerName: "ImageEEE",
     headerClassName: "header-wrap-custom",
     flex: 0.7,
     minWidth: 90,
@@ -350,14 +350,14 @@ export const getMarketingMaterials: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     renderCell: (params: any) => {
-      const fullPath = params.row.UploadImages;
+      const fullPath = params.row.imgs;
       const fileName = fullPath?.split(/[/\\]/).pop();
 
       return <span>{fileName}</span>;
     },
   },
   {
-    field: "Description",
+    field: "desc",
     headerName: "Description",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -367,7 +367,7 @@ export const getMarketingMaterials: GridColDef[] = [
     align: "center",
   },
   {
-    field: "UploadDocuments",
+    field: "docs",
     headerName: "Document name",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -376,7 +376,7 @@ export const getMarketingMaterials: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     renderCell: (params: any) => {
-      const fullPath = params.row.UploadDocuments;
+      const fullPath = params.row.docs;
       const fileName = fullPath?.split(/[/\\]/).pop();
       return <span>{fileName}</span>;
     },
@@ -4837,7 +4837,7 @@ export const clientTradingPatternDetailedColumns: GridColDef[] = [
 
 export const ctclUserWiseColumns: GridColDef[] = [
   {
-    field: "zone",
+    field: "zn",
     headerName: "Zone",
     flex: 0.8,
     minWidth: 60,
@@ -4846,7 +4846,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "branchCode",
+    field: "bc",
     headerName: "Branch Code",
     flex: 1,
     minWidth: 100,
@@ -4855,7 +4855,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "branch_Type",
+    field: "bt",
     headerName: "Branch Type",
     flex: 0.8,
     minWidth: 120,
@@ -4864,7 +4864,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "CTCLLoginID",
+    field: "clid",
     headerName: "CTCL Login ID",
     flex: 1,
     minWidth: 90,
@@ -4874,7 +4874,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "CTCLUserName",
+    field: "cusr",
     headerName: "CTCL User Name",
     flex: 1.5,
     minWidth: 210,
@@ -4885,7 +4885,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
   },
 
   {
-    field: "turnover",
+    field: "tov",
     headerName: "Turnover (Cr.)",
     flex: 1,
     minWidth: 120,
@@ -4902,7 +4902,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
     },
   },
   {
-    field: "grossBrokerage",
+    field: "gbrok",
     headerName: "Gross Brokerage",
     flex: 1,
     minWidth: 100,
@@ -4920,7 +4920,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
     },
   },
   {
-    field: "netBrokerage",
+    field: "nbrok",
     headerName: "Net Brokerage",
     flex: 1,
     minWidth: 100,
@@ -4938,7 +4938,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
     },
   },
   {
-    field: "last_Trade_Date",
+    field: "ltd",
     headerName: "Last Trade Date",
     flex: 1,
     minWidth: 100,
@@ -4950,7 +4950,7 @@ export const ctclUserWiseColumns: GridColDef[] = [
 ];
 export const ctclUserWiseDetailedColumns: GridColDef[] = [
   {
-    field: "zone",
+    field: "zn",
     headerName: "Zone",
     flex: 0.8,
     minWidth: 60,
@@ -4959,7 +4959,7 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "branchCode",
+    field: "bc",
     headerName: "Branch Code",
     flex: 1,
     minWidth: 100,
@@ -4968,7 +4968,7 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "branch_Type",
+    field: "bt",
     headerName: "Branch Type",
     flex: 0.8,
     minWidth: 120,
@@ -4977,7 +4977,7 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "CTCLLoginID",
+    field: "clid",
     headerName: "CTCL Login ID",
     flex: 1,
     minWidth: 90,
@@ -4987,7 +4987,7 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "CTCLUserName",
+    field: "cusr",
     headerName: "CTCL User Name",
     flex: 1.5,
     minWidth: 210,
@@ -4997,7 +4997,7 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "exchangeSegment",
+    field: "seg",
     headerName: "Exchange / Segment",
     flex: 1.2,
     minWidth: 90,
@@ -5007,7 +5007,7 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "turnover",
+    field: "tov",
     headerName: "Turnover (Cr.)",
     flex: 1,
     minWidth: 120,
@@ -5024,7 +5024,7 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     },
   },
   {
-    field: "grossBrokerage",
+    field: "gbrok",
     headerName: "Gross Brokerage",
     flex: 1,
     minWidth: 100,
@@ -5042,7 +5042,7 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     },
   },
   {
-    field: "netBrokerage",
+    field: "nbrok",
     headerName: "Net Brokerage",
     flex: 1,
     minWidth: 100,
@@ -5060,7 +5060,7 @@ export const ctclUserWiseDetailedColumns: GridColDef[] = [
     },
   },
   {
-    field: "last_Trade_Date",
+    field: "ltd",
     headerName: "Last Trade Date",
     flex: 1,
     minWidth: 100,

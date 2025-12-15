@@ -22,8 +22,15 @@ const RegulatoryAnnouncement = ({ activeMenu }: any) => {
       dispatch(showLoader("Please wait..."));
       try {
         const response = await apiServices.viewRegAnnoucement({});
-        console.log("Fetched Regulatory Announcements:", response?.data?.Table);
-        setRegAnnouncements(response?.data?.Table || []);
+        console.log("Fetched Regulatory Announcements:", response?.data);
+        const rows = response?.data.data || [];
+
+        const mappedRows = rows.map((item: any, index: number) => ({
+          Id: index + 1, // REQUIRED if using MUI DataGrid
+          ...item,
+        }));
+        console.log("Regulatory AnnouncementsResponse", mappedRows);
+        setRegAnnouncements(mappedRows);
       } catch (error) {
         console.error("Error fetching regulatory announcements:", error);
       } finally {

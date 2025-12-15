@@ -71,14 +71,15 @@ const AmcMembership = () => {
       userId: decryptedUserId,
       // userId: "EMP-5376",
     };
-
     dispatch(showLoader("Please wait, we are processing your request..."));
-
     apiServices
       .GetClientModuleDataForAmc(payload)
       .then((response) => {
+        console.log("Responseee-->", response?.data);
+
         const withoutLifetime =
           response?.data?.data?.withoutLifetimeAMC[0] || [];
+        console.log("testeststasd", withoutLifetime);
 
         setSelectedRow(withoutLifetime);
         sessionStorage.setItem("selectedRow", JSON.stringify(withoutLifetime));
