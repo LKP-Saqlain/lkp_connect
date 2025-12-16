@@ -69,7 +69,7 @@ const CopyToClipboardCell: React.FC<Props> = ({
         setMandateLink(textToCopy);
         console.log("customLink", textToCopy);
       } else {
-        const encryptedBOID = encodeURIComponent(encryptAES(selectedRow.dP_ID));
+        const encryptedBOID = encodeURIComponent(encryptAES(selectedRow.dpid));
         const encryptedUserId = encodeURIComponent(encryptAES(user_id));
 
         textToCopy = `${window.location.origin}/AMCLink?boid=${encryptedBOID}&user=${encryptedUserId}`;

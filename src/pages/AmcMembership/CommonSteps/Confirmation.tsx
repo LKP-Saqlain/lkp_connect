@@ -81,23 +81,22 @@ const Confirmation = ({
     if (isCheckingRef.current || isActivatingRef.current) return;
     isCheckingRef.current = true;
     const payload = {
-      boid: selectedRow?.dP_ID,
+      boid: selectedRow?.dpid,
       amount: totalPayable.toFixed(2),
     };
 
     try {
       const response = await apiServices.GetDPAMCPaymentResponse(payload);
+      console.log("GetDPAMCPaymentResponse11", response);
+
       const paymentData = response?.data?.data;
 
-      if (paymentData?.status === "Success" && paymentData?.transDate) {
-        const transDate = dayjs(
-          paymentData.transDate,
-          "DD/MM/YYYY HH:mm:ss"
-        ).toDate();
+      if (paymentData?.sts === "Success" && paymentData?.td) {
+        const td = dayjs(paymentData.td, "DD/MM/YYYY HH:mm:ss").toDate();
         const now = new Date();
         const TEN_MINUTES = 10 * 60 * 1000;
 
-        if (Math.abs(now.getTime() - transDate.getTime()) <= TEN_MINUTES) {
+        if (Math.abs(now.getTime() - td.getTime()) <= TEN_MINUTES) {
           clearInterval(intervalRef.current!);
           setPaymentStatus("success");
           // Optionally trigger AMC activation here

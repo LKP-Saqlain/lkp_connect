@@ -6949,7 +6949,7 @@ export const APContestAchievedClients: GridColDef[] = [
 ];
 export const EmpBrokerageAchieved: GridColDef[] = [
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "Client Code",
     width: 130,
     headerAlign: "center",
@@ -6957,7 +6957,7 @@ export const EmpBrokerageAchieved: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     minWidth: 200,
     flex: 1,
@@ -6966,7 +6966,7 @@ export const EmpBrokerageAchieved: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "grossBrokerage",
+    field: "gb",
     headerName: "Gross Brokerage",
     width: 150,
     headerAlign: "center",
@@ -6981,7 +6981,7 @@ export const EmpBrokerageAchieved: GridColDef[] = [
     },
   },
   {
-    field: "netToLKPBrokerage",
+    field: "nlkp",
     headerName: "Net To LKP Brokerage",
     width: 150,
     headerAlign: "center",
@@ -6997,7 +6997,7 @@ export const EmpBrokerageAchieved: GridColDef[] = [
     },
   },
   {
-    field: "slbM_GrossBrokerage",
+    field: "slbm_gb",
     headerName: "SLBM Gross Brokerage",
     width: 150,
     headerAlign: "center",
@@ -7013,7 +7013,7 @@ export const EmpBrokerageAchieved: GridColDef[] = [
     },
   },
   {
-    field: "slbM_NetToLKPBrokerage",
+    field: "slbm_nlkp",
     headerName: "SLBM Net To LKP Brokerage",
     width: 150,
     headerAlign: "center",
@@ -7031,7 +7031,7 @@ export const EmpBrokerageAchieved: GridColDef[] = [
 ];
 export const EmpNonBrokerageAchieved: GridColDef[] = [
   {
-    field: "empCode",
+    field: "emp",
     headerName: "Employee Code",
     width: 130,
     headerAlign: "center",
@@ -7039,7 +7039,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "monthYr",
+    field: "myr",
     headerName: "Month-Year",
     width: 120,
     headerAlign: "center",
@@ -7048,7 +7048,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
   },
 
   {
-    field: "insurance_Gross",
+    field: "ins_g",
     headerName: "Insurance Gross",
     width: 150,
     headerAlign: "center",
@@ -7056,7 +7056,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "insurance_NetToLKP",
+    field: "ins_ntl",
     headerName: "Insurance Net To LKP",
     width: 170,
     headerAlign: "center",
@@ -7065,7 +7065,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "loanRevenue",
+    field: "ln_rev",
     headerName: "Loan Revenue",
     width: 140,
     headerAlign: "center",
@@ -7073,7 +7073,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "mfRevenue",
+    field: "mf_rev",
     headerName: "MF Revenue",
     width: 130,
     headerAlign: "center",
@@ -7081,7 +7081,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "liquiLoansRev",
+    field: "liq_rev",
     headerName: "Liquid Loans Revenue",
     width: 180,
     headerAlign: "center",
@@ -7090,7 +7090,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "spipRev",
+    field: "spip_rev",
     headerName: "SPIP Revenue",
     width: 130,
     headerAlign: "center",
@@ -7105,7 +7105,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     },
   },
   {
-    field: "trilogyRev",
+    field: "trl_rev",
     headerName: "Trilogy Revenue",
     width: 140,
     headerAlign: "center",
@@ -9367,7 +9367,7 @@ export const ClientMandateReport: GridColDef[] = [
 
 export const AmcLifeMembership: GridColDef[] = [
   {
-    field: "trading_Code",
+    field: "tc",
     headerName: "Client Code",
     flex: 1,
     minWidth: 100,
@@ -9376,7 +9376,7 @@ export const AmcLifeMembership: GridColDef[] = [
     align: "left",
   },
   {
-    field: "dP_ID",
+    field: "dpid",
     headerName: "BOID",
     flex: 1,
     minWidth: 150,
@@ -9385,7 +9385,7 @@ export const AmcLifeMembership: GridColDef[] = [
     align: "left",
   },
   {
-    field: "primary_Holder",
+    field: "ph1",
     headerName: "Primary Holder Name",
     flex: 1,
     minWidth: 180,
@@ -9394,7 +9394,7 @@ export const AmcLifeMembership: GridColDef[] = [
     align: "left",
   },
   {
-    field: "primaryHolder_phn",
+    field: "ph1_mob",
     headerName: "Mobile No.",
     flex: 1,
     minWidth: 120,
@@ -9403,14 +9403,11 @@ export const AmcLifeMembership: GridColDef[] = [
     align: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => {
-      const mobile = params.value || ""; // Extract the mobile number
-
-      // Mask all digits except the first 2 and the last 2
+      const mobile = params.value || "";
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
-        (_: any, prefix: any, middle: any, suffix: any) => {
-          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
+        (_: any, p1: any, mid: any, p2: any) =>
+          `${p1}${"X".repeat(mid.length)}${p2}`
       );
 
       return (
@@ -9421,7 +9418,7 @@ export const AmcLifeMembership: GridColDef[] = [
     },
   },
   {
-    field: "status",
+    field: "sts",
     headerName: "Status",
     flex: 1,
     minWidth: 120,
@@ -9431,7 +9428,7 @@ export const AmcLifeMembership: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "branchType",
+    field: "bt",
     headerName: "Branch Type",
     flex: 1,
     minWidth: 130,
@@ -9441,7 +9438,7 @@ export const AmcLifeMembership: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "bsdA_Flag",
+    field: "bsda",
     headerName: "BSDA",
     flex: 1,
     minWidth: 130,
@@ -9451,9 +9448,8 @@ export const AmcLifeMembership: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params) => (params.value ? params.value : "—"),
   },
-
   {
-    field: "dealerName",
+    field: "dlr",
     headerName: "Dealer Name",
     flex: 1,
     minWidth: 160,
@@ -9461,13 +9457,10 @@ export const AmcLifeMembership: GridColDef[] = [
     headerAlign: "center",
     align: "left",
     headerClassName: "header-wrap-custom",
-    valueGetter: (params: any) => {
-      return params || "-";
-    },
+    valueGetter: (params: any) => params || "-",
   },
-
   {
-    field: "rmname",
+    field: "rm",
     headerName: "RM Name",
     flex: 1,
     minWidth: 150,
@@ -9476,9 +9469,8 @@ export const AmcLifeMembership: GridColDef[] = [
     align: "left",
     headerClassName: "header-wrap-custom",
   },
-
   {
-    field: "secondary_Holder_Name",
+    field: "ph2",
     headerName: "Second Holder Name",
     flex: 1,
     minWidth: 180,
@@ -9486,12 +9478,10 @@ export const AmcLifeMembership: GridColDef[] = [
     headerAlign: "center",
     align: "left",
     headerClassName: "header-wrap-custom",
-    valueGetter: (params: any) => {
-      return params || "-";
-    },
+    valueGetter: (params: any) => params || "-",
   },
   {
-    field: "third_Holder_Name",
+    field: "ph3",
     headerName: "Third Holder Name",
     flex: 1,
     minWidth: 180,
@@ -9499,12 +9489,10 @@ export const AmcLifeMembership: GridColDef[] = [
     headerAlign: "center",
     align: "left",
     headerClassName: "header-wrap-custom",
-    valueGetter: (params: any) => {
-      return params || "-";
-    },
+    valueGetter: (params: any) => params || "-",
   },
   {
-    field: "branch_code",
+    field: "bc",
     headerName: "Branch Code",
     flex: 1,
     minWidth: 100,
@@ -9513,7 +9501,7 @@ export const AmcLifeMembership: GridColDef[] = [
     align: "center",
   },
   {
-    field: "zone",
+    field: "zn",
     headerName: "Zone",
     flex: 1,
     minWidth: 70,
@@ -9522,7 +9510,7 @@ export const AmcLifeMembership: GridColDef[] = [
     align: "center",
   },
   {
-    field: "module_Description",
+    field: "m_desc",
     headerName: "Scheme Category",
     flex: 1,
     minWidth: 180,
@@ -9582,7 +9570,7 @@ export const AmcLifeMembership: GridColDef[] = [
 ];
 export const AmcNonLifeMembership: GridColDef[] = [
   {
-    field: "schemeStatus",
+    field: "sch",
     headerName: "Activate",
     flex: 1,
     minWidth: 100,
@@ -9600,18 +9588,18 @@ export const AmcNonLifeMembership: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
-      const { dP_ID } = params.row;
+      const { dpid } = params.row;
       // if (!Payment_link || !EnCAccountCode)
       //   return (
       //     <Tooltip title={"No Link Available"} arrow placement="top">
       //       <span>No Link Available</span>
       //     </Tooltip>
       //   );
-      if (params?.row?.schemeStatus === "Submitted") return <span>—</span>;
+      if (params?.row?.sch === "Submitted") return <span>—</span>;
 
-      const fullLink = `${dP_ID}`;
+      const fullLink = `${dpid}`;
       console.log(
-        params?.row?.schemeStatus,
+        params?.row?.sch,
         "Payment_link,  <CopyToClipboardCellEnCAccountCode",
         fullLink
       );
@@ -9629,16 +9617,16 @@ export const AmcNonLifeMembership: GridColDef[] = [
 
 export const AmcContest: GridColDef[] = [
   {
-    field: "trading_Code",
+    field: "cc",
     headerName: "Client Code",
     flex: 1,
     minWidth: 100,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "center",
+    align: "left",
   },
   {
-    field: "dp_Id",
+    field: "dpid",
     headerName: "BOID",
     flex: 1,
     minWidth: 160,
@@ -9647,7 +9635,7 @@ export const AmcContest: GridColDef[] = [
     align: "center",
   },
   {
-    field: "primary_Holder",
+    field: "ph1",
     headerName: "Primary Holder Name",
     flex: 1,
     minWidth: 180,
@@ -9657,7 +9645,7 @@ export const AmcContest: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "primaryHolder_phn",
+    field: "ph1_mob",
     headerName: "Mobile No.",
     flex: 1,
     minWidth: 120,
@@ -9669,10 +9657,10 @@ export const AmcContest: GridColDef[] = [
       const mobile = params.value || "";
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
-        (_: any, prefix: any, middle: any, suffix: any) => {
-          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
+        (_: any, prefix: any, middle: any, suffix: any) =>
+          `${prefix}${"X".repeat(middle.length)}${suffix}`
       );
+
       return (
         <Tooltip title={mobile} arrow placement="top">
           <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
@@ -9681,7 +9669,7 @@ export const AmcContest: GridColDef[] = [
     },
   },
   {
-    field: "status",
+    field: "sts",
     headerName: "Status",
     flex: 1,
     minWidth: 120,
@@ -9691,7 +9679,7 @@ export const AmcContest: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "branchType",
+    field: "bt",
     headerName: "Branch Type",
     flex: 1,
     minWidth: 130,
@@ -9700,9 +9688,8 @@ export const AmcContest: GridColDef[] = [
     align: "center",
     headerClassName: "header-wrap-custom",
   },
-
   {
-    field: "dealerName",
+    field: "dlr",
     headerName: "Dealer Name",
     flex: 1,
     minWidth: 160,
@@ -9710,13 +9697,10 @@ export const AmcContest: GridColDef[] = [
     headerAlign: "center",
     align: "left",
     headerClassName: "header-wrap-custom",
-    valueGetter: (params: any) => {
-      return params || "-";
-    },
+    valueGetter: (params: any) => params || "-",
   },
-
   {
-    field: "rmname",
+    field: "rm",
     headerName: "RM Name",
     flex: 1,
     minWidth: 150,
@@ -9725,9 +9709,8 @@ export const AmcContest: GridColDef[] = [
     align: "left",
     headerClassName: "header-wrap-custom",
   },
-
   {
-    field: "secondary_Holder_Name",
+    field: "ph2",
     headerName: "Secondary Holder Name",
     flex: 1,
     minWidth: 180,
@@ -9737,7 +9720,7 @@ export const AmcContest: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "third_Holder_Name",
+    field: "ph3",
     headerName: "Third Holder Name",
     flex: 1,
     minWidth: 160,
@@ -9747,7 +9730,7 @@ export const AmcContest: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "branch_code",
+    field: "bc",
     headerName: "Branch Code",
     flex: 1,
     minWidth: 80,
@@ -9757,7 +9740,7 @@ export const AmcContest: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "zone",
+    field: "zn",
     headerName: "Zone",
     flex: 1,
     minWidth: 80,
@@ -9804,8 +9787,8 @@ export const AmcContest: GridColDef[] = [
   //   headerClassName: "header-wrap-custom",
   // },
   {
-    field: "module_Narr",
-    headerName: "Scheme Category",
+    field: "m_nar",
+    headerName: "Scheme Name",
     flex: 1,
     minWidth: 150,
     disableColumnMenu: true,
@@ -9813,7 +9796,7 @@ export const AmcContest: GridColDef[] = [
     align: "center",
   },
   {
-    field: "schemeStatus",
+    field: "sch",
     headerName: "Scheme Status ",
     flex: 1,
     minWidth: 150,
@@ -10917,7 +10900,7 @@ export const regMasterColumns: GridColDef[] = [
 
 export const AmcZoneReportDirect: GridColDef[] = [
   {
-    field: "emp",
+    field: "cc",
     headerName: "Employee Code",
     flex: 1,
     minWidth: 120,
@@ -11464,7 +11447,7 @@ export const extendedAmcReport: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "Client Code",
     flex: 1,
     minWidth: 150,
@@ -11472,7 +11455,7 @@ export const extendedAmcReport: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "dP_ID",
+    field: "dpid",
     headerName: "DP ID",
     flex: 1,
     minWidth: 180,
@@ -11480,7 +11463,7 @@ export const extendedAmcReport: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "primary_Holder",
+    field: "ph1",
     headerName: "Primary Holder",
     flex: 1.5,
     minWidth: 220,
@@ -11488,7 +11471,7 @@ export const extendedAmcReport: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "schemeName",
+    field: "sch_nm",
     headerName: "Scheme Name",
     flex: 1.2,
     minWidth: 200,

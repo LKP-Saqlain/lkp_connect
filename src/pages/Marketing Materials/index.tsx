@@ -56,6 +56,7 @@ const MarketingMaterial = () => {
                 fileType: `.${ext}`,
                 contentType: "",
               };
+              console.log("PayloadDownload", imgPayload);
 
               try {
                 const imgResp = await apiServices.ComplianceDownload(

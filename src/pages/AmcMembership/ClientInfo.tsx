@@ -46,7 +46,7 @@ const ClientInfo = ({
       // }
 
       const payload = {
-        dP_ID: selectedRow?.dP_ID,
+        dP_ID: selectedRow?.dpid,
         // dP_ID: "1203000000010904",
         // dP_ID: "1203000001123371", //MTO6
         // dP_ID: "1203000001442910", //98885
@@ -58,8 +58,9 @@ const ClientInfo = ({
 
       try {
         const response = await apiServices.GetClientModuleDetails(payload);
+        console.log("GetClientModuleDetails:", response?.data?.data);
         const result = response?.data?.data?.[0] || null;
-        console.log(" GetClientModuleDetails:", result);
+
         setLocalClientData(result);
         setClientData(result); //  this sends data to parent (AmcMembership)
       } catch (error) {
@@ -74,7 +75,7 @@ const ClientInfo = ({
 
   const checkPaymentStatus = async () => {
     const payload = {
-      boid: selectedRow?.dP_ID,
+      boid: selectedRow?.dpid,
       userId: user_id,
     };
     // {
@@ -110,14 +111,12 @@ const ClientInfo = ({
     }
   };
   // Extract and safely display API values with fallback
-  const primaryHolder = clientData?.primary_Holder || "-- Not Applicable --";
-  const secondaryHolder =
-    clientData?.secondary_Holder_Name || "-- Not Applicable --";
-  const tertiaryHolder =
-    clientData?.third_Holder_Name || "-- Not Applicable --";
-  const email = clientData?.email_id || "-";
-  const mobile = clientData?.mobile_No || "-";
-  const dpId = clientData?.dP_ID || "-";
+  const primaryHolder = clientData?.ph1 || "-- Not Applicable --";
+  const secondaryHolder = clientData?.ph2 || "-- Not Applicable --";
+  const tertiaryHolder = clientData?.ph3 || "-- Not Applicable --";
+  const email = clientData?.em || "-";
+  const mobile = clientData?.mob || "-";
+  const dpId = clientData?.dpid || "-";
 
   return (
     <>

@@ -96,19 +96,24 @@ const Index = ({ activeMenu }: any) => {
     apiServices
       .GetClientDPContest(payload)
       .then((response) => {
+        console.log(
+          "GetClientDPContestResponse",
+          response?.data?.data?.dpClientcountdetails
+        );
+
         const resData = response?.data?.data?.clientModule || [];
         const countDetails =
           response?.data?.data?.dpClientcountdetails?.[0] || {};
 
         SetContestData(
           resData.map((item: any, index: number) => ({
-            id: index + 1,
+            Id: index + 1,
             ...item,
           }))
         );
 
-        setClientCount(countDetails.traded_Client_Count || 0);
-        setIncentiveEarned(countDetails.incentiveEran || 0);
+        setClientCount(countDetails.tcc || 0);
+        setIncentiveEarned(countDetails.ie || 0);
       })
       .catch((error) => {
         console.error("Error fetching contest data:", error);
@@ -184,10 +189,11 @@ const Index = ({ activeMenu }: any) => {
     if (!searchQuery) return true;
     const search = searchQuery.toLowerCase();
     return (
-      item?.trading_Code?.toLowerCase().includes(search) ||
-      item?.primary_Holder?.toLowerCase().includes(search) ||
-      item?.dP_ID?.toLowerCase().includes(search) ||
-      item?.dp_Id?.toLowerCase().includes(search)
+      item?.tc?.toLowerCase().includes(search) ||
+      item?.ph1?.toLowerCase().includes(search) ||
+      item?.dpid?.toLowerCase().includes(search)
+      // ||
+      // item?.dpid?.toLowerCase().includes(search)
     );
   });
 
@@ -198,7 +204,7 @@ const Index = ({ activeMenu }: any) => {
 
   const checkPaymentStatus = async (row: any) => {
     const payload = {
-      boid: row?.dP_ID,
+      boid: row?.dpid,
       userId: user_id,
     };
     // {

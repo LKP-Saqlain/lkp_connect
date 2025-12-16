@@ -148,6 +148,7 @@ export const newDomainEndpoints = [
   endpoints.GetOverviewBrokRevReport,
   endpoints.GetOverviewUniqueTradedClients,
   endpoints.GetAMCZoneReport,
+  endpoints.GetDPAMCZoneReportDetails,
   endpoints.GetZoneTargetdata,
   endpoints.GetPNLAccountDetailsPdf,
   endpoints.GetQuaterlyPayoutGrid,
@@ -181,5 +182,22 @@ export const newDomainEndpoints = [
 
   //back office
   endpoints.GetClientAccessLink,
-  // endpoints.GetClientModuleDataForAmc,
+  //DP AMC
+  endpoints.GetClientModuleDataForAmc,
+  endpoints.GetClientDPContest,
+  endpoints.GetClientModuleDetails,
+  endpoints.GetAMCActivationStatus,
+  endpoints.SendDPAMCEmail,
+  endpoints.GetDPAMCPaymentResponse,
+  endpoints.SendFirstHolderSignature,
+  endpoints.SendSecondHolderSignature,
+  endpoints.SendThirdHolderSignature,
+  endpoints.SendFinalSignedMail,
+
+  // Employeee contest
+  endpoints.GetEmpContestAchievedBrokerage,
+  endpoints.GetEmpContestAchievedNonBrokerage,
+  endpoints.GetEmpContestAchievedClients,
+  endpoints.GetEMPContestTargetDetails,
+  endpoints.GetEmpContestAchievedSummary,
 ];

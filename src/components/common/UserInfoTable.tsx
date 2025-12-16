@@ -1426,11 +1426,11 @@ const DataTable = ({
       }));
     } else if (selectedWidget === "Non-Lifetime Membership") {
       return TableColumns.AmcNonLifeMembership.map((column) => {
-        if (column.field === "schemeStatus") {
+        if (column.field === "sch") {
           return {
             ...column,
             renderCell: (params: any) => {
-              const status = params?.row?.schemeStatus;
+              const status = params?.row?.sch;
 
               return (
                 <div style={{ display: "flex", justifyContent: "center" }}>
@@ -2367,7 +2367,7 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "Client DP AMC Report direct") {
       return TableColumns.AmcZoneReportDirect.map((column) => {
-        if (column.field === "submitted") {
+        if (column.field === "sub") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -2385,13 +2385,13 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  {params.row.submitted}
+                  {params.row.sub}
                 </button>
               );
             },
           };
         }
-        if (column.field === "completed") {
+        if (column.field === "cmp") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -2409,7 +2409,7 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  {params.row.completed}
+                  {params.row.cmp}
                 </button>
               );
             },
@@ -2420,7 +2420,7 @@ const DataTable = ({
       });
     } else if (activeSubItem === "Client DP AMC Report indirect") {
       return TableColumns.AmcZoneReportIndirect.map((column) => {
-        if (column.field === "submitted") {
+        if (column.field === "sub") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -2438,13 +2438,13 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  {params.row.submitted}
+                  {params.row.sub}
                 </button>
               );
             },
           };
         }
-        if (column.field === "completed") {
+        if (column.field === "cmp") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -2462,7 +2462,7 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  {params.row.completed}
+                  {params.row.cmp}
                 </button>
               );
             },

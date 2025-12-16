@@ -44,10 +44,8 @@ const PaymentChoice = ({
         )
       : 0;
 
-  const existingOutstanding = parseCurrency(
-    clientData?.existing_dp_outstanding
-  );
-  const ledgerBalance = parseCurrency(clientData?.ledgerbalance);
+  const existingOutstanding = parseCurrency(clientData?.edo);
+  const ledgerBalance = parseCurrency(clientData?.lbal);
   const amcAmount = parseCurrency(amcFee);
 
   const totalPayable = existingOutstanding + amcAmount;
@@ -72,12 +70,12 @@ const PaymentChoice = ({
 
   const handleOnlinePayment = async () => {
     const payload = {
-      boid: clientData?.dP_ID,
+      boid: clientData?.dpid,
     };
     dispatch(showLoader("Sending payment link to your email..."));
     try {
       const response = await apiServices.SendDPAMCEmail(payload);
-      console.log(" Payment link response:", response);
+      console.log("Payment link response:", response);
 
       if (response?.data?.isSuccess) {
         ShowToast("success", capitalizeEachWord(response?.data?.data));

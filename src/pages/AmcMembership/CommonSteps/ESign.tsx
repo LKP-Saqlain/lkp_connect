@@ -64,7 +64,7 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
       else apiFunc = apiServices.SendThirdHolderSignature;
 
       const response = await apiFunc({
-        dpid: selectedRow?.dP_ID,
+        dpid: selectedRow?.dpid,
         // dpid: "1203000001123371",
         // dpid: "1203000001078403", //Msir
       });
@@ -136,7 +136,7 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
     console.log("check before downloadSignedPdf");
     try {
       const payload = {
-        dpid: selectedRow?.dP_ID,
+        dpid: selectedRow?.dpid,
         maxStage: signCount,
       };
 

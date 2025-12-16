@@ -196,7 +196,7 @@ const NudgeTable = ({
                   fontWeight: "500",
                 }}
               >
-                {singleData?.summary?.submittedCount}
+                {singleData?.summary?.sub_tot}
               </span>
             </div>
 
@@ -227,7 +227,7 @@ const NudgeTable = ({
                   fontWeight: "500",
                 }}
               >
-                {singleData?.summary?.completedCount}
+                {singleData?.summary?.cmp_tot}
               </span>
             </div>
           </div>

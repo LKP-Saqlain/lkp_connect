@@ -39,7 +39,7 @@ const AchieveCard = () => {
             GetEmpContestAchievedBrokerage?.status === 200
               ? (GetEmpContestAchievedBrokerage?.data?.data || []).map(
                   (item: any, index: number) => ({
-                    id: index + 1,
+                    Id: index + 1,
                     ...item,
                   })
                 )
@@ -49,7 +49,7 @@ const AchieveCard = () => {
             GetEmpContestAchievedNonBrokerage?.status === 200
               ? (GetEmpContestAchievedNonBrokerage?.data?.data || []).map(
                   (item: any, index: number) => ({
-                    id: index + 1,
+                    Id: index + 1,
                     ...item,
                   })
                 )
@@ -59,7 +59,7 @@ const AchieveCard = () => {
             GetEmpContestAchievedClients?.status === 200
               ? (GetEmpContestAchievedClients?.data?.data || []).map(
                   (item: any, index: number) => ({
-                    id: index + 1,
+                    Id: index + 1,
                     ...item,
                   })
                 )

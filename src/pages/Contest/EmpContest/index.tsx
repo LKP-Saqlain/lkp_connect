@@ -20,12 +20,12 @@ interface APContestData {
   qtarget: number;
   newClientCount: number;
   prize: string;
-  freshCashMargin: number;
-  mfauM_Net: number;
-  freshCash: number;
-  mfaum: number;
-  spipAccountCount: number;
-  insurancePremiumTarget: number;
+  fcm: number;
+  mfnet: number;
+  fresh_cash: number;
+  mf_aum: number;
+  spip_cnt: number;
+  ins_t: number;
 }
 
 const EMPContest = ({ activeMenu }: any) => {
@@ -66,14 +66,15 @@ const EMPContest = ({ activeMenu }: any) => {
       .then(([GetEMPContestTargetDetails, GetEmpContestAchievedSummary]) => {
         if (GetEMPContestTargetDetails?.status === 200) {
           const data = GetEMPContestTargetDetails?.data?.data?.[0] || {};
+          console.log("testTEST1111111", data);
 
           const {
-            newAccountCount: newClient = 0,
-            reactivationCount: reactivate = 0,
-            brokingRevnTarget: broking = 0,
-            nonBrokingRevnTarget: nonBroking = 0,
-            freshCashMargin: freeCash_Margin = 0,
-            mfauM_Net: mfAUM_NET = 0,
+            nca: newClient = 0,
+            rac: reactivate = 0,
+            brt: broking = 0,
+            nbrt: nonBroking = 0,
+            fcm: freeCash_Margin = 0,
+            mfnet: mfAUM_NET = 0,
           } = data;
 
           setTargetData(data);
@@ -92,23 +93,30 @@ const EMPContest = ({ activeMenu }: any) => {
           setAchievedData(data);
           console.log("achievedData", achievedData);
 
-          const broking =
-            (data.brokerageNetToLKP || 0) + (data.slbmNetToLKPBrokerage || 0);
+          const broking = (data.bb_nlkp || 0) + (data.slbm_nlkp || 0);
+          // (data.brokerageNetToLKP || 0) + (data.slbmNetToLKPBrokerage || 0);
 
+          // const nonbroking =
+          //   (data.spipRevenue || 0) +
+          //   (data.loanRevenue || 0) +
+          //   (data.trilogyRevenue || 0) +
+          //   (data.mfNetToLKP || 0) +
+          //   (data.netToLKPInsurance || 0) +
+          //   (data.liquiLoanNetToLKPBrokerage || 0);
           const nonbroking =
-            (data.spipRevenue || 0) +
-            (data.loanRevenue || 0) +
-            (data.trilogyRevenue || 0) +
-            (data.mfNetToLKP || 0) +
-            (data.netToLKPInsurance || 0) +
-            (data.liquiLoanNetToLKPBrokerage || 0);
+            (data.spip_rev || 0) +
+            (data.ln_rev || 0) +
+            (data.trl_rev || 0) +
+            (data.mf_nlkp || 0) +
+            (data.ins_nlkp || 0) +
+            (data.liq_nlkp || 0);
 
-          const freeCash_Margin = data.freshCash || 0;
-          const mfAUM_NET = data.mfaum || 0;
-          const newClient = data.newClients || 0;
-          const reactivate = data.reactivatedClients || 0;
-          const spipAchieved = data.spipClientsAchieved || 0;
-          const insuranceAchieved = data.insurancePremAchieved || 0;
+          const freeCash_Margin = data.fresh_cash || 0;
+          const mfAUM_NET = data.mf_aum || 0;
+          const newClient = data.new_cl || 0;
+          const reactivate = data.react_cl || 0;
+          const spipAchieved = data.spip_cnt || 0;
+          const insuranceAchieved = data.ins_ach || 0;
 
           setAchieveCard({
             broking,
@@ -179,25 +187,22 @@ const EMPContest = ({ activeMenu }: any) => {
           <DashboardCard
             activeMenu={activeMenu}
             title="Fresh Cash Margin Target"
-            value={formatIndianNumber(targetData?.freshCashMargin)}
+            value={formatIndianNumber(targetData?.fcm)}
             animationData={CoinIcon}
             customClass={true}
             rightTitle="MF AUM Target"
-            rightValue={formatIndianNumber(targetData?.mfauM_Net)}
+            rightValue={formatIndianNumber(targetData?.mfnet)}
           />
         </Col>
         <Col xxl={3} lg={3} md={6} sm={12}>
           <DashboardCard
             activeMenu={activeMenu}
             title="SPIP Client Target"
-            value={formatIndianNumber(targetData?.spipAccountCount, false)}
+            value={formatIndianNumber(targetData?.spip_cnt, false)}
             animationData={CoinIcon}
             customClass={true}
             rightTitle="Insurance Target"
-            rightValue={formatIndianNumber(
-              targetData?.insurancePremiumTarget,
-              false
-            )}
+            rightValue={formatIndianNumber(targetData?.ins_t, false)}
           />
         </Col>
       </Row>
