@@ -31,27 +31,32 @@ const UserInfoModal = ({
   uploadedFileName,
 }: any) => {
   const [clientDetails, setClientDetails] = useState({
-    Client_Name: "",
-    Clientcode: "",
-    Mobile_No: "",
-    City: "",
-    Age: 0,
-    Email_Id: "",
-    status: "",
-    Equity: "",
-    "F & O": "",
-    Currency: "",
-    Commodity: "",
-    MTF: "",
-    SLBM: "",
-    Equity_Intraday: 0,
-    Equity_Delivery: 0,
-    Equity_Futures: 0,
-    Equity_Options: 0,
-    Currency_Futures: 0,
-    Currency_Options: 0,
-    Commodity_Futures: 0,
-    Commodity_Options: 0,
+    cn: "", // Client_Name
+    cc: "", // Clientcode
+    mob: "", // Mobile_No
+    ct: "", // City
+    age: 0, // Age
+    em: "", // Email_Id
+    eqdt: "", // EquityTradeDate
+    eq: "", // Equity
+    fodt: "", // F_OTradeDate
+    fo: "", // F_O
+    curdt: "", // CurrencyTradeDate
+    cur: "", // Currency
+    comdt: "", // Commodity_TradeDate
+    com: "", // Commodity
+    mtf: "", // MTF
+    slbmdt: "", // SLBM_TradeDate
+    slbm: "", // SLBM
+    eq_in: 0, // Equity_Intraday
+    eq_del: 0, // Equity_Delivery
+    eq_fut: 0, // Equity_Futures
+    eq_opt: 0, // Equity_Options
+    cur_fut: 0, // Currency_Futures
+    cur_opt: 0, // Currency_Options
+    com_fut: 0, // Commodity_Futures
+    com_opt: 0, // Commodity_Options
+    sts: "", // status
   });
 
   const isMobile = useMediaQuery("(max-width:768px)");
@@ -74,8 +79,8 @@ const UserInfoModal = ({
         .unwrap()
         .then((response) => {
           dispatch(hideLoader());
-          console.log("ClientDetailsResponse", response);
-          setClientDetails(response?.data?.data[0]);
+          console.log("ClientDetailsResponse", response?.data?.data);
+          setClientDetails(response?.data?.data);
         })
         .catch((err) => {
           console.log("ResponseError", err);
@@ -160,7 +165,7 @@ const UserInfoModal = ({
                   >
                     Client Name
                   </p>
-                  <h6 className="user-info">{clientDetails.Client_Name}</h6>
+                  <h6 className="user-info">{clientDetails.cn}</h6>
                 </div>
               </Col>
               {/* Client Code */}
@@ -177,7 +182,7 @@ const UserInfoModal = ({
                   >
                     Client Code
                   </p>
-                  <h6 className="user-info">{clientDetails.Clientcode}</h6>
+                  <h6 className="user-info">{clientDetails.cc}</h6>
                 </div>
               </Col>
               {/* Mobile No */}
@@ -194,7 +199,7 @@ const UserInfoModal = ({
                   >
                     Mobile No
                   </p>
-                  <h6 className="user-info">{clientDetails.Mobile_No}</h6>
+                  <h6 className="user-info">{clientDetails.mob}</h6>
                 </div>
               </Col>
               {/* City */}
@@ -211,7 +216,7 @@ const UserInfoModal = ({
                   >
                     City
                   </p>
-                  <h6 className="user-info">{clientDetails.City}</h6>
+                  <h6 className="user-info">{clientDetails.ct}</h6>
                 </div>
               </Col>
               {/* Age */}
@@ -233,12 +238,12 @@ const UserInfoModal = ({
                       fontSize="small"
                       sx={{
                         color:
-                          clientDetails.status === "Active"
+                          clientDetails.sts === "Active"
                             ? "#01D28E"
                             : "#FF0606",
                       }}
                     />
-                    {clientDetails.status}
+                    {clientDetails.sts}
                   </h6>
                 </div>
               </Col>
@@ -257,7 +262,7 @@ const UserInfoModal = ({
                     Email Id
                   </p>
                   <h6 className="user-info">
-                    {clientDetails.Email_Id.toLowerCase()}
+                    {clientDetails.em.toLowerCase()}
                   </h6>
                 </div>
               </Col>
@@ -298,9 +303,8 @@ const UserInfoModal = ({
           <Col md={9}>
             <Row className="">
               {ClientInfoCapsules.map((item) => {
-                const status = (
-                  clientDetails as Record<string, string | number>
-                )[item.label];
+                const status = clientDetails[item.key] || "Inactive";
+                console.log("Statttus", status, item);
                 const color = status === "Active" ? "#01D28E" : "#FF0606";
 
                 return (

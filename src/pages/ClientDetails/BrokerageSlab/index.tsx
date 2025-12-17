@@ -18,16 +18,16 @@ const BrokerageSlab = ({
   uploadedFileName,
 }: any) => {
   interface BrokerageItem {
-    type: string;
-    equity_intraday_brokerage?: number;
-    equity_Delivery_brokerage?: number;
-    equity_Futures_brokerage?: number;
-    equity_Options_brokerage?: number;
-    currency_Futures_brokerage?: number;
-    currency_Options_brokerage?: number;
-    commodity_Futures_brokerage?: number;
-    commodity_Options_brokerage?: number;
-    description?: string;
+    typ: string;
+    eq_in?: number;
+    eq_del?: number;
+    eq_fut?: number;
+    eq_opt?: number;
+    cur_fut?: number;
+    cur_opt?: number;
+    com_fut?: number;
+    com_opt?: number;
+    desc?: string;
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,32 +52,32 @@ const BrokerageSlab = ({
         {
           id: 1,
           label: "Equity",
-          status: formatStatus(setClientDetails["EquityTradeDate"]),
+          status: formatStatus(setClientDetails["eqdt"]),
         },
         {
           id: 2,
           label: "F&O",
-          status: formatStatus(setClientDetails["F_OTradeDate"]),
+          status: formatStatus(setClientDetails["eqdt"]),
         },
         {
           id: 3,
           label: "Currency",
-          status: formatStatus(setClientDetails["CurrencyTradeDate"]),
+          status: formatStatus(setClientDetails["curdt"]),
         },
         {
           id: 4,
           label: "Commodity",
-          status: formatStatus(setClientDetails["Commodity_TradeDate"]),
+          status: formatStatus(setClientDetails["comdt"]),
         },
         {
           id: 5,
           label: "MTF",
-          status: formatStatus(setClientDetails["MTF_TradeDate"]),
+          status: formatStatus(setClientDetails["mtf"]),
         },
         {
           id: 6,
           label: "SLBM",
-          status: formatStatus(setClientDetails["SLBM_TradeDate"]),
+          status: formatStatus(setClientDetails["slbmdt"]),
         },
       ];
 
@@ -160,9 +160,9 @@ const BrokerageSlab = ({
   // };
   const handleValidty = async (item?: any): Promise<boolean> => {
     const payload = {
-      clientcode: item?.clientcode,
-      segment: item?.type,
-      moduleNo: item.moduleNo,
+      clientcode: item?.cc,
+      segment: item?.typ,
+      moduleNo: item.m_no,
     };
 
     try {
@@ -171,23 +171,23 @@ const BrokerageSlab = ({
       const response = await apiServices.GetBrokerageModificationValidity(
         payload
       );
+      console.log(
+        "GetBrokerageModificationValidityResponse",
+        response?.data?.data
+      );
 
       if (response?.status === 200) {
-        const modificationFlag = response?.data?.data?.modificationFlag;
-        const statusMsg = response?.data?.data?.statusMsg;
+        const mdflg = response?.data?.data?.mdflg;
+        const stsmsg = response?.data?.data?.stsmsg;
 
-        console.log(
-          modificationFlag,
-          "Fetched Validity Details---raw",
-          response?.data
-        );
+        console.log(mdflg, "Fetched Validity Details---raw", response?.data);
 
         // Show message only if modification is not allowed
-        if (modificationFlag !== "Y" && statusMsg) {
-          ShowToast("error", statusMsg);
+        if (mdflg !== "Y" && stsmsg) {
+          ShowToast("error", stsmsg);
         }
 
-        return modificationFlag === "Y";
+        return mdflg === "Y";
       }
     } catch (err) {
       console.log("Error", err);
@@ -261,14 +261,14 @@ const BrokerageSlab = ({
                 brokerageSlab.map((item, index) => {
                   // Extract the first non-zero brokerage value
                   const value =
-                    item.equity_intraday_brokerage ||
-                    item.equity_Delivery_brokerage ||
-                    item.equity_Futures_brokerage ||
-                    item.equity_Options_brokerage ||
-                    item.currency_Futures_brokerage ||
-                    item.currency_Options_brokerage ||
-                    item.commodity_Futures_brokerage ||
-                    item.commodity_Options_brokerage ||
+                    item.eq_in ||
+                    item.eq_del ||
+                    item.eq_fut ||
+                    item.eq_opt ||
+                    item.cur_fut ||
+                    item.cur_opt ||
+                    item.com_fut ||
+                    item.com_opt ||
                     0;
 
                   // const isOption = item.type?.toLowerCase().includes("option");
@@ -301,7 +301,7 @@ const BrokerageSlab = ({
                                 marginTop: "5px",
                               }}
                             >
-                              {item.type}
+                              {item.typ}
                             </p>
                             <p
                               style={{
@@ -321,7 +321,7 @@ const BrokerageSlab = ({
                                 />
                               )}
                               {/* {formattedValue} {suffix} */}
-                              {item.description}
+                              {item.desc}
                             </p>
                           </div>
                           <FiEdit

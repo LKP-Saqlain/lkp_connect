@@ -200,4 +200,32 @@ export const newDomainEndpoints = [
   endpoints.GetEmpContestAchievedClients,
   endpoints.GetEMPContestTargetDetails,
   endpoints.GetEmpContestAchievedSummary,
+
+  //KYC Dashboard
+  //RH Approval
+  endpoints.GetBrokerageRHStatus, //done
+  endpoints.UpdateBrokerageRHStatus, //done no change
+  //KYC Approval
+  endpoints.GetBrokerageKycStatusNew, //done
+  endpoints.GetBrokerageKycDetailsStatus, //done
+  endpoints.GetTechExcelApiResponseNew, //Keeping TechExcel as it is
+  endpoints.UpdateBrokerageKycStatusNew, //done no change
+
+  //Brokerage modification status
+  endpoints.GetBrokerageModificationStatus,
+
+  //Client Pledge Request
+  endpoints.GetClientPledgeDetails,
+
+  //Upload SLBM Holding
+  endpoints.SLBMHoldingsUploadOdin,
+
+  //Client Details Popup API's
+  endpoints.ClientDashboard,
+  endpoints.ClientSegmentBrok,
+  endpoints.GetClientWiseBrokerage,
+  endpoints.GetBrokerageDetails,
+  //Brokerage Slab API's
+  endpoints.GetBrokerageModificationValidity,
+  endpoints.GetBrokerageModificationHistory,
 ];

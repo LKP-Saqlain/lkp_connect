@@ -20,12 +20,12 @@ import ShowToast from "../../../utils/toastUtils";
 // New types for clarity and safety
 interface BrokerageHistoryItem {
   moduleNo: string;
-  modificationDate: string;
-  description: string;
-  brokeragePerc: number;
-  rowNum: number;
-  clientcode: string;
-  segment: string;
+  md_dt: string;
+  desc: string;
+  bperc: number;
+  rnum: number;
+  cc: string;
+  seg: string;
 }
 
 interface ModalComponentProps {
@@ -72,14 +72,14 @@ const ModalComponent = ({
   const dispatch = useDispatch<AppDispatch>();
 
   // Destructure BrokerageTitle early to avoid repeated optional chaining
-  const { type, clientcode } = BrokerageTitle || {};
+  const { typ, cc } = BrokerageTitle || {};
 
   // Fetch brokerage plans
   useEffect(() => {
-    if (!type) return; // Exit early — don't call the API yet
+    if (!typ) return; // Exit early — don't call the API yet
 
-    const payload = { segment: type };
-    console.log("Fetching plans for segment", type);
+    const payload = { segment: typ };
+    console.log("Fetching plans for segment", typ);
 
     dispatch(showLoader("Please wait..."));
 
@@ -98,13 +98,17 @@ const ModalComponent = ({
       })
       .catch((err) => console.log("Error", err))
       .finally(() => dispatch(hideLoader()));
-  }, [type]);
+  }, [typ]);
+
+  useEffect(() => {
+    console.log("Test", currentPlan);
+  }, [currentPlan]);
 
   // Fetch brokerage modification history
   useEffect(() => {
-    if (!clientcode || !type) return; // Exit early if required fields are missing
+    if (!cc || !typ) return; // Exit early if required fields are missing
 
-    const payload = { clientcode, segment: type };
+    const payload = { clientcode: cc, segment: typ };
     console.log("Fetching modification history");
 
     dispatch(showLoader("Please wait..."));
@@ -125,7 +129,7 @@ const ModalComponent = ({
       })
       .catch((err) => console.error("API error:", err))
       .finally(() => dispatch(hideLoader()));
-  }, [clientcode, type]);
+  }, [cc, typ]);
 
   // const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
   //   const selectedValue = event.target.value;
@@ -151,12 +155,12 @@ const ModalComponent = ({
 
   //     console.log(`${key}:`, value);
 
-  //     if (value > currentPlan.brokeragePerc) {
-  //       console.log(`${key} is greater than brokeragePerc → show consent`);
+  //     if (value > currentPlan.bperc) {
+  //       console.log(`${key} is greater than bperc → show consent`);
   //       consentNeeded = true;
   //       break;
-  //     } else if (value < currentPlan.brokeragePerc) {
-  //       console.log(`${key} is smaller than brokeragePerc → no consent`);
+  //     } else if (value < currentPlan.bperc) {
+  //       console.log(`${key} is smaller than bperc → no consent`);
   //       continue;
   //     } else {
   //       // If equal, check min field only for Intraday/Delivery
@@ -172,9 +176,9 @@ const ModalComponent = ({
 
   //       const minValue = matchedPlan[minKey];
 
-  //       if (minValue > currentPlan.brokeragePercMin) {
+  //       if (minValue > currentPlan.bpmin) {
   //         console.log(
-  //           `${minKey} (${minValue}) > brokeragePercMin (${currentPlan.brokeragePercMin}) → show consent`
+  //           `${minKey} (${minValue}) > bpmin (${currentPlan.bpmin}) → show consent`
   //         );
   //         consentNeeded = true;
   //         break;
@@ -211,15 +215,15 @@ const ModalComponent = ({
       console.log(`${key}:`, value);
 
       // --- 1️⃣ strictly higher than current brokerage %
-      if (value > currentPlan.brokeragePerc) {
-        console.log(`${key} is greater than brokeragePerc → show consent`);
+      if (value > currentPlan.bperc) {
+        console.log(`${key} is greater than bperc → show consent`);
         consentNeeded = true;
         // setShowConsent(true);
         break;
       }
       // --- 2️⃣ strictly lower → skip
-      if (value < currentPlan.brokeragePerc) {
-        console.log(`${key} is smaller than brokeragePerc → no consent`);
+      if (value < currentPlan.bperc) {
+        console.log(`${key} is smaller than bperc → no consent`);
         continue;
       }
       // --- 3️⃣ equal → need further checks
@@ -234,11 +238,11 @@ const ModalComponent = ({
             : "EquityDeliveryMin";
 
         const newMin = matchedPlan[minKey];
-        const currMin = currentPlan.brokeragePercMin;
+        const currMin = currentPlan.bpmin;
 
         if (newMin !== undefined && currMin !== undefined && newMin > currMin) {
           console.log(
-            `${minKey} (${newMin}) > brokeragePercMin (${currMin}) → show consent`
+            `${minKey} (${newMin}) > bpmin (${currMin}) → show consent`
           );
           consentNeeded = true;
           // setShowConsent(true);
@@ -251,7 +255,7 @@ const ModalComponent = ({
         // If there is a segment-specific Min, compare it
         const minKey = key.replace("Per", "Min"); // e.g. EquityFuturesPer -> EquityFuturesMin
         const newMin = matchedPlan[minKey];
-        const currMin = currentPlan.brokeragePercMin;
+        const currMin = currentPlan.bpmin;
 
         if (
           newMin !== undefined &&
@@ -259,13 +263,13 @@ const ModalComponent = ({
           newMin > currMin // strictly higher than current min
         ) {
           console.log(
-            `${key} equals brokeragePerc, and ${minKey} (${newMin}) > brokeragePercMin (${currMin}) → show consent`
+            `${key} equals bperc, and ${minKey} (${newMin}) > bpmin (${currMin}) → show consent`
           );
           consentNeeded = true;
           break;
         } else {
           console.log(
-            `${key} equals brokeragePerc, but no higher minimum → no consent`
+            `${key} equals bperc, but no higher minimum → no consent`
           );
         }
       }
@@ -288,18 +292,16 @@ const ModalComponent = ({
   const handleUpdateBrokeragePlan = () => {
     const latestHistory = history[0];
 
-    const existingPlan = latestHistory?.segment
-      ?.toLowerCase()
-      .includes("option")
-      ? `Rs ${latestHistory?.brokeragePerc} per lot`
-      : `${latestHistory?.brokeragePerc}% of turnover`;
+    const existingPlan = latestHistory?.seg?.toLowerCase().includes("option")
+      ? `Rs ${latestHistory?.bperc} per lot`
+      : `${latestHistory?.bperc}% of turnover`;
 
-    const activeSince = latestHistory?.modificationDate || "";
+    const activeSince = latestHistory?.md_dt || "";
 
     const payload = {
-      clientcode: BrokerageTitle?.clientcode || "",
-      segment: BrokerageTitle?.type || "",
-      moduleNo: selectedPlan?.ModuleNo || "",
+      clientcode: BrokerageTitle?.cc || "",
+      segment: BrokerageTitle?.typ || "",
+      moduleNo: selectedPlan?.m_no || "",
       existingPlan: `${existingPlan} ( ${activeSince} )`,
       proposedPlan: selectedValue,
       consentfileName: uploadedFileName,
@@ -424,7 +426,7 @@ const ModalComponent = ({
       }}
     >
       <ModalHeader toggle={handleCloseClick} style={{ color: "#11395C" }}>
-        {type}
+        {typ}
       </ModalHeader>
 
       <ModalBody>
@@ -526,7 +528,7 @@ const ModalComponent = ({
                     <Col
                       xs={12}
                       md={6}
-                      key={item.rowNum}
+                      key={item.rnum}
                       style={{
                         display: "flex",
                         justifyContent: "center",
@@ -563,14 +565,14 @@ const ModalComponent = ({
                             </strong>
                           )}
                           <br />
-                          {item.modificationDate}
+                          {item.md_dt}
                           <br />
-                          {item.description}
+                          {item.desc}
                           {/* 
             Keeping this logic commented intentionally as per your original code
             {item.segment.toLowerCase().includes("option")
-              ? `₹ ${item.brokeragePerc} per lot`
-              : `${item.brokeragePerc} % of turnover`} 
+              ? `₹ ${item.bperc} per lot`
+              : `${item.bperc} % of turnover`} 
           */}
                         </p>
                       </div>
@@ -625,14 +627,14 @@ const ModalComponent = ({
                           fontFamily: "Poppins",
                         }}
                       >
-                        {/* {history[0].brokeragePerc} */}
-                        {history[0].description}
+                        {/* {history[0].bperc} */}
+                        {history[0].desc}
                         {/* {history[0].segment.toLowerCase().includes("option")
                           ? "per lot"
                           : "% of turnover"}{" "} */}
                         {/* Plan */}
                         <br />
-                        Active since {formatDate(history[0].modificationDate)}
+                        Active since {formatDate(history[0].md_dt)}
                       </p>
                     )}
                   </Col>
@@ -680,7 +682,7 @@ const ModalComponent = ({
                         if (e.target.files && e.target.files[0]) {
                           const file = e.target.files[0];
                           setSelectedFile(file);
-                          handleFileUpload?.(file, type);
+                          handleFileUpload?.(file, typ);
                           // setSelectedFile(null);
                         }
                       }}

@@ -17,8 +17,7 @@ const allowedFormats = ["pdf", "png", "jpg", "jpeg"];
 interface ClientRow {
   BranchCode?: string;
   BranchType?: string;
-  ctermcode?: string;
-  ClientCode?: string;
+  cc?: string;
   ClientName?: string;
   PANNO?: string;
   ActivationDate?: string;
@@ -253,8 +252,8 @@ const ClientDetails = ({
     const searchVal = value.toLowerCase();
 
     const filteredAllClients = baseData.filter((item: any) => {
-      const name = item.clientName || item.ClientName;
-      const code = item.ctermcode || item.ClientCode;
+      const name = item.cn || item.cn;
+      const code = item.cc || item.cc;
 
       return (
         name?.toLowerCase().includes(searchVal) ||
@@ -392,9 +391,7 @@ const ClientDetails = ({
             isOpen={isModalOpen}
             onClose={getUserBrokergageModificationDetails}
             handleModalClose={handleModalClose}
-            selectedClientCode={
-              selectedUserInfo?.ctermcode ?? selectedUserInfo?.ClientCode
-            }
+            selectedClientCode={selectedUserInfo?.cc ?? selectedUserInfo?.cc}
             branch={branchCode}
             handleFileUpload={handleFileUpload}
             uploadedFileName={uploadedFileName}

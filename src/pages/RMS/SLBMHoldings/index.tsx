@@ -120,7 +120,9 @@ const SLBMHoldings: React.FC = () => {
     dispatch(showLoader(""));
     apiServices
       .SLBMHoldingsUploadOdin(formData)
+
       .then((response) => {
+        console.log("SLBMResponse1-->", response?.data);
         if (response?.data?.statusCode === 200) {
           //     console.log(payload, "slbm payload");
           ShowToast("success", response?.data?.message);

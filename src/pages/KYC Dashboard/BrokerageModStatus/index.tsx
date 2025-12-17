@@ -36,7 +36,7 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
-  const [modificationStatus, setModificationStatus] = useState([]);
+  const [modificationStatus, setModificationStatus] = useState<any[]>([]);
   const [clientCode, setClientCode] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(statusOptions[0]);
   const [zoneOptions, setZoneOptions] = useState<any[]>([]);
@@ -74,6 +74,7 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
     e.preventDefault();
 
     const [fromDate, toDate] = selectedDateRange || [];
+
     const payload = {
       clientCode: clientCode.trim(),
       status: selectedStatus?.value || "",
@@ -82,14 +83,23 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
       endDate: toDate ? moment(toDate).format("YYYY-MM-DD") : null,
       user_id: user_id,
     };
+
     console.log(payload, "payload");
 
     dispatch(showLoader("Loading..."));
+
     apiServices
       .GetBrokerageModificationStatus(payload)
       .then((response) => {
-        if (response?.status === 200) {
-          setModificationStatus(response.data?.data || []);
+        const rows = response?.data?.data || [];
+        if (response?.status === 200 && Array.isArray(rows)) {
+          const mappedRows = rows.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          console.log("Mapped Modification Status", mappedRows);
+          setModificationStatus(mappedRows);
         }
       })
       .catch(() => ShowToast("error", "Date is required"))
@@ -104,17 +114,17 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
     try {
       // 1. Define header name mapping
       const headerMap: Record<string, string> = {
-        zone: "Zone",
-        status: "Status",
-        clientcode: "Client Code",
-        branchcode: "Branch Code",
-        clientName: "Client Name",
-        clientType: "Client Type",
-        segment: "Segment",
-        existingPlan: "Existing Plan",
-        proposedPlan: "Proposed Plan",
+        zn: "Zone",
+        sts: "Status",
+        cc: "Client Code",
+        bc: "Branch Code",
+        cn: "Client Name",
+        ctyp: "Client Type",
+        seg: "Segment",
+        expln: "Existing Plan",
+        prpln: "Proposed Plan",
         Remarks: "Remarks",
-        kycApproveStatusDate: "Status Date",
+        kyc_dt: "Status Date",
       };
       // 2. Remove 'rowId' and prepare data
       const cleanedData = (modificationStatus as Record<string, any>[]).map(

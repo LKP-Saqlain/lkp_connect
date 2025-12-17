@@ -195,7 +195,26 @@ const Index = ({ activeMenu }: any) => {
     apiServices
       .GetClientPledgeDetails(payload)
       .then((response) => {
-        setData(response?.data?.data);
+        const rawData = response?.data?.data;
+
+        let rows: any[] = [];
+
+        // If backend sends a single object
+        if (rawData && !Array.isArray(rawData)) {
+          rows = [rawData];
+        }
+        // If backend sends an array
+        else if (Array.isArray(rawData)) {
+          rows = rawData;
+        }
+
+        const mappedRows = rows.map((item: any, index: number) => ({
+          Id: index + 1,
+          ...item,
+        }));
+
+        console.log("Mapped Client Pledge Details", mappedRows);
+        setData(mappedRows);
       })
       .catch((error) => {
         console.error("Error fetching compliance data:", error);
@@ -229,8 +248,8 @@ const Index = ({ activeMenu }: any) => {
   };
 
   const handleClick = (row: any) => {
-    const encryptedCode = row?.encryptedCode;
-    const clientCode = row?.clientCode;
+    const encryptedCode = row?.enc;
+    const clientCode = row?.cc;
 
     if (!encryptedCode || !clientCode) {
       console.warn("Missing client or encrypted code");

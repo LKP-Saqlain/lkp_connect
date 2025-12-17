@@ -17,21 +17,32 @@ const RegionalHead = ({ activeSubItem }: any) => {
     (state: RootState) => state.UserLogin?.data?.data
   );
   useEffect(() => {
-    let payload = {
-      user_id,
-    };
+    const payload = { user_id };
+
     dispatch(showLoader("Please wait..."));
+
     apiServices
       .GetBrokerageRHStatus(payload)
       .then((response) => {
         if (response?.status === 200) {
-          console.log("ModStatus-data", response?.data?.data);
-          setRhStatus(response?.data?.data);
+          console.log("TestTestTest", response?.data?.data);
+
+          const rawData = response?.data?.data || [];
+
+          const mappedData = rawData.map((item: any, index: number) => ({
+            Id: index + 1, // required for DataGrid
+            ...item,
+          }));
+
+          console.log("ModStatus-data (mapped)", mappedData);
+          setRhStatus(mappedData);
         }
       })
-      .catch((err) => console.log("Error", err))
+      .catch((err) => {
+        console.error("Error", err);
+      })
       .finally(() => dispatch(hideLoader()));
-  }, [flag]);
+  }, [flag, user_id]);
 
   const handleApproval = (rid: number, remark: string, entryFlag: string) => {
     const payload = {
@@ -44,6 +55,7 @@ const RegionalHead = ({ activeSubItem }: any) => {
     apiServices
       .UpdateBrokerageRHStatus(payload)
       .then((response) => {
+        console.log("Responseee123", response?.data);
         if (response?.status === 200) {
           setFlag(!flag);
         }

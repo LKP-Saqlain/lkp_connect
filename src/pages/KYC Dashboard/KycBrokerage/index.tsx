@@ -37,7 +37,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
           const resData = response?.data?.data;
           setKycData(
             resData.map((item: any, index: number) => ({
-              id: index + 1,
+              Id: index + 1,
               ...item,
             }))
           );
@@ -56,8 +56,8 @@ const KycBrokerage = ({ activeSubItem }: any) => {
     dispatch(showLoader("Please wait..."));
 
     const payload = {
-      clientcode: segmentRow.clientcode,
-      brokSeg: segmentRow.segment,
+      clientcode: segmentRow.cc,
+      brokSeg: segmentRow.seg,
     };
 
     apiServices
@@ -104,15 +104,15 @@ const KycBrokerage = ({ activeSubItem }: any) => {
 
       // Step 1: Call TechExcel only if approving (A)
       if (action === "A") {
-        const moduleMap = row.map((item: any) => item?.moduleNo);
-        const segmentMap = row.map((item: any) => item?.segment);
+        const moduleMap = row.map((item: any) => item?.m_no);
+        const segmentMap = row.map((item: any) => item?.seg);
 
         // prevent duplicate reverse calls (e.g., Intraday ↔ Delivery)
         const uniquePairs = new Set<string>();
 
         for (const item of row) {
-          const thisModuleNo = item?.moduleNo;
-          const thisSegment = item?.segment;
+          const thisModuleNo = item?.m_no;
+          const thisSegment = item?.seg;
 
           const otherModuleNo =
             moduleMap.length > 1
@@ -132,8 +132,8 @@ const KycBrokerage = ({ activeSubItem }: any) => {
           uniquePairs.add(pairKey);
 
           const techPayload = {
-            segment: segmentRow?.segment,
-            clientcode: item?.clientcode,
+            segment: segmentRow?.seg,
+            clientcode: item?.cc,
             startdate: formattedDate,
             moduleNo: thisModuleNo,
             moduleNo2: otherModuleNo,
@@ -165,7 +165,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
             allTechExcelSuccess = false;
             ShowToast(
               "error",
-              `TechExcel failed for ${item.clientcode}: ${
+              `TechExcel failed for ${item.cc}: ${
                 techRes?.data?.data || "Unknown error"
               }`
             );
@@ -173,7 +173,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
             break; // stop loop — no need to continue
           } else {
             console.log(
-              `✅ TechExcel success for ${item.clientcode}: ${techRes?.data?.data}`
+              `TechExcel success for ${item.cc}: ${techRes?.data?.data}`
             );
           }
         }
@@ -184,6 +184,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
         const kycRes = await apiServices.UpdateBrokerageKycStatusNew(
           kycPayload
         );
+        console.log("UpdateAPIResponse", kycRes);
 
         if (kycRes?.data?.isSuccess == true) {
           ShowToast("success", kycRes?.data?.data?.[0]);
@@ -207,15 +208,15 @@ const KycBrokerage = ({ activeSubItem }: any) => {
 
   const handlePreview = async (row: any) => {
     setFileType("");
-    const fileExtension = row.consentfilename
-      ? `.${row.consentfilename.split(".").pop()?.toLowerCase()}`
+    const fileExtension = row.cfile
+      ? `.${row.cfile.split(".").pop()?.toLowerCase()}`
       : "";
 
     console.log("approvalExtension", fileExtension, row);
     setFileType(fileExtension);
 
     const payload = {
-      fileName: row.consentfilename,
+      fileName: row.cfile,
       filePath: "D:\\FileUpload\\KYCConsentForm",
       fileType: fileExtension ? fileExtension : fileType ? fileType : "",
       contentType: "",
@@ -251,7 +252,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     if (segmentRow) {
-      console.log(segmentRow.clientcode, "count", segmentRow.segment);
+      console.log(segmentRow.cc, "count", segmentRow.seg);
     }
   }, [segmentRow]);
 

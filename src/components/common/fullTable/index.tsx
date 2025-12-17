@@ -20,6 +20,18 @@ const barColors = [
 ];
 
 const categories = [
+  "eq_in",
+  "eq_del",
+  "eq_fut",
+  "eq_opt",
+  "com_fut",
+  "com_fut",
+  "cur_fut",
+  "cur_opt",
+  "slbm",
+];
+
+const PassCategories = [
   "Equity Intraday",
   "Equity Delivery",
   "Equity Futures",
@@ -62,11 +74,9 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
           console.log("fetchedBrokerageData raw", fetchedBrokerageData);
 
           if (fetchedBrokerageData && Array.isArray(fetchedBrokerageData)) {
-            const data = fetchedBrokerageData.map(
-              (item: any) => item.brokerage ?? 0
-            );
+            const data = fetchedBrokerageData.map((item: any) => item.brk ?? 0);
             const labels = fetchedBrokerageData.map(
-              (item: any) => item.monthyr ?? ""
+              (item: any) => item.myr ?? ""
             );
 
             setMonthBrokerageData({
@@ -147,7 +157,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
             setGrossBrokerageData([]);
           }
           if (typeof res?.data === "object") {
-            const responseData = res?.data?.data[0];
+            const responseData = res?.data?.data;
             if (responseData) {
               const mappedData = categories.map(
                 (category) => responseData[category.replace(/ /g, "_")]
@@ -377,7 +387,7 @@ const PerformanceHistoryChart = ({ selectedClientCode }: any) => {
                       <ReactApexChart
                         // dir="ltr"
                         // options={barOptions}
-                        options={barOptions(categories)}
+                        options={barOptions(PassCategories)}
                         series={seriess}
                         type="bar"
                         height="374"

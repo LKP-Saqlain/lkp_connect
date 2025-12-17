@@ -3292,13 +3292,19 @@ export const partnerContestCapsules = [
   { id: 5, label: "New Added Clients" },
 ];
 
-export const ClientInfoCapsules = [
-  { id: 1, label: "Equity", status: "Active" },
-  { id: 2, label: "F & O", status: "Active" },
-  { id: 3, label: "Currency", status: "Active" },
-  { id: 4, label: "Commodity", status: "Inactive" },
-  { id: 5, label: "MTF", status: "Active" },
-  { id: 6, label: "SLBM", status: "Inactive" },
+type ClientCapsuleKey = "eq" | "fo" | "cur" | "com" | "mtf" | "slbm";
+
+export const ClientInfoCapsules: {
+  id: number;
+  label: string;
+  key: ClientCapsuleKey;
+}[] = [
+  { id: 1, label: "Equity", key: "eq" },
+  { id: 2, label: "F & O", key: "fo" },
+  { id: 3, label: "Currency", key: "cur" },
+  { id: 4, label: "Commodity", key: "com" },
+  { id: 5, label: "MTF", key: "mtf" },
+  { id: 6, label: "SLBM", key: "slbm" },
 ];
 
 export const BrokSlabItems = [
@@ -3735,9 +3741,10 @@ export const FundamentalRatiosHeader = [
     shortKey: "DEBT_CE_A",
   },
 ];
+
 export const RegionalHead: GridColDef[] = [
   {
-    field: "branchcode",
+    field: "bc",
     headerName: "Branch",
     minWidth: 70,
     flex: 0.6,
@@ -3746,7 +3753,7 @@ export const RegionalHead: GridColDef[] = [
     align: "center",
   },
   {
-    field: "clientcode",
+    field: "cc",
     headerName: "Client Code",
     flex: 0.6,
     minWidth: 100,
@@ -3755,7 +3762,7 @@ export const RegionalHead: GridColDef[] = [
     align: "left",
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 1.5,
     minWidth: 180,
@@ -3764,7 +3771,7 @@ export const RegionalHead: GridColDef[] = [
     align: "left",
   },
   {
-    field: "segment",
+    field: "seg",
     headerName: "Segment",
     flex: 1,
     minWidth: 120,
@@ -3773,7 +3780,7 @@ export const RegionalHead: GridColDef[] = [
     align: "left",
   },
   {
-    field: "existingPlan",
+    field: "expln",
     headerName: "Existing Plan",
     flex: 1.5,
     minWidth: 200,
@@ -3782,7 +3789,7 @@ export const RegionalHead: GridColDef[] = [
     align: "left",
   },
   {
-    field: "proposedPlan",
+    field: "prpln",
     headerName: "Proposed Plan",
     flex: 1.2,
     minWidth: 130,
@@ -3791,16 +3798,14 @@ export const RegionalHead: GridColDef[] = [
     align: "left",
   },
   {
-    field: "consentfilename",
+    field: "cfile",
     headerName: "Download",
-    // flex: 1,
-    // minWidth: 50,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "remark",
+    field: "remark", // unchanged (action column)
     headerName: "Action",
     flex: 1,
     minWidth: 100,
@@ -3813,10 +3818,10 @@ export const RegionalHead: GridColDef[] = [
 
 export const BrokerageModificationStatus: GridColDef[] = [
   ...RegionalHead.filter(
-    (col) => col.field !== "remark" && col.field !== "consentfilename"
+    (col) => col.field !== "remark" && col.field !== "cfile"
   ),
   {
-    field: "status",
+    field: "sts",
     headerName: "Status",
     flex: 1,
     minWidth: 180,
@@ -3879,7 +3884,7 @@ export const BrokerageModificationStatus: GridColDef[] = [
     },
   },
   {
-    field: "reason",
+    field: "rsn",
     headerName: "Remarks",
     minWidth: 100,
     flex: 1,
@@ -3888,7 +3893,7 @@ export const BrokerageModificationStatus: GridColDef[] = [
     align: "center",
   },
   {
-    field: "kycApproveStatusDate",
+    field: "kyc_dt",
     headerName: "Date approved by KYC",
     minWidth: 200,
     flex: 1,
@@ -3915,7 +3920,7 @@ export const BrokerageKyc: GridColDef[] = [
     align: "center",
   },
   {
-    field: "zone",
+    field: "zn",
     headerName: "Zone",
     minWidth: 60,
     flex: 0.5,
@@ -3924,7 +3929,7 @@ export const BrokerageKyc: GridColDef[] = [
     align: "center",
   },
   {
-    field: "branchcode",
+    field: "bc",
     headerName: "Branch",
     minWidth: 70,
     flex: 0.6,
@@ -3942,7 +3947,7 @@ export const BrokerageKyc: GridColDef[] = [
     align: "left",
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 1.5,
     minWidth: 180,
@@ -3952,7 +3957,7 @@ export const BrokerageKyc: GridColDef[] = [
   },
 
   {
-    field: "segment",
+    field: "seg",
     headerName: "Segment",
     flex: 1,
     minWidth: 120,
@@ -3968,12 +3973,10 @@ export const getBrokerageKycDetails = (
   return [
     ...RegionalHead.filter(
       (col) =>
-        col.field !== "branchcode" &&
-        col.field !== "remark" &&
-        col.field !== "consentfilename"
+        col.field !== "bc" && col.field !== "remark" && col.field !== "cfile"
     ),
     {
-      field: "consentfilename",
+      field: "cfile",
       headerName: "Download",
       disableColumnMenu: true,
       headerAlign: "center",
@@ -4002,7 +4005,7 @@ export const getBrokerageKycDetails = (
       },
     },
     {
-      field: "kycApproveStatusDate",
+      field: "kyc_dt",
       headerName: "Date approved by RH",
       flex: 1,
       minWidth: 180,
@@ -6621,21 +6624,21 @@ export const unListedTradeColumns: GridColDef[] = [
 export const ClientPledgeRequest: GridColDef[] = [
   {
     disableColumnMenu: true,
-    field: "clientCode",
+    field: "cc",
     headerName: "Client Code",
     align: "left",
     flex: 1,
-    minWidth: 100, // Reasonable on all screens
+    minWidth: 100,
   },
   {
     disableColumnMenu: true,
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 2,
-    minWidth: 160, // Names can be long; ensure space
+    minWidth: 160,
   },
   {
-    field: "mobileNo",
+    field: "mob",
     headerName: "Mobile No",
     flex: 1,
     minWidth: 120,
@@ -6643,18 +6646,13 @@ export const ClientPledgeRequest: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     renderCell: (params: any) => {
-      const mobile = params.value || ""; // Extract the mobile number
-
-      // Mask all digits except the first 2 and the last 2
+      const mobile = params.value || "";
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
-        (_: any, prefix: any, middle: any, suffix: any) => {
-          console.log(prefix, suffix); // Added only for testing purpose
-          return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
+        (_: any, prefix: any, middle: any, suffix: any) =>
+          `${prefix}${"X".repeat(middle.length)}${suffix}`
       );
 
-      // Return tooltip with the masked mobile number
       return (
         <Tooltip title={mobile} arrow placement="top">
           <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
@@ -6663,7 +6661,7 @@ export const ClientPledgeRequest: GridColDef[] = [
     },
   },
   {
-    field: "clientStatus",
+    field: "csts",
     headerName: "Status",
     flex: 0.8,
     minWidth: 80,
@@ -6672,17 +6670,17 @@ export const ClientPledgeRequest: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "poaStatus",
+    field: "poa",
     headerName: "POA Status",
     flex: 1,
-    minWidth: 70, // Slightly wider for better label display
+    minWidth: 70,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "lastTradeDate",
+    field: "ltd",
     headerName: "Last Trade Date",
     minWidth: 120,
     flex: 1,
@@ -6692,12 +6690,12 @@ export const ClientPledgeRequest: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     valueGetter: (params: any) => {
       const rawDate = params;
-      if (!rawDate) return null; // Handle missing data
+      if (!rawDate) return null;
 
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (_match: any, day: any, month: any, year: any) => {
+          (_: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -6712,7 +6710,6 @@ export const ClientPledgeRequest: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -6721,17 +6718,16 @@ export const ClientPledgeRequest: GridColDef[] = [
       return parsedDate;
     },
     sortComparator: (v1: any, v2: any) => {
-      if (!v1 || !v2) return 0; // Handle missing values
-      return v1 - v2; // Sort in ascending order
+      if (!v1 || !v2) return 0;
+      return v1 - v2;
     },
     valueFormatter: (params: any) => {
       if (!params) return "";
-      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+      return dayjs(params).format("DD-MMM-YY");
     },
   },
-
   {
-    field: "holdingValue",
+    field: "hval",
     headerName: "Holding Value",
     headerClassName: "header-wrap-custom",
     minWidth: 120,
@@ -6802,7 +6798,6 @@ export const ClientPledgeRequest: GridColDef[] = [
     field: "encryptedCode",
     headerName: "Pledge Request",
     headerClassName: "header-wrap-custom",
-    // flex: 1,
     width: 90,
     disableColumnMenu: true,
     headerAlign: "center",

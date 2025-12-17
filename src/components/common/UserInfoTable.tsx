@@ -452,11 +452,11 @@ const DataTable = ({
             ),
           };
         }
-        if (column.field === "consentfilename") {
+        if (column.field === "cfile") {
           return {
             ...column,
             renderCell: (params: any) => {
-              const fileName = params.row?.consentfilename;
+              const fileName = params.row?.cfile;
 
               return fileName ? (
                 <button
@@ -472,7 +472,7 @@ const DataTable = ({
                   <DownloadForOfflineIcon />
                 </button>
               ) : (
-                "╶─"
+                "─"
               );
             },
           };
