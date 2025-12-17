@@ -1,6 +1,6 @@
 import { Card, CardBody, Row, Col } from "reactstrap";
 import { ClientInfoCapsules } from "../../../helper/tableColumns.tsx";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+// import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import PerformanceHistoryChart from "../PerformanceHistory";
 import SegmentWiseTable from "../../../components/common/fullTable";
 import BrokerageSlab from "../BrokerageSlab";
@@ -130,7 +130,7 @@ const UserInfoDetail = () => {
                     >
                       {item.label}
                     </p>
-                    <p
+                    {/* <p
                       style={{
                         fontFamily: "Poppins",
                         color: "#777",
@@ -151,7 +151,7 @@ const UserInfoDetail = () => {
                         }}
                       />
                       {item.status}
-                    </p>
+                    </p> */}
                   </CardBody>
                 </Card>
               </Col>
