@@ -165,8 +165,8 @@ const ModalComponent = ({
     (state: RootState) => state.UserLogin?.data?.data
   );
   console.log("PAN", authenticationValue);
-  const rmCode = user_id.split("-")[1] || "";
-  // formik.setFieldValue("rmCode", rmCode);
+  const rmc = user_id.split("-")[1] || "";
+  // formik.setFieldValue("rmc", rmc);
   const dispatch = useDispatch<AppDispatch>();
 
   const getMarketingMaterialValidationSchema = (
@@ -187,14 +187,14 @@ const ModalComponent = ({
   //     transactionDate: Yup.string().required("Transaction Date is required"),
   //     clientName: Yup.string().required("Client name required"),
   //     securitiesName: Yup.string().required("securitiesName is required"),
-  //     noOfShare: Yup.number()
+  //     nsh: Yup.number()
   //       .typeError("Number of share must be a number")
   //       .required("Number of share is required"),
-  //     brokPerShare: Yup.number()
+  //     lcps: Yup.number()
   //       .typeError("Brokerage of share must be a number")
   //       .required("Brokerage per share is required"),
   //     sbCode: Yup.string().required("Sub-broker Code is required"),
-  //     sbRate: Yup.string().required("Sub-broker Rate is required"),
+  //     sbr: Yup.string().required("Sub-broker Rate is required"),
   //   });
 
   const getRegulatoryValidationSchema = (editData: EditData) =>
@@ -235,9 +235,9 @@ const ModalComponent = ({
 
   const getThirdPartyValidationSchema = () =>
     Yup.object().shape({
-      ledgerCode: Yup.string().required("Ledger Code is required"),
-      companyName: Yup.string().required("Company Name is required"),
-      emailId: Yup.string()
+      ldc: Yup.string().required("Ledger Code is required"),
+      cnm: Yup.string().required("Company Name is required"),
+      em: Yup.string()
         .transform((value) => normalizeEmailInput(value))
         .test(
           "multiple-emails",
@@ -250,10 +250,10 @@ const ModalComponent = ({
           }
         )
         .required("Email ID is required"),
-      emailId1: Yup.string()
+      em1: Yup.string()
         .transform((value) => normalizeEmailInput(value))
         .test(
-          "emailId1",
+          "em1",
           "One or more secondary email addresses are invalid",
           (value) => {
             if (!value) return true; // Skip validation if empty
@@ -262,10 +262,10 @@ const ModalComponent = ({
           }
         ),
 
-      emailId2: Yup.string()
+      em2: Yup.string()
         .transform((value) => normalizeEmailInput(value))
         .test(
-          "emailId2",
+          "em2",
           "One or more alternate email addresses are invalid",
           (value) => {
             if (!value) return true; // Skip validation if empty
@@ -273,12 +273,12 @@ const ModalComponent = ({
             return emails.every((email) => isValidEmail(email));
           }
         ),
-      sacNumber: Yup.string().required("SAC Number is required"),
-      state: Yup.string().required("State is required"),
-      gstNumber: Yup.string().required("GST Number is required"),
-      gstStateCode: Yup.string().required("GST State Code is required"),
+      sac: Yup.string().required("SAC Number is required"),
+      ste: Yup.string().required("State is required"),
+      gst: Yup.string().required("GST Number is required"),
+      gsc: Yup.string().required("GST State Code is required"),
       pan: Yup.string().required("PAN is required"),
-      address1: Yup.string().required("Address is required"),
+      ad1: Yup.string().required("Address is required"),
       // mobileNo: Yup.string().required("Mobile Number is required"),
     });
 
@@ -372,20 +372,20 @@ const ModalComponent = ({
       }
     : isThirdPartyMaster
     ? {
-        ledgerCode: "",
-        companyName: "",
-        emailId: "",
-        emailId1: "",
-        emailId2: "",
-        sacNumber: "",
-        state: "",
-        gstNumber: "",
-        gstStateCode: "",
+        ldc: "",
+        cnm: "",
+        em: "",
+        em1: "",
+        em2: "",
+        sac: "",
+        ste: "",
+        gst: "",
+        gsc: "",
         pan: "",
-        address1: "",
-        address2: "",
-        address3: "",
-        mobileNo: "",
+        ad1: "",
+        ad2: "",
+        ad3: "",
+        mob: "",
       }
     : isVendorMasterContent
     ? {
@@ -422,21 +422,21 @@ const ModalComponent = ({
         // directAppLevel: "",
       }
     : {
-        transactionDate: null as string | null,
-        clientName: "",
-        securitiesName: "",
-        noOfShare: null,
-        clientRate: null,
-        vendorRate: null,
-        brokPerShare: null,
-        brokIncGST: null,
+        tdt: null as string | null,
+        cn: "",
+        nsec: "",
+        nsh: null,
+        crt: null,
+        vrt: null,
+        lcps: null,
+        big: null, //Brok inclusive GST
         gst: null,
-        brokExcGST: null,
-        sbCode: null,
-        sbRate: null,
-        sbCommision: null,
-        netBrokerage: null,
-        rmCode: rmCode,
+        beg: null,
+        sbc: null,
+        sbr: null,
+        sbcm: null,
+        nbg: null,
+        rmc: rmc,
       };
   const cleanEmails = (email: any) => normalizeEmailInput(email);
   const formik = useFormik({
@@ -475,9 +475,9 @@ const ModalComponent = ({
           return;
         } else if (isUnlistedContent) {
           const unlistedPayload = {
-            transactionDate: values.transactionDate,
-            clientName: values.clientName,
-            securitiesName: values.securitiesName,
+            transactionDate: values.tdt,
+            clientName: values.cn,
+            securitiesName: values.nsec,
           };
           console.log(unlistedPayload);
           fetchUnlistedContent(setTouched, values);
@@ -487,23 +487,23 @@ const ModalComponent = ({
           return;
         } else if (isThirdPartyMaster) {
           const thirdPartyPayload = {
-            ledgerCode: values.ledgerCode,
-            companyName: values.companyName,
+            ldc: values.ldc,
+            cnm: values.cnm,
             // emailId: values.emailId,
-            // emailId1: values.emailId1,
-            // emailId2: values.emailId2,
-            emailId: cleanEmails(values.emailId),
-            emailId1: cleanEmails(values.emailId1),
-            emailId2: cleanEmails(values.emailId2),
-            sacNumber: values.sacNumber,
-            state: values.state,
-            gstNumber: values.gstNumber,
-            gstStateCode: values.gstStateCode,
+            // em1: values.em1,
+            // em2: values.em2,
+            em: cleanEmails(values.em),
+            em1: cleanEmails(values.em1),
+            em2: cleanEmails(values.em2),
+            sac: values.sac,
+            ste: values.ste,
+            gst: values.gst,
+            gsc: values.gsc,
             pan: values.pan,
-            address1: values.address1,
-            address2: values.address2,
-            address3: values.address3,
-            mobileNo: values.mobileNo,
+            ad1: values.ad1,
+            ad2: values.ad2,
+            ad3: values.ad3,
+            mob: values.mob,
           };
           console.log(thirdPartyPayload, "thirdPartyPayload");
 
@@ -583,13 +583,13 @@ const ModalComponent = ({
     console.log("unlistedValuess", values);
 
     setTouched({
-      transactionDate: true,
-      clientName: true,
-      securitiesName: true,
-      noOfShare: true,
-      brokPerShare: true,
-      sbCode: true,
-      sbRate: true,
+      tdt: true,
+      cn: true,
+      nsec: true,
+      nsh: true,
+      lcps: true,
+      sbc: true,
+      sbr: true,
     });
 
     if (!selectedFileB64 || selectedFileB64.trim() === "") {
@@ -748,53 +748,38 @@ const ModalComponent = ({
       }
       if (isThirdPartyMaster) {
         formik.setValues({
-          ledgerCode: editData.ledgerCode || "",
-          companyName: editData.companyName || "",
-          emailId: editData.emailId || "",
-          emailId1: editData.emailId1 || "",
-          emailId2: editData.emailId2 || "",
-          sacNumber: editData.sacNumber || "",
-          state: editData.state || "",
-          gstNumber: editData.gstNumber || "",
-          gstStateCode: editData.gstStateCode || "",
+          ldc: editData.ldc || "",
+          cnm: editData.cnm || "",
+          em: editData.em || "",
+          em1: editData.em1 || "",
+          em2: editData.em2 || "",
+          sac: editData.sac || "",
+          ste: editData.ste || "",
+          gst: editData.gst || "",
+          gsc: editData.gsc || "",
           pan: editData.pan || "",
-          address1: editData.address1 || "",
-          address2: editData.address2 || "",
-          address3: editData.address3 || "",
-          mobileNo: editData.mobileNo || "",
+          ad1: editData.ad1 || "",
+          ad2: editData.ad2 || "",
+          ad3: editData.ad3 || "",
+          mob: editData.mob || "",
         });
       }
       if (isUnlistedContent) {
-        formik.setFieldValue(
-          "transactionDate",
-          editData?.transactionDate || null
-        );
-        formik.setFieldValue("clientName", editData?.clientName || null);
-        formik.setFieldValue(
-          "securitiesName",
-          editData?.nameOfSecurities || null
-        );
-        formik.setFieldValue("noOfShare", editData?.noOfShares || null);
-        formik.setFieldValue(
-          "brokPerShare",
-          editData?.lkpCommissionPerShare || null
-        );
-        formik.setFieldValue(
-          "brokIncGST",
-          editData?.brokerageInclusiveGST || null
-        );
+        formik.setFieldValue("tdt", editData?.tdt || null);
+        formik.setFieldValue("cn", editData?.cn || null);
+        formik.setFieldValue("nsec", editData?.nsec || null);
+        formik.setFieldValue("nsh", editData?.nsh || null);
+        formik.setFieldValue("lcps", editData?.lcps || null);
+        formik.setFieldValue("big", editData?.big || null);
         formik.setFieldValue("gst", editData?.gst || null);
-        formik.setFieldValue(
-          "brokExcGST",
-          editData?.brokerageExclusiveGST || null
-        );
-        formik.setFieldValue("sbRate", editData?.sbRate || null);
-        formik.setFieldValue("sbCode", editData?.sbCode || null);
-        formik.setFieldValue("netBrokerage", editData?.netBrokerage || null);
-        formik.setFieldValue("rmCode", editData?.rmCode || null);
-        formik.setFieldValue("sbCommision", editData?.sbCommission || null);
-        formik.setFieldValue("clientRate", editData?.clientRate || null);
-        formik.setFieldValue("vendorRate", editData?.vendorRate || null);
+        formik.setFieldValue("beg", editData?.beg || null);
+        formik.setFieldValue("sbr", editData?.sbr || null);
+        formik.setFieldValue("sbc", editData?.sbc || null);
+        formik.setFieldValue("nbg", editData?.nbg || null);
+        formik.setFieldValue("rmc", editData?.rmc || null);
+        formik.setFieldValue("sbcm", editData?.sbcm || null);
+        formik.setFieldValue("crt", editData?.crt || null);
+        formik.setFieldValue("vrt", editData?.vrt || null);
       }
       if (isVendorMasterContent) {
         // if (editData?.bankActNo !== "" && editData?.ifscCode !== "") {
@@ -1034,14 +1019,14 @@ const ModalComponent = ({
     };
 
     const resetBrokerageFields = () => {
-      formik.setFieldValue("brokIncGST", "");
+      formik.setFieldValue("big", "");
       formik.setFieldValue("gst", "");
-      formik.setFieldValue("brokExcGST", "");
-      formik.setFieldValue("sbCommision", "");
-      formik.setFieldValue("netBrokerage", "");
+      formik.setFieldValue("beg", "");
+      formik.setFieldValue("sbcm", "");
+      formik.setFieldValue("nbg", "");
     };
 
-    if (name === "clientRate" || name === "vendorRate") {
+    if (name === "crt" || name === "vrt") {
       // allow only digits and a single dot
       const decimalValue = value
         .replace(/[^0-9.]/g, "")
@@ -1049,58 +1034,55 @@ const ModalComponent = ({
 
       formik.setFieldValue(name, decimalValue);
 
-      const clientRate = parseFloat(
-        name === "clientRate" ? decimalValue : formik.values.clientRate || "0"
+      const crt = parseFloat(
+        name === "crt" ? decimalValue : formik.values.crt || "0"
       );
-      const vendorRate = parseFloat(
-        name === "vendorRate" ? decimalValue : formik.values.vendorRate || "0"
+      const vrt = parseFloat(
+        name === "vrt" ? decimalValue : formik.values.vrt || "0"
       );
 
-      if (!isNaN(clientRate) && !isNaN(vendorRate)) {
-        const brokPerShare = clientRate - vendorRate;
-        formik.setFieldValue("brokPerShare", brokPerShare.toFixed(2)); // keep decimals
+      if (!isNaN(crt) && !isNaN(vrt)) {
+        const lcps = crt - vrt;
+        formik.setFieldValue("lcps", lcps.toFixed(2)); // This is LKP Commission per share
       }
     }
 
-    // Updated logic to trigger full business rules when only noOfShare is changed
-    else if (name === "noOfShare") {
+    // Updated logic to trigger full business rules when only nsh is changed
+    else if (name === "nsh") {
       formik.setFieldValue(name, numericValue);
       formik.setFieldError(name, "");
 
-      const noOfShare = parseInt(numericValue || "0");
-      const brokPerShare = parseFloat(formik.values.brokPerShare || "0");
+      const nsh = parseInt(numericValue || "0");
+      const lcps = parseFloat(formik.values.lcps || "0");
 
-      if (noOfShare > 0 && brokPerShare > 0) {
-        const inclusiveGST = Math.floor(noOfShare * brokPerShare);
+      if (nsh > 0 && lcps > 0) {
+        const inclusiveGST = Math.floor(nsh * lcps);
         const gst = Math.floor(inclusiveGST / 1.18);
         const exclusiveGST = Math.floor(inclusiveGST - gst);
 
-        formik.setFieldValue("brokIncGST", formatIndianNumber(inclusiveGST));
+        formik.setFieldValue("big", formatIndianNumber(inclusiveGST));
         formik.setFieldValue("gst", formatIndianNumber(exclusiveGST));
-        formik.setFieldValue("brokExcGST", formatIndianNumber(gst));
+        formik.setFieldValue("beg", formatIndianNumber(gst));
 
-        // Leave it blank until sbRate is provided
-        const sbRate = parseFloat(formik.values.sbRate || "0");
-        if (sbRate > 0) {
-          const sbValue = sbRate * noOfShare;
+        // Leave it blank until sbr is provided
+        const sbr = parseFloat(formik.values.sbr || "0");
+        if (sbr > 0) {
+          const sbValue = sbr * nsh;
           const subBrokerCommission = Math.floor(sbValue / 1.18);
 
-          const brokExcGST = exclusiveGST;
-          const netBrokerage = Math.floor(brokExcGST - subBrokerCommission);
+          const beg = exclusiveGST;
+          const nbg = Math.floor(beg - subBrokerCommission);
 
-          formik.setFieldValue("sbCommision", subBrokerCommission);
-          formik.setFieldValue(
-            "netBrokerage",
-            formatIndianNumber(netBrokerage)
-          );
+          formik.setFieldValue("sbcm", subBrokerCommission);
+          formik.setFieldValue("nbg", formatIndianNumber(nbg));
         } else {
-          formik.setFieldValue("sbCommision", "");
-          formik.setFieldValue("netBrokerage", ""); // keep empty until sbRate entered
+          formik.setFieldValue("sbcm", "");
+          formik.setFieldValue("nbg", ""); // keep empty until sbr entered
         }
       } else {
         resetBrokerageFields();
       }
-    } else if (name === "sbRate") {
+    } else if (name === "sbr") {
       // Allow only digits and one dot
       const decimalValue = value
         .replace(/[^0-9.]/g, "")
@@ -1108,36 +1090,29 @@ const ModalComponent = ({
 
       formik.setFieldValue(name, decimalValue);
 
-      const noOfShare = parseInt(formik.values.noOfShare || "0");
-      const sbRate = parseFloat(decimalValue);
+      const nsh = parseInt(formik.values.nsh || "0");
+      const sbr = parseFloat(decimalValue);
 
-      if (noOfShare > 0 && !isNaN(sbRate)) {
-        const subBrokerValue = sbRate * noOfShare; //1600
+      if (nsh > 0 && !isNaN(sbr)) {
+        const subBrokerValue = sbr * nsh; //1600
         const subBrokerCommission = Math.floor(subBrokerValue / 1.18);
         console.log("sbCoMMISSION", subBrokerCommission);
 
         // const subBrokerCommission = Math.floor(subBrokerValue - stComm);
 
-        const brokExcGST = Math.floor(
-          parseFloat(
-            (formik.values.brokExcGST ?? "0").toString().replace(/,/g, "")
-          )
+        const beg = Math.floor(
+          parseFloat((formik.values.beg ?? "0").toString().replace(/,/g, ""))
         );
 
-        const netBrokerage = Math.floor(
-          Math.abs(brokExcGST - subBrokerCommission)
-        );
+        const nbg = Math.floor(Math.abs(beg - subBrokerCommission));
 
-        formik.setFieldValue(
-          "sbCommision",
-          formatIndianNumber(subBrokerCommission)
-        );
-        formik.setFieldValue("netBrokerage", formatIndianNumber(netBrokerage));
+        formik.setFieldValue("sbcm", formatIndianNumber(subBrokerCommission));
+        formik.setFieldValue("nbg", formatIndianNumber(nbg));
       } else {
-        formik.setFieldValue("sbCommision", "");
-        formik.setFieldValue("netBrokerage", "");
+        formik.setFieldValue("sbcm", "");
+        formik.setFieldValue("nbg", "");
       }
-    } else if (name === "sbCode" || name === "rmCode") {
+    } else if (name === "sbCode" || name === "rmc") {
       setSanitizedAlphaNumeric();
     } else if (name === "bankAccountNo") {
       if (regEx.number.test(value)) {
@@ -1312,8 +1287,8 @@ const ModalComponent = ({
 
   useEffect(() => {
     if (user_id) {
-      const rmCode = user_id.split("-")[1] || "";
-      formik.setFieldValue("rmCode", rmCode);
+      const rmc = user_id.split("-")[1] || "";
+      formik.setFieldValue("rmc", rmc);
     }
   }, [user_id]);
 
@@ -1795,19 +1770,17 @@ const ModalComponent = ({
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="rmCode"
-                    name="rmCode"
+                    id="rmc"
+                    name="rmc"
                     label="Enter RM Code"
                     variant="outlined"
                     size="small"
                     disabled={true}
-                    value={formik.values.rmCode}
+                    value={formik.values.rmc}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.rmCode && Boolean(formik.errors.rmCode)
-                    }
-                    // helperText={formik.touched.rmCode && formik.errors.rmCode}
+                    error={formik.touched.rmc && Boolean(formik.errors.rmc)}
+                    // helperText={formik.touched.rmc && formik.errors.rmc}
                   />
                 </Col>
                 <Col lg={6}>
@@ -1816,27 +1789,24 @@ const ModalComponent = ({
                       <DatePicker
                         format="DD/MM/YYYY"
                         value={
-                          formik.values.transactionDate
-                            ? dayjs(formik.values.transactionDate, "DD/MM/YYYY")
+                          formik.values.tdt
+                            ? dayjs(formik.values.tdt, "DD/MM/YYYY")
                             : null
                         }
                         maxDate={dayjs()}
                         minDate={dayjs().subtract(64, "year")}
                         onChange={(date: Dayjs | null) =>
                           formik.setFieldValue(
-                            "transactionDate",
+                            "tdt",
                             date ? date.format("DD-MM-YYYY") : ""
                           )
                         }
                         slotProps={{
                           textField: {
                             error: Boolean(
-                              formik.touched.transactionDate &&
-                                formik.errors.transactionDate
+                              formik.touched.tdt && formik.errors.tdt
                             ),
-                            helperText:
-                              formik.touched.transactionDate &&
-                              formik.errors.transactionDate,
+                            helperText: formik.touched.tdt && formik.errors.tdt,
                           },
                         }}
                       />
@@ -1846,49 +1816,38 @@ const ModalComponent = ({
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="clientName"
-                    name="clientName"
+                    id="cn"
+                    name="cn"
                     label="Enter Client Name"
                     variant="outlined"
                     size="small"
-                    value={formik.values.clientName}
+                    value={formik.values.cn}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.clientName &&
-                      Boolean(formik.errors.clientName)
-                    }
-                    helperText={
-                      formik.touched.clientName && formik.errors.clientName
-                    }
+                    error={formik.touched.cn && Boolean(formik.errors.cn)}
+                    helperText={formik.touched.cn && formik.errors.cn}
                   />
                 </Col>
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="securitiesName"
-                    name="securitiesName"
+                    id="nsec"
+                    name="nsec"
                     label="Enter Securities Name"
                     variant="outlined"
                     size="small"
-                    value={formik.values.securitiesName}
+                    value={formik.values.nsec}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.securitiesName &&
-                      Boolean(formik.errors.securitiesName)
-                    }
-                    helperText={
-                      formik.touched.securitiesName &&
-                      formik.errors.securitiesName
-                    }
+                    error={formik.touched.nsec && Boolean(formik.errors.nsec)}
+                    helperText={formik.touched.nsec && formik.errors.nsec}
                   />
                 </Col>
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="clientRate"
-                    name="clientRate"
+                    id="crt"
+                    name="crt"
                     // type="number"
                     label="Enter Client Rate"
                     variant="outlined"
@@ -1897,23 +1856,18 @@ const ModalComponent = ({
                       inputMode: "decimal",
                       pattern: "^[0-9]*\\.?[0-9]+$",
                     }}
-                    value={formik.values.clientRate}
+                    value={formik.values.crt}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.clientRate &&
-                      Boolean(formik.errors.clientRate)
-                    }
-                    helperText={
-                      formik.touched.clientRate && formik.errors.clientRate
-                    }
+                    error={formik.touched.crt && Boolean(formik.errors.crt)}
+                    helperText={formik.touched.crt && formik.errors.crt}
                   />
                 </Col>
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="vendorRate"
-                    name="vendorRate"
+                    id="vrt"
+                    name="vrt"
                     // type="number"
                     label="Enter Vendor Rate"
                     variant="outlined"
@@ -1922,91 +1876,71 @@ const ModalComponent = ({
                       inputMode: "decimal",
                       pattern: "^[0-9]*\\.?[0-9]+$",
                     }}
-                    value={formik.values.vendorRate}
+                    value={formik.values.vrt}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.vendorRate &&
-                      Boolean(formik.errors.vendorRate)
-                    }
-                    helperText={
-                      formik.touched.vendorRate && formik.errors.vendorRate
-                    }
+                    error={formik.touched.vrt && Boolean(formik.errors.vrt)}
+                    helperText={formik.touched.vrt && formik.errors.vrt}
                   />
                 </Col>
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="noOfShare"
-                    name="noOfShare"
+                    id="nsh"
+                    name="nsh"
                     // type="number"
                     label="Enter Number of share"
                     variant="outlined"
                     size="small"
                     inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-                    value={formik.values.noOfShare}
+                    value={formik.values.nsh}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.noOfShare &&
-                      Boolean(formik.errors.noOfShare)
-                    }
-                    helperText={
-                      formik.touched.noOfShare && formik.errors.noOfShare
-                    }
+                    error={formik.touched.nsh && Boolean(formik.errors.nsh)}
+                    helperText={formik.touched.nsh && formik.errors.nsh}
                   />
                 </Col>
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="brokPerShare"
-                    name="brokPerShare"
+                    id="lcps"
+                    name="lcps"
                     // type="number"
                     // label="LKP Commission per share"
                     variant="outlined"
                     disabled={true}
                     size="small"
                     inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-                    // value={formik.values.brokPerShare}
+                    // value={formik.values.lcps}
                     value={`${
-                      formik.values.brokPerShare || "0"
+                      formik.values.lcps || "0"
                     }  /- LKP Commission per share`}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.brokPerShare &&
-                      Boolean(formik.errors.brokPerShare)
-                    }
-                    helperText={
-                      formik.touched.brokPerShare && formik.errors.brokPerShare
-                    }
+                    error={formik.touched.lcps && Boolean(formik.errors.lcps)}
+                    helperText={formik.touched.lcps && formik.errors.lcps}
                   />
                 </Col>
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="brokIncGST"
-                    name="brokIncGST"
+                    id="big"
+                    name="big"
                     disabled={true}
                     // label="Brokerage Inclusive GST"
                     variant="outlined"
                     size="small"
                     inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                     value={`${
-                      formik.values.brokIncGST || "0"
+                      formik.values.big || "0"
                     }  /- Brokerage Inclusive GST`}
                     InputProps={{
                       readOnly: true,
                     }}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.brokIncGST &&
-                      Boolean(formik.errors.brokIncGST)
-                    }
-                    helperText={
-                      formik.touched.brokIncGST && formik.errors.brokIncGST
-                    }
+                    error={formik.touched.big && Boolean(formik.errors.big)}
+                    helperText={formik.touched.big && formik.errors.big}
                   />
                 </Col>
                 <Col lg={6}>
@@ -2032,35 +1966,30 @@ const ModalComponent = ({
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="brokExcGST"
-                    name="brokExcGST"
+                    id="beg"
+                    name="beg"
                     disabled={true}
                     // label="Brokerage Exclusive GST"
                     variant="outlined"
                     size="small"
                     inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                     value={`${
-                      formik.values.brokExcGST || "0"
+                      formik.values.beg || "0"
                     }  /- Brokerage Exclusive GST`}
                     InputProps={{
                       readOnly: true,
                     }}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.brokExcGST &&
-                      Boolean(formik.errors.brokExcGST)
-                    }
-                    helperText={
-                      formik.touched.brokExcGST && formik.errors.brokExcGST
-                    }
+                    error={formik.touched.beg && Boolean(formik.errors.beg)}
+                    helperText={formik.touched.beg && formik.errors.beg}
                   />
                 </Col>
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="sbRate"
-                    name="sbRate"
+                    id="sbr"
+                    name="sbr"
                     label="Enter Sub-broker Rate"
                     variant="outlined"
                     size="small"
@@ -2068,85 +1997,69 @@ const ModalComponent = ({
                       inputMode: "decimal",
                       pattern: "^[0-9]*\\.?[0-9]+$",
                     }}
-                    value={formik.values.sbRate}
+                    value={formik.values.sbr}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.sbRate && Boolean(formik.errors.sbRate)
-                    }
-                    helperText={formik.touched.sbRate && formik.errors.sbRate}
+                    error={formik.touched.sbr && Boolean(formik.errors.sbr)}
+                    helperText={formik.touched.sbr && formik.errors.sbr}
                   />
                 </Col>
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="sbCode"
-                    name="sbCode"
+                    id="sbc"
+                    name="sbc"
                     label="Enter Sub-broker Code"
                     variant="outlined"
                     size="small"
-                    value={formik.values.sbCode}
+                    value={formik.values.sbc}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.sbCode && Boolean(formik.errors.sbCode)
-                    }
-                    helperText={formik.touched.sbCode && formik.errors.sbCode}
+                    error={formik.touched.sbc && Boolean(formik.errors.sbc)}
+                    helperText={formik.touched.sbc && formik.errors.sbc}
                   />
                 </Col>
 
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="sbCommision"
-                    name="sbCommision"
+                    id="sbcm"
+                    name="sbcm"
                     // label="Sub-broker Commision"
                     variant="outlined"
                     size="small"
                     disabled={true}
                     inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
                     value={`${
-                      formik.values.sbCommision || "0"
+                      formik.values.sbcm || "0"
                     }  /- Sub-Broker Commission`}
                     InputProps={{
                       readOnly: true,
                     }}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.sbCommision &&
-                      Boolean(formik.errors.sbCommision)
-                    }
-                    helperText={
-                      formik.touched.sbCommision && formik.errors.sbCommision
-                    }
+                    error={formik.touched.sbcm && Boolean(formik.errors.sbcm)}
+                    helperText={formik.touched.sbcm && formik.errors.sbcm}
                   />
                 </Col>
                 <Col lg={12}>
                   <TextField
                     fullWidth
-                    id="netBrokerage"
-                    name="netBrokerage"
+                    id="nbg"
+                    name="nbg"
                     // label="Net. Brokerage"
                     variant="outlined"
                     size="small"
                     disabled={true}
                     inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-                    value={`${
-                      formik.values.netBrokerage || "0"
-                    }  /- Net.Brokerage`}
+                    value={`${formik.values.nbg || "0"}  /- Net.Brokerage`}
                     InputProps={{
                       readOnly: true,
                     }}
                     onChange={handleCustomChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.touched.netBrokerage &&
-                      Boolean(formik.errors.netBrokerage)
-                    }
-                    helperText={
-                      formik.touched.netBrokerage && formik.errors.netBrokerage
-                    }
+                    error={formik.touched.nbg && Boolean(formik.errors.nbg)}
+                    helperText={formik.touched.nbg && formik.errors.nbg}
                   />
                 </Col>
                 <Col lg={12}>
@@ -2212,72 +2125,60 @@ const ModalComponent = ({
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="ledgerCode"
-                    name="ledgerCode"
+                    id="ldc"
+                    name="ldc"
                     label="Enter Ledger Code"
                     variant="outlined"
                     size="small"
-                    value={formik.values.ledgerCode}
+                    value={formik.values.ldc}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.submitCount > 0 &&
-                      Boolean(formik.errors.ledgerCode)
-                    }
-                    helperText={
-                      formik.submitCount > 0 && formik.errors.ledgerCode
-                    }
+                    error={formik.submitCount > 0 && Boolean(formik.errors.ldc)}
+                    helperText={formik.submitCount > 0 && formik.errors.ldc}
                   />
                 </Col>
 
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="companyName"
-                    name="companyName"
+                    id="cnm"
+                    name="cnm"
                     label="Enter Company Name"
                     variant="outlined"
                     size="small"
-                    value={formik.values.companyName}
+                    value={formik.values.cnm}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.submitCount > 0 &&
-                      Boolean(formik.errors.companyName)
-                    }
-                    helperText={
-                      formik.submitCount > 0 && formik.errors.companyName
-                    }
+                    error={formik.submitCount > 0 && Boolean(formik.errors.cnm)}
+                    helperText={formik.submitCount > 0 && formik.errors.cnm}
                   />
                 </Col>
 
                 <Col lg={4}>
                   <TextField
                     fullWidth
-                    id="emailId"
-                    name="emailId"
+                    id="em"
+                    name="em"
                     label="Primary Email"
                     variant="outlined"
                     size="small"
-                    value={formik.values.emailId}
+                    value={formik.values.em}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.submitCount > 0 && Boolean(formik.errors.emailId)
-                    }
-                    helperText={formik.submitCount > 0 && formik.errors.emailId}
+                    error={formik.submitCount > 0 && Boolean(formik.errors.em)}
+                    helperText={formik.submitCount > 0 && formik.errors.em}
                   />
                 </Col>
 
                 <Col lg={4}>
                   <TextField
                     fullWidth
-                    id="emailId1"
-                    name="emailId1"
+                    id="em1"
+                    name="em1"
                     label="Secondary Email"
                     variant="outlined"
                     size="small"
-                    value={formik.values.emailId1}
+                    value={formik.values.em1}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -2286,12 +2187,12 @@ const ModalComponent = ({
                 <Col lg={4}>
                   <TextField
                     fullWidth
-                    id="emailId2"
-                    name="emailId2"
+                    id="em2"
+                    name="em2"
                     label="Alternate Email"
                     variant="outlined"
                     size="small"
-                    value={formik.values.emailId2}
+                    value={formik.values.em2}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -2317,79 +2218,64 @@ const ModalComponent = ({
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="sacNumber"
-                    name="sacNumber"
+                    id="sac"
+                    name="sac"
                     label="SAC Number"
                     variant="outlined"
                     size="small"
-                    value={formik.values.sacNumber}
+                    value={formik.values.sac}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.submitCount > 0 && Boolean(formik.errors.sacNumber)
-                    }
-                    helperText={
-                      formik.submitCount > 0 && formik.errors.sacNumber
-                    }
+                    error={formik.submitCount > 0 && Boolean(formik.errors.sac)}
+                    helperText={formik.submitCount > 0 && formik.errors.sac}
                   />
                 </Col>
 
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="state"
-                    name="state"
+                    id="ste"
+                    name="ste"
                     label="State"
                     variant="outlined"
                     size="small"
-                    value={formik.values.state}
+                    value={formik.values.ste}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.submitCount > 0 && Boolean(formik.errors.state)
-                    }
-                    helperText={formik.submitCount > 0 && formik.errors.state}
+                    error={formik.submitCount > 0 && Boolean(formik.errors.ste)}
+                    helperText={formik.submitCount > 0 && formik.errors.ste}
                   />
                 </Col>
 
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="gstNumber"
-                    name="gstNumber"
+                    id="gst"
+                    name="gst"
                     label="GST Number"
                     variant="outlined"
                     size="small"
-                    value={formik.values.gstNumber}
+                    value={formik.values.gst}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.submitCount > 0 && Boolean(formik.errors.gstNumber)
-                    }
-                    helperText={
-                      formik.submitCount > 0 && formik.errors.gstNumber
-                    }
+                    error={formik.submitCount > 0 && Boolean(formik.errors.gst)}
+                    helperText={formik.submitCount > 0 && formik.errors.gst}
                   />
                 </Col>
 
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="gstStateCode"
-                    name="gstStateCode"
+                    id="gsc"
+                    name="gsc"
                     label="GST State Code"
                     variant="outlined"
                     size="small"
-                    value={formik.values.gstStateCode}
+                    value={formik.values.gsc}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.submitCount > 0 &&
-                      Boolean(formik.errors.gstStateCode)
-                    }
-                    helperText={
-                      formik.submitCount > 0 && formik.errors.gstStateCode
-                    }
+                    error={formik.submitCount > 0 && Boolean(formik.errors.gsc)}
+                    helperText={formik.submitCount > 0 && formik.errors.gsc}
                   />
                 </Col>
 
@@ -2412,52 +2298,44 @@ const ModalComponent = ({
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="mobileNo"
-                    name="mobileNo"
+                    id="mob"
+                    name="mob"
                     label="Mobile Number"
                     variant="outlined"
                     size="small"
-                    value={formik.values.mobileNo}
+                    value={formik.values.mob}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.submitCount > 0 && Boolean(formik.errors.mobileNo)
-                    }
-                    helperText={
-                      formik.submitCount > 0 && formik.errors.mobileNo
-                    }
+                    error={formik.submitCount > 0 && Boolean(formik.errors.mob)}
+                    helperText={formik.submitCount > 0 && formik.errors.mob}
                   />
                 </Col>
 
                 <Col lg={12}>
                   <TextField
                     fullWidth
-                    id="address1"
-                    name="address1"
+                    id="ad1"
+                    name="ad1"
                     label="Address Line 1"
                     variant="outlined"
                     size="small"
-                    value={formik.values.address1}
+                    value={formik.values.ad1}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={
-                      formik.submitCount > 0 && Boolean(formik.errors.address1)
-                    }
-                    helperText={
-                      formik.submitCount > 0 && formik.errors.address1
-                    }
+                    error={formik.submitCount > 0 && Boolean(formik.errors.ad1)}
+                    helperText={formik.submitCount > 0 && formik.errors.ad1}
                   />
                 </Col>
 
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="address2"
-                    name="address2"
+                    id="ad2"
+                    name="ad2"
                     label="Address Line 2"
                     variant="outlined"
                     size="small"
-                    value={formik.values.address2}
+                    value={formik.values.ad2}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -2466,12 +2344,12 @@ const ModalComponent = ({
                 <Col lg={6}>
                   <TextField
                     fullWidth
-                    id="address3"
-                    name="address3"
+                    id="ad3"
+                    name="ad3"
                     label="Address Line 3"
                     variant="outlined"
                     size="small"
-                    value={formik.values.address3}
+                    value={formik.values.ad3}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />

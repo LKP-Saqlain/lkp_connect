@@ -10,21 +10,21 @@ import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
 
 interface ThirdPartyEditData {
-  ledgerCode: string;
-  companyName: string;
-  emailId: string;
-  emailId1?: string;
-  emailId2?: string;
-  sacNumber: string;
-  state: string;
-  gstNumber: string;
-  gstStateCode: string;
+  ldc: string;
+  cnm: string;
+  em: string;
+  em1?: string;
+  em2?: string;
+  sac: string;
+  ste: string;
+  gst: string;
+  gsc: string;
   pan: string;
-  address1: string;
-  address2?: string;
-  address3?: string;
-  mobileNo: string;
-  rowId?: number;
+  ad1: string;
+  ad2?: string;
+  ad3?: string;
+  mob: string;
+  rid?: number;
 }
 
 const ThirdPartyMaster = ({ activeSubItem }: any) => {
@@ -76,26 +76,26 @@ const ThirdPartyMaster = ({ activeSubItem }: any) => {
 
     const commonPayload = {
       user_id: user_id,
-      ledgerCode: data.ledgerCode,
-      companyName: data.companyName,
-      emailId: data.emailId,
-      emailId1: data.emailId1,
-      emailId2: data.emailId2,
-      sacNumber: data.sacNumber,
-      state: data.state,
-      gstNumber: data.gstNumber,
-      gstStateCode: data.gstStateCode,
+      ledgerCode: data.ldc,
+      companyName: data.cnm,
+      emailId: data.em,
+      emailId1: data.em1,
+      emailId2: data.em2,
+      sacNumber: data.sac,
+      state: data.ste,
+      gstNumber: data.gst,
+      gstStateCode: data.gsc,
       pan: data.pan,
-      address1: data.address1,
-      address2: data.address2,
-      address3: data.address3,
-      mobileNo: data.mobileNo,
+      address1: data.ad1,
+      address2: data.ad2,
+      address3: data.ad3,
+      mobileNo: data.mob,
     };
 
     const payload = editUserCheck
-      ? { ...commonPayload, rowId: editData?.rowId }
+      ? { ...commonPayload, rowId: editData?.rid }
       : commonPayload;
-
+    debugger;
     dispatch(showLoader(""));
     console.log(payload, "thirdpartM payload");
 
@@ -132,7 +132,7 @@ const ThirdPartyMaster = ({ activeSubItem }: any) => {
       dispatch(showLoader("Deleting..."));
 
       const payload = {
-        Rowid: row?.rowId,
+        Rowid: row?.rid,
         user_id: user_id,
       };
 

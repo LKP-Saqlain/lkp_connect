@@ -986,8 +986,8 @@ const CustomModal = ({
             <option value="">-- Select Vendor Name --</option>
             {Array.isArray(vendors) &&
               vendors.map((vendor) => (
-                <option key={vendor.rowId} value={vendor.rowId}>
-                  {vendor.vendorName}
+                <option key={vendor.rid} value={vendor.rid}>
+                  {vendor.vn}
                 </option>
               ))}
           </Input>

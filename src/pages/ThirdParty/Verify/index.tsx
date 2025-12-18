@@ -29,7 +29,15 @@ const InvoiceVerify = ({ activeSubItem }: any) => {
       .GetUnverifiedTPInvoices(payload)
       .then((response) => {
         console.log("A1 Data", response?.data?.data);
-        setData(response?.data?.data);
+        // setData(response?.data?.data);
+        const apiData = response?.data?.data || [];
+        const updatedData = apiData.map((item: any, index: number) => ({
+          Id: index + 1,
+          ...item,
+        }));
+
+        console.log("A1 Data", updatedData);
+        setData(updatedData);
       })
       .catch((error) => {
         console.error("Error fetching compliance data:", error);
@@ -56,7 +64,7 @@ const InvoiceVerify = ({ activeSubItem }: any) => {
         setFlag(!flag);
         if (response?.status === 200) {
           setFlag(!flag);
-          ShowToast("success", response?.data?.data?.message);
+          ShowToast("success", response?.data?.msg);
         } else {
           console.log("Error during approval", response);
           ShowToast("error", "Error approving item");
@@ -81,10 +89,10 @@ const InvoiceVerify = ({ activeSubItem }: any) => {
       const response = await apiServices.DeleteTPInvoiceRecord(payload);
       console.log("Delete Response →", response);
       if (response?.status === 200) {
-        ShowToast("success", response.data?.message || "Deleted successfully.");
+        ShowToast("success", response.data?.msg || "Deleted successfully.");
         setFlag((prev) => !prev); // toggle for refresh
       } else {
-        throw new Error(response?.data?.message || "Deletion failed.");
+        throw new Error(response?.data?.msg || "Deletion failed.");
       }
     } catch (error: any) {
       console.error("Delete Error:", error);

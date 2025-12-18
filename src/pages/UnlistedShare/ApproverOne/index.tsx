@@ -35,6 +35,8 @@ const index = ({ activeSubItem }: any) => {
         dispatch(showLoader("Please wait, we are processing your request..."));
 
         const response = await apiServices.Approver1ViewUnlisted(ViewPayload);
+        console.log("Approver1ViewUnlistedResponse", response);
+
         const vendorResponse = await apiServices.GetUnlistedVendorDropdown(
           vendorPayload
         );
@@ -94,8 +96,10 @@ const index = ({ activeSubItem }: any) => {
       .then((response) => {
         // setFlag(!flag);
         if (response?.status === 200) {
+          console.log("Resppponse111", response?.data);
+
           setFlag(!flag);
-          ShowToast("success", response?.data?.data?.msg);
+          ShowToast("success", response?.data?.message);
         } else {
           console.log("Error during approval", response);
           ShowToast("error", "Error approving item");

@@ -119,7 +119,6 @@ export const newDomainEndpoints = [
 
   endpoints.APContestLeaderboard,
   endpoints.getDormantReport, //1
-  // endpoints.ViewUnlistedSharesRecord,
 
   //from new sheeets
   endpoints.GetAPContestAchievedBrokerage,
@@ -134,16 +133,9 @@ export const newDomainEndpoints = [
   endpoints.GetTradedClient,
   endpoints.GetRevTradedClient,
 
-  // endpoints.InsertUnlistedSharesRecord,  //revert
-  // endpoints.UpdateUnlistedSharesRecord,//revert
-  // endpoints.DeleteUnlistedSharesRecord,//revert
-  // endpoints.Approver1ViewUnlisted,//revert
-  // endpoints.Approver2ViewUnlisted, //revert
   // endpoints.ViewVendorDetails, //revert
 
   // endpoints.ViewVendorDetailsReport,   //revert
-  // endpoints.ViewThirdPartyMaster, //revert
-  // endpoints.ThirdPartyApproverView,  //revert
   endpoints.GetslbmOverview,
   endpoints.GetOverviewBrokRevReport,
   endpoints.GetOverviewUniqueTradedClients,
@@ -228,4 +220,35 @@ export const newDomainEndpoints = [
   //Brokerage Slab API's
   endpoints.GetBrokerageModificationValidity,
   endpoints.GetBrokerageModificationHistory,
+
+  //Unlisted API's
+  endpoints.ViewUnlistedSharesRecord,
+  endpoints.InsertUnlistedSharesRecord,
+  endpoints.UpdateUnlistedSharesRecord,
+  endpoints.DeleteUnlistedSharesRecord,
+  //Approver 1
+  endpoints.Approver1ViewUnlisted,
+  endpoints.GetUnlistedVendorDropdown,
+  endpoints.ApproverActionUnlistedShares, //action submit API use for both 1 and 2
+  endpoints.Approver2ViewUnlisted, //
+  endpoints.UploadUnlistedSharesVendorFile,
+
+  //Account - Third Party
+  endpoints.ViewThirdPartyMaster,
+  endpoints.UpdateThirdPartyMasterRecord,
+  endpoints.InsertThirdPartyMasterRecord,
+  endpoints.DeleteThirdPartyMasterRecord,
+  endpoints.ThirdPartyApproverView, //Need to check this api once getting response
+  endpoints.ThirdPartyApproverAction, //Need to check this api once getting response
+
+  //Third Party Innvoice
+  endpoints.TPInvoiceStaging, //Upload file also columns has change from my end
+  endpoints.TPInvoiceUpload,
+  endpoints.GetTPInvoiceRecordList,
+  endpoints.DeleteTPInvoiceRecord,
+  endpoints.GetUnverifiedTPInvoices,
+  endpoints.HandleTPInvoiceApproval,
+  endpoints.GetReadyToSendTPInvoices,
+  endpoints.GenerateTPInvoice,
+  endpoints.SendTPInvoiceBulkEmail,
 ];

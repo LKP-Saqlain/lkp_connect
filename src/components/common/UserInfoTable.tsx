@@ -1140,7 +1140,7 @@ const DataTable = ({
                 >
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.rowID);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("approve");
                     }}
                     style={{ cursor: "pointer" }}
@@ -1161,7 +1161,7 @@ const DataTable = ({
                   </div>
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.rowID);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("reject");
                     }}
                     style={{ cursor: "pointer" }}
@@ -1194,7 +1194,7 @@ const DataTable = ({
                 >
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.rowID);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("approve");
                     }}
                     style={{ cursor: "pointer" }}
@@ -1215,7 +1215,7 @@ const DataTable = ({
                   </div>
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.rowID);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("reject");
                     }}
                     style={{ cursor: "pointer" }}
@@ -1306,7 +1306,7 @@ const DataTable = ({
                 );
               },
             };
-          } else if (column.field === "status") {
+          } else if (column.field === "sts") {
             return {
               ...column,
               renderCell: (params: any) => {
@@ -1636,7 +1636,7 @@ const DataTable = ({
                 >
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.rowId);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("approve");
                     }}
                     style={{ cursor: "pointer" }}

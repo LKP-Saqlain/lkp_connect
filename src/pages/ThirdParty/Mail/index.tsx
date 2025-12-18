@@ -26,7 +26,15 @@ const InvoiceMail = ({ activeSubItem }: any) => {
     apiServices
       .GetReadyToSendTPInvoices(payload)
       .then((response) => {
-        setData(response?.data?.data);
+        const apiData = response?.data?.data || [];
+
+        const updatedData = apiData.map((item: any, index: number) => ({
+          Id: index + 1,
+          ...item,
+        }));
+
+        console.log("A1 Data", updatedData);
+        setData(updatedData);
       })
       .catch((error) => {
         console.error("Error fetching compliance data:", error);
@@ -58,7 +66,7 @@ const InvoiceMail = ({ activeSubItem }: any) => {
         // Create a temporary anchor element
         const link = document.createElement("a");
         link.href = url;
-        link.download = `TP_Invoice_${value.invoiceNumber}.pdf`; // name your file
+        link.download = `TP_Invoice_${value.invn}.pdf`; // name your file
 
         // Trigger download
         document.body.appendChild(link);
@@ -90,9 +98,9 @@ const InvoiceMail = ({ activeSubItem }: any) => {
       .then((response) => {
         if (response?.data?.statusCode === 200) {
           setFlag(!flag);
-          ShowToast("success", response?.data?.message);
+          ShowToast("success", response?.data?.msg);
         } else {
-          ShowToast("error", response?.data?.message);
+          ShowToast("error", response?.data?.msg);
         }
       })
       .catch((error) => {

@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react";
 
 type Vendor = {
-  rowId: number;
-  vendorName: string;
+  rid: number;
+  vn: string;
 };
 
 const VendorContext = createContext<Vendor[]>([]);
@@ -16,6 +16,8 @@ export const VendorProvider = ({
   children: React.ReactNode;
   value: Vendor[];
 }) => {
+  console.log("valueeee", value);
+
   return (
     <VendorContext.Provider value={value}>{children}</VendorContext.Provider>
   );

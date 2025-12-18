@@ -18,13 +18,21 @@ const InvoiceStatusReport = ({ activeSubItem }: any) => {
       user_id: user_id,
       // user_id: "EMP-0656",
     };
+
     dispatch(showLoader("Please wait, we are processing your request..."));
 
     apiServices
       .GetTPInvoiceRecordList(payload)
       .then((response) => {
-        console.log("A1 Data", response?.data?.data);
-        setData(response?.data?.data);
+        const apiData = response?.data?.data || [];
+
+        const updatedData = apiData.map((item: any, index: number) => ({
+          Id: index + 1,
+          ...item,
+        }));
+
+        console.log("A1 Data", updatedData);
+        setData(updatedData);
       })
       .catch((error) => {
         console.error("Error fetching compliance data:", error);
@@ -32,7 +40,7 @@ const InvoiceStatusReport = ({ activeSubItem }: any) => {
       .finally(() => {
         dispatch(hideLoader());
       });
-  }, [dispatch]);
+  }, [dispatch, user_id]);
 
   return (
     <div className="page-content page-view">

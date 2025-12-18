@@ -12,23 +12,23 @@ import ShowToast from "../../../utils/toastUtils";
 
 export interface UnlistedRecord {
   rowID: number;
-  transactionDate: string;
-  clientName: string;
+  tdt: string;
+  cn: string;
   branchCode: string;
   zone: string;
   clientCategory: string;
   rmCode: string;
   rmName: string;
   nameOfSecurities: string;
-  noOfShares: number;
+  nsh: number;
   brokeragePerShare: number;
-  brokerageInclusiveGST: number;
+  big: number;
   gst: number;
-  brokerageExclusiveGST: number;
-  sbCode: string;
-  sbRate: number;
-  sbCommission: number;
-  netBrokerage: number;
+  beg: number;
+  sbc: string;
+  sbr: number;
+  sbcm: number;
+  nbg: number;
   status: string;
   remarks: string;
   id: number;
@@ -72,8 +72,8 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
             (item: any, index: number) => ({
               ...item,
               Id: index + 1,
-              transactionDate: item.transactionDate?.split(" ")[0],
-              dealSheetB64: item.DealSheetB64 ? item.DealSheetB64 : null,
+              transactionDate: item.tdt?.split(" ")[0],
+              dealSheetB64: item.ds64 ? item.ds64 : null,
             })
           );
           console.log("ViewListedShareRecord", filteredResponse);
@@ -102,7 +102,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
   const updateUnlistedVals = (data: any, fileBase64: any) => {
     console.log("updateUnlistedVals", data);
 
-    const formattedDate = dayjs(editData?.transactionDate, "DD/MM/YYYY").format(
+    const formattedDate = dayjs(editData?.tdt, "DD/MM/YYYY").format(
       "YYYY-MM-DD"
     );
     console.log(formattedDate, "formattedDate");
@@ -110,22 +110,19 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
     let payload = {
       user_Id: user_id,
       transactionDate: formattedDate,
-      clientName: data.clientName,
-      securitiesName: data.securitiesName,
-      noOfShares: cleanNumber(data?.noOfShare),
-      clientRate: data.clientRate,
-      vendorRate: data.vendorRate,
-      lkpCommissionPerShare: cleanNumber(data?.brokPerShare),
-      brokerageInclusiveGST: cleanNumber(data?.brokIncGST),
+      clientName: data.cn,
+      securitiesName: data.nsec,
+      noOfShares: cleanNumber(data?.nsh),
+      clientRate: data.crt,
+      vendorRate: data.vrt,
+      lkpCommissionPerShare: cleanNumber(data?.lcps),
+      brokerageInclusiveGST: cleanNumber(data?.big),
       gst: cleanNumber(data?.gst),
-      brokerageExclusiveGST: cleanNumber(data?.brokExcGST),
-      sbCode: data.sbCode ? data.sbCode : "",
-      sbRate: cleanNumber(data?.sbRate) ? cleanNumber(data?.sbRate) : 0,
-      sbCommission:
-        cleanNumber(data?.sbCommision) ??
-        cleanNumber(editData?.sbCommission) ??
-        0,
-      netBrokerage: cleanNumber(data?.netBrokerage),
+      brokerageExclusiveGST: cleanNumber(data?.beg),
+      sbCode: data.sbc ? data.sbc : "",
+      sbRate: cleanNumber(data?.sbr) ? cleanNumber(data?.sbr) : 0,
+      sbCommission: cleanNumber(data?.sbcm) ?? cleanNumber(editData?.sbcm) ?? 0,
+      netBrokerage: cleanNumber(data?.nbg),
       rowId: editData?.rowID,
       dealSheetB64: fileBase64,
     };
@@ -160,8 +157,8 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                 const filteredResponse = response?.data?.data?.map(
                   (item: any, index: number) => ({
                     ...item,
-                    id: index + 1,
-                    transactionDate: item.transactionDate?.split(" ")[0],
+                    Id: index + 1,
+                    transactionDate: item.tdt?.split(" ")[0],
                   })
                 );
                 setUnlistedData(filteredResponse);
@@ -187,47 +184,43 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
     }
 
     const {
-      brokExcGST,
-      brokIncGST,
-      brokPerShare, //is now LKP Per share
-      clientName,
+      beg,
+      big,
+      lcps, //is now LKP commission Per share
+      cn,
       gst,
-      netBrokerage,
-      noOfShare,
-      rmCode,
-      sbCode,
-      sbCommision,
-      sbRate,
-      securitiesName,
-      transactionDate,
-      clientRate,
-      vendorRate,
+      nbg,
+      nsh,
+      rmc,
+      sbc,
+      sbcm,
+      sbr,
+      nsec,
+      tdt,
+      crt,
+      vrt,
     } = data;
 
-    const formattedDate = dayjs(transactionDate, "DD/MM/YYYY").format(
-      "YYYY-MM-DD"
-    );
+    const formattedDate = dayjs(tdt, "DD/MM/YYYY").format("YYYY-MM-DD");
     console.log(formattedDate, "formattedDate");
 
     let payload = {
       user_Id: user_id,
       transactionDate: formattedDate,
-      clientName,
-      securitiesName,
-      noOfShares: unformatNumber(noOfShare),
-      clientRate: unformatNumber(clientRate),
-      vendorRate: unformatNumber(vendorRate),
-      lkpCommissionPerShare: unformatNumber(brokPerShare),
-      brokerageInclusiveGST: unformatNumber(brokIncGST),
+      clientName: cn,
+      securitiesName: nsec,
+      noOfShares: unformatNumber(nsh),
+      clientRate: unformatNumber(crt),
+      vendorRate: unformatNumber(vrt),
+      lkpCommissionPerShare: unformatNumber(lcps),
+      brokerageInclusiveGST: unformatNumber(big),
       gst: unformatNumber(gst),
-      brokerageExclusiveGST: unformatNumber(brokExcGST),
-      sbCode: sbCode?.toString().trim() ? sbCode?.toString().trim() : "",
-      sbRate: unformatNumber(sbRate) ? unformatNumber(sbRate) : 0,
-      sbCommission: unformatNumber(sbCommision)
-        ? unformatNumber(sbCommision)
-        : 0,
-      netBrokerage: unformatNumber(netBrokerage),
-      rmCode: rmCode?.toString().trim(),
+      brokerageExclusiveGST: unformatNumber(beg),
+      sbCode: sbc?.toString().trim() ? sbc?.toString().trim() : "",
+      sbRate: unformatNumber(sbr) ? unformatNumber(sbr) : 0,
+      sbCommission: unformatNumber(sbcm) ? unformatNumber(sbcm) : 0,
+      netBrokerage: unformatNumber(nbg),
+      rmCode: rmc?.toString().trim(),
       dealSheetB64: fileBase64,
     };
     console.log("Payload", payload);
@@ -240,9 +233,9 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
           console.log("InsertResponse", respones?.status);
 
           if (respones?.data?.data === null) {
-            ShowToast("error", respones?.data?.message);
+            ShowToast("error", respones?.data?.msg);
           } else {
-            ShowToast("success", respones?.data?.message);
+            ShowToast("success", respones?.data?.msg);
           }
           dispatch(hideLoader());
           setmodal_grid(false);
@@ -264,8 +257,8 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                 const filteredResponse = response?.data?.data?.map(
                   (item: any, index: number) => ({
                     ...item,
-                    id: index + 1,
-                    transactionDate: item.transactionDate?.split(" ")[0],
+                    Id: index + 1,
+                    transactionDate: item.tdt?.split(" ")[0],
                   })
                 );
                 setUnlistedData(filteredResponse);
@@ -319,8 +312,8 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       const filteredResponse = viewResponse?.data?.data?.map(
         (item: any, index: number) => ({
           ...item,
-          id: index + 1,
-          transactionDate: item.transactionDate?.split(" ")[0],
+          Id: index + 1,
+          transactionDate: item.tdt?.split(" ")[0],
         })
       );
       setUnlistedData(filteredResponse);

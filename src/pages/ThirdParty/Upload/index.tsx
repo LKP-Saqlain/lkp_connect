@@ -42,6 +42,8 @@ const InvoiceUpload = ({ activeSubItem }: any) => {
     apiServices
       .TPInvoiceStaging(formData)
       .then((response) => {
+        console.log("TPInvoiceStagingResssponse", response?.data);
+
         if (response?.data?.statusCode === 200) {
           const rawData = response?.data?.data || [];
           const dataWithIds = rawData.map((item: any, index: number) => ({
@@ -98,9 +100,9 @@ const InvoiceUpload = ({ activeSubItem }: any) => {
       .TPInvoiceUpload(payload)
       .then((response) => {
         if (response?.data?.statusCode === 200) {
-          ShowToast("success", response?.data?.message);
+          ShowToast("success", response?.data?.msg);
         } else {
-          ShowToast("error", response?.data?.message || "Upload failed");
+          ShowToast("error", response?.data?.msg || "Upload failed");
         }
       })
       .catch((err) => {
