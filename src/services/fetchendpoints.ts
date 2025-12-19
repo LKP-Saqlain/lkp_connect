@@ -133,8 +133,6 @@ export const newDomainEndpoints = [
   endpoints.GetTradedClient,
   endpoints.GetRevTradedClient,
 
-  // endpoints.ViewVendorDetails, //revert
-
   // endpoints.ViewVendorDetailsReport,   //revert
   endpoints.GetslbmOverview,
   endpoints.GetOverviewBrokRevReport,
@@ -251,4 +249,31 @@ export const newDomainEndpoints = [
   endpoints.GetReadyToSendTPInvoices,
   endpoints.GenerateTPInvoice,
   endpoints.SendTPInvoiceBulkEmail,
+
+  //Master
+  endpoints.GetExcludeOptions,
+  endpoints.GetClientExclusionList,
+  endpoints.InsertClientExclusionEntry,
+  endpoints.DeleteClientExclusionEntry,
+
+  //RMS-->REG MASTER
+  endpoints.ViewREGMasterdata,
+
+  //PreTrade
+  endpoints.GetAllRecords,
+  endpoints.UploadTradeFile, //uncomment this after confirmation from sayali
+  endpoints.GetPreTradeReport,
+  endpoints.GetPendingApproveStatus,
+  endpoints.SavePreTradeApproveStatus,
+
+  //ACCOUNT -> Vendor Creation
+  endpoints.ViewVendorDetails,
+  endpoints.ViewAccountVendorDetails,
+  endpoints.ViewVendorDetailsReport,
+  endpoints.SaveVendorDetails,
+  endpoints.UpdateVendorDetails,
+  endpoints.DeleteVendorDetails,
+  endpoints.UploadTdsfile,
+  endpoints.VerifyBankDetails,
+  endpoints.UpdateAccountApproval,
 ];

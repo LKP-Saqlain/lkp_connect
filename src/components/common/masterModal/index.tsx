@@ -787,34 +787,34 @@ const ModalComponent = ({
         // }
 
         formik.setValues({
-          vendorName: editData.vendorName || "",
-          chequePrintName: editData.chqPrintName || "",
-          address1: editData.address1 || "",
-          address2: editData.address2 || "",
-          address3: editData.address3 || "",
-          city: editData.city || "",
-          pinCode: editData.pincode || "",
-          state: editData.state || "",
-          gstNo: editData.gstNo || editData.gstNumber || "",
-          mobileNo: editData.mobileNo || "",
-          emailId: editData.emailID || editData.emailId || "",
-          telephoneNo: editData.teleNo || "",
-          faxNo: editData.faxNo || "",
-          panNo: editData.panNo || editData.pan || "",
-          panDoc: editData.panDoc || editData.panDoc || "",
+          vendorName: editData.vnm || "",
+          chequePrintName: editData.cpn || "",
+          address1: editData.ad1 || "",
+          address2: editData.ad2 || "",
+          address3: editData.ad3 || "",
+          city: editData.cty || "",
+          pinCode: editData.pin || "",
+          state: editData.ste || "",
+          gstNo: editData.gst || editData.gstNumber || "",
+          mobileNo: editData.mob || "",
+          emailId: editData.em || editData.em || "",
+          telephoneNo: editData.tele || "",
+          faxNo: editData.fax || "",
+          panNo: editData.pan || "",
+          panDoc: editData.pdoc || "",
           serviceTaxNo: editData.serviceTaxNo || "",
-          websiteName: editData.websiteName || "",
-          panFile: editData.panFile || null,
+          websiteName: editData.web || "",
+          panFile: editData.panFile || null, //not getting in state so keeping it as it is
           panExtension: "",
           // tdsFlag: editData.tdsFlag ? "Yes" : "No",
           // tdsFile: editData.tdsPath || null,
-          msmeFlag: editData.msmeFlag ? "Yes" : "No",
-          msmeType: editData.msmeType || "",
-          msmeFile: editData.msmePath || null,
-          ifscCode: editData.ifscCode || "",
-          bankAccountNo: editData.bankActNo || "",
-          bankFile: editData.bankDoc || null,
-          bankFileName: editData?.bankFileName,
+          msmeFlag: editData.msmf ? "Yes" : "No",
+          msmeType: editData.msmt || "",
+          msmeFile: editData.msmp || null,
+          ifscCode: editData.ifsc || "",
+          bankAccountNo: editData.actn || "",
+          bankFile: editData.bdoc || null,
+          bankFileName: editData?.bankFileName, //not getting in state so keeping it as it is
           tdsFileName: editData?.tdsFileName,
           msmeFileName: editData?.msmeFileName,
           // directAppLevel: editData.directAppLevel || "",
@@ -1295,12 +1295,12 @@ const ModalComponent = ({
   useEffect(() => {
     if (editUserCheck && activeSubItem !== "Unlisted Shares Entry") {
       const fileExtension =
-        editData && editData.panDoc
-          ? `.${editData.panDoc.split(".").pop()?.toLowerCase()}`
+        editData && editData.pdoc
+          ? `.${editData.pdoc.split(".").pop()?.toLowerCase()}`
           : "";
       formik.setFieldValue("panExtension", fileExtension);
       const payload = {
-        fileName: editData.panDoc,
+        fileName: editData.pdoc,
         filePath:
           "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterMSME",
         fileType: fileExtension,
@@ -1314,6 +1314,8 @@ const ModalComponent = ({
       apiServices
         .ComplianceDownload(payload)
         .then((response) => {
+          console.log("Responseee", response?.data);
+
           if (response?.status === 200 && response?.data) {
             const fileBlob = new Blob([response.data], {
               type:

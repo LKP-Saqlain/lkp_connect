@@ -441,8 +441,8 @@ const CustomModal = ({
   };
 
   const handleVerifyBank = () => {
-    const { bankActNo, ifscCode } = row;
-    handleVerifyDetails?.(bankActNo, ifscCode);
+    const { actn, ifsc } = row;
+    handleVerifyDetails?.(actn, ifsc);
   };
 
   const renderHeaderIcon = () => {
@@ -508,7 +508,7 @@ const CustomModal = ({
         variant="outlined"
         fullWidth
         size="small"
-        value={row?.bankActNo}
+        value={row?.actn}
         disabled={true}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
@@ -520,7 +520,7 @@ const CustomModal = ({
         variant="outlined"
         fullWidth
         size="small"
-        value={row?.ifscCode}
+        value={row?.ifsc}
         disabled={true}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}

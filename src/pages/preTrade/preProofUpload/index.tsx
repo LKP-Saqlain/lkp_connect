@@ -59,7 +59,18 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
         console.log("getAllRecordsReponse->", response?.data);
         if (response?.status === 200) {
           dispatch(hideLoader());
-          setGetPreTradeRecords(response?.data?.data);
+          // setGetPreTradeRecords(response?.data?.data);
+          const rawData = response?.data?.data || [];
+          const filteredData = rawData.filter((item: any) => {
+            return item !== null; // replace with your actual filter condition
+          });
+          const finalData = filteredData.map((item: any, index: number) => ({
+            ...item,
+            Id: index + 1,
+          }));
+          console.log("finalFilterData", finalData);
+
+          setGetPreTradeRecords(finalData);
           // if (!toastShownRef.current) {
           //   toastShownRef.current = true;
 

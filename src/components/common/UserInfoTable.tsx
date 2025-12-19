@@ -843,7 +843,7 @@ const DataTable = ({
               );
             },
           };
-        } else if (column.field === "status") {
+        } else if (column.field === "sts") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -876,7 +876,7 @@ const DataTable = ({
                 }
               };
 
-              const statusStyles = getStatusStyles(params.row.status);
+              const statusStyles = getStatusStyles(params.row.sts);
 
               return (
                 <div
@@ -904,7 +904,7 @@ const DataTable = ({
                       lineHeight: "1",
                     }}
                   >
-                    {params.row.status}
+                    {params.row.sts}
                   </div>
                 </div>
               );
@@ -947,7 +947,7 @@ const DataTable = ({
                 <div
                   onClick={() => {
                     HandleApprovalModal("approve");
-                    setSelectedRow(params.row.rowID);
+                    setSelectedRow(params.row.rid);
                     console.log(params.row.dummyId, "selectedrow approve");
                   }}
                   style={{
@@ -967,7 +967,7 @@ const DataTable = ({
                 <div
                   onClick={() => {
                     HandleApprovalModal("reject");
-                    setSelectedRow(params.row.rowID);
+                    setSelectedRow(params.row.rid);
                   }}
                   style={{
                     cursor: "pointer",
@@ -1763,13 +1763,11 @@ const DataTable = ({
           return {
             ...column,
             renderCell: (params: any) => {
-              // ✅ Check condition
               if (params.row.app === "A") {
                 // Already approved — no actions
                 return <span style={{ color: "gray" }}>--</span>;
               }
 
-              // ✅ Show Approve / Reject only if not approved
               return (
                 <div style={{ display: "flex", justifyContent: "center" }}>
                   <div
@@ -1777,7 +1775,7 @@ const DataTable = ({
                       console.log("rowTest", params.row);
                       setSelectedRow(params.row);
                       HandleApprovalModal("approve");
-                      console.log(params.row.vendorId, "selectedrow approve");
+                      console.log(params.row.vid, "selectedrow approve");
                     }}
                     style={{
                       cursor: "pointer",
@@ -1823,7 +1821,7 @@ const DataTable = ({
               if (params.row.app === "A" || "R") {
                 return (
                   <span style={{ color: "#11395C", fontWeight: 500 }}>
-                    {params.row.accRemark || "--"}
+                    {params.row.armk || "--"}
                   </span>
                 );
               }

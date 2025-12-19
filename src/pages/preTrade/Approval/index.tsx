@@ -266,7 +266,18 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
 
         if (res?.status === 200) {
           dispatch(hideLoader());
-          setPreTradeReportData(res?.data?.data);
+          // setPreTradeReportData(res?.data?.data);
+          const rawData = res?.data?.data || [];
+          console.log("GetPreTradeReportResponse", rawData);
+          const filteredData = rawData.filter((item: any) => {
+            return item !== null;
+          });
+          const finalData = filteredData.map((item: any, index: number) => ({
+            ...item,
+            Id: index + 1,
+          }));
+          console.log("FinalData", finalData);
+          setPreTradeReportData(finalData);
           // if (res?.data?.data.length === 0) {
           //   ShowToast("error", res?.data?.message);
           // } else {

@@ -9,7 +9,7 @@ import ShowToast from "../../../utils/toastUtils";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 
 export interface VendorData {
-  vendorId: number;
+  vid: number;
   vendorName: string;
   address1: string;
   address2: string;
@@ -25,7 +25,7 @@ export interface VendorData {
   bankName: string;
   bankActNo: string;
   ifscCode: string;
-  bankDoc: string;
+  bdoc: string;
   chqPrintNameFlag: string;
   chqPrintLocCode: string;
   chqPrintLocFlag: string;
@@ -39,10 +39,10 @@ export interface VendorData {
   tdsPath: string;
   msmeFlag: boolean;
   msmeType: string;
-  msmePath: string;
-  bankDocExtn: string;
+  msmp: string;
+  bdx: string; //bankDoc extension flag
   tdsExtn: string;
-  msmseExtn: string; // spelling matches your provided data
+  msmx: string; // spelling matches your provided data
   id: number;
 }
 
@@ -112,7 +112,9 @@ const VendorMaster = ({ activeSubItem }: any) => {
       "panFileBase64-->",
       panFileBase64,
       "panFileExtension-->",
-      panFileExtension
+      panFileExtension,
+      "bankfileExtension",
+      bankFileExtension
     );
     setmodal_grid(false);
     const {
@@ -164,7 +166,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
         bankName: chequePrintName ? chequePrintName : "",
         bankActNo: bankAccountNo,
         ifscCode: ifscCode,
-        bankDoc: bankFileBase64 ? bankFileBase64 : editData?.bankDoc,
+        bankDoc: bankFileBase64 ? bankFileBase64 : editData?.bdoc,
         chqPrintNameFlag: chqPrintLocationFlag === "YES" ? "Y" : "N",
         chqPrintLocCode: chqPrintLocation?.printLocCode || "",
         chqPrintLocFlag: chqPrintLocation?.printLocation !== "" ? "Y" : "N",
@@ -177,14 +179,12 @@ const VendorMaster = ({ activeSubItem }: any) => {
         // tdsFlag: tdsFlag === "Yes" ? true : false,
         // tdsPath: tdsFileBase64 ? tdsFileBase64 : editData?.tdsPath,
         msmeFlag: msmeFlag === "Yes" ? true : false,
-        msmePath: msmeFileBase64 ? msmeFileBase64 : editData?.msmePath,
+        msmePath: msmeFileBase64 ? msmeFileBase64 : editData?.msmp,
         msmeType: msmeFlag === "Yes" ? msmeType : "",
-        bankDocExtn: bankFileExtension
-          ? bankFileExtension
-          : editData?.bankDocExtn,
+        bankDocExtn: bankFileExtension ? bankFileExtension : editData?.bdx,
         // tdsExtn: tdsFileExtension ? tdsFileExtension : editData?.tdsExtn,
-        msmeExtn: msmeFileExtension ? msmeFileExtension : editData?.msmseExtn,
-        vendorID: editData?.vendorId,
+        msmeExtn: msmeFileExtension ? msmeFileExtension : editData?.msmx,
+        vendorID: editData?.vid,
       };
       console.log("EditPayload-->", payload);
       dispatch(showLoader(""));
@@ -290,7 +290,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
             })
           );
 
-          setVendorData(formattedVendors); // Replace existing data
+          setVendorData(formattedVendors);
           dispatch(hideLoader());
 
           console.log("Mapped Vendor Data:", formattedVendors);
@@ -322,7 +322,7 @@ const VendorMaster = ({ activeSubItem }: any) => {
     // setDeletedRow(row);
 
     let payload = {
-      vendorID: row?.vendorId,
+      vendorID: row?.vid,
     };
     apiServices
       .DeleteVendorDetails(payload)

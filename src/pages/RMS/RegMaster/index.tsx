@@ -26,7 +26,7 @@ const RegMaster = ({ activeSubItem }: any) => {
         if (response?.status === 200 && Array.isArray(response?.data?.data)) {
           const records = response.data.data.map(
             (item: any, index: number) => ({
-              id: index + 1, // ✅ Add incremental id
+              Id: index + 1,
               ...item,
             })
           );

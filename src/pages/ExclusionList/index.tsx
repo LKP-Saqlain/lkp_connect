@@ -79,8 +79,8 @@ const Index = ({ activeSubItem }: any) => {
       .then((res) => {
         if (res?.status === 200) {
           const formatted = res?.data?.data.map((item: any) => ({
-            value: item.valueItem,
-            label: item.displayItem,
+            value: item.valitm,
+            label: item.disitm,
           }));
           setExcludeOptions(formatted);
 
@@ -99,11 +99,6 @@ const Index = ({ activeSubItem }: any) => {
   const handleView = (values: any) => {
     console.log("teststes", values, formik.values);
 
-    // if (!values?.selectedApiOption) {
-    //   ShowToast("error", "Please select Exclude From option");
-    //   return;
-    // }
-
     const payload = {
       user_id: user_id,
       excludeFrom: values.selectedApiOption?.value || "1",
@@ -113,11 +108,24 @@ const Index = ({ activeSubItem }: any) => {
     console.log("Payload111", payload);
 
     dispatch(showLoader("Please wait, we are processing your request..."));
+
     apiServices
       .GetClientExclusionList(payload)
       .then((response) => {
         if (response?.status === 200) {
-          setdata(response?.data?.data);
+          const rawData = response?.data?.data || [];
+
+          const filteredData = rawData.filter((item: any) => {
+            return item !== null;
+            // e.g. item.isActive === true
+          });
+
+          const finalData = filteredData.map((item: any, index: number) => ({
+            ...item,
+            Id: index + 1,
+          }));
+
+          setdata(finalData);
         }
       })
       .catch(() => console.log("Error while fetching exclude list"))
@@ -141,7 +149,6 @@ const Index = ({ activeSubItem }: any) => {
         if (response?.status === 200 && response?.data?.isSuccess) {
           ShowToast("success", response?.data?.message);
           setmodal_grid(false);
-          // ✅ Call GetClientExclusionList only after success
           handleView(formik.values);
         } else {
           ShowToast("error", response?.data?.message);

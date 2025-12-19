@@ -36,6 +36,8 @@ const VendorApproval = ({ activeSubItem }: any) => {
     apiServices
       .ViewAccountVendorDetails(payload)
       .then((response) => {
+        console.log("Response-->", response?.data?.data);
+
         if (response?.status === 200) {
           const newVendors = response?.data?.data || [];
 
@@ -66,10 +68,8 @@ const VendorApproval = ({ activeSubItem }: any) => {
       return ext.startsWith(".") ? ext : `.${ext}`;
     };
 
-    const tdsFileName = `${authenticationValue}_TDS${ensureDot(row.tdsExtn)}`;
-    const msmeFileName = `${authenticationValue}_MSME${ensureDot(
-      row.msmseExtn
-    )}`;
+    const tdsFileName = `${authenticationValue}_TDS${ensureDot(row.tdsx)}`;
+    const msmeFileName = `${authenticationValue}_MSME${ensureDot(row.msmx)}`;
 
     console.log("Testtss", tdsFileName, msmeFileName);
 
@@ -109,12 +109,10 @@ const VendorApproval = ({ activeSubItem }: any) => {
 
     if (docType === "PAN") {
       const fileExtension =
-        row && row.panDoc
-          ? `.${row.panDoc.split(".").pop()?.toLowerCase()}`
-          : "";
+        row && row.pdoc ? `.${row.pdoc.split(".").pop()?.toLowerCase()}` : "";
 
       const payload = {
-        fileName: row.panDoc,
+        fileName: row.pdoc,
         filePath:
           "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterMSME",
         fileType: fileExtension,
@@ -135,7 +133,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
             const url = URL.createObjectURL(fileBlob);
             const link = document.createElement("a");
             link.href = url;
-            link.download = row.panDoc || `PAN_Document${fileExtension}`;
+            link.download = row.pdoc || `PAN_Document${fileExtension}`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -155,20 +153,20 @@ const VendorApproval = ({ activeSubItem }: any) => {
     }
     switch (docType) {
       case "TDS":
-        base64Data = row.tdsPath;
-        fileExt = row.tdsExtn?.toLowerCase();
+        base64Data = row.tdsp;
+        fileExt = row.tdsx?.toLowerCase();
         fileName = `TDS_Document.${fileExt}`;
         break;
 
       case "MSME":
-        base64Data = row.msmePath;
-        fileExt = row.msmseExtn?.toLowerCase();
+        base64Data = row.msmp;
+        fileExt = row.msmx?.toLowerCase();
         fileName = `MSME_Document.${fileExt}`;
         break;
 
       case "BANK":
-        base64Data = row.bankDoc;
-        fileExt = row.bankDocExtn?.toLowerCase();
+        base64Data = row.bdoc;
+        fileExt = row.bdx?.toLowerCase();
         fileName = `Bank_Document.${fileExt}`;
         break;
 
@@ -236,7 +234,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
         if (response?.status === 200) {
           dispatch(hideLoader());
           let data = response?.data;
-          console.log("VerifyBankResponse", data?.data);
+          console.log("VerifyBankResponse", data);
           if (data?.data !== "") {
             setBeneficiaryName(data?.data);
           }

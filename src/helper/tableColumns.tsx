@@ -4051,7 +4051,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     sortable: false,
   },
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "ClientCode",
     width: 100,
     disableColumnMenu: true,
@@ -4059,7 +4059,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "tradeDate",
+    field: "td",
     headerName: "Order Date Time",
     width: 100,
     disableColumnMenu: true,
@@ -4068,14 +4068,13 @@ export const PreProofUploadColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "buySell",
+    field: "bs",
     headerName: "Buy Sell",
     width: 70,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
   },
-
   {
     field: "symbolSeries",
     headerName: "Symbol / Series",
@@ -4084,13 +4083,13 @@ export const PreProofUploadColumns: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
-      const symbol = (params.row?.symbol || "").trim();
-      const series = (params.row?.series || "").trim();
+      const symbol = (params.row?.sym || "").trim();
+      const series = (params.row?.ser || "").trim();
       return `${symbol} / ${series}`;
     },
   },
   {
-    field: "expiryDate",
+    field: "ed",
     headerName: "Expiry Date",
     headerClassName: "header-wrap-custom",
     width: 100,
@@ -4113,7 +4112,7 @@ export const PreProofUploadColumns: GridColDef[] = [
   //   },
   // },
   {
-    field: "instrumentType",
+    field: "inst",
     headerName: "Instrument Type",
     width: 90,
     headerClassName: "header-wrap-custom",
@@ -4122,7 +4121,7 @@ export const PreProofUploadColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "strikeprice",
+    field: "sp",
     headerName: "Strike Price",
     headerClassName: "header-wrap-custom",
     width: 60,
@@ -4138,9 +4137,8 @@ export const PreProofUploadColumns: GridColDef[] = [
     headerAlign: "center",
     align: "right",
   },
-
   {
-    field: "tradeOrderNumber",
+    field: "ton",
     flex: 2,
     headerName: "Order Number",
     headerClassName: "header-wrap-custom",
@@ -4163,7 +4161,7 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "status",
+    field: "sts",
     headerName: "Status",
     width: 100,
     disableColumnMenu: true,
@@ -4171,7 +4169,7 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "ClientCode",
     width: 100,
     disableColumnMenu: true,
@@ -4179,7 +4177,7 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "tradeDate",
+    field: "td",
     headerName: "Order Date",
     width: 100,
     disableColumnMenu: true,
@@ -4188,7 +4186,7 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "buySell",
+    field: "bs",
     headerName: "Buy Sell",
     width: 70,
     disableColumnMenu: true,
@@ -4203,13 +4201,13 @@ export const preTradeColumns: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
-      const symbol = (params.row?.symbol || "").trim();
-      const series = (params.row?.series || "").trim();
+      const symbol = (params.row?.sym || "").trim();
+      const series = (params.row?.ser || "").trim();
       return `${symbol} / ${series}`;
     },
   },
   {
-    field: "expiryDate",
+    field: "ed",
     headerName: "Expiry Date",
     headerClassName: "header-wrap-custom",
     width: 100,
@@ -4218,7 +4216,7 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "instrumentType",
+    field: "inst",
     headerName: "Instrument Type",
     width: 90,
     headerClassName: "header-wrap-custom",
@@ -4227,7 +4225,7 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "strikeprice",
+    field: "sp",
     headerName: "Strike Price",
     headerClassName: "header-wrap-custom",
     width: 60,
@@ -4244,8 +4242,7 @@ export const preTradeColumns: GridColDef[] = [
     align: "right",
   },
   {
-    field: "tradeOrderNumber",
-    // flex: 2,
+    field: "ton",
     headerName: "Order Number",
     headerClassName: "header-wrap-custom",
     width: 160,
@@ -4254,7 +4251,7 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "dealerName",
+    field: "dlr_nm",
     headerName: "Dealer Name",
     width: 140,
     disableColumnMenu: true,
@@ -4262,16 +4259,15 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "dealerID",
+    field: "dlr_id",
     headerName: "Dealer ID",
     width: 80,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
   },
-
   {
-    field: "remarks",
+    field: "rmk",
     headerName: "Remark",
     width: 160,
     disableColumnMenu: true,
@@ -4302,7 +4298,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "ClientCode",
     width: 100,
     disableColumnMenu: true,
@@ -4310,7 +4306,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "tradeDate",
+    field: "td",
     headerName: "Order Date",
     width: 100,
     disableColumnMenu: true,
@@ -4319,7 +4315,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "buySell",
+    field: "bs",
     headerName: "Buy Sell",
     width: 70,
     disableColumnMenu: true,
@@ -4334,13 +4330,13 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
-      const symbol = (params.row?.symbol || "").trim();
-      const series = (params.row?.series || "").trim();
+      const symbol = (params.row?.sym || "").trim();
+      const series = (params.row?.ser || "").trim();
       return `${symbol} / ${series}`;
     },
   },
   {
-    field: "expiryDate",
+    field: "ed",
     headerName: "Expiry Date",
     headerClassName: "header-wrap-custom",
     width: 100,
@@ -4349,7 +4345,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "instrumentType",
+    field: "inst",
     headerName: "Instrument Type",
     width: 90,
     headerClassName: "header-wrap-custom",
@@ -4358,7 +4354,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "strikeprice",
+    field: "sp",
     headerName: "Strike Price",
     headerClassName: "header-wrap-custom",
     width: 60,
@@ -4375,8 +4371,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "right",
   },
   {
-    field: "tradeOrderNumber",
-    // flex: 2,
+    field: "ton",
     headerName: "Order Number",
     headerClassName: "header-wrap-custom",
     width: 160,
@@ -4385,7 +4380,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "dealername",
+    field: "dlr_nm",
     headerName: "Dealer Name",
     width: 140,
     disableColumnMenu: true,
@@ -4393,16 +4388,15 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "dealerID",
+    field: "dlr_id",
     headerName: "Dealer ID",
     width: 80,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
   },
-
   {
-    field: "remarks",
+    field: "rmk",
     headerName: "Remark",
     width: 160,
     disableColumnMenu: true,
@@ -4410,6 +4404,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
 ];
+
 export const clientTradingPatternSummarizedColumns: GridColDef[] = [
   {
     field: "zn",
@@ -7101,7 +7096,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
 ];
 export const ClientExclusionColumns: GridColDef[] = [
   {
-    field: "zone",
+    field: "zn",
     headerName: "Zone",
     minWidth: 80,
     flex: 0.7,
@@ -7110,7 +7105,7 @@ export const ClientExclusionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "type",
+    field: "typ",
     headerName: "Type",
     minWidth: 80,
     flex: 0.7,
@@ -7137,7 +7132,7 @@ export const ClientExclusionColumns: GridColDef[] = [
   //   disableColumnMenu: true,
   // },
   {
-    field: "remarks",
+    field: "rmks",
     headerName: "Remarks",
     minWidth: 200,
     flex: 2.5,
@@ -7146,7 +7141,7 @@ export const ClientExclusionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "createdBy",
+    field: "cby",
     headerName: "Created By",
     minWidth: 130,
     flex: 1,
@@ -7155,7 +7150,7 @@ export const ClientExclusionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "createdOn",
+    field: "cdt",
     headerName: "Created On",
     minWidth: 130,
     flex: 1,
@@ -7693,135 +7688,124 @@ export const TpInvoiceReportColumns: GridColDef[] = [
 ];
 export const VendorMasterColumns: GridColDef[] = [
   {
-    field: "vendorId",
+    field: "vid",
     headerName: "Vendor ID",
     minWidth: 100,
     flex: 0.6,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
-  // {
-  //   field: "vendorCode",
-  //   headerName: "Vendor Code",
-  //   minWidth: 120,
-  //   flex: 0.7,
-  //   disableColumnMenu: true,
-  //   headerAlign: "center",
-  //   align: "center",
-  // },
   {
-    field: "vendorName",
+    field: "vnm",
     headerName: "Vendor Name",
     minWidth: 200,
     flex: 1,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
+    disableColumnMenu: true,
   },
   {
-    field: "address1",
+    field: "ad1",
     headerName: "Address",
     minWidth: 300,
     flex: 1.2,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    renderCell: (params: any) => {
-      const address1 = (params.row?.address1 || "").trim();
-      const address2 = (params.row?.address2 || "").trim();
-      const address3 = (params.row?.address3 || "").trim();
-      return `${address1}  ${address2} ${address3}`;
+    disableColumnMenu: true,
+    renderCell: (params) => {
+      const ad1 = (params.row?.ad1 || "").trim();
+      const ad2 = (params.row?.ad2 || "").trim();
+      const ad3 = (params.row?.ad3 || "").trim();
+      return `${ad1} ${ad2} ${ad3}`;
     },
   },
   {
-    field: "city",
+    field: "cty",
     headerName: "City",
     minWidth: 100,
     flex: 0.6,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
-    field: "state",
+    field: "ste",
     headerName: "State",
     minWidth: 100,
     flex: 0.6,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
-    field: "pincode",
+    field: "pin",
     headerName: "Pin Code",
     minWidth: 100,
     flex: 0.6,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
-    field: "teleNo",
+    field: "tele",
     headerName: "Tele No",
     minWidth: 120,
     flex: 0.7,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
-    field: "mobileNo",
+    field: "mob",
     headerName: "Mobile No",
     minWidth: 130,
     flex: 0.8,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
-    field: "emailID",
+    field: "em",
     headerName: "Email ID",
     minWidth: 180,
     flex: 1,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
-    field: "panNo",
+    field: "pan",
     headerName: "PAN No",
     minWidth: 140,
     flex: 0.9,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
-    field: "gstNo",
+    field: "gst",
     headerName: "GST No",
     minWidth: 140,
     flex: 0.9,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
-    field: "msmeFlag",
+    field: "msmf",
     headerName: "MSME Flag",
     minWidth: 110,
     flex: 0.6,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-    // valueFormatter: ({ value }) => (value ? "Yes" : "No"),
+    disableColumnMenu: true,
   },
   {
-    field: "msmeType",
+    field: "msmt",
     headerName: "MSME Type",
     minWidth: 130,
     flex: 0.8,
-    disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
   },
@@ -7854,15 +7838,13 @@ export const VendorMasterColumns: GridColDef[] = [
     // ),
   },
   {
-    field: "accRemark",
+    field: "armk",
     headerName: "Remark",
     minWidth: 160,
     flex: 0.6,
-    sortable: false,
-    filterable: false,
     headerAlign: "center",
     align: "center",
-    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
   },
 ];
 
@@ -10501,7 +10483,7 @@ export const ageingColumns: GridColDef[] = [
 
 export const vendorApprovalColumns: GridColDef[] = [
   {
-    field: "vendorName",
+    field: "vnm",
     headerName: "Vendor Name",
     headerClassName: "header-wrap-custom",
     flex: 1.5,
@@ -10510,7 +10492,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "city",
+    field: "cty",
     headerName: "City",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10519,7 +10501,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "state",
+    field: "ste",
     headerName: "State",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10528,7 +10510,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "mobileNo",
+    field: "mob",
     headerName: "Mobile No",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10537,7 +10519,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "emailID",
+    field: "em",
     headerName: "Email ID",
     headerClassName: "header-wrap-custom",
     flex: 1.5,
@@ -10546,7 +10528,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "bankName",
+    field: "bnk",
     headerName: "Bank Name",
     headerClassName: "header-wrap-custom",
     flex: 1.2,
@@ -10555,7 +10537,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "bankActNo",
+    field: "actn",
     headerName: "A/C No",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10564,7 +10546,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "bankDoc",
+    field: "bdoc",
     headerName: "Bank Document",
     minWidth: 120,
     flex: 0.6,
@@ -10574,7 +10556,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "panDocument",
+    field: "pdoc",
     headerName: "Pan Document",
     minWidth: 120,
     flex: 0.6,
@@ -10584,7 +10566,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "ifscCode",
+    field: "ifsc",
     headerName: "IFSC Code",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10593,7 +10575,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "tdsFlag",
+    field: "tdsf",
     headerName: "TDS Flag",
     headerClassName: "header-wrap-custom",
     flex: 0.8,
@@ -10603,7 +10585,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? "Yes" : "No"),
   },
   {
-    field: "tdsPath",
+    field: "tdsp",
     headerName: "TDS Document",
     minWidth: 120,
     flex: 0.6,
@@ -10613,7 +10595,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "msmeFlag",
+    field: "msmf",
     headerName: "MSME Flag",
     headerClassName: "header-wrap-custom",
     flex: 0.8,
@@ -10623,7 +10605,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? "Yes" : "No"),
   },
   {
-    field: "msmePath",
+    field: "msmp",
     headerName: "MSME Document",
     minWidth: 120,
     flex: 0.6,
@@ -10633,7 +10615,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "accApproval",
+    field: "app",
     headerName: "Approval Status",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10642,7 +10624,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "accRemark",
+    field: "armk",
     headerName: "Account Remark",
     headerClassName: "header-wrap-custom",
     flex: 1.5,
@@ -10651,7 +10633,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "createdDate",
+    field: "cdt",
     headerName: "Created Date",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10660,6 +10642,7 @@ export const vendorApprovalColumns: GridColDef[] = [
     headerAlign: "center",
   },
 ];
+
 export const t6SellingReportColumns: GridColDef[] = [
   {
     field: "zone",
@@ -10829,7 +10812,7 @@ export const t6SellingReportColumns: GridColDef[] = [
 
 export const regMasterColumns: GridColDef[] = [
   {
-    field: "exchange",
+    field: "ex",
     headerName: "Exchange",
     flex: 1,
     minWidth: 120,
@@ -10839,7 +10822,7 @@ export const regMasterColumns: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "scripcode",
+    field: "sc",
     headerName: "Scrip Code",
     flex: 1,
     minWidth: 120,
@@ -10849,7 +10832,7 @@ export const regMasterColumns: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "symbol",
+    field: "sym",
     headerName: "Symbol",
     flex: 1.2,
     minWidth: 160,

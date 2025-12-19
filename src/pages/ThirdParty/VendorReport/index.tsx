@@ -58,13 +58,14 @@ const VendorReport = ({ activeSubItem }: any) => {
   }, [formik, startDate, endDate]);
 
   const fetchReport = () => {
-    let payload = {
+    const payload = {
       vendorName: formik.values.vendorName || "ALL",
       startdate: startDate,
       enddate: endDate,
     };
 
     dispatch(showLoader(""));
+
     apiServices
       .ViewVendorDetailsReport(payload)
       .then((response) => {
@@ -73,51 +74,53 @@ const VendorReport = ({ activeSubItem }: any) => {
         if (response?.status === 200) {
           const rows = response?.data?.data || [];
 
-          if (rows.length > 0) {
-            const formattedRows = rows.map((data: any) => ({
-              id: data.vendorId,
-              vendorId: data.vendorId,
-              vendorName: data.vendorName,
-              address1: data.address1,
-              address2: data.address2,
-              address3: data.address3,
-              city: data.city,
-              state: data.state,
-              pincode: data.pincode,
-              mobileNo: data.mobileNo,
-              teleNo: data.teleNo,
-              emailID: data.emailID,
-              websiteName: data.websiteName,
-              panNo: data.panNo,
-              panDoc: data.panDoc,
-              bankName: data.bankName,
-              bankActNo: data.bankActNo,
-              ifscCode: data.ifscCode,
-              bankDoc: data.bankDoc,
-              chqPrintNameFlag: data.chqPrintNameFlag,
-              chqPrintLocFlag: data.chqPrintLocFlag,
-              chqPrintLocCode: data.chqPrintLocCode,
-              chqPrintName: data.chqPrintName,
-              createdBy: data.createdBy,
-              createdDate: formatDate(data.createdDate),
-              faxNo: data.faxNo,
-              paymentBank: data.paymentBank,
-              gstNo: data.gstNo,
-              tdsFlag: data.tdsFlag,
-              tdsPath: data.tdsPath,
-              msmeFlag: data.msmeFlag,
-              msmeType: data.msmeType,
-              msmePath: data.msmePath,
-              bankDocExtn: data.bankDocExtn,
-              tdsExtn: data.tdsExtn,
-              msmseExtn: data.msmseExtn,
-              accApproval: data.accApproval,
-              accRemark: data.accRemark,
-            }));
+          // ✅ Filter valid records
+          const filteredRows = rows.filter((row: any) => row?.vid);
 
-            setVendorRows(formattedRows); // store multiple records
-            console.log("Vendor Data:", formattedRows);
-          }
+          // ✅ Add Id and keep ONLY new field names
+          const formattedRows = filteredRows.map((row: any, index: number) => ({
+            Id: index + 1,
+
+            vid: row.vid,
+            vnm: row.vnm,
+            ad1: row.ad1,
+            ad2: row.ad2,
+            ad3: row.ad3,
+            cty: row.cty,
+            ste: row.ste,
+            pin: row.pin,
+            mob: row.mob,
+            tele: row.tele,
+            em: row.em,
+            web: row.web,
+            pan: row.pan,
+            pdoc: row.pdoc,
+            bnk: row.bnk,
+            actn: row.actn,
+            ifsc: row.ifsc,
+            bdoc: row.bdoc,
+            cpf: row.cpf,
+            cplc: row.cplc,
+            cplf: row.cplf,
+            cby: row.cby,
+            cpn: row.cpn,
+            cdt: formatDate(row.cdt),
+            fax: row.fax,
+            pbnk: row.pbnk,
+            gst: row.gst,
+            tdsf: row.tdsf,
+            tdsp: row.tdsp,
+            msmf: row.msmf,
+            msmt: row.msmt,
+            msmp: row.msmp,
+            bdx: row.bdx,
+            tdsx: row.tdsx,
+            msmx: row.msmx,
+            app: row.app,
+            armk: row.armk,
+          }));
+
+          setVendorRows(formattedRows);
         }
       })
       .catch((error) => {
@@ -203,20 +206,16 @@ const VendorReport = ({ activeSubItem }: any) => {
 
     if (docType === "PAN") {
       const fileExtension =
-        row && row.panDoc
-          ? `.${row.panDoc.split(".").pop()?.toLowerCase()}`
-          : "";
+        row && row.pdoc ? `.${row.pdoc.split(".").pop()?.toLowerCase()}` : "";
 
       const payload = {
-        fileName: row.panDoc,
+        fileName: row.pdoc,
         filePath:
           "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterMSME",
         fileType: fileExtension,
         contentType: "",
       };
-
       dispatch(showLoader("Loading Preview..."));
-
       apiServices
         .ComplianceDownload(payload)
         .then((response) => {
@@ -249,20 +248,20 @@ const VendorReport = ({ activeSubItem }: any) => {
     }
     switch (docType) {
       case "TDS":
-        base64Data = row.tdsPath;
-        fileExt = row.tdsExtn?.toLowerCase();
+        base64Data = row.tdsp;
+        fileExt = row.tdsx?.toLowerCase();
         fileName = `TDS_Document.${fileExt}`;
         break;
 
       case "MSME":
-        base64Data = row.msmePath;
-        fileExt = row.msmseExtn?.toLowerCase();
+        base64Data = row.msmp;
+        fileExt = row.msmx?.toLowerCase();
         fileName = `MSME_Document.${fileExt}`;
         break;
 
       case "BANK":
-        base64Data = row.bankDoc;
-        fileExt = row.bankDocExtn?.toLowerCase();
+        base64Data = row.bdoc;
+        fileExt = row.bdx?.toLowerCase();
         fileName = `Bank_Document.${fileExt}`;
         break;
 
