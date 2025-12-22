@@ -13,8 +13,8 @@ import { formatDateTime } from "../../../helper/commmon";
 
 interface UploadDetail {
   type: string;
-  uploadedon: string;
-  uploadedBy: string;
+  uon: string;
+  uby: string;
 }
 
 const MTFFileUpload = ({ activeSubItem }: any) => {
@@ -222,11 +222,9 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
   );
 
   const MTFStockAgeing = uploadDetails.find(
-    (item: any) => item.type === "MTFStockAgeing"
+    (item: any) => item.tp === "MTFStockAgeing"
   );
-  const MTFAgeing = uploadDetails.find(
-    (item: any) => item.type === "MTFAgeing"
-  );
+  const MTFAgeing = uploadDetails.find((item: any) => item.tp === "MTFAgeing");
 
   return (
     <div className="page-content page-view">
@@ -307,11 +305,11 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                       >
                         <div>
                           <strong>Last Uploaded By:</strong>{" "}
-                          {MTFStockAgeing.uploadedBy}
+                          {MTFStockAgeing.uby}
                         </div>
                         <div>
                           <strong>Last Uploaded On:</strong>{" "}
-                          {formatDateTime(MTFStockAgeing?.uploadedon)}
+                          {formatDateTime(MTFStockAgeing?.uon)}
                         </div>
                       </div>
                     )}
@@ -360,12 +358,11 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                         }}
                       >
                         <div>
-                          <strong>Last Uploaded By:</strong>{" "}
-                          {MTFAgeing.uploadedBy}
+                          <strong>Last Uploaded By:</strong> {MTFAgeing.uby}
                         </div>
                         <div>
                           <strong>Last Uploaded On:</strong>{" "}
-                          {formatDateTime(MTFAgeing?.uploadedon)}
+                          {formatDateTime(MTFAgeing?.uon)}
                         </div>
                       </div>
                     )}

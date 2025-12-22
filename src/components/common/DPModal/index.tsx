@@ -344,7 +344,12 @@ const CustomModal = ({
             localStorage.setItem("tkn", token);
             // localStorage.setItem("userName", name);
             dispatch(updateUserId(`EMP-${formik.values.userChangeValue}`));
-            localStorage.setItem("Id", `EMP-${formik.values.userChangeValue}`);
+            localStorage.setItem(
+              "Id",
+              `${formik?.values?.prefix === "EMP" ? "EMP" : "APN"}-${
+                formik.values.userChangeValue
+              }`
+            );
             setmodal_center(false);
             formik.resetForm();
             window.location.reload();

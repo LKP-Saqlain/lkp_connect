@@ -197,7 +197,7 @@ const ShortFallReport = ({ activeSubItem }: any) => {
         if (response?.status === 200 && Array.isArray(response.data?.data)) {
           const recordsWithId = response.data.data.map(
             (item: any, index: number) => ({
-              id: index + 1, // Add unique ID
+              Id: index + 1, // Add unique ID
               ...item,
             })
           );

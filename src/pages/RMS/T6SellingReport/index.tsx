@@ -200,7 +200,7 @@ const T6SellingReport = ({ activeSubItem }: any) => {
 
         if (response?.status === 200 && Array.isArray(data)) {
           const recordsWithId = data.map((item: any, index: number) => ({
-            id: index + 1,
+            Id: index + 1,
             ...item,
           }));
 

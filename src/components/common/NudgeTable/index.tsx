@@ -282,8 +282,7 @@ const NudgeTable = ({
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {reportDataCustom?.clientname || "-"} /{" "}
-                  {reportDataCustom?.clientcode || "-"}
+                  {reportDataCustom?.cn || "-"} / {reportDataCustom?.cc || "-"}
                 </div>
               </div>
             )}

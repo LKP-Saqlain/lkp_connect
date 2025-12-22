@@ -256,9 +256,6 @@ export const newDomainEndpoints = [
   endpoints.InsertClientExclusionEntry,
   endpoints.DeleteClientExclusionEntry,
 
-  //RMS-->REG MASTER
-  endpoints.ViewREGMasterdata,
-
   //PreTrade
   endpoints.GetAllRecords,
   endpoints.UploadTradeFile, //uncomment this after confirmation from sayali
@@ -276,4 +273,23 @@ export const newDomainEndpoints = [
   endpoints.UploadTdsfile,
   endpoints.VerifyBankDetails,
   endpoints.UpdateAccountApproval,
+
+  //RMS-->REG MASTER
+  endpoints.ViewREGMasterdata,
+  endpoints.REGNSEFileUpload,
+  endpoints.REGBSEFileUpload,
+  endpoints.GetFileuploadDetails,
+
+  endpoints.ViewT6SellingReport,
+  endpoints.T6NSESellingFileUpload,
+  endpoints.T6BSESellingFileUpload,
+
+  endpoints.ViewMTFAgeingReport,
+  endpoints.MTFAgeingFileUpload,
+  endpoints.MTFStockAgeingFileUpload,
+
+  endpoints.ViewMTFStockAgeingReport,
+  endpoints.GetMTFShortfallData,
+  endpoints.MergeIntoOdinFile,
+  endpoints.MergeIntoSymphonyFile,
 ];

@@ -2182,7 +2182,7 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "MTF Ageing Report") {
       return TableColumns.ageingColumns.map((column) => {
-        if (column.field === "clientcode") {
+        if (column.field === "cc") {
           return {
             ...column,
             renderCell: (params: any) => {

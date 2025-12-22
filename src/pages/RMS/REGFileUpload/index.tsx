@@ -12,14 +12,14 @@ import ShowToast from "../../../utils/toastUtils";
 import { formatDateTime } from "../../../helper/commmon";
 
 interface UploadDetail {
-  type: string;
-  uploadedon: string;
-  uploadedBy: string;
+  tp: string;
+  uon: string;
+  uby: string;
 }
 interface UploadDetail {
-  type: string;
-  uploadedon: string;
-  uploadedBy: string;
+  tp: string;
+  uon: string;
+  uby: string;
 }
 const RegFileUpload = ({ activeSubItem }: any) => {
   const [uploadDetails, setUploadDetails] = useState<UploadDetail[]>([]);
@@ -194,10 +194,10 @@ const RegFileUpload = ({ activeSubItem }: any) => {
   );
 
   const nseDetails = uploadDetails.find(
-    (item: any) => item.type === "NSEREGMASTER"
+    (item: any) => item.tp === "NSEREGMASTER"
   );
   const bseDetails = uploadDetails.find(
-    (item: any) => item.type === "BSEREGMASTER"
+    (item: any) => item.tp === "BSEREGMASTER"
   );
 
   return (
@@ -274,12 +274,11 @@ const RegFileUpload = ({ activeSubItem }: any) => {
                         }}
                       >
                         <div>
-                          <strong>Last Uploaded By:</strong>{" "}
-                          {nseDetails.uploadedBy}
+                          <strong>Last Uploaded By:</strong> {nseDetails.uby}
                         </div>
                         <div>
                           <strong>Last Uploaded On:</strong>{" "}
-                          {formatDateTime(nseDetails?.uploadedon)}
+                          {formatDateTime(nseDetails?.uon)}
                         </div>
                       </div>
                     )}
@@ -330,12 +329,11 @@ const RegFileUpload = ({ activeSubItem }: any) => {
                         }}
                       >
                         <div>
-                          <strong>Last Uploaded By:</strong>{" "}
-                          {bseDetails.uploadedBy}
+                          <strong>Last Uploaded By:</strong> {bseDetails.uby}
                         </div>
                         <div>
                           <strong>Last Uploaded On:</strong>{" "}
-                          {formatDateTime(bseDetails?.uploadedon)}
+                          {formatDateTime(bseDetails?.uon)}
                         </div>
                       </div>
                     )}

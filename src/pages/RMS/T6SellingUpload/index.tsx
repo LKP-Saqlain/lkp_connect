@@ -13,8 +13,8 @@ import { formatDateTime } from "../../../helper/commmon";
 
 interface UploadDetail {
   type: string;
-  uploadedon: string;
-  uploadedBy: string;
+  uon: string;
+  uby: string;
 }
 
 const T6SellingFileUpload = ({ activeSubItem }: any) => {
@@ -181,8 +181,8 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
     </div>
   );
 
-  const nseDetails = uploadDetails.find((item: any) => item.type === "NSE");
-  const bseDetails = uploadDetails.find((item: any) => item.type === "BSE");
+  const nseDetails = uploadDetails.find((item: any) => item.tp === "NSE");
+  const bseDetails = uploadDetails.find((item: any) => item.tp === "BSE");
 
   return (
     <div className="page-content page-view">
@@ -261,12 +261,11 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
                         }}
                       >
                         <div>
-                          <strong>Last Uploaded By:</strong>{" "}
-                          {nseDetails.uploadedBy}
+                          <strong>Last Uploaded By:</strong> {nseDetails.uby}
                         </div>
                         <div>
                           <strong>Last Uploaded On:</strong>{" "}
-                          {formatDateTime(nseDetails?.uploadedon)}
+                          {formatDateTime(nseDetails?.uon)}
                         </div>
                       </div>
                     )}
@@ -319,12 +318,11 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
                         }}
                       >
                         <div>
-                          <strong>Last Uploaded By:</strong>{" "}
-                          {bseDetails.uploadedBy}
+                          <strong>Last Uploaded By:</strong> {bseDetails.uby}
                         </div>
                         <div>
                           <strong>Last Uploaded On:</strong>{" "}
-                          {formatDateTime(bseDetails?.uploadedon)}
+                          {formatDateTime(bseDetails?.uon)}
                         </div>
                       </div>
                     )}

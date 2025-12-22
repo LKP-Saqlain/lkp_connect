@@ -23,8 +23,8 @@ import { formatDateTime } from "../../../helper/commmon";
 
 interface UploadDetail {
   type: string;
-  uploadedon: string;
-  uploadedBy: string;
+  uon: string;
+  uby: string;
 }
 
 const MTFAgeingReport = ({ activeSubItem }: any) => {
@@ -213,7 +213,7 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
 
         if (response?.status === 200 && Array.isArray(data)) {
           const recordsWithId = data.map((item: any, index: number) => ({
-            id: index + 1,
+            Id: index + 1,
             ...item,
           }));
 
@@ -252,12 +252,12 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
   };
 
   useEffect(() => {
-    if (!selectedMtfRow?.clientcode) return;
+    if (!selectedMtfRow?.cc) return;
 
     const fetchMTFStockAgeingRecords = () => {
       const payload = {
         user_id: user_id,
-        clientCode: selectedMtfRow.clientcode,
+        clientCode: selectedMtfRow.cc,
       };
       dispatch(showLoader(""));
 
@@ -269,7 +269,7 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
 
           if (response?.status === 200 && Array.isArray(data)) {
             const recordsWithId = data.map((item: any, index: number) => ({
-              id: index + 1,
+              Id: index + 1,
               ...item,
             }));
 
@@ -284,7 +284,7 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
     };
 
     fetchMTFStockAgeingRecords();
-  }, [selectedMtfRow?.clientcode]);
+  }, [selectedMtfRow?.cc]);
 
   useEffect(() => {
     console.log("stateUpdate", selectedMtfRow);
@@ -316,9 +316,7 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
       });
   };
 
-  const MTFAgeing = uploadDetails.find(
-    (item: any) => item.type === "MTFAgeing"
-  );
+  const MTFAgeing = uploadDetails.find((item: any) => item.tp === "MTFAgeing");
 
   return (
     <React.Fragment>
@@ -595,12 +593,11 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
                         }}
                       >
                         <div>
-                          <strong>Last Uploaded By :</strong>{" "}
-                          {MTFAgeing.uploadedBy}
+                          <strong>Last Uploaded By :</strong> {MTFAgeing.uby}
                         </div>
                         <div>
                           <strong>Last Uploaded On :</strong>{" "}
-                          {formatDateTime(MTFAgeing?.uploadedon)}
+                          {formatDateTime(MTFAgeing?.uon)}
                         </div>
                       </div>
                     )}

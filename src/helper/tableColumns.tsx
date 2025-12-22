@@ -10073,7 +10073,7 @@ export const clientMISColumns: GridColDef[] = [
 
 export const shortfallColumns: GridColDef[] = [
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "Client Code",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -10082,7 +10082,7 @@ export const shortfallColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 1.5,
     minWidth: 250,
@@ -10090,186 +10090,164 @@ export const shortfallColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "mtfCashCollateralA",
+    field: "mca",
     headerName: "MTF Cash Collateral (A)",
     headerClassName: "header-wrap-custom",
     flex: 1,
     minWidth: 100,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "mtfShareCollateralB",
+    field: "msb",
     headerName: "MTF Share Collateral (B)",
     headerClassName: "header-wrap-custom",
     flex: 1,
     minWidth: 100,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "netMarginReqC",
+    field: "nmc",
     headerName: "Net Margin Req (C)",
     flex: 1,
     align: "right",
     headerAlign: "center",
     minWidth: 110,
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "mtmLossD",
+    field: "mld",
     headerName: "MTM Loss (D)",
     flex: 1,
     align: "right",
     headerAlign: "center",
     minWidth: 100,
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "marginShortExcess",
+    field: "mse",
     headerName: "Margin Short/Excess",
     flex: 1,
     align: "right",
     headerAlign: "center",
     minWidth: 95,
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "totalFundedAmountE",
+    field: "tfa",
     headerName: "Total Funded Amt (E)",
     flex: 1,
     align: "right",
     headerAlign: "center",
     minWidth: 110,
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "grp1LedgerF",
+    field: "glf",
     headerName: "Grp1 Ledger (F)",
     flex: 1,
     align: "right",
     headerAlign: "center",
     minWidth: 110,
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "mtfShareMarketValue",
+    field: "msv",
     headerName: "MTF Share Market Value",
     flex: 1.2,
     align: "right",
     headerAlign: "center",
     minWidth: 110,
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "maxAmountLimit",
+    field: "mal",
     headerName: "Max Amount Limit",
     flex: 1,
     align: "right",
     headerAlign: "center",
     minWidth: 120,
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "maxScripAmount",
+    field: "msa",
     headerName: "Max Scrip Amount",
     flex: 1,
     align: "right",
     headerAlign: "center",
     minWidth: 80,
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "interestPercent",
+    field: "ip",
     headerName: "Interest %",
     flex: 0.8,
     align: "center",
     headerAlign: "center",
     minWidth: 80,
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
 ];
 
 export const ageingColumns: GridColDef[] = [
   {
-    field: "zone",
+    field: "zn",
     headerName: "Zone",
     headerClassName: "header-wrap-custom",
     flex: 0.6,
@@ -10278,7 +10256,7 @@ export const ageingColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "branchcode",
+    field: "bc",
     headerName: "Branch Code",
     flex: 0.8,
     minWidth: 80,
@@ -10287,7 +10265,7 @@ export const ageingColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "clientType",
+    field: "ct",
     headerName: "Client Type",
     flex: 0.8,
     minWidth: 100,
@@ -10295,7 +10273,7 @@ export const ageingColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "clientcode",
+    field: "cc",
     headerName: "Client Code",
     flex: 0.8,
     minWidth: 90,
@@ -10303,7 +10281,7 @@ export const ageingColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 1.4,
     minWidth: 240,
@@ -10311,7 +10289,7 @@ export const ageingColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "rmCode",
+    field: "rmc",
     headerName: "RM Code",
     flex: 0.6,
     minWidth: 70,
@@ -10320,7 +10298,7 @@ export const ageingColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
-    field: "rmName",
+    field: "rmn",
     headerName: "RM Name",
     flex: 1.2,
     minWidth: 200,
@@ -10329,7 +10307,7 @@ export const ageingColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
-    field: "dealerCode",
+    field: "dc",
     headerName: "Dealer Code",
     headerClassName: "header-wrap-custom",
     flex: 0.7,
@@ -10339,7 +10317,7 @@ export const ageingColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
-    field: "dealerName",
+    field: "dn",
     headerName: "Dealer Name",
     flex: 1.2,
     minWidth: 200,
@@ -10373,111 +10351,96 @@ export const ageingColumns: GridColDef[] = [
     headerAlign: "center",
     renderCell: (params) => (params.value ? params.value : "—"),
   },
-  // Numeric fields with formatting
   {
-    field: "mtfFunded",
+    field: "mtf",
     headerName: "MTF Funded",
     flex: 1,
     minWidth: 160,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "lessOrEqual30Days",
+    field: "d30",
     headerName: "<= 30 Days",
     flex: 0.9,
     minWidth: 140,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "lessOrEqual60Days",
+    field: "d60",
     headerName: "<= 60 Days",
     flex: 0.9,
     minWidth: 120,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "lessOrEqual88Days",
+    field: "d88",
     headerName: "<= 88 Days",
     flex: 0.9,
     minWidth: 110,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "lessOrEqual89Days",
+    field: "d89",
     headerName: "<= 89 Days",
     flex: 0.9,
     minWidth: 110,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "lessOrEqual90Days",
+    field: "d90",
     headerName: "<= 90 Days",
     flex: 0.9,
     minWidth: 110,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
   {
-    field: "greaterThan90Days",
+    field: "gt90",
     headerName: "> 90 Days",
     flex: 1,
     minWidth: 120,
     align: "right",
     headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(value);
-    },
+      }).format(parseFloat(params)),
   },
 ];
 
@@ -10645,7 +10608,7 @@ export const vendorApprovalColumns: GridColDef[] = [
 
 export const t6SellingReportColumns: GridColDef[] = [
   {
-    field: "zone",
+    field: "zn",
     headerName: "Zone",
     headerClassName: "header-wrap-custom",
     // flex: 0.8,
@@ -10655,7 +10618,7 @@ export const t6SellingReportColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
-    field: "branchCode",
+    field: "bc",
     headerName: "Branch Code",
     headerClassName: "header-wrap-custom",
     // flex: 1,
@@ -10665,9 +10628,8 @@ export const t6SellingReportColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
-    field: "branchType",
+    field: "bt",
     headerName: "Branch Type",
-    // flex: 1,
     align: "center",
     headerAlign: "center",
     minWidth: 70,
@@ -10675,9 +10637,8 @@ export const t6SellingReportColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
-    field: "clientCode",
+    field: "cc",
     headerName: "Client Code",
-    // flex: 1,
     align: "center",
     headerAlign: "center",
     minWidth: 100,
@@ -10685,7 +10646,7 @@ export const t6SellingReportColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
-    field: "clientName",
+    field: "cn",
     headerName: "Client Name",
     flex: 1.5,
     align: "left",
@@ -10695,7 +10656,7 @@ export const t6SellingReportColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
-    field: "exchange",
+    field: "ex",
     headerName: "Exchange",
     headerClassName: "header-wrap-custom",
     flex: 0.8,
@@ -10704,7 +10665,6 @@ export const t6SellingReportColumns: GridColDef[] = [
     headerAlign: "center",
     renderCell: (params) => (params.value ? params.value : "—"),
   },
-
   {
     field: "symbolSeries",
     headerName: "Symbol / Series",
@@ -10714,64 +10674,47 @@ export const t6SellingReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => {
-      const symbol = (params.row?.symbol || "").trim();
-      const series = (params.row?.series || "").trim();
+      const symbol = (params.row?.sym || "").trim();
+      const series = (params.row?.sr || "").trim();
       return `${symbol} / ${series}`;
     },
   },
   {
-    field: "rate",
+    field: "rt",
     headerName: "Rate",
-    // flex: 1,
     align: "right",
     headerAlign: "center",
     minWidth: 70,
     headerClassName: "header-wrap-custom",
     renderCell: (params) => {
       const value = params.value;
+      if (value === null || value === undefined || value === "") return "—";
 
-      // Handle empty/null/undefined
-      if (value === null || value === undefined || value === "") {
-        return "—";
-      }
-
-      // Format the number with Indian locale and 2 decimal places
-      const formattedValue = new Intl.NumberFormat("en-IN", {
+      return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(Number(value));
-
-      return formattedValue;
     },
   },
   {
-    field: "qty",
+    field: "qt",
     headerName: "Quantity",
-    // flex: 1,
     align: "right",
     headerAlign: "center",
     minWidth: 70,
     headerClassName: "header-wrap-custom",
     renderCell: (params) => {
       const value = params.value;
+      if (value === null || value === undefined || value === "") return "—";
 
-      // Handle empty/null/undefined
-      if (value === null || value === undefined || value === "") {
-        return "—";
-      }
-
-      // Format the number with Indian locale and 2 decimal places
-      const formattedValue = new Intl.NumberFormat("en-IN", {
+      return new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(Number(value));
-
-      return formattedValue;
     },
   },
-
   {
-    field: "rMcode",
+    field: "rmc",
     headerName: "RM Name & Code",
     flex: 1.5,
     align: "left",
@@ -10779,8 +10722,8 @@ export const t6SellingReportColumns: GridColDef[] = [
     minWidth: 180,
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => {
-      const rmName = (params.row?.rmName || "").trim();
-      const rmCode = (params.row?.rMcode || "").trim();
+      const rmName = (params.row?.rmn || "").trim();
+      const rmCode = (params.row?.rmc || "").trim();
 
       if (!rmName && !rmCode) return "—";
       if (!rmName) return rmCode;
@@ -10790,7 +10733,7 @@ export const t6SellingReportColumns: GridColDef[] = [
     },
   },
   {
-    field: "dealercode",
+    field: "dlc",
     headerName: "Dealer Name & Code",
     flex: 1,
     align: "center",
@@ -10798,14 +10741,14 @@ export const t6SellingReportColumns: GridColDef[] = [
     minWidth: 150,
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => {
-      const dealerName = (params.row?.dealerName || "").trim();
-      const dealercode = (params.row?.dealercode || "").trim();
+      const dealerName = (params.row?.dln || "").trim();
+      const dealerCode = (params.row?.dlc || "").trim();
 
-      if (!dealerName && !dealercode) return "—";
-      if (!dealerName) return dealercode;
-      if (!dealerName) return dealerName;
+      if (!dealerName && !dealerCode) return "—";
+      if (!dealerName) return dealerCode;
+      if (!dealerCode) return dealerName;
 
-      return `${dealerName} - (${dealercode})`;
+      return `${dealerName} - (${dealerCode})`;
     },
   },
 ];
@@ -11246,7 +11189,7 @@ export const MTFStockAgeingColumns: GridColDef[] = [
   //   renderCell: (params) => params.value || "—",
   // },
   {
-    field: "nseScrip",
+    field: "sc",
     headerName: "NSE Scrip",
     flex: 1,
     minWidth: 140,
@@ -11277,7 +11220,7 @@ export const MTFStockAgeingColumns: GridColDef[] = [
       params.value !== undefined ? params.value.toLocaleString() : "0",
   },
   {
-    field: "fundingAmount",
+    field: "fa",
     headerName: "Funding Amount",
     flex: 1.2,
     minWidth: 120,
@@ -11293,7 +11236,7 @@ export const MTFStockAgeingColumns: GridColDef[] = [
         : "0.00",
   },
   {
-    field: "marketRate",
+    field: "mr",
     headerName: "Market Rate",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -11304,7 +11247,7 @@ export const MTFStockAgeingColumns: GridColDef[] = [
     renderCell: (params) => params.value ?? "0",
   },
   {
-    field: "varPerc",
+    field: "var",
     headerName: "VAR %",
     flex: 0.8,
     minWidth: 80,
@@ -11316,7 +11259,7 @@ export const MTFStockAgeingColumns: GridColDef[] = [
       params.value !== undefined ? params.value.toFixed(2) + "%" : "—",
   },
   {
-    field: "elmPerc",
+    field: "elm",
     headerName: "ELM %",
     headerClassName: "header-wrap-custom",
     flex: 0.8,
@@ -11328,7 +11271,7 @@ export const MTFStockAgeingColumns: GridColDef[] = [
       params.value !== undefined ? params.value.toFixed(2) + "%" : "—",
   },
   {
-    field: "marginPerc",
+    field: "mp",
     headerName: "Margin %",
     headerClassName: "header-wrap-custom",
     flex: 0.8,
@@ -11340,7 +11283,7 @@ export const MTFStockAgeingColumns: GridColDef[] = [
       params.value !== undefined ? params.value.toFixed(2) + "%" : "—",
   },
   {
-    field: "tradeDATE",
+    field: "td",
     headerName: "Trade Date",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -11348,16 +11291,14 @@ export const MTFStockAgeingColumns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
-    // renderCell: (params) =>
-    //   params.value ? dayjs(params.value).format("DD-MMM-YYYY") : "—",
     valueGetter: (params: any) => {
       const rawDate = params;
-      if (!rawDate) return null; // Handle missing data
+      if (!rawDate) return null;
 
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
-          (_match: any, day: any, month: any, year: any) => {
+          (_: any, day: any, month: any, year: any) => {
             const monthMap: any = {
               Jan: "01",
               Feb: "02",
@@ -11372,7 +11313,6 @@ export const MTFStockAgeingColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
@@ -11381,16 +11321,14 @@ export const MTFStockAgeingColumns: GridColDef[] = [
       return parsedDate;
     },
     sortComparator: (v1, v2) => {
-      if (!v1 || !v2) return 0; // Handle missing values
-      return v1 - v2; // Sort in ascending order
+      if (!v1 || !v2) return 0;
+      return v1 - v2;
     },
-    valueFormatter: (params: any) => {
-      if (!params) return "";
-      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
-    },
+    valueFormatter: (params: any) =>
+      params ? dayjs(params).format("DD-MMM-YY") : "",
   },
   {
-    field: "days",
+    field: "dy",
     headerName: "Days",
     headerClassName: "header-wrap-custom",
     flex: 0.7,
