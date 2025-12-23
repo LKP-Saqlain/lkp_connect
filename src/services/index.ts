@@ -1105,4 +1105,16 @@ export const apiServices = {
       payload
     );
   },
+  ViewComplianceData: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewComplianceData, payload);
+  },
+  DeleteComplianceData: async (payload: any) => {
+    return await apiService("POST", endpoints.DeleteComplianceData, payload);
+  },
+  InsertComplianceData: async (payload: any) => {
+    return await apiService("POST", endpoints.InsertComplianceData, payload);
+  },
+  UpdateComplianceData: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateComplianceData, payload);
+  },
 };

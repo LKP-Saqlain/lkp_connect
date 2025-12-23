@@ -1066,11 +1066,11 @@ const DataTable = ({
       //   ...column,
       // }));
       return TableColumns.spipClientDetails.map((column) => {
-        if (column.field === "expiryStatus") {
+        if (column.field === "exp") {
           return {
             ...column,
             renderCell: (params: any) => {
-              const status = params.row.expiryStatus;
+              const status = params.row.exp;
 
               if (status === "E") {
                 return (

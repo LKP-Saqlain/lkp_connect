@@ -4,9 +4,10 @@ import { Button, Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import UserInfoTable from "../../components/common/UserInfoTable";
 import ModalComponent from "../../components/common/ComplianceModal";
 import { apiServices } from "../../services";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
 import ShowToast from "../../utils/toastUtils";
+import { RootState } from "../../redux/store";
 // import dayjs from "dayjs";
 // import dayjs from "dayjs";
 
@@ -32,7 +33,7 @@ import ShowToast from "../../utils/toastUtils";
 //   // Add more dummy data here...
 // ];
 interface ComplianceEntry {
-  RowId: number;
+  rid: number;
   FinancialYear: string;
   DateOfCommunication: string;
   TypeOfDocuments: string;
@@ -68,11 +69,14 @@ const CommEntry = ({ activeSubItem }: any) => {
   const [deletedRow, setDeletedRow] = useState<ComplianceEntry | null>(null);
 
   const dispatch = useDispatch();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
 
   useEffect(() => {
     if (isRowDeleted && deletedRow) {
       const fetchComplianceEntry = async () => {
-        let payload = {
+        const payload = {
           financialYear: "",
           department: "",
           action: "view",
@@ -82,26 +86,34 @@ const CommEntry = ({ activeSubItem }: any) => {
           communicationProof: "",
           communicationProofPath: "",
           dateOfCommunication: formattedDate,
-          rowId: deletedRow?.RowId || 0,
+          rowId: deletedRow?.rid || 0,
           userId: "",
           entryFlag: "",
           remark: "",
         };
 
         dispatch(showLoader("Please wait, we are processing your request..."));
+
         try {
-          const response = await apiServices.ComplainceReport(payload);
-          dispatch(hideLoader());
-          console.log("apiResponse", response?.data?.Table);
-          setUserData(response?.data?.Table);
+          const response = await apiServices.ViewComplianceData(payload);
+          const apiData = response?.data?.data || [];
+
+          // ✅ Add id for each row
+          const mappedData = apiData.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          console.log("Mapped Data After Delete", mappedData);
+          setUserData(mappedData);
         } catch (error) {
           console.error("Error", error);
-          dispatch(hideLoader());
         } finally {
           dispatch(hideLoader());
-          // setIsRowDeleted(false); // Reset flag in Redux store
+          // setIsRowDeleted(false); // keep commented if handled in Redux elsewhere
         }
       };
+
       fetchComplianceEntry();
     }
   }, [dispatch, isRowDeleted, deletedRow]);
@@ -131,27 +143,16 @@ const CommEntry = ({ activeSubItem }: any) => {
     setDeletedRow(row);
 
     let payload = {
-      financialYear: row.FinancialYear,
-      department: row.Department,
-      action: "delete",
-      typeOfDocuments: row.TypeOfDocuments,
-      communicationType: row.CommunicationType,
-      communicationProof: row.CommunicationProof,
-      communicationProofPath: row.CommunicationProofPath,
-      dateOfCommunication: formattedDate,
-      rowId: row.RowId || 0,
-      userId: "",
-      DocumentType: row.DocumentType,
-      entryFlag: "",
-      remark: "",
+      rowId: row?.rid,
+      userId: user_id,
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
     try {
-      const response = await apiServices.ComplainceReport(payload);
+      const response = await apiServices.DeleteComplianceData(payload);
       dispatch(hideLoader());
-      console.log("apiResponse", response?.data?.Table);
-      ShowToast("success", response?.data?.Table[0].Message);
+      console.log("apiResponse111", response?.data?.message);
+      ShowToast("success", response?.data?.message);
       setIsRowDeleted(true);
     } catch (error) {
       console.error("Error", error);
@@ -173,9 +174,9 @@ const CommEntry = ({ activeSubItem }: any) => {
   };
 
   useEffect(() => {
-    if (editData?.RowId) {
+    if (editData?.rid) {
       const fetchComplianceEntry = async () => {
-        let payload = {
+        const payload = {
           financialYear: editData.FinancialYear || "2024-2025",
           department: editData.Department || "ALL",
           action: "view",
@@ -185,27 +186,32 @@ const CommEntry = ({ activeSubItem }: any) => {
           communicationProof: editData.CommunicationProof || "string",
           communicationProofPath: editData.CommunicationProofPath || "string",
           dateOfCommunication: formattedDate,
-          rowId: editData.RowId || 0,
+          rowId: editData.rid || 0,
           userId: editData.CreatedBy || "",
           entryFlag: "",
           remark: "",
         };
+
         dispatch(showLoader("Please wait, we are processing your request..."));
-        apiServices
-          .ComplainceReport(payload)
-          .then((response) => {
-            dispatch(hideLoader());
-            console.log("apiResponse", response?.data?.Table);
-            setUserData(response?.data?.Table);
-          })
-          .catch((error) => {
-            dispatch(hideLoader());
-            console.log("Error", error);
-          })
-          .finally(() => {
-            dispatch(hideLoader());
-          });
+
+        try {
+          const response = await apiServices.ViewComplianceData(payload);
+          const apiData = response?.data?.data || [];
+
+          const mappedData = apiData.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          console.log("Mapped Edit Data", mappedData);
+          setUserData(mappedData);
+        } catch (error) {
+          console.error("Error", error);
+        } finally {
+          dispatch(hideLoader());
+        }
       };
+
       fetchComplianceEntry();
     }
   }, [dispatch, editData]);
@@ -213,7 +219,7 @@ const CommEntry = ({ activeSubItem }: any) => {
   //this useEffect call direct after insert api calls from modalComponent
   useEffect(() => {
     const fetchComplianceEntry = async () => {
-      let payload = {
+      const payload = {
         financialYear: "",
         department: "",
         action: "view",
@@ -230,30 +236,37 @@ const CommEntry = ({ activeSubItem }: any) => {
       };
 
       dispatch(showLoader("Please wait, we are processing your request..."));
+
       try {
-        const response = await apiServices.ComplainceReport(payload);
+        const response = await apiServices.ViewComplianceData(payload);
         dispatch(hideLoader());
-        console.log("apiResponse", response?.data?.Table);
-        setUserData(response?.data?.Table);
+
+        const apiData = response?.data?.data || [];
+
+        const mappedData = apiData.map((item: any, index: number) => ({
+          Id: index + 1,
+          ...item,
+        }));
+
+        console.log("Mapped Data", mappedData);
+        setUserData(mappedData);
       } catch (error) {
         console.error("Error", error);
         dispatch(hideLoader());
       }
     };
 
-    // Call API on first render or when apiStatus is true
     if (apiStatus || apiStatus === false) {
       fetchComplianceEntry();
     }
 
-    // Reset apiStatus to false after execution
     if (apiStatus) {
       const timeoutId = setTimeout(() => {
         setApiStatus(false);
       }, 3000);
       return () => clearTimeout(timeoutId);
     }
-  }, [dispatch, apiStatus]); // Add apiStatus as dependency
+  }, [dispatch, apiStatus]);
 
   return (
     <React.Fragment>

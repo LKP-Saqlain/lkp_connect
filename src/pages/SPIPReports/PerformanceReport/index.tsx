@@ -39,7 +39,7 @@ const PerformanceReport = () => {
       raCode: Yup.string().required("Please enter RA Code"),
     }),
     onSubmit: async ({ finYear, raCode }) => {
-      const payload = { raCode, year: finYear };
+      const payload = { raCode, year: finYear, ClientCode: "" };
       try {
         dispatch(showLoader(""));
         const response = await apiServices.GenerateClientPerformancePdf(

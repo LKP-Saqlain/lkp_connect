@@ -292,4 +292,19 @@ export const newDomainEndpoints = [
   endpoints.GetMTFShortfallData,
   endpoints.MergeIntoOdinFile,
   endpoints.MergeIntoSymphonyFile,
+
+  //SPIP
+  endpoints.SPIPClientPerformanceSummary,
+  endpoints.SPIPClientPerformanceDashboard,
+  endpoints.SPIPsubScriptionDetail,
+  endpoints.SPIPFeesSharingReport, //this api is used for both client-wise and branch-wise report
+  endpoints.SPIPB2BClientDetails,
+  endpoints.GenerateClientPerformancePdf,
+  endpoints.GetClientMISDetails,
+
+  //Compliance
+  endpoints.ViewComplianceData,
+  endpoints.InsertComplianceData,
+  endpoints.DeleteComplianceData,
+  endpoints.UpdateComplianceData,
 ];

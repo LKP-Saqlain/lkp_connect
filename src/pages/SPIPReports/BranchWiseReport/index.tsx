@@ -97,7 +97,7 @@ const SPIPBranchWiseFeesReport = ({ activeSubItem }: SPIPPeformance) => {
           const filteredResponse = response?.data?.data?.map(
             (item: any, index: number) => ({
               ...item,
-              id: index + 1,
+              Id: index + 1,
             })
           );
           console.log("filterResponse-->", filteredResponse);

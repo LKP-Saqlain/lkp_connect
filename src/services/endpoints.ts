@@ -258,4 +258,8 @@ export const endpoints = {
   ElogForPhysical: "api/MF/ElogForPhysical",
   PhysicalClientInfo: "api/MF/PhysicalClientInfo",
   GetAPGrossBrokeragePerQuarter: "/api/MIS/GetAPGrossBrokeragePerQuarter",
+  ViewComplianceData: "/api/Compliance/ViewComplianceData",
+  InsertComplianceData: "/api/Compliance/InsertComplianceData",
+  UpdateComplianceData: "/api/Compliance/UpdateComplianceData",
+  DeleteComplianceData: "/api/Compliance/DeleteComplianceData",
 };

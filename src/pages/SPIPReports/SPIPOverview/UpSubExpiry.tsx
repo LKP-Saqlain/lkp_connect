@@ -35,14 +35,14 @@ const UpSubExpiry = ({ handleTradingOpen }: any) => {
         const data = response?.data?.data || [];
 
         const sortedResponse = data
-          ?.filter((item: any) => item.expiryStatus === "A")
+          ?.filter((item: any) => item.exp === "A")
           .map((item: any, index: number) => ({
             ...item,
-            id: index + 1,
+            Id: index + 1,
           }))
           .sort((a: any, b: any) => {
-            if (a.expiryStatus === "A" && b.expiryStatus !== "A") return -1;
-            if (a.expiryStatus !== "A" && b.expiryStatus === "A") return 1;
+            if (a.exp === "A" && b.exp !== "A") return -1;
+            if (a.exp !== "A" && b.exp === "A") return 1;
             return 0;
           });
 

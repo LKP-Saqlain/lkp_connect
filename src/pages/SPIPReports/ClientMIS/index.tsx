@@ -51,7 +51,7 @@ const ClientMIS = ({ activeSubItem }: ClientMIS) => {
           const apiData = response?.data?.data || [];
 
           const formattedData = apiData.map((item: any, index: number) => ({
-            id: index + 1,
+            Id: index + 1,
             ...item,
           }));
 

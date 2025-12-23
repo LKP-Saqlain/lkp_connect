@@ -25,7 +25,7 @@ import {
   TypeOfDocuments,
 } from "../../../helper/tableColumns.tsx";
 interface EditData {
-  CommunicationProofPath?: string;
+  cpp?: string;
 }
 
 const ModalComponent = ({
@@ -58,7 +58,7 @@ const ModalComponent = ({
   useEffect(() => {
     console.log("editInfoData", editData, editUserCheck, fileExtension);
     // debugger;
-    if (editData?.RowId > 0) {
+    if (editData?.rid > 0) {
       console.log("editInfoData not zero");
     }
   }, [editData, editUserCheck]);
@@ -77,7 +77,7 @@ const ModalComponent = ({
         "Proof of Communication is required"
       ),
       uploadProof: Yup.mixed().when([], {
-        is: () => !editData?.CommunicationProofPath, // Check if empty
+        is: () => !editData?.cpp, // Check if empty
         then: (schema) => schema.required("Please Upload Proof"),
         otherwise: (schema) => schema.notRequired(),
       }),
@@ -127,10 +127,9 @@ const ModalComponent = ({
         }
       }
       if (uploadedFile === null && editData) {
-        communicationProofPath =
-          editData.CommunicationProofPath || communicationProofPath;
+        communicationProofPath = editData.cpp || communicationProofPath;
 
-        uploadedFileExt = editData?.DocumentType || fileExtension || "unknown";
+        uploadedFileExt = editData?.dtype || fileExtension || "unknown";
 
         console.log(
           "EditData communicationProofPath",
@@ -145,54 +144,47 @@ const ModalComponent = ({
       formik.resetForm(); // Reset Formik form
     },
   });
+
+  const formatDateForEdit = (date: any) => {
+    if (!date) return "";
+    return date.replace(/\//g, "-"); // "2025/12/23" → "2025-12-23"
+  };
+
   const fetchSubmitForm = async (
     uploadedFileExt: string,
     communicationProofPath: string
   ) => {
     console.log("uploadedFileExtension", uploadedFileExt);
-    let payload = {
+
+    const payload = {
       financialYear: "2024-2025",
-      department: formik.values.department ? formik.values.department : "",
-      action: editData?.RowId > 0 ? "update" : "insert",
-      typeOfDocuments: formik.values.TypeOfDocuments
-        ? formik.values.TypeOfDocuments
-        : "",
-      communicationType: formik.values.communicationType
-        ? formik.values.communicationType
-        : "",
-      communicationProof: formik.values.proofOfCommunication
-        ? formik.values.proofOfCommunication
-        : "",
-      communicationProofPath: communicationProofPath,
-      dateOfCommunication: formik.values.dateOfCommunication
-        ? formik.values.dateOfCommunication
-        : "",
-      rowId: editData?.RowId ? editData?.RowId : 0,
+      department: formik.values.department || "",
+      typeOfDocuments: formik.values.TypeOfDocuments || "",
+      communicationType: formik.values.communicationType || "",
+      communicationProof: formik.values.proofOfCommunication || "",
+      communicationProofPath,
+      dateOfCommunication: editUserCheck
+        ? formatDateForEdit(formik.values.dateOfCommunication)
+        : formik.values.dateOfCommunication || "",
+      rowId: editUserCheck ? editData?.rid || 0 : 0, //  rowId only meaningful for update
       userId: user_id,
       DocumentType: uploadedFileExt,
-      entryFlag: "",
-      remark: "",
     };
+
     dispatch(showLoader("Please wait, we are processing your request..."));
-    apiServices
-      .ComplainceReport(payload)
+
+    const apiCall = editUserCheck
+      ? apiServices.UpdateComplianceData(payload)
+      : apiServices.InsertComplianceData(payload);
+
+    apiCall
       .then((response) => {
+        console.log("apiResponseModal", response?.data);
         dispatch(hideLoader());
-        console.log("fileExtension", fileExtension);
-        console.log("apiResponseModal", response?.data?.Table[0].MSG);
-        let suceessCheck = response?.data?.Table.length;
-        if (suceessCheck.length >= 0) {
-        }
-        // setUserData(response?.data?.Table);
-        if (editUserCheck) {
-          ShowToast("success", response?.data?.Table[0].Message);
-        } else {
-          ShowToast("success", response?.data?.Table[0].MSG);
-        }
       })
       .catch((error) => {
+        console.error("Error", error);
         dispatch(hideLoader());
-        console.log("Error", error);
       })
       .finally(() => {
         dispatch(hideLoader());
@@ -202,15 +194,15 @@ const ModalComponent = ({
   useEffect(() => {
     if (editData) {
       formik.setValues({
-        DocumentType: editData.DocumentType || "",
-        department: editData.Department || "",
-        communicationType: editData.CommunicationType || "",
-        proofOfCommunication: editData.CommunicationProof || "",
-        dateOfCommunication: editData.DateOfCommunication
-          ? dayjs(editData.DateOfCommunication).format("YYYY/MM/DD") // Convert to string
+        DocumentType: editData.dtype || "",
+        department: editData.dept || "",
+        communicationType: editData.ctype || "",
+        proofOfCommunication: editData.cdesc || "",
+        dateOfCommunication: editData.doc
+          ? dayjs(editData.doc).format("YYYY/MM/DD") // Convert to string
           : "",
         uploadProof: "",
-        TypeOfDocuments: editData.TypeOfDocuments || "",
+        TypeOfDocuments: editData.tod || "",
       });
     }
   }, [editData]);
@@ -359,7 +351,7 @@ const ModalComponent = ({
                         formik.values.dateOfCommunication
                           ? dayjs(
                               formik.values.dateOfCommunication,
-                              "YYYY/MM/DD"
+                              "YYYY-MM-DD"
                             )
                           : null
                       }
@@ -368,7 +360,7 @@ const ModalComponent = ({
                       onChange={(date: Dayjs | null) =>
                         formik.setFieldValue(
                           "dateOfCommunication",
-                          date ? date.format("YYYY/MM/DD") : ""
+                          date ? date.format("YYYY-MM-DD") : ""
                         )
                       }
                       slotProps={{
