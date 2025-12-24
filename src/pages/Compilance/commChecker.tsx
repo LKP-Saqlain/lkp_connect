@@ -61,15 +61,6 @@ const ComChecker = ({ activeSubItem }: any) => {
 
   const handleApproval = (rid: number, remark: string, entryFlag: string) => {
     const payload = {
-      financialYear: "",
-      department: "",
-      action: "approve",
-      documentType: "",
-      typeOfDocuments: "",
-      communicationType: "",
-      communicationProof: "",
-      communicationProofPath: "",
-      dateOfCommunication: formattedDate,
       rowId: rid,
       userId: user_id,
       entryFlag: entryFlag,
@@ -78,12 +69,13 @@ const ComChecker = ({ activeSubItem }: any) => {
     dispatch(showLoader("Approving..."));
 
     apiServices
-      .Compliance(payload)
+      .ApproveComplianceData(payload)
       .then((response) => {
         // setFlag(!flag);
         if (response?.status === 200) {
           setFlag(!flag);
-          ShowToast("success", response?.data.Table[0]?.Message);
+          console.log("Responseee-->", response?.data);
+          ShowToast("success", response?.data.message);
         } else {
           console.log("Error during approval", response);
           ShowToast("error", "Error approving item");

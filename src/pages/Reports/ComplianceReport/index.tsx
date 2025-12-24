@@ -61,37 +61,34 @@ const Retrival = ({ activeSubItem }: any) => {
   }, [formik.values]);
 
   const fetchComplianceReport = async () => {
-    let payload = {
+    const payload = {
       financialYear: formik.values.finYear,
       department: formik.values.department,
-      action: "viewReport",
-      documentType: "",
       typeOfDocuments: formik.values.documentType,
-      communicationType: "",
-      communicationProof: "",
-      communicationProofPath: "",
-      dateOfCommunication: "02/03/2025",
-      rowId: 0,
-      userId: "",
-      entryFlag: "",
-      remark: "",
     };
+
     dispatch(showLoader("Please wait, we are processing your request..."));
+
     apiServices
-      .ComplainceReport(payload)
+      .GetComplianceReport(payload)
       .then((response) => {
-        dispatch(hideLoader());
-        console.log("apiResponse", response?.data?.Table);
-        setUserData(response?.data?.Table);
+        const apiData = response?.data?.data || [];
+
+        const mappedData = apiData.map((item: any, index: number) => ({
+          Id: index + 1,
+          ...item,
+        }));
+
+        setUserData(mappedData);
       })
       .catch((error) => {
-        dispatch(hideLoader());
         console.log("Error", error);
       })
       .finally(() => {
         dispatch(hideLoader());
       });
   };
+
   const handleDownload = async (row: any) => {
     const payload = {
       fileName: row.CommunicationProofPath,

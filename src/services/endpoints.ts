@@ -262,4 +262,6 @@ export const endpoints = {
   InsertComplianceData: "/api/Compliance/InsertComplianceData",
   UpdateComplianceData: "/api/Compliance/UpdateComplianceData",
   DeleteComplianceData: "/api/Compliance/DeleteComplianceData",
+  GetComplianceReport: "/api/Compliance/GetComplianceReport",
+  ApproveComplianceData: "/api/Compliance/ApproveComplianceData",
 };

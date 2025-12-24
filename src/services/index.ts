@@ -1117,4 +1117,10 @@ export const apiServices = {
   UpdateComplianceData: async (payload: any) => {
     return await apiService("POST", endpoints.UpdateComplianceData, payload);
   },
+  GetComplianceReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetComplianceReport, payload);
+  },
+  ApproveComplianceData: async (payload: any) => {
+    return await apiService("POST", endpoints.ApproveComplianceData, payload);
+  },
 };

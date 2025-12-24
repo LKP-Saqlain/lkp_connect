@@ -93,7 +93,7 @@ const MandateCall = () => {
   const HandleVerifyUpi = () => {
     const payload = {
       requestInfo: {
-        pgMerchantId: "HDFC000010010275",
+        pgMerchantId: "",
         pspRefNo: "",
       },
       payeeType: {
@@ -197,7 +197,7 @@ const MandateCall = () => {
 
     let payload = {
       requestInfo: {
-        pgMerchantId: "HDFC000010010275",
+        pgMerchantId: "",
         pspRefNo: "",
       },
       mandate: {
@@ -238,7 +238,7 @@ const MandateCall = () => {
 
     let payload = {
       requestInfo: {
-        pgMerchantId: "HDFC000010010275",
+        pgMerchantId: "",
         pspRefNo: "",
       },
       mandate: {
