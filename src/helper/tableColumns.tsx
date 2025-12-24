@@ -2053,29 +2053,29 @@ export const DPDebitRecovery: GridColDef[] = [
       return <CopyToClipboardCell fullLink={fullLink} field={"payment"} />;
     },
   },
-  // {
-  //   field: "dpMandate_Link",
-  //   headerName: "Mandate\nLink",
-  //   headerClassName: "header-wrap-custom",
-  //   minWidth: 75,
-  //   flex: 0.3,
-  //   align: "center",
-  //   headerAlign: "center",
-  //   disableColumnMenu: true,
-  //   renderCell: (params: any) => {
-  //     const { paylnk, enc } = params.row;
-  //     if (!paylnk || !enc) return <span>No Link Available</span>;
+  {
+    field: "dpMandate_Link",
+    headerName: "Mandate\nLink",
+    headerClassName: "header-wrap-custom",
+    minWidth: 75,
+    flex: 0.3,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const { paylnk, enc } = params.row;
+      if (!paylnk || !enc) return <span>No Link Available</span>;
 
-  //     const fullLink = `${paylnk}${enc}`;
-  //     return (
-  //       <CopyToClipboardCell
-  //         fullLink={fullLink}
-  //         field={"dpMandate"}
-  //         selectedRow={params?.row}
-  //       />
-  //     );
-  //   },
-  // },
+      const fullLink = `${paylnk}${enc}`;
+      return (
+        <CopyToClipboardCell
+          fullLink={fullLink}
+          field={"dpMandate"}
+          selectedRow={params?.row}
+        />
+      );
+    },
+  },
   {
     field: "cc",
     headerName: "Client Code",
