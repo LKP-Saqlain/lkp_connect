@@ -54,16 +54,12 @@ const CopyToClipboardCell: React.FC<Props> = ({
     let textToCopy = field !== "dpMandate" ? fullLink : mandateLink;
 
     if (field === "dpMandate" || field === "AMC") {
-      console.log(
-        "clientCode&dP_ID",
-        selectedRow.ClientCode,
-        selectedRow.dP_ID
-      );
+      console.log("clientCode&dP_ID", selectedRow.cc, selectedRow.dP_ID);
 
       const isMandate = field === "dpMandate";
 
       if (isMandate) {
-        const encryptedCode = encryptAES(selectedRow.ClientCode);
+        const encryptedCode = encryptAES(selectedRow.cc);
         const safeCode = encodeURIComponent(encryptedCode);
         textToCopy = `${window.location.origin}/DPMandate/${safeCode}`;
         setMandateLink(textToCopy);
