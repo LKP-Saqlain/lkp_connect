@@ -114,8 +114,8 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
         .then((res) => {
           if (res?.status === 200) {
             let branchDropdown = res.data.data.map((item: any) => ({
-              label: item.val, // Display value
-              value: item.val, // Actual value
+              label: item.val, 
+              value: item.val, 
             }));
 
             // Add "ALL" as first option
