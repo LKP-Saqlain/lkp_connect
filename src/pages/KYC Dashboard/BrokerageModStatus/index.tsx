@@ -59,9 +59,9 @@ const BrokerageModificationStatus = ({ activeSubItem }: any) => {
       .getDropDown(payload)
       .then((res) => {
         if (res?.status === 200) {
-          const formatted = res.data.map((item: any) => ({
-            label: item.itemDesc,
-            value: item.itemVal,
+          const formatted = res.data.data.map((item: any) => ({
+            label: item.desc,
+            value: item.val,
           }));
           setZoneOptions(formatted);
         }

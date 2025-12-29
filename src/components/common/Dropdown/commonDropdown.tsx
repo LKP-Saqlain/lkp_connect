@@ -48,10 +48,10 @@ const ComDropDown: React.FC<ComDropDownProps> = ({ onZoneChange }) => {
 
         const res = await apiServices.getDropDown(payload);
 
-        if (res?.status === 200 && Array.isArray(res.data)) {
-          const zoneOptions: ZoneOption[] = res.data.map((item: any) => ({
-            label: item.itemDesc,
-            value: item.itemVal,
+        if (res?.status === 200 && Array.isArray(res.data.data)) {
+          const zoneOptions: ZoneOption[] = res.data.data.map((item: any) => ({
+            label: item.desc,
+            value: item.val,
           }));
 
           setZones(zoneOptions);

@@ -310,4 +310,5 @@ export const newDomainEndpoints = [
   endpoints.GetComplianceReport,
   // endpoints.ComplainceReport,
   endpoints.ApproveComplianceData,
+  endpoints.getDropDown,
 ];

@@ -201,9 +201,9 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         .then((res) => {
           console.log("Response-->", res);
           if (res?.status === 200) {
-            let zoneDropdown = res?.data.map((item: any) => ({
-              label: item.itemDesc, // This will be displayed in the dropdown
-              value: item.itemVal, // This will be the actual value
+            let zoneDropdown = res?.data.data.map((item: any) => ({
+              label: item.desc, // This will be displayed in the dropdown
+              value: item.val, // This will be the actual value
             }));
             console.log("dropdown value", zoneDropdown);
             setNoSortingGroup(zoneDropdown);

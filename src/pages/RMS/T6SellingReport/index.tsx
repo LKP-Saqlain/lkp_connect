@@ -96,9 +96,9 @@ const T6SellingReport = ({ activeSubItem }: any) => {
       .then((res) => {
         console.log("Response-->", res);
         if (res?.status === 200) {
-          let zoneDropdown = res?.data.map((item: any) => ({
-            label: item.itemDesc, // This will be displayed in the dropdown
-            value: item.itemVal, // This will be the actual value
+          let zoneDropdown = res?.data.data.map((item: any) => ({
+            label: item.desc, // This will be displayed in the dropdown
+            value: item.val, // This will be the actual value
           }));
           console.log("dropdown value", zoneDropdown);
           setNoSortingGroup(zoneDropdown);
@@ -151,9 +151,9 @@ const T6SellingReport = ({ activeSubItem }: any) => {
         .then((res) => {
           console.log("response->", res);
           if (res?.status === 200) {
-            let branchDropdown = res?.data.map((item: any) => ({
-              label: item.itemVal, // Display value in dropdown
-              value: item.itemVal, // Actual value of the dropdown item
+            let branchDropdown = res?.data.data.map((item: any) => ({
+              label: item.val, // Display value in dropdown
+              value: item.val, // Actual value of the dropdown item
             }));
             branchDropdown = [
               { label: "ALL", value: "ALL" },

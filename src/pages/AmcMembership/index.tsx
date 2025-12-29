@@ -141,9 +141,9 @@ const Index = ({ activeMenu }: any) => {
 
         const res = await apiServices.getDropDown(payload);
         if (res?.status === 200) {
-          const zoneOptions = res.data.map((item: any) => ({
-            label: item.itemDesc,
-            value: item.itemVal,
+          const zoneOptions = res.data.data.map((item: any) => ({
+            label: item.desc,
+            value: item.val,
           }));
 
           setNoSortingGroup(zoneOptions);

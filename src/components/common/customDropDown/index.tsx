@@ -76,9 +76,9 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
       .getDropDown(payload, customHeaders)
       .then((res) => {
         if (res?.status === 200) {
-          const zoneDropdown = res.data.map((item: any) => ({
-            label: item.itemDesc,
-            value: item.itemVal,
+          const zoneDropdown = res.data.data.map((item: any) => ({
+            label: item.desc,
+            value: item.val,
           }));
           setNoSortingGroup(zoneDropdown);
 
@@ -113,9 +113,9 @@ const DropDown = ({ handleValues, tradeData, setCustomLedgerData }: table) => {
         .getDropDown(payload)
         .then((res) => {
           if (res?.status === 200) {
-            let branchDropdown = res.data.map((item: any) => ({
-              label: item.itemVal, // Display value
-              value: item.itemVal, // Actual value
+            let branchDropdown = res.data.data.map((item: any) => ({
+              label: item.val, // Display value
+              value: item.val, // Actual value
             }));
 
             // Add "ALL" as first option
