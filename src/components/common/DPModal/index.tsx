@@ -127,17 +127,19 @@ const CustomModal = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log(
-      "TestProps",
-      fileExtension,
-      setSetShowImg,
-      previewUrl,
-      activeSubItem,
-      "row",
-      row,
-      "accctionnnn"
-    );
+    console.log("TestProps", activeSubItem, "row", row);
   }, [fileExtension, setSetShowImg, previewUrl, activeSubItem, row]);
+
+  useEffect(() => {
+    if (activeSubItem === "mandateCall" && row) {
+      formik.setValues({
+        ...formik.values,
+        umn: row.umn || "",
+        mandateAmount: row.amount || "",
+        mandateUpi: row.upi || "",
+      });
+    }
+  }, [activeSubItem, row]);
 
   useEffect(() => {
     console.log("Actionnn", action);
@@ -179,6 +181,11 @@ const CustomModal = ({
       tdsFlag: "Yes",
       uploadProof: null,
       prefix: "EMP",
+
+      // mandateCall fields
+      umn: row?.umn || "",
+      mandateAmount: row?.amount,
+      mandateUpi: row?.upi,
     },
     validationSchema: Yup.object({
       // For Vendor Approval
@@ -239,8 +246,32 @@ const CustomModal = ({
         remark: Yup.string().required("Remark is required"),
         dropdownOption: Yup.string().required("Vendor Name is required"),
       }),
+      ...(activeSubItem === "mandateCall" && {
+        mandateAmount: Yup.number()
+          .min(5000, "Amount must be at least 5000")
+          .required("Amount is required"),
+
+        mandateUpi: Yup.string().trim().required("UPI ID is required"),
+      }),
     }),
     onSubmit: (values) => {
+      if (activeSubItem === "mandateCall") {
+        console.log({
+          umn: values.umn,
+          amount: values.mandateAmount,
+          upi: values.mandateUpi,
+        });
+
+        getUserDetails?.({
+          ...row,
+          umn: values.umn,
+          amount: values.mandateAmount,
+          upi: values.mandateUpi,
+        });
+
+        setmodal_center(false);
+        return;
+      }
       if (
         action === "delete" ||
         activeSubItem === "DP Debit Recovery" ||
@@ -449,6 +480,77 @@ const CustomModal = ({
     const { actn, ifsc } = row;
     handleVerifyDetails?.(actn, ifsc);
   };
+
+  const renderMandateFields = () => (
+    <Box sx={{ mt: 2 }}>
+      {/* UMN */}
+      <TextField
+        label="UMN"
+        size="small"
+        fullWidth
+        disabled
+        value={formik.values.umn}
+        sx={{ mb: 2 }}
+      />
+
+      {/* Amount (numeric only) */}
+      <TextField
+        label="Amount"
+        size="small"
+        fullWidth
+        name="mandateAmount"
+        value={formik.values.mandateAmount}
+        onChange={(e) => {
+          const value = e.target.value;
+
+          // allow empty + numeric only
+          if (/^[0-9]*$/.test(value)) {
+            formik.setFieldValue("mandateAmount", value);
+          }
+        }}
+        onBlur={() => {
+          const value = Number(formik.values.mandateAmount);
+
+          formik.setFieldTouched("mandateAmount", true);
+
+          if (value && value < 5000) {
+            formik.setFieldError(
+              "mandateAmount",
+              "Amount must be at least 5000"
+            );
+          }
+        }}
+        error={
+          formik.touched.mandateAmount && Boolean(formik.errors.mandateAmount)
+        }
+        helperText={
+          formik.touched.mandateAmount &&
+          typeof formik.errors.mandateAmount === "string"
+            ? formik.errors.mandateAmount
+            : ""
+        }
+        sx={{ mb: 2 }}
+      />
+
+      {/* UPI ID */}
+      <TextField
+        label="UPI ID"
+        size="small"
+        fullWidth
+        name="mandateUpi"
+        value={formik.values.mandateUpi}
+        onChange={formik.handleChange}
+        onBlur={formik.handleBlur}
+        error={formik.touched.mandateUpi && Boolean(formik.errors.mandateUpi)}
+        helperText={
+          formik.touched.mandateUpi &&
+          typeof formik.errors.mandateUpi === "string"
+            ? formik.errors.mandateUpi
+            : ""
+        }
+      />
+    </Box>
+  );
 
   const renderHeaderIcon = () => {
     if (isAdmin) {
@@ -1213,8 +1315,8 @@ const CustomModal = ({
   };
 
   useEffect(() => {
-    console.log("formikValues", formik.values);
-  }, [formik.values]);
+    console.log("formikValues", formik.values, formik.errors);
+  }, [formik.values, formik.errors]);
   return (
     <ReactstrapModal
       isOpen={modal_center}
@@ -1298,6 +1400,7 @@ const CustomModal = ({
             </div>
             {/* Main Form */}
             <form onSubmit={formik.handleSubmit}>
+              {activeSubItem === "mandateCall" && renderMandateFields()}
               {shouldShowRemarkField() && renderRemarkField()}
               {activeSubItem === "Vendor Approval" &&
                 action === "approve" &&

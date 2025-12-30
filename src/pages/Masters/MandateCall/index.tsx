@@ -20,6 +20,7 @@ const MandateCall = () => {
   const [upiId, setUpiId] = useState("");
   const [isMandateEnabled, setIsMandateEnabled] = useState(false);
   const [amount, setAmount] = useState("5000");
+  const [mandateTableData, setMandateTableData] = useState<any>(null);
   const [successMsg, setSuccessMsg] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -187,6 +188,8 @@ const MandateCall = () => {
   };
 
   const formatDate = (dateStr?: string) => {
+    console.log("Test111", dateStr);
+
     if (!dateStr) return "";
     const [year, month, day] = dateStr.split("-");
     return `${day}${month}${year}`; // DDMMYYYY
@@ -208,15 +211,21 @@ const MandateCall = () => {
           pattern: "MONTHLY",
           ruleType: "ON",
           ruleValue: data?.ruleValue?.toString() ?? "",
-          startDate: formatDate(data?.startdate),
-          endDate: formatDate(data?.Enddate),
+          startDate: data.startdate
+            ? formatDate(data?.startdate)
+            : formatDate(mandateTableData.startdate),
+          endDate: data.Enddate
+            ? formatDate(data?.Enddate)
+            : formatDate(mandateTableData.Enddate),
         },
         action_type: "UPDATE",
         onBehalf_Of: "PAYEE",
         expiryTime: "180",
-        umn: data?.umn,
+        umn: data?.umn ? data?.umn : mandateTableData?.umn,
       },
     };
+    console.log("Payload", payload);
+
     dispatch(showLoader(""));
     apiServices
       .UpdateUpiMandate(payload)
@@ -242,10 +251,12 @@ const MandateCall = () => {
         pspRefNo: "",
       },
       mandate: {
-        amount: value?.amount.toString(),
+        amount: value.amount
+          ? value?.amount.toString()
+          : mandateTableData?.amount,
         action_type: "REVOKE",
         onBehalf_Of: "PAYEE",
-        UMN: value?.umn,
+        UMN: value?.umn ? value?.umn : mandateTableData.umn,
       },
     };
     dispatch(showLoader(""));
@@ -266,6 +277,13 @@ const MandateCall = () => {
         console.log("Errrror", error);
         dispatch(hideLoader());
       });
+  };
+
+  const getUserDetails = (value: any) => {
+    console.log("values", value);
+    setAmount(value?.amount);
+    setUpiId(value?.upi);
+    setMandateTableData(value);
   };
 
   useEffect(() => {
@@ -362,19 +380,17 @@ const MandateCall = () => {
                   ) : (
                     <p>Loading...</p>
                   )}
-
                   <Grid
                     container
                     spacing={2}
                     alignItems="center"
-                    style={{ marginTop: "20px" }}
+                    sx={{ mt: 2, border: "1px solid black", p: 2 }}
                   >
-                    {/* Amount Field */}
+                    {/* Amount */}
                     <Grid item xs={12} sm={6} md={4}>
                       <TextField
                         size="small"
                         label="Please Enter Amount"
-                        variant="outlined"
                         fullWidth
                         onBlur={handleAmountBlur}
                         value={formatIndianNumber(amount)}
@@ -382,12 +398,11 @@ const MandateCall = () => {
                       />
                     </Grid>
 
-                    {/* UPI Field */}
+                    {/* UPI */}
                     <Grid item xs={12} sm={6} md={4}>
                       <TextField
                         size="small"
                         label="Enter UPI ID"
-                        variant="outlined"
                         fullWidth
                         value={upiId}
                         onChange={(e) => {
@@ -397,10 +412,10 @@ const MandateCall = () => {
                       />
                     </Grid>
 
+                    {/* Verify */}
                     <Grid item xs={12} sm={6} md={2}>
                       <Button
                         variant="contained"
-                        // color="primary"
                         sx={{ backgroundColor: "#11395C" }}
                         fullWidth
                         onClick={HandleVerifyUpi}
@@ -409,16 +424,51 @@ const MandateCall = () => {
                       </Button>
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={2}>
-                      <Button
-                        variant="contained"
-                        color="success"
-                        fullWidth
-                        disabled={!isMandateEnabled}
-                        onClick={HandleMandate}
-                      >
-                        Mandate
-                      </Button>
+                    {/* Spacer */}
+                    <Grid item xs={12} sm={6} md={2} />
+
+                    {/* SECOND ROW - STARTS EXACTLY UNDER AMOUNT */}
+                    <Grid item xs={12} sm={6} md={4}>
+                      <Grid container spacing={1}>
+                        <Grid item xs={4}>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="success"
+                            fullWidth
+                            disabled={!isMandateEnabled}
+                            onClick={HandleMandate}
+                          >
+                            Mandate
+                          </Button>
+                        </Grid>
+
+                        <Grid item xs={4}>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            // color="warning"
+                            sx={{ color: "#FFF", backgroundColor: "#11395C" }}
+                            fullWidth
+                            onClick={handleUpdate}
+                          >
+                            Update
+                          </Button>
+                        </Grid>
+
+                        <Grid item xs={4}>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            // color="#11395C"
+                            sx={{ color: "#FFF", backgroundColor: "#11395C" }}
+                            fullWidth
+                            onClick={getRevokeDetails}
+                          >
+                            Revoke
+                          </Button>
+                        </Grid>
+                      </Grid>
                     </Grid>
                   </Grid>
 
@@ -469,8 +519,9 @@ const MandateCall = () => {
                       <UserInfoTable
                         activeSubItem={"mandateCall"}
                         T6Data={mandateCallBackData}
-                        handleUpdate={handleUpdate}
-                        getUserDetails={getRevokeDetails}
+                        // handleUpdate={handleUpdate}
+                        // getUserDetails={getRevokeDetails}
+                        getUserDetails={getUserDetails}
                       />
                     </CardBody>
                   </Card>

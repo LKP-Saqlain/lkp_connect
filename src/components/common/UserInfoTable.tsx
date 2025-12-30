@@ -87,7 +87,7 @@ interface SelectedWidgetProps {
   setSegmentRow?: any;
   setIsBankVerified?: any;
   beneficiaryName?: any;
-  handleUpdate?: (data: any) => void;
+  // handleUpdate?: (data: any) => void;
   onViewAmcDetails?: (row: any) => void;
   handleMTFRow?: (row: any) => void;
   openNudgeTable?: () => void;
@@ -137,7 +137,7 @@ const DataTable = ({
   handleVerifyDetails,
   isBankVerified,
   setIsBankVerified,
-  handleUpdate,
+  // handleUpdate,
   setIsNudgeTableOpen,
   setSegmentRow,
   onViewAmcDetails,
@@ -2119,51 +2119,20 @@ const DataTable = ({
         if (column.field === "Action") {
           return {
             ...column,
-            renderCell: (params: any) => {
-              return (
-                <div style={{ display: "flex", gap: "6px" }}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{
-                      borderRadius: "8px",
-                      textTransform: "none",
-                      fontSize: "10px",
-                      height: "18px",
-                      padding: "2px 4px",
-                      marginTop: "4px",
-                    }}
-                    onClick={() => {
-                      console.log("Update clicked", params.row);
-                      handleUpdate?.(params.row);
-                    }}
-                  >
-                    Update
-                  </Button>
-
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    size="small"
-                    sx={{
-                      borderRadius: "8px",
-                      textTransform: "none",
-                      fontSize: "10px",
-                      height: "19px",
-                      padding: "2px 4px",
-                      marginTop: "4px",
-                    }}
-                    onClick={() => {
-                      console.log("Revoke clicked", params.row);
-                      setSelectedRow(params.row);
-                      tog_center();
-                    }}
-                  >
-                    Revoke
-                  </Button>
-                </div>
-              );
-            },
+            renderCell: (params: any) => (
+              <Tooltip title="Edit" arrow placement="top">
+                <IconButton
+                  sx={{ p: 0 }}
+                  onClick={() => {
+                    setSelectedRow(params.row); // if required
+                    // handleEdit?.(params.row); // optional callback
+                    tog_center(); // open modal
+                  }}
+                >
+                  <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                </IconButton>
+              </Tooltip>
+            ),
           };
         }
         return column;
@@ -2603,9 +2572,11 @@ const DataTable = ({
     Msg = `Are you sure want to ${action} this entry`;
   } else if (activeSubItem === "Pre Trade Approval" && !showDocument) {
     Msg = `Are you sure want to ${action} this entry`;
-  } else if (activeSubItem === "mandateCall") {
-    Msg = "Are you sure want to Revoke?";
-  } else if (
+  }
+  //  else if (activeSubItem === "mandateCall") {
+  //   Msg = "Are you sure want to Revoke?";
+  // }
+  else if (
     activeSubItem === "Pre Trade Proof Upload" ||
     activeSubItem === "Pre Trade Report" ||
     (activeSubItem === "Unlisted Shares Approval 1" && action === "approve") ||

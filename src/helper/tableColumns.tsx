@@ -9114,6 +9114,15 @@ export const MutualFundOrderColumns: GridColDef[] = [
 
 export const dpDebitMandateColumns: GridColDef[] = [
   {
+    field: "Action",
+    headerName: "Action",
+    flex: 2,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
     field: "RequestDate",
     headerName: "Request Date",
     flex: 1,
@@ -9121,6 +9130,22 @@ export const dpDebitMandateColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    valueFormatter: (params: any) => {
+      console.log("Paramsss", params);
+
+      if (!params) return "";
+
+      // Extract date part (YYYY-MM-DD)
+      const datePart = params.split(" ")[0];
+
+      const date = new Date(datePart);
+
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      });
+    },
   },
   {
     field: "umn",
@@ -9187,15 +9212,6 @@ export const dpDebitMandateColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
-  },
-  {
-    field: "Action",
-    headerName: "Action",
-    flex: 2,
-    minWidth: 150,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
   },
 ];
 
