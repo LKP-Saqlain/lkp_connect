@@ -256,7 +256,7 @@ const MandateCall = () => {
 
   const getRevokeDetails = (value: any) => {
     console.log("Vallues", value);
-   
+
     let payload = {
       requestInfo: {
         pgMerchantId: "",
@@ -269,15 +269,13 @@ const MandateCall = () => {
         UMN: mandateTableData.umn,
       },
     };
-  
+
     dispatch(showLoader(""));
-   
+
     apiServices
       .RevokeUpiMandate(payload)
       .then((response) => {
-       
         if (response?.status === 200) {
-        
           console.log("respinsesse", response?.data);
           if (response?.data?.statusCode === 200) {
             ShowToast("success", response?.data?.data?.statusDesc);
@@ -288,7 +286,6 @@ const MandateCall = () => {
         }
       })
       .catch((error) => {
-       
         console.log("Errrror", error);
         dispatch(hideLoader());
       });
@@ -304,8 +301,8 @@ const MandateCall = () => {
   const handleSendOtp = () => {
     const payload = {
       otp_type: "SendOtpSMS",
-      mobileNo: "9702497379", //data?.mobileNo,
-      User_id: "5431",
+      mobileNo: data?.mobileNo, //"9702497379", //data?.mobileNo,
+      User_id: data?.clientcode, // "5431",
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
@@ -345,8 +342,8 @@ const MandateCall = () => {
 
   const handleValidateOTP = (value: any) => {
     const payload = {
-      mobileNo: "9702497379",
-      User_id: "5431",
+      mobileNo: data?.mobileNo, // "9702497379",
+      User_id: data?.clientcode, // "5431",
       otp: otp.join(""),
     };
 
