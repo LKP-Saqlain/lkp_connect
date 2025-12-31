@@ -1,5 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Card, CardBody, CardHeader, Col, Row, Table } from "reactstrap";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Col,
+  Input,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+  Row,
+  Table,
+} from "reactstrap";
 import { apiServices } from "../../../services";
 import { TextField, Button, Grid, Box } from "@mui/material";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
@@ -13,15 +25,19 @@ import UserInfoTable from "../../../components/common/UserInfoTable";
 // import IconButton from "@mui/material/IconButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { decryptAES } from "../../../utils/encryptDecrypt";
+// import { SendOtp } from "../../../redux/thunk/ForgotPassword";
 
 const MandateCall = () => {
   const [data, setData] = useState<any>(null);
   const [mandateCallBackData, setMandateCallbackData] = useState<any>(null);
   const [upiId, setUpiId] = useState("");
   const [isMandateEnabled, setIsMandateEnabled] = useState(false);
-  const [amount, setAmount] = useState("5000");
+  const [amount, setAmount] = useState("10000");
   const [mandateTableData, setMandateTableData] = useState<any>(null);
   const [successMsg, setSuccessMsg] = useState("");
+  const [isRevokeModalOpen, setIsRevokeModalOpen] = useState(false);
+  const [showOtpField, setShowOtpField] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   // const { user_id } = useSelector(
@@ -181,9 +197,9 @@ const MandateCall = () => {
   const handleAmountBlur = () => {
     const numericValue = Number(amount);
 
-    if (numericValue < 5000) {
-      ShowToast("error", "Amount must be at least ₹5,000");
-      setAmount("5000");
+    if (numericValue < 10000) {
+      ShowToast("error", "Amount must be at least ₹10,000");
+      setAmount("10000");
     }
   };
 
@@ -208,20 +224,16 @@ const MandateCall = () => {
         amount: amount,
         amt_rule: "MAX",
         recurrence: {
-          pattern: "MONTHLY",
-          ruleType: "ON",
-          ruleValue: data?.ruleValue?.toString() ?? "",
-          startDate: data.startdate
-            ? formatDate(data?.startdate)
-            : formatDate(mandateTableData.startdate),
-          endDate: data.Enddate
-            ? formatDate(data?.Enddate)
-            : formatDate(mandateTableData.Enddate),
+          pattern: "ASPRESENTED",
+          ruleType: "",
+          ruleValue: mandateTableData?.ruleValue?.toString() ?? "",
+          startDate: formatDate(mandateTableData.startdate),
+          endDate: formatDate(mandateTableData.Enddate),
         },
         action_type: "UPDATE",
         onBehalf_Of: "PAYEE",
         expiryTime: "180",
-        umn: data?.umn ? data?.umn : mandateTableData?.umn,
+        umn: mandateTableData?.umn,
       },
     };
     console.log("Payload", payload);
@@ -244,26 +256,28 @@ const MandateCall = () => {
 
   const getRevokeDetails = (value: any) => {
     console.log("Vallues", value);
-
+   
     let payload = {
       requestInfo: {
         pgMerchantId: "",
         pspRefNo: "",
       },
       mandate: {
-        amount: value.amount
-          ? value?.amount.toString()
-          : mandateTableData?.amount,
+        amount: mandateTableData?.amount.toString(),
         action_type: "REVOKE",
         onBehalf_Of: "PAYEE",
-        UMN: value?.umn ? value?.umn : mandateTableData.umn,
+        UMN: mandateTableData.umn,
       },
     };
+  
     dispatch(showLoader(""));
+   
     apiServices
       .RevokeUpiMandate(payload)
       .then((response) => {
+       
         if (response?.status === 200) {
+        
           console.log("respinsesse", response?.data);
           if (response?.data?.statusCode === 200) {
             ShowToast("success", response?.data?.data?.statusDesc);
@@ -274,6 +288,7 @@ const MandateCall = () => {
         }
       })
       .catch((error) => {
+       
         console.log("Errrror", error);
         dispatch(hideLoader());
       });
@@ -284,6 +299,81 @@ const MandateCall = () => {
     setAmount(value?.amount);
     setUpiId(value?.upi);
     setMandateTableData(value);
+  };
+
+  const handleSendOtp = () => {
+    const payload = {
+      otp_type: "SendOtpSMS",
+      mobileNo: "9702497379", //data?.mobileNo,
+      User_id: "5431",
+    };
+
+    dispatch(showLoader("Please wait, we are processing your request..."));
+
+    apiServices
+      .SendOtpSms(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("Responsee1", response?.data);
+
+          ShowToast("success", response?.data?.message);
+          setShowOtpField(true);
+        }
+      })
+      .catch((error) => {
+        ShowToast(
+          "error",
+          error?.message ||
+            "Sorry for the inconvenience, please try after some time."
+        );
+      })
+      .finally(() => dispatch(hideLoader()));
+  };
+
+  const handleOtpChange = (value: string, index: number) => {
+    if (!/^\d?$/.test(value)) return;
+
+    const updatedOtp = [...otp];
+    updatedOtp[index] = value;
+    setOtp(updatedOtp);
+
+    // Auto focus next input
+    if (value && index < 5) {
+      document.getElementById(`otp-${index + 1}`)?.focus();
+    }
+  };
+
+  const handleValidateOTP = (value: any) => {
+    const payload = {
+      mobileNo: "9702497379",
+      User_id: "5431",
+      otp: otp.join(""),
+    };
+
+    dispatch(showLoader(""));
+
+    apiServices
+      .ValidateOtpSms(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+
+        if (response?.status !== 200) return;
+
+        const { statusCode, message } = response.data;
+
+        if (statusCode === 200) {
+          ShowToast("success", message);
+
+          //  Revoke API ONLY on valid OTP
+          getRevokeDetails(value);
+        } else {
+          ShowToast("error", message);
+        }
+      })
+      .catch((error) => {
+        dispatch(hideLoader());
+        console.log("error", error);
+      });
   };
 
   useEffect(() => {
@@ -321,7 +411,7 @@ const MandateCall = () => {
                   <Box>
                     <img src={Logo} alt="Logo" style={{ height: "40px" }} />
                   </Box>
-                  <h4 className="card-title mb-0">DP Mandate Call</h4>
+                  <h4 className="card-title mb-0">DP Mandate Request</h4>
                 </CardHeader>
 
                 <CardBody
@@ -329,6 +419,87 @@ const MandateCall = () => {
                     backgroundColor: "#F8F8F8",
                   }}
                 >
+                  <Modal
+                    isOpen={isRevokeModalOpen}
+                    toggle={() => setIsRevokeModalOpen(false)}
+                    centered
+                    style={{ maxWidth: "380px", margin: "auto" }}
+                  >
+                    <ModalHeader toggle={() => setIsRevokeModalOpen(false)}>
+                      Revoke Confirmation
+                    </ModalHeader>
+
+                    <ModalBody>
+                      <div className="text-center mb-3">
+                        {!showOtpField && (
+                          <Button
+                            // color="primary"
+                            sx={{ color: "#fff", backgroundColor: "#11395C" }}
+                            onClick={handleSendOtp}
+                            disabled={showOtpField}
+                          >
+                            Send OTP
+                          </Button>
+                        )}
+                      </div>
+
+                      {showOtpField && (
+                        <div className="d-flex justify-content-center gap-2">
+                          {otp.map((digit, index) => (
+                            <Input
+                              key={index}
+                              id={`otp-${index}`}
+                              type="text"
+                              maxLength={1}
+                              value={digit}
+                              onChange={(e) =>
+                                handleOtpChange(e.target.value, index)
+                              }
+                              style={{
+                                width: "45px",
+                                height: "45px",
+                                textAlign: "center",
+                                fontSize: "18px",
+                              }}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </ModalBody>
+
+                    <ModalFooter>
+                      <Button
+                        color="secondary"
+                        onClick={() => {
+                          setIsRevokeModalOpen(false);
+                          setShowOtpField(false);
+                          setOtp(["", "", "", "", "", ""]);
+                        }}
+                        sx={{
+                          backgroundColor: "#6c757d",
+                          color: "#fff",
+                          // textTransform: "none",
+                        }}
+                      >
+                        Cancel
+                      </Button>
+
+                      <Button
+                        variant="contained"
+                        color="error"
+                        disabled={!showOtpField || otp.some((d) => d === "")}
+                        sx={{
+                          backgroundColor: "green",
+                          color: "#fff",
+                          textTransform: "none",
+                          margin: "5px",
+                        }}
+                        onClick={handleValidateOTP}
+                      >
+                        Submit
+                      </Button>
+                    </ModalFooter>
+                  </Modal>
                   {data ? (
                     <Table bordered hover responsive>
                       <thead style={{ textAlign: "center" }}>
@@ -384,7 +555,7 @@ const MandateCall = () => {
                     container
                     spacing={2}
                     alignItems="center"
-                    sx={{ mt: 2, border: "1px solid black", p: 2 }}
+                    sx={{ mt: 2, p: 2 }}
                   >
                     {/* Amount */}
                     <Grid item xs={12} sm={6} md={4}>
@@ -460,10 +631,9 @@ const MandateCall = () => {
                           <Button
                             size="small"
                             variant="contained"
-                            // color="#11395C"
                             sx={{ color: "#FFF", backgroundColor: "#11395C" }}
                             fullWidth
-                            onClick={getRevokeDetails}
+                            onClick={() => setIsRevokeModalOpen(true)}
                           >
                             Revoke
                           </Button>

@@ -1123,4 +1123,10 @@ export const apiServices = {
   ApproveComplianceData: async (payload: any) => {
     return await apiService("POST", endpoints.ApproveComplianceData, payload);
   },
+  SendOtpSms: async (payload: any) => {
+    return await apiService("POST", endpoints.SendOtpSms, payload);
+  },
+  ValidateOtpSms: async (payload: any) => {
+    return await apiService("POST", endpoints.ValidateOtpSms, payload);
+  },
 };

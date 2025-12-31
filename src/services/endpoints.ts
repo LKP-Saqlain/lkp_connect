@@ -264,4 +264,6 @@ export const endpoints = {
   DeleteComplianceData: "/api/Compliance/DeleteComplianceData",
   GetComplianceReport: "/api/Compliance/GetComplianceReport",
   ApproveComplianceData: "/api/Compliance/ApproveComplianceData",
+  SendOtpSms: "/api/Common/SendOtpSms",
+  ValidateOtpSms: "/api/Common/ValidateOtpSms",
 };

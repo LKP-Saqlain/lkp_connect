@@ -26,6 +26,8 @@ export const publicEndpoints = [
   endpoints.DownloadSignedPdf,
   endpoints.SendFinalSignedMail,
   endpoints.GetAMCActivationStatus,
+  endpoints.SendOtpSms,
+  endpoints.ValidateOtpSms,
 ];
 
 export const fundamentalEndpoints = [
