@@ -279,7 +279,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                       }}
                     >
                       <h4 className="card-title mb-0">
-                        AP Contest Achieved Clientssss{" "}
+                        AP Contest Achieved Clients{" "}
                         <span style={{ fontSize: "12px" }}>
                           (October–December)
                         </span>
