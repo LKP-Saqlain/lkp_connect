@@ -24,40 +24,82 @@ const ComChecker = ({ activeSubItem }: any) => {
   const formattedDate = `${year}/${month}/${day}`;
 
   useEffect(() => {
-    const fetchComplianceData = () => {
+    const fetchComplianceEntry = async () => {
       const payload = {
         financialYear: "",
         department: "",
-        action: "viewchecker",
+        action: "view",
         documentType: "",
         typeOfDocuments: "",
         communicationType: "",
         communicationProof: "",
         communicationProofPath: "",
         dateOfCommunication: formattedDate,
-        // dateOfCommunication: "2025/02/05",
         rowId: 0,
         userId: "",
         entryFlag: "",
         remark: "",
       };
+
       dispatch(showLoader("Please wait, we are processing your request..."));
 
-      apiServices
-        .Compliance(payload)
-        .then((response) => {
-          setData(response?.data.Table);
-        })
-        .catch((error) => {
-          console.error("Error fetching compliance data:", error);
-        })
-        .finally(() => {
-          dispatch(hideLoader());
-        });
-    };
+      try {
+        const response = await apiServices.ViewComplianceData(payload);
+        const apiData = response?.data?.data || [];
 
-    fetchComplianceData();
+        // ✅ Add id for each row
+        const mappedData = apiData.map((item: any, index: number) => ({
+          Id: index + 1,
+          ...item,
+        }));
+
+        console.log("Mapped Data After Delete", mappedData);
+        setData(mappedData);
+      } catch (error) {
+        console.error("Error", error);
+      } finally {
+        dispatch(hideLoader());
+        // setIsRowDeleted(false); // keep commented if handled in Redux elsewhere
+      }
+    };
+    fetchComplianceEntry();
   }, [dispatch, flag]);
+
+  // useEffect(() => {
+  //   const fetchComplianceData = () => {
+  //     const payload = {
+  //       financialYear: "",
+  //       department: "",
+  //       action: "viewchecker",
+  //       documentType: "",
+  //       typeOfDocuments: "",
+  //       communicationType: "",
+  //       communicationProof: "",
+  //       communicationProofPath: "",
+  //       dateOfCommunication: formattedDate,
+  //       // dateOfCommunication: "2025/02/05",
+  //       rowId: 0,
+  //       userId: "",
+  //       entryFlag: "",
+  //       remark: "",
+  //     };
+  //     dispatch(showLoader("Please wait, we are processing your request..."));
+
+  //     apiServices
+  //       .Compliance(payload)
+  //       .then((response) => {
+  //         setData(response?.data.Table);
+  //       })
+  //       .catch((error) => {
+  //         console.error("Error fetching compliance data:", error);
+  //       })
+  //       .finally(() => {
+  //         dispatch(hideLoader());
+  //       });
+  //   };
+
+  //   fetchComplianceData();
+  // }, [dispatch, flag]);
 
   const handleApproval = (rid: number, remark: string, entryFlag: string) => {
     const payload = {
@@ -91,14 +133,14 @@ const ComChecker = ({ activeSubItem }: any) => {
 
   const handleDownload = async (row: any) => {
     const payload = {
-      fileName: row.CommunicationProofPath,
+      fileName: row.cpp,
       filePath: "D:\\FileUpload\\Compliance",
-      fileType: `.${row.DocumentType}`,
+      fileType: `.${row.dtype}`,
       contentType: "",
     };
 
     dispatch(showLoader("Downloading..."));
-    console.log("row data", row, payload.fileType);
+    console.log("row data", payload);
 
     apiServices
       .ComplianceDownload(payload)

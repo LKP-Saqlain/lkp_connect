@@ -1260,12 +1260,18 @@ const ModalComponent = ({
 
     // Detect if it's GZIP (first two bytes 0x1F 0x8B)
     const isGzip = binaryData[0] === 0x1f && binaryData[1] === 0x8b;
-    let fileBytes = binaryData;
+
+    let fileBytes: Uint8Array<ArrayBufferLike> = binaryData;
 
     if (isGzip) {
-      // Decompress GZIP
       fileBytes = pako.ungzip(binaryData);
     }
+
+    //  Force creation of a true ArrayBuffer
+    const arrayBuffer = new ArrayBuffer(fileBytes.byteLength);
+    new Uint8Array(arrayBuffer).set(
+      fileBytes.subarray(0, fileBytes.byteLength)
+    );
 
     // Map extn to MIME
     const mimeType =
@@ -1280,9 +1286,11 @@ const ModalComponent = ({
         ? "image/png"
         : "application/octet-stream";
 
-    return new File([fileBytes], fileName || `file${extn || ""}`, {
-      type: mimeType,
-    });
+    return new File(
+      [new Uint8Array(arrayBuffer)],
+      fileName || `file${extn || ""}`,
+      { type: mimeType }
+    );
   }
 
   useEffect(() => {

@@ -174,7 +174,8 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
             <UserCount />
           </Row>
           <Row>
-            <TripleBar />
+            {" "}
+            <TripleBar />{" "}
           </Row>
 
           <Row>

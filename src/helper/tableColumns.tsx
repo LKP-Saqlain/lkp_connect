@@ -480,7 +480,7 @@ export const getCommChecker: GridColDef[] = [
     sortable: false,
   },
   {
-    field: "DateOfCommunication",
+    field: "doc",
     headerName: "Date",
     minWidth: 100,
     flex: 1,
@@ -527,7 +527,7 @@ export const getCommChecker: GridColDef[] = [
     },
   },
   {
-    field: "TypeOfDocuments",
+    field: "tod",
     headerName: "Type of Document",
     minWidth: 120,
     flex: 1,
@@ -536,7 +536,7 @@ export const getCommChecker: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "CommunicationType",
+    field: "ctype",
     headerName: "Communication Type",
     minWidth: 120,
     flex: 1,
@@ -545,7 +545,7 @@ export const getCommChecker: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
   {
-    field: "CommunicationProof",
+    field: "cdesc",
     headerName: "Communication Description",
     minWidth: 240,
     flex: 2,
@@ -553,7 +553,7 @@ export const getCommChecker: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "Department",
+    field: "dept",
     headerName: "Department",
     minWidth: 100,
     flex: 1,
@@ -561,7 +561,7 @@ export const getCommChecker: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "CommunicationProofPath",
+    field: "cpp",
     headerName: "Document",
     minWidth: 100,
     flex: 1,
@@ -3115,7 +3115,7 @@ export const communicationColumns = (): GridColDef[] => [
 
 export const CompliancneReport: GridColDef[] = [
   {
-    field: "DateOfCommunication",
+    field: "doc",
     headerName: "Date of Communication",
     width: 160,
     headerClassName: "header-wrap-custom",
@@ -3124,7 +3124,7 @@ export const CompliancneReport: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "TypeOfDocuments",
+    field: "tod",
     headerName: "Type of Document",
     minWidth: 110,
     disableColumnMenu: true,
@@ -3132,7 +3132,7 @@ export const CompliancneReport: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "CommunicationType",
+    field: "ctype",
     headerName: "Communication Type",
     minWidth: 120,
     headerClassName: "header-wrap-custom",
@@ -3140,7 +3140,7 @@ export const CompliancneReport: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "CommunicationDesc",
+    field: "cdesc",
     headerName: "Communication Description",
     minWidth: 400,
     headerAlign: "center",
@@ -3155,7 +3155,7 @@ export const CompliancneReport: GridColDef[] = [
     // },
   },
   {
-    field: "CommunicationProofPath",
+    field: "cpp",
     headerName: "Document",
     minWidth: 120,
     disableColumnMenu: true,
@@ -3163,7 +3163,7 @@ export const CompliancneReport: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "Department",
+    field: "dept",
     headerName: "Department",
     minWidth: 100,
     headerAlign: "center",
@@ -10793,7 +10793,7 @@ export const regMasterColumns: GridColDef[] = [
 
 export const AmcZoneReportDirect: GridColDef[] = [
   {
-    field: "cc",
+    field: "emp",
     headerName: "Employee Code",
     flex: 1,
     minWidth: 120,
@@ -11370,7 +11370,7 @@ export const extendedAmcReport: GridColDef[] = [
 
 export const apGrossBrokerageColumns: GridColDef[] = [
   {
-    field: "apn",
+    field: "apc",
     headerName: "AP Code",
     minWidth: 200,
     align: "center",
@@ -11379,7 +11379,7 @@ export const apGrossBrokerageColumns: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   {
-    field: "apc",
+    field: "apn",
     headerName: "AP Name",
     flex: 1,
     minWidth: 50,
@@ -11434,11 +11434,10 @@ export const apGrossBrokerageColumns: GridColDef[] = [
   },
 ];
 
-const formatNumber = (value: number) => {
-  if (!value && value !== 0) return "—";
+export const formatNumber = (value: any) => {
+  if (value == null || value === "") return "—";
 
-  return new Intl.NumberFormat("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(Number(value));
+  const rounded = Math.round(Number(value));
+
+  return rounded.toLocaleString("en-IN");
 };

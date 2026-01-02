@@ -18,7 +18,8 @@ const ProjectsOverviewCharts = ({
   useEffect(() => {
     console.log("brokData", brokerageData);
     if (brokerageDate) {
-      const categories = brokerageData.map((item: any) => item.Dtrandate);
+      const categories =
+        brokerageData && brokerageData.map((item: any) => item.dt);
       setLatestDates(categories);
       console.log("categories", categories);
     } else if (revenueYear) {

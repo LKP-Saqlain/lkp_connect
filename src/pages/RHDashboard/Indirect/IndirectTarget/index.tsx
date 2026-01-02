@@ -121,6 +121,12 @@ const IndirectTarget = ({ activeSubItem }: { activeSubItem: string }) => {
       .finally(() => dispatch(hideLoader()));
   }, [accessType]);
 
+  const formatIndianNumber = (number: number) => {
+    return new Intl.NumberFormat("en-IN", {
+      maximumFractionDigits: 0,
+    }).format(number);
+  };
+
   useEffect(() => {
     fetchGrossBrokerageQuarter();
   }, [formik.values.selectedZone?.value]);
@@ -246,6 +252,7 @@ const IndirectTarget = ({ activeSubItem }: { activeSubItem: string }) => {
                     title={card.title}
                     value={card.value}
                     IndirectQuarter={card.indirectQuarter}
+                    formatIndianNumber={formatIndianNumber}
                     customClass
                   />
                 </Col>

@@ -222,7 +222,7 @@ const RegAnnMaster = ({ activeSubItem }: any) => {
 
     try {
       // Extract file path and name
-      const fullPath = row.CircularFilePath || "";
+      const fullPath = row.cfp || "";
       const pathParts = fullPath.split("\\");
       const fullFileName = pathParts[pathParts.length - 1]; // e.g. "sample..pdf"
       const filePath = pathParts.slice(0, -1).join("\\"); // e.g. "D:\\PROJECT"

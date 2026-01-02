@@ -24,7 +24,7 @@ interface UserData {
     tcnt?: number;
     dcnt?: number;
     icnt?: number;
-    submittedTotal?: number;
+    sub_tot?: number;
     sub_dir?: number;
     sub_ind?: number;
     cmp_tot?: number;
@@ -175,7 +175,7 @@ const AmcReport = ({ activeSubItem }: any) => {
         break;
 
       case 1: // Submitted Clients
-        if (badge === "total") return data.submittedTotal || 0;
+        if (badge === "total") return data.sub_tot || 0;
         if (badge === "direct") return data.sub_dir || 0;
         if (badge === "indirect") return data.sub_ind || 0;
         break;
@@ -245,7 +245,7 @@ const AmcReport = ({ activeSubItem }: any) => {
                   index === 0
                     ? userData.summary.tcnt || 0
                     : index === 1
-                    ? userData.summary.submittedTotal || 0
+                    ? userData.summary.sub_tot || 0
                     : userData.summary.cmp_tot || 0,
                 isActive: activeBadges[index] === "total",
                 onClick: () => handleBadgeClick(index, "total"),

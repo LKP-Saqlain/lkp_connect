@@ -359,7 +359,7 @@ const DataTable = ({
       });
     } else if (activeSubItem === "Communication Retrival Report") {
       return TableColumns.CompliancneReport.map((column) => {
-        if (column.field === "CommunicationProofPath") {
+        if (column.field === "cpp") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -710,7 +710,7 @@ const DataTable = ({
                 >
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.RowId);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("approve");
                     }}
                     style={{ cursor: "pointer" }}
@@ -731,7 +731,7 @@ const DataTable = ({
                   </div>
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.RowId);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("reject");
                     }}
                     style={{ cursor: "pointer" }}
@@ -745,7 +745,7 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "CommunicationProofPath") {
+        if (column.field === "cpp") {
           return {
             ...column,
             renderCell: (params: any) => {

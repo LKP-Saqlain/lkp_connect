@@ -37,8 +37,8 @@ const StoreVisits = ({ getActiveClients }: any) => {
           const clientData = response?.data;
           console.log(clientData, "merum");
 
-          const active = Number(clientData?.activeClients ?? 0);
-          const inactive = Number(clientData?.inactiveClients ?? 0);
+          const active = Number(clientData?.ac ?? 0);
+          const inactive = Number(clientData?.ic ?? 0);
 
           console.log("ChartData Debug:", { active, inactive });
 

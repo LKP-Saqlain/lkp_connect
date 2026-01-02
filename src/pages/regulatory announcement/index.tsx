@@ -46,7 +46,7 @@ const RegulatoryAnnouncement = ({ activeMenu }: any) => {
 
     try {
       // Extract file path and name
-      const fullPath = row.CircularFilePath || "";
+      const fullPath = row.cfp || "";
       const pathParts = fullPath.split("\\");
       const fullFileName = pathParts[pathParts.length - 1]; // e.g. "sample..pdf"
       const filePath = pathParts.slice(0, -1).join("\\"); // e.g. "D:\\PROJECT"
@@ -69,6 +69,7 @@ const RegulatoryAnnouncement = ({ activeMenu }: any) => {
 
       dispatch(showLoader("Downloading..."));
       const response = await apiServices.ComplianceDownload(payload);
+      console.log("CompliandeDownloadResponse", response?.data);
 
       if (response?.status === 200 && response?.data) {
         const url = window.URL.createObjectURL(new Blob([response.data]));

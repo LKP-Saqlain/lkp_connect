@@ -328,26 +328,26 @@ const CTCLReport = ({ activeSubItem }: any) => {
     const formattedData =
       formik.values.reportType === "summarized"
         ? selectedData.map((item) => ({
-            Zone: item.zone,
-            "Branch Code": item.branchCode,
-            "Branch Type": item.branch_Type,
-            "CTCL Login ID": item.CTCLLoginID,
-            "CTCL User Name": item.CTCLUserName,
-            "Turnover (Cr.)": item.turnover,
-            "Gross Brokerage": item.grossBrokerage,
-            "Net Brokerage": item.netBrokerage,
+            Zone: item.zn,
+            "Branch Code": item.bc,
+            "Branch Type": item.bt,
+            "CTCL Login ID": item.clid,
+            "CTCL User Name": item.cusr,
+            "Turnover (Cr.)": item.tov,
+            "Gross Brokerage": item.gbrok,
+            "Net Brokerage": item.nbrok,
             "Last Trade Date": item.ltd,
           }))
         : selectedData.map((item) => ({
-            Zone: item.zone,
-            "Branch Code": item.branchCode,
-            "Branch Type": item.branch_Type,
-            "CTCL Login ID": item.CTCLLoginID,
-            "CTCL User Name": item.CTCLUserName,
-            "Exchange / Segment": item.exchangeSegment,
-            "Turnover (Cr.)": item.turnover,
-            "Gross Brokerage": item.grossBrokerage,
-            "Net Brokerage": item.netBrokerage,
+            Zone: item.zn,
+            "Branch Code": item.bc,
+            "Branch Type": item.bt,
+            "CTCL Login ID": item.clid,
+            "CTCL User Name": item.cusr,
+            "Exchange / Segment": item.seg,
+            "Turnover (Cr.)": item.tov,
+            "Gross Brokerage": item.gbrok,
+            "Net Brokerage": item.nbrok,
             "Last Trade Date": item.ltd,
           }));
 

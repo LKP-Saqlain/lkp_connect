@@ -313,4 +313,17 @@ export const newDomainEndpoints = [
   // endpoints.ComplainceReport,
   endpoints.ApproveComplianceData,
   endpoints.getDropDown,
+
+  //Research Call
+  // endpoints.ResearchCallData,  //data is mismatch so commented for a while
+
+  endpoints.ComplainceFileDownload,
+
+  //SPIP Dashboard
+  endpoints.GetAPRevenue,
+  endpoints.GetClientActiveInactiveCount,
+  endpoints.GetCommissionRevenueSummary,
+  endpoints.GetB2BCommissionSummary,
+  //SPIP SUBMENUS APIS
+  endpoints.FillQuarterName,
 ];

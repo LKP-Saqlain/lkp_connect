@@ -19,6 +19,7 @@ const financialYears = [
   { value: "2022-2023", label: "2022-2023" },
   { value: "2023-2024", label: "2023-2024" },
   { value: "2024-2025", label: "2024-2025" },
+  { value: "2025-2026", label: "2025-2026" },
 ];
 const documentType = [
   { value: "Circular", label: "Circular" },
@@ -91,9 +92,9 @@ const Retrival = ({ activeSubItem }: any) => {
 
   const handleDownload = async (row: any) => {
     const payload = {
-      fileName: row.CommunicationProofPath,
+      fileName: row.cpp,
       filePath: "D:\\FileUpload\\Compliance",
-      fileType: `.${row.DocumentType}`,
+      fileType: `.${row.dtype}`,
       contentType: "",
     };
 
