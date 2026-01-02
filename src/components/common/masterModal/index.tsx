@@ -1261,17 +1261,16 @@ const ModalComponent = ({
     // Detect if it's GZIP (first two bytes 0x1F 0x8B)
     const isGzip = binaryData[0] === 0x1f && binaryData[1] === 0x8b;
 
-    let fileBytes: Uint8Array<ArrayBufferLike> = binaryData;
+    //  Uint8Array is NOT generic → use plain Uint8Array
+    let fileBytes: Uint8Array = binaryData;
 
     if (isGzip) {
       fileBytes = pako.ungzip(binaryData);
     }
 
-    //  Force creation of a true ArrayBuffer
+    // Force creation of a true ArrayBuffer (Blob/File safe)
     const arrayBuffer = new ArrayBuffer(fileBytes.byteLength);
-    new Uint8Array(arrayBuffer).set(
-      fileBytes.subarray(0, fileBytes.byteLength)
-    );
+    new Uint8Array(arrayBuffer).set(fileBytes);
 
     // Map extn to MIME
     const mimeType =
