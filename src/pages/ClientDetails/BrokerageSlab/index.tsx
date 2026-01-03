@@ -40,6 +40,8 @@ const BrokerageSlab = ({
   const dispatch = useDispatch<AppDispatch>();
 
   const formatStatus = (value: string | undefined | null): string => {
+    console.log("Test123", value);
+
     if (!value || value === "01-Jan-00") return "--";
     return value;
   };
@@ -57,7 +59,7 @@ const BrokerageSlab = ({
         {
           id: 2,
           label: "F&O",
-          status: formatStatus(setClientDetails["eqdt"]),
+          status: formatStatus(setClientDetails["fodt"]),
         },
         {
           id: 3,

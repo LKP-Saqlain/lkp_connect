@@ -63,6 +63,12 @@ baseInstance.interceptors.request.use(
     const isMultipart = isEndpointMatched(url, multipartEndpoints);
     const isMutualFund = isEndpointMatched(url, mutualFundEndpoints);
     const isNewDomain = isEndpointMatched(url, newDomainEndpoints);
+    // const hasDomainOverride = "useNewDomain" in config === true;
+    // console.log("useNewDomain value:", (config as any).useNewDomain);
+
+    // const isNewDomain = hasDomainOverride
+    //   ? (config as any).useNewDomain === true
+    //   : isEndpointMatched(url, newDomainEndpoints);
 
     // Set baseURL and authorization
     config.baseURL = isFundamental

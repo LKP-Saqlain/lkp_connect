@@ -316,14 +316,16 @@ export const newDomainEndpoints = [
 
   //Research Call
   // endpoints.ResearchCallData,  //data is mismatch so commented for a while
-
+  endpoints.ComplainceFileUpload,
   endpoints.ComplainceFileDownload,
 
   //SPIP Dashboard
-  endpoints.GetAPRevenue,
-  endpoints.GetClientActiveInactiveCount,
-  endpoints.GetCommissionRevenueSummary,
-  endpoints.GetB2BCommissionSummary,
-  //SPIP SUBMENUS APIS
-  endpoints.FillQuarterName,
+  endpoints.GetAPRevenue, // SPIP Dashboard 10 days brokerage only
+  endpoints.GetClientActiveInactiveCount, //donut count
+  endpoints.GetCommissionRevenueSummary, //triple graph
+  endpoints.GetUniqueSubclientCount, // 3rd card
+  endpoints.GetB2BCommissionSummary, //1st card value
+
+  // //SPIP SUBMENUS APIS
+  // endpoints.FillQuarterName,
 ];

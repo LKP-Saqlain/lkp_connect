@@ -105,7 +105,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
     let base64Data = "";
     let fileExt = "";
     let fileName = "";
-    console.log("row111111", docType, row);
+    console.log("row111111", docType, row.fileExt);
 
     if (docType === "PAN") {
       const fileExtension =
@@ -118,12 +118,13 @@ const VendorApproval = ({ activeSubItem }: any) => {
         fileType: fileExtension,
         contentType: "",
       };
-
+      console.log("Payload1111", payload, row);
       dispatch(showLoader("Loading Preview..."));
-
       apiServices
         .ComplianceDownload(payload)
         .then((response) => {
+          console.log("Tes1111t", response?.data);
+
           if (response?.status === 200 && response?.data) {
             const fileBlob = new Blob([response.data], {
               type:

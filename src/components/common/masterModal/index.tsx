@@ -164,7 +164,7 @@ const ModalComponent = ({
   const { authenticationValue, user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
-  console.log("PAN", authenticationValue);
+  console.log("PAN1111111", authenticationValue, user_id);
   const rmc = user_id.split("-")[1] || "";
   // formik.setFieldValue("rmc", rmc);
   const dispatch = useDispatch<AppDispatch>();
@@ -1300,7 +1300,11 @@ const ModalComponent = ({
   }, [user_id]);
 
   useEffect(() => {
-    if (editUserCheck && activeSubItem !== "Unlisted Shares Entry") {
+    if (
+      editUserCheck &&
+      activeSubItem !== "Unlisted Shares Entry" &&
+      activeSubItem != "Vendor Creation"
+    ) {
       const fileExtension =
         editData && editData.pdoc
           ? `.${editData.pdoc.split(".").pop()?.toLowerCase()}`
@@ -2773,7 +2777,7 @@ const ModalComponent = ({
                               {formik.values.msmeFile ? (
                                 <>
                                   {uploadedMSMEFile?.name ||
-                                    `msme_document_file${editData?.msmseExtn}`}
+                                    `msme_document_file${editData?.msmx}`}
                                   <Tooltip title="Delete file" arrow>
                                     <span
                                       style={{
@@ -2985,7 +2989,7 @@ const ModalComponent = ({
                         {formik.values.bankFile ? (
                           <>
                             {uploadedBankFile?.name ||
-                              `bank_document_file${editData?.bankDocExtn}`}
+                              `bank_document_file${editData?.bdx}`}
                             <Tooltip title="Delete file" arrow>
                               <span
                                 style={{

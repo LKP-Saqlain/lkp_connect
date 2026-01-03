@@ -70,25 +70,25 @@ const VendorMaster = ({ activeSubItem }: any) => {
     }
   }, [editData]);
 
-  useEffect(() => {
-    dispatch(showLoader(""));
-    const fetchCities = () => {
-      apiServices
-        .FetchPinLocation({})
-        .then((response) => {
-          if (response?.status === 200) {
-            console.log("Response-->", response?.data?.data);
-            // const data = response?.data?.data || [];
-            dispatch(hideLoader());
-          }
-        })
-        .catch((error) => {
-          console.log("ERROR", error);
-        });
-    };
+  // useEffect(() => {
+  //   dispatch(showLoader(""));
+  //   const fetchCities = () => {
+  //     apiServices
+  //       .FetchPinLocation({})
+  //       .then((response) => {
+  //         if (response?.status === 200) {
+  //           console.log("Response-->", response?.data?.data);
+  //           // const data = response?.data?.data || [];
+  //           dispatch(hideLoader());
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.log("ERROR", error);
+  //       });
+  //   };
 
-    fetchCities();
-  }, [dispatch]);
+  //   fetchCities();
+  // }, [dispatch]);
 
   function tog_grid() {
     setmodal_grid(!modal_grid);

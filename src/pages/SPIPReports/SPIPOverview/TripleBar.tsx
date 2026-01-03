@@ -33,18 +33,20 @@ const TripleBar = () => {
     apiServices
       .GetCommissionRevenueSummary(payload)
       .then((response) => {
+        console.log("Response1111", response?.data);
+
         if (response?.status === 200) {
           setBrokerageData(response?.data);
           const fetchedBrokerageData = response?.data;
 
           const balanceCommission = fetchedBrokerageData.map(
-            (item: any) => item.balanceCommission
+            (item: any) => item.bc
           );
           const commissionReleased = fetchedBrokerageData.map(
-            (item: any) => item.commissionReleased
+            (item: any) => item.cr
           );
           const totalCommission = fetchedBrokerageData.map(
-            (item: any) => item.totalCommission
+            (item: any) => item.tc
           );
 
           setMonthProjectData([

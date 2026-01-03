@@ -73,8 +73,8 @@ const SPIPOverview = ({ activeSubItem, handleTradingOpen }: any) => {
 
           // Set new sub-client count
           if (uniqueSubCountResponse?.status === 200) {
-            const { uniqueSubclientcount } = uniqueSubCountResponse.data;
-            setNewSubClient(uniqueSubclientcount);
+            const { usc } = uniqueSubCountResponse.data;
+            setNewSubClient(usc);
           }
         }
       )

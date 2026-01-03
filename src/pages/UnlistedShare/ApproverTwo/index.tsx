@@ -28,8 +28,15 @@ const index = ({ activeSubItem }: any) => {
       apiServices
         .Approver2ViewUnlisted(payload)
         .then((response) => {
-          console.log("A2 Data", response?.data?.data);
-          setData(response?.data?.data);
+          const apiData = response?.data?.data ?? [];
+
+          const formattedData = apiData.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          console.log("A2 Data", formattedData);
+          setData(formattedData);
         })
         .catch((error) => {
           console.error("Error fetching compliance data:", error);

@@ -27,7 +27,7 @@ const ProjectsOverviewCharts = ({
       setLatestDates(categories);
       console.log("categories", categories);
     } else if (tripleBarData) {
-      const categories = brokerageData.map((item: any) => item.monthYear);
+      const categories = brokerageData.map((item: any) => item.my);
       setLatestDates(categories);
       console.log("commissionRevenueResponse tripleBarData", categories);
     }
