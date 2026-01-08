@@ -233,19 +233,17 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
             {subItems.map((subItem, index) => (
               <ListItemButton
                 key={index}
-                onClick={() => handleSubItemSelection(subItem.menu_name)}
+                onClick={() => handleSubItemSelection(subItem.mn)}
                 sx={{
                   justifyContent: open ? "initial" : "center",
 
                   pl: 4,
                   margin: "5px",
                   backgroundColor:
-                    activeSubItem === subItem.menu_name
-                      ? "#708090"
-                      : "transparent",
+                    activeSubItem === subItem.mn ? "#708090" : "transparent",
                   borderRadius: "10px",
                   boxShadow:
-                    activeSubItem === subItem.menu_name
+                    activeSubItem === subItem.mn
                       ? "0px 2px 6px rgba(0,0,0,0.1)"
                       : "none",
                   transition: "all 0.3s ease-in-out",
@@ -268,20 +266,16 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
                 >
                   <ArrowRightIcon
                     sx={{
-                      color:
-                        activeSubItem === subItem.menu_name
-                          ? "black"
-                          : "#F9F6EE",
+                      color: activeSubItem === subItem.mn ? "black" : "#F9F6EE",
                       fontSize: "20px",
                     }}
                   />
                 </ListItemIcon>
                 <ListItemText
-                  primary={subItem.menu_name}
+                  primary={subItem.mn}
                   sx={{
                     opacity: open ? 1 : 0,
-                    color:
-                      activeSubItem === subItem.menu_name ? "black" : "#F9F6EE",
+                    color: activeSubItem === subItem.mn ? "black" : "#F9F6EE",
                     transition: "color 0.5s",
                   }}
                   primaryTypographyProps={{

@@ -468,7 +468,8 @@ const SideBar = () => {
       .unwrap()
       .then((res) => {
         console.log("response", res);
-        console.log("res", res?.data);
+        console.log("GetMenusRes", res?.data?.data);
+        // console.log("res11111", res?.data);
         const processedMenus = buildMenuHierarchy(res?.data);
         console.log("menuItems-->", processedMenus);
         setMenuItems(processedMenus);
@@ -504,22 +505,22 @@ const SideBar = () => {
   }, []);
 
   const buildMenuHierarchy = (data: any) => {
-    // Create a map of menu items with the `menu_code` as the key
+    // Create a map of menu items with the `mc` as the key
     const menuMap = new Map();
     data.forEach((item: any) => {
-      menuMap.set(item.menu_code, { ...item, subItems: [] });
+      menuMap.set(item.mc, { ...item, subItems: [] });
     });
 
     // Iterate over the data and find child menus
     const menuHierarchy: any = [];
     data.forEach((item: any) => {
-      if (item.parent_menu_code === 0) {
-        menuHierarchy.push(menuMap.get(item.menu_code));
+      if (item.pmc === 0) {
+        menuHierarchy.push(menuMap.get(item.mc));
       } else {
         // Child menu, add to parent
-        const parentMenu = menuMap.get(item.parent_menu_code);
+        const parentMenu = menuMap.get(item.pmc);
         if (parentMenu) {
-          parentMenu.subItems.push(menuMap.get(item.menu_code));
+          parentMenu.subItems.push(menuMap.get(item.mc));
         }
       }
     });
@@ -828,8 +829,8 @@ const SideBar = () => {
     subItems: Record<string, JSX.Element | null>
   ): JSX.Element | null => subItems[activeSubItem] || null;
 
-  const componentResolver = (menu_order: number, menu_name: string) => {
-    console.log("MenuOrder", menu_order, menu_name);
+  const componentResolver = (menu_order: number, mn: string) => {
+    console.log("MenuOrder", menu_order, mn);
     const map: Record<string, JSX.Element | null> = {
       "My Performance":
         user_type === "Employee"
@@ -891,15 +892,13 @@ const SideBar = () => {
       "DP AMC Contest": <AmcMembership activeMenu={activeMenu} />,
       "Research Calls": <ResearchCalls />,
     };
-    return map[menu_name] ?? null;
+    return map[mn] ?? null;
   };
   const renderContent = () => {
-    const active = menuItems.find((item) => item.menu_name === activeMenu);
+    const active = menuItems.find((item) => item.mn === activeMenu);
     console.log("activeMenu", active);
 
-    return active
-      ? componentResolver(active.menu_order, active.menu_name)
-      : null;
+    return active ? componentResolver(active.menu_order, active.mn) : null;
   };
 
   const handleNotificationClick = () => {
@@ -923,7 +922,7 @@ const SideBar = () => {
 
   useEffect(() => {
     const hasMyPerformance = menuItems.some(
-      (menu) => menu.menu_name === "My Performance"
+      (menu) => menu.mn === "My Performance"
     );
     setShowMyPerformance(hasMyPerformance);
   }, [menuItems]);
@@ -1253,15 +1252,15 @@ const SideBar = () => {
             <List>
               {menuItems.map((item) => (
                 <DrawerItem
-                  key={item.menu_code}
-                  title={item.menu_name}
+                  key={item.mc}
+                  title={item.mn}
                   open={open}
                   subItems={item.subItems}
                   handleDrawerOpen={handleDrawerOpen}
                   isMobile={isMobile}
                   activeMenu={activeMenu}
                   handleClick={() =>
-                    handleMenuClick(item.menu_name, !!item.subItems?.length)
+                    handleMenuClick(item.mn, !!item.subItems?.length)
                   }
                   handleSubItemClick={handleSubItemClick}
                   visible={true}

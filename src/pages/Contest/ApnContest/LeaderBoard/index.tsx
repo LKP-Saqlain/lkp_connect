@@ -34,11 +34,11 @@ const index = ({ isCustomRender, row }: any) => {
       if (response?.data?.statusCode === 200 && Array.isArray(list)) {
         const formattedData = list.map((item: any, index: number) => ({
           ...item,
-          Id: index + 1, //
+          Id: index + 1,
         }));
         setPersonalData(userRank);
         setUserData(formattedData);
-        console.log(" Leaderboard Data:", formattedData);
+        console.log("Leaderboard Data:", formattedData);
       } else {
         console.warn(" No valid leaderboard data found:", response);
         setUserData([]);

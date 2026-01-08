@@ -14,10 +14,10 @@ export interface FormData {
 }
 
 export interface MenuItems {
-  menu_code: number;
-  menu_name: string;
+  mc: number;
+  mn: string;
   menu_path: string | null;
-  parent_menu_code: number;
+  pmc: number;
   menu_order: number;
   isParent: boolean;
   subItems?: MenuItems[]; // SubItems for child menus

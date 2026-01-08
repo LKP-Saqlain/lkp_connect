@@ -102,6 +102,7 @@ export const newDomainEndpoints = [
   endpoints.GetAPGrossBrokeragePerQuarter,
   endpoints.ClientDetails,
   endpoints.FetchPinLocation,
+  endpoints.getMenus,
   // endpoints.InsertThirdPartyMasterRecord,
   // endpoints.UpdateThirdPartyMasterRecord,
   // endpoints.DeleteThirdPartyMasterRecord,

@@ -38,6 +38,8 @@ import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 // import { isAdminAccess } from "../../../helper/commmon";
 import { pdfjs, Document, Page } from "react-pdf";
 import ApnContest from "../../../pages/Contest/ApnContest";
+import { encryptAES } from "../../../utils/encryptDecrypt";
+import { setAuthenticationValue } from "../../../redux/slices/AuthnticateUser";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 interface CustomModalProps {
@@ -341,7 +343,6 @@ const CustomModal = ({
 
   const handleUserClick = async () => {
     const errors = await formik.validateForm();
-
     if (Object.keys(errors).length > 0) {
       formik.setTouched({
         userChangeValue: true,
@@ -349,7 +350,6 @@ const CustomModal = ({
       });
       return;
     }
-
     let payload = {
       user_id:
         formik?.values?.prefix === "EMP"
@@ -360,7 +360,6 @@ const CustomModal = ({
       auth_value: formik.values.userPanValue,
     };
     console.log("Payload", payload);
-
     dispatch(showLoader("Please wait, we are processing your request..."));
     dispatch(AuthUser(payload))
       .unwrap()
@@ -368,23 +367,30 @@ const CustomModal = ({
         console.log("2FAresponse", response);
         if (response?.status === 200) {
           const { token } = response?.data;
-
           setTimeout(() => {
             console.log("2FA_Response", response?.data);
             localStorage.setItem("authenticated", "true");
             localStorage.setItem("tkn", token);
+            localStorage.setItem(
+              "authPan",
+              encryptAES(formik?.values?.userPanValue)
+            );
+            console.log("panValue", formik.values?.userPanValue);
+            dispatch(setAuthenticationValue(formik.values.userPanValue));
             // localStorage.setItem("userName", name);
-            dispatch(updateUserId(`EMP-${formik.values.userChangeValue}`));
+            dispatch(
+              updateUserId(
+                `${formik.values.prefix}-${formik.values.userChangeValue}`
+              )
+            );
             localStorage.setItem(
               "Id",
-              `${formik?.values?.prefix === "EMP" ? "EMP" : "APN"}-${
-                formik.values.userChangeValue
-              }`
+              `${formik.values.prefix}-${formik.values.userChangeValue}`
             );
             setmodal_center(false);
             formik.resetForm();
             window.location.reload();
-          }, 250);
+          }, 300);
           // navigate("/dashboard");
         }
       })
