@@ -220,6 +220,8 @@ export const newDomainEndpoints = [
   //Brokerage Slab API's
   endpoints.GetBrokerageModificationValidity,
   endpoints.GetBrokerageModificationHistory,
+  endpoints.GetBrokeragePlans,
+  endpoints.UpdateClientBrokerageModification,
 
   //Unlisted API's
   endpoints.ViewUnlistedSharesRecord,
