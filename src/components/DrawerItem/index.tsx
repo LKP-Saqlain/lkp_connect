@@ -117,7 +117,9 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "Client Request": <PublishedWithChangesIcon />,
     "Mutual Fund": <AttachMoneyIcon />,
     "DP AMC Contest": <AssignmentTurnedInIcon />,
+    "DP AMC Contest-Q4": <AssignmentTurnedInIcon />,
     "Research Calls": <TroubleshootIcon />,
+    "Partner Contest-Q4": <LocalPoliceIcon />,
   };
 
   const getIcon = (title: string) => {
@@ -211,6 +213,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           title === "Account" ||
           title === "Mutual Fund" ||
           title === "Partner Contest" ||
+          title === "Partner Contest-Q4" ||
           title === "DP AMC Contest" ||
           title === "Research Calls") && (
           <div className="starburst-bg">

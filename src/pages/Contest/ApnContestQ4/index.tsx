@@ -6,9 +6,9 @@ import contestReward from "../../../assets/images/AP Contest.png";
 import ActiveClient from "../../../assets/images/Clients.json";
 import DashboardCard from "../../../components/common/DashboardCard";
 import UserInfoTable from "../../../components/common/UserInfoTable";
-import ClientWiseBrokerage from "./Clientwise Brokerage/index";
-import BrokingRevenue from "./Broking Revenue/index";
-import Leaderboard from "./LeaderBoard/index";
+import ClientWiseBrokerage from "./ClientwiseBrokerageQ4/index";
+import BrokingRevenue from "./BrokingRevenueQ4/index";
+import Leaderboard from "./LeaderBoardQ4/index";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -29,7 +29,7 @@ interface APContestData {
   prze: string;
 }
 
-const APContestQ4 = ({ activeMenu, isCustomRender, row }: any) => {
+const APContest = ({ activeMenu, isCustomRender, row }: any) => {
   const [selectedCapsule, setSelectedCapsule] = useState("Contest Rewards");
   const [targetData, setTargetData] = useState<APContestData | null>(null);
   const [userData, setUserData] = useState<any[]>([]);
@@ -50,7 +50,7 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row }: any) => {
   useEffect(() => {
     const payload = {
       user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
-      quarterPeriod: "Q3-2526",
+      quarterPeriod: "Q4-2526",
     };
 
     const fetchContestTargetDetails = async () => {
@@ -121,7 +121,7 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row }: any) => {
   const fetchAPContestAchClients = () => {
     let payload = {
       user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
-      quarterPeriod: "Q3-2526",
+      quarterPeriod: "Q4-2526",
       // user_id: user_id,
     };
     dispatch(showLoader(""));
@@ -153,7 +153,7 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row }: any) => {
   const fetchAPContestSummary = () => {
     let payload = {
       user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
-      quarterPeriod: "Q3-2526",
+      quarterPeriod: "Q4-2526",
       // user_id: user_id,
     };
     dispatch(showLoader(""));
@@ -322,4 +322,4 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row }: any) => {
   );
 };
 
-export default APContestQ4;
+export default APContest;

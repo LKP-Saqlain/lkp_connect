@@ -301,7 +301,7 @@ const ModalComponent = ({
     const payload = {
       clientcode: BrokerageTitle?.cc || "",
       segment: BrokerageTitle?.typ || "",
-      moduleNo: selectedPlan?.m_no || "",
+      moduleNo: selectedPlan?.m_no || selectedPlan?.ModuleNo,
       existingPlan: `${existingPlan} ( ${activeSince} )`,
       proposedPlan: selectedValue,
       consentfileName: uploadedFileName,

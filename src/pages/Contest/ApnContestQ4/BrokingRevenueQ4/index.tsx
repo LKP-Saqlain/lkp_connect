@@ -35,7 +35,7 @@ const ApContestSummaryCard = ({ isCustomRender, row }: any) => {
   const fetchDashboardData = async () => {
     const payload = {
       user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
-      quarterPeriod: "Q3-2526",
+      quarterPeriod: "Q4-2526",
     };
 
     try {
@@ -81,7 +81,7 @@ const ApContestSummaryCard = ({ isCustomRender, row }: any) => {
   const fetchApContestSummary = async () => {
     const payload = {
       user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
-      quarterPeriod: "Q3-2526",
+      quarterPeriod: "Q4-2526",
     };
 
     try {

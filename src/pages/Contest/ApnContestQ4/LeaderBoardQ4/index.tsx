@@ -22,7 +22,7 @@ const index = ({ isCustomRender, row }: any) => {
   const fetchLeaderboard = async () => {
     const payload = {
       user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
-      quarterPeriod: "Q3-2526",
+      quarterPeriod: "Q4-2526",
     };
 
     try {

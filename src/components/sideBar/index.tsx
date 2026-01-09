@@ -47,6 +47,7 @@ import OTDetails from "../../pages/OT";
 import SPIP from "../../pages/SPIPReports";
 import SPIPOverview from "../../pages/SPIPReports/SPIPOverview";
 import ApnContest from "../../pages/Contest/ApnContest";
+import ApnContestQ4 from "../../pages/Contest/ApnContestQ4";
 import EmpContest from "../../pages/Contest/EmpContest";
 import PledgeRequest from "../../pages/PledgeRequest";
 import InsertUnlistedShares from "../../pages/UnlistedShare/showUnlistedRecords";
@@ -103,6 +104,7 @@ import DPTransactionIndex from "../../pages/Reports/AMC Transaction";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import MandatePayment from "../../pages/ThirdParty/Mandate";
 import AmcMembership from "../../pages/AmcMembership";
+import AmcMembershipQ4 from "../../pages/AmcMembershipQ4";
 import LedgerDebitReport from "../../pages/AmcMembership/LedgerReport";
 import VendorReport from "../../pages/ThirdParty/VendorReport";
 import RMSPledgeHolding from "../../pages/RMS/PledgeHoldingAdjustment";
@@ -878,6 +880,7 @@ const SideBar = () => {
       "TPD Report": getSubItemComponent(tpdSubItems),
       "Employee Target": <EmpContest activeMenu={activeMenu} />,
       "Partner Contest": <ApnContest activeMenu={activeMenu} />,
+      "Partner Contest-Q4": <ApnContestQ4 activeMenu={activeMenu} />,
       "Client Details": (
         <ClientDetails
           handleDrawerClose={handleDrawerClose}
@@ -890,6 +893,7 @@ const SideBar = () => {
       Account: getSubItemComponent(AccountSubItems),
       "Client Request": <PledgeRequest activeMenu={activeMenu} />,
       "DP AMC Contest": <AmcMembership activeMenu={activeMenu} />,
+      "DP AMC Contest-Q4": <AmcMembershipQ4 activeMenu={activeMenu} />,
       "Research Calls": <ResearchCalls />,
     };
     return map[mn] ?? null;

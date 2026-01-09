@@ -52,7 +52,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
       periodType: selectedMonth === 13 ? "ALL" : "MONTH",
       year: 2025,
       month: selectedMonth,
-      quarterPeriod: "Q3-2526",
+      quarterPeriod: "Q4-2526",
     };
 
     try {
@@ -83,7 +83,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
   const fetchAPachievedBrokerage = () => {
     let payload = {
       user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
-      quarterPeriod: "Q3-2526",
+      quarterPeriod: "Q4-2526",
     };
     dispatch(showLoader(""));
 
