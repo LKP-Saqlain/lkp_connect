@@ -5,6 +5,11 @@ import "../../../pages/Overview/style.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 
+const LABEL_MAP: Record<string, string> = {
+  ac: "Active",
+  ic: "Inactive",
+};
+
 const StoreVisitsCharts = ({ chartData, componentsFlag }: any) => {
   const [labels, setLabels] = useState<string[]>([]);
   const [seriess, setSeriess] = useState<number[]>([]);
@@ -16,21 +21,24 @@ const StoreVisitsCharts = ({ chartData, componentsFlag }: any) => {
   const chartColors = ["#11395C", "#F57C00"];
 
   useEffect(() => {
-    console.log("chartData", chartData);
     if (user_type === "Employee" || componentsFlag) {
       const newLabels = chartData.map((item: any) => item.name);
       const newSeries = chartData.map((item: any) => Number(item.value) || 0);
       setLabels(newLabels);
       setSeriess(newSeries);
-      console.log("res12", newLabels, newSeries);
     } else {
-      const newLabels = Object.keys(chartData);
-      const newSeries = Object.values(chartData) as number[];
+      const newLabels = Object.keys(chartData).map(
+        (key) => LABEL_MAP[key] ?? key
+      );
+
+      const newSeries = Object.values(chartData).map(
+        (value) => Number(value) || 0
+      );
+
       setLabels(newLabels);
       setSeriess(newSeries);
-      console.log("res12", newLabels, newSeries);
     }
-  }, [chartData]);
+  }, [chartData, user_type, componentsFlag]);
 
   useEffect(() => {
     console.log("chartData", chartData);

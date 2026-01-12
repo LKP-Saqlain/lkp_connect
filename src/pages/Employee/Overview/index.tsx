@@ -169,67 +169,47 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
       const payload = {
         branchCode: user_id,
       };
-      dispatch(showLoader("Please wait, we are processing your request..."));
-      dispatch(APBrokerage(payload))
-        .unwrap()
-        .then((response) => {
-          const month = response?.data?.Table3[0]?.FinancialQuarter;
-          const APbrokerage = response?.data?.Table3[0]?.APbrokerage;
-          const GrossBrokerage = response?.data?.Table3[0]?.GrossBrokerage;
-          // const allQuarters = response?.data?.Table3 || [];
-          // const totalAPBrokerage = allQuarters.reduce(
-          //   (acc, item) => acc + (item.APbrokerage || 0),
-          //   0
-          // );
 
-          // const totalGrossBrokerage = allQuarters.reduce(
-          //   (acc, item) => acc + (item.GrossBrokerage || 0),
-          //   0
-          // );
-          const clients = response?.data?.Table4[0]?.NewClientCOUNTS;
-          const uniqueTradedClients =
-            response?.data?.Table5[0]?.TradedClientCOUNTS;
-          console.log(
-            response?.data,
-            "AP three CARD",
-            month,
-            uniqueTradedClients,
-            clients,
-            activeClients
-          );
-          setFirstCard({
-            APbrokerage,
-            GrossBrokerage,
-            total: APbrokerage + GrossBrokerage,
-          });
-          // setFirstCard({
-          //   APbrokerage: totalAPBrokerage,
-          //   GrossBrokerage: totalGrossBrokerage,
-          //   total: totalAPBrokerage + totalGrossBrokerage,
-          // });
-          setNewClien(clients);
-          setTradedClients(uniqueTradedClients);
-          // setStartMonth(month);
-          console.log("ffff", firstCard);
+      try {
+        dispatch(showLoader("Please wait, we are processing your request..."));
 
-          if (response?.status === 200) {
-            dispatch(hideLoader());
-          }
-        })
-        .catch((Err) => {
-          const { message } = Err;
-          console.log("Error->", message);
-          dispatch(hideLoader());
-          ShowToast(
-            "error",
-            message ||
-              "Sorry for the inconvenience, please try after some time."
-          );
-        })
-        .finally(() => {});
+        const response = await dispatch(APBrokerage(payload)).unwrap();
+        const data = response?.data?.data;
+
+        console.log("GetAPRevenueResponse", data);
+
+        // Normalize values
+        const clients = data?.newClients?.nc ?? 0;
+        const tradedClients = data?.tradedClients?.tc ?? 0;
+
+        const APbrokerage = data?.yearlyBrokerage?.apb ?? 0;
+        const GrossBrokerage = data?.yearlyBrokerage?.gb ?? 0;
+
+        // Set states
+        setNewClien(clients);
+        setTradedClients(tradedClients);
+
+        setFirstCard({
+          APbrokerage,
+          GrossBrokerage,
+          total: APbrokerage + GrossBrokerage,
+        });
+      } catch (error: any) {
+        console.error("Error->", error);
+
+        ShowToast(
+          "error",
+          error?.message ||
+            "Sorry for the inconvenience, please try after some time."
+        );
+      } finally {
+        dispatch(hideLoader());
+      }
     };
+
     fetchActiveInactiveCli();
-  }, [dispatch]);
+  }, [dispatch, user_id]);
+
   useEffect(() => {
     playerRef.current?.playFromBeginning();
   }, []);
@@ -272,6 +252,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   const getActiveClients = (clients: any) => {
     console.log("activeClients", clients);
     setActiveClients(clients);
+    console.log(activeClients);
   };
 
   document.title = "LKP Securities | User Overview";

@@ -48,17 +48,21 @@ const Revenue = ({}: any) => {
       dispatch(APBrokerage(payload))
         .unwrap()
         .then((response) => {
-          console.log("APBrokerageResponse", response?.data?.Table2);
-          setBrokerageData(response?.data?.Table2);
-          const fetchedBrokerageData = response?.data?.Table2;
+          console.log(
+            "APBrokerageResponse",
+            response?.data?.data?.monthlyBrokerage
+          );
+
+          setBrokerageData(response?.data?.data?.monthlyBrokerage);
+          const fetchedBrokerageData = response?.data?.data?.monthlyBrokerage;
 
           if (fetchedBrokerageData) {
             // Extract GrossBrokerage and APbrokerage data from the API response
             const grossBrokerageData = fetchedBrokerageData.map(
-              (item: any) => item.GrossBrokerage
+              (item: any) => item.gb
             );
             const apShareData = fetchedBrokerageData.map(
-              (item: any) => item.APbrokerage
+              (item: any) => item.apb
             );
 
             // Update the monthProjectData array

@@ -29,14 +29,15 @@ const StoreVisits = ({ getActiveClients }: any) => {
       dispatch(APBrokerage(payload))
         .unwrap()
         .then((response) => {
-          const firstItem = response?.data?.Table1?.[0];
+          console.log(
+            "ClientCountResponse",
+            response?.data?.data?.clientStatus
+          );
 
-          if (
-            firstItem &&
-            (firstItem.Active !== null || firstItem.Inactive !== null)
-          ) {
+          const firstItem = response?.data?.data?.clientStatus;
+          if (firstItem && (firstItem.ac !== null || firstItem.ic !== null)) {
             console.log("APSummaryResponse", firstItem);
-            getActiveClients(firstItem.Active);
+            getActiveClients(firstItem.ac);
             setChartData(firstItem);
           } else {
             console.warn("API returned all null values");

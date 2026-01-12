@@ -23,7 +23,7 @@ const ProjectsOverviewCharts = ({
       setLatestDates(categories);
       console.log("categories", categories);
     } else if (revenueYear) {
-      const categories = brokerageData.map((item: any) => item.YearMonth);
+      const categories = brokerageData.map((item: any) => item.ym);
       setLatestDates(categories);
       console.log("categories", categories);
     } else if (tripleBarData) {

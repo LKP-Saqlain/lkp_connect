@@ -97,7 +97,7 @@ const T6Table = ({ handleTradingOpen }: any) => {
             setUpcomingOverviewDormantTableData(finalData);
           }
         } else {
-          ShowToast("error", "No Records");
+          // ShowToast("error", "No Records");
         }
       })
       .catch((error) => {
