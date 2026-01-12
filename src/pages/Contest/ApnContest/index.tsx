@@ -29,7 +29,7 @@ interface APContestData {
   prze: string;
 }
 
-const APContestQ4 = ({ activeMenu, isCustomRender, row }: any) => {
+const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
   const [selectedCapsule, setSelectedCapsule] = useState("Contest Rewards");
   const [targetData, setTargetData] = useState<APContestData | null>(null);
   const [userData, setUserData] = useState<any[]>([]);
@@ -46,6 +46,10 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row }: any) => {
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
+
+  useEffect(() => {
+    console.log("SelectedTabValue", selectedTab);
+  }, [selectedTab]);
 
   useEffect(() => {
     const payload = {

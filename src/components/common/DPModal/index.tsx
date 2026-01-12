@@ -38,6 +38,7 @@ import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 // import { isAdminAccess } from "../../../helper/commmon";
 import { pdfjs, Document, Page } from "react-pdf";
 import ApnContest from "../../../pages/Contest/ApnContest";
+import ApnContestQ4 from "../../../pages/Contest/ApnContestQ4";
 import { encryptAES } from "../../../utils/encryptDecrypt";
 import { setAuthenticationValue } from "../../../redux/slices/AuthnticateUser";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
@@ -74,6 +75,7 @@ interface CustomModalProps {
   isBankVerified?: any;
   setIsBankVerified?: any;
   beneficiaryName?: any;
+  selectedTab?: any;
 }
 
 const prefixOptions = ["EMP", "APN"];
@@ -103,6 +105,7 @@ const CustomModal = ({
   isBankVerified,
   setIsBankVerified,
   beneficiaryName,
+  selectedTab,
 }: CustomModalProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -1371,11 +1374,19 @@ const CustomModal = ({
                 }}
               />
             )}{" "}
-            <ApnContest
-              activeMenu={"Partner Contest"}
-              isCustomRender={true}
-              row={row}
-            />
+            {selectedTab === 0 ? (
+              <ApnContest
+                activeMenu={"Partner Contest"}
+                isCustomRender={true}
+                row={row}
+              />
+            ) : (
+              <ApnContestQ4
+                activeMenu={"Partner Contest"}
+                isCustomRender={true}
+                row={row}
+              />
+            )}
           </>
         ) : (
           <>

@@ -91,6 +91,7 @@ interface SelectedWidgetProps {
   onViewAmcDetails?: (row: any) => void;
   handleMTFRow?: (row: any) => void;
   openNudgeTable?: () => void;
+  selectedTab?: any;
 }
 
 const DataTable = ({
@@ -144,6 +145,7 @@ const DataTable = ({
   beneficiaryName,
   handleMTFRow,
   openNudgeTable,
+  selectedTab,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -2628,6 +2630,7 @@ const DataTable = ({
         isBankVerified={isBankVerified}
         beneficiaryName={beneficiaryName}
         setIsBankVerified={setIsBankVerified}
+        selectedTab={selectedTab}
       />
       {selectedWidget === "Clients With Ledger Balance" && (
         <DropDown

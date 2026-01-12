@@ -13,7 +13,6 @@ import {
   Row,
 } from "reactstrap";
 import DataTable from "../../../components/common/UserInfoTable";
-import Select from "react-select";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { Button } from "@mui/material";
@@ -21,10 +20,13 @@ import { useFormik } from "formik";
 import DownloadIcon from "@mui/icons-material/Download";
 import ShowToast from "../../../utils/toastUtils";
 import { getAPContestReportColumns } from "../../../helper/tableColumns";
+import { Tabs, Tab } from "@mui/material";
 
 const PartnerContestReport = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any>();
   const [noSortingGroup, setNoSortingGroup] = useState([]);
+  const [tabValue, setTabValue] = useState(0);
+
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -148,59 +150,117 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
   }, [dispatch, accessType]);
 
   useEffect(() => {
+    if (tabValue !== 0 && tabValue !== 1) return;
     const selectedZone = formik.values.selectedZone?.value || "ALL";
+    const quarterPeriod = tabValue === 0 ? "Q3-2526" : "Q4-2526";
     const payload = {
-      user_id: user_id,
-      // user_id: "APN-7161",
+      user_id,
       zone: selectedZone,
+      quarterPeriod,
     };
-    dispatch(showLoader("Please wait, we are processing your request..."));
-    console.log("GetAPContestReport", payload);
+    console.log("GetAPContestReport Payload", payload);
+    const fetchReport = async () => {
+      try {
+        dispatch(showLoader("Please wait, we are processing your request..."));
 
-    apiServices
-      .GetAPContestReport(payload)
-      .then((response) => {
-        const result = response?.data?.data || [];
+        const response = await apiServices.GetAPContestReport(payload);
+        const result = response?.data?.data ?? [];
 
         setData(
-          result.map((item: any, index: any) => ({
+          result.map((item: any, index: number) => ({
             ...item,
             Id: index + 1,
           }))
         );
-        console.log("A1 GetAPContestReport Data", result);
-      })
-      .catch((error) => {
+
+        console.log("GetAPContestReport Data", result);
+      } catch (error) {
         console.error("Error fetching compliance data:", error);
-      })
-      .finally(() => {
+      } finally {
         dispatch(hideLoader());
-      });
-  }, [dispatch, formik.values.selectedZone]);
+      }
+    };
+
+    fetchReport();
+  }, [dispatch, user_id, tabValue, formik.values.selectedZone]);
 
   return (
     <div className="page-content page-view">
       <Container fluid>
-        <Card
-          style={{
-            borderRadius: "15px",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+        <Tabs
+          value={tabValue}
+          onChange={(_, v) => setTabValue(v)}
+          TabIndicatorProps={{ style: { display: "none" } }}
+          sx={{
+            marginTop: "1rem",
+            marginLeft: ".7rem",
+            marginBottom: "8px",
+            backgroundColor: "white",
+            borderRadius: "11px",
+            width: "fit-content",
+            minHeight: 0,
+            // border: "1.5px solid #11395C",
           }}
         >
-          <CardHeader
+          <Tab
+            label="Q3"
+            sx={{
+              textTransform: "none",
+              fontWeight: 400,
+              borderRadius: "10px",
+              px: 3,
+              minHeight: 10,
+              backgroundColor: tabValue === 0 ? "#11395C" : "white",
+              color: tabValue === 0 ? "white" : "#11395C",
+              "&.Mui-selected": {
+                color: "white !important",
+              },
+              "& .MuiTab-wrapper": {
+                color: tabValue === 0 ? "white" : "#11395C",
+              },
+            }}
+          />
+
+          <Tab
+            label="Q4"
+            sx={{
+              textTransform: "none",
+              fontWeight: 400,
+              borderRadius: "10px",
+              px: 3,
+              minHeight: 10,
+              backgroundColor: tabValue === 1 ? "#11395C" : "white",
+              color: tabValue === 1 ? "white" : "#11395C",
+              "&.Mui-selected": {
+                color: "white !important",
+              },
+              "& .MuiTab-wrapper": {
+                color: tabValue === 1 ? "white" : "#11395C",
+              },
+            }}
+          />
+        </Tabs>
+        {tabValue === 0 && (
+          <Card
             style={{
-              borderRadius: "15px 15px 0 0",
-              boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
-              backgroundColor: "#fff",
-              padding: "0.2rem 0.8rem",
+              borderRadius: "15px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
             }}
           >
-            <h4 className="card-title mb-0">
-              Partner Contest Report{" "}
-              <span style={{ fontSize: "12px" }}> (October - December)</span>
-            </h4>
-          </CardHeader>
-          {/* <CardBody style={{ textAlign: "center" }}>
+            <CardHeader
+              style={{
+                borderRadius: "15px 15px 0 0",
+                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff",
+                padding: "0.2rem 0.8rem",
+              }}
+            >
+              <h4 className="card-title mb-0">
+                Partner Contest Report{" "}
+                <span style={{ fontSize: "12px" }}> (October - December)</span>
+              </h4>
+            </CardHeader>
+            {/* <CardBody style={{ textAlign: "center" }}>
             <h4
               style={{
                 fontWeight: "700",
@@ -211,82 +271,265 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
               Coming Soon
             </h4>{" "}
           </CardBody> */}
-          <CardBody>
-            <form onSubmit={formik.handleSubmit}>
-              {accessType === "ALL" && (
-                <Row className="align-items-end">
-                  <Col xl={3} lg={4} md={6} sm={12}>
-                    <div className="mb-3" style={{ maxWidth: "300px" }}>
-                      <Label
-                        htmlFor="zone-select"
-                        className="form-label text-muted label-font"
-                      >
-                        Zone
-                      </Label>
-                      <Select
-                        value={formik.values.selectedZone}
-                        onChange={(option: any) =>
-                          formik.setFieldValue("selectedZone", option)
-                        }
-                        onBlur={formik.handleBlur}
-                        options={noSortingGroup}
-                        isClearable
-                        className="placeholder-font"
-                        id="zone-select"
-                        styles={{
-                          control: (base: any) => ({
-                            ...base,
-                            cursor: "pointer",
-                            borderColor:
-                              formik.touched.selectedZone &&
-                              formik.errors.selectedZone
-                                ? "#DC4535"
-                                : base.borderColor,
-                            "&:hover": {
-                              borderColor:
-                                formik.touched.selectedZone &&
-                                formik.errors.selectedZone
-                                  ? "#DC4535"
-                                  : base.borderColor,
-                            },
-                          }),
-                        }}
-                      />
-                      {formik.touched.selectedZone &&
-                        formik.errors.selectedZone && (
-                          <div
-                            className="text-danger"
-                            style={{ fontSize: "12px" }}
-                          >
-                            {formik.errors.selectedZone}
-                          </div>
-                        )}
-                    </div>
-                  </Col>
-                  <Col xl="auto" lg="auto" md="auto" sm="auto">
-                    {Array.isArray(data) && data.length > 0 && (
-                      <Button
-                        variant="outlined"
-                        sx={{
-                          textTransform: "none",
-                          backgroundColor: "#11395C",
-                          color: "#FFF",
-                          marginBottom: "1rem",
-                        }}
-                        onClick={() =>
-                          exportToExcel(data, "Partner_contest_report")
-                        }
-                      >
-                        Excel <DownloadIcon />
-                      </Button>
-                    )}
-                  </Col>
-                </Row>
-              )}
-            </form>
-            <DataTable activeSubItem={activeSubItem} T6Data={data} />
-          </CardBody>
-        </Card>
+            <CardBody>
+              <form onSubmit={formik.handleSubmit}>
+                {accessType === "ALL" && (
+                  <Row className="align-items-center">
+                    {/* Zone selector */}
+                    <Col>
+                      <Card style={{ marginBottom: "0.7rem" }}>
+                        <Row style={{ margin: "5px" }}>
+                          <Col xs={12}>
+                            <div className="d-flex align-items-center gap-2">
+                              {/* Label */}
+                              <Label
+                                htmlFor="zone-select"
+                                className="form-label text-muted label-font mb-0"
+                                style={{ minWidth: "50px" }}
+                              >
+                                Zone
+                              </Label>
+
+                              {/* Scrollable buttons */}
+                              <div
+                                className="d-flex flex-nowrap gap-2 overflow-auto"
+                                style={{ maxWidth: "100%" }}
+                              >
+                                {noSortingGroup.map((zone: any) => {
+                                  const isSelected =
+                                    formik.values.selectedZone?.value ===
+                                    zone.value;
+
+                                  return (
+                                    <Button
+                                      key={zone.value}
+                                      type="button"
+                                      style={{
+                                        minWidth: "60px",
+                                        whiteSpace: "nowrap",
+                                        fontSize: "12px",
+                                        padding: "2px",
+                                        borderRadius: "6px",
+                                        border: "1px solid #11395c",
+                                        backgroundColor: isSelected
+                                          ? "#11395c"
+                                          : "#ffffff",
+                                        color: isSelected
+                                          ? "#ffffff"
+                                          : "#11395c",
+                                      }}
+                                      onClick={() =>
+                                        formik.setFieldValue(
+                                          "selectedZone",
+                                          zone
+                                        )
+                                      }
+                                      onBlur={() =>
+                                        formik.setFieldTouched(
+                                          "selectedZone",
+                                          true
+                                        )
+                                      }
+                                    >
+                                      {zone.label}
+                                    </Button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            {/* Validation */}
+                            {formik.touched.selectedZone &&
+                              formik.errors.selectedZone && (
+                                <div
+                                  className="text-danger"
+                                  style={{ fontSize: "12px" }}
+                                >
+                                  {formik.errors.selectedZone}
+                                </div>
+                              )}
+                          </Col>
+                        </Row>
+                      </Card>
+                    </Col>
+
+                    {/* Excel button */}
+                    <Col xs="auto">
+                      {Array.isArray(data) && data.length > 0 && (
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            textTransform: "none",
+                            backgroundColor: "#11395C",
+                            color: "#FFF",
+                            marginBottom: "1rem",
+                            marginRight: "1rem",
+                            whiteSpace: "nowrap",
+                          }}
+                          onClick={() =>
+                            exportToExcel(data, "Partner_contest_report")
+                          }
+                        >
+                          Excel <DownloadIcon />
+                        </Button>
+                      )}
+                    </Col>
+                  </Row>
+                )}
+              </form>
+              <DataTable
+                activeSubItem={activeSubItem}
+                T6Data={data}
+                selectedTab={tabValue}
+              />
+            </CardBody>
+          </Card>
+        )}
+        {tabValue === 1 && (
+          <Card
+            style={{
+              borderRadius: "15px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+            }}
+          >
+            <CardHeader
+              style={{
+                borderRadius: "15px 15px 0 0",
+                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+                backgroundColor: "#fff",
+                padding: "0.2rem 0.8rem",
+              }}
+            >
+              <h4 className="card-title mb-0">
+                Partner Contest Report{" "}
+                <span style={{ fontSize: "12px" }}> (October - December)</span>
+              </h4>
+            </CardHeader>
+            {/* <CardBody style={{ textAlign: "center" }}>
+            <h4
+              style={{
+                fontWeight: "700",
+                marginBottom: "15px",
+                textAlign: "left",
+              }}
+            >
+              Coming Soon
+            </h4>{" "}
+          </CardBody> */}
+            <CardBody>
+              <form onSubmit={formik.handleSubmit}>
+                {accessType === "ALL" && (
+                  <Row className="align-items-center">
+                    {/* Zone selector */}
+                    <Col>
+                      <Card style={{ marginBottom: "0.7rem" }}>
+                        <Row style={{ margin: "5px" }}>
+                          <Col xs={12}>
+                            <div className="d-flex align-items-center gap-2">
+                              {/* Label */}
+                              <Label
+                                htmlFor="zone-select"
+                                className="form-label text-muted label-font mb-0"
+                                style={{ minWidth: "50px" }}
+                              >
+                                Zone
+                              </Label>
+
+                              {/* Scrollable buttons */}
+                              <div
+                                className="d-flex flex-nowrap gap-2 overflow-auto"
+                                style={{ maxWidth: "100%" }}
+                              >
+                                {noSortingGroup.map((zone: any) => {
+                                  const isSelected =
+                                    formik.values.selectedZone?.value ===
+                                    zone.value;
+
+                                  return (
+                                    <Button
+                                      key={zone.value}
+                                      type="button"
+                                      style={{
+                                        minWidth: "60px",
+                                        whiteSpace: "nowrap",
+                                        fontSize: "12px",
+                                        padding: "2px",
+                                        borderRadius: "6px",
+                                        border: "1px solid #11395c",
+                                        backgroundColor: isSelected
+                                          ? "#11395c"
+                                          : "#ffffff",
+                                        color: isSelected
+                                          ? "#ffffff"
+                                          : "#11395c",
+                                      }}
+                                      onClick={() =>
+                                        formik.setFieldValue(
+                                          "selectedZone",
+                                          zone
+                                        )
+                                      }
+                                      onBlur={() =>
+                                        formik.setFieldTouched(
+                                          "selectedZone",
+                                          true
+                                        )
+                                      }
+                                    >
+                                      {zone.label}
+                                    </Button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+
+                            {/* Validation */}
+                            {formik.touched.selectedZone &&
+                              formik.errors.selectedZone && (
+                                <div
+                                  className="text-danger"
+                                  style={{ fontSize: "12px" }}
+                                >
+                                  {formik.errors.selectedZone}
+                                </div>
+                              )}
+                          </Col>
+                        </Row>
+                      </Card>
+                    </Col>
+
+                    {/* Excel button */}
+                    <Col xs="auto">
+                      {Array.isArray(data) && data.length > 0 && (
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            textTransform: "none",
+                            backgroundColor: "#11395C",
+                            color: "#FFF",
+                            marginBottom: "1rem",
+                            marginRight: "1rem",
+                            whiteSpace: "nowrap",
+                          }}
+                          onClick={() =>
+                            exportToExcel(data, "Partner_contest_report")
+                          }
+                        >
+                          Excel <DownloadIcon />
+                        </Button>
+                      )}
+                    </Col>
+                  </Row>
+                )}
+              </form>
+              <DataTable
+                activeSubItem={activeSubItem}
+                T6Data={data}
+                selectedTab={tabValue}
+              />
+            </CardBody>
+          </Card>
+        )}
       </Container>
     </div>
   );
