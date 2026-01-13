@@ -291,8 +291,8 @@ const EMPContestQ4 = ({ activeMenu }: any) => {
             value={formatIndianNumber(targetData?.mtf_cl_tg, false)}
             animationData={CoinIcon}
             customClass={true}
-            rightTitle="MTF Utilisation"
-            rightValue={targetData?.mtf_ult_tg?.toString()}
+            rightTitle="MTF Utilisation Target"
+            rightValue={targetData?.mtf_ult_tg ? targetData?.mtf_ult_tg : 0}
           />
         </Col>
         <Col xxl={3} lg={3} md={6} sm={12}>

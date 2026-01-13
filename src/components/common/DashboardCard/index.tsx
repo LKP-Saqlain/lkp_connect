@@ -223,11 +223,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     : "10px",
                   fontWeight: "bold",
                   marginLeft:
-                    rightTitle === "Insurance Achieved"
-                      ? "2rem"
-                      : rightTitle === "MTF Utilisation Achieved"
-                      ? "4rem"
-                      : "0rem",
+                    rightTitle === "Insurance Achieved" ? "2rem" : "0rem",
                 }}
               >
                 {rightTitle}
