@@ -206,10 +206,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 style={{
                   color: "#1B1B1B",
                   fontSize: title.toLowerCase().startsWith("fresh cash margin")
-                    ? "12px"
+                    ? "10px"
                     : title === "Research Product Achieved"
-                    ? "12px"
-                    : "12px",
+                    ? "10px"
+                    : "10px",
                   fontWeight: "bold",
                 }}
               >
@@ -219,8 +219,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 style={{
                   color: "#1B1B1B",
                   fontSize: title.toLowerCase().startsWith("fresh cash margin")
-                    ? "12px"
-                    : "14px",
+                    ? "10px"
+                    : "10px",
                   fontWeight: "bold",
                   marginLeft:
                     rightTitle === "Insurance Achieved"
@@ -272,7 +272,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                 >
                   {prefix}
                   {typeof value === "number" ? (
-                    <span style={{ fontSize: "15px", fontWeight: "bold" }}>
+                    <span style={{ fontSize: "12px", fontWeight: "bold" }}>
                       <CountUp
                         start={0}
                         end={value ?? 0}
@@ -548,7 +548,7 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                         className="mb-0"
                         style={{
                           color: "#1B1B1B",
-                          fontSize: "17px",
+                          fontSize: "12px",
                           fontWeight: "bold",
                           width:
                             rightValue === "Coming Soon" ? "6rem" : undefined,
@@ -618,7 +618,13 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     }}
                   >
                     {numericRightValue !== null ? (
-                      <span style={{ color: "#1B1B1B", fontWeight: "bold" }}>
+                      <span
+                        style={{
+                          color: "#1B1B1B",
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                        }}
+                      >
                         <CountUp
                           start={0}
                           end={numericRightValue}
@@ -628,7 +634,13 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                         />
                       </span>
                     ) : (
-                      <span style={{ color: "#1B1B1B", fontWeight: "bold" }}>
+                      <span
+                        style={{
+                          color: "#1B1B1B",
+                          fontWeight: "bold",
+                          fontSize: "12px",
+                        }}
+                      >
                         {rightValue}
                       </span>
                     )}

@@ -85,7 +85,7 @@ const index = ({ isCustomRender, row }: any) => {
           <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
             <h4 className="card-title mb-0">
               AP Contest Leaderboard{" "}
-              <span style={{ fontSize: "12px" }}>(January–April)</span>
+              <span style={{ fontSize: "12px" }}>(January–March)</span>
             </h4>
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <span>My Rank: #{personalData?.rnk ?? "-"}</span>

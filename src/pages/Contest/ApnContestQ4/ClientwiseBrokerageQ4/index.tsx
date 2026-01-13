@@ -274,7 +274,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
           >
             <h4 className="card-title mb-0">
               AP Contest Achieved Brokerage{" "}
-              <span style={{ fontSize: "12px" }}>(January–April)</span>
+              <span style={{ fontSize: "12px" }}>(January-March)</span>
             </h4>
           </CardHeader>
           <CardBody>
