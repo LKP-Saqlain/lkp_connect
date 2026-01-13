@@ -49,6 +49,7 @@ import SPIPOverview from "../../pages/SPIPReports/SPIPOverview";
 import ApnContest from "../../pages/Contest/ApnContest";
 import ApnContestQ4 from "../../pages/Contest/ApnContestQ4";
 import EmpContest from "../../pages/Contest/EmpContest";
+import EmpContestQ4 from "../../pages/Contest/EmpContestQ4";
 import PledgeRequest from "../../pages/PledgeRequest";
 import InsertUnlistedShares from "../../pages/UnlistedShare/showUnlistedRecords";
 import ShowUnlistedRecords from "../../pages/UnlistedShare/showUnlistedRecords";
@@ -272,10 +273,10 @@ const SideBar = () => {
   console.log("EMpLastDate", EmployeeLastBrokingDate);
 
   const apBrokingLastDate = useSelector(
-    (state: RootState) => state.APBrokerage?.data?.data?.Table
+    (state: RootState) => state.APBrokerage?.data?.data?.data?.dailyRevenue
   );
 
-  console.log("testasdasd", apBrokingLastDate);
+  console.log("apBrokingLastDateValue", apBrokingLastDate);
 
   useEffect(() => {
     if (activeMenu !== "" || activeSubItem !== "") {
@@ -879,6 +880,7 @@ const SideBar = () => {
       ),
       "TPD Report": getSubItemComponent(tpdSubItems),
       "Employee Target": <EmpContest activeMenu={activeMenu} />,
+      "Employee Target-Q4": <EmpContestQ4 activeMenu={activeMenu} />,
       "Partner Contest": <ApnContest activeMenu={activeMenu} />,
       "Partner Contest-Q4": <ApnContestQ4 activeMenu={activeMenu} />,
       "Client Details": (

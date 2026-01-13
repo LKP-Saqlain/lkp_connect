@@ -6990,6 +6990,7 @@ export const EmpNonBrokerageAchieved: GridColDef[] = [
     field: "emp",
     headerName: "Employee Code",
     width: 130,
+    flex: 1,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,

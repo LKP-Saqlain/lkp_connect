@@ -112,6 +112,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     SPIP: <AnalyticsIcon />,
     "TPD Report": <FaFileInvoice size={17} />,
     "Employee Target": <LocalPoliceIcon />,
+    "Employee Target-Q4": <LocalPoliceIcon />,
     "Partner Contest": <LocalPoliceIcon />,
     "SPIP Dashboard": <SpaceDashboardIcon />,
     "Client Request": <PublishedWithChangesIcon />,

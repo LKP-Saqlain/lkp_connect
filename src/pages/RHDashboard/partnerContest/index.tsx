@@ -23,7 +23,7 @@ import { getAPContestReportColumns } from "../../../helper/tableColumns";
 import { Tabs, Tab } from "@mui/material";
 
 const PartnerContestReport = ({ activeSubItem }: any) => {
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<any[]>([]);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [tabValue, setTabValue] = useState(0);
 
@@ -150,6 +150,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
   }, [dispatch, accessType]);
 
   useEffect(() => {
+    setData([]);
     if (tabValue !== 0 && tabValue !== 1) return;
     const selectedZone = formik.values.selectedZone?.value || "ALL";
     const quarterPeriod = tabValue === 0 ? "Q3-2526" : "Q4-2526";
@@ -402,7 +403,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
             >
               <h4 className="card-title mb-0">
                 Partner Contest Report{" "}
-                <span style={{ fontSize: "12px" }}> (October - December)</span>
+                <span style={{ fontSize: "12px" }}> (January - March)</span>
               </h4>
             </CardHeader>
             {/* <CardBody style={{ textAlign: "center" }}>

@@ -132,6 +132,10 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
   console.log("testsrta", allDataSets);
 
   useEffect(() => {
+    console.log("Tes11111t", typeof rightValue);
+  }, [rightValue]);
+
+  useEffect(() => {
     console.log(
       "TesttestTest",
       activeClient?.total,
@@ -154,6 +158,14 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
     "Gross Brokerage",
     "Gross Brokerage",
   ];
+
+  const numericRightValue =
+    rightValue !== null &&
+    rightValue !== undefined &&
+    rightValue !== "" &&
+    !isNaN(Number(rightValue))
+      ? Number(rightValue)
+      : null;
 
   return (
     <>
@@ -195,7 +207,9 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                   color: "#1B1B1B",
                   fontSize: title.toLowerCase().startsWith("fresh cash margin")
                     ? "12px"
-                    : "14px",
+                    : title === "Research Product Achieved"
+                    ? "12px"
+                    : "12px",
                   fontWeight: "bold",
                 }}
               >
@@ -209,7 +223,11 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                     : "14px",
                   fontWeight: "bold",
                   marginLeft:
-                    rightTitle === "Insurance Achieved" ? "2rem" : "0rem",
+                    rightTitle === "Insurance Achieved"
+                      ? "2rem"
+                      : rightTitle === "MTF Utilisation Achieved"
+                      ? "4rem"
+                      : "0rem",
                 }}
               >
                 {rightTitle}
@@ -599,30 +617,20 @@ const DashboardCard: React.FC<DashboardCardProps> = ({
                       width: rightValue === "Coming Soon" ? "4rem" : undefined,
                     }}
                   >
-                    {typeof rightValue === "number" ? (
-                      <span
-                        style={{
-                          color: "#1B1B1B",
-                          fontWeight: "bold",
-                        }}
-                      >
+                    {numericRightValue !== null ? (
+                      <span style={{ color: "#1B1B1B", fontWeight: "bold" }}>
                         <CountUp
                           start={0}
-                          end={rightValue ?? 0}
+                          end={numericRightValue}
                           separator=","
                           duration={1}
                           formattingFn={formatIndianNumber}
                         />
                       </span>
                     ) : (
-                      <span
-                        style={{
-                          color: "#1B1B1B",
-                          fontWeight: "bold",
-                        }}
-                      >
+                      <span style={{ color: "#1B1B1B", fontWeight: "bold" }}>
                         {rightValue}
-                      </span> //  Fix: Wrap in a JSX element
+                      </span>
                     )}
                   </div>
                 </div>

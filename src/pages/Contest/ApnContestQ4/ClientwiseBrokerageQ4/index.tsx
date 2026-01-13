@@ -18,18 +18,18 @@ import UserInfoTable from "../../../../components/common/UserInfoTable";
 // 📅 Month options
 const months = [
   { label: "ALL", value: 13 },
-  //   { label: "Jan-2026", value: 1 },
-  //   { label: "February", value: 2 },
-  //   { label: "March", value: 3 },
+  { label: "Jan-2026", value: 1 },
+  { label: "Feb-2026", value: 2 },
+  { label: "Mar-2026", value: 3 },
   //   { label: "April", value: 4 },
   //   { label: "May", value: 5 },
   //   { label: "June", value: 6 },
   //   { label: "July", value: 7 },
   //   { label: "August", value: 8 },
   //   { label: "September", value: 9 },
-  { label: "Oct-2025", value: 10 },
-  { label: "Nov-2025", value: 11 },
-  { label: "Dec-2025", value: 12 },
+  // { label: "Oct-2025", value: 10 },
+  // { label: "Nov-2025", value: 11 },
+  // { label: "Dec-2025", value: 12 },
 ];
 
 const TopClientBrokerage = ({ isCustomRender, row }: any) => {
@@ -39,9 +39,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
   );
 
   const [brokerageData, setBrokerageData] = useState<any[]>([]);
-  const [selectedMonth, setSelectedMonth] = useState<number>(
-    new Date().getMonth() + 1
-  );
+  const [selectedMonth, setSelectedMonth] = useState<number>(13);
 
   const [userData, setUserData] = useState<any[]>([]);
 
@@ -50,7 +48,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
       //   user_id: "APN-7161", // you can replace this with your logged-in user_id
       user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
       periodType: selectedMonth === 13 ? "ALL" : "MONTH",
-      year: 2025,
+      year: 2026,
       month: selectedMonth,
       quarterPeriod: "Q4-2526",
     };
@@ -276,7 +274,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
           >
             <h4 className="card-title mb-0">
               AP Contest Achieved Brokerage{" "}
-              <span style={{ fontSize: "12px" }}>(October–December)</span>
+              <span style={{ fontSize: "12px" }}>(January–April)</span>
             </h4>
           </CardHeader>
           <CardBody>

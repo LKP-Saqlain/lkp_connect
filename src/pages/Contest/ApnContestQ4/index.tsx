@@ -206,7 +206,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                     <Card className="contest-card">
                       <CardBody style={{ textAlign: "center" }}>
                         <p style={{ fontWeight: "700", marginBottom: "15px" }}>
-                          Contest Period - 1st October to 31st December
+                          Contest Period - 1st January to 31st April
                         </p>
                         <img
                           src={contestReward}
@@ -248,7 +248,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                         activeClientsEmpty={true}
                         customClass={true}
                         note={
-                          isMobile && `* Contest Period - 1st Oct to 31st Dec`
+                          isMobile && `* Contest Period - 1st Jan to 31st Apr`
                         }
                       />
                     </Col>
@@ -284,7 +284,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                       <h4 className="card-title mb-0">
                         AP Contest Achieved Clients{" "}
                         <span style={{ fontSize: "12px" }}>
-                          (October–December)
+                          (January–April)
                         </span>
                       </h4>
                     </CardHeader>

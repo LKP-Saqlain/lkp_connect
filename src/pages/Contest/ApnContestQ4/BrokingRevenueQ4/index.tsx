@@ -208,7 +208,7 @@ const ApContestSummaryCard = ({ isCustomRender, row }: any) => {
             title: "Revenue Achieved*",
             value: formatIndianCurrency(summary?.bnlkp),
             note: isMobile
-              ? "* Contest Period - 1st Oct to 31st Dec"
+              ? "* Contest Period - 1st Jan to 31st Apr"
               : undefined,
           },
           { title: "Active Clients", value: clientData?.actc ?? "-" },

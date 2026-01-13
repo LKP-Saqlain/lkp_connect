@@ -16,16 +16,18 @@ import DataTable from "../../../components/common/UserInfoTable";
 // import * as Yup from "yup";
 import { useFormik } from "formik";
 import ShowToast from "../../../utils/toastUtils";
-import Select from "react-select";
+// import Select from "react-select";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { Button } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
+import { Tabs, Tab } from "@mui/material";
 import { EmployeeTargetReportColumns } from "../../../helper/tableColumns";
 
 const EmployeeTargetReport = ({ activeSubItem }: any) => {
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<any[]>([]);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
+  const [tabValue, setTabValue] = useState(0);
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -128,9 +130,13 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
   }, [dispatch, accessType]);
 
   useEffect(() => {
+    setData([]);
+    if (tabValue !== 0 && tabValue !== 1) return;
+    const quarterPeriod = tabValue === 0 ? "Q3-2526" : "Q4-2526";
     const payload = {
       user_id: user_id,
       zone: formik.values.selectedZone?.value || "ALL",
+      quarterPeriod,
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
@@ -166,7 +172,7 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
       .finally(() => {
         dispatch(hideLoader());
       });
-  }, [dispatch, formik.values.selectedZone]);
+  }, [dispatch, user_id, formik.values.selectedZone, tabValue]);
 
   const exportToExcel = (data: any[], fileName: string) => {
     const orderedData = data.map((row) => {
@@ -195,90 +201,161 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
   return (
     <div className="page-content page-view">
       <Container fluid>
+        {/* Tabs */}
+        <Tabs
+          value={tabValue}
+          onChange={(_, v) => setTabValue(v)}
+          TabIndicatorProps={{ style: { display: "none" } }}
+          sx={{
+            marginTop: "1rem",
+            marginLeft: ".7rem",
+            marginBottom: "8px",
+            backgroundColor: "white",
+            borderRadius: "11px",
+            width: "fit-content",
+            minHeight: 0,
+            // border: "1.5px solid #11395C",
+          }}
+        >
+          <Tab
+            label="Q3"
+            sx={{
+              textTransform: "none",
+              fontWeight: 400,
+              borderRadius: "10px",
+              px: 3,
+              minHeight: 10,
+              backgroundColor: tabValue === 0 ? "#11395C" : "white",
+              color: tabValue === 0 ? "white" : "#11395C",
+              "&.Mui-selected": {
+                color: "white !important",
+              },
+              "& .MuiTab-wrapper": {
+                color: tabValue === 0 ? "white" : "#11395C",
+              },
+            }}
+          />
+
+          <Tab
+            label="Q4"
+            sx={{
+              textTransform: "none",
+              fontWeight: 400,
+              borderRadius: "10px",
+              px: 3,
+              minHeight: 10,
+              backgroundColor: tabValue === 1 ? "#11395C" : "white",
+              color: tabValue === 1 ? "white" : "#11395C",
+              "&.Mui-selected": {
+                color: "white !important",
+              },
+              "& .MuiTab-wrapper": {
+                color: tabValue === 1 ? "white" : "#11395C",
+              },
+            }}
+          />
+        </Tabs>
+
+        {/* Card */}
         <Card
           style={{
             borderRadius: "15px",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
           }}
         >
+          {/* Header */}
           <CardHeader
             style={{
               borderRadius: "15px 15px 0 0",
-              boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
-              backgroundColor: "#fff",
+              boxShadow: "0 -4px 8px rgba(0,0,0,0.15)",
               padding: "0.2rem 0.8rem",
             }}
           >
             <h4 className="card-title mb-0">
               Employee Target Report{" "}
-              <span style={{ fontSize: "12px" }}> (October-December)</span>
+              <span style={{ fontSize: "12px" }}>
+                {tabValue === 0 ? "(October–December)" : "(January–March)"}
+              </span>
             </h4>
           </CardHeader>
+
+          {/* Body */}
           <CardBody>
             <form onSubmit={formik.handleSubmit}>
               {accessType === "ALL" && (
-                <Row className="align-items-end">
-                  {/* Zone Dropdown */}
-                  <Col xl={3} lg={4} md={6} sm={12}>
-                    <div className="mb-3" style={{ maxWidth: "300px" }}>
-                      <Label
-                        htmlFor="zone-select"
-                        className="form-label text-muted label-font"
-                      >
-                        Zone
-                      </Label>
-                      <Select
-                        value={formik.values.selectedZone}
-                        onChange={(option: any) =>
-                          formik.setFieldValue("selectedZone", option)
-                        }
-                        onBlur={formik.handleBlur}
-                        options={noSortingGroup}
-                        isClearable
-                        className="placeholder-font"
-                        id="zone-select"
-                        styles={{
-                          control: (base: any) => ({
-                            ...base,
-                            cursor: "pointer",
-                            borderColor:
-                              formik.touched.selectedZone &&
-                              formik.errors.selectedZone
-                                ? "#DC4535"
-                                : base.borderColor,
-                            "&:hover": {
-                              borderColor:
-                                formik.touched.selectedZone &&
-                                formik.errors.selectedZone
-                                  ? "#DC4535"
-                                  : base.borderColor,
-                            },
-                          }),
-                        }}
-                      />
-                      {formik.touched.selectedZone &&
-                        formik.errors.selectedZone && (
-                          <div
-                            className="text-danger"
-                            style={{ fontSize: "12px" }}
-                          >
-                            {formik.errors.selectedZone}
+                <Row className="align-items-center">
+                  {/* Zone */}
+                  <Col>
+                    <Card style={{ marginBottom: "0.7rem" }}>
+                      <Row style={{ margin: "5px" }}>
+                        <Col xs={12}>
+                          <div className="d-flex align-items-center gap-2">
+                            <Label
+                              className="form-label text-muted label-font mb-0"
+                              style={{ minWidth: "50px" }}
+                            >
+                              Zone
+                            </Label>
+
+                            <div className="d-flex flex-nowrap gap-2 overflow-auto">
+                              {noSortingGroup.map((zone: any) => {
+                                const selected =
+                                  formik.values.selectedZone?.value ===
+                                  zone.value;
+
+                                return (
+                                  <Button
+                                    key={zone.value}
+                                    type="button"
+                                    style={{
+                                      minWidth: "60px",
+                                      fontSize: "12px",
+                                      padding: "2px",
+                                      borderRadius: "6px",
+                                      border: "1px solid #11395c",
+                                      backgroundColor: selected
+                                        ? "#11395c"
+                                        : "#fff",
+                                      color: selected ? "#fff" : "#11395c",
+                                    }}
+                                    onClick={() =>
+                                      formik.setFieldValue("selectedZone", zone)
+                                    }
+                                  >
+                                    {zone.label}
+                                  </Button>
+                                );
+                              })}
+                            </div>
                           </div>
-                        )}
-                    </div>
+
+                          {formik.touched.selectedZone &&
+                            formik.errors.selectedZone && (
+                              <div
+                                className="text-danger"
+                                style={{ fontSize: "12px" }}
+                              >
+                                {formik.errors.selectedZone}
+                              </div>
+                            )}
+                        </Col>
+                      </Row>
+                    </Card>
                   </Col>
-                  <Col xl="auto" lg="auto" md="auto" sm="auto">
+
+                  {/* Excel */}
+                  <Col xs="auto">
                     {Array.isArray(data) && data.length > 0 && (
                       <Button
-                        variant="outlined"
                         sx={{
                           textTransform: "none",
                           backgroundColor: "#11395C",
                           color: "#FFF",
-                          marginBottom: "1rem",
+                          mb: "1rem",
+                          mr: "1rem",
                         }}
                         onClick={() =>
-                          exportToExcel(data, "Employee_Performance_Report")
+                          exportToExcel(data, "Partner_contest_report")
                         }
                       >
                         Excel <DownloadIcon />

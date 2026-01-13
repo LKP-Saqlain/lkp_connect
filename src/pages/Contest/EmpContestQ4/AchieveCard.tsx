@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 
-const AchieveCard = () => {
+const AchieveCardQ4 = () => {
   type AchieveDataKey = "broking" | "nonBroking" | "client";
 
   const [achieveData, setAchieveData] = useState({
@@ -21,7 +21,7 @@ const AchieveCard = () => {
   );
 
   useEffect(() => {
-    const payload = { user_id: user_id, quarterPeriod: "Q3-2526" };
+    const payload = { user_id: user_id, quarterPeriod: "Q4-2526" };
     dispatch(showLoader(""));
 
     Promise.all([
@@ -94,19 +94,19 @@ const AchieveCard = () => {
       title: "Brokerage Achieved ",
       dataKey: "broking",
       menu: "Employee Brokerage Achieved",
-      timeFrame: "(October-December)",
+      timeFrame: "(January - March)",
     },
     {
       title: "Non-Brokerage Achieved ",
       dataKey: "nonBroking",
       menu: "Employee Non-Brokerage Achieved",
-      timeFrame: "(October-December)",
+      timeFrame: "(January - March)",
     },
     {
       title: "New Clients Achieved ",
       dataKey: "client",
       menu: "Employee Clients Achieved",
-      timeFrame: "(October-December)",
+      timeFrame: "(January - March)",
     },
   ];
 
@@ -143,4 +143,4 @@ const AchieveCard = () => {
   );
 };
 
-export default AchieveCard;
+export default AchieveCardQ4;

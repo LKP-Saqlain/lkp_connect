@@ -26,9 +26,12 @@ interface APContestData {
   mf_aum: number;
   spip_cnt: number;
   ins_t: number;
+  rprd_tg: number;
+  mtf_cl_tg: number;
+  mtf_ult_tg: number;
 }
 
-const EMPContest = ({ activeMenu }: any) => {
+const EMPContestQ4 = ({ activeMenu }: any) => {
   const [revenueCard, setRevenueCard] = useState({
     broking: 0,
     nonBroking: 0,
@@ -46,6 +49,11 @@ const EMPContest = ({ activeMenu }: any) => {
     reactivate: 0,
     spipAchieved: 0,
     insuranceAchieved: 0,
+    MTFActiveClient: 0,
+    MTFUtilisationTarget: 0,
+    MTFClientAchieved: 0,
+    MTFUtilisationAchieved: 0,
+    researchProductAchieved: 0,
   });
   const [targetData, setTargetData] = useState<APContestData | null>(null);
   const [achievedData, setAchievedData] = useState<APContestData | null>(null);
@@ -56,7 +64,11 @@ const EMPContest = ({ activeMenu }: any) => {
   );
 
   useEffect(() => {
-    const payload = { user_id: user_id, quarterPeriod: "Q3-2526" };
+    console.log("TestData111", targetData?.mtf_cl_tg, targetData?.mtf_ult_tg);
+  }, [targetData]);
+
+  useEffect(() => {
+    const payload = { user_id: user_id, quarterPeriod: "Q4-2526" };
     dispatch(showLoader(""));
     Promise.all([
       apiServices.GetEMPContestTargetDetails(payload),
@@ -91,7 +103,7 @@ const EMPContest = ({ activeMenu }: any) => {
           const data = GetEmpContestAchievedSummary?.data?.data || {};
           console.log(data, "GetEmpContestAchievedSummary");
           setAchievedData(data);
-          console.log("achievedData", achievedData);
+          console.log("achievedData11", achievedData);
 
           const broking = (data.bb_nlkp || 0) + (data.slbm_nlkp || 0);
           // (data.brokerageNetToLKP || 0) + (data.slbmNetToLKPBrokerage || 0);
@@ -117,6 +129,11 @@ const EMPContest = ({ activeMenu }: any) => {
           const reactivate = data.react_cl || 0;
           const spipAchieved = data.spip_cnt || 0;
           const insuranceAchieved = data.ins_ach || 0;
+          const MTFActiveClient = data.mtf_cl_tg;
+          const MTFUtilisationTarget = data.mtf_ult_tg;
+          const MTFClientAchieved = data.mtf_cl_ach;
+          const MTFUtilisationAchieved = data.mtf_ult_ach;
+          const researchProductAchieved = data.spip_rev + data.trl_rev;
 
           setAchieveCard({
             broking,
@@ -127,6 +144,11 @@ const EMPContest = ({ activeMenu }: any) => {
             reactivate,
             spipAchieved,
             insuranceAchieved,
+            MTFActiveClient,
+            MTFUtilisationTarget,
+            MTFClientAchieved,
+            MTFUtilisationAchieved,
+            researchProductAchieved,
           });
         }
       })
@@ -159,7 +181,7 @@ const EMPContest = ({ activeMenu }: any) => {
             title="Revenue Target"
             value={formatIndianNumber(revenueCard.broking)}
             animationData={RevenueImg}
-            note={isMobile && `* Contest Period - 1st Oct to 31st Dec`}
+            note={isMobile && `* Contest Period - 1st Jan to 31st Mar`}
             customClass={true}
             rightValue={formatIndianNumber(revenueCard.nonBroking)}
             subHeading="Broking"
@@ -197,8 +219,8 @@ const EMPContest = ({ activeMenu }: any) => {
         <Col xxl={3} lg={3} md={6} sm={12}>
           <DashboardCard
             activeMenu={activeMenu}
-            title="SPIP Client Target"
-            value={formatIndianNumber(targetData?.spip_cnt, false)}
+            title="Research Product Target"
+            value={formatIndianNumber(targetData?.rprd_tg, false)}
             animationData={CoinIcon}
             customClass={true}
             rightTitle="Insurance Target"
@@ -251,12 +273,37 @@ const EMPContest = ({ activeMenu }: any) => {
         <Col xxl={3} lg={3} md={6} sm={12}>
           <DashboardCard
             activeMenu={activeMenu}
-            title="SPIP Client Achieved"
-            value={achieveCard.spipAchieved}
+            title="Research Product Achieved"
+            value={achieveCard.researchProductAchieved}
             animationData={CoinIcon}
             customClass={true}
             rightTitle="Insurance Achieved"
             rightValue={achieveCard.insuranceAchieved}
+          />
+        </Col>
+      </Row>
+      <Row style={{ marginTop: "15px" }}>
+        <Col xxl={3} lg={3} md={6} sm={12}>
+          <DashboardCard
+            activeMenu={activeMenu}
+            title="MTF Active Client"
+            // value={achieveCard.MTFActiveClient}
+            value={formatIndianNumber(targetData?.mtf_cl_tg, false)}
+            animationData={CoinIcon}
+            customClass={true}
+            rightTitle="MTF Utilisation"
+            rightValue={targetData?.mtf_ult_tg?.toString()}
+          />
+        </Col>
+        <Col xxl={3} lg={3} md={6} sm={12}>
+          <DashboardCard
+            activeMenu={activeMenu}
+            title="MTF Client Achieved"
+            value={achieveCard.MTFClientAchieved}
+            animationData={CoinIcon}
+            customClass={true}
+            rightTitle="MTF Utilisation Achieved"
+            rightValue={achieveCard.MTFUtilisationAchieved}
           />
         </Col>
       </Row>
@@ -265,4 +312,4 @@ const EMPContest = ({ activeMenu }: any) => {
   );
 };
 
-export default EMPContest;
+export default EMPContestQ4;
