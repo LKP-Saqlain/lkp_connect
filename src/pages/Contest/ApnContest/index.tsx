@@ -14,24 +14,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
-
-import UserCapsules from "../../ClientDetails/UserCapsules";
+import { Tabs, Tab } from "@mui/material";
+// import UserCapsules from "../../ClientDetails/UserCapsules";
 
 // import ShowToast from "../../../utils/toastUtils";
 
-interface APContestData {
-  rid: number;
-  apc: string;
-  apn: string;
-  zn: string;
-  qtrg: number;
-  nccnt: number;
-  prze: string;
-}
+// interface APContestData {
+//   rid: number;
+//   apc: string;
+//   apn: string;
+//   zn: string;
+//   qtrg: number;
+//   nccnt: number;
+//   prze: string;
+// }
 
 const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
-  const [selectedCapsule, setSelectedCapsule] = useState("Contest Rewards");
-  const [targetData, setTargetData] = useState<APContestData | null>(null);
+  // const [selectedCapsule, setSelectedCapsule] = useState("Contest Rewards");
+  // const [targetData, setTargetData] = useState<APContestData | null>(null);
   const [userData, setUserData] = useState<any[]>([]);
   const [apContestAchSummaryRecord, setApContestAchSummaryRecord] = useState<
     any[]
@@ -40,7 +40,17 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
     bnlkp: number;
     newc: number;
   } | null>(null);
+  const [tabValue, setTabValue] = useState(0);
 
+  const partnerContestTabs = [
+    "Contest Rewards",
+    "Leaderboard",
+    "Broking Revenue",
+    "Clientwise Brokerage",
+    "New Added Clients",
+  ];
+
+  const selectedCapsuleData = partnerContestTabs[tabValue];
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
@@ -81,7 +91,7 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
             userData
           );
 
-          setTargetData(firstItem);
+          // setTargetData(firstItem);
         }
       } catch (error) {
         console.error("Error fetching AP Contest Target Details", error);
@@ -177,22 +187,22 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
       });
   };
 
-  const handleClick = (value: string) => {
-    console.log("You clicked the Chip.", value);
-    setSelectedCapsule(value);
-  };
+  // const handleClick = (value: string) => {
+  //   console.log("You clicked the Chip.", value);
+  //   setSelectedCapsule(value);
+  // };
 
   useEffect(() => {
     // alert(selectedCapsule);
-    if (selectedCapsule === "New Added Clients") {
+    if (selectedCapsuleData === "New Added Clients") {
       fetchAPContestAchClients();
     }
-  }, [selectedCapsule]);
+  }, [selectedCapsuleData]);
 
   return (
     <>
       <div className="page-content page-view">
-        <div>
+        {/* <div>
           <UserCapsules
             selectedCapsule={selectedCapsule}
             handleClick={handleClick}
@@ -200,11 +210,47 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
             targetData={targetData}
             isCustomRender={isCustomRender}
           />
-        </div>
+        </div> */}
+        <Tabs
+          value={tabValue}
+          onChange={(_, v) => setTabValue(v)}
+          TabIndicatorProps={{ style: { display: "none" } }}
+          sx={{
+            marginTop: "1rem",
+            marginLeft: ".7rem",
+            marginBottom: "8px",
+            backgroundColor: "white",
+            borderRadius: "11px",
+            width: "fit-content",
+            minHeight: 0,
+          }}
+        >
+          {partnerContestTabs.map((label, index) => (
+            <Tab
+              key={label}
+              label={label}
+              sx={{
+                textTransform: "none",
+                fontWeight: 400,
+                borderRadius: "10px",
+                px: 3,
+                minHeight: 10,
+                backgroundColor: tabValue === index ? "#11395C" : "white",
+                color: tabValue === index ? "white" : "#11395C",
+                "&.Mui-selected": {
+                  color: "white !important",
+                },
+                "& .MuiTab-wrapper": {
+                  color: tabValue === index ? "white" : "#11395C",
+                },
+              }}
+            />
+          ))}
+        </Tabs>
         <Container fluid>
           <Row>
             <div className="card-body">
-              {selectedCapsule === "Contest Rewards" && (
+              {selectedCapsuleData === "Contest Rewards" && (
                 <Row className="mt-3">
                   <Col sm={12}>
                     <Card className="contest-card">
@@ -228,20 +274,20 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
                 </Row>
               )}
 
-              {selectedCapsule === "Leaderboard" && (
+              {selectedCapsuleData === "Leaderboard" && (
                 <Leaderboard isCustomRender={isCustomRender} row={row} />
               )}
-              {selectedCapsule === "Broking Revenue" && (
+              {selectedCapsuleData === "Broking Revenue" && (
                 <BrokingRevenue isCustomRender={isCustomRender} row={row} />
               )}
-              {selectedCapsule === "Clientwise Brokerage" && (
+              {selectedCapsuleData === "Clientwise Brokerage" && (
                 <ClientWiseBrokerage
                   isCustomRender={isCustomRender}
                   row={row}
                 />
               )}
 
-              {selectedCapsule === "New Added Clients" && (
+              {selectedCapsuleData === "New Added Clients" && (
                 <>
                   <Row className="g-3" style={{ margin: "5px 0px" }}>
                     <Col xxl={4} lg={4} md={6} sm={12}>

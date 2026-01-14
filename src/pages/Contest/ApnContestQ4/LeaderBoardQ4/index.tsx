@@ -19,9 +19,13 @@ const index = ({ isCustomRender, row }: any) => {
     (state: RootState) => state.UserLogin?.data?.data
   );
 
+  useEffect(() => {
+    console.log("RowCheck", row);
+  }, [row]);
+
   const fetchLeaderboard = async () => {
     const payload = {
-      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
       quarterPeriod: "Q4-2526",
     };
 
