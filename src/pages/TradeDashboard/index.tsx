@@ -140,7 +140,7 @@ const DashboardCrypto = ({
         try {
           dispatch(showLoader(""));
           const response = await apiServices.DashboardNudge(payload);
-          console.log("dashBoardNudgeData", typeof response?.data);
+          console.log("dashBoardNudgeData", response?.data);
 
           const nudgeData = response?.data;
           setDashboardNudgeData(nudgeData);

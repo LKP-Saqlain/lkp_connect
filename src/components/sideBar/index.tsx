@@ -383,48 +383,46 @@ const SideBar = () => {
   }, [EmployeeLastBrokingDate, apBrokingLastDate]);
 
   useEffect(() => {
-    if (showMyPerformance) {
-      const fetchDashboardNudge = async () => {
-        const payload = {
-          user_id: user_id,
-        };
+    if (!showMyPerformance) return;
 
-        try {
-          dispatch(showLoader(""));
-          const response = await apiServices.DashboardNudge(payload);
-          console.log("dashBoardNudgeData", response?.data);
+    const fetchDashboardNudge = async () => {
+      dispatch(showLoader(""));
 
-          const reportTypes = new Set<string>();
+      try {
+        const payload = { user_id };
+        const response = await apiServices.DashboardNudge(payload);
 
-          Object.values(response?.data).forEach((table: any) => {
-            table.forEach((entry: any) => {
-              if (entry.ReportType) {
-                reportTypes.add(entry.ReportType);
-              }
-            });
-          });
-          console.log("reportTypeSize", reportTypes.size);
+        const data = response?.data;
+        console.log("dashBoardNudgeData", data);
 
-          setNudgeCount(reportTypes.size);
-          const nudgeData = response?.data;
-          setSideBarNudge(nudgeData);
-
-          dispatch(hideLoader());
-
-          if (response?.status === 200) {
-            // ShowToast("success", response?.data?.Message);
-            // setIsNudgeOpen(!isNudgeOpen);
-          } else {
-            console.error("Failed");
-          }
-        } catch (error) {
-          dispatch(hideLoader());
-          console.error("Error sending email:", error);
+        if (!data || response?.status !== 200) {
+          console.error("Failed to fetch dashboard nudge");
+          return;
         }
-      };
-      fetchDashboardNudge();
-    }
-  }, [dispatch, showMyPerformance]);
+
+        const reportTypes = new Set<string>();
+
+        Object.values(data).forEach((table: any) => {
+          table?.forEach((entry: any) => {
+            if (entry?.ReportType) {
+              reportTypes.add(entry.ReportType);
+            }
+          });
+        });
+
+        console.log("reportTypeSize", reportTypes.size);
+
+        setNudgeCount(reportTypes.size);
+        setSideBarNudge(data);
+      } catch (error) {
+        console.error("Error fetching dashboard nudge:", error);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+
+    fetchDashboardNudge();
+  }, [dispatch, showMyPerformance, user_id]);
 
   console.log("user", user_id);
 
