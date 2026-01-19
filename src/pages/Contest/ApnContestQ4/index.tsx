@@ -279,7 +279,11 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                             <span
                               style={{ marginLeft: "6px", fontWeight: 700 }}
                             >
-                              {targetData?.qtrg ?? "-"}
+                              ₹
+                              {targetData?.qtrg.toLocaleString("en-IN", {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0,
+                              }) ?? "-"}
                             </span>
                           </p>
                         </div>
