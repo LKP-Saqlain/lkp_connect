@@ -498,7 +498,7 @@ const CustomModal = ({
         size="small"
         fullWidth
         disabled
-        value={formik.values.umn}
+        value={formik.values.umn ? formik.values.umn : row?.umn}
         sx={{ mb: 2 }}
       />
 
@@ -508,7 +508,11 @@ const CustomModal = ({
         size="small"
         fullWidth
         name="mandateAmount"
-        value={formik.values.mandateAmount}
+        value={
+          formik.values.mandateAmount
+            ? formik.values.mandateAmount
+            : row?.amount
+        }
         onChange={(e) => {
           const value = e.target.value;
 
@@ -547,7 +551,7 @@ const CustomModal = ({
         size="small"
         fullWidth
         name="mandateUpi"
-        value={formik.values.mandateUpi}
+        value={formik.values.mandateUpi ? formik.values.mandateUpi : row?.upi}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         error={formik.touched.mandateUpi && Boolean(formik.errors.mandateUpi)}

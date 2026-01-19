@@ -2574,11 +2574,9 @@ const DataTable = ({
     Msg = `Are you sure want to ${action} this entry`;
   } else if (activeSubItem === "Pre Trade Approval" && !showDocument) {
     Msg = `Are you sure want to ${action} this entry`;
-  }
-  //  else if (activeSubItem === "mandateCall") {
-  //   Msg = "Are you sure want to Revoke?";
-  // }
-  else if (
+  } else if (activeSubItem === "mandateCall") {
+    Msg = "Edit Details";
+  } else if (
     activeSubItem === "Pre Trade Proof Upload" ||
     activeSubItem === "Pre Trade Report" ||
     (activeSubItem === "Unlisted Shares Approval 1" && action === "approve") ||
