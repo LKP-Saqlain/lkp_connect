@@ -639,17 +639,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
             const isMTD = selectedButton === "MTD";
 
             const badges = [
-              {
-                type: "warning",
-                label: "Total",
-                value: isToggleMetric
-                  ? isMTD
-                    ? metric.data.MonthTotal // MTD value
-                    : metric.data.total // YTD value
-                  : metric.data.total,
-                isActive: activeBadges[index] === "total",
-                onClick: () => handleBadgeClick(index, "total"),
-              },
+              
               {
                 type: "info",
                 label: "Direct",
@@ -671,6 +661,16 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
                   : metric.data.indirect,
                 isActive: activeBadges[index] === "indirect",
                 onClick: () => handleBadgeClick(index, "indirect"),
+              },{
+                type: "warning",
+                label: "Total",
+                value: isToggleMetric
+                  ? isMTD
+                    ? metric.data.MonthTotal // MTD value
+                    : metric.data.total // YTD value
+                  : metric.data.total,
+                isActive: activeBadges[index] === "total",
+                onClick: () => handleBadgeClick(index, "total"),
               },
             ];
 

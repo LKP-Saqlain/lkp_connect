@@ -2,7 +2,7 @@ import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 
 import { useMediaQuery } from "rsuite/esm/useMediaQuery/useMediaQuery";
 import theme from "../../../theme";
-import contestReward from "../../../assets/images/AP Contest.png";
+import contestReward from "../../../assets/images/AP Contest-Q4.svg";
 import ActiveClient from "../../../assets/images/Clients.json";
 import DashboardCard from "../../../components/common/DashboardCard";
 import UserInfoTable from "../../../components/common/UserInfoTable";
@@ -31,7 +31,7 @@ import { Tabs, Tab } from "@mui/material";
 
 const APContest = ({ activeMenu, isCustomRender, row }: any) => {
   // const [selectedCapsule, setSelectedCapsule] = useState("Contest Rewards");
-  // const [targetData, setTargetData] = useState<APContestData | null>(null);
+  const [targetData, setTargetData] = useState<any | null>(null);
   const [userData, setUserData] = useState<any[]>([]);
   const [apContestAchSummaryRecord, setApContestAchSummaryRecord] = useState<
     any[]
@@ -87,7 +87,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
             userData
           );
 
-          // setTargetData(firstItem);
+          setTargetData(firstItem);
         }
       } catch (error) {
         console.error("Error fetching AP Contest Target Details", error);
@@ -250,18 +250,49 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                 <Row className="mt-3">
                   <Col sm={12}>
                     <Card className="contest-card">
+                      <CardHeader className="py-3">
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                            gap: "8px",
+                          }}
+                        >
+                          <p
+                            style={{
+                              margin: 0,
+                              fontWeight: 700,
+                            }}
+                          >
+                            Contest Period: 1st January – 31st March
+                          </p>
+
+                          <p
+                            style={{
+                              margin: 0,
+                              fontWeight: 600,
+                            }}
+                          >
+                            Minimum Brokerage:
+                            <span
+                              style={{ marginLeft: "6px", fontWeight: 700 }}
+                            >
+                              {targetData?.qtrg ?? "-"}
+                            </span>
+                          </p>
+                        </div>
+                      </CardHeader>
+
                       <CardBody style={{ textAlign: "center" }}>
-                        <p style={{ fontWeight: "700", marginBottom: "15px" }}>
-                          Contest Period - 1st January to 31st Mar
-                        </p>
                         <img
                           src={contestReward}
                           alt="Contest Reward"
                           style={{
-                            maxWidth: "75%",
+                            minWidth: "70%",
                             height: "auto",
                             borderRadius: "8px",
-                            // boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                           }}
                         />
                       </CardBody>
