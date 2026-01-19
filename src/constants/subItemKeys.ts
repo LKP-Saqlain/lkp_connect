@@ -12,7 +12,7 @@ export const SubItemKeys = {
   RH_INDIRECT: "Indirect Channel",
   EMPLOYEE_TARGET_REPORT: "Employee Target Report",
   RH_PARTNER: "Partner Contest Report",
-  RH_ZONE_TARGET: "Zone Target Q3",
+  RH_ZONE_TARGET: "Zone Target Q4",
   RH_AMC_REPORT: "Client DP AMC Report",
   SPIP_CLIENT_MIS: "SPIP Client MIS",
   INDIRECT_CHANNEL_TARGET: "Indirect Channel Target",
