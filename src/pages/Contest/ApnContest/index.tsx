@@ -32,6 +32,8 @@ import { Tabs, Tab } from "@mui/material";
 const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
   // const [selectedCapsule, setSelectedCapsule] = useState("Contest Rewards");
   // const [targetData, setTargetData] = useState<APContestData | null>(null);
+  const [apInfo, setApInfo]  = useState<any | null>(null);
+
   const [userData, setUserData] = useState<any[]>([]);
   const [apContestAchSummaryRecord, setApContestAchSummaryRecord] = useState<
     any[]
@@ -90,7 +92,7 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
             activeMenu,
             userData
           );
-
+          setApInfo(firstItem);
           // setTargetData(firstItem);
         }
       } catch (error) {
@@ -211,42 +213,68 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
             isCustomRender={isCustomRender}
           />
         </div> */}
-        <Tabs
-          value={tabValue}
-          onChange={(_, v) => setTabValue(v)}
-          TabIndicatorProps={{ style: { display: "none" } }}
-          sx={{
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
             marginTop: "1rem",
-            marginLeft: ".7rem",
-            marginBottom: "8px",
-            backgroundColor: "white",
-            borderRadius: "11px",
-            width: "fit-content",
-            minHeight: 0,
+            marginRight: "0.7rem",
+            flexWrap: "wrap", // responsive
+            gap: "8px",
           }}
         >
-          {partnerContestTabs.map((label, index) => (
-            <Tab
-              key={label}
-              label={label}
-              sx={{
-                textTransform: "none",
-                fontWeight: 400,
-                borderRadius: "10px",
-                px: 3,
-                minHeight: 10,
-                backgroundColor: tabValue === index ? "#11395C" : "white",
-                color: tabValue === index ? "white" : "#11395C",
-                "&.Mui-selected": {
-                  color: "white !important",
-                },
-                "& .MuiTab-wrapper": {
+          <Tabs
+            value={tabValue}
+            onChange={(_, v) => setTabValue(v)}
+            TabIndicatorProps={{ style: { display: "none" } }}
+            sx={{
+              marginTop: "1rem",
+              marginLeft: ".7rem",
+              marginBottom: "8px",
+              backgroundColor: "white",
+              borderRadius: "11px",
+              width: "fit-content",
+              minHeight: 0,
+            }}
+          >
+            {partnerContestTabs.map((label, index) => (
+              <Tab
+                key={label}
+                label={label}
+                sx={{
+                  textTransform: "none",
+                  fontWeight: 400,
+                  borderRadius: "10px",
+                  px: 3,
+                  minHeight: 10,
+                  backgroundColor: tabValue === index ? "#11395C" : "white",
                   color: tabValue === index ? "white" : "#11395C",
-                },
+                  "&.Mui-selected": {
+                    color: "white !important",
+                  },
+                  "& .MuiTab-wrapper": {
+                    color: tabValue === index ? "white" : "#11395C",
+                  },
+                }}
+              />
+            ))}
+          </Tabs>
+          {apInfo && isCustomRender && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+                fontSize: "13px",
+                fontWeight: 300,
               }}
-            />
-          ))}
-        </Tabs>
+            >
+              {apInfo.apn} / {apInfo.apc}
+            </div>
+          )}
+        </div>
+
         <Container fluid>
           <Row>
             <div className="card-body">

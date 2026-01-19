@@ -150,7 +150,7 @@ const ZoneTarget = ({ activeSubItem }: any) => {
     if (!user_id) return;
 
     const payload = {
-      quarterName: "Q3",
+      quarterName: "Q4",
       zone: formik.values.selectedZone?.value || "ALL",
       user_ID: user_id,
     };
@@ -347,13 +347,7 @@ const ZoneTarget = ({ activeSubItem }: any) => {
               <Row>
                 {metrics.map((metric, index) => {
                   const badges = [
-                    {
-                      type: "warning",
-                      label: "Total",
-                      value: metric.data.total,
-                      isActive: activeBadges[index] === "total",
-                      onClick: () => handleBadgeClick(index, "total"),
-                    },
+                  
                     {
                       type: "info",
                       label: "Direct",
@@ -367,6 +361,12 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                       value: metric.data.indirect,
                       isActive: activeBadges[index] === "indirect",
                       onClick: () => handleBadgeClick(index, "indirect"),
+                    },  {
+                      type: "warning",
+                      label: "Total",
+                      value: metric.data.total,
+                      isActive: activeBadges[index] === "total",
+                      onClick: () => handleBadgeClick(index, "total"),
                     },
                   ];
 
@@ -410,7 +410,7 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                   }}
                 >
                   {/* Left side title */}
-                  <h4 className="card-title mb-0">Zone Target Q3</h4>
+                  <h4 className="card-title mb-0">Zone Target Q4</h4>
 
                   {/* Right side buttons */}
                   <div style={{ display: "flex", gap: "1px" }}>

@@ -8032,57 +8032,35 @@ export const getAPContestReportColumns: GridColDef[] = [
         params
       ),
   },
-  // {
-  //   field: "brokerageAchievedPerc",
-  //   headerName: "Revenue Achievement (%)",
-  //   flex: 1.4,
-  //   disableColumnMenu: true,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   headerClassName: "header-wrap-custom",
-  //   valueFormatter: (params: any) => {
-  //     return `${params} %`;
-  //   },
-  //   // valueGetter: (params: any) => `${params.achievementPercentage ?? 0}%`,
-  // },
-  // {
-  //   field: "newClientCount",
-  //   headerName: " Clients Target",
-  //   flex: 1,
-  //   disableColumnMenu: true,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   headerClassName: "header-wrap-custom",
-  // },
   {
-    field: "cla",
+    field: "clientsAchieved", // ✅ unique
     headerName: "Clients Achieved",
     flex: 1,
-    disableColumnMenu: true,
-    headerAlign: "center",
     align: "center",
-    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+    renderCell: (params) => {
+      const value = params.row.cla; 
+      return value ?? "-";
+    },
   },
-  // {
-  //   field: "clientsAchievedPerc",
-  //   headerName: "Client Achievement (%)",
-  //   flex: 1.4,
-  //   disableColumnMenu: true,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   headerClassName: "header-wrap-custom",
-  //   valueFormatter: (params: any) => {
-  //     return `${params} %`;
-  //   },
-  // },
-  // {
-  //   field: "prize",
-  //   headerName: "Prize",
-  //   flex: 1.5,
-  //   disableColumnMenu: true,
-  //   headerAlign: "center",
-  //   align: "center",
-  // },
+  {
+    field: "accop",
+    headerName: "Account Opened",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "accountsTraded", // ✅ unique
+    headerName: "Account Traded",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => {
+      const value = params.row.cla; 
+      return value ?? "-";
+    },
+  },
 ];
 
 export const clientUnpledgeReport: GridColDef[] = [
