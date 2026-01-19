@@ -207,42 +207,69 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
             isCustomRender={isCustomRender}
           />
         </div> */}
-        <Tabs
-          value={tabValue}
-          onChange={(_, v) => setTabValue(v)}
-          TabIndicatorProps={{ style: { display: "none" } }}
-          sx={{
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
             marginTop: "1rem",
-            marginLeft: ".7rem",
-            marginBottom: "8px",
-            backgroundColor: "white",
-            borderRadius: "11px",
-            width: "fit-content",
-            minHeight: 0,
+            marginRight: "0.7rem",
+            flexWrap: "wrap", // responsive
+            gap: "8px",
           }}
         >
-          {partnerContestTabs.map((label, index) => (
-            <Tab
-              key={label}
-              label={label}
-              sx={{
-                textTransform: "none",
-                fontWeight: 400,
-                borderRadius: "10px",
-                px: 3,
-                minHeight: 10,
-                backgroundColor: tabValue === index ? "#11395C" : "white",
-                color: tabValue === index ? "white" : "#11395C",
-                "&.Mui-selected": {
-                  color: "white !important",
-                },
-                "& .MuiTab-wrapper": {
+          <Tabs
+            value={tabValue}
+            onChange={(_, v) => setTabValue(v)}
+            TabIndicatorProps={{ style: { display: "none" } }}
+            sx={{
+              marginTop: "1rem",
+              marginLeft: ".7rem",
+              marginBottom: "8px",
+              backgroundColor: "white",
+              borderRadius: "11px",
+              width: "fit-content",
+              minHeight: 0,
+            }}
+          >
+            {partnerContestTabs.map((label, index) => (
+              <Tab
+                key={label}
+                label={label}
+                sx={{
+                  textTransform: "none",
+                  fontWeight: 400,
+                  borderRadius: "10px",
+                  px: 3,
+                  minHeight: 10,
+                  backgroundColor: tabValue === index ? "#11395C" : "white",
                   color: tabValue === index ? "white" : "#11395C",
-                },
+                  "&.Mui-selected": {
+                    color: "white !important",
+                  },
+                  "& .MuiTab-wrapper": {
+                    color: tabValue === index ? "white" : "#11395C",
+                  },
+                }}
+              />
+            ))}
+          </Tabs>
+          {targetData && isCustomRender && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+                fontSize: "13px",
+                fontWeight: 300,
               }}
-            />
-          ))}
-        </Tabs>
+            >
+              {targetData.apn} / {targetData.apc}
+            </div>
+          )}
+        </div>
+
         <Container fluid>
           <Row>
             <div className="card-body">
@@ -280,7 +307,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                               style={{ marginLeft: "6px", fontWeight: 700 }}
                             >
                               ₹
-                              {targetData?.qtrg.toLocaleString("en-IN", {
+                              {targetData?.qtrg?.toLocaleString("en-IN", {
                                 minimumFractionDigits: 0,
                                 maximumFractionDigits: 0,
                               }) ?? "-"}
