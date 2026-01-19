@@ -243,7 +243,7 @@ const DashboardCrypto = ({
             showLoader("Please wait, we are processing your request...")
           );
           const response = await apiServices.T6Selling(payload);
-          console.log("ClientCashresponse", response?.data?.data);
+          console.log("ClientCashResponse", response?.data?.data);
           if (response?.status === 200) {
             setResponseStatus(true);
             dispatch(hideLoader());
@@ -550,13 +550,8 @@ const DashboardCrypto = ({
   //     : filteredSubCategories;
 
   const handleRefreshClicked = async () => {
-    // Reset main tab selection to "All"
     setSelectedTab(0);
-
-    // Re-fetch API
     await fetchResearchCall();
-
-    // ✅ Reapply filtering for "All" tab to show all records
     handleTabClick(0);
   };
 
@@ -616,7 +611,6 @@ const DashboardCrypto = ({
                 style={{
                   borderRadius: "15px",
                   boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-                  // padding: "14px",
                 }}
               >
                 <CardBody>

@@ -126,7 +126,7 @@ export const newDomainEndpoints = [
   //from new sheeets
   endpoints.GetAPContestAchievedBrokerage,
   endpoints.GetAPContestAchievedClients,
-  // endpoints.DashboardNudge,
+  endpoints.DashboardNudge,
   endpoints.GetPledgeReport,
 
   //RH DASHBOARD/OVERVIEW

@@ -903,7 +903,7 @@ export const slbmColumns: GridColDef[] = [
 
 export const clientNotTradedColumns: GridColDef[] = [
   {
-    field: "cc",
+    field: "ClientCode",
     headerName: "Client Code",
     flex: 1.3,
     headerAlign: "center",
@@ -911,7 +911,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "cn",
+    field: "ClientName",
     headerName: "Client Name",
     flex: 2.2,
     headerAlign: "center",
@@ -919,7 +919,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "bc",
+    field: "BranchCode",
     headerName: "Branch Code",
     flex: 1,
     headerAlign: "center",
@@ -927,7 +927,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ad",
+    field: "ActivationDate",
     headerName: "Activation Date",
     flex: 1.5,
     headerAlign: "center",
@@ -942,7 +942,6 @@ export const clientNotTradedColumns: GridColDef[] = [
     valueGetter: (params: any) => {
       const rawDate = params;
       if (!rawDate) return null; // Handle missing data
-
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
@@ -961,12 +960,10 @@ export const clientNotTradedColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
       );
-
       return parsedDate;
     },
     sortComparator: (v1, v2) => {
@@ -979,7 +976,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     },
   },
   {
-    field: "ltd",
+    field: "LastTradeDate",
     headerName: "Last Trade Date",
     flex: 1.5,
     headerAlign: "center",
@@ -988,7 +985,6 @@ export const clientNotTradedColumns: GridColDef[] = [
     valueGetter: (params: any) => {
       const rawDate = params;
       if (!rawDate) return null; // Handle missing data
-
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
@@ -1007,12 +1003,10 @@ export const clientNotTradedColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
       );
-
       return parsedDate;
     },
     sortComparator: (v1, v2) => {
@@ -1025,7 +1019,7 @@ export const clientNotTradedColumns: GridColDef[] = [
     },
   },
   {
-    field: "avt", //Not in the sheet added from another table reference on 12/05/2025
+    field: "Active",
     headerName: "Active",
     flex: 0.8,
     headerAlign: "center",
@@ -1036,7 +1030,7 @@ export const clientNotTradedColumns: GridColDef[] = [
 
 export const newClientAddFiveDays: GridColDef[] = [
   {
-    field: "cc",
+    field: "ClientCode",
     headerName: "Client Code",
     flex: 1,
     headerAlign: "center",
@@ -1044,7 +1038,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "cn",
+    field: "ClientName",
     headerName: "Client Name",
     flex: 2,
     headerAlign: "center",
@@ -1052,7 +1046,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "bc",
+    field: "BranchCode",
     headerName: "Branch Code",
     flex: 0.9,
     headerAlign: "center",
@@ -1060,7 +1054,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ad",
+    field: "ActivationDate",
     headerName: "Activation Date",
     flex: 1.2,
     headerAlign: "center",
@@ -1069,7 +1063,6 @@ export const newClientAddFiveDays: GridColDef[] = [
     valueGetter: (params: any) => {
       const rawDate = params;
       if (!rawDate) return null; // Handle missing data
-
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
@@ -1088,12 +1081,10 @@ export const newClientAddFiveDays: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
       );
-
       return parsedDate;
     },
     sortComparator: (v1, v2) => {
@@ -1106,7 +1097,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     },
   },
   {
-    field: "avt",
+    field: "Active",
     headerName: "Active",
     flex: 0.5,
     headerAlign: "center",
@@ -1114,7 +1105,7 @@ export const newClientAddFiveDays: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ltd",
+    field: "LastTradeDate",
     headerName: "Last Trade Date",
     flex: 1.5,
     headerAlign: "center",
@@ -1123,7 +1114,6 @@ export const newClientAddFiveDays: GridColDef[] = [
     valueGetter: (params: any) => {
       const rawDate = params;
       if (!rawDate) return null; // Handle missing data
-
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
@@ -1142,12 +1132,10 @@ export const newClientAddFiveDays: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
       );
-
       return parsedDate;
     },
     sortComparator: (v1, v2) => {
@@ -1163,7 +1151,7 @@ export const newClientAddFiveDays: GridColDef[] = [
 
 export const spipRenewalColumns: GridColDef[] = [
   {
-    field: "ia",
+    field: "IACode",
     headerName: "IA Code",
     width: 90,
     headerAlign: "center",
@@ -1171,7 +1159,7 @@ export const spipRenewalColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "cn",
+    field: "ClientName",
     headerName: "Client Name",
     width: 250,
     flex: 1,
@@ -1180,7 +1168,7 @@ export const spipRenewalColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "bo",
+    field: "Backofficecode",
     headerName: "Back Office Code",
     width: 90,
     headerAlign: "center",
@@ -1188,9 +1176,8 @@ export const spipRenewalColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
   },
-
   {
-    field: "mn",
+    field: "MobileNo",
     headerName: "Mobile No",
     width: 120,
     headerAlign: "center",
@@ -1198,7 +1185,6 @@ export const spipRenewalColumns: GridColDef[] = [
     disableColumnMenu: true,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
-
       // Mask all digits except the first 2 and the last 2
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
@@ -1207,7 +1193,6 @@ export const spipRenewalColumns: GridColDef[] = [
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
         }
       );
-
       // Return tooltip with the masked mobile number
       return (
         <Tooltip title={mobile} arrow placement="top">
@@ -1216,9 +1201,8 @@ export const spipRenewalColumns: GridColDef[] = [
       );
     },
   },
-
   {
-    field: "avt",
+    field: "Active",
     headerName: "Active",
     width: 90,
     headerAlign: "center",
@@ -1226,7 +1210,7 @@ export const spipRenewalColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ad",
+    field: "ActivationDate",
     headerName: "Start Date",
     width: 120,
     headerAlign: "center",
@@ -1236,7 +1220,6 @@ export const spipRenewalColumns: GridColDef[] = [
     valueGetter: (params: any) => {
       const rawDate = params;
       if (!rawDate) return null; // Handle missing data
-
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
@@ -1255,12 +1238,10 @@ export const spipRenewalColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
       );
-
       return parsedDate;
     },
     sortComparator: (v1, v2) => {
@@ -1273,7 +1254,7 @@ export const spipRenewalColumns: GridColDef[] = [
     },
   },
   {
-    field: "ed",
+    field: "EndDate",
     headerName: "Renewal due on",
     width: 120,
     headerAlign: "center",
@@ -1283,7 +1264,6 @@ export const spipRenewalColumns: GridColDef[] = [
     valueGetter: (params: any) => {
       const rawDate = params;
       if (!rawDate) return null; // Handle missing data
-
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
@@ -1302,12 +1282,10 @@ export const spipRenewalColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
       );
-
       return parsedDate;
     },
     sortComparator: (v1, v2) => {
@@ -1320,7 +1298,7 @@ export const spipRenewalColumns: GridColDef[] = [
     },
   },
   {
-    field: "rm",
+    field: "RMCode",
     headerName: "RM Code",
     width: 100,
     headerAlign: "center",
@@ -1331,7 +1309,7 @@ export const spipRenewalColumns: GridColDef[] = [
 
 export const upcomingDormantClientColumns: GridColDef[] = [
   {
-    field: "cc",
+    field: "ClientCode",
     headerName: "Client Code",
     flex: 1.5,
     headerAlign: "center",
@@ -1339,7 +1317,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "cn",
+    field: "ClientName",
     headerName: "Client Name",
     flex: 2,
     headerAlign: "center",
@@ -1347,7 +1325,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ltd",
+    field: "LastTradeDate",
     headerName: "Last Trade Date",
     flex: 1.5,
     headerAlign: "center",
@@ -1356,7 +1334,6 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     valueGetter: (params: any) => {
       const rawDate = params;
       if (!rawDate) return null; // Handle missing data
-
       const parsedDate = new Date(
         rawDate.replace(
           /(\d{2})-([A-Za-z]{3})-(\d{2})/,
@@ -1375,12 +1352,10 @@ export const upcomingDormantClientColumns: GridColDef[] = [
               Nov: "11",
               Dec: "12",
             };
-
             return `20${year}-${monthMap[month]}-${day}`;
           }
         )
       );
-
       return parsedDate;
     },
     sortComparator: (v1, v2) => {
@@ -1393,7 +1368,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     },
   },
   {
-    field: "mn",
+    field: "MobileNo",
     headerName: "Mobile No",
     flex: 1,
     headerAlign: "center",
@@ -1401,7 +1376,6 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     disableColumnMenu: true,
     renderCell: (params: any) => {
       const mobile = params.value || ""; // Extract the mobile number
-
       // Mask all digits except the first 2 and the last 2
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
@@ -1410,7 +1384,6 @@ export const upcomingDormantClientColumns: GridColDef[] = [
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
         }
       );
-
       // Return tooltip with the masked mobile number
       return (
         <Tooltip title={mobile} arrow placement="top">
@@ -1420,7 +1393,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
     },
   },
   {
-    field: "dc",
+    field: "DayCount",
     headerName: "Days to Dormant",
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -1432,7 +1405,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
 
 export const spipSubscriptionColumns: GridColDef[] = [
   {
-    field: "ia",
+    field: "IACode",
     headerName: "IA Code",
     // flex: 1.5,
     width: 90,
@@ -1441,7 +1414,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "cn",
+    field: "ClientName",
     headerName: "Client Name",
     width: 200,
     headerAlign: "center",
@@ -1449,7 +1422,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "bo",
+    field: "Backofficecode",
     headerName: "Backoffice Code",
     // flex: 1.5,
     width: 120,
@@ -1459,7 +1432,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     valueGetter: (params: any) => params || "-", // Show '-' if empty
   },
   {
-    field: "bc",
+    field: "BranchCode",
     headerName: "Branch Code",
     // flex: 1,
     headerAlign: "center",
@@ -1467,7 +1440,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "mn",
+    field: "MobileNo",
     headerName: "Mobile No",
     // flex: 1.5,
     width: 110,
@@ -1476,14 +1449,12 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
     renderCell: (params) => {
       const mobile = params.value || ""; // Extract the mobile number
-
       // Mask all digits except the first 2 and the last 2
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
         (_match: any, prefix: any, middle: any, suffix: any) =>
           `${prefix}${"X".repeat(middle.length)}${suffix}`
       );
-
       return (
         <Tooltip title={mobile} arrow placement="top">
           <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
@@ -1492,7 +1463,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     },
   },
   {
-    field: "em",
+    field: "EmailId",
     headerName: "Email ID",
     // flex: 2,
     width: 200,
@@ -1501,7 +1472,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "avt",
+    field: "Active",
     headerName: "Active",
     // flex: 1,
     width: 60,
@@ -1510,7 +1481,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "ad",
+    field: "ActivationDate",
     headerName: "Activation Date",
     // flex: 1.5,
     headerAlign: "center",
@@ -1518,14 +1489,13 @@ export const spipSubscriptionColumns: GridColDef[] = [
     align: "center",
     width: 90,
     disableColumnMenu: true,
-
     valueFormatter: (params: any) => {
       if (!params) return "-";
       return dayjs(params).format("DD-MMM-YY"); // Converts to "27-Feb-24"
     },
   },
   {
-    field: "rm",
+    field: "RMCode",
     headerName: "RM Code",
     // flex: 1,
     width: 80,
@@ -1534,7 +1504,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "amt",
+    field: "Amount",
     headerName: "Amount",
     // flex: 1.5,
     width: 100,
@@ -10318,6 +10288,7 @@ export const ageingColumns: GridColDef[] = [
     minWidth: 120,
     align: "center",
     headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
     field: "bseScrip",
@@ -10333,7 +10304,7 @@ export const ageingColumns: GridColDef[] = [
     headerName: "ISIN",
     flex: 1.2,
     minWidth: 180,
-    align: "left",
+    align: "center",
     headerAlign: "center",
     renderCell: (params) => (params.value ? params.value : "—"),
   },
@@ -10378,7 +10349,7 @@ export const ageingColumns: GridColDef[] = [
   },
   {
     field: "d88",
-    headerName: "<= 88 Days",
+    headerName: "<= 70 Days",
     flex: 0.9,
     minWidth: 110,
     align: "right",
@@ -10391,7 +10362,7 @@ export const ageingColumns: GridColDef[] = [
   },
   {
     field: "d89",
-    headerName: "<= 89 Days",
+    headerName: "<= 80 Days",
     flex: 0.9,
     minWidth: 110,
     align: "right",
