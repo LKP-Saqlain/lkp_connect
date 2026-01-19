@@ -347,13 +347,7 @@ const ZoneTarget = ({ activeSubItem }: any) => {
               <Row>
                 {metrics.map((metric, index) => {
                   const badges = [
-                    {
-                      type: "warning",
-                      label: "Total",
-                      value: metric.data.total,
-                      isActive: activeBadges[index] === "total",
-                      onClick: () => handleBadgeClick(index, "total"),
-                    },
+                  
                     {
                       type: "info",
                       label: "Direct",
@@ -367,6 +361,12 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                       value: metric.data.indirect,
                       isActive: activeBadges[index] === "indirect",
                       onClick: () => handleBadgeClick(index, "indirect"),
+                    },  {
+                      type: "warning",
+                      label: "Total",
+                      value: metric.data.total,
+                      isActive: activeBadges[index] === "total",
+                      onClick: () => handleBadgeClick(index, "total"),
                     },
                   ];
 

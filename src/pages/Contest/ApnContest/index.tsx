@@ -32,6 +32,13 @@ import { Tabs, Tab } from "@mui/material";
 const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
   // const [selectedCapsule, setSelectedCapsule] = useState("Contest Rewards");
   // const [targetData, setTargetData] = useState<APContestData | null>(null);
+  const [apInfo, setApInfo] = useState<{
+    apn?: string;
+    apc?: string;
+    zn?: string;
+    qtrg?: number;
+  } | null>(null);
+
   const [userData, setUserData] = useState<any[]>([]);
   const [apContestAchSummaryRecord, setApContestAchSummaryRecord] = useState<
     any[]
@@ -90,7 +97,7 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
             activeMenu,
             userData
           );
-
+          setApInfo(firstItem);
           // setTargetData(firstItem);
         }
       } catch (error) {
@@ -246,7 +253,22 @@ const APContestQ4 = ({ activeMenu, isCustomRender, row, selectedTab }: any) => {
               }}
             />
           ))}
+          
         </Tabs>
+        {apInfo && isCustomRender && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-end",
+              fontSize: "13px",
+              fontWeight: 300,
+            }}
+          >
+            {apInfo.apn} / {apInfo.apc}
+          </div>
+        )}
+
         <Container fluid>
           <Row>
             <div className="card-body">

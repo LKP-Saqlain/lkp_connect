@@ -826,6 +826,18 @@ const SideBar = () => {
     "DP AMC Ledger Debit": <LedgerDebitReport activeSubItem={activeSubItem} />,
     "Vendor Details Report": <VendorReport activeSubItem={activeSubItem} />,
   };
+
+  const q4SubItems: Record<string, JSX.Element> = {
+    "Employee Target": <EmpContestQ4 activeMenu={activeSubItem+"-Q4"} />,
+    "DP AMC Contest": <AmcMembershipQ4 activeMenu={activeSubItem+"-Q4"} />,
+    "Partner Contest": <ApnContestQ4 activeSubItem={activeSubItem+"-Q4"} />,
+  };
+  const q3SubItems: Record<string, JSX.Element> = {
+    "Employee Target": <EmpContest activeMenu={activeMenu} />,
+    "DP AMC Contest": <AmcMembership activeMenu={activeMenu} />,
+    "Partner Contest": <ApnContest activeMenu={activeMenu} />,
+  };
+
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>
   ): JSX.Element | null => subItems[activeSubItem] || null;
@@ -881,6 +893,8 @@ const SideBar = () => {
       "Employee Target-Q4": <EmpContestQ4 activeMenu={activeMenu} />,
       "Partner Contest": <ApnContest activeMenu={activeMenu} />,
       "Partner Contest-Q4": <ApnContestQ4 activeMenu={activeMenu} />,
+      "Q4 Contest": getSubItemComponent(q4SubItems),
+      "Q3 Contest": getSubItemComponent(q3SubItems),
       "Client Details": (
         <ClientDetails
           handleDrawerClose={handleDrawerClose}
