@@ -351,7 +351,7 @@ const APContest = ({ activeMenu, isCustomRender, row }: any) => {
                     <Col xxl={4} lg={4} md={6} sm={12}>
                       <DashboardCard
                         title="Client Target*"
-                        value={12}
+                        value={9}
                         animationData={ActiveClient}
                         activeClientsEmpty={true}
                         customClass={true}
