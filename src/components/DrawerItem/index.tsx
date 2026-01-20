@@ -22,7 +22,6 @@ import StackedBarChartIcon from "@mui/icons-material/StackedBarChart";
 import BallotIcon from "@mui/icons-material/Ballot";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import HomeWorkRoundedIcon from "@mui/icons-material/HomeWorkRounded";
-import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import List from "@mui/material/List";
 import { MenuItems } from "../../types/index";
 import StoreIcon from "@mui/icons-material/Store";
@@ -111,16 +110,12 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     IVR: <PublishedWithChangesIcon />,
     SPIP: <AnalyticsIcon />,
     "TPD Report": <FaFileInvoice size={17} />,
-    "Employee Target": <LocalPoliceIcon />,
-    "Employee Target-Q4": <LocalPoliceIcon />,
-    "Partner Contest": <LocalPoliceIcon />,
     "SPIP Dashboard": <SpaceDashboardIcon />,
     "Client Request": <PublishedWithChangesIcon />,
     "Mutual Fund": <AttachMoneyIcon />,
-    "DP AMC Contest": <AssignmentTurnedInIcon />,
-    "DP AMC Contest-Q4": <AssignmentTurnedInIcon />,
     "Research Calls": <TroubleshootIcon />,
-    "Partner Contest-Q4": <LocalPoliceIcon />,
+    "Q4 Contest": <LocalPoliceIcon />,
+    "Q3 Contest": <LocalPoliceIcon />,
   };
 
   const getIcon = (title: string) => {
@@ -211,12 +206,8 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           ))}
 
         {(title === "Zone Overview" ||
-          title === "Account" ||
           title === "Mutual Fund" ||
-          title === "Partner Contest" ||
-          title === "Partner Contest-Q4" ||
-          title === "DP AMC Contest" ||
-          title === "Research Calls") && (
+          title === "Q4 Contest") && (
           <div className="starburst-bg">
             <Lottie
               loop
