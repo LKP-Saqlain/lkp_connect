@@ -331,4 +331,14 @@ export const newDomainEndpoints = [
 
   // //SPIP SUBMENUS APIS
   // endpoints.FillQuarterName,
+
+  //Mandate
+  endpoints.GetDpClientDetails,
+  endpoints.GetMandateCallBackDetails,
+  endpoints.checkUpi,
+  endpoints.CreateUpiMandate,
+  endpoints.UpdateUpiMandate,
+  endpoints.RevokeUpiMandate,
+  endpoints.SendOtpSms,
+  endpoints.ValidateOtpSms,
 ];

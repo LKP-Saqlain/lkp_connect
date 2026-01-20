@@ -528,16 +528,16 @@ const MandateCall = () => {
                       >
                         <tr>
                           <td>Client Name</td>
-                          <td>{data.clientName}</td>
+                          <td>{data.cn}</td>
                         </tr>
                         <tr></tr>
                         <tr>
                           <td>Client Code</td>
-                          <td>{data.clientcode}</td>
+                          <td>{data.cc}</td>
                         </tr>
                         <tr>
                           <td>DP Code</td>
-                          <td>{data.dpcode}</td>
+                          <td>{data.dpcd}</td>
                         </tr>
                         <tr>
                           <td>DP ID</td>

@@ -2073,9 +2073,25 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "Employee Target Report") {
-      return TableColumns.EmployeeTargetReportColumns.map((column) => ({
-        ...column,
-      }));
+      const HIDE_WHEN_TAB_0 = new Set([
+        "mtf_cl_tg",
+        "mtf_cl_ach",
+        "mtf_ult_tg",
+        "mtf_ult_ach",
+      ]);
+
+      const HIDE_WHEN_TAB_1 = new Set(["spip_t", "spip_a"]);
+      return TableColumns.EmployeeTargetReportColumns.filter((column) => {
+        if (selectedTab === 0 && HIDE_WHEN_TAB_0.has(column.field)) {
+          return false;
+        }
+
+        if (selectedTab === 1 && HIDE_WHEN_TAB_1.has(column.field)) {
+          return false;
+        }
+
+        return true;
+      });
     } else if (activeSubItem === "RHDashboardTop10Clients") {
       return TableColumns.RHTopClientsColumns.map((column) => ({
         ...column,

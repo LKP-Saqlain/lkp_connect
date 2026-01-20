@@ -8039,7 +8039,7 @@ export const getAPContestReportColumns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     renderCell: (params) => {
-      const value = params.row.cla; 
+      const value = params.row.cla;
       return value ?? "-";
     },
   },
@@ -8057,7 +8057,7 @@ export const getAPContestReportColumns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     renderCell: (params) => {
-      const value = params.row.cla; 
+      const value = params.row.cla;
       return value ?? "-";
     },
   },
@@ -8376,7 +8376,96 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
-
+  {
+    field: "rprd_tg",
+    headerName: "Research Product Target",
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).format(params),
+  },
+  {
+    field: "rprd_ach",
+    headerName: "Research Product Achieved",
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).format(params),
+  },
+  {
+    field: "mtf_cl_tg",
+    headerName: "MTF Active Client",
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).format(params),
+  },
+  {
+    field: "mtf_cl_ach",
+    headerName: "MTF Client Achieved",
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).format(params),
+  },
+  {
+    field: "mtf_ult_tg",
+    headerName: "MTF Utilisation Target",
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).format(params),
+  },
+  {
+    field: "mtf_ult_ach",
+    headerName: "MTF Utilisation Achieved",
+    minWidth: 100,
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params) =>
+      new Intl.NumberFormat("en-IN", {
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
+      }).format(params),
+  },
   {
     field: "spip_t",
     headerName: "SPIP Clients Target",

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../redux/store";
@@ -26,7 +26,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any[]>([]);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [tabValue, setTabValue] = useState(0);
-
+  const lastZoneRef = useRef<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -152,6 +152,11 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
   useEffect(() => {
     setData([]);
     if (tabValue !== 0 && tabValue !== 1) return;
+
+    const currentZone = formik.values.selectedZone?.value || "ALL";
+    if (lastZoneRef.current === currentZone) return;
+    lastZoneRef.current = currentZone;
+
     const selectedZone = formik.values.selectedZone?.value || "ALL";
     const quarterPeriod = tabValue === 0 ? "Q3-2526" : "Q4-2526";
     const payload = {

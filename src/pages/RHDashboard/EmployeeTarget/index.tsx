@@ -367,7 +367,11 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
             </form>
 
             {/* Table */}
-            <DataTable activeSubItem={activeSubItem} T6Data={data} />
+            <DataTable
+              activeSubItem={activeSubItem}
+              T6Data={data}
+              selectedTab={tabValue}
+            />
           </CardBody>
         </Card>
       </Container>

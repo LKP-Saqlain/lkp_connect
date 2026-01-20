@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -59,7 +59,7 @@ const ZoneTarget = ({ activeSubItem }: any) => {
   const [selectedType, setSelectedType] = useState<
     "both" | "target" | "achieved"
   >("both");
-
+  const lastZoneRef = useRef<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { accessType } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
@@ -148,10 +148,14 @@ const ZoneTarget = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     if (!user_id) return;
+    //Logic not re-render same same useEffect with bc same value
+    const currentZone = formik.values.selectedZone?.value || "ALL";
+    if (lastZoneRef.current === currentZone) return;
+    lastZoneRef.current = currentZone;
 
     const payload = {
       quarterName: "Q4",
-      zone: formik.values.selectedZone?.value || "ALL",
+      zone: currentZone,
       user_ID: user_id,
     };
 
@@ -161,49 +165,48 @@ const ZoneTarget = ({ activeSubItem }: any) => {
       .GetZoneTargetdata(payload)
       .then((response) => {
         dispatch(hideLoader());
+
         if (response?.status === 200) {
           const data = response?.data?.data;
-          console.log("Zone Target API Response:", data);
+          if (!data) return;
 
-          if (data) {
-            const targets = data.targets?.[0] || {};
-            setZoneTargetData({
-              total: targets.ttb || 0,
-              direct: targets.tdb || 0,
-              indirect: targets.tidb || 0,
+          const targets = data.targets?.[0] ?? {};
+          setZoneTargetData({
+            total: targets.ttb ?? 0,
+            direct: targets.tdb ?? 0,
+            indirect: targets.tidb ?? 0,
+          });
+
+          const actuals = data.actuals?.[0] ?? {};
+          setZoneTargetAchievedData({
+            total: actuals.t_ach_b ?? 0,
+            direct: actuals.z_ach_db ?? 0,
+            indirect: actuals.z_ach_idb ?? 0,
+          });
+
+          const percentages = data.percentages?.[0] ?? {};
+          setZoneTargetAchievedPercentageData({
+            total: Number(percentages.t_ach_pct) || 0,
+            direct: Number(percentages.d_ach_pct) || 0,
+            indirect: Number(percentages.id_ach_pct) || 0,
+          });
+
+          const zonebarData = data.zonebarData?.[0];
+          if (zonebarData) {
+            setZoneBarData({
+              bdm: transformModelKeys(zonebarData.bdm),
+              bidm: transformModelKeys(zonebarData.bidm),
+              btm: transformModelKeys(zonebarData.btm),
             });
-
-            const actuals = data.actuals?.[0] || {};
-            setZoneTargetAchievedData({
-              total: actuals.t_ach_b || 0,
-              direct: actuals.z_ach_db || 0,
-              indirect: actuals.z_ach_idb || 0,
-            });
-
-            const percentages = data.percentages?.[0] || {};
-            setZoneTargetAchievedPercentageData({
-              total: parseFloat(percentages.t_ach_pct) || 0,
-              direct: parseFloat(percentages.d_ach_pct) || 0,
-              indirect: parseFloat(percentages.id_ach_pct) || 0,
-            });
-
-            const zonebarData = data.zonebarData?.[0];
-            if (zonebarData) {
-              setZoneBarData({
-                bdm: transformModelKeys(zonebarData.bdm),
-                bidm: transformModelKeys(zonebarData.bidm),
-                btm: transformModelKeys(zonebarData.btm),
-              });
-            }
           }
         }
       })
       .catch((error) => {
-        console.log("Zone Target API Error:", error);
         dispatch(hideLoader());
         ShowToast("error", "Failed to fetch Zone Target data.");
+        console.error("Zone Target API Error:", error);
       });
-  }, [dispatch, user_id, formik.values.selectedZone]);
+  }, [user_id, formik.values.selectedZone?.value]);
 
   const metrics = [
     { title: "Zone Target", data: zoneTargetData },
@@ -347,7 +350,6 @@ const ZoneTarget = ({ activeSubItem }: any) => {
               <Row>
                 {metrics.map((metric, index) => {
                   const badges = [
-                  
                     {
                       type: "info",
                       label: "Direct",
@@ -361,7 +363,8 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                       value: metric.data.indirect,
                       isActive: activeBadges[index] === "indirect",
                       onClick: () => handleBadgeClick(index, "indirect"),
-                    },  {
+                    },
+                    {
                       type: "warning",
                       label: "Total",
                       value: metric.data.total,
