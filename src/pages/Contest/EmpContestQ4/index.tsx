@@ -50,7 +50,6 @@ const EMPContestQ4 = ({ activeMenu }: any) => {
     spipAchieved: 0,
     insuranceAchieved: 0,
     MTFActiveClient: 0,
-    MTFUtilisationTarget: 0,
     MTFClientAchieved: 0,
     MTFUtilisationAchieved: 0,
     researchProductAchieved: 0,
@@ -130,7 +129,6 @@ const EMPContestQ4 = ({ activeMenu }: any) => {
           const spipAchieved = data.spip_cnt || 0;
           const insuranceAchieved = data.ins_ach || 0;
           const MTFActiveClient = data.mtf_cl_tg;
-          const MTFUtilisationTarget = data.mtf_ult_tg;
           const MTFClientAchieved = data.mtf_cl_ach;
           const MTFUtilisationAchieved = data.mtf_ult_ach;
           const researchProductAchieved = data.spip_rev + data.trl_rev;
@@ -145,7 +143,6 @@ const EMPContestQ4 = ({ activeMenu }: any) => {
             spipAchieved,
             insuranceAchieved,
             MTFActiveClient,
-            MTFUtilisationTarget,
             MTFClientAchieved,
             MTFUtilisationAchieved,
             researchProductAchieved,
@@ -284,16 +281,18 @@ const EMPContestQ4 = ({ activeMenu }: any) => {
       </Row>
       <Row style={{ marginTop: "15px" }}>
         <Col xxl={3} lg={3} md={6} sm={12}>
-          <DashboardCard
-            activeMenu={activeMenu}
-            title="MTF Active Client"
-            // value={achieveCard.MTFActiveClient}
-            value={formatIndianNumber(targetData?.mtf_cl_tg, false)}
-            animationData={CoinIcon}
-            customClass={true}
-            rightTitle="MTF Utilisation Target"
-            rightValue={targetData?.mtf_ult_tg ? targetData?.mtf_ult_tg : 0}
-          />
+          {targetData && (
+            <DashboardCard
+              activeMenu={activeMenu}
+              title="MTF Active Client"
+              // value={achieveCard.MTFActiveClient}
+              value={formatIndianNumber(targetData?.mtf_cl_tg, false)}
+              animationData={CoinIcon}
+              customClass={true}
+              rightTitle="MTF Utilisation Target"
+              rightValue={targetData && targetData?.mtf_ult_tg}
+            />
+          )}
         </Col>
         <Col xxl={3} lg={3} md={6} sm={12}>
           <DashboardCard
