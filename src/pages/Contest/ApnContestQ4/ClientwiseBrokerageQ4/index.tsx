@@ -46,7 +46,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
   const fetchTopClients = async () => {
     const payload = {
       //   user_id: "APN-7161", // you can replace this with your logged-in user_id
-      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
       periodType: selectedMonth === 13 ? "ALL" : "MONTH",
       year: 2026,
       month: selectedMonth,
@@ -80,7 +80,7 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
 
   const fetchAPachievedBrokerage = () => {
     let payload = {
-      user_id: isCustomRender ? `APN-${row?.apCode}` : user_id,
+      user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
       quarterPeriod: "Q4-2526",
     };
     dispatch(showLoader(""));
