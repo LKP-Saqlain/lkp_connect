@@ -26,7 +26,9 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any[]>([]);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [tabValue, setTabValue] = useState(0);
-  const lastZoneRef = useRef<string | null>(null);
+  const [isZoneReady, setIsZoneReady] = useState(false);
+  const lastRequestRef = useRef<string | null>(null);
+
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -128,6 +130,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
             setNoSortingGroup(zoneDropdown);
             if (zoneDropdown.length > 0) {
               formik.setFieldValue("selectedZone", zoneDropdown[0]);
+              setIsZoneReady(true);
             }
             // setSelectedNoSortingGroup(selectedNoSortingGroup);
           }
@@ -150,21 +153,29 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
   }, [dispatch, accessType]);
 
   useEffect(() => {
-    setData([]);
+    if (!isZoneReady) return;
     if (tabValue !== 0 && tabValue !== 1) return;
 
-    const currentZone = formik.values.selectedZone?.value || "ALL";
-    if (lastZoneRef.current === currentZone) return;
-    lastZoneRef.current = currentZone;
-
-    const selectedZone = formik.values.selectedZone?.value || "ALL";
+    const selectedZone = formik.values.selectedZone?.value ?? "ALL";
     const quarterPeriod = tabValue === 0 ? "Q3-2526" : "Q4-2526";
+
+    // Create a unique key for this request
+    const requestKey = `${selectedZone}_${tabValue}`;
+
+    // Prevent duplicate calls
+    if (lastRequestRef.current === requestKey) return;
+    lastRequestRef.current = requestKey;
+
+    setData([]);
+
     const payload = {
       user_id,
       zone: selectedZone,
       quarterPeriod,
     };
+
     console.log("GetAPContestReport Payload", payload);
+
     const fetchReport = async () => {
       try {
         dispatch(showLoader("Please wait, we are processing your request..."));
@@ -178,8 +189,6 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
             Id: index + 1,
           }))
         );
-
-        console.log("GetAPContestReport Data", result);
       } catch (error) {
         console.error("Error fetching compliance data:", error);
       } finally {
@@ -188,7 +197,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
     };
 
     fetchReport();
-  }, [dispatch, user_id, tabValue, formik.values.selectedZone]);
+  }, [user_id, tabValue, formik.values.selectedZone, isZoneReady]);
 
   return (
     <div className="page-content page-view">

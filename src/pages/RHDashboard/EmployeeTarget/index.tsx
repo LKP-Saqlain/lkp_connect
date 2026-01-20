@@ -29,10 +29,11 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [tabValue, setTabValue] = useState(0);
   const dispatch = useDispatch<AppDispatch>();
+  const [isZoneReady, setIsZoneReady] = useState(false);
+
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
-
   const { accessType } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
   );
@@ -108,6 +109,7 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
             setNoSortingGroup(zoneDropdown);
             if (zoneDropdown.length > 0) {
               formik.setFieldValue("selectedZone", zoneDropdown[0]);
+              setIsZoneReady(true);
             }
             // setSelectedNoSortingGroup(selectedNoSortingGroup);
           }
@@ -130,12 +132,18 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
   }, [dispatch, accessType]);
 
   useEffect(() => {
-    setData([]);
+    if (!isZoneReady) return;
+    if (!user_id) return;
     if (tabValue !== 0 && tabValue !== 1) return;
+
+    setData([]);
+
+    const selectedZone = formik.values.selectedZone!.value;
     const quarterPeriod = tabValue === 0 ? "Q3-2526" : "Q4-2526";
+
     const payload = {
-      user_id: user_id,
-      zone: formik.values.selectedZone?.value || "ALL",
+      user_id,
+      zone: selectedZone,
       quarterPeriod,
     };
 
@@ -146,8 +154,6 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
       .then((response) => {
         const result = response?.data?.data || [];
 
-        console.log("A1 GEmployee Performance", result);
-
         setData(
           result.map((item: any, index: number) => {
             const totalAchieved = parseFloat(item.tra) || 0;
@@ -156,23 +162,16 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
             const percentage =
               totalTarget !== 0 ? (totalAchieved / totalTarget) * 100 : 0;
 
-            const percentageRounded = Math.round(percentage * 100) / 100;
-
             return {
               ...item,
               Id: index + 1,
-              perRevAch: percentageRounded,
+              perRevAch: Math.round(percentage * 100) / 100,
             };
           })
         );
       })
-      .catch((error) => {
-        console.error("Error fetching compliance data:", error);
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
-  }, [dispatch, user_id, formik.values.selectedZone, tabValue]);
+      .finally(() => dispatch(hideLoader()));
+  }, [tabValue, isZoneReady, formik.values.selectedZone, user_id]);
 
   const exportToExcel = (data: any[], fileName: string) => {
     const orderedData = data.map((row) => {
