@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Card, Col, Container, Label, Row } from "reactstrap";
 import ChartCard from "../../../components/common/ChartCard";
 import { apiServices } from "../../../services";
@@ -46,7 +46,8 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
   const [selectedViews, setSelectedViews] = useState<ViewType[]>(
     Array(9).fill("Total")
   );
-
+  const lastZoneRef = useRef<string | null>(null);
+  const lastChartZoneRef = useRef<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
@@ -326,7 +327,6 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
   useEffect(() => {
     // Chart-related API configs and call
 
-    const selectedZoneValue = formik.values.selectedZone?.value || "ALL";
     const chartApiConfigs = [
       {
         title: "Brokerage Details for last 15 Days",
@@ -430,6 +430,13 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
         setter: setSlbmSegment,
       },
     ];
+    if (!user_id) return;
+
+    const zone = formik.values.selectedZone?.value || "ALL";
+
+    // Block duplicate calls
+    if (lastChartZoneRef.current === zone) return;
+    lastChartZoneRef.current = zone;
 
     const loadAllData = async () => {
       try {
@@ -441,7 +448,7 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
               {
                 user_ID: user_id,
                 optionType: config.optionType,
-                zoneCode: selectedZoneValue,
+                zoneCode: zone,
               },
               config.mapping,
               config.setter,
@@ -456,10 +463,8 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
       }
     };
 
-    if (user_id && selectedZoneValue) {
-      loadAllData();
-    }
-  }, [formik.values.selectedZone, user_id, dispatch]);
+    loadAllData();
+  }, [user_id, formik.values.selectedZone?.value]);
 
   const handleViewChange = (index: number, value: ViewType) => {
     setSelectedViews((prev) => {
@@ -532,8 +537,15 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
   }, [uniqueTradedClientsData, newAccountsData]);
 
   useEffect(() => {
+    const zone = formik.values.selectedZone?.value || "ALL";
+    if (!user_id) return;
+
+    // Prevent duplicate calls
+    if (lastZoneRef.current === zone) return;
+    lastZoneRef.current = zone;
+
     fetchDashboardMetrics();
-  }, [dispatch, user_id, formik.values.selectedZone?.value]);
+  }, [user_id, formik.values.selectedZone?.value]);
 
   const metrics = [
     { title: "Active Clients ", data: activeClientsData },
@@ -639,7 +651,6 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
             const isMTD = selectedButton === "MTD";
 
             const badges = [
-              
               {
                 type: "info",
                 label: "Direct",
@@ -661,7 +672,8 @@ const Overview = ({ activeSubItem }: OverviewProps) => {
                   : metric.data.indirect,
                 isActive: activeBadges[index] === "indirect",
                 onClick: () => handleBadgeClick(index, "indirect"),
-              },{
+              },
+              {
                 type: "warning",
                 label: "Total",
                 value: isToggleMetric
