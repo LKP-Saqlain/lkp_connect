@@ -828,9 +828,9 @@ const SideBar = () => {
   };
 
   const q4SubItems: Record<string, JSX.Element> = {
-    "Employee Target": <EmpContestQ4 activeMenu={activeSubItem+"-Q4"} />,
-    "DP AMC Contest": <AmcMembershipQ4 activeMenu={activeSubItem+"-Q4"} />,
-    "Partner Contest": <ApnContestQ4 activeSubItem={activeSubItem+"-Q4"} />,
+    "Employee Target": <EmpContestQ4 activeMenu={activeSubItem + "-Q4"} />,
+    "DP AMC Contest": <AmcMembershipQ4 activeMenu={activeSubItem + "-Q4"} />,
+    "Partner Contest": <ApnContestQ4 activeSubItem={activeSubItem + "-Q4"} />,
   };
   const q3SubItems: Record<string, JSX.Element> = {
     "Employee Target": <EmpContest activeMenu={activeMenu} />,
