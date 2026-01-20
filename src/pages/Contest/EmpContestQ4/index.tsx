@@ -279,33 +279,35 @@ const EMPContestQ4 = ({ activeMenu }: any) => {
           />
         </Col>
       </Row>
-      <Row style={{ marginTop: "15px" }}>
-        <Col xxl={3} lg={3} md={6} sm={12}>
-          {targetData && (
+      {targetData && (
+        <Row style={{ marginTop: "15px" }}>
+          <Col xxl={3} lg={3} md={6} sm={12}>
+            {targetData && (
+              <DashboardCard
+                activeMenu={activeMenu}
+                title="MTF Active Client"
+                // value={achieveCard.MTFActiveClient}
+                value={formatIndianNumber(targetData?.mtf_cl_tg, false)}
+                animationData={CoinIcon}
+                customClass={true}
+                rightTitle="MTF Utilisation Target"
+                rightValue={targetData?.mtf_ult_tg}
+              />
+            )}
+          </Col>
+          <Col xxl={3} lg={3} md={6} sm={12}>
             <DashboardCard
               activeMenu={activeMenu}
-              title="MTF Active Client"
-              // value={achieveCard.MTFActiveClient}
-              value={formatIndianNumber(targetData?.mtf_cl_tg, false)}
+              title="MTF Client Achieved"
+              value={achieveCard.MTFClientAchieved}
               animationData={CoinIcon}
               customClass={true}
-              rightTitle="MTF Utilisation Target"
-              rightValue={targetData && targetData?.mtf_ult_tg}
+              rightTitle="MTF Utilisation Achieved"
+              rightValue={achieveCard.MTFUtilisationAchieved}
             />
-          )}
-        </Col>
-        <Col xxl={3} lg={3} md={6} sm={12}>
-          <DashboardCard
-            activeMenu={activeMenu}
-            title="MTF Client Achieved"
-            value={achieveCard.MTFClientAchieved}
-            animationData={CoinIcon}
-            customClass={true}
-            rightTitle="MTF Utilisation Achieved"
-            rightValue={achieveCard.MTFUtilisationAchieved}
-          />
-        </Col>
-      </Row>
+          </Col>
+        </Row>
+      )}
       <AchieveCard />
     </div>
   );
