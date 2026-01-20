@@ -51,12 +51,16 @@ const NudgeTable = ({
 
   const [remarks, setRemarks] = useState<string>("");
   const [showValidation, setShowValidation] = useState(false); // for red textfield when empty
-  const [activeTab, setActiveTab] = useState<"submitted" | "completed">(
-    selectedTab ?? "submitted"
+  const [activeTab, setActiveTab] = useState<"sub" | "cmp">(
+    selectedTab ?? "sub"
   );
 
   useEffect(() => {
-    setActiveTab(selectedTab ?? "submitted");
+    console.log("SelectedTab111", selectedTab, singleData, selectedTab);
+  }, [selectedTab, singleData, selectedTab]);
+
+  useEffect(() => {
+    setActiveTab(selectedTab ?? "sub");
   }, [isOpen, selectedTab]);
 
   const handleActionClick = (actionType: "A" | "R") => {
@@ -90,9 +94,9 @@ const NudgeTable = ({
   const reportData = useMemo(() => {
     if (selectedReport === "AMC Contest Report") {
       const list =
-        activeTab === "submitted"
+        activeTab === "sub"
           ? singleData?.submittedList
-          : activeTab === "completed"
+          : activeTab === "cmp"
           ? singleData?.completedList
           : [];
 
@@ -170,14 +174,14 @@ const NudgeTable = ({
             }}
           >
             <div
-              onClick={() => setActiveTab("submitted")}
+              onClick={() => setActiveTab("sub")}
               style={{
                 cursor: "pointer",
                 borderBottom:
-                  activeTab === "submitted" ? "2px solid #11395C" : "none",
+                  activeTab === "sub" ? "2px solid #11395C" : "none",
                 paddingBottom: "4px",
-                fontWeight: activeTab === "submitted" ? "600" : "400",
-                color: activeTab === "submitted" ? "#11395C" : "#666",
+                fontWeight: activeTab === "sub" ? "600" : "400",
+                color: activeTab === "sub" ? "#11395C" : "#666",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",
@@ -201,14 +205,14 @@ const NudgeTable = ({
             </div>
 
             <div
-              onClick={() => setActiveTab("completed")}
+              onClick={() => setActiveTab("cmp")}
               style={{
                 cursor: "pointer",
                 borderBottom:
-                  activeTab === "completed" ? "2px solid #11395C" : "none",
+                  activeTab === "cmp" ? "2px solid #11395C" : "none",
                 paddingBottom: "4px",
-                fontWeight: activeTab === "completed" ? "600" : "400",
-                color: activeTab === "completed" ? "#11395C" : "#666",
+                fontWeight: activeTab === "cmp" ? "600" : "400",
+                color: activeTab === "cmp" ? "#11395C" : "#666",
                 display: "flex",
                 alignItems: "center",
                 gap: "8px",

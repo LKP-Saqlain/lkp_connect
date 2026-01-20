@@ -103,12 +103,14 @@ const AmcReport = ({ activeSubItem }: any) => {
   }, [dispatch, user_id, selectedZone, accessType]);
 
   const fetchAmcExtended = async (row: any) => {
+    console.log("Row11", row);
+
     console.log(fetchAmcExtended, row);
 
     const payload = {
       userId: user_id,
-      empOrAPCode: row.empOrAPCode,
-      branchType: row.branchType,
+      empOrAPCode: row.emp,
+      branchType: row.bt,
     };
 
     dispatch(showLoader(""));
@@ -130,6 +132,7 @@ const AmcReport = ({ activeSubItem }: any) => {
   };
 
   const handleExtendedVersion = (row: any, type: any) => {
+    console.log("Test1111", row, type);
     setExtendedData(null);
     fetchAmcExtended(row);
     setSelectedType(type);
