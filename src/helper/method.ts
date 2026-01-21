@@ -27,9 +27,9 @@ export const extractBarModelData = (
   if (!model) return { categories: [], series: [] };
 
   const months = [
-    { key: "a", label: "Oct" },
-    { key: "b", label: "Nov" },
-    { key: "c", label: "Dec" },
+    { key: "a", label: "Jan" },
+    { key: "b", label: "Feb" },
+    { key: "c", label: "Mar" },
   ];
 
   // Convert model keys
