@@ -413,8 +413,8 @@ const DataTable = ({
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <div
                   onClick={() => {
-                    console.log("rowTest", params.row.rowId);
-                    setSelectedRow(params.row.rowId);
+                    console.log("rowTest", params.row.rid);
+                    setSelectedRow(params.row.rid);
                     // HandleApprovalModal("approve", params);
                     HandleApprovalModal("approve");
                     console.log(params.row.dummyId, "selectedrow approve");
@@ -435,7 +435,7 @@ const DataTable = ({
                 <div style={{ fontSize: 20, color: "gray" }}>|</div>
                 <div
                   onClick={() => {
-                    setSelectedRow(params.row.rowId);
+                    setSelectedRow(params.row.rid);
                     HandleApprovalModal("reject");
                     // HandleApprovalModal("reject", params);
                   }}
@@ -1962,7 +1962,7 @@ const DataTable = ({
                 >
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.rowId);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("approve");
                     }}
                     style={{ cursor: "pointer" }}
@@ -1983,7 +1983,7 @@ const DataTable = ({
                   </div>
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.rowId);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("reject");
                     }}
                     style={{ cursor: "pointer" }}

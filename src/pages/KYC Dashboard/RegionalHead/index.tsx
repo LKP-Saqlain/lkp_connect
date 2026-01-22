@@ -45,6 +45,7 @@ const RegionalHead = ({ activeSubItem }: any) => {
   }, [flag, user_id]);
 
   const handleApproval = (rid: number, remark: string, entryFlag: string) => {
+    alert("called");
     const payload = {
       rowId: rid,
       rHflag: entryFlag,
