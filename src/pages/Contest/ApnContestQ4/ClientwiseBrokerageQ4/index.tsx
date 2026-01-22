@@ -47,7 +47,8 @@ const TopClientBrokerage = ({ isCustomRender, row }: any) => {
     const payload = {
       //   user_id: "APN-7161", // you can replace this with your logged-in user_id
       user_id: isCustomRender ? `APN-${row?.apc}` : user_id,
-      periodType: selectedMonth === 13 ? "ALL" : "MONTH",
+      periodType:
+        selectedMonth === 13 ? "ALL" : selectedMonth === 1 ? "ALL" : "MONTH",
       year: 2026,
       month: selectedMonth,
       quarterPeriod: "Q4-2526",

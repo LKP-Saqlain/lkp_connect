@@ -21,24 +21,24 @@ const Bsda = ({ onNext, clientData }: BsdaProps) => {
 
   const emailBodyText = `Dear LKP Team,
 
-BOID - ${clientData?.dP_ID}
+BOID - ${clientData?.dpid}
 
 I hereby give my consent to convert my existing BSDA (Basic Services Demat Account) to a Regular Demat Account and avail all the facilities and services available under the Regular category. Please initiate the necessary process for the same at the earliest.
 
 Thank you.
 
 Warm regards,
-${clientData?.primary_Holder}`;
+${clientData?.ph1}`;
 
   const emailBodyHTML = `
     Dear LKP Team,<br /><br />
-    BOID - <b>${clientData?.dP_ID}</b><br /><br />
+    BOID - <b>${clientData?.dpid}</b><br /><br />
     I hereby give my <b>consent to convert my existing BSDA (Basic Services Demat Account)</b>
     to a <b>Regular Demat Account</b> and avail all the facilities and services available under
     the Regular category. Please initiate the necessary process for the same at the earliest.<br /><br />
     Thank you.<br /><br />
     Warm regards,<br />
-    <b>${clientData?.primary_Holder}</b>
+    <b>${clientData?.ph1}</b>
   `;
 
   return (
@@ -59,7 +59,7 @@ ${clientData?.primary_Holder}`;
             }}
           >
             It has been observed that the Demat Account{" "}
-            <b>{clientData?.dP_ID}</b> is under BSDA Category and in order to
+            <b>{clientData?.dpid}</b> is under BSDA Category and in order to
             avail the Lifetime DP AMC Scheme, the DP Account will need to be
             moved to Regular Category from BSDA Category.
           </p>
@@ -73,7 +73,7 @@ ${clientData?.primary_Holder}`;
           >
             In order to enable us to move the DP account to Regular Category,
             the client will need to send the below text message from their
-            registered email ID i.e. <b>( {clientData?.email_id} )</b> to{" "}
+            registered email ID i.e. <b>( {clientData?.em} )</b> to{" "}
             <a
               href="mailto:ho_dp@lkpsec.com"
               style={{

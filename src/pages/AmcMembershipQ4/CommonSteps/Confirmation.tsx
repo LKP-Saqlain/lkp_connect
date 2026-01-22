@@ -53,8 +53,8 @@ const Confirmation = ({
     if (isActivatingRef.current) return;
     isActivatingRef.current = true;
     const payload = {
-      tradingCode: selectedRow?.trading_Code,
-      boid: selectedRow?.dP_ID,
+      tradingCode: selectedRow?.tc,
+      boid: selectedRow?.dpid,
       paymentAmount: totalPayable.toFixed(2),
       paymentType: flow,
       otP_ID: 1,

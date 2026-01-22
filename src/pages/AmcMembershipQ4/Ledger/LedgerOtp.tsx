@@ -30,11 +30,11 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
   useEffect(() => {
     const sendOtp = async () => {
       const payload = {
-        mobileNo: clientData?.mobile_No,
+        mobileNo: clientData?.mob,
         // mobileNo: "99693727591",
         otp: "",
         action: "Send",
-        emailId: clientData?.email_id,
+        emailId: clientData?.em,
       };
 
       dispatch(showLoader("Sending OTP to your registered mobile..."));
@@ -85,11 +85,11 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     }
 
     const payload = {
-      mobileNo: clientData?.mobile_No,
+      mobileNo: clientData?.mob,
       // mobileNo: "99693727591",
       otp: enteredOtp,
       action: "Verify",
-      emailId: clientData?.email_id,
+      emailId: clientData?.em,
     };
 
     dispatch(showLoader("Verifying OTP..."));
@@ -122,11 +122,11 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     setOtpSent(false);
 
     const payload = {
-      mobileNo: clientData?.mobile_No,
+      mobileNo: clientData?.mob,
       // mobileNo: "99693727591",
       otp: "",
       action: "Send",
-      emailId: clientData?.email_id,
+      emailId: clientData?.em,
     };
 
     dispatch(showLoader("Resending OTP..."));
@@ -168,14 +168,13 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
       <p style={{ color: "#666", fontSize: "0.9rem", marginBottom: "2rem" }}>
         OTP sent to your mobile number -{" "}
         <strong>
-          {clientData?.mobile_No
-            ? `XXXXXX${clientData.mobile_No.slice(-4)}`
-            : "XXXXXX5856"}
+          {clientData?.mob ? `XXXXXX${clientData.mob.slice(-4)}` : "XXXXXX5856"}
         </strong>{" "}
         <br />
-        &amp; Email ID -{" "}
-        <strong>{clientData?.email_id || "user@email.com"}</strong> to confirm
-        Ledger Debit.
+        &amp; Email ID - <strong>
+          {clientData?.em || "user@email.com"}
+        </strong>{" "}
+        to confirm Ledger Debit.
       </p>
 
       {/* OTP Input Boxes */}

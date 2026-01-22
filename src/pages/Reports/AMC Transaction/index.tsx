@@ -75,7 +75,7 @@ const DPTransactionIndex = ({ activeSubItem }: any) => {
 
   const handleDownload = (row: any) => {
     const payload = {
-      boId: row?.dP_ID,
+      boId: row?.dpid,
       fileType: "eSignPDF",
     };
 
@@ -89,7 +89,7 @@ const DPTransactionIndex = ({ activeSubItem }: any) => {
 
         const link = document.createElement("a");
         link.href = url;
-        link.download = `AMC_${row.dP_ID || "file"}.pdf`;
+        link.download = `AMC_${row.dpid || "file"}.pdf`;
         document.body.appendChild(link);
         link.click();
 

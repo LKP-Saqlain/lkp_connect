@@ -155,19 +155,19 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
 
   const holders = [
     {
-      name: selectedRow?.primary_Holder,
+      name: selectedRow?.ph1,
       type: "Primary Holder",
       action: () => handleSign("primary"),
       key: "primary",
     },
     {
-      name: selectedRow?.secondary_Holder_Name,
+      name: selectedRow?.ph2,
       type: "Second Holder",
       action: () => handleSign("secondary"),
       key: "secondary",
     },
     {
-      name: selectedRow?.third_Holder_Name,
+      name: selectedRow?.ph3,
       type: "Third Holder",
       action: () => handleSign("third"),
       key: "third",

@@ -98,7 +98,7 @@ const AmcMembership = () => {
   }, [step]);
 
   // ✅ Fix typo: use bSDA_Flag (not bsdA_Flag)
-  const isBSDA = selectedRow?.bsdA_Flag === "Y";
+  const isBSDA = selectedRow?.bsda === "Y";
 
   // const handleGoBack = () => {
   //   sessionStorage.removeItem("selectedRow"); // cleanup
