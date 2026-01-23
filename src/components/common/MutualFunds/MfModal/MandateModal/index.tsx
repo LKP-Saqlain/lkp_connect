@@ -29,6 +29,7 @@ const CreateMandateModal = ({
   clientNo,
   upiId,
   mandate,
+  selectedType,
 }: any) => {
   const [amount, setAmount] = useState(
     // selectedPaymentType === "upi" ? 15000 : 100000
@@ -55,6 +56,7 @@ const CreateMandateModal = ({
       micrcode: "",
       startdate: formatDate(tomorrow), // Start date is tomorrow
       enddate: "", // Empty or use formatDate(someDate) if needed
+      dpFlag: selectedType === "physical" ? "P" : "",
     };
 
     // Add UPI-specific fields if needed

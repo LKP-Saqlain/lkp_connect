@@ -10,7 +10,7 @@ import "./Global.css";
 import ChangePassword from "./pages/Authentication/ChangePassword";
 import Maintenance from "./pages/Maintenance";
 import AmcMembershipSteps from "./pages/AmcMembership/Steps";
-import StatusCard from "./pages/MutualFund/PhysicalOnboard/StatusPage";
+import StatusCard from "./pages/MutualFund/Main/PhysicalOnboard/StatusPage/index";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(

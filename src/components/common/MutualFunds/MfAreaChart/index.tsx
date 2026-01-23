@@ -127,17 +127,17 @@ const MfAreaChart: React.FC<ApexChartProps> = ({
               fontSize: "12px",
               border:
                 selection === range.key
-                  ? "2px solid #007bff"
+                  ? "2px solid #004aad"
                   : "1px solid #ddd",
-              background: selection === range.key ? "#007bff" : "#f9f9f9",
+              background: selection === range.key ? "#004aad" : "#f9f9f9",
               color: selection === range.key ? "#fff" : "#333",
               fontWeight: 500,
               cursor: "pointer",
               transition: "all 0.2s ease",
-              boxShadow:
-                selection === range.key
-                  ? "0 2px 6px rgba(0, 123, 255, 0.3)"
-                  : "0 1px 3px rgba(0,0,0,0.1)",
+              // boxShadow:
+              //   selection === range.key
+              //     ? "0 2px 6px rgba(0, 123, 255, 0.23)"
+              //     : "0 1px 3px rgba(0,0,0,0.1)",
             }}
           >
             {range.label}
