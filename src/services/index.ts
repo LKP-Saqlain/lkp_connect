@@ -1129,4 +1129,17 @@ export const apiServices = {
   ValidateOtpSms: async (payload: any) => {
     return await apiService("POST", endpoints.ValidateOtpSms, payload);
   },
+  GetEmployeeExpiryDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetEmployeeExpiryDetails,
+      payload
+    );
+  },
+  GetClientExpiryDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientExpiryDetails, payload);
+  },
+  GetZoneExpiryDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetZoneExpiryDetails, payload);
+  },
 };

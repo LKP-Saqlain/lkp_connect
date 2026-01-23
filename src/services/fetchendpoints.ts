@@ -341,4 +341,9 @@ export const newDomainEndpoints = [
   endpoints.RevokeUpiMandate,
   endpoints.SendOtpSms,
   endpoints.ValidateOtpSms,
+
+  //Expiry
+  endpoints.GetEmployeeExpiryDetails,
+  endpoints.GetClientExpiryDetails,
+  endpoints.GetZoneExpiryDetails,
 ];

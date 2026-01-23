@@ -189,7 +189,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
 
         const payload = {
           user_id,
-          rowId: row?.rowID,
+          rowId: row?.rid,
           fileName: communicationProofPath,
           uploadedBy: user_id,
           uploadedDate: new Date().toISOString(),

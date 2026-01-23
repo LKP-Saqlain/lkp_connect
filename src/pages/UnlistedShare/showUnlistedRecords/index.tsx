@@ -292,7 +292,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
     console.log("selectedRowwww", row);
     dispatch(showLoader(""));
     let payload = {
-      rowId: row.rowID,
+      rowId: row.rid,
       user_Id: user_id,
     };
 

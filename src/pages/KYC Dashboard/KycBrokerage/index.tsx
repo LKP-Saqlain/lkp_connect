@@ -92,7 +92,7 @@ const KycBrokerage = ({ activeSubItem }: any) => {
 
     const kycPayload = {
       brokeragedtls: row.map((item: any) => ({
-        rowID: item?.rowId,
+        rowID: item?.rid,
         ...commonFields,
       })),
     };

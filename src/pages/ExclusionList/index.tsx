@@ -160,7 +160,7 @@ const Index = ({ activeSubItem }: any) => {
 
   // === Delete entry handler ===
   const handleDelete = (row: any) => {
-    const payload = { user_id: user_id, rowId: row.rowId };
+    const payload = { user_id: user_id, rowId: row.rid };
     dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
       .DeleteClientExclusionEntry(payload)

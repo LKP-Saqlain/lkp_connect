@@ -2501,6 +2501,18 @@ const DataTable = ({
       return TableColumns.apGrossBrokerageColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Employee Wise Details") {
+      return TableColumns.employeeExpiryColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Client Wise Details") {
+      return TableColumns.clientExpiryColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Zone Wise Details") {
+      return TableColumns.zoneExpiryColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }

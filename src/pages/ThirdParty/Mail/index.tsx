@@ -49,7 +49,7 @@ const InvoiceMail = ({ activeSubItem }: any) => {
 
     const payload = {
       user_id: user_id,
-      rowId: value.rowId,
+      rowId: value.rid,
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
