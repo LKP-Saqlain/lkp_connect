@@ -101,9 +101,9 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
   // const decryptedData = decryptTripleDES(encryptedPayload, encryptionKey, true);
   // console.log("Decrypted Data:", decryptedData);
 
-  const handleValues = (revTotal: string) => {
-    console.log("revTotal", revTotal);
-  };
+  // const handleValues = (revTotal: string) => {
+  //   console.log("revTotal", revTotal);
+  // };
 
   // function tog_animationZoom() {
   //   setmodal_animationZoom((prev) => !prev);
@@ -315,7 +315,7 @@ const DashboardProject = ({ handleTradingOpen }: any) => {
                 <Row>
                   <Col>
                     <RevenueDetails
-                      handleValues={handleValues}
+                      // handleValues={handleValues}
                       handleRevenueRange={handleRevenueRange}
                       handleRevenueData={handleRevenueData}
                       setTradedClientCount={setTradedClientCount}

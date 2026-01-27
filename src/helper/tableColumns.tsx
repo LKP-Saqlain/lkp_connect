@@ -3907,7 +3907,7 @@ export const BrokerageKyc: GridColDef[] = [
     align: "center",
   },
   {
-    field: "clientcode",
+    field: "cc",
     headerName: "Client Code",
     flex: 0.6,
     minWidth: 100,
@@ -11480,3 +11480,245 @@ export const formatNumber = (value: any) => {
 
   return rounded.toLocaleString("en-IN");
 };
+
+export const employeeExpiryColumns: GridColDef[] = [
+  {
+    field: "zn",
+    headerName: "Zone",
+    flex: 0.6,
+    minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "ec",
+    headerName: "EmpCode",
+    flex: 0.8,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "en",
+    headerName: "EmpName",
+    flex: 1.5,
+    minWidth: 220,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "ecg",
+    headerName: "EmpCategoryName",
+    flex: 1.2,
+    minWidth: 180,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "bqty",
+    headerName: "BuyQty",
+    flex: 0.8,
+    minWidth: 90,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "sqty",
+    headerName: "SellQty",
+    flex: 0.8,
+    minWidth: 90,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "fnl",
+    headerName: "FinalLots",
+    flex: 0.8,
+    minWidth: 100,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "fnbd",
+    headerName: "FinalBrokData",
+    flex: 1,
+    minWidth: 130,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "ccnt",
+    headerName: "ClientCnt",
+    flex: 0.8,
+    minWidth: 100,
+    type: "number",
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+];
+
+export const clientExpiryColumns: GridColDef[] = [
+  {
+    field: "zn",
+    headerName: "Zone",
+    flex: 0.6,
+    minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "ec",
+    headerName: "EmpCode",
+    flex: 0.8,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "en",
+    headerName: "EmpName",
+    flex: 1.5,
+    minWidth: 220,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "ecg",
+    headerName: "EmpCategoryName",
+    flex: 1.2,
+    minWidth: 180,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "bqty",
+    headerName: "BuyQty",
+    flex: 0.8,
+    minWidth: 90,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "sqty",
+    headerName: "SellQty",
+    flex: 0.8,
+    minWidth: 90,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "fnl",
+    headerName: "FinalLots",
+    flex: 0.8,
+    minWidth: 100,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "fnbd",
+    headerName: "FinalBrokData",
+    flex: 1,
+    minWidth: 130,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "ccnt",
+    headerName: "ClientCnt",
+    flex: 0.8,
+    minWidth: 100,
+    type: "number",
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+];
+
+export const zoneExpiryColumns: GridColDef[] = [
+  {
+    field: "zn",
+    headerName: "Zone",
+    flex: 0.6,
+    minWidth: 80,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "bqty",
+    headerName: "BuyQty",
+    flex: 0.8,
+    minWidth: 90,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "sqty",
+    headerName: "SellQty",
+    flex: 0.8,
+    minWidth: 90,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "fnl",
+    headerName: "FinalLots",
+    flex: 0.8,
+    minWidth: 100,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "fnbd",
+    headerName: "FinalBrokData",
+    flex: 1,
+    minWidth: 130,
+    type: "number",
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "ccnt",
+    headerName: "ClientCnt",
+    flex: 0.8,
+    minWidth: 100,
+    type: "number",
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+];

@@ -266,4 +266,7 @@ export const endpoints = {
   ApproveComplianceData: "/api/Compliance/ApproveComplianceData",
   SendOtpSms: "/api/Common/SendOtpSms",
   ValidateOtpSms: "/api/Common/ValidateOtpSms",
+  GetEmployeeExpiryDetails: "/api/RMS/GetEmployeeExpiryDetails",
+  GetClientExpiryDetails: "/api/RMS/GetClientExpiryDetails",
+  GetZoneExpiryDetails: "/api/RMS/GetZoneExpiryDetails",
 };

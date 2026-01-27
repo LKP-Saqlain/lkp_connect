@@ -119,6 +119,7 @@ import RegMaster from "../../pages/RMS/RegMaster";
 import PledgeReport from "../../pages/Reports/pledgeReqReport";
 import ResearchCalls from "../../pages/researchCalls";
 import { decryptAES } from "../../utils/encryptDecrypt";
+import Expiry from "../../pages/Expiry";
 
 const drawerWidth = 260;
 
@@ -693,6 +694,7 @@ const SideBar = () => {
     "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
     "Client Exclusion": <ExclusionList activeSubItem={activeSubItem} />,
+    // "Menu Master": <Expiry activeSubItem={activeSubItem} />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {
@@ -909,6 +911,7 @@ const SideBar = () => {
       "DP AMC Contest": <AmcMembership activeMenu={activeMenu} />,
       "DP AMC Contest-Q4": <AmcMembershipQ4 activeMenu={activeMenu} />,
       "Research Calls": <ResearchCalls />,
+      "Expiry Contest": <Expiry />,
     };
     return map[mn] ?? null;
   };

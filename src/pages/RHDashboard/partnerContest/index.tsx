@@ -87,69 +87,69 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
   };
 
   useEffect(() => {
-    if (accessType === "ALL") {
-      const str = user_id;
-      const userType = localStorage.getItem("uIdType");
-      let extractUserId: string | null = null;
+    // if (accessType === "ALL") {
+    const str = user_id;
+    const userType = localStorage.getItem("uIdType");
+    let extractUserId: string | null = null;
 
-      if (str) {
-        const parts = str.split("-");
-        if (parts.length > 1) {
-          extractUserId = parts[1];
-        }
+    if (str) {
+      const parts = str.split("-");
+      if (parts.length > 1) {
+        extractUserId = parts[1];
       }
-      let payload = {
-        user_id: str === "APN-7161" ? "5376" : extractUserId,
-        option: "zone",
-        userType:
-          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
-        zone: "ALL",
-      };
-
-      const username = "admin";
-      const password = "admin";
-      const credentials = `${username}:${password}`;
-      const encodedCredentials = btoa(credentials); // Base64 encode
-      const LoginauthHeader = `Basic ${encodedCredentials}`;
-
-      const customHeaders = {
-        Authorization: LoginauthHeader, // Use LoginauthHeader for this request
-      };
-
-      dispatch(showLoader("Please wait, we are processing your request..."));
-      apiServices
-        .getDropDown(payload, customHeaders)
-        .then((res) => {
-          console.log("Response-->", res);
-          if (res?.status === 200) {
-            let zoneDropdown = res?.data.data.map((item: any) => ({
-              label: item.desc, // This will be displayed in the dropdown
-              value: item.val, // This will be the actual value
-            }));
-            console.log("dropdown value", zoneDropdown);
-            setNoSortingGroup(zoneDropdown);
-            if (zoneDropdown.length > 0) {
-              formik.setFieldValue("selectedZone", zoneDropdown[0]);
-              setIsZoneReady(true);
-            }
-            // setSelectedNoSortingGroup(selectedNoSortingGroup);
-          }
-        })
-        .catch((Err) => {
-          const { message } = Err.response.data;
-          console.log("Error->", message);
-          dispatch(hideLoader());
-          // formik.setFieldError("password", message);
-          const errorMessage = Err.response.data.message;
-          ShowToast(
-            "error",
-            errorMessage ||
-              "Sorry for the inconvenience, please try after some time."
-          );
-        });
-
-      dispatch(hideLoader());
     }
+    let payload = {
+      user_id: str === "APN-7161" ? "5376" : extractUserId,
+      option: "zone",
+      userType:
+        str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+      zone: "ALL",
+    };
+
+    const username = "admin";
+    const password = "admin";
+    const credentials = `${username}:${password}`;
+    const encodedCredentials = btoa(credentials); // Base64 encode
+    const LoginauthHeader = `Basic ${encodedCredentials}`;
+
+    const customHeaders = {
+      Authorization: LoginauthHeader, // Use LoginauthHeader for this request
+    };
+
+    dispatch(showLoader("Please wait, we are processing your request..."));
+    apiServices
+      .getDropDown(payload, customHeaders)
+      .then((res) => {
+        console.log("Response-->", res);
+        if (res?.status === 200) {
+          let zoneDropdown = res?.data.data.map((item: any) => ({
+            label: item.desc, // This will be displayed in the dropdown
+            value: item.val, // This will be the actual value
+          }));
+          console.log("dropdown value", zoneDropdown);
+          setNoSortingGroup(zoneDropdown);
+          if (zoneDropdown.length > 0) {
+            formik.setFieldValue("selectedZone", zoneDropdown[0]);
+            setIsZoneReady(true);
+          }
+          // setSelectedNoSortingGroup(selectedNoSortingGroup);
+        }
+      })
+      .catch((Err) => {
+        const { message } = Err.response.data;
+        console.log("Error->", message);
+        dispatch(hideLoader());
+        // formik.setFieldError("password", message);
+        const errorMessage = Err.response.data.message;
+        ShowToast(
+          "error",
+          errorMessage ||
+            "Sorry for the inconvenience, please try after some time."
+        );
+      });
+
+    dispatch(hideLoader());
+    // }
   }, [dispatch, accessType]);
 
   useEffect(() => {

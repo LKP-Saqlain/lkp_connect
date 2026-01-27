@@ -60,7 +60,7 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
             fontSize: isMobile ? "1.2rem" : "1.4rem",
           }}
         >
-          {selectedRow.module_No === 12
+          {selectedRow.m_no === 12
             ? "DP Lifetime AMC-1500 Tariff for Non–Corporate Clients"
             : " Lifetime–1500 Tariff for Non–Corporate Clients"}
         </h5>
@@ -75,13 +75,13 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
           <p style={{ margin: 0, fontWeight: 500, color: "#000" }}>
             DP ID –{" "}
             <span style={{ color: "#1c3c6b", fontWeight: 600 }}>
-              {selectedRow?.dP_ID}
+              {selectedRow?.dpid}
             </span>
           </p>
           <p style={{ margin: 0, fontWeight: 500, color: "#000" }}>
             Client ID –{" "}
             <span style={{ color: "#1c3c6b", fontWeight: 600 }}>
-              {selectedRow?.trading_Code}
+              {selectedRow?.tc}
             </span>
           </p>
         </div>
@@ -101,7 +101,7 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
               <tr>
                 <th style={thStyle}>Particulars</th>
                 <th style={thStyle}>
-                  {selectedRow.module_No === 12
+                  {selectedRow.m_no === 12
                     ? "DP LIFETIME AMC-1500"
                     : "Lifetime–1500"}
                 </th>
@@ -149,7 +149,7 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
               <tr>
                 <th style={thStyle}>Particulars</th>
                 <th style={thStyle}>
-                  {selectedRow.module_No === 12
+                  {selectedRow.m_no === 12
                     ? "DP LIFETIME AMC-1500"
                     : "Lifetime–1500"}
                 </th>
@@ -163,7 +163,7 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
               <tr>
                 <td>On-Market transactions</td>
                 <td style={tdStyle}>
-                  {selectedRow.module_No === 12
+                  {selectedRow.m_no === 12
                     ? "0.02% of trans value or Rs.25/trans which is higher"
                     : "₹25 per debit transaction"}
                 </td>
@@ -171,7 +171,7 @@ const TariffForm = ({ onNext, selectedRow }: TariffProps) => {
               <tr>
                 <td>Off-Market transactions</td>
                 <td style={tdStyle}>
-                  {selectedRow.module_No === 12
+                  {selectedRow.m_no === 12
                     ? "0.02% of trans value or Rs.25/trans which is higher"
                     : "₹25 per debit transaction"}
                 </td>
