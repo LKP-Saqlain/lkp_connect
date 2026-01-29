@@ -343,7 +343,10 @@ export const newDomainEndpoints = [
   endpoints.ValidateOtpSms,
 
   //Expiry
-  endpoints.GetEmployeeExpiryDetails,
-  endpoints.GetClientExpiryDetails,
-  endpoints.GetZoneExpiryDetails,
+  // endpoints.GetEmployeeExpiryDetails,
+  // endpoints.GetClientExpiryDetails,
+  // endpoints.GetZoneExpiryDetails,
+  endpoints.GetDealerExpiryDashBoardData,
+  endpoints.GetZoneExpiryDashBoardData,
+  
 ];

@@ -269,4 +269,6 @@ export const endpoints = {
   GetEmployeeExpiryDetails: "/api/RMS/GetEmployeeExpiryDetails",
   GetClientExpiryDetails: "/api/RMS/GetClientExpiryDetails",
   GetZoneExpiryDetails: "/api/RMS/GetZoneExpiryDetails",
+  GetDealerExpiryDashBoardData: "/api/RMS/GetDealerExpiryDashBoardData",
+  GetZoneExpiryDashBoardData: "/api/RMS/GetZoneExpiryDashBoardData",
 };

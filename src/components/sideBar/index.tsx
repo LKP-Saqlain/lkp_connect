@@ -49,6 +49,7 @@ import SPIPOverview from "../../pages/SPIPReports/SPIPOverview";
 import ApnContest from "../../pages/Contest/ApnContest";
 import ApnContestQ4 from "../../pages/Contest/ApnContestQ4";
 import EmpContest from "../../pages/Contest/EmpContest";
+import PartnerSPIP from "../../pages/Contest/SPIP/Partner";
 import EmpContestQ4 from "../../pages/Contest/EmpContestQ4";
 import PledgeRequest from "../../pages/PledgeRequest";
 import InsertUnlistedShares from "../../pages/UnlistedShare/showUnlistedRecords";
@@ -120,6 +121,8 @@ import PledgeReport from "../../pages/Reports/pledgeReqReport";
 import ResearchCalls from "../../pages/researchCalls";
 import { decryptAES } from "../../utils/encryptDecrypt";
 import Expiry from "../../pages/Expiry";
+import EmployeeSPIP from "../../pages/Contest/SPIP/Employee";
+import B2BSPIP from "../../pages/Contest/SPIP/B2B";
 
 const drawerWidth = 260;
 
@@ -833,6 +836,9 @@ const SideBar = () => {
     "Employee Target": <EmpContestQ4 activeMenu={activeSubItem + "-Q4"} />,
     "DP AMC Contest": <AmcMembershipQ4 activeMenu={activeSubItem + "-Q4"} />,
     "Partner Contest": <ApnContestQ4 activeSubItem={activeSubItem + "-Q4"} />,
+    "Partner SPIP": <PartnerSPIP activeSubItem={activeSubItem} />,
+    "Employee SPIP": <EmployeeSPIP activeMenu={activeMenu} />,
+    "B2B SPIP": <B2BSPIP activeMenu={activeMenu} />,
   };
   const q3SubItems: Record<string, JSX.Element> = {
     "Employee Target": <EmpContest activeMenu={activeMenu} />,

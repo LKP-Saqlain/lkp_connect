@@ -469,3 +469,62 @@ export const ELOG_STATUS_LIST = [
   { code: "001", message: "Only Third Elog Approved." },
   { code: "000", message: "All Holder Elog not approved." },
 ];
+
+// rows
+export const expiryContestCriteriaRows = [
+  {
+    id: 1,
+    da: "Tuesday",
+    inde: "Nifty",
+    Instumen: "Nifty 50",
+  },
+  {
+    id: 2,
+    da: "Thursday",
+    inde: "Sensex",
+    Instumen: "Sensex",
+  },
+];
+
+export const expiryContestRewardRows = [
+  {
+    id: 1,
+    noOfLots: 100,
+    minBrok: 5000,
+    uniqueClients: 5,
+    giftVoucher: 500,
+  },
+  {
+    id: 2,
+    noOfLots: 200,
+    minBrok: 10000,
+    uniqueClients: 10,
+    giftVoucher: 1000,
+  },
+];
+export const RHexpiryContestRewardRows = [
+  {
+    id: 1,
+    criteria:"Employee",
+    noOfLots: 100,
+    minBrok: 5000,
+    uniqueClients: 5,
+    giftVoucher: 500,
+  },
+  {
+    id: 2,
+    criteria:"Employee",
+    noOfLots: 200,
+    minBrok: 10000,
+    uniqueClients: 10,
+    giftVoucher: 1000,
+  },
+  {
+    id: 3,
+    criteria:"Zone",
+    noOfLots: 500,
+    minBrok: 50000,
+    uniqueClients: 20,
+    giftVoucher: 2000,
+  },
+];

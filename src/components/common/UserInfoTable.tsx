@@ -2501,16 +2501,24 @@ const DataTable = ({
       return TableColumns.apGrossBrokerageColumns.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Employee Wise Details") {
-      return TableColumns.employeeExpiryColumns.map((column) => ({
+    } else if (activeMenu === "expiryContestCriteria") {
+      return TableColumns.expiryContestCriteria.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Client Wise Details") {
-      return TableColumns.clientExpiryColumns.map((column) => ({
+    } else if (activeMenu === "expiryContestReward") {
+      return TableColumns.expiryContestReward.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "Zone Wise Details") {
-      return TableColumns.zoneExpiryColumns.map((column) => ({
+    } else if (activeMenu === "todaysContestProgress") {
+      return TableColumns.todaysContestProgress.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "RHexpiryContestReward") {
+      return TableColumns.RHexpiryContestReward.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "employeesContestProgress") {
+      return TableColumns.employeesContestProgress.map((column) => ({
         ...column,
       }));
     } else {
@@ -2683,7 +2691,13 @@ const DataTable = ({
       )}
       <Paper
         sx={{
-          height: selectedWidget === "Client Details Report" ? "200px" : "72vh",
+          height:
+            selectedWidget === "Client Details Report"
+              ? "200px"
+              : selectedWidget === "Criteria and Rewards"
+              ? "auto"
+              : "72vh",
+
           // height: `${calculatedHeight}px`,
           width: "100%",
           overflowX: "auto",

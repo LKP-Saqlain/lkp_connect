@@ -1,136 +1,137 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import { RootState, AppDispatch } from "../../redux/store";
 import { apiServices } from "../../services";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
-import { Tabs, Tab } from "@mui/material";
-import DataTable from "../../components/common/UserInfoTable";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
-type ExpiryData = any[];
+import DataTable from "../../components/common/UserInfoTable";
+import {
+  expiryContestCriteriaRows,
+  expiryContestRewardRows,
+} from "../../helper/commmon";
+import { Button } from "@mui/material";
 
 const Expiry = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
-
-  const [tabValue, setTabValue] = useState(0);
-  const [employeeData, setEmployeeData] = useState<ExpiryData>([]);
-  const [clientData, setClientData] = useState<ExpiryData>([]);
-  const [zoneData, setZoneData] = useState<ExpiryData>([]);
-
-  const symbol = tabValue === 0 ? "sensex" : "nifty";
-
-  const fetchExpiryData = useCallback(
-    async (apiFn: Function, setter: Function) => {
-      try {
-        const payload = { user_id, symbol };
-        const response = await apiFn(payload);
-
-        if (response?.status === 200) {
-          const mappedData =
-            (response?.data?.data || []).map((item: any, index: number) => ({
-              Id: index + 1,
-              ...item,
-            })) || [];
-
-          setter(mappedData);
-        }
-      } catch (error) {
-        console.error("API Error:", error);
-      }
-    },
-    [user_id, symbol]
-  );
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    dispatch(showLoader(""));
+    handleExpiryData();
+    const intervalId = setInterval(() => {
+      handleExpiryData();
+    }, 15 * 60 * 1000);
 
-    Promise.all([
-      fetchExpiryData(apiServices.GetEmployeeExpiryDetails, setEmployeeData),
-      fetchExpiryData(apiServices.GetClientExpiryDetails, setClientData),
-      fetchExpiryData(apiServices.GetZoneExpiryDetails, setZoneData),
-    ]).finally(() => dispatch(hideLoader()));
-  }, [fetchExpiryData, dispatch]);
+    return () => clearInterval(intervalId);
+  }, []);
 
-  const cardsConfig = [
-    {
-      title: "Employee Wise Details",
-      data: employeeData,
-    },
-    {
-      title: "Client Wise Details",
-      data: clientData,
-    },
-    {
-      title: "Zone Wise Details",
-      data: zoneData,
-    },
-  ];
+  const handleExpiryData = () => {
+    const payload = {
+      user_id: user_id,
+    };
+    dispatch(showLoader("Fetching Client Code..."));
+    apiServices
+      .GetDealerExpiryDashBoardData(payload)
+      .then((response: any) => {
+        const rawData = response?.data?.data || {};
+        const formattedData = rawData.map((item: any, index: number) => ({
+          id: index + 1,
+          ...item,
+        }));
+        console.log(formattedData, "expiry Response:", response);
+        setData(formattedData);
+      })
+      .catch((error: any) => {
+        console.error("PhysicalClientInfo Error:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
 
   return (
     <div className="page-content page-view">
       <div className="container-fluid">
-        {/* Tabs */}
-        <Tabs
-          value={tabValue}
-          onChange={(_, v) => setTabValue(v)}
-          TabIndicatorProps={{ style: { display: "none" } }}
-          sx={{
-            mt: "1rem",
-            ml: ".7rem",
-            mb: "8px",
-            backgroundColor: "white",
-            borderRadius: "11px",
-            width: "fit-content",
-            minHeight: 0,
-          }}
-        >
-          {["Sensex", "Nifty"].map((label, index) => (
-            <Tab
-              key={label}
-              label={label}
-              sx={{
-                textTransform: "none",
-                fontWeight: 400,
-                borderRadius: "10px",
-                px: 3,
-                minHeight: 10,
-                backgroundColor: tabValue === index ? "#11395C" : "white",
-                color: tabValue === index ? "white" : "#11395C",
-                "&.Mui-selected": { color: "white" },
-              }}
-            />
-          ))}
-        </Tabs>
-
-        {/* Cards */}
         <Row className="row-font">
-          {cardsConfig.map(({ title, data }) => (
-            <Col lg={12} key={title}>
-              <Card
+          <Col lg={12}>
+            <Card
+              style={{
+                minHeight: "80vh",
+                borderRadius: "15px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <CardHeader
                 style={{
-                  minHeight: "80vh",
-                  borderRadius: "15px",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+                  borderRadius: "15px 15px 0 0",
+                  backgroundColor: "#fff",
+                  padding: "0.6rem 1rem",
                 }}
               >
-                <CardHeader
-                  style={{
-                    borderRadius: "15px 15px 0 0",
-                    backgroundColor: "#fff",
-                    padding: "0.2rem 0.8rem",
-                  }}
-                >
-                  <h4 className="card-title mb-0">{title}</h4>
-                </CardHeader>
-                <CardBody>
-                  <DataTable activeSubItem={title} T6Data={data} />
-                </CardBody>
-              </Card>
-            </Col>
-          ))}
+                <div className="d-flex align-items-center justify-content-between">
+                  <h5 className="mb-0">Expiry Day Contest</h5>
+
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    sx={{
+                      textTransform: "none",
+                      borderRadius: "16px",
+                      fontSize: "0.8rem",
+                      padding: "2px 8px",
+                      color: "#11395C",
+                    }}
+                    onClick={handleExpiryData}
+                  >
+                    Refresh <RefreshIcon sx={{ fontSize: "1.1rem" }} />
+                  </Button>
+                </div>
+              </CardHeader>
+
+              <CardBody>
+                {/* Contest Criteria & Rewards */}
+                <h6 className="card-title mb-3">
+                  Contest Criteria and Rewards
+                </h6>
+
+                <Row className="mb-4">
+                  {/* Criteria Table */}
+                  <Col lg={6} md={12}>
+                    <DataTable
+                      activeMenu={"expiryContestCriteria"}
+                      T6Data={expiryContestCriteriaRows}
+                      selectedWidget="Criteria and Rewards"
+                      customHide={true}
+                    />
+                  </Col>
+
+                  {/* Rewards Table */}
+                  <Col lg={6} md={12}>
+                    <DataTable
+                      activeMenu={"expiryContestReward"}
+                      T6Data={expiryContestRewardRows}
+                      selectedWidget="Criteria and Rewards"
+                      customHide={true}
+                    />
+                  </Col>
+                </Row>
+
+                {/* Today's Contest Progress */}
+                <h6 className="card-title mb-3">Today’s Contest Progress</h6>
+
+                <DataTable
+                  activeMenu={"todaysContestProgress"}
+                  T6Data={data}
+                  selectedWidget="Criteria and Rewards"
+                  customHide={true}
+                />
+              </CardBody>
+            </Card>
+          </Col>
         </Row>
       </div>
     </div>
