@@ -27,7 +27,7 @@ import { EmployeeTargetReportColumns } from "../../../helper/tableColumns";
 const EmployeeTargetReport = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any[]>([]);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(1);
   const dispatch = useDispatch<AppDispatch>();
   const [isZoneReady, setIsZoneReady] = useState(false);
 

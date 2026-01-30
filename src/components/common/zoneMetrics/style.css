@@ -1,0 +1,43 @@
+.zone-table {
+  font-size: 13px;
+  color: #0f172a;
+}
+
+/* Row layout */
+.zone-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 1fr;
+  align-items: center;
+  min-height: 32px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Header */
+.zone-header {
+  font-weight: 600;
+  border-bottom: 1.5px solid #cbd5e1;
+}
+
+/* Total row */
+.zone-total {
+  font-weight: 600;
+  border-bottom: none;
+  padding-top: 6px;
+}
+
+/* Cells */
+.zone-cell {
+  padding: 0 10px;
+}
+
+/* Vertical separators */
+.zone-cell.direct,
+.zone-cell.indirect {
+  border-left: 1px solid #e5e7eb;
+  text-align: right;
+}
+
+/* Month column */
+.zone-cell.month {
+  text-align: left;
+}

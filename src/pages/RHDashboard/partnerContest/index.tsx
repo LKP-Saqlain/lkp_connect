@@ -25,7 +25,7 @@ import { Tabs, Tab } from "@mui/material";
 const PartnerContestReport = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any[]>([]);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(1);
   const [isZoneReady, setIsZoneReady] = useState(false);
   const lastRequestRef = useRef<string | null>(null);
 

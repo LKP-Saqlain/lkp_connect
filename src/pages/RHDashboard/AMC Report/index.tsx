@@ -9,6 +9,7 @@ import {
   CardBody,
   Button,
 } from "reactstrap";
+import { Tabs, Tab } from "@mui/material";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
@@ -20,26 +21,35 @@ import NudgeTable from "../../../components/common/NudgeTable";
 interface UserData {
   direct: any[];
   inDirect: any[];
-  summary: {
-    tcnt?: number;
-    dcnt?: number;
-    icnt?: number;
-    sub_tot?: number;
-    sub_dir?: number;
-    sub_ind?: number;
-    cmp_tot?: number;
-    cmp_dir?: number;
-    cmp_ind?: number;
-  };
+  summary: Record<string, number>;
 }
+
+const TAB_CONFIG = [
+  { label: "Q3", optionType: "Q3", period: "October–December" },
+  { label: "Q4", optionType: "Q4", period: "January–March" },
+];
+
+const SUMMARY_KEYS = [
+  { title: "Total Clients", keys: ["tcnt", "dcnt", "icnt"] },
+  { title: "Submitted Clients", keys: ["sub_tot", "sub_dir", "sub_ind"] },
+  { title: "Completed Clients", keys: ["cmp_tot", "cmp_dir", "cmp_ind"] },
+];
 
 const AmcReport = ({ activeSubItem }: any) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+  const [tabValue, setTabValue] = useState(1);
+  const [activeBranch, setActiveBranch] = useState<"direct" | "indirect">(
+    "direct"
   );
+  const [selectedZone, setSelectedZone] = useState("all");
+  const [activeBadges, setActiveBadges] = useState(["total", "total", "total"]);
+  const [extendedData, setExtendedData] = useState<any>(null);
+  const [selectedType, setSelectedType] = useState<any>();
+  const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
+
+  const { user_id } = useSelector((s: RootState) => s.UserLogin?.data?.data);
   const { accessType } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data || {}
+    (s: RootState) => s.AuthUser?.data?.data || {}
   );
 
   const [userData, setUserData] = useState<UserData>({
@@ -47,310 +57,259 @@ const AmcReport = ({ activeSubItem }: any) => {
     inDirect: [],
     summary: {},
   });
-  const [activeBranch, setActiveBranch] = useState<"direct" | "indirect">(
-    "direct"
-  );
-  const [selectedZone, setSelectedZone] = useState<string>("all");
-  const [extendedData, setExtendedData] = useState<any>(null);
-
-  const [selectedType, setSelectedType] = useState<any>();
-  const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
-  // const [segmentRow, setSegmentRow] = useState(null);
 
   useEffect(() => {
     if (accessType === "ALL" && selectedZone === "all") return;
-    const fetchAMCZoneReport = async () => {
-      const payload = {
-        zone: selectedZone || "all",
-        userId: user_id,
-        optionType: "all",
-      };
 
+    const fetchReport = async () => {
       dispatch(showLoader(""));
 
       try {
-        const response = await apiServices.GetAMCZoneReport(payload);
+        const res = await apiServices.GetAMCZoneReport({
+          userId: user_id,
+          zone: selectedZone,
+          optionType: TAB_CONFIG[tabValue].optionType,
+        });
 
-        if (response?.data?.statusCode === 200) {
-          const data = response.data.data;
-
-          const directData =
-            data.direct?.map((item: any, index: number) => ({
-              ...item,
-              Id: index + 1,
-            })) || [];
-
-          const inDirectData =
-            data.inDirect?.map((item: any, index: number) => ({
-              ...item,
-              Id: index + 1,
-            })) || [];
-
+        if (res?.data?.statusCode === 200) {
+          const { direct = [], inDirect = [], summary = {} } = res.data.data;
           setUserData({
-            direct: directData,
-            inDirect: inDirectData,
-            summary: data.summary || {},
+            direct: direct.map((d: any, i: number) => ({ ...d, Id: i + 1 })),
+            inDirect: inDirect.map((d: any, i: number) => ({
+              ...d,
+              Id: i + 1,
+            })),
+            summary,
           });
         }
-      } catch (error) {
-        console.error("Error fetching AMC Zone Report:", error);
       } finally {
         dispatch(hideLoader());
       }
     };
 
-    fetchAMCZoneReport();
-  }, [dispatch, user_id, selectedZone, accessType]);
+    fetchReport();
+  }, [tabValue, selectedZone, accessType, user_id, dispatch]);
 
-  const fetchAmcExtended = async (row: any) => {
-    console.log("Row11", row);
-
-    console.log(fetchAmcExtended, row);
-
-    const payload = {
-      userId: user_id,
-      empOrAPCode: row.emp,
-      branchType: row.bt,
-    };
-
+  const fetchExtended = async (row: any) => {
     dispatch(showLoader(""));
-
     try {
-      const response = await apiServices.GetDPAMCZoneReportDetails(payload);
-
-      if (response?.data?.statusCode === 200) {
-        const data = response.data.data;
-        console.log(data, "GetDPAMCZoneReportDetails");
-
-        setExtendedData(data);
-      }
-    } catch (error) {
-      console.error("Error fetching AMC Zone Report:", error);
+      const res = await apiServices.GetDPAMCZoneReportDetails({
+        userId: user_id,
+        empOrAPCode: row.emp,
+        branchType: row.bt,
+      });
+      if (res?.data?.statusCode === 200) setExtendedData(res.data.data);
     } finally {
       dispatch(hideLoader());
     }
   };
 
+  const handleBadgeClick = (idx: number, type: string) =>
+    setActiveBadges((p) => p.map((v, i) => (i === idx ? type : v)));
+
+  const getMetricValue = (i: number) => {
+    const badge = activeBadges[i];
+    const [total, direct, indirect] = SUMMARY_KEYS[i].keys;
+    return (
+      userData.summary[
+        badge === "direct" ? direct : badge === "indirect" ? indirect : total
+      ] || 0
+    );
+  };
+
   const handleExtendedVersion = (row: any, type: any) => {
-    console.log("Test1111", row, type);
     setExtendedData(null);
-    fetchAmcExtended(row);
+    fetchExtended(row);
     setSelectedType(type);
     setIsNudgeTableOpen(true);
-    console.log(row, type, "row-----type");
   };
 
-  // useEffect(() => {
-  //   console.log(segmentRow, "segmentRow from amc report");
-  // }, [segmentRow]);
-
-  const handleZoneChange = (zone: any) => {
-    console.log("Selected zone:", zone);
-    setSelectedZone(zone?.value || "all"); // update selected zone value here
-  };
-
-  // Track active badge per card (0: Total, 1: Submitted, 2: Completed)
-  // Each can be 'total', 'direct', or 'indirect'
-  const [activeBadges, setActiveBadges] = useState<string[]>([
-    "total",
-    "total",
-    "total",
-  ]);
-
-  const handleBadgeClick = (cardIndex: number, type: string) => {
-    setActiveBadges((prev) => {
-      const updated = [...prev];
-      updated[cardIndex] = type;
-      return updated;
-    });
-  };
-
-  // Return value based on card index and active badge
-  const getMetricValue = (cardIndex: number) => {
-    const badge = activeBadges[cardIndex];
-    const data = userData.summary;
-
-    switch (cardIndex) {
-      case 0: // Total Clients
-        if (badge === "total") return data.tcnt || 0;
-        if (badge === "direct") return data.dcnt || 0;
-        if (badge === "indirect") return data.icnt || 0;
-        break;
-
-      case 1: // Submitted Clients
-        if (badge === "total") return data.sub_tot || 0;
-        if (badge === "direct") return data.sub_dir || 0;
-        if (badge === "indirect") return data.sub_ind || 0;
-        break;
-
-      case 2: // Completed Clients
-        if (badge === "total") return data.cmp_tot || 0;
-        if (badge === "direct") return data.cmp_dir || 0;
-        if (badge === "indirect") return data.cmp_ind || 0;
-        break;
-
-      default:
-        return 0;
-    }
-  };
-
-  const summaryMetrics = [
-    { title: "Total Clients" },
-    { title: "Submitted Clients" },
-    { title: "Completed Clients" },
-  ];
-
-  const closeNudgeTable = () => {
-    setIsNudgeTableOpen(false);
-  };
-
-  return (
-    <div className="page-content page-view">
-      <Container fluid>
-        {accessType === "ALL" && (
-          <Card style={{ marginTop: "2rem", padding: "1rem" }}>
-            <ComDropDown onZoneChange={handleZoneChange} />
-          </Card>
-        )}
-
-        <Row>
-          {summaryMetrics.map((metric, index) => {
-            // Define badges with proper values from summary and active state
-            const badges = [
+  const renderSummaryCards = () => (
+    <Row>
+      {SUMMARY_KEYS.map((m, i) => (
+        <Col key={i} xxl={4} lg={4} md={4} sm={12}>
+          <DashboardCard
+            title={m.title}
+            value={getMetricValue(i)}
+            badges={[
               {
                 type: "info",
                 label: "Direct",
-                value:
-                  index === 0
-                    ? userData.summary.dcnt || 0
-                    : index === 1
-                    ? userData.summary.sub_dir || 0
-                    : userData.summary.cmp_dir || 0,
-                isActive: activeBadges[index] === "direct",
-                onClick: () => handleBadgeClick(index, "direct"),
+                value: userData.summary[m.keys[1]] || 0,
+                isActive: activeBadges[i] === "direct",
+                onClick: () => handleBadgeClick(i, "direct"),
               },
               {
                 type: "primary",
                 label: "Indirect",
-                value:
-                  index === 0
-                    ? userData.summary.icnt || 0
-                    : index === 1
-                    ? userData.summary.sub_ind || 0
-                    : userData.summary.cmp_ind || 0,
-                isActive: activeBadges[index] === "indirect",
-                onClick: () => handleBadgeClick(index, "indirect"),
+                value: userData.summary[m.keys[2]] || 0,
+                isActive: activeBadges[i] === "indirect",
+                onClick: () => handleBadgeClick(i, "indirect"),
               },
               {
                 type: "warning",
                 label: "Total",
-                value:
-                  index === 0
-                    ? userData.summary.tcnt || 0
-                    : index === 1
-                    ? userData.summary.sub_tot || 0
-                    : userData.summary.cmp_tot || 0,
-                isActive: activeBadges[index] === "total",
-                onClick: () => handleBadgeClick(index, "total"),
+                value: userData.summary[m.keys[0]] || 0,
+                isActive: activeBadges[i] === "total",
+                onClick: () => handleBadgeClick(i, "total"),
               },
-            ];
+            ]}
+            customZoneClass
+            customClass
+            mainCustomClass
+          />
+        </Col>
+      ))}
+    </Row>
+  );
 
-            return (
-              <Col
-                key={index}
-                xxl={4}
-                lg={4}
-                md={4}
-                sm={12}
-                style={{ marginBottom: "1rem" }}
-              >
-                <DashboardCard
-                  title={metric.title}
-                  value={getMetricValue(index)}
-                  badges={badges}
-                  customZoneClass={true}
-                  customClass={true}
-                  mainCustomClass={true}
-                />
-              </Col>
-            );
-          })}
-        </Row>
-        <Card
+  const renderAMCReport = () => (
+    <>
+      {renderSummaryCards()}
+
+      <Card
+        className="mt-3"
+        style={{
+          minHeight: "80vh",
+          borderRadius: "15px",
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
+          // marginTop: "17px",
+        }}
+      >
+        <CardHeader
           style={{
-            minHeight: "80vh",
-            borderRadius: "15px",
-            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-            // marginTop: "17px",
+            borderRadius: "15px 15px 0 0",
+            boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
+            backgroundColor: "#fff",
+            padding: "0.2rem 0.8rem",
           }}
         >
-          <CardHeader
-            style={{
-              borderRadius: "15px 15px 0 0",
-              boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
-              backgroundColor: "#fff",
-              padding: "0.2rem 0.8rem",
-            }}
-          >
-            <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
-              <h4 className="card-title mb-0">
-                AMC Contest Report{" "}
-                <span style={{ fontSize: "12px" }}>(October–December)</span>
-              </h4>
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
+          <div className="d-flex justify-content-between">
+            <h4 className="card-title mb-0">
+              AMC Contest Report{" "}
+              <span style={{ fontSize: "12px" }}>
+                ({TAB_CONFIG[tabValue].period})
+              </span>
+            </h4>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Button
+                type="button"
+                onClick={() => setActiveBranch("direct")}
+                style={{
+                  backgroundColor:
+                    activeBranch === "direct" ? "#11395C" : "#ffffff",
+                  color: activeBranch === "direct" ? "#ffffff" : "#11395C",
+                  border: "1px solid #11395C",
+                  minWidth: "80px",
+                  fontSize: "10px",
+                  borderRadius: "6px",
+                }}
               >
-                <Button
-                  type="button"
-                  onClick={() => setActiveBranch("direct")}
-                  style={{
-                    backgroundColor:
-                      activeBranch === "direct" ? "#11395C" : "#ffffff",
-                    color: activeBranch === "direct" ? "#ffffff" : "#11395C",
-                    border: "1px solid #11395C",
-                    minWidth: "80px",
-                    fontSize: "14px",
-                    borderRadius: "6px",
-                  }}
-                >
-                  Direct
-                </Button>
+                Direct
+              </Button>
 
-                <Button
-                  type="button"
-                  onClick={() => setActiveBranch("indirect")}
-                  style={{
-                    backgroundColor:
-                      activeBranch === "indirect" ? "#F57C00" : "#ffffff",
-                    color: activeBranch === "indirect" ? "#ffffff" : "#F57C00",
-                    border: "1px solid #F57C00",
-                    minWidth: "80px",
-                    fontSize: "14px",
-                    borderRadius: "6px",
-                  }}
-                >
-                  Indirect
-                </Button>
-              </div>
+              <Button
+                type="button"
+                onClick={() => setActiveBranch("indirect")}
+                style={{
+                  backgroundColor:
+                    activeBranch === "indirect" ? "#F57C00" : "#ffffff",
+                  color: activeBranch === "indirect" ? "#ffffff" : "#F57C00",
+                  border: "1px solid #F57C00",
+                  minWidth: "80px",
+                  fontSize: "10px",
+                  borderRadius: "6px",
+                }}
+              >
+                Indirect
+              </Button>
             </div>
-          </CardHeader>
-          <CardBody>
-            <UserInfoTable
-              T6Data={
-                activeBranch === "direct" ? userData.direct : userData.inDirect
-              }
-              activeSubItem={`${activeSubItem} ${activeBranch}`}
-              handleDownload={handleExtendedVersion}
-            />
-          </CardBody>
-        </Card>
-        <NudgeTable
-          isOpen={isNudgeTableOpen}
-          onClose={closeNudgeTable}
-          selectedReport={"AMC Contest Report"}
-          singleData={extendedData}
-          selectedTab={selectedType}
-        />
+          </div>
+        </CardHeader>
+
+        <CardBody>
+          <UserInfoTable
+            T6Data={
+              activeBranch === "direct" ? userData.direct : userData.inDirect
+            }
+            activeSubItem={`${activeSubItem} ${activeBranch}`}
+            handleDownload={handleExtendedVersion}
+          />
+        </CardBody>
+      </Card>
+
+      <NudgeTable
+        isOpen={isNudgeTableOpen}
+        onClose={() => setIsNudgeTableOpen(false)}
+        selectedReport="AMC Contest Report"
+        singleData={extendedData}
+        selectedTab={selectedType}
+      />
+    </>
+  );
+
+  return (
+    <div className="page-content page-view">
+      <Container fluid>
+        <Tabs
+          value={tabValue}
+          onChange={(_, v) => setTabValue(v)}
+          TabIndicatorProps={{ style: { display: "none" } }}
+          sx={{
+            mt: "1rem",
+            mb: "8px",
+            backgroundColor: "white",
+            borderRadius: "7px",
+            width: "fit-content",
+            minHeight: "28px", // 👈 reduce Tabs height
+            height: "28px",
+            // padding: "2px",
+          }}
+        >
+          <Tab
+            label="Q3"
+            sx={{
+              textTransform: "none",
+              fontWeight: 400,
+              borderRadius: "7px",
+              px: 3,
+              minHeight: "28px", // 👈 reduce Tab height
+              height: "28px",
+              lineHeight: "28px", // 👈 vertical centering
+              backgroundColor: tabValue === 0 ? "#11395C" : "white",
+              color: tabValue === 0 ? "white" : "#11395C",
+              "&.Mui-selected": {
+                color: "white !important",
+              },
+            }}
+          />
+
+          <Tab
+            label="Q4"
+            sx={{
+              textTransform: "none",
+              fontWeight: 400,
+              borderRadius: "7px",
+              px: 3,
+              minHeight: "28px",
+              height: "28px",
+              lineHeight: "28px",
+              backgroundColor: tabValue === 1 ? "#11395C" : "white",
+              color: tabValue === 1 ? "white" : "#11395C",
+              "&.Mui-selected": {
+                color: "white !important",
+              },
+            }}
+          />
+        </Tabs>
+
+        {accessType === "ALL" && (
+          <ComDropDown
+            onZoneChange={(z: any) => setSelectedZone(z?.value || "all")}
+          />
+        )}
+
+        {renderAMCReport()}
       </Container>
     </div>
   );
