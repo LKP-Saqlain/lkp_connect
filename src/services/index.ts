@@ -1142,4 +1142,23 @@ export const apiServices = {
   GetZoneExpiryDetails: async (payload: any) => {
     return await apiService("POST", endpoints.GetZoneExpiryDetails, payload);
   },
+  UploadHdfcMerchantFile: async (payload: any) => {
+    return await apiService("POST", endpoints.UploadHdfcMerchantFile, payload);
+  },
+  GetClientMandateData: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientMandateData, payload);
+  },
+  DownloadDpMandateTrans: async (payload: any) => {
+    return await apiService("POST", endpoints.DownloadDpMandateTrans, payload);
+  },
+  GetClientMandateExectionData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetClientMandateExectionData,
+      payload
+    );
+  },
+  GetMandateJVReportData: async (payload: any) => {
+    return await apiService("POST", endpoints.GetMandateJVReportData, payload);
+  },
 };

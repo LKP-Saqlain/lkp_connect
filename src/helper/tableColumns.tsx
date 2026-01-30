@@ -2023,29 +2023,29 @@ export const DPDebitRecovery: GridColDef[] = [
       return <CopyToClipboardCell fullLink={fullLink} field={"payment"} />;
     },
   },
-  // {
-  //   field: "dpMandate_Link",
-  //   headerName: "Mandate\nLink",
-  //   headerClassName: "header-wrap-custom",
-  //   minWidth: 75,
-  //   flex: 0.3,
-  //   align: "center",
-  //   headerAlign: "center",
-  //   disableColumnMenu: true,
-  //   renderCell: (params: any) => {
-  //     const { paylnk, enc } = params.row;
-  //     if (!paylnk || !enc) return <span>No Link Available</span>;
+  {
+    field: "dpMandate_Link",
+    headerName: "Mandate\nLink",
+    headerClassName: "header-wrap-custom",
+    minWidth: 75,
+    flex: 0.3,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const { paylnk, enc } = params.row;
+      if (!paylnk || !enc) return <span>No Link Available</span>;
 
-  //     const fullLink = `${paylnk}${enc}`;
-  //     return (
-  //       <CopyToClipboardCell
-  //         fullLink={fullLink}
-  //         field={"dpMandate"}
-  //         selectedRow={params?.row}
-  //       />
-  //     );
-  //   },
-  // },
+      const fullLink = `${paylnk}${enc}`;
+      return (
+        <CopyToClipboardCell
+          fullLink={fullLink}
+          field={"dpMandate"}
+          selectedRow={params?.row}
+        />
+      );
+    },
+  },
   {
     field: "cc",
     headerName: "Client Code",
@@ -11721,4 +11721,234 @@ export const zoneExpiryColumns: GridColDef[] = [
     headerAlign: "center",
     renderCell: (params) => (params.value ? params.value : "—"),
   },
+];
+
+export const ClientMandateColumns: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    minWidth: 80,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "branchcode",
+    headerName: "Branch",
+    minWidth: 100,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    minWidth: 120,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 220,
+    flex: 1.5,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "boId",
+    headerName: "BO ID",
+    minWidth: 180,
+    flex: 1.2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "mandateAmount",
+    headerName: "Mandate Amount",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "mandateStatus",
+    headerName: "Status",
+    minWidth: 120,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "umn",
+    headerName: "UMN",
+    minWidth: 260,
+    flex: 2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+];
+
+export const mandateExecutionColumns: GridColDef[] = [
+  {
+    field: "clientcode",
+    headerName: "Client Code",
+    minWidth: 120,
+    flex: 1,
+  },
+  {
+    field: "dpCode",
+    headerName: "DP Code",
+    minWidth: 200,
+    flex: 1.5,
+  },
+  {
+    field: "executionAmount",
+    headerName: "Execution Amount",
+    minWidth: 150,
+    flex: 1,
+    type: "number",
+    align: "right",
+    headerAlign: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "ExecutionDate",
+    headerName: "Execution Date",
+    minWidth: 180,
+    flex: 1.2,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+  },
+  {
+    field: "custRefNo",
+    headerName: "Customer Ref No",
+    minWidth: 180,
+    flex: 1.3,
+  },
+  {
+    field: "downloadJVReceipt",
+    headerName: "Receipt",
+    minWidth: 130,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) =>
+      params.value === "YES" ? (
+        <span style={{ color: "green", fontWeight: 500 }}>{params.value}</span>
+      ) : (
+        <span style={{ color: "red", fontWeight: 500 }}>{params.value}</span>
+      ),
+  },
+];
+
+export const MandateTab3Columns: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    minWidth: 80,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "branchCode",
+    headerName: "Branch",
+    minWidth: 100,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    minWidth: 120,
+    flex: 1,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 200,
+    flex: 1.5,
+  },
+  {
+    field: "dpCode",
+    headerName: "DP Code",
+    minWidth: 200,
+    flex: 1.5,
+    align: "center",
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    minWidth: 150,
+    flex: 1,
+    type: "number",
+    align: "right",
+    headerAlign: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "CreatedOn",
+    headerName: "Created On",
+    minWidth: 180,
+    flex: 1.2,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "custRefno",
+    headerName: "Customer Ref No",
+    minWidth: 180,
+    flex: 1.3,
+    align: "center",
+    headerAlign: "center",
+  },
+  // {
+  //   field: "receipt",
+  //   headerName: "Receipt",
+  //   minWidth: 130,
+  //   flex: 1,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   renderCell: () => (
+  //     <span style={{ color: "green", fontWeight: 500 }}>Download</span>
+  //   ),
+  // },
 ];

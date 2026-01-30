@@ -120,6 +120,7 @@ import PledgeReport from "../../pages/Reports/pledgeReqReport";
 import ResearchCalls from "../../pages/researchCalls";
 import { decryptAES } from "../../utils/encryptDecrypt";
 import Expiry from "../../pages/Expiry";
+import AutoPayReport from "../../pages/ThirdParty/DPAutoPay";
 
 const drawerWidth = 260;
 
@@ -827,6 +828,7 @@ const SideBar = () => {
     "Dp Debit Collection": <MandatePayment activeSubItem={activeSubItem} />,
     "DP AMC Ledger Debit": <LedgerDebitReport activeSubItem={activeSubItem} />,
     "Vendor Details Report": <VendorReport activeSubItem={activeSubItem} />,
+    "DP AutoPay Report": <AutoPayReport activeSubItem={activeSubItem} />,
   };
 
   const q4SubItems: Record<string, JSX.Element> = {
