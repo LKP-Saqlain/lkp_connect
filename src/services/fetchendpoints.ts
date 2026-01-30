@@ -355,6 +355,9 @@ export const newDomainEndpoints = [
   endpoints.GetClientMandateExectionData,
   endpoints.GetMandateJVReportData,
   endpoints.DPAMCDownloadFile,
+
+  endpoints.GetDealerExpiryDashBoardData,
+  endpoints.GetZoneExpiryDashBoardData,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

@@ -274,6 +274,8 @@ export const endpoints = {
   DownloadDpMandateTrans: "/api/Mandate/DownloadDpMandateTrans",
   GetClientMandateExectionData: "/api/Mandate/GetClientMandateExectionData",
   GetMandateJVReportData: "/api/Mandate/GetMandateJVReportData",
+  GetDealerExpiryDashBoardData: "/api/RMS/GetDealerExpiryDashBoardData",
+  GetZoneExpiryDashBoardData: "/api/RMS/GetZoneExpiryDashBoardData",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

@@ -11476,250 +11476,183 @@ export const apGrossBrokerageColumns: GridColDef[] = [
 export const formatNumber = (value: any) => {
   if (value == null || value === "") return "—";
 
-  const rounded = Math.round(Number(value));
+  const num = Number(value);
 
-  return rounded.toLocaleString("en-IN");
+  if (Number.isNaN(num)) return value;
+
+  return Math.round(num).toLocaleString("en-IN");
 };
 
-export const employeeExpiryColumns: GridColDef[] = [
+export const expiryContestReward: GridColDef[] = [
   {
-    field: "zn",
-    headerName: "Zone",
-    flex: 0.6,
-    minWidth: 80,
+    field: "noOfLots",
+    headerName: "Min No of Lots",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => formatNumber(params.value),
+  },
+  {
+    field: "minBrok",
+    headerName: "Min Brokerage",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => formatNumber(params.value),
+  },
+  {
+    field: "uniqueClients",
+    headerName: "Unique Clients",
+    flex: 1,
     align: "center",
     headerAlign: "center",
   },
   {
-    field: "ec",
-    headerName: "EmpCode",
-    flex: 0.8,
-    minWidth: 100,
+    field: "giftVoucher",
+    headerName: "Gift Voucher",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+];
+export const RHexpiryContestReward: GridColDef[] = [
+  {
+    field: "criteria",
+    headerName: "Criteria",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  ...expiryContestReward,
+];
+export const expiryContestCriteria: GridColDef[] = [
+  {
+    field: "da",
+    headerName: "Day",
+    flex: 1,
     align: "center",
     headerAlign: "center",
   },
   {
-    field: "en",
-    headerName: "EmpName",
-    flex: 1.5,
-    minWidth: 220,
+    field: "inde",
+    headerName: "Index",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "Instumen",
+    headerName: "Instrument",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+];
+export const todaysContestProgress: GridColDef[] = [
+  {
+    field: "day",
+    headerName: "Day",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "index",
+    headerName: "Index",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "instrument",
+    headerName: "Instrument",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "noOfLots",
+    headerName: "Min No of Lots",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => formatNumber(params.value),
+  },
+  {
+    field: "minBrokerage",
+    headerName: "Min Brokerage",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => formatNumber(params.value),
+  },
+  {
+    field: "uniqueClients",
+    headerName: "Unique Clients",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "qualified",
+    headerName: "Qualified",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "prize",
+    headerName: "Gift Voucher",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+];
+export const employeesContestProgress: GridColDef[] = [
+  {
+    field: "empName",
+    headerName: "Employee Name",
+    flex: 2,
+    minWidth: 180,
     align: "left",
     headerAlign: "center",
   },
   {
-    field: "ecg",
-    headerName: "EmpCategoryName",
-    flex: 1.2,
-    minWidth: 180,
-    align: "center",
-    headerAlign: "center",
-    renderCell: (params) => (params.value ? params.value : "—"),
-  },
-  {
-    field: "bqty",
-    headerName: "BuyQty",
-    flex: 0.8,
-    minWidth: 90,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-  },
-  {
-    field: "sqty",
-    headerName: "SellQty",
-    flex: 0.8,
-    minWidth: 90,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-  },
-  {
-    field: "fnl",
-    headerName: "FinalLots",
-    flex: 0.8,
-    minWidth: 100,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-  },
-  {
-    field: "fnbd",
-    headerName: "FinalBrokData",
+    field: "noOfLots",
+    headerName: "Min No of Lots",
     flex: 1,
-    minWidth: 130,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
-  },
-  {
-    field: "ccnt",
-    headerName: "ClientCnt",
-    flex: 0.8,
-    minWidth: 100,
-    type: "number",
     align: "center",
     headerAlign: "center",
-    renderCell: (params) => (params.value ? params.value : "—"),
-  },
-];
-
-export const clientExpiryColumns: GridColDef[] = [
-  {
-    field: "zn",
-    headerName: "Zone",
-    flex: 0.6,
-    minWidth: 80,
-    align: "center",
-    headerAlign: "center",
+    renderCell: (params) => formatNumber(params.value),
   },
   {
-    field: "ec",
-    headerName: "EmpCode",
-    flex: 0.8,
-    minWidth: 100,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
-    field: "en",
-    headerName: "EmpName",
-    flex: 1.5,
-    minWidth: 220,
-    align: "left",
-    headerAlign: "center",
-  },
-  {
-    field: "ecg",
-    headerName: "EmpCategoryName",
-    flex: 1.2,
-    minWidth: 180,
-    align: "center",
-    headerAlign: "center",
-    renderCell: (params) => (params.value ? params.value : "—"),
-  },
-  {
-    field: "bqty",
-    headerName: "BuyQty",
-    flex: 0.8,
-    minWidth: 90,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-  },
-  {
-    field: "sqty",
-    headerName: "SellQty",
-    flex: 0.8,
-    minWidth: 90,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-  },
-  {
-    field: "fnl",
-    headerName: "FinalLots",
-    flex: 0.8,
-    minWidth: 100,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-  },
-  {
-    field: "fnbd",
-    headerName: "FinalBrokData",
+    field: "minBrokerage",
+    headerName: "Min Brokerage",
     flex: 1,
-    minWidth: 130,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
-  },
-  {
-    field: "ccnt",
-    headerName: "ClientCnt",
-    flex: 0.8,
-    minWidth: 100,
-    type: "number",
     align: "center",
     headerAlign: "center",
-    renderCell: (params) => (params.value ? params.value : "—"),
-  },
-];
-
-export const zoneExpiryColumns: GridColDef[] = [
-  {
-    field: "zn",
-    headerName: "Zone",
-    flex: 0.6,
-    minWidth: 80,
-    align: "center",
-    headerAlign: "center",
+    renderCell: (params) => formatNumber(params.value),
   },
   {
-    field: "bqty",
-    headerName: "BuyQty",
-    flex: 0.8,
-    minWidth: 90,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-  },
-  {
-    field: "sqty",
-    headerName: "SellQty",
-    flex: 0.8,
-    minWidth: 90,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-  },
-  {
-    field: "fnl",
-    headerName: "FinalLots",
-    flex: 0.8,
-    minWidth: 100,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-  },
-  {
-    field: "fnbd",
-    headerName: "FinalBrokData",
+    field: "uniqueClients",
+    headerName: "Unique Clients",
     flex: 1,
-    minWidth: 130,
-    type: "number",
-    align: "right",
-    headerAlign: "center",
-    valueFormatter: (params: any) => {
-      const value = parseFloat(params); // Convert the value to a number
-      return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(value);
-    },
-  },
-  {
-    field: "ccnt",
-    headerName: "ClientCnt",
-    flex: 0.8,
-    minWidth: 100,
-    type: "number",
     align: "center",
     headerAlign: "center",
-    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "qualified",
+    headerName: "Qualified",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "prize",
+    headerName: "Gift Voucher",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
   },
 ];
 

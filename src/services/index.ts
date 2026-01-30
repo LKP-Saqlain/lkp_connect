@@ -1161,4 +1161,18 @@ export const apiServices = {
   GetMandateJVReportData: async (payload: any) => {
     return await apiService("POST", endpoints.GetMandateJVReportData, payload);
   },
+  GetDealerExpiryDashBoardData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetDealerExpiryDashBoardData,
+      payload
+    );
+  },
+  GetZoneExpiryDashBoardData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetZoneExpiryDashBoardData,
+      payload
+    );
+  },
 };

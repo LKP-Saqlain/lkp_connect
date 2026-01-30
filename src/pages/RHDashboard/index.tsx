@@ -10,6 +10,7 @@ import PartnerContestReport from "./partnerContest";
 import EmployeeTargetReport from "./EmployeeTarget";
 import ZoneTarget from "./zoneTarget";
 import AmcReport from "./AMC Report";
+import ExpiryContest from "./Expiry Contest";
 // import IndirectTarget from "./IndirectTarget";
 
 interface RH {
@@ -33,6 +34,7 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
       <PartnerContestReport activeSubItem={activeSubItem} />
     ),
     [SubItemKeys.RH_AMC_REPORT]: <AmcReport activeSubItem={activeSubItem} />,
+    [SubItemKeys.RH_EXPIRY_CONTEST]: <ExpiryContest />,
     // [SubItemKeys.INDIRECT_CHANNEL_TARGET]: (
     //   <IndirectTarget activeSubItem={activeSubItem} />
     // ),
@@ -69,6 +71,8 @@ const Index = ({ activeMenu, activeSubItem }: RH) => {
         return <ZoneTarget activeSubItem={activeSubItem} />;
       } else if (activeSubItem === SubItemKeys.RH_AMC_REPORT) {
         return <AmcReport activeSubItem={activeSubItem} />;
+      } else if (activeSubItem === SubItemKeys.RH_EXPIRY_CONTEST) {
+        return <ExpiryContest />;
       } else {
         // return <Overview activeSubItem={activeSubItem} />;
       }

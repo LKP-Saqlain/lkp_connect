@@ -66,7 +66,7 @@ const AmcMembership = () => {
   const fetchData = ({ decryptedBOID, decryptedUserId }: any) => {
     const payload = {
       zone: "ALL",
-      branchCode: "ALL",
+      branchCode: "Q4",
       tradingCode: decryptedBOID,
       userId: decryptedUserId,
       // userId: "EMP-5376",
