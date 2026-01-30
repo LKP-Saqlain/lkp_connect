@@ -135,7 +135,9 @@ const TradeCard: React.FC<TradeCardProps> = ({
     expiry = result.expiry;
     strike = result.strike;
   }
-
+  const isClosedCall =
+    partialProfitText?.toLowerCase() ===
+    "the call has closed. kindly exit the position";
   return (
     <Card className={type != "Mandate" ? "trade-card" : ""}>
       {type === "Mandate" ? (
@@ -454,20 +456,19 @@ const TradeCard: React.FC<TradeCardProps> = ({
                 gap: "8px",
               }}
             >
-              {partialProfitText && status !== "Open" && (
-                <div
-                  style={{
-                    fontSize: "13px",
-                    color: "green",
-                    fontWeight: 100,
-                    flex: 1,
-                  }}
-                >
-                  {partialProfitText
+              <div
+                style={{
+                  fontSize: "13px",
+                  color: isClosedCall ? "red" : "green",
+                  fontWeight: 100,
+                  flex: 1,
+                }}
+              >
+                {partialProfitText &&
+                  partialProfitText
                     .toLowerCase()
                     .replace(/\b\w/g, (char) => char.toUpperCase())}
-                </div>
-              )}
+              </div>
               <div
                 style={{
                   position: "absolute",
