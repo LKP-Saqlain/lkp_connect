@@ -186,7 +186,7 @@ const Expiry = () => {
                     position: "relative",
                     display: "flex",
                     alignItems: "center",
-                    margin: "1rem 0",
+                    margin: "2rem 0",
                   }}
                 >
                   {/* Center title */}
