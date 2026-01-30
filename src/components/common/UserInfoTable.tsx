@@ -2521,6 +2521,18 @@ const DataTable = ({
       return TableColumns.employeesContestProgress.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "DP AutoPay Report") {
+      return TableColumns.ClientMandateColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Download DP Mandate Report") {
+      return TableColumns.mandateExecutionColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "DPMandateJVData") {
+      return TableColumns.MandateTab3Columns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }

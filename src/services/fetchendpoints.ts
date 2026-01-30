@@ -66,6 +66,7 @@ export const multipartEndpoints = [
   endpoints.T6NSESellingFileUpload,
   endpoints.REGNSEFileUpload,
   endpoints.REGBSEFileUpload,
+  endpoints.UploadHdfcMerchantFile,
 ];
 
 export const mutualFundEndpoints = [
@@ -343,10 +344,24 @@ export const newDomainEndpoints = [
   endpoints.ValidateOtpSms,
 
   //Expiry
-  // endpoints.GetEmployeeExpiryDetails,
-  // endpoints.GetClientExpiryDetails,
-  // endpoints.GetZoneExpiryDetails,
+  endpoints.GetEmployeeExpiryDetails,
+  endpoints.GetClientExpiryDetails,
+  endpoints.GetZoneExpiryDetails,
+
+  //Accounts
+  endpoints.UploadHdfcMerchantFile,
+  endpoints.GetClientMandateData,
+  endpoints.DownloadDpMandateTrans,
+  endpoints.GetClientMandateExectionData,
+  endpoints.GetMandateJVReportData,
+  endpoints.DPAMCDownloadFile,
+
   endpoints.GetDealerExpiryDashBoardData,
   endpoints.GetZoneExpiryDashBoardData,
-  
 ];
+const uniqueEndpoints = new Set(newDomainEndpoints);
+console.log(
+  "uniqueEndpointSize2",
+  uniqueEndpoints.size,
+  newDomainEndpoints.length
+);

@@ -269,6 +269,13 @@ export const endpoints = {
   GetEmployeeExpiryDetails: "/api/RMS/GetEmployeeExpiryDetails",
   GetClientExpiryDetails: "/api/RMS/GetClientExpiryDetails",
   GetZoneExpiryDetails: "/api/RMS/GetZoneExpiryDetails",
+  UploadHdfcMerchantFile: "/api/Mandate/UploadHdfcMerchantFile",
+  GetClientMandateData: "/api/Mandate/GetClientMandateData",
+  DownloadDpMandateTrans: "/api/Mandate/DownloadDpMandateTrans",
+  GetClientMandateExectionData: "/api/Mandate/GetClientMandateExectionData",
+  GetMandateJVReportData: "/api/Mandate/GetMandateJVReportData",
   GetDealerExpiryDashBoardData: "/api/RMS/GetDealerExpiryDashBoardData",
   GetZoneExpiryDashBoardData: "/api/RMS/GetZoneExpiryDashBoardData",
 };
+
+console.log("EndPOintLenghts", Object.keys(endpoints).length);
