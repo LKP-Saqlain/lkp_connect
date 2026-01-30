@@ -253,7 +253,7 @@ const CustomModal = ({
       }),
       ...(activeSubItem === "mandateCall" && {
         mandateAmount: Yup.number()
-          .min(5000, "Amount must be at least 5000")
+          .min(10000, "Amount must be at least 10,000")
           .required("Amount is required"),
 
         mandateUpi: Yup.string().trim().required("UPI ID is required"),
