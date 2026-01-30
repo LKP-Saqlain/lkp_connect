@@ -11490,6 +11490,7 @@ export const expiryContestReward: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     renderCell: (params) => formatNumber(params.value),
   },
   {
@@ -11498,6 +11499,7 @@ export const expiryContestReward: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     renderCell: (params) => formatNumber(params.value),
   },
   {
@@ -11505,6 +11507,7 @@ export const expiryContestReward: GridColDef[] = [
     headerName: "Unique Clients",
     flex: 1,
     align: "center",
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
   },
   {
@@ -11513,6 +11516,7 @@ export const expiryContestReward: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
   },
 ];
 export const RHexpiryContestReward: GridColDef[] = [
@@ -11552,7 +11556,7 @@ export const todaysContestProgress: GridColDef[] = [
   {
     field: "day",
     headerName: "Day",
-    flex: 1,
+    flex: 0.8,
     align: "center",
     headerAlign: "center",
   },
@@ -11576,6 +11580,7 @@ export const todaysContestProgress: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     renderCell: (params) => formatNumber(params.value),
   },
   {
@@ -11584,6 +11589,7 @@ export const todaysContestProgress: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     renderCell: (params) => formatNumber(params.value),
   },
   {
@@ -11592,6 +11598,7 @@ export const todaysContestProgress: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "qualified",
@@ -11606,6 +11613,7 @@ export const todaysContestProgress: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
   },
 ];
 export const employeesContestProgress: GridColDef[] = [
@@ -11623,6 +11631,7 @@ export const employeesContestProgress: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     renderCell: (params) => formatNumber(params.value),
   },
   {
@@ -11631,6 +11640,7 @@ export const employeesContestProgress: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     renderCell: (params) => formatNumber(params.value),
   },
   {
@@ -11639,6 +11649,7 @@ export const employeesContestProgress: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "qualified",
@@ -11653,6 +11664,7 @@ export const employeesContestProgress: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    headerClassName: "header-wrap-custom",
   },
 ];
 

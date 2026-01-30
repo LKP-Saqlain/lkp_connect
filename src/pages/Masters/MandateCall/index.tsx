@@ -157,9 +157,9 @@ const MandateCall = () => {
 
   const HandleMandate = () => {
     let payload = {
-      clientcode: data?.clientcode,
+      clientcode: data?.cc,
       // user_id: user_id,
-      dpCode: data?.dpcode,
+      dpCode: data?.dpcd,
       dpid: data?.dpid,
       amount: amount,
       upiID: upiId,
