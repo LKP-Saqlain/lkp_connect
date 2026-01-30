@@ -21,7 +21,7 @@ import { employeesContestProgress } from "../../../helper/tableColumns";
 const Expiry = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user_id, zoneName, accessType } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.AuthUser?.data?.data
   );
   const [employeeData, setEmployeeData] = useState([]);
   const [zoneData, setZoneData] = useState([]);
@@ -173,7 +173,7 @@ const Expiry = () => {
                 </Row>
 
                 {/* Today's Contest Progress */}
-                <h6 className="card-title mb-3">Today’s Contest Progress</h6>
+                <h6 className="card-title mb-3">Zone Contest Progress</h6>
 
                 <DataTable
                   activeMenu={"todaysContestProgress"}

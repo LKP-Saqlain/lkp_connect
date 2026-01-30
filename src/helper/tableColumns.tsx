@@ -11554,6 +11554,13 @@ export const expiryContestCriteria: GridColDef[] = [
 ];
 export const todaysContestProgress: GridColDef[] = [
   {
+    field: "zone",
+    headerName: "Zone",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
     field: "day",
     headerName: "Day",
     flex: 0.8,
@@ -11576,7 +11583,7 @@ export const todaysContestProgress: GridColDef[] = [
   },
   {
     field: "noOfLots",
-    headerName: "Min No of Lots",
+    headerName: "No of Lots",
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11618,6 +11625,13 @@ export const todaysContestProgress: GridColDef[] = [
 ];
 export const employeesContestProgress: GridColDef[] = [
   {
+    field: "zone",
+    headerName: "Zone",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
     field: "empName",
     headerName: "Employee Name",
     flex: 2,
@@ -11627,7 +11641,7 @@ export const employeesContestProgress: GridColDef[] = [
   },
   {
     field: "noOfLots",
-    headerName: "Min No of Lots",
+    headerName: "No of Lots",
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11896,4 +11910,102 @@ export const MandateTab3Columns: GridColDef[] = [
   //     <span style={{ color: "green", fontWeight: 500 }}>Download</span>
   //   ),
   // },
+];
+
+export const contestSPIP: GridColDef[] = [
+  // {
+  //   field: "rmc",
+  //   headerName: "RM Code",
+  //   flex: 1,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   renderCell: (params) => params.value || "—",
+  // },
+  // {
+  //   field: "rmn",
+  //   headerName: "RM Name",
+  //   flex: 2,
+  //   headerClassName: "header-wrap-custom",
+  //   renderCell: (params) => params.value || "—",
+  // },
+  // {
+  //   field: "br",
+  //   headerName: "Branch",
+  //   flex: 0.8,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   headerClassName: "header-wrap-custom",
+  // },
+  // {
+  //   field: "brn",
+  //   headerName: "Branch Name",
+  //   flex: 2,
+  //   headerClassName: "header-wrap-custom",
+  // },
+  {
+    field: "cc",
+    headerName: "RA Code",
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "cn",
+    headerName: "Client Name",
+    flex: 1.8,
+    headerClassName: "header-wrap-custom",
+  },
+  // {
+  //   field: "my",
+  //   headerName: "Month",
+  //   flex: 0.9,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   headerClassName: "header-wrap-custom",
+  // },
+  {
+    field: "sid",
+    headerName: "Start Date",
+    flex: 1.2,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "eid",
+    headerName: "End Date",
+    flex: 1.2,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "prd",
+    headerName: "Payment Date",
+    flex: 1.3,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "sf",
+    headerName: "Subscription Fees",
+    flex: 1.3,
+    align: "right",
+    headerAlign: "right",
+    renderCell: (params) => formatNumber(params.value),
+    headerClassName: "header-wrap-custom",
+  },
 ];

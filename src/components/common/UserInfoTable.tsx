@@ -2533,6 +2533,10 @@ const DataTable = ({
       return TableColumns.MandateTab3Columns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "contestSPIP") {
+      return TableColumns.contestSPIP.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }

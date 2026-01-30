@@ -1175,4 +1175,11 @@ export const apiServices = {
       payload
     );
   },
+  GetSPIPContest: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetSPIPContest,
+      payload
+    );
+  },
 };

@@ -358,6 +358,8 @@ export const newDomainEndpoints = [
 
   endpoints.GetDealerExpiryDashBoardData,
   endpoints.GetZoneExpiryDashBoardData,
+
+  endpoints.GetSPIPContest,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
