@@ -203,26 +203,26 @@ const Expiry = () => {
                   </h6>
 
                   {/* Right-aligned button */}
-                  {employeeData.length > 0 && (
-                    <div style={{ marginLeft: "auto" }}>
-                      <Button
-                        sx={{
-                          textTransform: "none",
-                          backgroundColor: "#11395C",
-                          color: "#FFF",
-                          height: "28px",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px",
-                        }}
-                        onClick={() =>
-                          exportToExcel(employeeData, "Expiry_contest_report")
-                        }
-                      >
-                        Excel <DownloadIcon sx={{ fontSize: "1rem" }} />
-                      </Button>
-                    </div>
-                  )}
+                  {/* {employeeData.length > 0 && ( */}
+                  <div style={{ marginLeft: "auto" }}>
+                    <Button
+                      sx={{
+                        textTransform: "none",
+                        backgroundColor: "#11395C",
+                        color: "#FFF",
+                        height: "28px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                      }}
+                      onClick={() =>
+                        exportToExcel(employeeData, "Expiry_contest_report")
+                      }
+                    >
+                      Excel <DownloadIcon sx={{ fontSize: "1rem" }} />
+                    </Button>
+                  </div>
+                  {/* )} */}
                 </div>
 
                 <DataTable

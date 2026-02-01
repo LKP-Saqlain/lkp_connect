@@ -12004,7 +12004,7 @@ export const contestSPIP: GridColDef[] = [
     headerName: "Subscription Fees",
     flex: 1.3,
     align: "right",
-    headerAlign: "right",
+    headerAlign: "center",
     renderCell: (params) => formatNumber(params.value),
     headerClassName: "header-wrap-custom",
   },
