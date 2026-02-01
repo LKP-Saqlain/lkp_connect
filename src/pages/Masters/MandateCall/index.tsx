@@ -64,6 +64,8 @@ const MandateCall = () => {
       .GetDpClientDetails({ clientcode: encryptedCode })
       .then((response) => {
         if (response?.status === 200) {
+          console.log("GetDpClientDetailsResponse", response?.data?.data);
+
           setData(response.data.data);
         }
       })
@@ -301,8 +303,8 @@ const MandateCall = () => {
   const handleSendOtp = () => {
     const payload = {
       otp_type: "SendOtpSMS",
-      mobileNo: data?.mobileNo, //"9702497379", //data?.mobileNo,
-      User_id: data?.clientcode, // "5431",
+      mobileNo: data?.mn, //"9702497379", //data?.mobileNo,
+      User_id: data?.cc, // "5431",
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
@@ -342,8 +344,8 @@ const MandateCall = () => {
 
   const handleValidateOTP = (value: any) => {
     const payload = {
-      mobileNo: data?.mobileNo, // "9702497379",
-      User_id: data?.clientcode, // "5431",
+      mobileNo: data?.mn, // "9702497379",
+      User_id: data?.cc, // "5431",
       otp: otp.join(""),
     };
 
