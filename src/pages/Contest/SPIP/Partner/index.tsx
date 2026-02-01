@@ -16,6 +16,7 @@ const Index = ({ activeSubItem }: any) => {
   const onlyDigits = user_id.replace(/\D/g, "");
   const [tabValue, setTabValue] = useState<string>("Contest Rewards");
   const [data, setData] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
   const dispatch = useDispatch<AppDispatch>();
   // 🔹 Sync tab with activeSubItem (optional)
   useEffect(() => {
@@ -42,8 +43,8 @@ const Index = ({ activeSubItem }: any) => {
     apiServices
       .GetSPIPContest(payload)
       .then((response: any) => {
-        const rawData = response?.data?.data || {};
-
+        const rawData = response?.data?.data?.list || {};
+        setTotalAmount(response?.data?.data?.totalAmount);
         console.log("expiry Response:", rawData);
 
         const filteredData = (rawData || []).map(
@@ -152,6 +153,11 @@ const Index = ({ activeSubItem }: any) => {
             >
               <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <h4 className="card-title mb-0">SPIP Partner Contest</h4>
+                <div
+                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
+                >
+                  <span>Total: ₹{totalAmount.toLocaleString("en-IN")}</span>
+                </div>
               </div>
             </CardHeader>
             <CardBody>

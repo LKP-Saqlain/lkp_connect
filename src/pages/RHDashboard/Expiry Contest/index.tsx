@@ -26,6 +26,7 @@ const Expiry = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [zoneData, setZoneData] = useState([]);
   const [selectedZone, setSelectedZone] = useState<string>(zoneName);
+  const [lastDate, setLastDate] = useState("");
 
   useEffect(() => {
     handleExpiryData();
@@ -62,7 +63,8 @@ const Expiry = () => {
             ...item,
           })
         );
-
+        let lastUpdatedDate = zoneSummary[0]?.UpdatedOn;
+        setLastDate(lastUpdatedDate);
         setZoneData(zoneSummary);
         setEmployeeData(empWiseData);
       })
@@ -126,21 +128,24 @@ const Expiry = () => {
               >
                 <div className="d-flex align-items-center justify-content-between">
                   <h5 className="mb-0">Expiry Day Contest</h5>
-
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    sx={{
-                      textTransform: "none",
-                      borderRadius: "16px",
-                      fontSize: "0.8rem",
-                      padding: "2px 8px",
-                      color: "#11395C",
-                    }}
-                    onClick={handleExpiryData}
-                  >
-                    Refresh <RefreshIcon sx={{ fontSize: "1.1rem" }} />
-                  </Button>
+                  <div>
+                    <span>Last Updated on: {lastDate}</span>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      sx={{
+                        textTransform: "none",
+                        borderRadius: "16px",
+                        fontSize: "0.8rem",
+                        padding: "2px 8px",
+                        color: "#11395C",
+                        ml: 2,
+                      }}
+                      onClick={handleExpiryData}
+                    >
+                      Refresh <RefreshIcon sx={{ fontSize: "1.1rem" }} />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
 

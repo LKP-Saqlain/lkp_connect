@@ -12008,4 +12008,13 @@ export const contestSPIP: GridColDef[] = [
     renderCell: (params) => formatNumber(params.value),
     headerClassName: "header-wrap-custom",
   },
+  {
+    field: "dr",
+    headerName: "Duration Month",
+    flex: 1.3,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => formatNumber(params.value),
+    headerClassName: "header-wrap-custom",
+  },
 ];
