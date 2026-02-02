@@ -19,24 +19,18 @@ const getKeyAndIv = () => {
  */
 export const encryptAES = (plainText: string): string => {
   const { key, iv } = getKeyAndIv();
-
-  const normalized = CryptoJS.enc.Utf8.parse(plainText);
-
-  const encrypted = CryptoJS.AES.encrypt(normalized, key, {
+  const encrypted = CryptoJS.AES.encrypt(plainText, key, {
     iv,
     mode: CryptoJS.mode.CBC,
     padding: CryptoJS.pad.Pkcs7,
   });
-
-  return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+  return encrypted.ciphertext.toString(CryptoJS.enc.Base64); // Base64 output
 };
-
 /**
  * Decrypt AES-128-CBC encrypted Base64 string
  */
 export const decryptAES = (encryptedText: string): string => {
   const { key, iv } = getKeyAndIv();
-
   const decrypted = CryptoJS.AES.decrypt(
     { ciphertext: CryptoJS.enc.Base64.parse(encryptedText) } as any,
     key,
@@ -46,6 +40,5 @@ export const decryptAES = (encryptedText: string): string => {
       padding: CryptoJS.pad.Pkcs7,
     }
   );
-
-  return decrypted.toString(CryptoJS.enc.Utf8).replace(/\0/g, "").trim();
+  return decrypted.toString(CryptoJS.enc.Utf8);
 };
