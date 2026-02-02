@@ -272,6 +272,7 @@ const CustomModal = ({
           umn: values.umn,
           amount: values.mandateAmount,
           upi: values.mandateUpi,
+          customDisable: true,
         });
 
         setmodal_center(false);

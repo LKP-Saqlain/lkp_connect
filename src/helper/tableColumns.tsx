@@ -9203,17 +9203,30 @@ export const dpDebitMandateColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+  // {
+  //   field: "mandateStatus",
+  //   headerName: "Mandate Status",
+  //   flex: 1,
+  //   minWidth: 120,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
   {
     field: "amount",
     headerName: "Amount",
-
     flex: 0.8,
     minWidth: 100,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    // valueFormatter: (params: any) =>
-    //   params.value ? `₹ ${Number(params.value).toLocaleString("en-IN")}` : "",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
   },
   {
     field: "frequency",

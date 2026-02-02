@@ -93,7 +93,7 @@ const MandateCall = () => {
 
           if (Array.isArray(rawData)) {
             const formattedData = rawData.map((item: any, index: number) => ({
-              id: index + 1,
+              Id: index + 1,
               ...item,
             }));
             setMandateCallbackData(formattedData);
@@ -158,6 +158,15 @@ const MandateCall = () => {
   };
 
   const HandleMandate = () => {
+    console.log(
+      "MandateTableData",
+      mandateTableData,
+      mandateCallBackData[0]?.mandateStatus
+    );
+    if (mandateCallBackData[0]?.mandateStatus === "ACTIVE") {
+      ShowToast("error", "Previous Mandate is Already Active");
+      return;
+    }
     let payload = {
       clientcode: data?.cc,
       // user_id: user_id,
@@ -271,6 +280,7 @@ const MandateCall = () => {
         UMN: mandateTableData.umn,
       },
     };
+    console.log("Payload11", payload);
 
     dispatch(showLoader(""));
 
@@ -281,6 +291,9 @@ const MandateCall = () => {
           console.log("respinsesse", response?.data);
           if (response?.data?.statusCode === 200) {
             ShowToast("success", response?.data?.data?.statusDesc);
+            setIsRevokeModalOpen(false);
+            setShowOtpField(false);
+            setOtp(["", "", "", "", "", ""]);
           } else {
             ShowToast("error", response?.data?.data?.statusDesc);
           }
@@ -294,7 +307,7 @@ const MandateCall = () => {
   };
 
   const getUserDetails = (value: any) => {
-    console.log("values", value);
+    console.log("values1111", value);
     setAmount(value?.amount);
     setUpiId(value?.upi);
     setMandateTableData(value);
@@ -355,7 +368,7 @@ const MandateCall = () => {
       .ValidateOtpSms(payload)
       .then((response) => {
         dispatch(hideLoader());
-
+        console.log("ValidateOtpSmsResponse", response);
         if (response?.status !== 200) return;
 
         const { statusCode, message } = response.data;
@@ -574,6 +587,7 @@ const MandateCall = () => {
                         size="small"
                         label="Enter UPI ID"
                         fullWidth
+                        disabled={mandateTableData ? true : false}
                         value={upiId}
                         onChange={(e) => {
                           setUpiId(e.target.value);
