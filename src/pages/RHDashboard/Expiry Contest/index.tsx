@@ -26,6 +26,7 @@ const Expiry = () => {
   const [employeeData, setEmployeeData] = useState([]);
   const [zoneData, setZoneData] = useState([]);
   const [selectedZone, setSelectedZone] = useState<string>(zoneName);
+  const [lastDate, setLastDate] = useState("");
 
   useEffect(() => {
     handleExpiryData();
@@ -62,7 +63,8 @@ const Expiry = () => {
             ...item,
           })
         );
-
+        let lastUpdatedDate = zoneSummary[0]?.UpdatedOn;
+        setLastDate(lastUpdatedDate);
         setZoneData(zoneSummary);
         setEmployeeData(empWiseData);
       })
@@ -126,21 +128,24 @@ const Expiry = () => {
               >
                 <div className="d-flex align-items-center justify-content-between">
                   <h5 className="mb-0">Expiry Day Contest</h5>
-
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    sx={{
-                      textTransform: "none",
-                      borderRadius: "16px",
-                      fontSize: "0.8rem",
-                      padding: "2px 8px",
-                      color: "#11395C",
-                    }}
-                    onClick={handleExpiryData}
-                  >
-                    Refresh <RefreshIcon sx={{ fontSize: "1.1rem" }} />
-                  </Button>
+                  <div>
+                    <span>Last Updated on: {lastDate}</span>
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      sx={{
+                        textTransform: "none",
+                        borderRadius: "16px",
+                        fontSize: "0.8rem",
+                        padding: "2px 8px",
+                        color: "#11395C",
+                        ml: 2,
+                      }}
+                      onClick={handleExpiryData}
+                    >
+                      Refresh <RefreshIcon sx={{ fontSize: "1.1rem" }} />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
 
@@ -176,7 +181,7 @@ const Expiry = () => {
                 <h6 className="card-title mb-3">Zone Contest Progress</h6>
 
                 <DataTable
-                  activeMenu={"todaysContestProgress"}
+                  activeMenu={"RHtodaysContestProgress"}
                   T6Data={zoneData}
                   selectedWidget="Criteria and Rewards"
                   customHide={true}
@@ -203,26 +208,26 @@ const Expiry = () => {
                   </h6>
 
                   {/* Right-aligned button */}
-                  {employeeData.length > 0 && (
-                    <div style={{ marginLeft: "auto" }}>
-                      <Button
-                        sx={{
-                          textTransform: "none",
-                          backgroundColor: "#11395C",
-                          color: "#FFF",
-                          height: "28px",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px",
-                        }}
-                        onClick={() =>
-                          exportToExcel(employeeData, "Expiry_contest_report")
-                        }
-                      >
-                        Excel <DownloadIcon sx={{ fontSize: "1rem" }} />
-                      </Button>
-                    </div>
-                  )}
+                  {/* {employeeData.length > 0 && ( */}
+                  <div style={{ marginLeft: "auto" }}>
+                    <Button
+                      sx={{
+                        textTransform: "none",
+                        backgroundColor: "#11395C",
+                        color: "#FFF",
+                        height: "28px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                      }}
+                      onClick={() =>
+                        exportToExcel(employeeData, "Expiry_contest_report")
+                      }
+                    >
+                      Excel <DownloadIcon sx={{ fontSize: "1rem" }} />
+                    </Button>
+                  </div>
+                  {/* )} */}
                 </div>
 
                 <DataTable

@@ -11565,14 +11565,8 @@ export const expiryContestCriteria: GridColDef[] = [
     headerAlign: "center",
   },
 ];
+
 export const todaysContestProgress: GridColDef[] = [
-  {
-    field: "zone",
-    headerName: "Zone",
-    flex: 0.8,
-    align: "center",
-    headerAlign: "center",
-  },
   {
     field: "day",
     headerName: "Day",
@@ -11605,12 +11599,30 @@ export const todaysContestProgress: GridColDef[] = [
   },
   {
     field: "minBrokerage",
-    headerName: "Min Brokerage",
+    headerName: "Brokerage",
     flex: 1,
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
-    renderCell: (params) => formatNumber(params.value),
+    renderCell: (params) => {
+      const isQualified = params.row?.qualified === "YES";
+
+      return (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundColor: isQualified ? "#d4edda" : "transparent",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: isQualified ? 600 : 400,
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
   },
   {
     field: "uniqueClients",
@@ -11635,6 +11647,17 @@ export const todaysContestProgress: GridColDef[] = [
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
   },
+];
+
+export const RHtodaysContestProgress: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  ...todaysContestProgress,
 ];
 export const employeesContestProgress: GridColDef[] = [
   {
@@ -11663,7 +11686,7 @@ export const employeesContestProgress: GridColDef[] = [
   },
   {
     field: "minBrokerage",
-    headerName: "Min Brokerage",
+    headerName: "Brokerage",
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -12017,7 +12040,16 @@ export const contestSPIP: GridColDef[] = [
     headerName: "Subscription Fees",
     flex: 1.3,
     align: "right",
-    headerAlign: "right",
+    headerAlign: "center",
+    renderCell: (params) => formatNumber(params.value),
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "dr",
+    headerName: "Duration Month",
+    flex: 1.3,
+    align: "center",
+    headerAlign: "center",
     renderCell: (params) => formatNumber(params.value),
     headerClassName: "header-wrap-custom",
   },
