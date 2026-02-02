@@ -181,7 +181,7 @@ const Expiry = () => {
                 <h6 className="card-title mb-3">Zone Contest Progress</h6>
 
                 <DataTable
-                  activeMenu={"todaysContestProgress"}
+                  activeMenu={"RHtodaysContestProgress"}
                   T6Data={zoneData}
                   selectedWidget="Criteria and Rewards"
                   customHide={true}

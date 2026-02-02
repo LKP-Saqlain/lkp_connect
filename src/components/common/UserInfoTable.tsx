@@ -2513,6 +2513,10 @@ const DataTable = ({
       return TableColumns.todaysContestProgress.map((column) => ({
         ...column,
       }));
+    } else if (activeMenu === "RHtodaysContestProgress") {
+      return TableColumns.RHtodaysContestProgress.map((column) => ({
+        ...column,
+      }));
     } else if (activeMenu === "RHexpiryContestReward") {
       return TableColumns.RHexpiryContestReward.map((column) => ({
         ...column,
