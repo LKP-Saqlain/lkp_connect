@@ -388,6 +388,35 @@ const MandateCall = () => {
       });
   };
 
+  const handleRevokeModalToggle = () => {
+    setIsRevokeModalOpen(false);
+    setShowOtpField(false);
+    setOtp(["", "", "", "", "", ""]);
+  };
+
+  const handleOtpKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    if (e.key !== "Backspace") return;
+
+    setOtp((prev) => {
+      const newOtp = [...prev];
+      if (index === 0) {
+        return ["", "", "", "", "", ""];
+      }
+      if (newOtp[index]) {
+        newOtp[index] = "";
+        return newOtp;
+      }
+      newOtp[index - 1] = "";
+      setTimeout(() => {
+        document.getElementById(`otp-${index - 1}`)?.focus();
+      }, 0);
+      return newOtp;
+    });
+  };
+
   useEffect(() => {
     fetchMandateData();
   }, [fetchMandateData]);
@@ -433,11 +462,11 @@ const MandateCall = () => {
                 >
                   <Modal
                     isOpen={isRevokeModalOpen}
-                    toggle={() => setIsRevokeModalOpen(false)}
+                    toggle={handleRevokeModalToggle}
                     centered
                     style={{ maxWidth: "380px", margin: "auto" }}
                   >
-                    <ModalHeader toggle={() => setIsRevokeModalOpen(false)}>
+                    <ModalHeader toggle={handleRevokeModalToggle}>
                       Revoke Confirmation
                     </ModalHeader>
 
@@ -467,6 +496,7 @@ const MandateCall = () => {
                               onChange={(e) =>
                                 handleOtpChange(e.target.value, index)
                               }
+                              onKeyDown={(e) => handleOtpKeyDown(e, index)}
                               style={{
                                 width: "45px",
                                 height: "45px",
