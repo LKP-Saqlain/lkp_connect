@@ -1168,6 +1168,20 @@ export const apiServices = {
       payload
     );
   },
+  GetDealerExpiryHistDashBoardData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetDealerExpiryHistDashBoardData,
+      payload
+    );
+  },
+  GetZoneExpiryHistDashBoardData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetZoneExpiryHistDashBoardData,
+      payload
+    );
+  },
   GetZoneExpiryDashBoardData: async (payload: any) => {
     return await apiService(
       "POST",

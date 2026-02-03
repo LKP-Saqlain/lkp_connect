@@ -358,7 +358,9 @@ export const newDomainEndpoints = [
   endpoints.DPAMCDownloadFile,
 
   endpoints.GetDealerExpiryDashBoardData,
+  endpoints.GetDealerExpiryHistDashBoardData,
   endpoints.GetZoneExpiryDashBoardData,
+  endpoints.GetZoneExpiryHistDashBoardData,
 
   endpoints.GetSPIPContest,
 ];

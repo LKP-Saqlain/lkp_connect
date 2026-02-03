@@ -11672,6 +11672,76 @@ export const todaysContestProgress: GridColDef[] = [
     headerClassName: "header-wrap-custom",
   },
 ];
+export const expiryContestHistory: GridColDef[] = [
+  {
+    field: "day",
+    headerName: "Day",
+    disableColumnMenu: true,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "index",
+    headerName: "Index",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "instrument",
+    headerName: "Instrument",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "noOfLots",
+    headerName: "No of Lots",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "minBrokerage",
+    headerName: "Brokerage",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "uniqueClients",
+    headerName: "Unique Clients",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "qualified",
+    headerName: "Qualified",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "prize",
+    headerName: "Gift Voucher",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+  },
+];
 
 export const RHtodaysContestProgress: GridColDef[] = [
   {
