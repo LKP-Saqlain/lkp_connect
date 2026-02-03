@@ -244,7 +244,9 @@ const MandateCall = () => {
         action_type: "UPDATE",
         onBehalf_Of: "PAYEE",
         expiryTime: "180",
-        umn: mandateTableData?.umn,
+        umn: mandateTableData?.umn
+          ? mandateTableData?.umn
+          : mandateCallBackData[0]?.umn,
       },
     };
     console.log("Payload", payload);
@@ -327,7 +329,6 @@ const MandateCall = () => {
       .then((response) => {
         if (response?.status === 200) {
           console.log("Responsee1", response?.data);
-
           ShowToast("success", response?.data?.message);
           setShowOtpField(true);
         }
@@ -420,6 +421,10 @@ const MandateCall = () => {
   useEffect(() => {
     fetchMandateData();
   }, [fetchMandateData]);
+
+  useEffect(() => {
+    console.log("CallbackTableDetails", mandateCallBackData[0]?.umn);
+  }, [mandateCallBackData]);
 
   return (
     <React.Fragment>
