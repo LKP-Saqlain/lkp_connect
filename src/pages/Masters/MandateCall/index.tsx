@@ -246,7 +246,7 @@ const MandateCall = () => {
         expiryTime: "180",
         umn: mandateTableData?.umn
           ? mandateTableData?.umn
-          : mandateCallBackData[0]?.umn,
+          : mandateCallBackData && mandateCallBackData[0]?.umn,
       },
     };
     console.log("Payload", payload);
@@ -421,10 +421,6 @@ const MandateCall = () => {
   useEffect(() => {
     fetchMandateData();
   }, [fetchMandateData]);
-
-  useEffect(() => {
-    console.log("CallbackTableDetails", mandateCallBackData[0]?.umn);
-  }, [mandateCallBackData]);
 
   return (
     <React.Fragment>
