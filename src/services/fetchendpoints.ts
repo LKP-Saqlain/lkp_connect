@@ -187,6 +187,7 @@ export const newDomainEndpoints = [
   endpoints.SendSecondHolderSignature,
   endpoints.SendThirdHolderSignature,
   endpoints.SendFinalSignedMail,
+  endpoints.DownloadSignedPdf,
 
   // Employeee contest
   endpoints.GetEmpContestAchievedBrokerage,

@@ -11500,6 +11500,7 @@ export const expiryContestReward: GridColDef[] = [
   {
     field: "noOfLots",
     headerName: "Min No of Lots",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11509,6 +11510,7 @@ export const expiryContestReward: GridColDef[] = [
   {
     field: "minBrok",
     headerName: "Min Brokerage",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11518,6 +11520,7 @@ export const expiryContestReward: GridColDef[] = [
   {
     field: "uniqueClients",
     headerName: "Unique Clients",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerClassName: "header-wrap-custom",
@@ -11526,6 +11529,7 @@ export const expiryContestReward: GridColDef[] = [
   {
     field: "giftVoucher",
     headerName: "Gift Voucher",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11539,6 +11543,7 @@ export const RHexpiryContestReward: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   ...expiryContestReward,
 ];
@@ -11549,6 +11554,7 @@ export const expiryContestCriteria: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "inde",
@@ -11556,6 +11562,7 @@ export const expiryContestCriteria: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "Instumen",
@@ -11563,6 +11570,7 @@ export const expiryContestCriteria: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
 ];
 
@@ -11570,6 +11578,7 @@ export const todaysContestProgress: GridColDef[] = [
   {
     field: "day",
     headerName: "Day",
+    disableColumnMenu: true,
     flex: 0.8,
     align: "center",
     headerAlign: "center",
@@ -11577,6 +11586,7 @@ export const todaysContestProgress: GridColDef[] = [
   {
     field: "index",
     headerName: "Index",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11584,6 +11594,7 @@ export const todaysContestProgress: GridColDef[] = [
   {
     field: "instrument",
     headerName: "Instrument",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11591,6 +11602,7 @@ export const todaysContestProgress: GridColDef[] = [
   {
     field: "noOfLots",
     headerName: "No of Lots",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11600,6 +11612,7 @@ export const todaysContestProgress: GridColDef[] = [
   {
     field: "minBrokerage",
     headerName: "Brokerage",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11627,6 +11640,7 @@ export const todaysContestProgress: GridColDef[] = [
   {
     field: "uniqueClients",
     headerName: "Unique Clients",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11635,6 +11649,7 @@ export const todaysContestProgress: GridColDef[] = [
   {
     field: "qualified",
     headerName: "Qualified",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11642,6 +11657,7 @@ export const todaysContestProgress: GridColDef[] = [
   {
     field: "prize",
     headerName: "Gift Voucher",
+    disableColumnMenu: true,
     flex: 1,
     align: "center",
     headerAlign: "center",
@@ -11656,6 +11672,7 @@ export const RHtodaysContestProgress: GridColDef[] = [
     flex: 0.8,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   ...todaysContestProgress,
 ];
@@ -11665,6 +11682,7 @@ export const employeesContestProgress: GridColDef[] = [
     headerName: "Zone",
     flex: 0.8,
     align: "center",
+    disableColumnMenu: true,
     headerAlign: "center",
   },
   {
@@ -11673,6 +11691,7 @@ export const employeesContestProgress: GridColDef[] = [
     flex: 2,
     minWidth: 180,
     align: "left",
+    disableColumnMenu: true,
     headerAlign: "center",
   },
   {
@@ -11680,6 +11699,7 @@ export const employeesContestProgress: GridColDef[] = [
     headerName: "No of Lots",
     flex: 1,
     align: "center",
+    disableColumnMenu: true,
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params) => formatNumber(params.value),
@@ -11689,6 +11709,7 @@ export const employeesContestProgress: GridColDef[] = [
     headerName: "Brokerage",
     flex: 1,
     align: "center",
+    disableColumnMenu: true,
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params) => formatNumber(params.value),
@@ -11698,6 +11719,7 @@ export const employeesContestProgress: GridColDef[] = [
     headerName: "Unique Clients",
     flex: 1,
     align: "center",
+    disableColumnMenu: true,
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
   },
@@ -11706,6 +11728,7 @@ export const employeesContestProgress: GridColDef[] = [
     headerName: "Qualified",
     flex: 1,
     align: "center",
+    disableColumnMenu: true,
     headerAlign: "center",
   },
   {
@@ -11713,6 +11736,7 @@ export const employeesContestProgress: GridColDef[] = [
     headerName: "Gift Voucher",
     flex: 1,
     align: "center",
+    disableColumnMenu: true,
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
   },
@@ -11885,12 +11909,14 @@ export const MandateTab3Columns: GridColDef[] = [
     headerName: "Client Code",
     minWidth: 120,
     flex: 1,
+    disableColumnMenu: true,
   },
   {
     field: "clientName",
     headerName: "Client Name",
     minWidth: 200,
     flex: 1.5,
+    disableColumnMenu: true,
   },
   {
     field: "dpCode",
@@ -11898,6 +11924,7 @@ export const MandateTab3Columns: GridColDef[] = [
     minWidth: 200,
     flex: 1.5,
     align: "center",
+    disableColumnMenu: true,
   },
   {
     field: "amount",
@@ -11914,6 +11941,7 @@ export const MandateTab3Columns: GridColDef[] = [
         maximumFractionDigits: 2,
       }).format(value);
     },
+    disableColumnMenu: true,
   },
   {
     field: "CreatedOn",
@@ -11926,6 +11954,7 @@ export const MandateTab3Columns: GridColDef[] = [
     },
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "custRefno",
@@ -11934,6 +11963,7 @@ export const MandateTab3Columns: GridColDef[] = [
     flex: 1.3,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   // {
   //   field: "receipt",
@@ -11984,12 +12014,14 @@ export const contestSPIP: GridColDef[] = [
     headerName: "RA Code",
     flex: 1,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
   },
   {
     field: "cn",
     headerName: "Client Name",
-    flex: 1.8,
+    flex: 1.6,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
   },
   // {
   //   field: "my",
@@ -12010,6 +12042,7 @@ export const contestSPIP: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "eid",
@@ -12022,6 +12055,7 @@ export const contestSPIP: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "prd",
@@ -12034,23 +12068,26 @@ export const contestSPIP: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "sf",
-    headerName: "Subscription Fees",
-    flex: 1.3,
+    headerName: "Subscription Fees (Excl. GST)",
+    flex: 1,
     align: "right",
     headerAlign: "center",
     renderCell: (params) => formatNumber(params.value),
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
   },
   {
     field: "dr",
     headerName: "Duration Month",
-    flex: 1.3,
+    flex: 1,
     align: "center",
     headerAlign: "center",
     renderCell: (params) => formatNumber(params.value),
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
   },
 ];
