@@ -25,7 +25,7 @@ const Expiry = () => {
     handleExpiryData();
     const intervalId = setInterval(() => {
       handleExpiryData();
-    }, 15 * 60 * 1000);
+    }, 10 * 60 * 1000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -33,6 +33,7 @@ const Expiry = () => {
   const handleExpiryData = () => {
     const payload = {
       user_id: user_id,
+      // user_id: "EMP-5299",
     };
     dispatch(showLoader("Fetching Client Code..."));
     apiServices
@@ -77,22 +78,44 @@ const Expiry = () => {
               >
                 <div className="d-flex align-items-center justify-content-between">
                   <h5 className="mb-0">Expiry Day Contest</h5>
-                  <div>
-                    <span>Last Updated on: {lastDate}</span>
+                  <div className="d-flex align-items-center">
+                    <div
+                      style={{
+                        marginTop: "8px",
+                        padding: "8px 12px",
+                        // backgroundColor: "#f8f9fa",
+                        // borderLeft: "4px solid #dc3545",
+                        borderRadius: "4px",
+                        fontSize: "1rem",
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      Last updated on: <strong>{lastDate}</strong>.
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: "0.65rem",
+                          color: "#dc3545",
+                          marginTop: "2px",
+                        }}
+                      >
+                        Data is refreshed every 10 minutes during market hours.
+                      </span>
+                    </div>
                     <Button
                       size="small"
                       variant="outlined"
                       sx={{
                         textTransform: "none",
                         borderRadius: "16px",
-                        fontSize: "0.8rem",
+                        fontSize: "1rem",
                         padding: "2px 8px",
                         color: "#11395C",
                         ml: 2,
                       }}
                       onClick={handleExpiryData}
                     >
-                      Refresh <RefreshIcon sx={{ fontSize: "1.1rem" }} />
+                      Refresh <RefreshIcon sx={{ fontSize: "1rem" }} />
                     </Button>
                   </div>
                 </div>
@@ -127,14 +150,29 @@ const Expiry = () => {
                 </Row>
 
                 {/* Today's Contest Progress */}
-                <h6 className="card-title mb-3">Today’s Contest Progress</h6>
-
-                <DataTable
+                <h6 className="card-title mb-3">
+                  Today’s Contest Progress
+                  <button>View History</button>
+                </h6>
+                {data.length > 0 ? (
+                  <DataTable
+                    activeMenu={"todaysContestProgress"}
+                    T6Data={data}
+                    selectedWidget="Criteria and Rewards"
+                    customHide={true}
+                  />
+                ) : (
+                  <span>
+                    There’s no expiry today. You can explore previous expiry
+                    contest details in the Historical tab.
+                  </span>
+                )}
+                {/* <DataTable
                   activeMenu={"todaysContestProgress"}
                   T6Data={data}
                   selectedWidget="Criteria and Rewards"
                   customHide={true}
-                />
+                /> */}
               </CardBody>
             </Card>
           </Col>

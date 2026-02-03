@@ -201,7 +201,7 @@ const AmcReport = ({ activeSubItem }: any) => {
                   color: activeBranch === "direct" ? "#ffffff" : "#11395C",
                   border: "1px solid #11395C",
                   minWidth: "80px",
-                  fontSize: "10px",
+                  fontSize: "14px",
                   borderRadius: "6px",
                 }}
               >
@@ -217,7 +217,7 @@ const AmcReport = ({ activeSubItem }: any) => {
                   color: activeBranch === "indirect" ? "#ffffff" : "#F57C00",
                   border: "1px solid #F57C00",
                   minWidth: "80px",
-                  fontSize: "10px",
+                  fontSize: "14px",
                   borderRadius: "6px",
                 }}
               >

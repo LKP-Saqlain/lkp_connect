@@ -11598,7 +11598,19 @@ export const todaysContestProgress: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
-    renderCell: (params) => formatNumber(params.value),
+    renderCell: (params) => {
+      const isQualified = params.row?.noOfLots >= 500;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
   },
   {
     field: "minBrokerage",
@@ -11609,18 +11621,11 @@ export const todaysContestProgress: GridColDef[] = [
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params) => {
-      const isQualified = params.row?.qualified === "YES";
-
+      const isQualified = params.row?.minBrokerage >= 50000;
       return (
         <div
           style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: isQualified ? "#d4edda" : "transparent",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontWeight: isQualified ? 600 : 400,
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
           }}
         >
           {formatNumber(params.value)}
@@ -11636,6 +11641,18 @@ export const todaysContestProgress: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.uniqueClients >= 20;
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
   },
   {
     field: "qualified",
@@ -11693,7 +11710,19 @@ export const employeesContestProgress: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
-    renderCell: (params) => formatNumber(params.value),
+    renderCell: (params) => {
+      const isQualified = params.row?.noOfLots >= 100;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
   },
   {
     field: "minBrokerage",
@@ -11703,7 +11732,19 @@ export const employeesContestProgress: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
-    renderCell: (params) => formatNumber(params.value),
+    renderCell: (params) => {
+      const isQualified = params.row?.minBrokerage >= 5000;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
   },
   {
     field: "uniqueClients",
@@ -11713,6 +11754,25 @@ export const employeesContestProgress: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.uniqueClients >= 5;
+
+      return (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: isQualified ? 600 : 400,
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
   },
   {
     field: "qualified",

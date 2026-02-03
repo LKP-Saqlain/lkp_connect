@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Tabs, Tab } from "@mui/material";
 import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 import contestReward from "../../../../assets/images/SPIP employees.svg";
@@ -7,6 +7,7 @@ import { apiServices } from "../../../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { DateRangePicker } from "rsuite";
 
 const EmployeeSPIP = ({ activeSubItem }: any) => {
   const partnerContestTabs = ["Contest Rewards", "Details"];
@@ -15,10 +16,16 @@ const EmployeeSPIP = ({ activeSubItem }: any) => {
   );
   const onlyDigits = user_id.replace(/\D/g, "");
   const [tabValue, setTabValue] = useState<string>("Contest Rewards");
+  const [rawData, setRawData] = useState([]);
   const [data, setData] = useState([]);
-  const [totalAmount, setTotalAmount] = useState(0);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
   const dispatch = useDispatch<AppDispatch>();
-  // 🔹 Sync tab with activeSubItem (optional)
+  const [apiTotalAmount, setApiTotalAmount] = useState<number>(0);
+
+  const [selectedDateRange, setSelectedDateRange] = useState<
+    [Date | null, Date | null]
+  >([null, null]);
+
   useEffect(() => {
     if (activeSubItem && partnerContestTabs.includes(activeSubItem)) {
       setTabValue(activeSubItem);
@@ -39,24 +46,23 @@ const EmployeeSPIP = ({ activeSubItem }: any) => {
       userId: onlyDigits,
       quarterPeriod: "Q4",
     };
-    dispatch(showLoader("Fetching Client Code..."));
+    dispatch(showLoader("Fetching SPIP Data..."));
     apiServices
       .GetSPIPContest(payload)
       .then((response: any) => {
-        const rawData = response?.data?.data?.list || {};
-        setTotalAmount(response?.data?.data?.totalAmount);
-        console.log("expiry Response:", rawData);
+        const list = response?.data?.data?.list || [];
+        const apiTotal = response?.data?.data?.totalAmount || 0;
 
-        const filteredData = (rawData || []).map(
-          (item: any, index: number) => ({
-            id: index + 1,
-            ...item,
-          })
-        );
+        const mappedData = list.map((item: any, index: number) => ({
+          id: index + 1,
+          ...item,
+        }));
 
-        setData(filteredData);
+        setRawData(mappedData);
+        setData(mappedData);
+        setApiTotalAmount(apiTotal);
+        setTotalAmount(apiTotal);
       })
-
       .catch((error: any) => {
         console.error("PhysicalClientInfo Error:", error);
       })
@@ -64,6 +70,46 @@ const EmployeeSPIP = ({ activeSubItem }: any) => {
         dispatch(hideLoader());
       });
   };
+
+  /* -------------------- Date filtering (prd) -------------------- */
+  const filteredData = useMemo(() => {
+    if (!selectedDateRange[0] || !selectedDateRange[1]) {
+      return rawData;
+    }
+
+    const [startDate, endDate] = selectedDateRange;
+
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(endDate);
+    end.setHours(23, 59, 59, 999);
+
+    return rawData.filter((item: any) => {
+      if (!item.prd) return false;
+      const prdDate = new Date(item.prd);
+      return prdDate >= start && prdDate <= end;
+    });
+  }, [rawData, selectedDateRange]);
+
+  /* -------------------- Update table + total -------------------- */
+  useEffect(() => {
+    setData(filteredData);
+
+    if (!selectedDateRange[0] || !selectedDateRange[1]) {
+      setTotalAmount(apiTotalAmount);
+      return;
+    }
+
+    const total = filteredData.reduce(
+      (sum, item: any) => sum + (Number(item.sf) || 0),
+      0
+    );
+
+    setTotalAmount(total);
+  }, [filteredData]);
+
+  /* ============================================================= */
 
   return (
     <div className="page-content page-view">
@@ -152,11 +198,32 @@ const EmployeeSPIP = ({ activeSubItem }: any) => {
               }}
             >
               <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <h4 className="card-title mb-0">SPIP Employee Contest</h4>
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
-                >
-                  <span>Total: ₹{totalAmount.toLocaleString("en-IN")}</span>
+                <h5 className="mb-0">SPIP Employee Contest</h5>
+
+                <div style={{ gap: "10px" }}>
+                  <DateRangePicker
+                    size="md"
+                    value={
+                      selectedDateRange[0] && selectedDateRange[1]
+                        ? ([selectedDateRange[0], selectedDateRange[1]] as [
+                            Date,
+                            Date
+                          ])
+                        : undefined
+                    }
+                    onChange={(value) =>
+                      setSelectedDateRange(value ?? [null, null])
+                    }
+                    placeholder="Start Date & End Date"
+                    showOneCalendar
+                    shouldDisableDate={(date) => date > new Date()}
+                    style={{ paddingRight: "1rem" }}
+                  />
+
+                  <span style={{ paddingLeft: 2 }}>
+                    <strong>Total:</strong> ₹
+                    {totalAmount.toLocaleString("en-IN")}
+                  </span>
                 </div>
               </div>
             </CardHeader>

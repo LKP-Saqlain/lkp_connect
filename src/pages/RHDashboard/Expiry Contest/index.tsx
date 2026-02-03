@@ -32,7 +32,7 @@ const Expiry = () => {
     handleExpiryData();
     const intervalId = setInterval(() => {
       handleExpiryData();
-    }, 15 * 60 * 1000);
+    }, 10 * 60 * 1000);
 
     return () => clearInterval(intervalId);
   }, [selectedZone]);
@@ -110,6 +110,7 @@ const Expiry = () => {
             <ComDropDown onZoneChange={handleZoneChange} />
           </Card>
         )}
+
         <Row className="row-font">
           <Col lg={12}>
             <Card
@@ -128,22 +129,45 @@ const Expiry = () => {
               >
                 <div className="d-flex align-items-center justify-content-between">
                   <h5 className="mb-0">Expiry Day Contest</h5>
-                  <div>
-                    <span>Last Updated on: {lastDate}</span>
+                  <div className="d-flex align-items-center">
+                    <div
+                      style={{
+                        padding: "8px 12px",
+                        // backgroundColor: "#f8f9fa",
+                        // borderLeft: "4px solid #dc3545",
+                        borderRadius: "4px",
+                        fontSize: "1rem",
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      Last updated on: <strong>{lastDate}</strong>.
+                      <span
+                        style={{
+                          display: "block",
+                          fontSize: "0.65rem",
+                          color: "#dc3545",
+                          marginTop: "2px",
+                        }}
+                      >
+                        {
+                          "( Data is refreshed every 10 minutes during market hours. )"
+                        }
+                      </span>
+                    </div>
                     <Button
                       size="small"
                       variant="outlined"
                       sx={{
                         textTransform: "none",
                         borderRadius: "16px",
-                        fontSize: "0.8rem",
+                        fontSize: "1rem",
                         padding: "2px 8px",
                         color: "#11395C",
                         ml: 2,
                       }}
                       onClick={handleExpiryData}
                     >
-                      Refresh <RefreshIcon sx={{ fontSize: "1.1rem" }} />
+                      Refresh <RefreshIcon sx={{ fontSize: "1rem" }} />
                     </Button>
                   </div>
                 </div>
