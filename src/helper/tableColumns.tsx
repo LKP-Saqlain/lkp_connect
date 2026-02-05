@@ -9610,6 +9610,23 @@ export const AmcNonLifeMembership: GridColDef[] = [
     },
   },
   ...AmcLifeMembership,
+  {
+    field: "hval",
+    headerName: "Holding Value",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
+  },
 ];
 
 export const AmcContest: GridColDef[] = [
