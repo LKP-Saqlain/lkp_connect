@@ -2529,6 +2529,10 @@ const DataTable = ({
       return TableColumns.employeesContestProgress.map((column) => ({
         ...column,
       }));
+    } else if (activeMenu === "employeesContestHistory") {
+      return TableColumns.employeesContestHistory.map((column) => ({
+        ...column,
+      }));
     } else if (activeSubItem === "DP AutoPay Report") {
       return TableColumns.ClientMandateColumns.map((column) => ({
         ...column,
@@ -2726,7 +2730,9 @@ const DataTable = ({
               ? "auto"
               : "72vh",
 
-          // height: `${calculatedHeight}px`,
+          maxHeight:
+            selectedWidget === "Criteria and Rewards" ? "52vh" : "none",
+
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",
