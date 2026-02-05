@@ -55,7 +55,7 @@ const Details = () => {
     const payload = {
       user_id: user_id,
       //   user_id: "EMP-5299",
-      month: "jan-26",
+      month: "ALL",
     };
     dispatch(showLoader("Fetching Client Code..."));
     apiServices

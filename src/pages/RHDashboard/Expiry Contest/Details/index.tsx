@@ -18,12 +18,12 @@ import { employeesContestProgress } from "../../../../helper/tableColumns";
 const Details = () => {
   const dispatch = useDispatch<AppDispatch>();
 
-  const { user_id, zoneName, accessType } = useSelector(
+  const { user_id, accessCode, accessType } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
   );
 
   const [view, setView] = useState<"TODAY" | "HISTORY">("TODAY");
-  const [selectedZone, setSelectedZone] = useState(zoneName);
+  const [selectedZone, setSelectedZone] = useState(accessCode);
   const [lastDate, setLastDate] = useState("");
 
   const [zoneData, setZoneData] = useState<any[]>([]);
@@ -46,8 +46,9 @@ const Details = () => {
   const fetchToday = () => {
     const payload = {
       user_id,
-      zone: selectedZone,
+      zone: accessType === "ALL" ? selectedZone : accessCode,
     };
+    console.log(payload, accessCode, accessType, "redux");
 
     dispatch(showLoader("Fetching data..."));
 

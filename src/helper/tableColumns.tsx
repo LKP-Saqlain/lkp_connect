@@ -11525,6 +11525,20 @@ export const expiryContestReward: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
   },
 ];
 export const RHexpiryContestReward: GridColDef[] = [
@@ -11670,6 +11684,20 @@ export const todaysContestProgress: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
   },
 ];
 export const expiryContestHistory: GridColDef[] = [
@@ -11759,6 +11787,20 @@ export const expiryContestHistory: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
   },
 ];
 
@@ -11890,6 +11932,20 @@ export const employeesContestProgress: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
   },
 ];
 
