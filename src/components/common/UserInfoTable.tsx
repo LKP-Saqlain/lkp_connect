@@ -92,6 +92,7 @@ interface SelectedWidgetProps {
   handleMTFRow?: (row: any) => void;
   openNudgeTable?: () => void;
   selectedTab?: any;
+  handleDownloadExcel?: () => void;
 }
 
 const DataTable = ({
@@ -146,6 +147,7 @@ const DataTable = ({
   handleMTFRow,
   openNudgeTable,
   selectedTab,
+  handleDownloadExcel,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -2715,6 +2717,7 @@ const DataTable = ({
           totalLedgerDebitAmt={totalLedgerDebitAmt}
           activeSubItem={activeSubItem}
           dormantCount={dormantCount}
+          handleDownloadExcel={handleDownloadExcel}
         />
       )}
       <Paper
