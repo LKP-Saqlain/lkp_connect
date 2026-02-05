@@ -78,8 +78,8 @@ const Details = () => {
   const fetchHistory = () => {
     const payload = {
       user_id,
-      zone: selectedZone,
-      month: "jan-26",
+      zone: accessType === "ALL" ? selectedZone : accessCode,
+      month: "ALL",
     };
 
     dispatch(showLoader("Fetching history..."));
@@ -223,7 +223,12 @@ const Details = () => {
           </div>
 
           <DataTable
-            activeMenu="employeesContestProgress"
+            activeMenu={
+              view === "TODAY"
+                ? "employeesContestProgress"
+                : "employeesContestHistory"
+            }
+            // activeMenu="employeesContestProgress" employeesContestHistory
             T6Data={employeeData}
             customHide
           />

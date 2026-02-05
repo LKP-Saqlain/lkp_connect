@@ -11838,7 +11838,7 @@ export const employeesContestProgress: GridColDef[] = [
   {
     field: "empName",
     headerName: "Employee Name",
-    flex: 2,
+    flex: 1.8,
     minWidth: 180,
     align: "left",
     disableColumnMenu: true,
@@ -11947,6 +11947,28 @@ export const employeesContestProgress: GridColDef[] = [
       return value;
     },
   },
+];
+export const employeesContestHistory: GridColDef[] = [
+  {
+    field: "ExpiryDate",
+    headerName: "Expiry Date",
+    flex: 1,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    renderCell: (params) => {
+      if (!params.value) return ""; // safety check
+      const date = new Date(params.value);
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
+  },
+  ...employeesContestProgress,
 ];
 
 export const ClientMandateColumns: GridColDef[] = [
