@@ -11674,6 +11674,25 @@ export const todaysContestProgress: GridColDef[] = [
 ];
 export const expiryContestHistory: GridColDef[] = [
   {
+    field: "ExpiryDate",
+    headerName: "Expiry Date",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => {
+      if (!params.value) return ""; // safety check
+      const date = new Date(params.value);
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
+  },
+  {
     field: "day",
     headerName: "Day",
     disableColumnMenu: true,
@@ -11719,7 +11738,7 @@ export const expiryContestHistory: GridColDef[] = [
     field: "uniqueClients",
     headerName: "Unique Clients",
     disableColumnMenu: true,
-    flex: 1,
+    flex: 0.8,
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
@@ -11743,6 +11762,17 @@ export const expiryContestHistory: GridColDef[] = [
   },
 ];
 
+export const RHexpiryContestHistory: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  ...expiryContestHistory,
+];
 export const RHtodaysContestProgress: GridColDef[] = [
   {
     field: "zone",

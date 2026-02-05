@@ -2545,6 +2545,10 @@ const DataTable = ({
       return TableColumns.contestSPIP.map((column) => ({
         ...column,
       }));
+    } else if (activeMenu === "RHexpiryContestHistory") {
+      return TableColumns.RHexpiryContestHistory.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }

@@ -1,270 +1,92 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { Tabs, Tab } from "@mui/material";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
-import { RootState, AppDispatch } from "../../../redux/store";
-import { apiServices } from "../../../services";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import DownloadIcon from "@mui/icons-material/Download";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
 
 import DataTable from "../../../components/common/UserInfoTable";
 import {
   expiryContestCriteriaRows,
   RHexpiryContestRewardRows,
 } from "../../../helper/commmon";
-import ComDropDown from "../../../components/common/Dropdown/commonDropdown";
-import { Button } from "@mui/material";
-import { employeesContestProgress } from "../../../helper/tableColumns";
+import Details from "./Details";
 
 const Expiry = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { user_id, zoneName, accessType } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data
-  );
-  const [employeeData, setEmployeeData] = useState([]);
-  const [zoneData, setZoneData] = useState([]);
-  const [selectedZone, setSelectedZone] = useState<string>(zoneName);
-  const [lastDate, setLastDate] = useState("");
-
-  useEffect(() => {
-    handleExpiryData();
-    const intervalId = setInterval(() => {
-      handleExpiryData();
-    }, 10 * 60 * 1000);
-
-    return () => clearInterval(intervalId);
-  }, [selectedZone]);
-
-  const handleExpiryData = () => {
-    const payload = {
-      user_id: user_id,
-      zone: selectedZone ?? zoneName,
-    };
-    dispatch(showLoader("Fetching Client Code..."));
-    apiServices
-      .GetZoneExpiryDashBoardData(payload)
-      .then((response: any) => {
-        const rawData = response?.data?.data || {};
-
-        console.log("expiry Response:", rawData);
-
-        const zoneSummary = (rawData.zoneSummary || []).map(
-          (item: any, index: number) => ({
-            id: index + 1,
-            ...item,
-          })
-        );
-
-        const empWiseData = (rawData.empWiseData || []).map(
-          (item: any, index: number) => ({
-            id: index + 1,
-            ...item,
-          })
-        );
-        let lastUpdatedDate = zoneSummary[0]?.UpdatedOn;
-        setLastDate(lastUpdatedDate);
-        setZoneData(zoneSummary);
-        setEmployeeData(empWiseData);
-      })
-
-      .catch((error: any) => {
-        console.error("PhysicalClientInfo Error:", error);
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
-  };
-
-  const exportToExcel = (data: any[], fileName: string) => {
-    const orderedData = data.map((row) => {
-      const orderedRow: any = {};
-      employeesContestProgress.forEach((col: any) => {
-        orderedRow[col.headerName as string] = row[col.field as string];
-      });
-      return orderedRow;
-    });
-
-    const worksheet = XLSX.utils.json_to_sheet(orderedData);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Employee Report");
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
-    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-    saveAs(blob, `${fileName}.xlsx`);
-  };
-
-  const handleZoneChange = (zone: any) => {
-    console.log("Selected zone:", zone);
-    setSelectedZone(zone?.value || "all"); // update selected zone value here
-  };
+  const tabs = ["Contest Criteria & Rewards", "Details"];
+  const [tabValue, setTabValue] = useState(tabs[0]);
 
   return (
     <div className="page-content page-view">
-      <div className="container-fluid">
-        {accessType === "ALL" && (
-          <Card style={{ marginTop: "2rem", padding: "1rem" }}>
-            <ComDropDown onZoneChange={handleZoneChange} />
-          </Card>
-        )}
+      <Tabs
+        value={tabValue}
+        onChange={(_, value) => setTabValue(value)}
+        TabIndicatorProps={{ style: { display: "none" } }}
+        sx={{
+          mb: 1,
+          backgroundColor: "#fff",
+          borderRadius: "11px",
+          width: "fit-content",
+        }}
+      >
+        {tabs.map((label) => (
+          <Tab
+            key={label}
+            value={label}
+            label={label}
+            sx={{
+              textTransform: "none",
+              px: 3,
+              borderRadius: "10px",
+              backgroundColor: tabValue === label ? "#11395C" : "#fff",
+              color: tabValue === label ? "#fff" : "#11395C",
+              "&.Mui-selected": { color: "#fff" },
+            }}
+          />
+        ))}
+      </Tabs>
 
-        <Row className="row-font">
-          <Col lg={12}>
-            <Card
-              style={{
-                minHeight: "80vh",
-                borderRadius: "15px",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-              }}
-            >
-              <CardHeader
-                style={{
-                  borderRadius: "15px 15px 0 0",
-                  backgroundColor: "#fff",
-                  padding: "0.6rem 1rem",
-                }}
-              >
-                <div className="d-flex align-items-center justify-content-between">
-                  <h5 className="mb-0">Expiry Day Contest</h5>
-                  <div className="d-flex align-items-center">
-                    <div
-                      style={{
-                        padding: "8px 12px",
-                        // backgroundColor: "#f8f9fa",
-                        // borderLeft: "4px solid #dc3545",
-                        borderRadius: "4px",
-                        fontSize: "1rem",
-                        lineHeight: 1.4,
-                      }}
-                    >
-                      Last updated on: <strong>{lastDate}</strong>.
-                      <span
-                        style={{
-                          display: "block",
-                          fontSize: "0.65rem",
-                          color: "#dc3545",
-                          marginTop: "2px",
-                        }}
-                      >
-                        {
-                          "( Data is refreshed every 10 minutes during market hours. )"
-                        }
-                      </span>
-                    </div>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      sx={{
-                        textTransform: "none",
-                        borderRadius: "16px",
-                        fontSize: "1rem",
-                        padding: "2px 8px",
-                        color: "#11395C",
-                        ml: 2,
-                      }}
-                      onClick={handleExpiryData}
-                    >
-                      Refresh <RefreshIcon sx={{ fontSize: "1rem" }} />
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
+      <Row>
+        <Col lg={12}>
+          <Card
+            style={{
+              minHeight: "80vh",
+              borderRadius: "15px",
+              boxShadow: "0 4px 12px rgba(0,0,0,.2)",
+            }}
+          >
+            <CardHeader className="bg-white">
+              <h5 className="mb-0">
+                {tabValue === tabs[0]
+                  ? "Expiry Day Contest Criteria & Rewards"
+                  : "Expiry Day Contest Details"}
+              </h5>
+            </CardHeader>
 
-              <CardBody>
-                {/* Contest Criteria & Rewards */}
-                <h6 className="card-title mb-3">
-                  Contest Criteria and Rewards
-                </h6>
-
-                <Row className="mb-4">
-                  {/* Criteria Table */}
-                  <Col lg={6} md={12}>
+            <CardBody>
+              {tabValue === tabs[0] && (
+                <Row>
+                  <Col lg={6}>
                     <DataTable
-                      activeMenu={"expiryContestCriteria"}
+                      activeMenu="expiryContestCriteria"
                       T6Data={expiryContestCriteriaRows}
+                      customHide
                       selectedWidget="Criteria and Rewards"
-                      customHide={true}
                     />
                   </Col>
-
-                  {/* Rewards Table */}
-                  <Col lg={6} md={12}>
+                  <Col lg={6}>
                     <DataTable
-                      activeMenu={"RHexpiryContestReward"}
+                      activeMenu="RHexpiryContestReward"
                       T6Data={RHexpiryContestRewardRows}
+                      customHide
                       selectedWidget="Criteria and Rewards"
-                      customHide={true}
                     />
                   </Col>
                 </Row>
+              )}
 
-                {/* Today's Contest Progress */}
-                <h6 className="card-title mb-3">Zone Contest Progress</h6>
-
-                <DataTable
-                  activeMenu={"RHtodaysContestProgress"}
-                  T6Data={zoneData}
-                  selectedWidget="Criteria and Rewards"
-                  customHide={true}
-                />
-                <div
-                  style={{
-                    position: "relative",
-                    display: "flex",
-                    alignItems: "center",
-                    margin: "2rem 0",
-                  }}
-                >
-                  {/* Center title */}
-                  <h6
-                    className="card-title mb-0"
-                    style={{
-                      position: "absolute",
-                      left: "50%",
-                      transform: "translateX(-50%)",
-                      lineHeight: "1.2",
-                    }}
-                  >
-                    Employee&apos;s Contest Progress
-                  </h6>
-
-                  {/* Right-aligned button */}
-                  {/* {employeeData.length > 0 && ( */}
-                  <div style={{ marginLeft: "auto" }}>
-                    <Button
-                      sx={{
-                        textTransform: "none",
-                        backgroundColor: "#11395C",
-                        color: "#FFF",
-                        height: "28px",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "4px",
-                      }}
-                      onClick={() =>
-                        exportToExcel(employeeData, "Expiry_contest_report")
-                      }
-                    >
-                      Excel <DownloadIcon sx={{ fontSize: "1rem" }} />
-                    </Button>
-                  </div>
-                  {/* )} */}
-                </div>
-
-                <DataTable
-                  activeMenu={"employeesContestProgress"}
-                  T6Data={employeeData}
-                  selectedWidget="Criteria and Rewards"
-                  customHide={true}
-                />
-              </CardBody>
-            </Card>
-          </Col>
-        </Row>
-      </div>
+              {tabValue === tabs[1] && <Details />}
+            </CardBody>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 };
