@@ -9609,7 +9609,89 @@ export const AmcNonLifeMembership: GridColDef[] = [
       );
     },
   },
-  ...AmcLifeMembership,
+  // ...AmcLifeMembership,
+  {
+    field: "tc",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "dpid",
+    headerName: "BOID",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "ph1",
+    headerName: "Primary Holder Name",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "ph1_mob",
+    headerName: "Mobile No.",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      const mobile = params.value || "";
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, p1: any, mid: any, p2: any) =>
+          `${p1}${"X".repeat(mid.length)}${p2}`
+      );
+
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "sts",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "bt",
+    headerName: "Branch Type",
+    flex: 1,
+    minWidth: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "bsda",
+    headerName: "BSDA",
+    flex: 1,
+    minWidth: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
   {
     field: "hval",
     headerName: "Holding Value",
@@ -9627,6 +9709,125 @@ export const AmcNonLifeMembership: GridColDef[] = [
       }).format(value);
     },
   },
+  {
+    field: "dlr",
+    headerName: "Dealer Name",
+    flex: 1,
+    minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => params || "-",
+  },
+  {
+    field: "rm",
+    headerName: "RM Name",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "ph2",
+    headerName: "Second Holder Name",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => params || "-",
+  },
+  {
+    field: "ph3",
+    headerName: "Third Holder Name",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => params || "-",
+  },
+  {
+    field: "bc",
+    headerName: "Branch Code",
+    flex: 1,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "zn",
+    headerName: "Zone",
+    flex: 1,
+    minWidth: 70,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "m_desc",
+    headerName: "Scheme Category",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  // {
+  //   field: "module_Modified_date",
+  //   headerName: "Module Modified Date",
+  //   flex: 1,
+  //   minWidth: 150,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   valueGetter: (params: any) => {
+  //     const rawDate = params;
+  //     if (!rawDate) return null; // Handle missing data
+
+  //     const parsedDate = new Date(
+  //       rawDate.replace(
+  //         /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+  //         (_match: any, day: any, month: any, year: any) => {
+  //           const monthMap: any = {
+  //             Jan: "01",
+  //             Feb: "02",
+  //             Mar: "03",
+  //             Apr: "04",
+  //             May: "05",
+  //             Jun: "06",
+  //             Jul: "07",
+  //             Aug: "08",
+  //             Sep: "09",
+  //             Oct: "10",
+  //             Nov: "11",
+  //             Dec: "12",
+  //           };
+  //           console.log(match);
+  //           return `20${year}-${monthMap[month]}-${day}`;
+  //         }
+  //       )
+  //     );
+
+  //     return parsedDate;
+  //   },
+  //   sortComparator: (v1: any, v2: any) => {
+  //     if (!v1 || !v2) return 0; // Handle missing values
+  //     return v1 - v2; // Sort in ascending order
+  //   },
+  //   valueFormatter: (params: any) => {
+  //     if (!params) return "";
+  //     return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+  //   },
+  // },
 ];
 
 export const AmcContest: GridColDef[] = [
