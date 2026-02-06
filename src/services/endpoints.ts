@@ -279,6 +279,11 @@ export const endpoints = {
   GetDealerExpiryHistDashBoardData: "/api/RMS/GetDealerExpiryHistDashBoardData",
   GetZoneExpiryDashBoardData: "/api/RMS/GetZoneExpiryDashBoardData",
   GetZoneExpiryHistDashBoardData: "/api/RMS/GetZoneExpiryHistDashBoardData",
+  SendClientMTFEmail: "/api/RMS/SendClientMTFEmail",
+  SendDealerMTFEmail: "/api/RMS/SendDealerMTFEmail",
+  SendRMMTFEmail: "/api/RMS/SendRMMTFEmail",
+  SendRHMTFEmail: "/api/RMS/SendRHMTFEmail",
+  SendAPMTFEmail: "/api/RMS/SendAPMTFEmail",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);
