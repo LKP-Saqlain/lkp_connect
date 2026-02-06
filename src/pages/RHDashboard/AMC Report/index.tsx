@@ -97,6 +97,7 @@ const AmcReport = ({ activeSubItem }: any) => {
         userId: user_id,
         empOrAPCode: row.emp,
         branchType: row.bt,
+        optionType: TAB_CONFIG[tabValue].optionType,
       });
       if (res?.data?.statusCode === 200) setExtendedData(res.data.data);
     } finally {
