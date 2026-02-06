@@ -9638,6 +9638,23 @@ export const AmcNonLifeMembership: GridColDef[] = [
     align: "left",
   },
   {
+    field: "hval",
+    headerName: "Holding Value",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
+  },
+  {
     field: "ph1_mob",
     headerName: "Mobile No.",
     flex: 1,
