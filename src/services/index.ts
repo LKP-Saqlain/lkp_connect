@@ -1176,10 +1176,21 @@ export const apiServices = {
     );
   },
   GetSPIPContest: async (payload: any) => {
-    return await apiService(
-      "POST",
-      endpoints.GetSPIPContest,
-      payload
-    );
+    return await apiService("POST", endpoints.GetSPIPContest, payload);
+  },
+  SendClientMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendClientMTFEmail, payload);
+  },
+  SendDealerMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendDealerMTFEmail, payload);
+  },
+  SendRMMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendRMMTFEmail, payload);
+  },
+  SendRHMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendRHMTFEmail, payload);
+  },
+  SendAPMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendAPMTFEmail, payload);
   },
 };

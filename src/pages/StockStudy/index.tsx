@@ -148,8 +148,10 @@ const StockStudy = () => {
     apiServices
       .ScripSearch()
       .then((response) => {
+        console.log("scripSearchResponse", response?.data?.data);
+
         dispatch(hideLoader());
-        setFundamentalRecords(response?.data?.Table || []);
+        setFundamentalRecords(response?.data?.data || []);
       })
       .catch((error) => {
         dispatch(hideLoader());

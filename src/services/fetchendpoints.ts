@@ -299,7 +299,11 @@ export const newDomainEndpoints = [
   endpoints.GetMTFShortfallData,
   endpoints.MergeIntoOdinFile,
   endpoints.MergeIntoSymphonyFile,
-
+  endpoints.SendClientMTFEmail,
+  endpoints.SendDealerMTFEmail,
+  endpoints.SendRHMTFEmail,
+  endpoints.SendRMMTFEmail,
+  endpoints.SendAPMTFEmail,
   //SPIP
   endpoints.SPIPClientPerformanceSummary,
   endpoints.SPIPClientPerformanceDashboard,

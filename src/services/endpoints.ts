@@ -277,6 +277,11 @@ export const endpoints = {
   GetMandateJVReportData: "/api/Mandate/GetMandateJVReportData",
   GetDealerExpiryDashBoardData: "/api/RMS/GetDealerExpiryDashBoardData",
   GetZoneExpiryDashBoardData: "/api/RMS/GetZoneExpiryDashBoardData",
+  SendClientMTFEmail: "/api/RMS/SendClientMTFEmail",
+  SendDealerMTFEmail: "/api/RMS/SendDealerMTFEmail",
+  SendRMMTFEmail: "/api/RMS/SendRMMTFEmail",
+  SendRHMTFEmail: "/api/RMS/SendRHMTFEmail",
+  SendAPMTFEmail: "/api/RMS/SendAPMTFEmail",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);
