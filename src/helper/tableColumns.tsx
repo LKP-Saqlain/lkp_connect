@@ -2116,8 +2116,8 @@ export const DPDebitRecovery: GridColDef[] = [
     valueFormatter: (params: any) => {
       const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
       }).format(value);
     },
   },

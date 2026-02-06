@@ -422,16 +422,16 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                         indirect: zoneTargetData.indirect.Mar,
                       },
                     ]}
-                    // total={{
-                    //   direct:
-                    //     zoneTargetData.direct.Jan +
-                    //     zoneTargetData.direct.Feb +
-                    //     zoneTargetData.direct.Mar,
-                    //   indirect:
-                    //     zoneTargetData.indirect.Jan +
-                    //     zoneTargetData.indirect.Feb +
-                    //     zoneTargetData.indirect.Mar,
-                    // }}
+                    total={{
+                      direct:
+                        zoneTargetData.direct.Jan +
+                        zoneTargetData.direct.Feb +
+                        zoneTargetData.direct.Mar,
+                      indirect:
+                        zoneTargetData.indirect.Jan +
+                        zoneTargetData.indirect.Feb +
+                        zoneTargetData.indirect.Mar,
+                    }}
                   />
                 </Col>
 
@@ -455,16 +455,16 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                         indirect: zoneAchievedData.indirect.Mar,
                       },
                     ]}
-                    // total={{
-                    //   direct:
-                    //     zoneAchievedData.direct.Jan +
-                    //     zoneAchievedData.direct.Feb +
-                    //     zoneAchievedData.direct.Mar,
-                    //   indirect:
-                    //     zoneAchievedData.indirect.Jan +
-                    //     zoneAchievedData.indirect.Feb +
-                    //     zoneAchievedData.indirect.Mar,
-                    // }}
+                    total={{
+                      direct:
+                        zoneAchievedData.direct.Jan +
+                        zoneAchievedData.direct.Feb +
+                        zoneAchievedData.direct.Mar,
+                      indirect:
+                        zoneAchievedData.indirect.Jan +
+                        zoneAchievedData.indirect.Feb +
+                        zoneAchievedData.indirect.Mar,
+                    }}
                   />
                 </Col>
 
@@ -488,16 +488,16 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                         indirect: zonePercentageData.indirect.Mar,
                       },
                     ]}
-                    // total={{
-                    //   direct:
-                    //     zonePercentageData.direct.Jan +
-                    //     zonePercentageData.direct.Feb +
-                    //     zonePercentageData.direct.Mar,
-                    //   indirect:
-                    //     zonePercentageData.indirect.Jan +
-                    //     zonePercentageData.indirect.Feb +
-                    //     zonePercentageData.indirect.Mar,
-                    // }}
+                    total={{
+                      direct:
+                        zonePercentageData.direct.Jan +
+                        zonePercentageData.direct.Feb +
+                        zonePercentageData.direct.Mar,
+                      indirect:
+                        zonePercentageData.indirect.Jan +
+                        zonePercentageData.indirect.Feb +
+                        zonePercentageData.indirect.Mar,
+                    }}
                   />
                 </Col>
               </Row>

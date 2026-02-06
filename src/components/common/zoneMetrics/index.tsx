@@ -15,7 +15,17 @@ interface Props {
   total?: { direct: number; indirect: number };
 }
 
-const ZoneMetricTableCard = ({ title, rows }: Props) => {
+const formatValue = (value: number, title: string) => {
+  if (title === "Zone Target Achieved %") {
+    return `${value.toFixed(2)}%`;
+  }
+
+  return value.toLocaleString("en-IN", {
+    maximumFractionDigits: 0,
+  });
+};
+
+const ZoneMetricTableCard = ({ title, rows, total }: Props) => {
   return (
     <Card className="h-100">
       <CardBody>
@@ -91,7 +101,7 @@ const ZoneMetricTableCard = ({ title, rows }: Props) => {
             </div>
           ))}
 
-          {/* <div className="zone-row zone-total">
+          <div className="zone-row zone-total">
             <div className="zone-cell month">
               {" "}
               <React.Fragment>
@@ -105,16 +115,13 @@ const ZoneMetricTableCard = ({ title, rows }: Props) => {
               </React.Fragment>
             </div>
             <div className="zone-cell direct">
-              {total.direct.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}
+              {total && formatValue(total.direct, title)}
             </div>
+
             <div className="zone-cell indirect">
-              {total.indirect.toLocaleString("en-IN", {
-                maximumFractionDigits: 0,
-              })}
+              {total && formatValue(total.indirect, title)}
             </div>
-          </div> */}
+          </div>
         </div>
       </CardBody>
     </Card>
