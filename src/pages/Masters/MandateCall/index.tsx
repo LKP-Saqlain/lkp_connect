@@ -276,10 +276,10 @@ const MandateCall = () => {
         pspRefNo: "",
       },
       mandate: {
-        amount: mandateTableData?.amount.toString(),
+        amount: mandateCallBackData?.[0].amount,
         action_type: "REVOKE",
         onBehalf_Of: "PAYEE",
-        UMN: mandateTableData.umn,
+        UMN: mandateCallBackData?.[0].umn,
       },
     };
     console.log("Payload11", payload);
@@ -318,7 +318,7 @@ const MandateCall = () => {
   const handleSendOtp = () => {
     const payload = {
       otp_type: "SendOtpSMS",
-      mobileNo: data?.mn, //"9702497379", //data?.mobileNo,
+      mobileNo: "9702497379", //"9702497379", //data?.mobileNo,
       User_id: data?.cc, // "5431",
     };
 
@@ -358,7 +358,7 @@ const MandateCall = () => {
 
   const handleValidateOTP = (value: any) => {
     const payload = {
-      mobileNo: data?.mn, // "9702497379",
+      mobileNo: "9702497379", // "9702497379",
       User_id: data?.cc, // "5431",
       otp: otp.join(""),
     };

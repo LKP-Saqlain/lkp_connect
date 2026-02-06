@@ -132,18 +132,19 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
   }, [dispatch, accessType]);
 
   useEffect(() => {
-    if (!isZoneReady) return;
+    if (!isZoneReady && accessType !== "ZONE") return;
     if (!user_id) return;
     if (tabValue !== 0 && tabValue !== 1) return;
 
     setData([]);
 
-    const selectedZone = formik.values.selectedZone!.value;
+    const selectedZone =
+      formik.values.selectedZone && formik.values.selectedZone!.value;
     const quarterPeriod = tabValue === 0 ? "Q3-2526" : "Q4-2526";
 
     const payload = {
       user_id,
-      zone: selectedZone,
+      zone: accessType === "ZONE" ? "ALL" : selectedZone,
       quarterPeriod,
     };
 
