@@ -276,7 +276,7 @@ const MandateCall = () => {
         pspRefNo: "",
       },
       mandate: {
-        amount: mandateCallBackData?.[0].amount,
+        amount: mandateCallBackData?.[0].amount.toString(),
         action_type: "REVOKE",
         onBehalf_Of: "PAYEE",
         UMN: mandateCallBackData?.[0].umn,
@@ -318,7 +318,7 @@ const MandateCall = () => {
   const handleSendOtp = () => {
     const payload = {
       otp_type: "SendOtpSMS",
-      mobileNo: "9702497379", //"9702497379", //data?.mobileNo,
+      mobileNo: data?.mn, //"9702497379", //data?.mobileNo,
       User_id: data?.cc, // "5431",
     };
 
@@ -356,9 +356,15 @@ const MandateCall = () => {
     }
   };
 
+  const resetRevokeModalState = () => {
+    setIsRevokeModalOpen(false);
+    setShowOtpField(false);
+    setOtp(["", "", "", "", "", ""]);
+  };
+
   const handleValidateOTP = (value: any) => {
     const payload = {
-      mobileNo: "9702497379", // "9702497379",
+      mobileNo: data?.mn, // "9702497379",
       User_id: data?.cc, // "5431",
       otp: otp.join(""),
     };
@@ -379,6 +385,9 @@ const MandateCall = () => {
 
           //  Revoke API ONLY on valid OTP
           getRevokeDetails(value);
+
+          //im closing the modal here
+          resetRevokeModalState();
         } else {
           ShowToast("error", message);
         }
