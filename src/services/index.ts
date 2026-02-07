@@ -1207,4 +1207,11 @@ export const apiServices = {
   SendAPMTFEmail: async (payload: any) => {
     return await apiService("POST", endpoints.SendAPMTFEmail, payload);
   },
+  GetContestSummary: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetContestSummary,
+      payload
+    );
+  },
 };

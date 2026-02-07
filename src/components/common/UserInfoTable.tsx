@@ -2555,6 +2555,10 @@ const DataTable = ({
       return TableColumns.RHexpiryContestHistory.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "SPIP Contest Report") {
+      return TableColumns.SPIPContestReport.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
