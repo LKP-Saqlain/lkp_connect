@@ -233,6 +233,7 @@ export const endpoints = {
   GetLedgerReport: "/api/Client/GetLedgerReport",
   GetAMCActivationStatus: "/api/Client/GetAMCActivationStatus",
   GetClientMISDetails: "/api/SPIP/GetClientMISDetails",
+  GetContestSummary: "/api/SPIP/GetContestSummary",
   ViewVendorDetailsReport: "/api/Account/ViewVendorDetailsReport",
   GetMTFShortfallData: "/api/RMS/GetMTFShortfallData",
   ViewMTFAgeingReport: "/api/RMS/ViewMTFAgeingReport",

@@ -1196,4 +1196,11 @@ export const apiServices = {
       payload
     );
   },
+  GetContestSummary: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetContestSummary,
+      payload
+    );
+  },
 };

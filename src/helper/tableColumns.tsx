@@ -12337,3 +12337,48 @@ export const contestSPIP: GridColDef[] = [
     disableColumnMenu: true,
   },
 ];
+export const SPIPContestReport: GridColDef[] = [
+  {
+    field: "ec",
+    headerName: "Client Code",
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "en",
+    headerName: "Name",
+    flex: 2,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "tc",
+    headerName: "Total Client",
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ta",
+    headerName: "Total Amount",
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        // minimumFractionDigits: 2,
+        // maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+];
