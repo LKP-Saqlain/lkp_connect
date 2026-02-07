@@ -2772,7 +2772,9 @@ const DataTable = ({
           hideFooter={customHide ? true : false}
           // getRowId={(row: any) => (row.Id ? row?.Id : row?.cc)}
           getRowId={(row: any) =>
-            row.Id
+            row?.rid
+              ? row.rid
+              : row.Id
               ? row?.Id
               : row?.cc
               ? row?.cc
