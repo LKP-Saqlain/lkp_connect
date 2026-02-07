@@ -17,6 +17,7 @@ export const SubItemKeys = {
   RH_EXPIRY_CONTEST: "Expiry Contest",
   SPIP_CLIENT_MIS: "SPIP Client MIS",
   INDIRECT_CHANNEL_TARGET: "Indirect Channel Target",
+  SPIP_Contest_Report: "SPIP Contest Report",
 } as const;
 
 export type SubItemKey = (typeof SubItemKeys)[keyof typeof SubItemKeys];
