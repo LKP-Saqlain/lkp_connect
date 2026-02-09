@@ -248,6 +248,7 @@ export const newDomainEndpoints = [
 
   //Third Party Innvoice
   endpoints.TPInvoiceStaging, //Upload file also columns has change from my end
+  endpoints.UnstageTPInvoice, 
   endpoints.TPInvoiceUpload,
   endpoints.GetTPInvoiceRecordList,
   endpoints.DeleteTPInvoiceRecord,

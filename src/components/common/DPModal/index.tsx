@@ -41,6 +41,9 @@ import ApnContest from "../../../pages/Contest/ApnContest";
 import ApnContestQ4 from "../../../pages/Contest/ApnContestQ4";
 import { encryptAES } from "../../../utils/encryptDecrypt";
 import { setAuthenticationValue } from "../../../redux/slices/AuthnticateUser";
+import EmployeeSPIP from "../../../pages/Contest/SPIP/Employee";
+import ApnSPIP from "../../../pages/Contest/SPIP/Partner";
+import B2BSPIP from "../../../pages/Contest/SPIP/B2B";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 interface CustomModalProps {
@@ -71,6 +74,7 @@ interface CustomModalProps {
   fileExtension?: any;
   isDropUpload?: any;
   isPartnerContest?: boolean;
+  isSPIPContest?: boolean;
   handleVerifyDetails?: (accNo: any, ifscCode: any) => void;
   isBankVerified?: any;
   setIsBankVerified?: any;
@@ -101,6 +105,7 @@ const CustomModal = ({
   fileExtension,
   isDropUpload,
   isPartnerContest,
+  isSPIPContest,
   handleVerifyDetails,
   isBankVerified,
   setIsBankVerified,
@@ -1331,6 +1336,67 @@ const CustomModal = ({
   useEffect(() => {
     console.log("formikValues", formik.values, formik.errors);
   }, [formik.values, formik.errors]);
+
+  useEffect(() => {
+    console.log("selectedTab changed:", selectedTab);
+  }, [selectedTab]);
+
+  const renderContestByTab = () => {
+    // Partner Contest → 2 tabs
+    if (isPartnerContest) {
+      switch (selectedTab) {
+        case 0:
+          return (
+            <ApnContest
+              activeMenu="Partner Contest"
+              isCustomRender={true}
+              row={row}
+            />
+          );
+        case 1:
+          return (
+            <ApnContestQ4
+              activeMenu="Partner Contest"
+              isCustomRender={true}
+              row={row}
+            />
+          );
+        default:
+          return null;
+      }
+    }
+
+    // SPIP Contest → 3 tabs
+    if (isSPIPContest) {
+      switch (selectedTab) {
+        case "EMP":
+          return (
+            <EmployeeSPIP
+              activeSubItem="Employee SPIP"
+              isCustomRender={true}
+              row={row}
+            />
+          );
+        case "APN":
+          return (
+            <ApnSPIP
+              activeSubItem="Partner SPIP"
+              isCustomRender={true}
+              row={row}
+            />
+          );
+        case "B2B":
+          return (
+            <B2BSPIP activeSubItem="B2B SPIP" isCustomRender={true} row={row} />
+          );
+        default:
+          return null;
+      }
+    }
+
+    return null;
+  };
+
   return (
     <ReactstrapModal
       isOpen={modal_center}
@@ -1341,7 +1407,8 @@ const CustomModal = ({
       style={{
         maxWidth: setShowImg
           ? "700px"
-          : activeSubItem === "Partner Contest Report"
+          : activeSubItem === "Partner Contest Report" ||
+            activeSubItem === "SPIP Contest Report"
           ? "90%"
           : "500px",
         borderRadius: "12px",
@@ -1351,14 +1418,14 @@ const CustomModal = ({
       <ModalBody
         className="text-center p-3"
         style={
-          isPartnerContest
+          isPartnerContest || isSPIPContest
             ? {
                 backgroundColor: "#E5E4E2",
               }
             : undefined
         }
       >
-        {isPartnerContest && isPartnerContest ? (
+        {isPartnerContest || isSPIPContest ? (
           <>
             {!expiredtime && (
               <i
@@ -1378,20 +1445,8 @@ const CustomModal = ({
                   color: "#000",
                 }}
               />
-            )}{" "}
-            {selectedTab === 0 ? (
-              <ApnContest
-                activeMenu={"Partner Contest"}
-                isCustomRender={true}
-                row={row}
-              />
-            ) : (
-              <ApnContestQ4
-                activeMenu={"Partner Contest"}
-                isCustomRender={true}
-                row={row}
-              />
             )}
+            {renderContestByTab()}
           </>
         ) : (
           <>
