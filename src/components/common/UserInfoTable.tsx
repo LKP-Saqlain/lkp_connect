@@ -2556,9 +2556,33 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "SPIP Contest Report") {
-      return TableColumns.SPIPContestReport.map((column) => ({
-        ...column,
-      }));
+      return TableColumns.SPIPContestReport.map((column) => {
+        if (column.field === "ec") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const handleClick = () => {
+                setSelectedRow(params.row);
+                tog_center();
+              };
+
+              return (
+                <span
+                  style={{
+                    color: "#1976d2",
+                    cursor: "pointer",
+                    // textDecoration: "underline",
+                  }}
+                  onClick={handleClick}
+                >
+                  {params.value}
+                </span>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }
@@ -2698,6 +2722,7 @@ const DataTable = ({
         isPartnerContest={
           activeSubItem === "Partner Contest Report" ? true : false
         }
+        isSPIPContest={activeSubItem === "SPIP Contest Report" ? true : false}
         handleVerifyDetails={handleVerifyDetails}
         isBankVerified={isBankVerified}
         beneficiaryName={beneficiaryName}

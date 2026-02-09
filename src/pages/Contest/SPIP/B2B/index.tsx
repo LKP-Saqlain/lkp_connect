@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../redux/store";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 
-const B2BSPIP = ({ activeSubItem }: any) => {
+const B2BSPIP = ({ activeSubItem, row, isCustomRender }: any) => {
   const partnerContestTabs = ["Contest Rewards", "Details"];
   const { user_id } = useSelector(
     (state: RootState) => state.AuthUser?.data?.data
@@ -36,7 +36,7 @@ const B2BSPIP = ({ activeSubItem }: any) => {
     // const payload = { userType: "APN", userId: "7417", quarterPeriod: "Q4" };
     const payload = {
       userType: "B2B",
-      userId: onlyDigits,
+      userId: isCustomRender ? row?.ec : onlyDigits,
       quarterPeriod: "Q4",
     };
     dispatch(showLoader("Fetching Client Code..."));

@@ -220,6 +220,7 @@ const SpipReport = ({ activeSubItem }: any) => {
               T6Data={userData}
               // activeSubItem={`${activeSubItem} ${activeBranch}`}
               activeSubItem={activeSubItem}
+              selectedTab={activeBranch}
             />
           </CardBody>
         </Card>
