@@ -7,13 +7,14 @@ import { apiServices } from "../../../services";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { RootState, AppDispatch } from "../../../redux/store";
 import DataTable from "../../../components/common/UserInfoTable";
+import { monthOptions } from "../../../helper/method";
 
 const Details = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
-
+  const [selectedMonth, setSelectedMonth] = useState("ALL");
   const [detailsView, setDetailsView] = useState<"TODAY" | "HISTORY">("TODAY");
   const [lastDate, setLastDate] = useState("");
   const [data, setData] = useState<any[]>([]);
@@ -22,7 +23,13 @@ const Details = () => {
     fetchTodayData();
     const interval = setInterval(fetchTodayData, 10 * 60 * 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [detailsView]);
+
+  useEffect(() => {
+    if (detailsView === "HISTORY") {
+      fetchHistoryData();
+    }
+  }, [selectedMonth, detailsView]);
 
   const fetchTodayData = () => {
     const payload = {
@@ -40,7 +47,6 @@ const Details = () => {
         }));
         let lastUpdatedDate = formattedData[0]?.UpdatedOn;
         setLastDate(lastUpdatedDate);
-        console.log(formattedData, "expiry Response:", response);
         setData(formattedData);
       })
       .catch((error: any) => {
@@ -55,7 +61,7 @@ const Details = () => {
     const payload = {
       user_id: user_id,
       //   user_id: "EMP-5299",
-      month: "ALL",
+      month: selectedMonth,
     };
     dispatch(showLoader("Fetching Client Code..."));
     apiServices
@@ -68,7 +74,6 @@ const Details = () => {
         }));
         let lastUpdatedDate = formattedData[0]?.UpdatedOn;
         setLastDate(lastUpdatedDate);
-        console.log(formattedData, "expiry Response:", response);
         setData(formattedData);
       })
       .catch((error: any) => {
@@ -117,6 +122,7 @@ const Details = () => {
               }}
               onClick={() => {
                 setDetailsView("HISTORY");
+                setSelectedMonth("ALL");
                 fetchHistoryData();
               }}
             >
@@ -163,6 +169,25 @@ const Details = () => {
       </div>
 
       {/* Table */}
+      {detailsView === "HISTORY" && (
+        <div className="d-flex justify-content-between align-items-center mb-2">
+          <h6 className="mb-0">Zone Contest Progress</h6>
+
+          <select
+            className="form-select form-select-sm"
+            style={{ width: "140px" }}
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+          >
+            {monthOptions.map((m) => (
+              <option key={m.value} value={m.value}>
+                {m.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       {data.length > 0 ? (
         <DataTable
           activeMenu={
