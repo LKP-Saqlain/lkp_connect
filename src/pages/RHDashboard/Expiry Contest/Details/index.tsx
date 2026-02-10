@@ -14,6 +14,7 @@ import ComDropDown from "../../../../components/common/Dropdown/commonDropdown";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { employeesContestProgress } from "../../../../helper/tableColumns";
+import { monthOptions } from "../../../../helper/method";
 
 const Details = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,6 +26,7 @@ const Details = () => {
   const [view, setView] = useState<"TODAY" | "HISTORY">("TODAY");
   const [selectedZone, setSelectedZone] = useState(accessCode);
   const [lastDate, setLastDate] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("ALL");
 
   const [zoneData, setZoneData] = useState<any[]>([]);
   const [employeeData, setEmployeeData] = useState<any[]>([]);
@@ -39,7 +41,7 @@ const Details = () => {
     } else {
       fetchHistory();
     }
-  }, [view, selectedZone]);
+  }, [view, selectedZone, selectedMonth]);
 
   /* ================= TODAY ================= */
 
@@ -79,7 +81,7 @@ const Details = () => {
     const payload = {
       user_id,
       zone: accessType === "ALL" ? selectedZone : accessCode,
-      month: "ALL",
+      month: selectedMonth,
     };
 
     dispatch(showLoader("Fetching history..."));
@@ -161,7 +163,10 @@ const Details = () => {
               size="small"
               variant="outlined"
               sx={{ textTransform: "none", borderRadius: "16px" }}
-              onClick={() => setView("HISTORY")}
+              onClick={() => {
+                setSelectedMonth("ALL");
+                setView("HISTORY");
+              }}
             >
               View History
             </Button>
@@ -190,9 +195,26 @@ const Details = () => {
       </div>
 
       {/* TABLES */}
+      {view === "HISTORY" && (
+        <div className="d-flex justify-content-between align-items-center mb-2">
+          <h6 className="mb-0">Zone Contest Progress</h6>
+
+          <select
+            className="form-select form-select-sm"
+            style={{ width: "140px" }}
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+          >
+            {monthOptions.map((m) => (
+              <option key={m.value} value={m.value}>
+                {m.label}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
       {zoneData.length > 0 ? (
         <>
-          <h6 className="mb-2">Zone Contest Progress</h6>
           <DataTable
             activeMenu={
               view === "TODAY"
@@ -204,7 +226,7 @@ const Details = () => {
             customHide
           />
 
-          <div className="d-flex justify-content-between align-items-center my-4">
+          <div className="d-flex justify-content-between align-items-center my-3">
             <h6 className="mb-0">Employee&apos;s Contest Progress</h6>
 
             {employeeData.length > 0 && (

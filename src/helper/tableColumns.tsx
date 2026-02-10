@@ -12120,13 +12120,7 @@ export const employeesContestProgress: GridColDef[] = [
       return (
         <div
           style={{
-            width: "100%",
-            height: "100%",
             backgroundColor: isQualified ? "#b1edbf" : "transparent",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontWeight: isQualified ? 600 : 400,
           }}
         >
           {formatNumber(params.value)}
