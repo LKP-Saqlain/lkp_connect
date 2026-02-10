@@ -13,8 +13,11 @@ import ComDropDown from "../../../../components/common/Dropdown/commonDropdown";
 
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { employeesContestProgress } from "../../../../helper/tableColumns";
-import { monthOptions } from "../../../../helper/method";
+import {
+  employeesContestProgress,
+  expiryContestHistory,
+} from "../../../../helper/tableColumns";
+import { monthOptions, symbolOptions } from "../../../../helper/method";
 
 const Details = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,9 +30,11 @@ const Details = () => {
   const [selectedZone, setSelectedZone] = useState(accessCode);
   const [lastDate, setLastDate] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("ALL");
+  const [symbol, setSymbol] = useState("ALL");
 
   const [zoneData, setZoneData] = useState<any[]>([]);
   const [employeeData, setEmployeeData] = useState<any[]>([]);
+  const [filteredData, setFilteredData] = useState<any[]>([]);
 
   /* ================= EFFECT ================= */
 
@@ -42,6 +47,17 @@ const Details = () => {
       fetchHistory();
     }
   }, [view, selectedZone, selectedMonth]);
+
+  useEffect(() => {
+    if (!zoneData) return;
+
+    if (symbol === "ALL") {
+      setFilteredData(zoneData);
+    } else {
+      const data = zoneData.filter((item) => item.index === symbol);
+      setFilteredData(data);
+    }
+  }, [symbol, zoneData]);
 
   /* ================= TODAY ================= */
 
@@ -110,21 +126,45 @@ const Details = () => {
   /* ================= EXCEL ================= */
 
   const exportToExcel = () => {
-    const orderedData = employeeData.map((row) => {
-      const obj: any = {};
-      employeesContestProgress.forEach((col: any) => {
-        obj[col.headerName] = row[col.field];
+    const sourceData: any[] =
+      view === "HISTORY" ? filteredData ?? [] : employeeData ?? [];
+
+    if (sourceData.length === 0) return;
+
+    const columns =
+      view === "HISTORY" ? expiryContestHistory : employeesContestProgress;
+
+    const orderedData = sourceData.map((row: any) => {
+      const obj: Record<string, any> = {};
+
+      columns.forEach((col: any) => {
+        if (col?.headerName && col?.field) {
+          obj[col.headerName] = row[col.field] ?? "";
+        }
       });
+
       return obj;
     });
 
     const sheet = XLSX.utils.json_to_sheet(orderedData);
     const book = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(book, sheet, "Employee Report");
+
+    XLSX.utils.book_append_sheet(
+      book,
+      sheet,
+      view === "HISTORY" ? "History Report" : "Employee Report"
+    );
 
     const buffer = XLSX.write(book, { bookType: "xlsx", type: "array" });
-    saveAs(new Blob([buffer]), "Expiry_contest_report.xlsx");
+
+    saveAs(
+      new Blob([buffer]),
+      view === "HISTORY"
+        ? "Expiry_contest_history.xlsx"
+        : "Expiry_contest_employee.xlsx"
+    );
   };
+
   const handleZoneChange = (zone: any) => {
     console.log("Selected zone:", zone);
     setSelectedZone(zone?.value || "all"); // update selected zone value here
@@ -198,19 +238,45 @@ const Details = () => {
       {view === "HISTORY" && (
         <div className="d-flex justify-content-between align-items-center mb-2">
           <h6 className="mb-0">Zone Contest Progress</h6>
-
-          <select
-            className="form-select form-select-sm"
-            style={{ width: "140px" }}
-            value={selectedMonth}
-            onChange={(e) => setSelectedMonth(e.target.value)}
-          >
-            {monthOptions.map((m) => (
-              <option key={m.value} value={m.value}>
-                {m.label}
-              </option>
-            ))}
-          </select>
+          <div className="d-flex gap-2">
+            <select
+              className="form-select form-select-sm"
+              style={{ width: "140px" }}
+              value={symbol}
+              onChange={(e) => setSymbol(e.target.value)}
+            >
+              {symbolOptions.map((m) => (
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+            <select
+              className="form-select form-select-sm"
+              style={{ width: "140px" }}
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+            >
+              {monthOptions.map((m) => (
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+            {filteredData.length > 0 && (
+              <Button
+                size="small"
+                sx={{
+                  textTransform: "none",
+                  backgroundColor: "#11395C",
+                  color: "#fff",
+                }}
+                onClick={exportToExcel}
+              >
+                Excel <DownloadIcon sx={{ fontSize: "1rem" }} />
+              </Button>
+            )}
+          </div>
         </div>
       )}
       {zoneData.length > 0 ? (
@@ -221,12 +287,12 @@ const Details = () => {
                 ? "RHtodaysContestProgress"
                 : "RHexpiryContestHistory"
             }
-            T6Data={zoneData}
+            T6Data={view === "HISTORY" ? filteredData : zoneData}
             selectedWidget="Criteria and Rewards"
             customHide
           />
 
-          <div className="d-flex justify-content-between align-items-center my-3">
+          <div className="d-flex justify-content-between align-items-center my-2">
             <h6 className="mb-0">Employee&apos;s Contest Progress</h6>
 
             {employeeData.length > 0 && (
