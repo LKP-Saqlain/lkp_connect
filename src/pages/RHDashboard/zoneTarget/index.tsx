@@ -318,6 +318,10 @@ const ZoneTarget = ({ activeSubItem }: any) => {
     target: ["#11395C", "#fff"],
     achieved: ["#F57C00", "#fff"],
   };
+
+  useEffect(() => {
+    console.log("zoneTargetValue", zonePercentageData);
+  }, [zonePercentageData]);
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -423,14 +427,8 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                       },
                     ]}
                     total={{
-                      direct:
-                        zoneTargetData.direct.Jan +
-                        zoneTargetData.direct.Feb +
-                        zoneTargetData.direct.Mar,
-                      indirect:
-                        zoneTargetData.indirect.Jan +
-                        zoneTargetData.indirect.Feb +
-                        zoneTargetData.indirect.Mar,
+                      direct: zoneTargetData.total.Jan,
+                      indirect: zoneTargetData.total.Feb,
                     }}
                   />
                 </Col>
@@ -456,14 +454,8 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                       },
                     ]}
                     total={{
-                      direct:
-                        zoneAchievedData.direct.Jan +
-                        zoneAchievedData.direct.Feb +
-                        zoneAchievedData.direct.Mar,
-                      indirect:
-                        zoneAchievedData.indirect.Jan +
-                        zoneAchievedData.indirect.Feb +
-                        zoneAchievedData.indirect.Mar,
+                      direct: zoneAchievedData.total.Jan,
+                      indirect: zoneAchievedData.total.Feb,
                     }}
                   />
                 </Col>
@@ -489,14 +481,8 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                       },
                     ]}
                     total={{
-                      direct:
-                        zonePercentageData.direct.Jan +
-                        zonePercentageData.direct.Feb +
-                        zonePercentageData.direct.Mar,
-                      indirect:
-                        zonePercentageData.indirect.Jan +
-                        zonePercentageData.indirect.Feb +
-                        zonePercentageData.indirect.Mar,
+                      direct: zonePercentageData.total.Jan,
+                      indirect: zonePercentageData.total.Feb,
                     }}
                   />
                 </Col>

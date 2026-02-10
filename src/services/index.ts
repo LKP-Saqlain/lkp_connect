@@ -1208,10 +1208,10 @@ export const apiServices = {
     return await apiService("POST", endpoints.SendAPMTFEmail, payload);
   },
   GetContestSummary: async (payload: any) => {
-    return await apiService(
-      "POST",
-      endpoints.GetContestSummary,
-      payload
-    );
+    return await apiService("POST", endpoints.GetContestSummary, payload);
+  },
+
+  MTFShorfallUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.MTFShorfallUpload, payload);
   },
 };

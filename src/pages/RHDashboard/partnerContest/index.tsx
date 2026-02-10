@@ -332,6 +332,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
                                         color: isSelected
                                           ? "#ffffff"
                                           : "#11395c",
+                                        textTransform: "capitalize",
                                       }}
                                       onClick={() =>
                                         formik.setFieldValue(
@@ -477,6 +478,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
                                         color: isSelected
                                           ? "#ffffff"
                                           : "#11395c",
+                                        textTransform: "capitalize",
                                       }}
                                       onClick={() =>
                                         formik.setFieldValue(

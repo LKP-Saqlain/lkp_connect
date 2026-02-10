@@ -67,6 +67,7 @@ export const multipartEndpoints = [
   endpoints.REGNSEFileUpload,
   endpoints.REGBSEFileUpload,
   endpoints.UploadHdfcMerchantFile,
+  endpoints.MTFShorfallUpload,
 ];
 
 export const mutualFundEndpoints = [
@@ -248,7 +249,7 @@ export const newDomainEndpoints = [
 
   //Third Party Innvoice
   endpoints.TPInvoiceStaging, //Upload file also columns has change from my end
-  endpoints.UnstageTPInvoice, 
+  endpoints.UnstageTPInvoice,
   endpoints.TPInvoiceUpload,
   endpoints.GetTPInvoiceRecordList,
   endpoints.DeleteTPInvoiceRecord,
@@ -305,6 +306,7 @@ export const newDomainEndpoints = [
   endpoints.SendRHMTFEmail,
   endpoints.SendRMMTFEmail,
   endpoints.SendAPMTFEmail,
+  endpoints.MTFShorfallUpload,
   //SPIP
   endpoints.SPIPClientPerformanceSummary,
   endpoints.SPIPClientPerformanceDashboard,

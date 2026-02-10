@@ -317,6 +317,7 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
                                         ? "#11395c"
                                         : "#fff",
                                       color: selected ? "#fff" : "#11395c",
+                                      textTransform: "capitalize",
                                     }}
                                     onClick={() =>
                                       formik.setFieldValue("selectedZone", zone)

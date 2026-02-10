@@ -124,7 +124,7 @@ import Expiry from "../../pages/Expiry";
 import AutoPayReport from "../../pages/ThirdParty/DPAutoPay";
 import EmployeeSPIP from "../../pages/Contest/SPIP/Employee";
 import B2BSPIP from "../../pages/Contest/SPIP/B2B";
-
+import MTFShortfallUpload from "../../pages/RMS/MTFShortfallUpload";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -791,6 +791,9 @@ const SideBar = () => {
     "T6 Selling Report": <T6SellingReport activeSubItem={activeSubItem} />,
     "REG File Upload": <RegFileUpload activeSubItem={activeSubItem} />,
     "REG Master Records": <RegMaster activeSubItem={activeSubItem} />,
+    "MTF Shortfall Upload": (
+      <MTFShortfallUpload activeSubItem={activeSubItem} />
+    ),
   };
   const tpdSubItems: Record<string, JSX.Element> = {
     "Unlisted Shares Entry": (
