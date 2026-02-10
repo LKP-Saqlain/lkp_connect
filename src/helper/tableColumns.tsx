@@ -12535,7 +12535,7 @@ export const contestSPIP: GridColDef[] = [
 export const SPIPContestReport: GridColDef[] = [
   {
     field: "ec",
-    headerName: "Client Code",
+    headerName: "Code",
     flex: 1,
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
