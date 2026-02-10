@@ -2755,12 +2755,7 @@ const DataTable = ({
       )}
       <Paper
         sx={{
-          height:
-            selectedWidget === "Client Details Report"
-              ? "200px"
-              : selectedWidget === "Criteria and Rewards"
-              ? "auto"
-              : "72vh",
+          height: selectedWidget === "Client Details Report" ? "200px" : "72vh",
 
           maxHeight:
             selectedWidget === "Criteria and Rewards" ? "52vh" : "none",
