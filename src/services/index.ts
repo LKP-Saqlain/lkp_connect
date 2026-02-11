@@ -1214,4 +1214,7 @@ export const apiServices = {
   MTFShorfallUpload: async (payload: any) => {
     return await apiService("POST", endpoints.MTFShorfallUpload, payload);
   },
+  ShowMailMTFAgeingData: async (payload: any) => {
+    return await apiService("POST", endpoints.ShowMailMTFAgeingData, payload);
+  },
 };

@@ -2583,6 +2583,10 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "MTFEmailAgeing") {
+      return TableColumns.mtfAgeingEmailColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
