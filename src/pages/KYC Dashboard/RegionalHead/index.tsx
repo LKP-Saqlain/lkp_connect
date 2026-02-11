@@ -25,8 +25,6 @@ const RegionalHead = ({ activeSubItem }: any) => {
       .GetBrokerageRHStatus(payload)
       .then((response) => {
         if (response?.status === 200) {
-          console.log("TestTestTest", response?.data?.data);
-
           const rawData = response?.data?.data || [];
 
           const mappedData = rawData.map((item: any, index: number) => ({
@@ -34,7 +32,6 @@ const RegionalHead = ({ activeSubItem }: any) => {
             ...item,
           }));
 
-          console.log("ModStatus-data (mapped)", mappedData);
           setRhStatus(mappedData);
         }
       })

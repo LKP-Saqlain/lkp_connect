@@ -65,7 +65,6 @@ const SpipReport = ({ activeSubItem }: any) => {
   const { accessType } = useSelector(
     (s: RootState) => s.AuthUser?.data?.data || {}
   );
-  const onlyDigits = user_id.replace(/\D/g, "");
   // const [userData, setUserData] = useState<UserData>({
   //   EMPLOYEE: [],
   //   PARTNER: [],
@@ -91,22 +90,14 @@ const SpipReport = ({ activeSubItem }: any) => {
       try {
         const res = await apiServices.GetContestSummary({
           userType: activeBranch,
-          userId: onlyDigits,
+          userId: user_id,
           zone: selectedZone,
           quarterPeriod: "Q4",
         });
 
         if (res?.data?.statusCode === 200) {
-          // const { employee = [], partner = [], b2b = [] } = res.data.data || {};
           console.log(res?.data?.data, "spipp");
-          // setUserData({
-          //   EMPLOYEE: employee.map((d: any, i: number) => ({
-          //     ...d,
-          //     Id: i + 1,
-          //   })),
-          //   PARTNER: partner.map((d: any, i: number) => ({ ...d, Id: i + 1 })),
-          //   B2B: b2b.map((d: any, i: number) => ({ ...d, Id: i + 1 })),
-          // });
+
           const data = res?.data?.data.map((d: any, i: number) => ({
             ...d,
             Id: i + 1,
