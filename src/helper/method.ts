@@ -28,8 +28,8 @@ export const monthOptions = [
 ];
 export const symbolOptions = [
   { label: "All", value: "ALL" },  
-  { label: "Sensex", value: "Sensex" },
-  { label: "Nifty 50", value: "Nifty 50" },
+  { label: "Sensex", value: "SENSEX" },
+  { label: "Nifty 50", value: "NIFTY" },
 ];
 
 export const extractBarModelData = (

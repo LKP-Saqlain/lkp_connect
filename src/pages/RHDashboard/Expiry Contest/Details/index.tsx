@@ -34,7 +34,7 @@ const Details = () => {
 
   const [zoneData, setZoneData] = useState<any[]>([]);
   const [employeeData, setEmployeeData] = useState<any[]>([]);
-  const [filteredData, setFilteredData] = useState<any[]>([]);
+  // const [filteredData, setFilteredData] = useState<any[]>([]);
 
   /* ================= EFFECT ================= */
 
@@ -46,18 +46,18 @@ const Details = () => {
     } else {
       fetchHistory();
     }
-  }, [view, selectedZone, selectedMonth]);
+  }, [view, selectedZone, selectedMonth, symbol]);
 
-  useEffect(() => {
-    if (!zoneData) return;
+  // useEffect(() => {
+  //   if (!zoneData) return;
 
-    if (symbol === "ALL") {
-      setFilteredData(zoneData);
-    } else {
-      const data = zoneData.filter((item) => item.index === symbol);
-      setFilteredData(data);
-    }
-  }, [symbol, zoneData]);
+  //   if (symbol === "ALL") {
+  //     setFilteredData(zoneData);
+  //   } else {
+  //     const data = zoneData.filter((item) => item.index === symbol);
+  //     setFilteredData(data);
+  //   }
+  // }, [symbol, zoneData]);
 
   /* ================= TODAY ================= */
 
@@ -98,6 +98,7 @@ const Details = () => {
       user_id,
       zone: accessType === "ALL" ? selectedZone : accessCode,
       month: selectedMonth,
+      symbol: symbol,
     };
 
     dispatch(showLoader("Fetching history..."));
@@ -127,7 +128,7 @@ const Details = () => {
 
   const exportToExcel = () => {
     const sourceData: any[] =
-      view === "HISTORY" ? filteredData ?? [] : employeeData ?? [];
+      view === "HISTORY" ? zoneData ?? [] : employeeData ?? [];
 
     if (sourceData.length === 0) return;
 
@@ -263,7 +264,7 @@ const Details = () => {
                 </option>
               ))}
             </select>
-            {filteredData.length > 0 && (
+            {zoneData.length > 0 && (
               <Button
                 size="small"
                 sx={{
@@ -287,9 +288,10 @@ const Details = () => {
                 ? "RHtodaysContestProgress"
                 : "RHexpiryContestHistory"
             }
-            T6Data={view === "HISTORY" ? filteredData : zoneData}
+            // T6Data={view === "HISTORY" ? filteredData : zoneData}
+            T6Data={zoneData}
             selectedWidget="Criteria and Rewards"
-            customHide
+            // customHide
           />
 
           <div className="d-flex justify-content-between align-items-center my-2">
@@ -318,7 +320,7 @@ const Details = () => {
             }
             // activeMenu="employeesContestProgress" employeesContestHistory
             T6Data={employeeData}
-            customHide
+            // customHide
           />
         </>
       ) : (
