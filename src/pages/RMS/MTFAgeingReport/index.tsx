@@ -10,10 +10,6 @@ import {
   CardHeader,
   Col,
   Label,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
   Row,
 } from "reactstrap";
 import Select from "react-select";
@@ -24,7 +20,6 @@ import { TextField } from "@mui/material";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import NudgeTable from "../../../components/common/NudgeTable";
 import { formatDateTime } from "../../../helper/commmon";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
 
 interface UploadDetail {
   type: string;
@@ -41,7 +36,6 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
   const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState("");
   const [uploadDetails, setUploadDetails] = useState<UploadDetail[]>([]);
-  const [isEmailConfirmOpen, setIsEmailConfirmOpen] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -322,103 +316,9 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
       });
   };
 
-  const handleSendEmail = async () => {
-    const payload = {
-      user_id: user_id,
-    };
-
-    dispatch(showLoader("Sending email..."));
-
-    let hasError = false;
-
-    const callApi = async (
-      apiFn: (payload: any) => Promise<any>,
-      apiName: string
-    ) => {
-      try {
-        const res = await apiFn(payload);
-        if (res?.status !== 200) {
-          throw new Error();
-        }
-      } catch {
-        hasError = true;
-        ShowToast("error", `${apiName} failed to send email`);
-      }
-    };
-
-    await callApi(apiServices.SendClientMTFEmail, "Client MTF Email");
-    await callApi(apiServices.SendDealerMTFEmail, "Dealer MTF Email");
-    await callApi(apiServices.SendRMMTFEmail, "RM MTF Email");
-    await callApi(apiServices.SendRHMTFEmail, "RH MTF Email");
-    await callApi(apiServices.SendAPMTFEmail, "AP MTF Email");
-
-    dispatch(hideLoader());
-
-    if (!hasError) {
-      ShowToast("success", "All emails sent successfully");
-    }
-  };
-
   const MTFAgeing = uploadDetails.find((item: any) => item.tp === "MTFAgeing");
-  const confirmBtnStyle = {
-    height: "25px",
-    minWidth: "70px",
-    padding: "0 12px",
-    fontSize: "13px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  };
   return (
     <React.Fragment>
-      <Modal
-        isOpen={isEmailConfirmOpen}
-        toggle={() => setIsEmailConfirmOpen(false)}
-        centered
-        style={{ maxWidth: "400px" }}
-      >
-        <ModalHeader toggle={() => setIsEmailConfirmOpen(false)}></ModalHeader>
-        <i
-          style={{ textAlign: "center" }}
-          className="ri-alert-line display-5 text-warning"
-        ></i>
-        <ModalBody
-          style={{ padding: "5px", fontSize: "14px", textAlign: "center" }}
-        >
-          Are you sure you want to send the Email?
-        </ModalBody>
-
-        <ModalFooter
-          className="justify-content-center"
-          style={{
-            padding: "8px 12px",
-            minHeight: "unset",
-          }}
-        >
-          <Button
-            color="secondary"
-            style={confirmBtnStyle}
-            onClick={() => setIsEmailConfirmOpen(false)}
-          >
-            No
-          </Button>
-
-          <Button
-            style={{
-              ...confirmBtnStyle,
-              backgroundColor: "#11395C",
-              borderColor: "#11395C",
-            }}
-            onClick={() => {
-              setIsEmailConfirmOpen(false);
-              handleSendEmail();
-            }}
-          >
-            Yes
-          </Button>
-        </ModalFooter>
-      </Modal>
-
       <div className="page-content page-view">
         <div className="container-fluid">
           <Row className="row-font">
@@ -583,6 +483,7 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
                       </Col>
 
                       <Col
+                        xl={2}
                         className="d-flex flex-column-reverse"
                         style={{
                           top:
@@ -602,42 +503,12 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
                             backgroundColor: "#11395C",
                             fontSize: "12px",
                             height: "40px",
-                            // minWidth: "100px",
+                            minWidth: "100px",
                           }}
                           // onClick={handleSubmit}
                           type="submit"
                         >
                           Submit
-                        </Button>
-                      </Col>
-
-                      <Col
-                        className="d-flex flex-column-reverse"
-                        style={{
-                          top:
-                            (formik.touched.selectedZone &&
-                              formik.errors.selectedZone) ||
-                            (formik.touched.selectedBranchCode &&
-                              formik.errors.selectedBranchCode)
-                              ? "-18px"
-                              : "",
-                        }}
-                      >
-                        <div className="mb-3" />
-                        <Button
-                          style={{
-                            backgroundColor: "#11395C",
-                            fontSize: "12px",
-                            height: "40px",
-                          }}
-                          type="button"
-                          onClick={() => setIsEmailConfirmOpen(true)}
-                        >
-                          Email
-                          <MailOutlineIcon
-                            fontSize="small"
-                            sx={{ marginLeft: "2px", marginBottom: "2px" }}
-                          />
                         </Button>
                       </Col>
                     </Row>

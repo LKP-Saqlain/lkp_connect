@@ -307,6 +307,7 @@ export const newDomainEndpoints = [
   endpoints.SendRMMTFEmail,
   endpoints.SendAPMTFEmail,
   endpoints.MTFShorfallUpload,
+  endpoints.ShowMailMTFAgeingData,
   //SPIP
   endpoints.SPIPClientPerformanceSummary,
   endpoints.SPIPClientPerformanceDashboard,

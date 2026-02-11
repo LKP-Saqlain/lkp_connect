@@ -12586,3 +12586,182 @@ export const SPIPContestReport: GridColDef[] = [
     },
   },
 ];
+
+export const mtfAgeingEmailColumns: GridColDef[] = [
+  {
+    field: "zn",
+    headerName: "Zone",
+    flex: 0.6,
+    minWidth: 70,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "bc",
+    headerName: "Branch Code",
+    flex: 0.8,
+    minWidth: 90,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "emailId",
+    headerName: "Email",
+    flex: 0.8,
+    minWidth: 240,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => params.value.toLowerCase() || "—",
+  },
+  {
+    field: "ct",
+    headerName: "Client Type",
+    flex: 0.8,
+    minWidth: 110,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "cc",
+    headerName: "Client Code",
+    flex: 0.8,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "cn",
+    headerName: "Client Name",
+    flex: 1.4,
+    minWidth: 220,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "rmc",
+    headerName: "RM Code",
+    flex: 0.7,
+    minWidth: 90,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "rmn",
+    headerName: "RM Name",
+    flex: 1.2,
+    minWidth: 200,
+    align: "left",
+    headerAlign: "center",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "dc",
+    headerName: "Dealer Code",
+    flex: 0.7,
+    minWidth: 90,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "dn",
+    headerName: "Dealer Name",
+    flex: 1.2,
+    minWidth: 200,
+    align: "left",
+    headerAlign: "center",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "mtf",
+    headerName: "MTF Funded",
+    flex: 1,
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "d30",
+    headerName: "≤ 30 Days",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "d60",
+    headerName: "≤ 60 Days",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "d88",
+    headerName: "≤ 88 Days",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "d89",
+    headerName: "≤ 89 Days",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "d90",
+    headerName: "≤ 90 Days",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "gt90",
+    headerName: "> 90 Days",
+    flex: 1,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+];
