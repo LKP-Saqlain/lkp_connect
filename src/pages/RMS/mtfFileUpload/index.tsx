@@ -62,7 +62,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
     apiServices
       .ShowMailMTFAgeingData(payload)
       .then((response) => {
-        const data = response?.data?.data;
+        const { data } = response?.data;
         if (response?.status === 200 && Array.isArray(data)) {
           dispatch(hideLoader());
 
@@ -579,7 +579,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
             }}
           >
             {" "}
-            <h4 className="card-title mb-0">{"MTF Email Ageing Records"}</h4>
+            <h4 className="card-title mb-0">{"MTF Ageing Client List"}</h4>
           </CardHeader>
           <CardBody>
             {" "}
