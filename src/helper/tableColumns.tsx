@@ -11979,6 +11979,19 @@ export const expiryContestHistory: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.noOfLots >= 100;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
   },
   {
     field: "minBrokerage",
@@ -11988,6 +12001,19 @@ export const expiryContestHistory: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.minBrokerage >= 5000;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
   },
   {
     field: "uniqueClients",
@@ -11997,6 +12023,19 @@ export const expiryContestHistory: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.uniqueClients >= 5;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
   },
   {
     field: "qualified",
@@ -12040,7 +12079,146 @@ export const RHexpiryContestHistory: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
   },
-  ...expiryContestHistory,
+  {
+    field: "ExpiryDate",
+    headerName: "Expiry Date",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => {
+      if (!params.value) return ""; // safety check
+      const date = new Date(params.value);
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
+  },
+  {
+    field: "day",
+    headerName: "Day",
+    disableColumnMenu: true,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "index",
+    headerName: "Index",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "instrument",
+    headerName: "Instrument",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "noOfLots",
+    headerName: "No of Lots",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.noOfLots >= 500;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "minBrokerage",
+    headerName: "Brokerage",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.minBrokerage >= 50000;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "uniqueClients",
+    headerName: "Unique Clients",
+    disableColumnMenu: true,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.uniqueClients >= 20;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "qualified",
+    headerName: "Qualified",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "prize",
+    headerName: "Gift Voucher",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
+  },
 ];
 export const RHtodaysContestProgress: GridColDef[] = [
   {
@@ -12542,6 +12720,15 @@ export const contestSPIP: GridColDef[] = [
   },
 ];
 export const SPIPContestReport: GridColDef[] = [
+  {
+    field: "zn",
+    headerName: "Zone",
+    flex: 0.7,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    align: "center",
+    headerAlign: "center",
+  },
   {
     field: "ec",
     headerName: "Code",

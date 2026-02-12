@@ -2759,11 +2759,14 @@ const DataTable = ({
       )}
       <Paper
         sx={{
-          height: selectedWidget === "Client Details Report" ? "200px" : "72vh",
-
-          maxHeight:
-            selectedWidget === "Criteria and Rewards" ? "52vh" : "none",
-
+          height:
+            selectedWidget === "Client Details Report"
+              ? "200px"
+              : selectedWidget === "Criteria and Rewards"
+              ? T6Data.length < 10
+                ? "auto"
+                : "52vh"
+              : "72vh",
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",
@@ -2835,7 +2838,8 @@ const DataTable = ({
           // Use the correct identifier for rows
           getRowClassName={(params) => {
             if (customCss) {
-              if (params.row.isDuplicate) return "duplicate-row";
+              if (!params.row.val) return "invalid-row";
+              if (params.row.dup) return "duplicate-row";
             }
             return params.indexRelativeToCurrentPage % 2 === 0
               ? "even-row"
@@ -2862,6 +2866,9 @@ const DataTable = ({
             },
             ...(customCss && {
               "& .duplicate-row": {
+                backgroundColor: "#f9e28e !important", // light yellow
+              },
+              "& .invalid-row": {
                 backgroundColor: "#ffadb0 !important", // light red
               },
             }),
