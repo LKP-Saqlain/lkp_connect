@@ -6563,6 +6563,33 @@ export const unListedTradeColumns: GridColDef[] = [
 
 export const ClientPledgeRequest: GridColDef[] = [
   {
+    field: "encryptedCode",
+    headerName: "Pledge Request",
+    headerClassName: "header-wrap-custom",
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+
+  {
+    field: "copylnk",
+    headerName: "Copy\nLink",
+    headerClassName: "header-wrap-custom",
+    minWidth: 75,
+    flex: 0.3,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const { enc } = params.row;
+      if (!enc) return <span>No Link Available</span>;
+
+      const fullLink = `https://allocation.lkp.net.in:51528/Pledge/direct?UserId=${enc}`;
+      return <CopyToClipboardCell fullLink={fullLink} field={"pledgeLink"} />;
+    },
+  },
+  {
     disableColumnMenu: true,
     field: "cc",
     headerName: "Client Code",
@@ -6734,15 +6761,6 @@ export const ClientPledgeRequest: GridColDef[] = [
   //   //   }).format(value);
   //   // },
   // },
-  {
-    field: "encryptedCode",
-    headerName: "Pledge Request",
-    headerClassName: "header-wrap-custom",
-    width: 90,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
 ];
 
 export const clientAPBrokerageColumns: GridColDef[] = [
