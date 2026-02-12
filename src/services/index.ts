@@ -1217,4 +1217,27 @@ export const apiServices = {
   ShowMailMTFAgeingData: async (payload: any) => {
     return await apiService("POST", endpoints.ShowMailMTFAgeingData, payload);
   },
+  SendClientMTFShortfallMail: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendClientMTFShortfallMail,
+      payload
+    );
+  },
+  SendDealerMTFShortfallMail: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendDealerMTFShortfallMail,
+      payload
+    );
+  },
+  SendRMMTFShortfallMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendRMMTFShortfallMail, payload);
+  },
+  SendRHMTFShortfallMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendRHMTFShortfallMail, payload);
+  },
+  SendAPMTFShortfallMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendAPMTFShortfallMail, payload);
+  },
 };

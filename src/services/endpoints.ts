@@ -287,6 +287,11 @@ export const endpoints = {
   SendAPMTFEmail: "/api/RMS/SendAPMTFEmail",
   MTFShorfallUpload: "/api/RMS/MTFShorfallUpload",
   ShowMailMTFAgeingData: "/api/RMS/ShowMailMTFAgeingData",
+  SendClientMTFShortfallMail: "/api/RMS/SendClientMTFShortfallMail",
+  SendDealerMTFShortfallMail: "/api/RMS/SendDealerMTFShortfallMail",
+  SendRMMTFShortfallMail: "/api/RMS/SendRMMTFShortfallMail",
+  SendRHMTFShortfallMail: "/api/RMS/SendRHMTFShortfallMail",
+  SendAPMTFShortfallMail: "/api/RMS/SendAPMTFShortfallMail",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);
