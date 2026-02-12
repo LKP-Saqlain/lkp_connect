@@ -230,32 +230,68 @@ const InvoiceUpload = ({ activeSubItem }: any) => {
                   customHide={true}
                 />
                 <div style={{ marginTop: "1rem" }}>
-                  <Button
-                    onClick={() => handleDuplicationClick(true)}
+                  <div
                     style={{
-                      backgroundColor: "#db393e",
-                      color: "#fff",
-                      padding: "4px 10px",
-                      borderColor: "#f94a4a",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      flexWrap: "wrap", // prevents breaking layout on small screens
                     }}
                   >
-                    With Duplicate
-                  </Button>
+                    <Button
+                      onClick={() => handleDuplicationClick(true)}
+                      style={{
+                        backgroundColor: "#db393e",
+                        color: "#fff",
+                        padding: "4px 10px",
+                        borderColor: "#f94a4a",
+                      }}
+                    >
+                      With Duplicate
+                    </Button>
 
-                  <Button
-                    onClick={() => handleDuplicationClick(false)}
-                    style={{
-                      backgroundColor: "#11395C",
-                      color: "#fff",
-                      padding: "4px 10px",
-                      marginLeft: "1rem",
-                    }}
-                  >
-                    Without Duplicate
-                  </Button>
-                  <p>
-                    <strong>NOTE:</strong> Rows in red mean they are duplicates.
-                  </p>
+                    <Button
+                      onClick={() => handleDuplicationClick(false)}
+                      style={{
+                        backgroundColor: "#11395C",
+                        color: "#fff",
+                        padding: "4px 10px",
+                      }}
+                    >
+                      Without Duplicate
+                    </Button>
+
+                    <p
+                      style={{
+                        fontSize: "13px",
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                      }}
+                    >
+                      <strong>Note:</strong>
+                      <span
+                        style={{
+                          width: "12px",
+                          height: "12px",
+                          backgroundColor: "#FFADB0",
+                          display: "inline-block",
+                        }}
+                      />
+                      Invalid Records
+                      <span
+                        style={{
+                          width: "12px",
+                          height: "12px",
+                          backgroundColor: "#F9E28E",
+                          display: "inline-block",
+                          marginLeft: "8px",
+                        }}
+                      />
+                      Duplicate Records
+                    </p>
+                  </div>
 
                   <Modal
                     isOpen={showConfirmModal}

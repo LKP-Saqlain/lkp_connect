@@ -105,7 +105,19 @@ const Index = ({ activeSubItem, row, isCustomRender }: any) => {
           />
         ))}
       </Tabs>
-
+      {row && isCustomRender && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-end",
+            fontSize: "13px",
+            fontWeight: 300,
+          }}
+        >
+          {row.en} / {row.ec}
+        </div>
+      )}
       {/* 🔹 Example conditional rendering */}
       <Container fluid>
         <Row>

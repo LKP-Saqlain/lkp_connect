@@ -62,6 +62,7 @@ const Details = () => {
       user_id: user_id,
       //   user_id: "EMP-5299",
       month: selectedMonth,
+      symbol: "ALL",
     };
     dispatch(showLoader("Fetching Client Code..."));
     apiServices
@@ -197,7 +198,8 @@ const Details = () => {
           }
           T6Data={data}
           customHide
-          selectedWidget={detailsView === "TODAY" ? "Criteria and Rewards" : ""}
+          // selectedWidget={detailsView === "TODAY" ? "Criteria and Rewards" : ""}
+          selectedWidget="Criteria and Rewards"
         />
       ) : (
         <span className="fs-5">

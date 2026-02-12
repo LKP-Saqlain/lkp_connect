@@ -239,44 +239,56 @@ const Details = () => {
       {view === "HISTORY" && (
         <div className="d-flex justify-content-between align-items-center mb-2">
           <h6 className="mb-0">Zone Contest Progress</h6>
-          <div className="d-flex gap-2">
-            <select
-              className="form-select form-select-sm"
-              style={{ width: "140px" }}
-              value={symbol}
-              onChange={(e) => setSymbol(e.target.value)}
-            >
-              {symbolOptions.map((m) => (
-                <option key={m.value} value={m.value}>
-                  {m.label}
-                </option>
-              ))}
-            </select>
-            <select
-              className="form-select form-select-sm"
-              style={{ width: "140px" }}
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-            >
-              {monthOptions.map((m) => (
-                <option key={m.value} value={m.value}>
-                  {m.label}
-                </option>
-              ))}
-            </select>
-            {zoneData.length > 0 && (
-              <Button
-                size="small"
-                sx={{
-                  textTransform: "none",
-                  backgroundColor: "#11395C",
-                  color: "#fff",
-                }}
-                onClick={exportToExcel}
+          <div className="d-flex  align-items-end gap-2">
+            <div>
+              <label className="form-label mb-1" style={{ fontSize: "12px" }}>
+                Select Symbol
+              </label>
+              <select
+                className="form-select form-select-sm"
+                style={{ width: "140px" }}
+                value={symbol}
+                onChange={(e) => setSymbol(e.target.value)}
               >
-                Excel <DownloadIcon sx={{ fontSize: "1rem" }} />
-              </Button>
-            )}
+                {symbolOptions.map((m) => (
+                  <option key={m.value} value={m.value}>
+                    {m.label}
+                  </option>
+                ))}
+              </select>
+            </div>{" "}
+            <div>
+              <label className="form-label mb-1" style={{ fontSize: "12px" }}>
+                Select Month
+              </label>
+              <select
+                className="form-select form-select-sm"
+                style={{ width: "140px" }}
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+              >
+                {monthOptions.map((m) => (
+                  <option key={m.value} value={m.value}>
+                    {m.label}
+                  </option>
+                ))}
+              </select>{" "}
+            </div>{" "}
+            <div>
+              {zoneData.length > 0 && (
+                <Button
+                  size="small"
+                  sx={{
+                    textTransform: "none",
+                    backgroundColor: "#11395C",
+                    color: "#fff",
+                  }}
+                  onClick={exportToExcel}
+                >
+                  Excel <DownloadIcon sx={{ fontSize: "1rem" }} />
+                </Button>
+              )}{" "}
+            </div>
           </div>
         </div>
       )}
@@ -320,6 +332,7 @@ const Details = () => {
             }
             // activeMenu="employeesContestProgress" employeesContestHistory
             T6Data={employeeData}
+            selectedWidget="Criteria and Rewards"
             // customHide
           />
         </>
