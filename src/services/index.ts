@@ -1240,4 +1240,7 @@ export const apiServices = {
   SendAPMTFShortfallMail: async (payload: any) => {
     return await apiService("POST", endpoints.SendAPMTFShortfallMail, payload);
   },
+  SLBMLastUpdate: async (payload: any) => {
+    return await apiService("POST", endpoints.SLBMLastUpdate, payload);
+  },
 };

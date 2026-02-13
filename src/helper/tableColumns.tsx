@@ -833,6 +833,7 @@ export const slbmColumns: GridColDef[] = [
     minWidth: 200,
     flex: 1.2,
     disableColumnMenu: true,
+    renderCell: (params) => params.value || "—",
   },
   {
     field: "isin",
@@ -860,7 +861,7 @@ export const slbmColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => (
       <Tooltip title={params.row?.rmmob} arrow placement="top">
-        <span>{params.value}</span>
+        <span>{params.value || " — "}</span>
       </Tooltip>
     ),
   },
@@ -873,7 +874,7 @@ export const slbmColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => (
       <Tooltip title={params.row?.dlrmob} arrow placement="top">
-        <span>{params.value}</span>
+        <span>{params.value || " — "}</span>
       </Tooltip>
     ),
   },
@@ -886,7 +887,7 @@ export const slbmColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => (
       <Tooltip title={params.row?.apmob} arrow placement="top">
-        <span>{params.value}</span>
+        <span>{params.value || " — "}</span>
       </Tooltip>
     ),
   },

@@ -10,7 +10,7 @@ import {
   Button,
 } from "reactstrap";
 // import { regEx } from "../../../helper/method";
-// import DownloadIcon from "@mui/icons-material/Download";
+import DownloadIcon from "@mui/icons-material/Download";
 import { apiServices } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../redux/store";
@@ -26,6 +26,9 @@ import "../style.css";
 // import { slbmColumns } from "../../../helper/tableColumns.tsx";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import { Autocomplete, TextField } from "@mui/material";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import { slbmColumns } from "../../../helper/tableColumns";
 
 // interface Option {
 //   label: string;
@@ -43,6 +46,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
   const [filteredData, setFilteredData] = useState([]);
   const [isinRecords, setIsinRecords] = useState<any[]>([]);
   const [inputText, setInputText] = useState<string>("");
+  const [slbmTime, setSlbmTime] = useState<string>("");
 
   // const [page, setPage] = useState(1); // Track current page
 
@@ -90,6 +94,30 @@ const SlbmHoling = ({ activeSubItem }: any) => {
       // handleDownloadExcel();
     },
   });
+
+  useEffect(() => {
+    let payload = {
+      loginName: user_id,
+      option: "LastUpdate",
+    };
+
+    dispatch(showLoader(""));
+    apiServices
+      .SLBMLastUpdate(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          console.log("ResponseApi", response?.data?.data[0].lud);
+          setSlbmTime(response?.data?.data[0].lud);
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch(showLoader("Please wait we are processing your request"));
@@ -255,7 +283,8 @@ const SlbmHoling = ({ activeSubItem }: any) => {
 
   const handleSubmit = async (event?: any, value?: any) => {
     console.log("newPage", event, value);
-
+    setFilteredData([]);
+    setUserData([]);
     const payload = {
       loginName: user_id,
       start: 0,
@@ -353,7 +382,34 @@ const SlbmHoling = ({ activeSubItem }: any) => {
     console.log("filteredSearch Records", filtered);
   };
 
-  document.title = "LKP Securities | Dormant Client Report";
+  const exportToExcel = (data: any[], fileName: string) => {
+    const orderedData = data.map((row) => {
+      const orderedRow: any = {};
+      slbmColumns.forEach((col: any) => {
+        let cellValue = row[col.field as string];
+
+        // If valueFormatter exists, apply it
+        if (col.valueFormatter) {
+          cellValue = col.valueFormatter(cellValue);
+        }
+
+        orderedRow[col.headerName as string] = cellValue;
+      });
+      return orderedRow;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(orderedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Employee Report");
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(blob, `${fileName}.xlsx`);
+  };
+
+  document.title = "LKP Securities | SLBM Client Holding Report";
 
   return (
     <React.Fragment>
@@ -372,13 +428,37 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                     borderRadius: "15px 15px 0 0",
                     boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
                     backgroundColor: "#fff",
-                    padding: "0.2rem 0.8rem",
+                    padding: "0.4rem 0.8rem",
                   }}
                 >
-                  <h4 className="card-title mb-0">
-                    SLBM Client Holding Report
-                  </h4>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      width: "100%",
+                    }}
+                  >
+                    <h4 className="card-title mb-0">
+                      SLBM Client Holding Report
+                    </h4>
+
+                    <span
+                      style={{
+                        fontSize: "0.65rem",
+                        fontWeight: 500,
+                        color: "#D22B2B",
+                        marginRight: "1rem",
+                      }}
+                    >
+                      <i>
+                        LAST UPDATED DATE -{" "}
+                        {slbmTime === "" ? "No Data Available" : slbmTime}
+                      </i>
+                    </span>
+                  </div>
                 </CardHeader>
+
                 <CardBody>
                   <form onSubmit={formik.handleSubmit}>
                     <div>
@@ -587,7 +667,7 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                               backgroundColor: "#11395C",
                               fontSize: "12px",
                               height: "40px",
-                              minWidth: "200px",
+                              // minWidth: "200px",
                             }}
                             // onClick={handleSubmit}
                             type="submit"
@@ -596,34 +676,41 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                           </Button>
                         </Col>
 
-                        <Col
-                          className="d-flex flex-column-reverse"
-                          style={{
-                            top:
-                              (formik.touched.selectedZone &&
-                                formik.errors.selectedZone) ||
-                              (formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode) ||
-                              (formik.touched.isInValue &&
-                                formik.errors.isInValue)
-                                ? "-25px"
-                                : "",
-                          }}
-                        >
-                          <div className="mb-3" />
-                          {/* <Button
+                        {user_id === "APN-7161" && filteredData.length > 0 && (
+                          <Col
+                            className="d-flex flex-column-reverse"
                             style={{
-                              backgroundColor: "#11395C",
-                              fontSize: "12px",
-                              height: "40px",
+                              top:
+                                (formik.touched.selectedZone &&
+                                  formik.errors.selectedZone) ||
+                                (formik.touched.selectedBranchCode &&
+                                  formik.errors.selectedBranchCode) ||
+                                (formik.touched.isInValue &&
+                                  formik.errors.isInValue)
+                                  ? "-25px"
+                                  : "",
                             }}
-                            type="button"
-                            onClick={handleDownloadExcel}
                           >
-                            Excel
-                            <DownloadIcon fontSize="small" />
-                          </Button> */}
-                        </Col>
+                            <div className="mb-3" />
+                            <Button
+                              style={{
+                                backgroundColor: "#11395C",
+                                fontSize: "12px",
+                                height: "40px",
+                              }}
+                              type="button"
+                              onClick={() =>
+                                exportToExcel(
+                                  filteredData,
+                                  "slbm_client_holding_report"
+                                )
+                              }
+                            >
+                              Excel
+                              <DownloadIcon fontSize="small" />
+                            </Button>
+                          </Col>
+                        )}
                       </Row>
                     </div>
                   </form>
