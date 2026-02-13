@@ -14,16 +14,16 @@ import "../style.css";
 import { exportToExcel } from "../../../utils";
 
 const DP_RECOVERY_EXCEL_COLUMNS = [
-  { header: "Client Code", key: "cc" },
-  { header: "BOID", key: "boid" },
-  { header: "Client Name", key: "bonm" },
-  { header: "Total DP Debit", key: "lda" },
-  { header: "Holding Value", key: "hval" },
-  { header: "Mobile No", key: "mob" },
-  { header: "Email ID", key: "em" },
-  { header: "Status", key: "bost" },
-  { header: "Category", key: "asts" },
-  { header: "Last Trade Date", key: "ltd" },
+  { headerName: "Client Code", field: "cc" },
+  { headerName: "BOID", field: "boid" },
+  { headerName: "Client Name", field: "bonm" },
+  { headerName: "Total DP Debit", field: "lda" },
+  { headerName: "Holding Value", field: "hval" },
+  { headerName: "Mobile No", field: "mob" },
+  { headerName: "Email ID", field: "em" },
+  { headerName: "Status", field: "bost" },
+  { headerName: "Category", field: "asts" },
+  { headerName: "Last Trade Date", field: "ltd" },
 ];
 
 const DPRecovery = ({ activeSubItem }: any) => {

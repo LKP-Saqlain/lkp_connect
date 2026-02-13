@@ -44,13 +44,15 @@ export const capitalizeEachWord = (text: any) => {
 
 export const exportToExcel = (
   data: any[],
-  columns: { header: string; key: string }[],
+  columns: { headerName: string; field: string }[],
   fileName: string
 ) => {
   const formattedData = data.map((row) => {
     const obj: any = {};
-    columns.forEach((col) => {
-      obj[col.header] = row[col.key] ?? "";
+    columns.forEach((col: any) => {
+      if (col?.headerName && col?.field) {
+        obj[col.headerName] = row[col.field] ?? "";
+      }
     });
     return obj;
   });

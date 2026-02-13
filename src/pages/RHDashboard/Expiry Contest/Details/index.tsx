@@ -10,14 +10,14 @@ import { RootState, AppDispatch } from "../../../../redux/store";
 
 import DataTable from "../../../../components/common/UserInfoTable";
 import ComDropDown from "../../../../components/common/Dropdown/commonDropdown";
-
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
 import {
+  employeesContestHistory,
   employeesContestProgress,
-  expiryContestHistory,
+  RHexpiryContestHistory,
+  RHtodaysContestProgress,
 } from "../../../../helper/tableColumns";
 import { monthOptions, symbolOptions } from "../../../../helper/method";
+import { exportToExcel } from "../../../../utils";
 
 const Details = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -124,47 +124,81 @@ const Details = () => {
       .finally(() => dispatch(hideLoader()));
   };
 
+  const handleExcelExport = (tableType: "ZONE" | "EMPLOYEE") => {
+    let columns: any[] = [];
+    let fileName = "";
+    let data: any[] = [];
+
+    if (tableType === "ZONE") {
+      columns =
+        view === "TODAY" ? RHtodaysContestProgress : RHexpiryContestHistory;
+
+      fileName =
+        view === "TODAY" ? "RH_Today_Contest" : "RH_Expiry_Contest_History";
+
+      data = zoneData;
+    }
+
+    if (tableType === "EMPLOYEE") {
+      columns =
+        view === "TODAY" ? employeesContestProgress : employeesContestHistory; // change if you have employeesContestHistory
+
+      fileName =
+        view === "TODAY"
+          ? "Employee_Today_Contest"
+          : "Employee_Contest_History";
+
+      data = employeeData;
+    }
+
+    if (!data.length) return;
+    console.log(data, columns, fileName, "exportToExcel");
+
+    exportToExcel(data, columns, fileName);
+  };
+
   /* ================= EXCEL ================= */
 
-  const exportToExcel = () => {
-    const sourceData: any[] =
-      view === "HISTORY" ? zoneData ?? [] : employeeData ?? [];
+  // const exportToExcel = () => {
 
-    if (sourceData.length === 0) return;
+  //   const sourceData: any[] =
+  //     view === "HISTORY" ? zoneData ?? [] : employeeData ?? [];
 
-    const columns =
-      view === "HISTORY" ? expiryContestHistory : employeesContestProgress;
+  //   if (sourceData.length === 0) return;
 
-    const orderedData = sourceData.map((row: any) => {
-      const obj: Record<string, any> = {};
+  //   const columns =
+  //     view === "HISTORY" ? expiryContestHistory : employeesContestProgress;
 
-      columns.forEach((col: any) => {
-        if (col?.headerName && col?.field) {
-          obj[col.headerName] = row[col.field] ?? "";
-        }
-      });
+  //   const orderedData = sourceData.map((row: any) => {
+  //     const obj: Record<string, any> = {};
 
-      return obj;
-    });
+  //     columns.forEach((col: any) => {
+  //       if (col?.headerName && col?.field) {
+  //         obj[col.headerName] = row[col.field] ?? "";
+  //       }
+  //     });
 
-    const sheet = XLSX.utils.json_to_sheet(orderedData);
-    const book = XLSX.utils.book_new();
+  //     return obj;
+  //   });
 
-    XLSX.utils.book_append_sheet(
-      book,
-      sheet,
-      view === "HISTORY" ? "History Report" : "Employee Report"
-    );
+  //   const sheet = XLSX.utils.json_to_sheet(orderedData);
+  //   const book = XLSX.utils.book_new();
 
-    const buffer = XLSX.write(book, { bookType: "xlsx", type: "array" });
+  //   XLSX.utils.book_append_sheet(
+  //     book,
+  //     sheet,
+  //     view === "HISTORY" ? "History Report" : "Employee Report"
+  //   );
 
-    saveAs(
-      new Blob([buffer]),
-      view === "HISTORY"
-        ? "Expiry_contest_history.xlsx"
-        : "Expiry_contest_employee.xlsx"
-    );
-  };
+  //   const buffer = XLSX.write(book, { bookType: "xlsx", type: "array" });
+
+  //   saveAs(
+  //     new Blob([buffer]),
+  //     view === "HISTORY"
+  //       ? "Expiry_contest_history.xlsx"
+  //       : "Expiry_contest_employee.xlsx"
+  //   );
+  // };
 
   const handleZoneChange = (zone: any) => {
     console.log("Selected zone:", zone);
@@ -283,7 +317,7 @@ const Details = () => {
                     backgroundColor: "#11395C",
                     color: "#fff",
                   }}
-                  onClick={exportToExcel}
+                  onClick={() => handleExcelExport("ZONE")}
                 >
                   Excel <DownloadIcon sx={{ fontSize: "1rem" }} />
                 </Button>
@@ -317,7 +351,7 @@ const Details = () => {
                   backgroundColor: "#11395C",
                   color: "#fff",
                 }}
-                onClick={exportToExcel}
+                onClick={() => handleExcelExport("EMPLOYEE")}
               >
                 Excel <DownloadIcon sx={{ fontSize: "1rem" }} />
               </Button>
@@ -330,7 +364,6 @@ const Details = () => {
                 ? "employeesContestProgress"
                 : "employeesContestHistory"
             }
-            // activeMenu="employeesContestProgress" employeesContestHistory
             T6Data={employeeData}
             selectedWidget="Criteria and Rewards"
             // customHide
