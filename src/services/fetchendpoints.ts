@@ -121,6 +121,7 @@ export const newDomainEndpoints = [
   endpoints.SLBMHoldingsReport,
   endpoints.GetEmpContestReport,
   endpoints.GetAPContestTargetDetails,
+  endpoints.SLBMLastUpdate,
 
   endpoints.APContestLeaderboard,
   endpoints.getDormantReport, //1

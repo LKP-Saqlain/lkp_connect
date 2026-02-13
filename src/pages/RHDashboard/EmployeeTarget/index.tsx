@@ -132,7 +132,7 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
   }, [dispatch, accessType]);
 
   useEffect(() => {
-    if (!isZoneReady && accessType !== "ZONE") return;
+    if (!isZoneReady && accessType !== "ZONE" && accessType !== "") return;
     if (!user_id) return;
     if (tabValue !== 0 && tabValue !== 1) return;
 

@@ -292,6 +292,7 @@ export const endpoints = {
   SendRMMTFShortfallMail: "/api/RMS/SendRMMTFShortfallMail",
   SendRHMTFShortfallMail: "/api/RMS/SendRHMTFShortfallMail",
   SendAPMTFShortfallMail: "/api/RMS/SendAPMTFShortfallMail",
+  SLBMLastUpdate: "/api/ShortAllocation/SLBMLastUpdate",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);
