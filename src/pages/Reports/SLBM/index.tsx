@@ -283,7 +283,8 @@ const SlbmHoling = ({ activeSubItem }: any) => {
 
   const handleSubmit = async (event?: any, value?: any) => {
     console.log("newPage", event, value);
-
+    setFilteredData([]);
+    setUserData([]);
     const payload = {
       loginName: user_id,
       start: 0,
@@ -675,39 +676,41 @@ const SlbmHoling = ({ activeSubItem }: any) => {
                           </Button>
                         </Col>
 
-                        <Col
-                          className="d-flex flex-column-reverse"
-                          style={{
-                            top:
-                              (formik.touched.selectedZone &&
-                                formik.errors.selectedZone) ||
-                              (formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode) ||
-                              (formik.touched.isInValue &&
-                                formik.errors.isInValue)
-                                ? "-25px"
-                                : "",
-                          }}
-                        >
-                          <div className="mb-3" />
-                          <Button
+                        {user_id === "APN-7161" && filteredData.length > 0 && (
+                          <Col
+                            className="d-flex flex-column-reverse"
                             style={{
-                              backgroundColor: "#11395C",
-                              fontSize: "12px",
-                              height: "40px",
+                              top:
+                                (formik.touched.selectedZone &&
+                                  formik.errors.selectedZone) ||
+                                (formik.touched.selectedBranchCode &&
+                                  formik.errors.selectedBranchCode) ||
+                                (formik.touched.isInValue &&
+                                  formik.errors.isInValue)
+                                  ? "-25px"
+                                  : "",
                             }}
-                            type="button"
-                            onClick={() =>
-                              exportToExcel(
-                                filteredData,
-                                "slbm_client_holding_report"
-                              )
-                            }
                           >
-                            Excel
-                            <DownloadIcon fontSize="small" />
-                          </Button>
-                        </Col>
+                            <div className="mb-3" />
+                            <Button
+                              style={{
+                                backgroundColor: "#11395C",
+                                fontSize: "12px",
+                                height: "40px",
+                              }}
+                              type="button"
+                              onClick={() =>
+                                exportToExcel(
+                                  filteredData,
+                                  "slbm_client_holding_report"
+                                )
+                              }
+                            >
+                              Excel
+                              <DownloadIcon fontSize="small" />
+                            </Button>
+                          </Col>
+                        )}
                       </Row>
                     </div>
                   </form>
