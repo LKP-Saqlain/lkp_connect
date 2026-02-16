@@ -23,10 +23,14 @@ export const useAppHealth = () => {
   };
 
   const checkVersion = async () => {
+    const controller = new AbortController();
+
     try {
       const response = await fetch("/version.json", {
         cache: "no-store",
+        signal: controller.signal,
       });
+
       const data = await response.json();
 
       if (!currentVersion.current) {
@@ -37,6 +41,8 @@ export const useAppHealth = () => {
     } catch {
       // ignore version check errors
     }
+
+    return () => controller.abort();
   };
 
   useEffect(() => {
@@ -57,7 +63,7 @@ export const useAppHealth = () => {
 
       const versionInterval = setInterval(() => {
         checkVersion();
-      }, 30000);
+      }, 60000);
 
       return () => clearInterval(versionInterval);
     }
