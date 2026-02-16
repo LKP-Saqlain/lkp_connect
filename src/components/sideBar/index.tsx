@@ -14,7 +14,7 @@ import {
   List,
   IconButton,
   useMediaQuery,
-  Badge,
+  // Badge,
 } from "@mui/material";
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
@@ -22,7 +22,7 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+// import NotificationsIcon from "@mui/icons-material/Notifications";
 // import { SlSizeFullscreen } from "react-icons/sl";
 // import { BsFullscreen } from "react-icons/bs";
 import Logo from "../../assets/logo.png";
@@ -244,7 +244,7 @@ const SideBar = () => {
 
   const [isNudgeOpen, setIsNudgeOpen] = useState(false);
   const [modal_animationZoom, setmodal_animationZoom] = useState(false);
-  const [nudgeCount, setNudgeCount] = useState(0);
+  // const [nudgeCount, setNudgeCount] = useState(0);
 
   const [sideBarNudge, setSideBarNudge] = useState<any[][]>([]);
   const [modal_center, setmodal_center] = useState<boolean>(false);
@@ -417,7 +417,7 @@ const SideBar = () => {
 
         console.log("reportTypeSize", reportTypes.size);
 
-        setNudgeCount(reportTypes.size);
+        // setNudgeCount(reportTypes.size);
         setSideBarNudge(data);
       } catch (error) {
         console.error("Error fetching dashboard nudge:", error);
@@ -933,11 +933,11 @@ const SideBar = () => {
     return active ? componentResolver(active.menu_order, active.mn) : null;
   };
 
-  const handleNotificationClick = () => {
-    setIsNudgeOpen(true); // Toggle the visibility of Nudge component
-    setmodal_animationZoom((prev) => !prev);
-    console.log("MenuMaster--->", isNudgeOpen);
-  };
+  // const handleNotificationClick = () => {
+  //   setIsNudgeOpen(true); // Toggle the visibility of Nudge component
+  //   setmodal_animationZoom((prev) => !prev);
+  //   console.log("MenuMaster--->", isNudgeOpen);
+  // };
 
   function tog_animationZoom() {
     setmodal_animationZoom((prev) => !prev);
@@ -1172,7 +1172,7 @@ const SideBar = () => {
                 </div>
               ) : null}
             </Box> */}
-            {showMyPerformance && (
+            {/* {showMyPerformance && (
               <MenuItem>
                 <IconButton
                   size="large"
@@ -1186,7 +1186,7 @@ const SideBar = () => {
                   </Badge>
                 </IconButton>
               </MenuItem>
-            )}
+            )} */}
             <Typography
               component="div"
               sx={{

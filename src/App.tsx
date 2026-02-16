@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense } from "react";
 import PrivateRoute from "./components/PrivateRoutes";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer } from "react-toastify";
@@ -11,6 +11,7 @@ import ChangePassword from "./pages/Authentication/ChangePassword";
 import Maintenance from "./pages/Maintenance";
 import AmcMembershipSteps from "./pages/AmcMembership/Steps";
 import StatusCard from "./pages/MutualFund/PhysicalOnboard/StatusPage";
+import { useAppHealth } from "./hooks/useAppHealth";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(
@@ -26,60 +27,20 @@ const ConsentOtp = lazy(() => import("./pages/MTF/consentOtp"));
 const CongratsPage = lazy(() => import("./pages/MTF/congratsScreen"));
 
 const App = () => {
-  const [serverOnline, setServerOnline] = useState(true);
-  const retryIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
   //this used to check the health of my IIS Server
-  const checkServer = async () => {
-    try {
-      const res = await fetch("/favicon.png", { cache: "no-store" });
-      if (res.ok) {
-        if (!serverOnline) {
-          console.log(" Server back online — reloading...");
-          setServerOnline(true);
-          window.location.reload();
-        }
-      } else {
-        console.warn(" Server returned bad status");
-        setServerOnline(false);
-      }
-    } catch (err) {
-      console.error(" Server unreachable:", err);
-      setServerOnline(false);
-    }
-  };
-
-  useEffect(() => {
-    checkServer();
-  }, []);
-
-  useEffect(() => {
-    if (!serverOnline) {
-      console.log("🔁 Starting retry interval...");
-      retryIntervalRef.current = setInterval(() => {
-        checkServer();
-      }, 10000);
-    } else {
-      if (retryIntervalRef.current) {
-        console.log("🛑 Stopping retry interval...");
-        clearInterval(retryIntervalRef.current);
-        retryIntervalRef.current = null;
-      }
-    }
-
-    return () => {
-      if (retryIntervalRef.current) {
-        clearInterval(retryIntervalRef.current);
-      }
-    };
-  }, [serverOnline]);
+  const { serverOnline, updateAvailable } = useAppHealth();
 
   if (!serverOnline) {
     return <Maintenance />;
   }
-
   return (
     <Router>
+      {updateAvailable && (
+        <div className="update-banner">
+          A new version is available.
+          <button onClick={() => window.location.reload()}>Refresh</button>
+        </div>
+      )}
       <ToastContainer />
       <Loader />
       <SessionExpiryHandler />
