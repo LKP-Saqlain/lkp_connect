@@ -266,7 +266,7 @@ const SideBar = () => {
     (state: RootState) => state.UserLogin && state.UserLogin?.data?.data
   );
 
-  const { name, emailID, authenticationValue } = useSelector(
+  const { name, authenticationValue } = useSelector(
     (state: RootState) => state.AuthUser && state.AuthUser?.data?.data
   );
   console.log("reduxStateUserName", name, user_type);
@@ -959,34 +959,34 @@ const SideBar = () => {
     setShowMyPerformance(hasMyPerformance);
   }, [menuItems]);
 
-  const handleSSOLogin = () => {
-    console.log("TestSSOLogin");
-    const userEmail = (emailID && emailID) || "";
-    let payload = {
-      email: userEmail,
-    };
+  // const handleSSOLogin = () => {
+  //   console.log("TestSSOLogin");
+  //   const userEmail = (emailID && emailID) || "";
+  //   let payload = {
+  //     email: userEmail,
+  //   };
 
-    dispatch(showLoader(""));
-    apiServices
-      .EKycSSOLogin(payload)
-      .then((response) => {
-        console.log("EKycSSOLoginResponse", response?.data?.data);
-        dispatch(hideLoader());
-        if (response?.status === 200) {
-          if (response?.data?.data?.success) {
-            const url = response?.data?.data?.url;
-            window.open(url, "_blank", "noopener,noreferrer");
-          }
-        }
-      })
-      .catch((Error) => {
-        console.log("Errrror", Error);
-        dispatch(hideLoader());
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
-  };
+  //   dispatch(showLoader(""));
+  //   apiServices
+  //     .EKycSSOLogin(payload)
+  //     .then((response) => {
+  //       console.log("EKycSSOLoginResponse", response?.data?.data);
+  //       dispatch(hideLoader());
+  //       if (response?.status === 200) {
+  //         if (response?.data?.data?.success) {
+  //           const url = response?.data?.data?.url;
+  //           window.open(url, "_blank", "noopener,noreferrer");
+  //         }
+  //       }
+  //     })
+  //     .catch((Error) => {
+  //       console.log("Errrror", Error);
+  //       dispatch(hideLoader());
+  //     })
+  //     .finally(() => {
+  //       dispatch(hideLoader());
+  //     });
+  // };
 
   const handleWebPortalLogin = () => {
     console.log("TestSSOLogin");
@@ -1094,7 +1094,7 @@ const SideBar = () => {
             </Button>
             {/* {showMyPerformance && ( */}
             <>
-              <Button
+              {/* <Button
                 onClick={handleSSOLogin}
                 style={{
                   height: "25px",
@@ -1110,7 +1110,7 @@ const SideBar = () => {
                 className="btn-sm"
               >
                 E-KYC
-              </Button>
+              </Button> */}
               <div
                 style={{
                   display: "flex",
