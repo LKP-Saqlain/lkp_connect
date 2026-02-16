@@ -27,7 +27,7 @@ import { EmployeeTargetReportColumns } from "../../../helper/tableColumns";
 const EmployeeTargetReport = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any[]>([]);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(1);
   const dispatch = useDispatch<AppDispatch>();
   const [isZoneReady, setIsZoneReady] = useState(false);
 
@@ -132,18 +132,19 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
   }, [dispatch, accessType]);
 
   useEffect(() => {
-    if (!isZoneReady) return;
+    if (!isZoneReady && accessType !== "ZONE" && accessType !== "") return;
     if (!user_id) return;
     if (tabValue !== 0 && tabValue !== 1) return;
 
     setData([]);
 
-    const selectedZone = formik.values.selectedZone!.value;
+    const selectedZone =
+      formik.values.selectedZone && formik.values.selectedZone!.value;
     const quarterPeriod = tabValue === 0 ? "Q3-2526" : "Q4-2526";
 
     const payload = {
       user_id,
-      zone: selectedZone,
+      zone: accessType === "ZONE" ? "ALL" : selectedZone,
       quarterPeriod,
     };
 
@@ -316,6 +317,7 @@ const EmployeeTargetReport = ({ activeSubItem }: any) => {
                                         ? "#11395c"
                                         : "#fff",
                                       color: selected ? "#fff" : "#11395c",
+                                      textTransform: "capitalize",
                                     }}
                                     onClick={() =>
                                       formik.setFieldValue("selectedZone", zone)

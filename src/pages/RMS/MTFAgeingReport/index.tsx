@@ -317,7 +317,6 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
   };
 
   const MTFAgeing = uploadDetails.find((item: any) => item.tp === "MTFAgeing");
-
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -350,203 +349,169 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
                 </CardHeader>
                 <CardBody>
                   <form onSubmit={formik.handleSubmit}>
-                    <div>
-                      <Row>
-                        <Col xl={3}>
-                          <div className="mb-3" style={{ maxWidth: "300px" }}>
-                            <Label
-                              htmlFor="zone-select"
-                              className="form-label text-muted label-font"
-                            >
-                              Zone
-                            </Label>
-                            <Select
-                              value={formik.values.selectedZone}
-                              onChange={(option: any) =>
-                                formik.setFieldValue("selectedZone", option)
-                              }
-                              onBlur={formik.handleBlur}
-                              options={noSortingGroup}
-                              isClearable
-                              className="placeholder-font"
-                              id="zone-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  cursor: "pointer",
+                    <Row className="align-items-end">
+                      <Col xl={3}>
+                        <div className="mb-3" style={{ maxWidth: "300px" }}>
+                          <Label
+                            htmlFor="zone-select"
+                            className="form-label text-muted label-font"
+                          >
+                            Zone
+                          </Label>
+                          <Select
+                            value={formik.values.selectedZone}
+                            onChange={(option: any) =>
+                              formik.setFieldValue("selectedZone", option)
+                            }
+                            onBlur={formik.handleBlur}
+                            options={noSortingGroup}
+                            isClearable
+                            className="placeholder-font"
+                            id="zone-select"
+                            styles={{
+                              control: (base: any) => ({
+                                ...base,
+                                cursor: "pointer",
+                                borderColor:
+                                  formik.touched.selectedZone &&
+                                  formik.errors.selectedZone
+                                    ? "#DC4535"
+                                    : base.borderColor,
+                                "&:hover": {
                                   borderColor:
                                     formik.touched.selectedZone &&
                                     formik.errors.selectedZone
                                       ? "#DC4535"
                                       : base.borderColor,
-                                  "&:hover": {
-                                    borderColor:
-                                      formik.touched.selectedZone &&
-                                      formik.errors.selectedZone
-                                        ? "#DC4535"
-                                        : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.selectedZone &&
-                              formik.errors.selectedZone && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
-                                  {formik.errors.selectedZone}
-                                </div>
-                              )}
-                          </div>
-                        </Col>
+                                },
+                              }),
+                            }}
+                          />
+                          {formik.touched.selectedZone &&
+                            formik.errors.selectedZone && (
+                              <div
+                                className="text-danger"
+                                style={{ fontSize: "12px" }}
+                              >
+                                {formik.errors.selectedZone}
+                              </div>
+                            )}
+                        </div>
+                      </Col>
 
-                        <Col xl={3}>
-                          <div className="mb-3" style={{ maxWidth: "300px" }}>
-                            <Label
-                              htmlFor="branch-code-select"
-                              className="form-label text-muted label-font"
-                            >
-                              Branch Code
-                            </Label>
-                            <Select
-                              value={formik.values.selectedBranchCode}
-                              onChange={(option) =>
-                                formik.setFieldValue(
-                                  "selectedBranchCode",
-                                  option
-                                )
-                              }
-                              onBlur={formik.handleBlur}
-                              options={branchCodeOptions}
-                              isClearable
-                              className="placeholder-font"
-                              id="branch-code-select"
-                              styles={{
-                                control: (base: any) => ({
-                                  ...base,
-                                  cursor: "pointer",
+                      <Col xl={3}>
+                        <div className="mb-3" style={{ maxWidth: "300px" }}>
+                          <Label
+                            htmlFor="branch-code-select"
+                            className="form-label text-muted label-font"
+                          >
+                            Branch Code
+                          </Label>
+                          <Select
+                            value={formik.values.selectedBranchCode}
+                            onChange={(option) =>
+                              formik.setFieldValue("selectedBranchCode", option)
+                            }
+                            onBlur={formik.handleBlur}
+                            options={branchCodeOptions}
+                            isClearable
+                            className="placeholder-font"
+                            id="branch-code-select"
+                            styles={{
+                              control: (base: any) => ({
+                                ...base,
+                                cursor: "pointer",
+                                borderColor:
+                                  formik.touched.selectedBranchCode &&
+                                  formik.errors.selectedBranchCode
+                                    ? "#DC4535"
+                                    : base.borderColor,
+                                "&:hover": {
                                   borderColor:
                                     formik.touched.selectedBranchCode &&
                                     formik.errors.selectedBranchCode
                                       ? "#DC4535"
                                       : base.borderColor,
-                                  "&:hover": {
-                                    borderColor:
-                                      formik.touched.selectedBranchCode &&
-                                      formik.errors.selectedBranchCode
-                                        ? "#DC4535"
-                                        : base.borderColor,
-                                  },
-                                }),
-                              }}
-                            />
-                            {formik.touched.selectedBranchCode &&
-                              formik.errors.selectedBranchCode && (
-                                <div
-                                  className="text-danger"
-                                  style={{ fontSize: "12px" }}
-                                >
-                                  {formik.errors.selectedBranchCode}
-                                </div>
-                              )}
-                          </div>
-                        </Col>
-
-                        <Col xl={3}>
-                          <div className="mb-3" style={{ maxWidth: "300px" }}>
-                            <Label
-                              htmlFor="client-code"
-                              className="form-label text-muted label-font"
-                            >
-                              Enter Client Code
-                            </Label>
-
-                            <TextField
-                              fullWidth
-                              id="client-code"
-                              name="clientCode"
-                              placeholder="Enter Client Code"
-                              variant="outlined"
-                              size="small"
-                              value={formik.values.clientCode}
-                              onChange={(e) => {
-                                const cleanedValue = e.target.value
-                                  .replace(/[^A-Za-z0-9]/g, "") // Remove special chars
-                                  .toUpperCase(); // Force uppercase
-                                formik.setFieldValue(
-                                  "clientCode",
-                                  cleanedValue
-                                );
-                              }}
-                              onBlur={formik.handleBlur}
-                              InputProps={{
-                                style: {
-                                  textTransform: "uppercase",
-                                  fontSize: "14px",
                                 },
-                              }}
-                            />
-                          </div>
-                        </Col>
-
-                        <Col
-                          className="d-flex flex-column-reverse"
-                          style={{
-                            top:
-                              (formik.touched.selectedZone &&
-                                formik.errors.selectedZone) ||
-                              (formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode) ||
-                              (formik.touched.clientCode &&
-                                formik.errors.clientCode)
-                                ? "-18px"
-                                : "",
-                          }}
-                        >
-                          <div className="mb-3" />
-                          <Button
-                            style={{
-                              backgroundColor: "#11395C",
-                              fontSize: "12px",
-                              height: "40px",
-                              minWidth: "200px",
+                              }),
                             }}
-                            // onClick={handleSubmit}
-                            type="submit"
-                          >
-                            Submit
-                          </Button>
-                        </Col>
+                          />
+                          {formik.touched.selectedBranchCode &&
+                            formik.errors.selectedBranchCode && (
+                              <div
+                                className="text-danger"
+                                style={{ fontSize: "12px" }}
+                              >
+                                {formik.errors.selectedBranchCode}
+                              </div>
+                            )}
+                        </div>
+                      </Col>
 
-                        <Col
-                          className="d-flex flex-column-reverse"
-                          style={{
-                            top:
-                              (formik.touched.selectedZone &&
-                                formik.errors.selectedZone) ||
-                              (formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode)
-                                ? "-18px"
-                                : "",
-                          }}
-                        >
-                          <div className="mb-3" />
-                          {/* <Button
+                      <Col xl={3}>
+                        <div className="mb-3" style={{ maxWidth: "300px" }}>
+                          <Label
+                            htmlFor="client-code"
+                            className="form-label text-muted label-font"
+                          >
+                            Enter Client Code
+                          </Label>
+
+                          <TextField
+                            fullWidth
+                            id="client-code"
+                            name="clientCode"
+                            placeholder="Enter Client Code"
+                            variant="outlined"
+                            size="small"
+                            value={formik.values.clientCode}
+                            onChange={(e) => {
+                              const cleanedValue = e.target.value
+                                .replace(/[^A-Za-z0-9]/g, "") // Remove special chars
+                                .toUpperCase(); // Force uppercase
+                              formik.setFieldValue("clientCode", cleanedValue);
+                            }}
+                            onBlur={formik.handleBlur}
+                            InputProps={{
+                              style: {
+                                textTransform: "uppercase",
+                                fontSize: "14px",
+                              },
+                            }}
+                          />
+                        </div>
+                      </Col>
+
+                      <Col
+                        xl={2}
+                        className="d-flex flex-column-reverse"
+                        style={{
+                          top:
+                            (formik.touched.selectedZone &&
+                              formik.errors.selectedZone) ||
+                            (formik.touched.selectedBranchCode &&
+                              formik.errors.selectedBranchCode) ||
+                            (formik.touched.clientCode &&
+                              formik.errors.clientCode)
+                              ? "-18px"
+                              : "",
+                        }}
+                      >
+                        <div className="mb-3" />
+                        <Button
                           style={{
                             backgroundColor: "#11395C",
                             fontSize: "12px",
                             height: "40px",
+                            minWidth: "100px",
                           }}
-                          type="button"
-                          onClick={handleDownloadExcel}
+                          // onClick={handleSubmit}
+                          type="submit"
                         >
-                          Excel
-                          <DownloadIcon fontSize="small" />
-                        </Button> */}
-                        </Col>
-                      </Row>
-                    </div>
+                          Submit
+                        </Button>
+                      </Col>
+                    </Row>
                   </form>
                 </CardBody>
               </Card>

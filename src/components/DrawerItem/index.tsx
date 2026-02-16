@@ -116,6 +116,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "Research Calls": <TroubleshootIcon />,
     "Q4 Contest": <LocalPoliceIcon />,
     "Q3 Contest": <LocalPoliceIcon />,
+    "Expiry Contest": <CampaignIcon />,
   };
 
   const getIcon = (title: string) => {

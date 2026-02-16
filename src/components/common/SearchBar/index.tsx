@@ -7,7 +7,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Button as ReactstrapButton } from "reactstrap";
 // import { Button as MUIButton } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import { Typography } from "@mui/material";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { Tooltip, Typography } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -64,6 +65,7 @@ interface SearchAppBarProps {
   totalLedgerDebitAmt?: any;
   activeSubItem?: any;
   dormantCount?: any;
+  handleDownloadExcel?: () => void;
 }
 
 const SearchAppBar: React.FC<SearchAppBarProps> = ({
@@ -80,6 +82,7 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
   totalLedgerDebitAmt,
   activeSubItem,
   dormantCount,
+  handleDownloadExcel,
 }) => {
   const [searchValue, setSearchValue] = React.useState(searchTableValue ?? "");
   // const [selectedButton, setSelectedButton] = React.useState<string>("ALL");
@@ -231,6 +234,21 @@ const SearchAppBar: React.FC<SearchAppBarProps> = ({
                 }).format(totalLedgerDebitAmt.active)}`}
               </Typography>
             )}
+            <Tooltip title="Download Excel" arrow>
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                  padding: "4px",
+                }}
+                onClick={handleDownloadExcel}
+              >
+                <DownloadForOfflineIcon
+                  style={{ fontSize: "30px", color: "#11395C" }}
+                />
+              </span>
+            </Tooltip>
           </>
         )}
 

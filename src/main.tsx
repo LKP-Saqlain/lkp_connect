@@ -6,7 +6,7 @@ import App from "./App.tsx";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import store, { persistor } from "./redux/store.ts";
-import 'rsuite/dist/rsuite.min.css';  // or 'rsuite/styles/index.less';
+import "rsuite/dist/rsuite.min.css"; // or 'rsuite/styles/index.less';
 
 createRoot(document.getElementById("root")!).render(
   <Provider store={store}>

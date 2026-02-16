@@ -215,7 +215,7 @@ const AmcMembershipQ4 = ({ activeMenu }: any) => {
     try {
       const response = await apiServices.GetAMCActivationStatus(payload);
       console.log("EsignStatus response:", response?.data?.data[0]);
-      return response?.data?.data[0]?.message2 === "eSign already submitted";
+      return response?.data?.data[0]?.msg2 === "eSign already submitted";
     } catch (error) {
       console.error(error);
       return false;
@@ -227,6 +227,8 @@ const AmcMembershipQ4 = ({ activeMenu }: any) => {
   const handleAmcDetailsClick = async (row: any) => {
     console.log("Row clicked from child:", row);
     const status = await checkPaymentStatus(row);
+    console.log("StatusCheck", status);
+
     if (status) {
       fetchData();
       console.log("Page refreshed, esign found");

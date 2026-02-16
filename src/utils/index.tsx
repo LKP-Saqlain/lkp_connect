@@ -1,3 +1,6 @@
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
 export const directStyle = {
   bgcolor: "#A8D4FB",
   color: "#000",
@@ -37,4 +40,36 @@ export const capitalizeEachWord = (text: any) => {
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
+};
+
+export const exportToExcel = (
+  data: any[],
+  columns: { headerName: string; field: string }[],
+  fileName: string
+) => {
+  const formattedData = data.map((row) => {
+    const obj: any = {};
+    columns.forEach((col: any) => {
+      if (col?.headerName && col?.field) {
+        obj[col.headerName] = row[col.field] ?? "";
+      }
+    });
+    return obj;
+  });
+
+  const worksheet = XLSX.utils.json_to_sheet(formattedData);
+  const workbook = XLSX.utils.book_new();
+
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
+
+  const excelBuffer = XLSX.write(workbook, {
+    bookType: "xlsx",
+    type: "array",
+  });
+
+  const blob = new Blob([excelBuffer], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+  });
+
+  saveAs(blob, `${fileName}.xlsx`);
 };

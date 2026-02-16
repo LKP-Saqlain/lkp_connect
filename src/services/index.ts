@@ -1129,4 +1129,118 @@ export const apiServices = {
   ValidateOtpSms: async (payload: any) => {
     return await apiService("POST", endpoints.ValidateOtpSms, payload);
   },
+  GetEmployeeExpiryDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetEmployeeExpiryDetails,
+      payload
+    );
+  },
+  GetClientExpiryDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientExpiryDetails, payload);
+  },
+  GetZoneExpiryDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetZoneExpiryDetails, payload);
+  },
+  UploadHdfcMerchantFile: async (payload: any) => {
+    return await apiService("POST", endpoints.UploadHdfcMerchantFile, payload);
+  },
+  GetClientMandateData: async (payload: any) => {
+    return await apiService("POST", endpoints.GetClientMandateData, payload);
+  },
+  DownloadDpMandateTrans: async (payload: any) => {
+    return await apiService("POST", endpoints.DownloadDpMandateTrans, payload);
+  },
+  GetClientMandateExectionData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetClientMandateExectionData,
+      payload
+    );
+  },
+  GetMandateJVReportData: async (payload: any) => {
+    return await apiService("POST", endpoints.GetMandateJVReportData, payload);
+  },
+  GetDealerExpiryDashBoardData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetDealerExpiryDashBoardData,
+      payload
+    );
+  },
+  GetDealerExpiryHistDashBoardData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetDealerExpiryHistDashBoardData,
+      payload
+    );
+  },
+  GetZoneExpiryHistDashBoardData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetZoneExpiryHistDashBoardData,
+      payload
+    );
+  },
+  GetZoneExpiryDashBoardData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetZoneExpiryDashBoardData,
+      payload
+    );
+  },
+  GetSPIPContest: async (payload: any) => {
+    return await apiService("POST", endpoints.GetSPIPContest, payload);
+  },
+  SendClientMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendClientMTFEmail, payload);
+  },
+  SendDealerMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendDealerMTFEmail, payload);
+  },
+  SendRMMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendRMMTFEmail, payload);
+  },
+  SendRHMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendRHMTFEmail, payload);
+  },
+  SendAPMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendAPMTFEmail, payload);
+  },
+  GetContestSummary: async (payload: any) => {
+    return await apiService("POST", endpoints.GetContestSummary, payload);
+  },
+
+  MTFShorfallUpload: async (payload: any) => {
+    return await apiService("POST", endpoints.MTFShorfallUpload, payload);
+  },
+  ShowMailMTFAgeingData: async (payload: any) => {
+    return await apiService("POST", endpoints.ShowMailMTFAgeingData, payload);
+  },
+  SendClientMTFShortfallMail: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendClientMTFShortfallMail,
+      payload
+    );
+  },
+  SendDealerMTFShortfallMail: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendDealerMTFShortfallMail,
+      payload
+    );
+  },
+  SendRMMTFShortfallMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendRMMTFShortfallMail, payload);
+  },
+  SendRHMTFShortfallMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendRHMTFShortfallMail, payload);
+  },
+  SendAPMTFShortfallMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendAPMTFShortfallMail, payload);
+  },
+  SLBMLastUpdate: async (payload: any) => {
+    return await apiService("POST", endpoints.SLBMLastUpdate, payload);
+  },
 };

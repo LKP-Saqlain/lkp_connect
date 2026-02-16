@@ -64,6 +64,8 @@ const MandateCall = () => {
       .GetDpClientDetails({ clientcode: encryptedCode })
       .then((response) => {
         if (response?.status === 200) {
+          console.log("GetDpClientDetailsResponse", response?.data?.data);
+
           setData(response.data.data);
         }
       })
@@ -91,7 +93,7 @@ const MandateCall = () => {
 
           if (Array.isArray(rawData)) {
             const formattedData = rawData.map((item: any, index: number) => ({
-              id: index + 1,
+              Id: index + 1,
               ...item,
             }));
             setMandateCallbackData(formattedData);
@@ -156,10 +158,19 @@ const MandateCall = () => {
   };
 
   const HandleMandate = () => {
+    console.log(
+      "MandateTableData",
+      mandateTableData,
+      mandateCallBackData[0]?.mandateStatus
+    );
+    if (mandateCallBackData[0]?.mandateStatus === "ACTIVE") {
+      ShowToast("error", "Previous Mandate is Already Active");
+      return;
+    }
     let payload = {
-      clientcode: data?.clientcode,
+      clientcode: data?.cc,
       // user_id: user_id,
-      dpCode: data?.dpcode,
+      dpCode: data?.dpcd,
       dpid: data?.dpid,
       amount: amount,
       upiID: upiId,
@@ -233,7 +244,9 @@ const MandateCall = () => {
         action_type: "UPDATE",
         onBehalf_Of: "PAYEE",
         expiryTime: "180",
-        umn: mandateTableData?.umn,
+        umn: mandateTableData?.umn
+          ? mandateTableData?.umn
+          : mandateCallBackData && mandateCallBackData[0]?.umn,
       },
     };
     console.log("Payload", payload);
@@ -263,12 +276,13 @@ const MandateCall = () => {
         pspRefNo: "",
       },
       mandate: {
-        amount: mandateTableData?.amount.toString(),
+        amount: mandateCallBackData?.[0].amount.toString(),
         action_type: "REVOKE",
         onBehalf_Of: "PAYEE",
-        UMN: mandateTableData.umn,
+        UMN: mandateCallBackData?.[0].umn,
       },
     };
+    console.log("Payload11", payload);
 
     dispatch(showLoader(""));
 
@@ -279,6 +293,9 @@ const MandateCall = () => {
           console.log("respinsesse", response?.data);
           if (response?.data?.statusCode === 200) {
             ShowToast("success", response?.data?.data?.statusDesc);
+            setIsRevokeModalOpen(false);
+            setShowOtpField(false);
+            setOtp(["", "", "", "", "", ""]);
           } else {
             ShowToast("error", response?.data?.data?.statusDesc);
           }
@@ -292,7 +309,7 @@ const MandateCall = () => {
   };
 
   const getUserDetails = (value: any) => {
-    console.log("values", value);
+    console.log("values1111", value);
     setAmount(value?.amount);
     setUpiId(value?.upi);
     setMandateTableData(value);
@@ -301,8 +318,8 @@ const MandateCall = () => {
   const handleSendOtp = () => {
     const payload = {
       otp_type: "SendOtpSMS",
-      mobileNo: data?.mobileNo, //"9702497379", //data?.mobileNo,
-      User_id: data?.clientcode, // "5431",
+      mobileNo: data?.mn, //"9702497379", //data?.mobileNo,
+      User_id: data?.cc, // "5431",
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
@@ -312,7 +329,6 @@ const MandateCall = () => {
       .then((response) => {
         if (response?.status === 200) {
           console.log("Responsee1", response?.data);
-
           ShowToast("success", response?.data?.message);
           setShowOtpField(true);
         }
@@ -340,10 +356,16 @@ const MandateCall = () => {
     }
   };
 
+  const resetRevokeModalState = () => {
+    setIsRevokeModalOpen(false);
+    setShowOtpField(false);
+    setOtp(["", "", "", "", "", ""]);
+  };
+
   const handleValidateOTP = (value: any) => {
     const payload = {
-      mobileNo: data?.mobileNo, // "9702497379",
-      User_id: data?.clientcode, // "5431",
+      mobileNo: data?.mn, // "9702497379",
+      User_id: data?.cc, // "5431",
       otp: otp.join(""),
     };
 
@@ -353,7 +375,7 @@ const MandateCall = () => {
       .ValidateOtpSms(payload)
       .then((response) => {
         dispatch(hideLoader());
-
+        console.log("ValidateOtpSmsResponse", response);
         if (response?.status !== 200) return;
 
         const { statusCode, message } = response.data;
@@ -363,6 +385,9 @@ const MandateCall = () => {
 
           //  Revoke API ONLY on valid OTP
           getRevokeDetails(value);
+
+          //im closing the modal here
+          resetRevokeModalState();
         } else {
           ShowToast("error", message);
         }
@@ -371,6 +396,35 @@ const MandateCall = () => {
         dispatch(hideLoader());
         console.log("error", error);
       });
+  };
+
+  const handleRevokeModalToggle = () => {
+    setIsRevokeModalOpen(false);
+    setShowOtpField(false);
+    setOtp(["", "", "", "", "", ""]);
+  };
+
+  const handleOtpKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    if (e.key !== "Backspace") return;
+
+    setOtp((prev) => {
+      const newOtp = [...prev];
+      if (index === 0) {
+        return ["", "", "", "", "", ""];
+      }
+      if (newOtp[index]) {
+        newOtp[index] = "";
+        return newOtp;
+      }
+      newOtp[index - 1] = "";
+      setTimeout(() => {
+        document.getElementById(`otp-${index - 1}`)?.focus();
+      }, 0);
+      return newOtp;
+    });
   };
 
   useEffect(() => {
@@ -418,11 +472,11 @@ const MandateCall = () => {
                 >
                   <Modal
                     isOpen={isRevokeModalOpen}
-                    toggle={() => setIsRevokeModalOpen(false)}
+                    toggle={handleRevokeModalToggle}
                     centered
                     style={{ maxWidth: "380px", margin: "auto" }}
                   >
-                    <ModalHeader toggle={() => setIsRevokeModalOpen(false)}>
+                    <ModalHeader toggle={handleRevokeModalToggle}>
                       Revoke Confirmation
                     </ModalHeader>
 
@@ -452,6 +506,7 @@ const MandateCall = () => {
                               onChange={(e) =>
                                 handleOtpChange(e.target.value, index)
                               }
+                              onKeyDown={(e) => handleOtpKeyDown(e, index)}
                               style={{
                                 width: "45px",
                                 height: "45px",
@@ -572,6 +627,7 @@ const MandateCall = () => {
                         size="small"
                         label="Enter UPI ID"
                         fullWidth
+                        disabled={mandateTableData ? true : false}
                         value={upiId}
                         onChange={(e) => {
                           setUpiId(e.target.value);

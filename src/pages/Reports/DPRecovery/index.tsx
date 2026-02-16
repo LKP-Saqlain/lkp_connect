@@ -11,6 +11,20 @@ import ShowToast from "../../../utils/toastUtils";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import UserCapsules from "../../ClientDetails/UserCapsules";
 import "../style.css";
+import { exportToExcel } from "../../../utils";
+
+const DP_RECOVERY_EXCEL_COLUMNS = [
+  { headerName: "Client Code", field: "cc" },
+  { headerName: "BOID", field: "boid" },
+  { headerName: "Client Name", field: "bonm" },
+  { headerName: "Total DP Debit", field: "lda" },
+  { headerName: "Holding Value", field: "hval" },
+  { headerName: "Mobile No", field: "mob" },
+  { headerName: "Email ID", field: "em" },
+  { headerName: "Status", field: "bost" },
+  { headerName: "Category", field: "asts" },
+  { headerName: "Last Trade Date", field: "ltd" },
+];
 
 const DPRecovery = ({ activeSubItem }: any) => {
   const [userData, setUserData] = useState<any[]>([]);
@@ -247,6 +261,39 @@ const DPRecovery = ({ activeSubItem }: any) => {
     setSelectedCapsule(value);
   };
 
+  const getExportDataByCapsule = () => {
+    switch (selectedCapsule) {
+      case "Active Clients":
+        return activeGroupedClients;
+
+      case "Inactive Clients":
+        return inactiveGroupedClients;
+
+      case "Total Clients":
+      default:
+        return userData;
+    }
+  };
+
+  const handleDownloadExcel = () => {
+    // alert("Im called from Child");
+    console.log("selectedCapsule11", selectedCapsule);
+    const exportData = getExportDataByCapsule();
+    if (!exportData.length) {
+      ShowToast("error", "No data available to export");
+      return;
+    }
+
+    const fileName =
+      selectedCapsule === "Active Clients"
+        ? "DP_Recovery_Active_Clients"
+        : selectedCapsule === "Inactive Clients"
+        ? "DP_Recovery_Inactive_Clients"
+        : "DP_Recovery_All_Clients";
+
+    exportToExcel(exportData, DP_RECOVERY_EXCEL_COLUMNS, fileName);
+  };
+
   return (
     <>
       <div className="page-content page-view">
@@ -298,6 +345,7 @@ const DPRecovery = ({ activeSubItem }: any) => {
                 inactiveClient={inactiveClients}
                 totalCount={totalCount}
                 totalLedgerDebitAmt={ledgerSum}
+                handleDownloadExcel={handleDownloadExcel}
               />
             </CardBody>
           </Card>

@@ -98,7 +98,7 @@ const AmcMembership = () => {
   }, [step]);
 
   // ✅ Fix typo: use bSDA_Flag (not bsdA_Flag)
-  const isBSDA = selectedRow?.bsdA_Flag === "Y";
+  const isBSDA = selectedRow?.bsda === "Y";
 
   // const handleGoBack = () => {
   //   sessionStorage.removeItem("selectedRow"); // cleanup
@@ -106,7 +106,9 @@ const AmcMembership = () => {
   // };
 
   const goToStep2 = () => setStep(isBSDA ? 3 : 2); // dynamic back step
-
+  useEffect(() => {
+    console.log("TESTeFFECT", selectedRow);
+  }, [selectedRow]);
   return (
     <div
       className="page-content page-view"

@@ -66,7 +66,7 @@ const AmcMembership = () => {
   const fetchData = ({ decryptedBOID, decryptedUserId }: any) => {
     const payload = {
       zone: "ALL",
-      branchCode: "ALL",
+      branchCode: "Q4",
       tradingCode: decryptedBOID,
       userId: decryptedUserId,
       // userId: "EMP-5376",
@@ -98,7 +98,7 @@ const AmcMembership = () => {
   }, [step]);
 
   // ✅ Fix typo: use bSDA_Flag (not bsdA_Flag)
-  const isBSDA = selectedRow?.bsdA_Flag === "Y";
+  const isBSDA = selectedRow?.bsda === "Y";
 
   // const handleGoBack = () => {
   //   sessionStorage.removeItem("selectedRow"); // cleanup

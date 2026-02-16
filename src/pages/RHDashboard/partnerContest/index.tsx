@@ -25,7 +25,7 @@ import { Tabs, Tab } from "@mui/material";
 const PartnerContestReport = ({ activeSubItem }: any) => {
   const [data, setData] = useState<any[]>([]);
   const [noSortingGroup, setNoSortingGroup] = useState([]);
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(1);
   const [isZoneReady, setIsZoneReady] = useState(false);
   const lastRequestRef = useRef<string | null>(null);
 
@@ -153,7 +153,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
   }, [dispatch, accessType]);
 
   useEffect(() => {
-    if (!isZoneReady) return;
+    if (!isZoneReady && accessType !== "ZONE" && accessType !== "") return;
     if (tabValue !== 0 && tabValue !== 1) return;
 
     const selectedZone = formik.values.selectedZone?.value ?? "ALL";
@@ -170,7 +170,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
 
     const payload = {
       user_id,
-      zone: selectedZone,
+      zone: accessType === "ZONE" ? "ALL" : selectedZone,
       quarterPeriod,
     };
 
@@ -332,6 +332,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
                                         color: isSelected
                                           ? "#ffffff"
                                           : "#11395c",
+                                        textTransform: "capitalize",
                                       }}
                                       onClick={() =>
                                         formik.setFieldValue(
@@ -477,6 +478,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
                                         color: isSelected
                                           ? "#ffffff"
                                           : "#11395c",
+                                        textTransform: "capitalize",
                                       }}
                                       onClick={() =>
                                         formik.setFieldValue(

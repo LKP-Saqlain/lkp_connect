@@ -89,7 +89,7 @@ const ClientInfo = ({
         "GetAMCActivationStatus Payment link response:",
         response?.data?.data[0]
       );
-      if (response?.data?.data[0]?.message === "Record Found") {
+      if (response?.data?.data[0]?.msg === "Record Found") {
         setPaymentStatus(true);
       } else {
         setPaymentStatus(false);

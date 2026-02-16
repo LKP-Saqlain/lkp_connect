@@ -66,6 +66,8 @@ export const multipartEndpoints = [
   endpoints.T6NSESellingFileUpload,
   endpoints.REGNSEFileUpload,
   endpoints.REGBSEFileUpload,
+  endpoints.UploadHdfcMerchantFile,
+  endpoints.MTFShorfallUpload,
 ];
 
 export const mutualFundEndpoints = [
@@ -119,6 +121,7 @@ export const newDomainEndpoints = [
   endpoints.SLBMHoldingsReport,
   endpoints.GetEmpContestReport,
   endpoints.GetAPContestTargetDetails,
+  endpoints.SLBMLastUpdate,
 
   endpoints.APContestLeaderboard,
   endpoints.getDormantReport, //1
@@ -186,6 +189,7 @@ export const newDomainEndpoints = [
   endpoints.SendSecondHolderSignature,
   endpoints.SendThirdHolderSignature,
   endpoints.SendFinalSignedMail,
+  endpoints.DownloadSignedPdf,
 
   // Employeee contest
   endpoints.GetEmpContestAchievedBrokerage,
@@ -246,6 +250,7 @@ export const newDomainEndpoints = [
 
   //Third Party Innvoice
   endpoints.TPInvoiceStaging, //Upload file also columns has change from my end
+  endpoints.UnstageTPInvoice,
   endpoints.TPInvoiceUpload,
   endpoints.GetTPInvoiceRecordList,
   endpoints.DeleteTPInvoiceRecord,
@@ -297,7 +302,17 @@ export const newDomainEndpoints = [
   endpoints.GetMTFShortfallData,
   endpoints.MergeIntoOdinFile,
   endpoints.MergeIntoSymphonyFile,
-
+  endpoints.SendClientMTFEmail,
+  endpoints.SendDealerMTFEmail,
+  endpoints.SendRHMTFEmail,
+  endpoints.SendRMMTFEmail,
+  endpoints.SendAPMTFEmail,
+  endpoints.MTFShorfallUpload,
+  endpoints.SendClientMTFShortfallMail,
+  endpoints.SendDealerMTFShortfallMail,
+  endpoints.SendRMMTFShortfallMail,
+  endpoints.SendRHMTFShortfallMail,
+  endpoints.SendAPMTFShortfallMail,
   //SPIP
   endpoints.SPIPClientPerformanceSummary,
   endpoints.SPIPClientPerformanceDashboard,
@@ -341,4 +356,31 @@ export const newDomainEndpoints = [
   endpoints.RevokeUpiMandate,
   endpoints.SendOtpSms,
   endpoints.ValidateOtpSms,
+
+  //Expiry
+  endpoints.GetEmployeeExpiryDetails,
+  endpoints.GetClientExpiryDetails,
+  endpoints.GetZoneExpiryDetails,
+
+  //Accounts
+  endpoints.UploadHdfcMerchantFile,
+  endpoints.GetClientMandateData,
+  endpoints.DownloadDpMandateTrans,
+  endpoints.GetClientMandateExectionData,
+  endpoints.GetMandateJVReportData,
+  endpoints.DPAMCDownloadFile,
+
+  endpoints.GetDealerExpiryDashBoardData,
+  endpoints.GetDealerExpiryHistDashBoardData,
+  endpoints.GetZoneExpiryDashBoardData,
+  endpoints.GetZoneExpiryHistDashBoardData,
+
+  endpoints.GetSPIPContest,
+  endpoints.GetContestSummary,
 ];
+const uniqueEndpoints = new Set(newDomainEndpoints);
+console.log(
+  "uniqueEndpointSize2",
+  uniqueEndpoints.size,
+  newDomainEndpoints.length
+);

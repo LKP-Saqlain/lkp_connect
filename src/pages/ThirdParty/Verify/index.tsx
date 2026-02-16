@@ -83,7 +83,7 @@ const InvoiceVerify = ({ activeSubItem }: any) => {
     try {
       dispatch(showLoader("Deleting..."));
       const payload = {
-        Rowid: row?.rowId,
+        Rowid: row?.rid,
         user_id: user_id,
       };
       const response = await apiServices.DeleteTPInvoiceRecord(payload);

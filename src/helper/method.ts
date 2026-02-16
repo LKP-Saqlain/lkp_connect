@@ -20,6 +20,18 @@ export function isValidPANNo(panNo: any) {
   return panRegex.test(panNo);
 }
 
+export const monthOptions = [
+  { label: "All", value: "ALL" },
+  { label: "Jan-26", value: "JAN-26" },
+  { label: "Feb-26", value: "FEB-26" },
+  { label: "Mar-26", value: "MAR-26" },
+];
+export const symbolOptions = [
+  { label: "All", value: "ALL" },  
+  { label: "Sensex", value: "SENSEX" },
+  { label: "Nifty 50", value: "NIFTY" },
+];
+
 export const extractBarModelData = (
   model: any,
   type: "Direct" | "Indirect" | "Total"
@@ -27,9 +39,9 @@ export const extractBarModelData = (
   if (!model) return { categories: [], series: [] };
 
   const months = [
-    { key: "a", label: "Oct" },
-    { key: "b", label: "Nov" },
-    { key: "c", label: "Dec" },
+    { key: "a", label: "Jan" },
+    { key: "b", label: "Feb" },
+    { key: "c", label: "Mar" },
   ];
 
   // Convert model keys

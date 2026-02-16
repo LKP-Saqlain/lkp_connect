@@ -833,6 +833,7 @@ export const slbmColumns: GridColDef[] = [
     minWidth: 200,
     flex: 1.2,
     disableColumnMenu: true,
+    renderCell: (params) => params.value || "—",
   },
   {
     field: "isin",
@@ -860,7 +861,7 @@ export const slbmColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => (
       <Tooltip title={params.row?.rmmob} arrow placement="top">
-        <span>{params.value}</span>
+        <span>{params.value || " — "}</span>
       </Tooltip>
     ),
   },
@@ -873,7 +874,7 @@ export const slbmColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => (
       <Tooltip title={params.row?.dlrmob} arrow placement="top">
-        <span>{params.value}</span>
+        <span>{params.value || " — "}</span>
       </Tooltip>
     ),
   },
@@ -886,7 +887,7 @@ export const slbmColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params: any) => (
       <Tooltip title={params.row?.apmob} arrow placement="top">
-        <span>{params.value}</span>
+        <span>{params.value || " — "}</span>
       </Tooltip>
     ),
   },
@@ -2023,29 +2024,29 @@ export const DPDebitRecovery: GridColDef[] = [
       return <CopyToClipboardCell fullLink={fullLink} field={"payment"} />;
     },
   },
-  // {
-  //   field: "dpMandate_Link",
-  //   headerName: "Mandate\nLink",
-  //   headerClassName: "header-wrap-custom",
-  //   minWidth: 75,
-  //   flex: 0.3,
-  //   align: "center",
-  //   headerAlign: "center",
-  //   disableColumnMenu: true,
-  //   renderCell: (params: any) => {
-  //     const { paylnk, enc } = params.row;
-  //     if (!paylnk || !enc) return <span>No Link Available</span>;
+  {
+    field: "dpMandate_Link",
+    headerName: "Mandate\nLink",
+    headerClassName: "header-wrap-custom",
+    minWidth: 75,
+    flex: 0.3,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const { paylnk, enc } = params.row;
+      if (!paylnk || !enc) return <span>No Link Available</span>;
 
-  //     const fullLink = `${paylnk}${enc}`;
-  //     return (
-  //       <CopyToClipboardCell
-  //         fullLink={fullLink}
-  //         field={"dpMandate"}
-  //         selectedRow={params?.row}
-  //       />
-  //     );
-  //   },
-  // },
+      const fullLink = `${paylnk}${enc}`;
+      return (
+        <CopyToClipboardCell
+          fullLink={fullLink}
+          field={"dpMandate"}
+          selectedRow={params?.row}
+        />
+      );
+    },
+  },
   {
     field: "cc",
     headerName: "Client Code",
@@ -2116,8 +2117,8 @@ export const DPDebitRecovery: GridColDef[] = [
     valueFormatter: (params: any) => {
       const value = parseFloat(params);
       return new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
       }).format(value);
     },
   },
@@ -3716,7 +3717,7 @@ export const RegionalHead: GridColDef[] = [
     field: "bc",
     headerName: "Branch",
     minWidth: 70,
-    flex: 0.6,
+    flex: 0.5,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -3733,8 +3734,8 @@ export const RegionalHead: GridColDef[] = [
   {
     field: "cn",
     headerName: "Client Name",
-    flex: 1.5,
-    minWidth: 180,
+    flex: 1.2,
+    minWidth: 150,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3751,8 +3752,8 @@ export const RegionalHead: GridColDef[] = [
   {
     field: "expln",
     headerName: "Existing Plan",
-    flex: 1.5,
-    minWidth: 200,
+    flex: 1.4,
+    minWidth: 180,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3774,10 +3775,19 @@ export const RegionalHead: GridColDef[] = [
     align: "center",
   },
   {
+    field: "req_dt",
+    headerName: "Request Date",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    minWidth: 120,
+    headerClassName: "header-wrap-custom",
+  },
+  {
     field: "remark", // unchanged (action column)
     headerName: "Action",
-    flex: 1,
-    minWidth: 100,
+    flex: 0.8,
+    minWidth: 90,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
@@ -3907,7 +3917,7 @@ export const BrokerageKyc: GridColDef[] = [
     align: "center",
   },
   {
-    field: "clientcode",
+    field: "cc",
     headerName: "Client Code",
     flex: 0.6,
     minWidth: 100,
@@ -6554,6 +6564,33 @@ export const unListedTradeColumns: GridColDef[] = [
 
 export const ClientPledgeRequest: GridColDef[] = [
   {
+    field: "encryptedCode",
+    headerName: "Pledge Request",
+    headerClassName: "header-wrap-custom",
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+
+  {
+    field: "copylnk",
+    headerName: "Copy\nLink",
+    headerClassName: "header-wrap-custom",
+    minWidth: 75,
+    flex: 0.3,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params: any) => {
+      const { enc } = params.row;
+      if (!enc) return <span>No Link Available</span>;
+
+      const fullLink = `https://allocation.lkp.net.in:51528/Pledge/direct?UserId=${enc}`;
+      return <CopyToClipboardCell fullLink={fullLink} field={"pledgeLink"} />;
+    },
+  },
+  {
     disableColumnMenu: true,
     field: "cc",
     headerName: "Client Code",
@@ -6725,15 +6762,6 @@ export const ClientPledgeRequest: GridColDef[] = [
   //   //   }).format(value);
   //   // },
   // },
-  {
-    field: "encryptedCode",
-    headerName: "Pledge Request",
-    headerClassName: "header-wrap-custom",
-    width: 90,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
 ];
 
 export const clientAPBrokerageColumns: GridColDef[] = [
@@ -9204,16 +9232,29 @@ export const dpDebitMandateColumns: GridColDef[] = [
     align: "center",
   },
   {
+    field: "mandateStatus",
+    headerName: "Mandate Status",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
     field: "amount",
     headerName: "Amount",
-
     flex: 0.8,
     minWidth: 100,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
-    // valueFormatter: (params: any) =>
-    //   params.value ? `₹ ${Number(params.value).toLocaleString("en-IN")}` : "",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params);
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
   },
   {
     field: "frequency",
@@ -9232,15 +9273,6 @@ export const dpDebitMandateColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
     align: "left",
-  },
-  {
-    field: "mandateStatus",
-    headerName: "Mandate Status",
-    flex: 1.2,
-    minWidth: 150,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
   },
   {
     field: "statusDesc",
@@ -9605,7 +9637,225 @@ export const AmcNonLifeMembership: GridColDef[] = [
       );
     },
   },
-  ...AmcLifeMembership,
+  // ...AmcLifeMembership,
+  {
+    field: "tc",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "dpid",
+    headerName: "BOID",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "ph1",
+    headerName: "Primary Holder Name",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "hval",
+    headerName: "Holding Value",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
+  },
+  {
+    field: "ph1_mob",
+    headerName: "Mobile No.",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      const mobile = params.value || "";
+      const maskedMobile = mobile.replace(
+        /^(\d{2})(\d+)(\d{2})$/,
+        (_: any, p1: any, mid: any, p2: any) =>
+          `${p1}${"X".repeat(mid.length)}${p2}`
+      );
+
+      return (
+        <Tooltip title={mobile} arrow placement="top">
+          <span style={{ cursor: "pointer" }}>{maskedMobile}</span>
+        </Tooltip>
+      );
+    },
+  },
+  {
+    field: "sts",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "bt",
+    headerName: "Branch Type",
+    flex: 1,
+    minWidth: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "bsda",
+    headerName: "BSDA",
+    flex: 1,
+    minWidth: 130,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "dlr",
+    headerName: "Dealer Name",
+    flex: 1,
+    minWidth: 160,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => params || "-",
+  },
+  {
+    field: "rm",
+    headerName: "RM Name",
+    flex: 1,
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "ph2",
+    headerName: "Second Holder Name",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => params || "-",
+  },
+  {
+    field: "ph3",
+    headerName: "Third Holder Name",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+    headerClassName: "header-wrap-custom",
+    valueGetter: (params: any) => params || "-",
+  },
+  {
+    field: "bc",
+    headerName: "Branch Code",
+    flex: 1,
+    minWidth: 100,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "zn",
+    headerName: "Zone",
+    flex: 1,
+    minWidth: 70,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "m_desc",
+    headerName: "Scheme Category",
+    flex: 1,
+    minWidth: 180,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  // {
+  //   field: "module_Modified_date",
+  //   headerName: "Module Modified Date",
+  //   flex: 1,
+  //   minWidth: 150,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   valueGetter: (params: any) => {
+  //     const rawDate = params;
+  //     if (!rawDate) return null; // Handle missing data
+
+  //     const parsedDate = new Date(
+  //       rawDate.replace(
+  //         /(\d{2})-([A-Za-z]{3})-(\d{2})/,
+  //         (_match: any, day: any, month: any, year: any) => {
+  //           const monthMap: any = {
+  //             Jan: "01",
+  //             Feb: "02",
+  //             Mar: "03",
+  //             Apr: "04",
+  //             May: "05",
+  //             Jun: "06",
+  //             Jul: "07",
+  //             Aug: "08",
+  //             Sep: "09",
+  //             Oct: "10",
+  //             Nov: "11",
+  //             Dec: "12",
+  //           };
+  //           console.log(match);
+  //           return `20${year}-${monthMap[month]}-${day}`;
+  //         }
+  //       )
+  //     );
+
+  //     return parsedDate;
+  //   },
+  //   sortComparator: (v1: any, v2: any) => {
+  //     if (!v1 || !v2) return 0; // Handle missing values
+  //     return v1 - v2; // Sort in ascending order
+  //   },
+  //   valueFormatter: (params: any) => {
+  //     if (!params) return "";
+  //     return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+  //   },
+  // },
 ];
 
 export const AmcContest: GridColDef[] = [
@@ -11476,7 +11726,1256 @@ export const apGrossBrokerageColumns: GridColDef[] = [
 export const formatNumber = (value: any) => {
   if (value == null || value === "") return "—";
 
-  const rounded = Math.round(Number(value));
+  const num = Number(value);
 
-  return rounded.toLocaleString("en-IN");
+  if (Number.isNaN(num)) return value;
+
+  return Math.round(num).toLocaleString("en-IN");
 };
+
+export const expiryContestReward: GridColDef[] = [
+  {
+    field: "noOfLots",
+    headerName: "Min No of Lots",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => formatNumber(params.value),
+  },
+  {
+    field: "minBrok",
+    headerName: "Min Brokerage",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => formatNumber(params.value),
+  },
+  {
+    field: "uniqueClients",
+    headerName: "Unique Clients",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+  },
+  {
+    field: "giftVoucher",
+    headerName: "Gift Voucher",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
+  },
+];
+export const RHexpiryContestReward: GridColDef[] = [
+  {
+    field: "criteria",
+    headerName: "Criteria",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  ...expiryContestReward,
+];
+export const expiryContestCriteria: GridColDef[] = [
+  {
+    field: "da",
+    headerName: "Day",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "inde",
+    headerName: "Index",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Instumen",
+    headerName: "Instrument",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+];
+
+export const todaysContestProgress: GridColDef[] = [
+  {
+    field: "day",
+    headerName: "Day",
+    disableColumnMenu: true,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "index",
+    headerName: "Index",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "instrument",
+    headerName: "Instrument",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "noOfLots",
+    headerName: "No of Lots",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.noOfLots >= 500;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "minBrokerage",
+    headerName: "Brokerage",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.minBrokerage >= 50000;
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "uniqueClients",
+    headerName: "Unique Clients",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.uniqueClients >= 20;
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "qualified",
+    headerName: "Qualified",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "prize",
+    headerName: "Gift Voucher",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
+  },
+];
+export const expiryContestHistory: GridColDef[] = [
+  {
+    field: "ExpiryDate",
+    headerName: "Expiry Date",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => {
+      if (!params.value) return ""; // safety check
+      const date = new Date(params.value);
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
+  },
+  {
+    field: "day",
+    headerName: "Day",
+    disableColumnMenu: true,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "index",
+    headerName: "Index",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "instrument",
+    headerName: "Instrument",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "noOfLots",
+    headerName: "No of Lots",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.noOfLots >= 100;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "minBrokerage",
+    headerName: "Brokerage",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.minBrokerage >= 5000;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "uniqueClients",
+    headerName: "Unique Clients",
+    disableColumnMenu: true,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.uniqueClients >= 5;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "qualified",
+    headerName: "Qualified",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "prize",
+    headerName: "Gift Voucher",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
+  },
+];
+
+export const RHexpiryContestHistory: GridColDef[] = [
+  {
+    field: "ExpiryDate",
+    headerName: "Expiry Date",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => {
+      if (!params.value) return ""; // safety check
+      const date = new Date(params.value);
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
+  },
+  {
+    field: "day",
+    headerName: "Day",
+    disableColumnMenu: true,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "index",
+    headerName: "Index",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "instrument",
+    headerName: "Instrument",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "noOfLots",
+    headerName: "No of Lots",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.noOfLots >= 500;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "minBrokerage",
+    headerName: "Brokerage",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.minBrokerage >= 50000;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "uniqueClients",
+    headerName: "Unique Clients",
+    disableColumnMenu: true,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.uniqueClients >= 20;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "qualified",
+    headerName: "Qualified",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "prize",
+    headerName: "Gift Voucher",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
+  },
+];
+export const RHtodaysContestProgress: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  ...todaysContestProgress,
+];
+export const employeesContestProgress: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 0.8,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "empName",
+    headerName: "Employee Name",
+    flex: 1.8,
+    minWidth: 180,
+    align: "left",
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "noOfLots",
+    headerName: "No of Lots",
+    flex: 1,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.noOfLots >= 100;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "minBrokerage",
+    headerName: "Brokerage",
+    flex: 1,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.minBrokerage >= 5000;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "uniqueClients",
+    headerName: "Unique Clients",
+    flex: 1,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.uniqueClients >= 5;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "qualified",
+    headerName: "Qualified",
+    flex: 1,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "prize",
+    headerName: "Gift Voucher",
+    flex: 1,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
+  },
+];
+export const employeesContestHistory: GridColDef[] = [
+  {
+    field: "ExpiryDate",
+    headerName: "Expiry Date",
+    flex: 1,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+    renderCell: (params) => {
+      if (!params.value) return ""; // safety check
+      const date = new Date(params.value);
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
+  },
+  {
+    field: "index",
+    headerName: "Index",
+    flex: 1,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  ...employeesContestProgress,
+];
+
+export const ClientMandateColumns: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    minWidth: 80,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "branchcode",
+    headerName: "Branch",
+    minWidth: 100,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    minWidth: 120,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 220,
+    flex: 1.5,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "boId",
+    headerName: "BO ID",
+    minWidth: 180,
+    flex: 1.2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "mandateAmount",
+    headerName: "Mandate Amount",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "mandateStatus",
+    headerName: "Status",
+    minWidth: 120,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "umn",
+    headerName: "UMN",
+    minWidth: 260,
+    flex: 2,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+];
+
+export const mandateExecutionColumns: GridColDef[] = [
+  {
+    field: "clientcode",
+    headerName: "Client Code",
+    minWidth: 120,
+    flex: 1,
+  },
+  {
+    field: "dpCode",
+    headerName: "DP Code",
+    minWidth: 200,
+    flex: 1.5,
+  },
+  {
+    field: "executionAmount",
+    headerName: "Execution Amount",
+    minWidth: 150,
+    flex: 1,
+    type: "number",
+    align: "right",
+    headerAlign: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+  {
+    field: "ExecutionDate",
+    headerName: "Execution Date",
+    minWidth: 180,
+    flex: 1.2,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+  },
+  {
+    field: "custRefNo",
+    headerName: "Customer Ref No",
+    minWidth: 180,
+    flex: 1.3,
+  },
+  {
+    field: "downloadJVReceipt",
+    headerName: "Receipt",
+    minWidth: 130,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) =>
+      params.value === "YES" ? (
+        <span style={{ color: "green", fontWeight: 500 }}>{params.value}</span>
+      ) : (
+        <span style={{ color: "red", fontWeight: 500 }}>{params.value}</span>
+      ),
+  },
+];
+
+export const MandateTab3Columns: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    minWidth: 80,
+    flex: 0.6,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "branchCode",
+    headerName: "Branch",
+    minWidth: 100,
+    flex: 0.8,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    minWidth: 120,
+    flex: 1,
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    minWidth: 200,
+    flex: 1.5,
+    disableColumnMenu: true,
+  },
+  {
+    field: "dpCode",
+    headerName: "DP Code",
+    minWidth: 200,
+    flex: 1.5,
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    minWidth: 150,
+    flex: 1,
+    type: "number",
+    align: "right",
+    headerAlign: "right",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value);
+    },
+    disableColumnMenu: true,
+  },
+  {
+    field: "CreatedOn",
+    headerName: "Created On",
+    minWidth: 180,
+    flex: 1.2,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "custRefno",
+    headerName: "Customer Ref No",
+    minWidth: 180,
+    flex: 1.3,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  // {
+  //   field: "receipt",
+  //   headerName: "Receipt",
+  //   minWidth: 130,
+  //   flex: 1,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   renderCell: () => (
+  //     <span style={{ color: "green", fontWeight: 500 }}>Download</span>
+  //   ),
+  // },
+];
+
+export const contestSPIP: GridColDef[] = [
+  // {
+  //   field: "rmc",
+  //   headerName: "RM Code",
+  //   flex: 1,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   renderCell: (params) => params.value || "—",
+  // },
+  // {
+  //   field: "rmn",
+  //   headerName: "RM Name",
+  //   flex: 2,
+  //   headerClassName: "header-wrap-custom",
+  //   renderCell: (params) => params.value || "—",
+  // },
+  // {
+  //   field: "br",
+  //   headerName: "Branch",
+  //   flex: 0.8,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   headerClassName: "header-wrap-custom",
+  // },
+  // {
+  //   field: "brn",
+  //   headerName: "Branch Name",
+  //   flex: 2,
+  //   headerClassName: "header-wrap-custom",
+  // },
+  {
+    field: "cc",
+    headerName: "RA Code",
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "cn",
+    headerName: "Client Name",
+    flex: 1.6,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  // {
+  //   field: "my",
+  //   headerName: "Month",
+  //   flex: 0.9,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   headerClassName: "header-wrap-custom",
+  // },
+  {
+    field: "sid",
+    headerName: "Start Date",
+    flex: 1.2,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "eid",
+    headerName: "End Date",
+    flex: 1.2,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "prd",
+    headerName: "Payment Date",
+    flex: 1.3,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+    headerClassName: "header-wrap-custom",
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "sf",
+    headerName: "Subscription Fees (Excl. GST)",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    renderCell: (params) => formatNumber(params.value),
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "dr",
+    headerName: "Duration Month",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => formatNumber(params.value),
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+];
+export const SPIPContestReport: GridColDef[] = [
+  {
+    field: "zn",
+    headerName: "Zone",
+    flex: 0.7,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "ec",
+    headerName: "Code",
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "en",
+    headerName: "Name",
+    flex: 2,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "tc",
+    headerName: "Total Client",
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ta",
+    headerName: "Total Amount",
+    flex: 1,
+    headerClassName: "header-wrap-custom",
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        // minimumFractionDigits: 2,
+        // maximumFractionDigits: 2,
+      }).format(value);
+    },
+  },
+];
+
+export const mtfAgeingEmailColumns: GridColDef[] = [
+  {
+    field: "zn",
+    headerName: "Zone",
+    flex: 0.6,
+    minWidth: 70,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "bc",
+    headerName: "Branch Code",
+    flex: 0.8,
+    minWidth: 90,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "emailId",
+    headerName: "Email",
+    flex: 0.8,
+    minWidth: 240,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => params.value.toLowerCase() || "—",
+  },
+  {
+    field: "ct",
+    headerName: "Client Type",
+    flex: 0.8,
+    minWidth: 110,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "cc",
+    headerName: "Client Code",
+    flex: 0.8,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "cn",
+    headerName: "Client Name",
+    flex: 1.4,
+    minWidth: 220,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "rmc",
+    headerName: "RM Code",
+    flex: 0.7,
+    minWidth: 90,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "rmn",
+    headerName: "RM Name",
+    flex: 1.2,
+    minWidth: 200,
+    align: "left",
+    headerAlign: "center",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "dc",
+    headerName: "Dealer Code",
+    flex: 0.7,
+    minWidth: 90,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "dn",
+    headerName: "Dealer Name",
+    flex: 1.2,
+    minWidth: 200,
+    align: "left",
+    headerAlign: "center",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "mtf",
+    headerName: "MTF Funded",
+    flex: 1,
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "d30",
+    headerName: "≤ 30 Days",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "d60",
+    headerName: "≤ 60 Days",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "d88",
+    headerName: "≤ 88 Days",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "d89",
+    headerName: "≤ 89 Days",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "d90",
+    headerName: "≤ 90 Days",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "gt90",
+    headerName: "> 90 Days",
+    flex: 1,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+];

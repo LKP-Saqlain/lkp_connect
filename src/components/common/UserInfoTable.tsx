@@ -92,6 +92,7 @@ interface SelectedWidgetProps {
   handleMTFRow?: (row: any) => void;
   openNudgeTable?: () => void;
   selectedTab?: any;
+  handleDownloadExcel?: () => void;
 }
 
 const DataTable = ({
@@ -146,6 +147,7 @@ const DataTable = ({
   handleMTFRow,
   openNudgeTable,
   selectedTab,
+  handleDownloadExcel,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -413,8 +415,8 @@ const DataTable = ({
               <div style={{ display: "flex", justifyContent: "center" }}>
                 <div
                   onClick={() => {
-                    console.log("rowTest", params.row.rowId);
-                    setSelectedRow(params.row.rowId);
+                    console.log("rowTest", params.row.rid);
+                    setSelectedRow(params.row.rid);
                     // HandleApprovalModal("approve", params);
                     HandleApprovalModal("approve");
                     console.log(params.row.dummyId, "selectedrow approve");
@@ -435,7 +437,7 @@ const DataTable = ({
                 <div style={{ fontSize: 20, color: "gray" }}>|</div>
                 <div
                   onClick={() => {
-                    setSelectedRow(params.row.rowId);
+                    setSelectedRow(params.row.rid);
                     HandleApprovalModal("reject");
                     // HandleApprovalModal("reject", params);
                   }}
@@ -1962,7 +1964,7 @@ const DataTable = ({
                 >
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.rowId);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("approve");
                     }}
                     style={{ cursor: "pointer" }}
@@ -1983,7 +1985,7 @@ const DataTable = ({
                   </div>
                   <div
                     onClick={() => {
-                      setSelectedRow(params.row.rowId);
+                      setSelectedRow(params.row.rid);
                       HandleApprovalModal("reject");
                     }}
                     style={{ cursor: "pointer" }}
@@ -2501,6 +2503,90 @@ const DataTable = ({
       return TableColumns.apGrossBrokerageColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeMenu === "expiryContestCriteria") {
+      return TableColumns.expiryContestCriteria.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "expiryContestReward") {
+      return TableColumns.expiryContestReward.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "todaysContestProgress") {
+      return TableColumns.todaysContestProgress.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "expiryContestHistory") {
+      return TableColumns.expiryContestHistory.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "RHtodaysContestProgress") {
+      return TableColumns.RHtodaysContestProgress.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "RHexpiryContestReward") {
+      return TableColumns.RHexpiryContestReward.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "employeesContestProgress") {
+      return TableColumns.employeesContestProgress.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "employeesContestHistory") {
+      return TableColumns.employeesContestHistory.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "DP AutoPay Report") {
+      return TableColumns.ClientMandateColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "Download DP Mandate Report") {
+      return TableColumns.mandateExecutionColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "DPMandateJVData") {
+      return TableColumns.MandateTab3Columns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "contestSPIP") {
+      return TableColumns.contestSPIP.map((column) => ({
+        ...column,
+      }));
+    } else if (activeMenu === "RHexpiryContestHistory") {
+      return TableColumns.RHexpiryContestHistory.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "SPIP Contest Report") {
+      return TableColumns.SPIPContestReport.map((column) => {
+        if (column.field === "ec") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const handleClick = () => {
+                setSelectedRow(params.row);
+                tog_center();
+              };
+
+              return (
+                <span
+                  style={{
+                    color: "#1976d2",
+                    cursor: "pointer",
+                    // textDecoration: "underline",
+                  }}
+                  onClick={handleClick}
+                >
+                  {params.value}
+                </span>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "MTFEmailAgeing") {
+      return TableColumns.mtfAgeingEmailColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
@@ -2640,6 +2726,7 @@ const DataTable = ({
         isPartnerContest={
           activeSubItem === "Partner Contest Report" ? true : false
         }
+        isSPIPContest={activeSubItem === "SPIP Contest Report" ? true : false}
         handleVerifyDetails={handleVerifyDetails}
         isBankVerified={isBankVerified}
         beneficiaryName={beneficiaryName}
@@ -2667,12 +2754,19 @@ const DataTable = ({
           totalLedgerDebitAmt={totalLedgerDebitAmt}
           activeSubItem={activeSubItem}
           dormantCount={dormantCount}
+          handleDownloadExcel={handleDownloadExcel}
         />
       )}
       <Paper
         sx={{
-          height: selectedWidget === "Client Details Report" ? "200px" : "72vh",
-          // height: `${calculatedHeight}px`,
+          height:
+            selectedWidget === "Client Details Report"
+              ? "200px"
+              : selectedWidget === "Criteria and Rewards"
+              ? T6Data.length < 10
+                ? "auto"
+                : "52vh"
+              : "72vh",
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",
@@ -2709,7 +2803,9 @@ const DataTable = ({
           hideFooter={customHide ? true : false}
           // getRowId={(row: any) => (row.Id ? row?.Id : row?.cc)}
           getRowId={(row: any) =>
-            row.Id
+            row?.rid
+              ? row.rid
+              : row.Id
               ? row?.Id
               : row?.cc
               ? row?.cc
@@ -2742,7 +2838,8 @@ const DataTable = ({
           // Use the correct identifier for rows
           getRowClassName={(params) => {
             if (customCss) {
-              if (params.row.isDuplicate) return "duplicate-row";
+              if (!params.row.val) return "invalid-row";
+              if (params.row.dup) return "duplicate-row";
             }
             return params.indexRelativeToCurrentPage % 2 === 0
               ? "even-row"
@@ -2769,6 +2866,9 @@ const DataTable = ({
             },
             ...(customCss && {
               "& .duplicate-row": {
+                backgroundColor: "#f9e28e !important", // light yellow
+              },
+              "& .invalid-row": {
                 backgroundColor: "#ffadb0 !important", // light red
               },
             }),

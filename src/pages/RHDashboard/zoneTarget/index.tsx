@@ -14,43 +14,59 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { apiServices } from "../../../services";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import ShowToast from "../../../utils/toastUtils";
-import DashboardCard from "../../../components/common/DashboardCard";
+// import DashboardCard from "../../../components/common/DashboardCard";
 import { extractBarModelData, keyMapping } from "../../../helper/method";
 import ZoneTargetChart from "../../../components/common/zoneTargetChart";
 import { Button as MuiButton } from "@mui/material";
+import ZoneMetricTableCard from "../../../components/common/zoneMetrics";
+
+// type MonthKey = "m1" | "m2" | "m3";
+
+interface MonthMetric {
+  Jan: number;
+  Feb: number;
+  Mar: number;
+}
+
+interface ZoneMetricState {
+  direct: MonthMetric;
+  indirect: MonthMetric;
+  total: MonthMetric;
+}
 
 interface FormValues {
   selectedZone: { label: string; value: string } | null;
 }
-interface MetricData {
-  total: number;
-  direct: number;
-  indirect: number;
-}
+// interface MetricData {
+//   total: number;
+//   direct: number;
+//   indirect: number;
+// }
 
 const ZoneTarget = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
-  const [zoneTargetData, setZoneTargetData] = useState({
-    total: 0,
-    direct: 0,
-    indirect: 0,
+  const [zoneTargetData, setZoneTargetData] = useState<ZoneMetricState>({
+    direct: { Jan: 0, Feb: 0, Mar: 0 },
+    indirect: { Jan: 0, Feb: 0, Mar: 0 },
+    total: { Jan: 0, Feb: 0, Mar: 0 },
   });
-  const [zoneTargetAchievedData, setZoneTargetAchievedData] = useState({
-    total: 0,
-    direct: 0,
-    indirect: 0,
+
+  const [zoneAchievedData, setZoneAchievedData] = useState<ZoneMetricState>({
+    direct: { Jan: 0, Feb: 0, Mar: 0 },
+    indirect: { Jan: 0, Feb: 0, Mar: 0 },
+    total: { Jan: 0, Feb: 0, Mar: 0 },
   });
-  const [
-    zoneTargetAchievedPercentageData,
-    setZoneTargetAchievedPercentageData,
-  ] = useState({
-    total: 0,
-    direct: 0,
-    indirect: 0,
-  });
-  const [activeBadges, setActiveBadges] = useState<string[]>(
-    Array(4).fill("total")
+
+  const [zonePercentageData, setZonePercentageData] = useState<ZoneMetricState>(
+    {
+      direct: { Jan: 0, Feb: 0, Mar: 0 },
+      indirect: { Jan: 0, Feb: 0, Mar: 0 },
+      total: { Jan: 0, Feb: 0, Mar: 0 },
+    }
   );
+  // const [activeBadges, setActiveBadges] = useState<string[]>(
+  //   Array(4).fill("total")
+  // );
   const [zoneBarData, setZoneBarData] = useState({
     bdm: null,
     bidm: null,
@@ -165,30 +181,69 @@ const ZoneTarget = ({ activeSubItem }: any) => {
       .GetZoneTargetdata(payload)
       .then((response) => {
         dispatch(hideLoader());
+        console.log("GetZoneTargetdataResponse", response?.data?.data);
 
         if (response?.status === 200) {
           const data = response?.data?.data;
           if (!data) return;
 
-          const targets = data.targets?.[0] ?? {};
+          // const targets = data.targets?.[0] ?? {};
+
+          const t = data.targets?.[0] ?? {};
+          const a = data.actuals?.[0] ?? {};
+          const p = data.percentages?.[0] ?? {};
           setZoneTargetData({
-            total: targets.ttb ?? 0,
-            direct: targets.tdb ?? 0,
-            indirect: targets.tidb ?? 0,
+            direct: {
+              Jan: t.tdb_m1 ?? 0,
+              Feb: t.tdb_m2 ?? 0,
+              Mar: t.tdb_m3 ?? 0,
+            },
+            indirect: {
+              Jan: t.tidb_m1 ?? 0,
+              Feb: t.tidb_m2 ?? 0,
+              Mar: t.tidb_m3 ?? 0,
+            },
+            total: {
+              Jan: t.ttb_m1 ?? 0,
+              Feb: t.ttb_m2 ?? 0,
+              Mar: t.ttb_m3 ?? 0,
+            },
           });
 
-          const actuals = data.actuals?.[0] ?? {};
-          setZoneTargetAchievedData({
-            total: actuals.t_ach_b ?? 0,
-            direct: actuals.z_ach_db ?? 0,
-            indirect: actuals.z_ach_idb ?? 0,
+          setZoneAchievedData({
+            direct: {
+              Jan: a.z_ach_db_m1 ?? 0,
+              Feb: a.z_ach_db_m2 ?? 0,
+              Mar: a.z_ach_db_m3 ?? 0,
+            },
+            indirect: {
+              Jan: a.z_ach_idb_m1 ?? 0,
+              Feb: a.z_ach_idb_m2 ?? 0,
+              Mar: a.z_ach_idb_m3 ?? 0,
+            },
+            total: {
+              Jan: a.t_ach_b_m1 ?? 0,
+              Feb: a.t_ach_b_m2 ?? 0,
+              Mar: a.t_ach_b_m3 ?? 0,
+            },
           });
 
-          const percentages = data.percentages?.[0] ?? {};
-          setZoneTargetAchievedPercentageData({
-            total: Number(percentages.t_ach_pct) || 0,
-            direct: Number(percentages.d_ach_pct) || 0,
-            indirect: Number(percentages.id_ach_pct) || 0,
+          setZonePercentageData({
+            direct: {
+              Jan: Number(p.d_ach_pct_m1) || 0,
+              Feb: Number(p.d_ach_pct_m2) || 0,
+              Mar: Number(p.d_ach_pct_m3) || 0,
+            },
+            indirect: {
+              Jan: Number(p.id_ach_pct_m1) || 0,
+              Feb: Number(p.id_ach_pct_m2) || 0,
+              Mar: Number(p.id_ach_pct_m3) || 0,
+            },
+            total: {
+              Jan: Number(p.t_ach_pct_m1) || 0,
+              Feb: Number(p.t_ach_pct_m2) || 0,
+              Mar: Number(p.t_ach_pct_m3) || 0,
+            },
           });
 
           const zonebarData = data.zonebarData?.[0];
@@ -208,31 +263,31 @@ const ZoneTarget = ({ activeSubItem }: any) => {
       });
   }, [user_id, formik.values.selectedZone?.value]);
 
-  const metrics = [
-    { title: "Zone Target", data: zoneTargetData },
-    { title: "Zone Target Achieved", data: zoneTargetAchievedData },
-    { title: "Zone Target Achieved %", data: zoneTargetAchievedPercentageData },
-  ];
+  // const metrics = [
+  //   { title: "Zone Target", data: zoneTargetData },
+  //   { title: "Zone Target Achieved", data: zoneTargetAchievedData },
+  //   { title: "Zone Target Achieved %", data: zoneTargetAchievedPercentageData },
+  // ];
 
-  const getMetricValue = (index: number): number => {
-    const badge = activeBadges[index];
-    const dataArray = [
-      zoneTargetData,
-      zoneTargetAchievedData,
-      zoneTargetAchievedPercentageData,
-    ];
-    console.log("badgeValue", badge, dataArray);
+  // const getMetricValue = (index: number): number => {
+  //   const badge = activeBadges[index];
+  //   const dataArray = [
+  //     zoneTargetData,
+  //     zoneTargetAchievedData,
+  //     zoneTargetAchievedPercentageData,
+  //   ];
+  //   console.log("badgeValue", badge, dataArray);
 
-    return dataArray[index][badge as keyof MetricData] || 0;
-  };
+  //   return dataArray[index][badge as keyof MetricData] || 0;
+  // };
 
-  const handleBadgeClick = (cardIndex: number, type: string) => {
-    setActiveBadges((prev) => {
-      const updated = [...prev];
-      updated[cardIndex] = type;
-      return updated;
-    });
-  };
+  // const handleBadgeClick = (cardIndex: number, type: string) => {
+  //   setActiveBadges((prev) => {
+  //     const updated = [...prev];
+  //     updated[cardIndex] = type;
+  //     return updated;
+  //   });
+  // };
 
   const transformModelKeys = (model: any) => {
     if (!model) return model;
@@ -263,6 +318,10 @@ const ZoneTarget = ({ activeSubItem }: any) => {
     target: ["#11395C", "#fff"],
     achieved: ["#F57C00", "#fff"],
   };
+
+  useEffect(() => {
+    console.log("zoneTargetValue", zonePercentageData);
+  }, [zonePercentageData]);
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -331,7 +390,6 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                             })}
                           </div>
                         </div>
-
                         {/* Validation error message */}
                         {formik.touched.selectedZone &&
                           formik.errors.selectedZone && (
@@ -347,53 +405,89 @@ const ZoneTarget = ({ activeSubItem }: any) => {
                   </Row>
                 </Card>
               )}
-              <Row>
-                {metrics.map((metric, index) => {
-                  const badges = [
-                    {
-                      type: "info",
-                      label: "Direct",
-                      value: metric.data.direct,
-                      isActive: activeBadges[index] === "direct",
-                      onClick: () => handleBadgeClick(index, "direct"),
-                    },
-                    {
-                      type: "primary",
-                      label: "Indirect",
-                      value: metric.data.indirect,
-                      isActive: activeBadges[index] === "indirect",
-                      onClick: () => handleBadgeClick(index, "indirect"),
-                    },
-                    {
-                      type: "warning",
-                      label: "Total",
-                      value: metric.data.total,
-                      isActive: activeBadges[index] === "total",
-                      onClick: () => handleBadgeClick(index, "total"),
-                    },
-                  ];
+              <Row style={{ marginBottom: "12px" }}>
+                <Col md={4}>
+                  <ZoneMetricTableCard
+                    title="Zone Target"
+                    rows={[
+                      {
+                        month: "Jan",
+                        direct: zoneTargetData.direct.Jan,
+                        indirect: zoneTargetData.indirect.Jan,
+                      },
+                      {
+                        month: "Feb",
+                        direct: zoneTargetData.direct.Feb,
+                        indirect: zoneTargetData.indirect.Feb,
+                      },
+                      {
+                        month: "Mar",
+                        direct: zoneTargetData.direct.Mar,
+                        indirect: zoneTargetData.indirect.Mar,
+                      },
+                    ]}
+                    total={{
+                      direct: zoneTargetData.total.Jan,
+                      indirect: zoneTargetData.total.Feb,
+                    }}
+                  />
+                </Col>
 
-                  return (
-                    <Col
-                      key={index}
-                      xxl={4}
-                      lg={4}
-                      md={4}
-                      sm={12}
-                      style={{ marginBottom: "1rem" }}
-                    >
-                      <DashboardCard
-                        title={metric.title}
-                        value={getMetricValue(index)}
-                        badges={badges}
-                        customZoneClass={true}
-                        customClass={true}
-                        mainCustomClass={true}
-                      />
-                    </Col>
-                  );
-                })}
+                <Col md={4}>
+                  <ZoneMetricTableCard
+                    title="Zone Target Achieved"
+                    rows={[
+                      {
+                        month: "Jan",
+                        direct: zoneAchievedData.direct.Jan,
+                        indirect: zoneAchievedData.indirect.Jan,
+                      },
+                      {
+                        month: "Feb",
+                        direct: zoneAchievedData.direct.Feb,
+                        indirect: zoneAchievedData.indirect.Feb,
+                      },
+                      {
+                        month: "Mar",
+                        direct: zoneAchievedData.direct.Mar,
+                        indirect: zoneAchievedData.indirect.Mar,
+                      },
+                    ]}
+                    total={{
+                      direct: zoneAchievedData.total.Jan,
+                      indirect: zoneAchievedData.total.Feb,
+                    }}
+                  />
+                </Col>
+
+                <Col md={4}>
+                  <ZoneMetricTableCard
+                    title="Zone Target Achieved %"
+                    rows={[
+                      {
+                        month: "Jan",
+                        direct: zonePercentageData.direct.Jan,
+                        indirect: zonePercentageData.indirect.Jan,
+                      },
+                      {
+                        month: "Feb",
+                        direct: zonePercentageData.direct.Feb,
+                        indirect: zonePercentageData.indirect.Feb,
+                      },
+                      {
+                        month: "Mar",
+                        direct: zonePercentageData.direct.Mar,
+                        indirect: zonePercentageData.indirect.Mar,
+                      },
+                    ]}
+                    total={{
+                      direct: zonePercentageData.total.Jan,
+                      indirect: zonePercentageData.total.Feb,
+                    }}
+                  />
+                </Col>
               </Row>
+
               <Card
                 style={{
                   minHeight: "55vh",
