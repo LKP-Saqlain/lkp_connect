@@ -33,14 +33,13 @@ const App = () => {
   if (!serverOnline) {
     return <Maintenance />;
   }
+
+  if (updateAvailable) {
+    return <Maintenance isUpdate onRefresh={() => window.location.reload()} />;
+  }
+
   return (
     <Router>
-      {updateAvailable && (
-        <div className="update-banner">
-          A new version is available.
-          <button onClick={() => window.location.reload()}>Refresh</button>
-        </div>
-      )}
       <ToastContainer />
       <Loader />
       <SessionExpiryHandler />
