@@ -1,14 +1,127 @@
 // mfTypes.ts
-import Discover from "./Discover";
+import Discover from "./Main/Discover";
 import highReturnsImg from "../../assets/images/MF/high_returns.png";
 import TaxSavingImg from "../../assets/images/MF/Tax_saving.png";
 import sip100Img from "../../assets/images/MF/SIP With 101.png";
 import sip500Img from "../../assets/images/MF/SIP With 501.png";
 import nfoImg from "../../assets/images/MF/NFO.png";
 // import Watchlist from "./Watchlist";
-import Portfolio from "./Portfolio";
-import Report from "./Report";
-import Order from "./Order";
+import Portfolio from "./Main/Portfolio";
+import Report from "./Main/Report";
+import Order from "./Main/Order";
+import * as Yup from "yup";
+import dayjs from "dayjs";
+
+export const holderSchema = Yup.object().shape({
+  pan: Yup.string()
+    .length(10, "PAN must be 10 characters")
+    .matches(/^[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}$/, "Invalid PAN format")
+    .required("PAN is required"),
+
+  mobile: Yup.string()
+    .matches(/^[6-9]\d{9}$/, "Invalid mobile number")
+    .required("Mobile is required"),
+
+  firstName: Yup.string().required("First name required"),
+  lastName: Yup.string().required("Last name required"),
+
+  dob: Yup.date()
+    .required("Date of birth is required")
+    .max(new Date(), "Future date not allowed")
+    .test(
+      "age",
+      "You must be at least 18 years old",
+      (value) => value && dayjs().diff(value, "year") >= 18
+    ),
+
+  gender: Yup.string().required("Gender is required"),
+
+  email: Yup.string().email("Invalid email").required("Email is required"),
+
+  address1: Yup.string()
+    // .max(40, "Address 1 Limit is 40 characters")
+    .required("Address 1 is required"),
+  address2: Yup.string(),
+  // .max(40, "Address 2 Limit is 40 characters"),
+  address3: Yup.string(),
+  // .max(40, "Address 3 Limit is 40 characters"),
+  country: Yup.string().required("Country required"),
+  state: Yup.string().required("State required"),
+  city: Yup.string().required("City required"),
+  pincode: Yup.string()
+    .matches(/^\d{6}$/, "Invalid pincode")
+    .required("Pincode required"),
+  // incomeSlab: Yup.string().required(),
+  // sourceWealth: Yup.string().required(),
+  occupation: Yup.string().required(),
+  // pepStatus: Yup.string().required(),
+  // kraAddressType: Yup.string().required(),
+  taxResident: Yup.string().required(),
+  // placeOfBirth: Yup.string().required(),
+  // countryOfBirth: Yup.string().required(),
+});
+
+export const optionalBankSchema = Yup.object()
+  .nullable()
+  .test("optional-bank-validation", "", function (value) {
+    if (!value) return true;
+
+    const hasAnyValue = Object.entries(value).some(
+      ([key, val]) => key !== "isVerified" && Boolean(val)
+    );
+
+    if (!hasAnyValue) return true;
+
+    return bankSchema.isValidSync(value, { abortEarly: false });
+  });
+
+export const bankSchema = Yup.object({
+  bankAccNo: Yup.string()
+    .required("Account number required")
+    .matches(/^\d{9,18}$/, "Invalid account number"),
+
+  reBankAccNo: Yup.string()
+    .oneOf([Yup.ref("bankAccNo")], "Account numbers must match")
+    .required("Re-enter account number"),
+
+  ifscCode: Yup.string()
+    .required("IFSC required")
+    .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "Invalid IFSC"),
+
+  accountType: Yup.string().required("Select account type"),
+
+  bankName: Yup.string().required("Bank name is required"),
+
+  micrCode: Yup.string().notRequired(), // ✅ optional
+});
+
+export const holderBankSchema = Yup.object().shape({
+  banks: Yup.array()
+    .of(bankSchema)
+    .test(
+      "bank-2-condition",
+      "If any field in Bank 2 is filled, all fields must be filled",
+      function (banks?: any[]) {
+        if (!banks) return false; // banks is undefined → invalid
+
+        const bank1 = banks[0];
+        const bank2 = banks[1];
+
+        // BANK 1 must always be fully filled
+        const bank1Filled = Object.values(bank1).every((v) => v !== "");
+        if (!bank1Filled) return false;
+
+        // BANK 2 empty → okay
+        const bank2AllEmpty = Object.values(bank2).every((v) => v === "");
+        if (bank2AllEmpty) return true;
+
+        // BANK 2 partially filled → require all
+        const bank2AllFilled = Object.values(bank2).every((v) => v !== "");
+        return bank2AllFilled;
+      }
+    ),
+});
+
 export interface TabItem {
   label: string;
   content?: React.ReactNode; // optional so you can define labels first and add content later
@@ -19,6 +132,8 @@ export interface BasicTabsProps {
   heading?: string; // optional heading
   content?: string;
   onTabChange?: string;
+  customCase?: string;
+  onSearchClick?: () => void;
 }
 
 export interface TabPanelProps {
@@ -39,12 +154,13 @@ export interface MutualFundModalProps {
   isOpen: boolean;
   toggle: () => void;
   modalType: "oneTime" | "sip" | "redeem" | null;
-  title?: string;
+  title?: any;
   bseSchemeCode?: string;
   hasToken?: string;
   selectedType?: string;
   onOrderSuccess?: any;
   onBack?: any;
+  redeemFolioNumber?: string;
 }
 
 export interface BankDetail {
@@ -55,6 +171,8 @@ export interface BankDetail {
   code: string;
   logo?: string | null;
   paymentMode: string;
+  bankName?: any;
+  bankAccountNumber?: any;
 }
 
 export interface PortfolioRecord {
@@ -81,6 +199,34 @@ export interface PortfolioRecord {
   // add any other fields you need
 }
 
+export interface MandateDetail {
+  amount: string;
+  mandateId: string;
+  status: string;
+  [key: string]: any;
+}
+
+export interface NestedModalProps {
+  isOpen: boolean;
+  toggle: () => void;
+  title?: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  selectedType?: string;
+  onConfirm?: (selectedMandate: MandateDetail | null) => void;
+  banks: any;
+  clientNo: string;
+  amount: number | string;
+  selectedPaymentType: string | null;
+  upiId?: string;
+  redeemFolioNumber?: string;
+  dateSelected: number | null;
+  bseSchemeCode: string | undefined;
+  selectedBank: any;
+  onBack?: any;
+  onOrderSuccess?: any;
+}
+
 export interface PortfolioSummary {
   instrumentType: string;
   instrumentTypeId: number;
@@ -102,6 +248,56 @@ export interface PortfolioSummary {
   xirr: string;
   totalXIRR: string;
 }
+
+export interface upComingSIP {
+  id: number;
+  userMasterID: number;
+  reedosName: string;
+  accountId: number;
+  sipRegsNo: string;
+  startDate: string;
+  endDate: string;
+  amount: number;
+  investedAmount: number;
+  currentValue: number;
+  unrealizedProfitLoss: number;
+  totalGain: number;
+  xirr: string | null;
+  totalXIRR: string | null;
+  // ... add other fields if needed
+}
+
+export interface TransactionRecord {
+  assetClassId: number;
+  folioNumber: string;
+  security: string;
+  isin: string;
+  transactionDate: string;
+  action: string;
+  quantity: number;
+  transactionPrice: number;
+  netPrice: number;
+  brokerage: number;
+  amount: number;
+  tranId: number;
+  accountID: number;
+  cumulativeQuantity: number;
+  clientName: string;
+  status: any;
+  bankName: string;
+  bankAccNo: any;
+  mandateId: number;
+  regnDate: string;
+
+  // add more fields as per your response if required
+}
+
+export const tabList = [
+  { label: "Mandates" },
+  { label: "Upcoming SIP" },
+  { label: "Ongoing SIP" },
+  { label: "Transaction" },
+];
 
 export const mainMenuC = [
   { id: 1, label: "equity" },
@@ -157,11 +353,6 @@ export const mainMenu = [
     label: "Discover",
     content: (props: any) => <Discover {...props} />,
   },
-  // {
-  //   id: 2,
-  //   label: "Watchlist",
-  //   content: (props: any) => <Watchlist {...props} />,
-  // },
   {
     id: 3,
     label: "Portfolio",
@@ -170,165 +361,6 @@ export const mainMenu = [
   { id: 4, label: "Report", content: (props: any) => <Report {...props} /> },
   { id: 5, label: "Order", content: (props: any) => <Order {...props} /> },
 ];
-
-// export const mutualFundCards = {
-//   equity: [
-//     {
-//       id: 1,
-//       fundName: "DSP Top 100 Equity Fund - Regular Growth",
-//       category: "Equity",
-//       subCategory: "Large Cap Fund",
-//       minSIP: 100,
-//       aumCr: 15000,
-//       minLumpSum: 200000,
-//       oneWeekReturn: 2.48,
-//       logo: "data:image/jpeg;base64,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",
-//     },
-//     {
-//       id: 2,
-//       fundName: "SBI Small Cap Fund - Direct Plan",
-//       category: "Equity",
-//       subCategory: "Small Cap Fund",
-//       minSIP: 500,
-//       aumCr: 8000,
-//       minLumpSum: 5000,
-//       oneWeekReturn: 3.12,
-//       logo: "data:image/jpeg;base64,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",
-//     },
-//     {
-//       id: 3,
-//       fundName: "HDFC Midcap Opportunities Fund",
-//       category: "Equity",
-//       subCategory: "Mid Cap Fund",
-//       minSIP: 500,
-//       aumCr: 22000,
-//       minLumpSum: 10000,
-//       oneWeekReturn: 1.85,
-//       logo: "data:image/jpeg;base64,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",
-//     },
-//   ],
-
-//   debt: [
-//     {
-//       id: 4,
-//       fundName: "ICICI Prudential Corporate Bond Fund",
-//       category: "Debt",
-//       subCategory: "Corporate Bond",
-//       minSIP: 1000,
-//       aumCr: 18000,
-//       minLumpSum: 5000,
-//       oneWeekReturn: 0.42,
-//       logo: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAlAMBEQACEQEDEQH/xAAcAAEAAwADAQEAAAAAAAAAAAAABQYHAQMECAL/xABAEAABAwECCggDBgQHAAAAAAAAAQIDBAUGBxEXNlNVc5KTshITFDE1VHTBIVHRFkFCUpHSIiMyoTNEYWJxcoH/xAAbAQEAAgMBAQAAAAAAAAAAAAAABAUBAwYCB//EAC4RAAECAgkDBAMBAQEAAAAAAAABAgMEBRESFDM0UVJxFjKRE4GhsSExU0HBI//aAAwDAQACEQMRAD8A2972sarnuRrU71VcSIB+1qQ6kq6Zf8xFvoebbdT1Ydoc9rp9PFvoLbdRYdoO10+ni30FtuosO0Ha6fTxb6C23UWHaDtdPp4t9BbbqLDtB2un08W+gtt1Fh2hx2um8xFvoLbdRYdop2RyMkb0o3I5Pm1cZ6MKip+FP2vcDB0rUwNcrXTRtcneiuTGhhXIh6RjlSuodrp9PFvoYtt1Fh2g7XT6eLfQW26iw7Qdrp9PFvoLbdRYdoO10+ni30FtuosO0Ha6fTxb6C23UWHaDtdPp4t9BbbqLDtDllTBI7osmjc75NciqZRUUKxyJWqHaZPJBX4RFunaeNEX+T9//KGiZwnE+i85D5MS6iLRM3UKio+gWnajqItEzdQVC27UdRFombqCoW3ajqItEzdQVC27UdRFombqCoW3ajqItEzdQVC27UdTFombqCoW3amv4M2tbdWJGoiJ10nd/wBi1lMJPc4enM67hPotS9ykkqDEb7RRuvXaaujaq9ane1PytKeYxXHe0QqpJQ6l/wA/6pCdRFombqGmosrbtR1EWiZuoKhbdqOoi0TN1BULbtR1EWiZuoKhbdqOoi0TN1BULbtR1EWiZuoKhbdqWfBxGxt7aVWsai9XJ3Ji/CSJRP8A1Qp6cVVkl5T7NjLY4gg775qWlsfdDRM4TifRech8mKlQd8AAAAAAAAAa5g0zWi20nMWkphefs4mnM67hPotK9xKKgxS+mddp7VOVCnmMVx3lE5KH7/akKaSxAAAAAAABZcHWdtLs5OUkyuKhUU3kncobCWpxJB33zUtLY+6GiZwnE+i85D5MVKg74AHLGOkejGNc5y9zWpjVTP7MOcjUrctSHd2Gs8lU8F30M2H6L4NN5g708oOxVvkqngv+gsP0XwZvMDenlB2Kt8lU8F/0Fh+i+BeYG9PKDsNb5Kp4L/oLDtF8GLzA3p5Q1fBzHJFdiJksb43dbJ/C9qtX+r5KWcqipCSs46mXtfOOVq1pUn0Wde5SSVRjV8qSqfei0Xx0s72rImJzYnKi/wAKfeiFTMNd6qqiHb0XHhNk2I5yIvNX+qQ3Yq3yVTwX/Q02H6L4LC8wN6eUHYq3yVTwX/QWH6L4F5gb08oOxVvkqngv+gsP0XwYvMDenlD8yUtTExXy000bU/E+NzU/uhhWuT8qh6ZGhPWy1yKvJ1GDaACy4Os7aXZycpJlcVCopvJO5Q2EtTiSDvvmpaWx90NEzhOJ9F5yHyYqVB3wAJi52dNmbb2U3S+KhApTJxODbi4OBAAAAAAAAAAAAABV8JGalRtI+ZCNN4SltQmdb7/RkJVnbgwCy4Os7aXZycpJlcVCopvJO5Q2EtTiSDvvmpaWx90NEzhOJ9F5yHyYqVB3wAJi52dNmbb2U3S+KhApTJxODbi4OBABWpb+XYilfHJa8TXscrXIrH/BU7/wm9JaMqVo01LHhp+FU/OUC6uuYdx/7RdY20xeIW4ZQLq64h3H/tF1jbReIW4ZQLq65h3H/tF1jbReIW4ZQLq64h3H/tF1jbReIW4ZQLq65h3H/tF1jbReIW4lrFtyzbciklsqrbUsid0XuaipiXFjxfFDW+G+GtTkqNjXtf8AlqkieD0VfCRmpPtI+ZCNN4SlrQudb7/RkJVncAwCy4Os7aXZycpJlcVCopvJO5Q2EtTiSDvvmpaWx90NEzhOJ9F5yHyYqVB3wAJi52dNmbb2U3S+KhApTJxODbi4OBAB8u2v4vXeok5lOjh9icFBE71PIezwAAAAAAbFgO8HtL1LeRCopDvTgtJHsU0sgE4q+EjNSfaR8yEabwlLWhc633+jISrO4BgFlwdZ20uzk5STK4qFRTeSdyhsJanEkHffNS0tj7oaJnCcT6MzkPkxUqDvgATFzs6bM23spul8VCBSmTicG3FwcCAD5dtfxeu9RJzKdHC7E4KCJ3qeQ9ngAAAAAyDYsB3g1pepbyIU9Id6cFpI9imlkAnFXwkZqT7SPmQjTeEpa0LnG+/0ZCVZ3AMAsuDrO2l2cnKSZXFQqKbyTuUNhLU4k8Vs2e21bMqKF8jo2zN6KvamNUPERltqtN0vGWBFbFT9oU7JlS60qOG0iXFupedRRdifIyZUus6jhtFxbqY6ii7E+T12TcGnsy0qetZaE0joH9JGOjbiU9slEY5HIppmabiR4ToSsRK+S5kspAAfLtr+L13qJOZTo4XYnBQRO9TyHs8AAAAAGQbFgO8GtL1LeRCnpDvTgtJHsU0sgE4jLw2Qy3LMfQySuia9Wr02pjVMS4zXFhpEbZUkycy6VjJFalaoVTJnS6zqOG0jXJupc9RRdifIyZUus6jhtMXFupjqKLsT5JGwLjwWLasVfHXTSuja5vQcxqIuNMX3G2HLJDdaRSNOUxEmoKwnMRPJbSSU5+XvZG1XSOa1qd6uXEiAyiVrUh09upPNQcRDFpNT16b9FHbqTzUHEQWk1Hpv0U5bWUz3I1lTC5y9yI9FVRaQwrHJ+0O8yeQAfLtr+L13qJOZTo4XYnBQRO9TyHs8AAAAAGQbFgO8GtL1LeRCnpDvTgtJHsU0sgE4/EkkcTelK9rG/Ny4kMKtX7Moir+EOrt1J5qDiILSanr036KO3UnmoOIgtJqPTfop+o6qnkcjY54nuXuRr0VQiophWOT9odxk8kHfhEW6dpoqY06nu/8AUNMwtUJxPozOQ+TE+g3H/Sn6FNUd/WOg38qfogqQVkzc1rUvTZmJqf43y/0U3y+KhX0pk4nBt5cHAgA+XbX8XrvUScynRwuxOCgid6nkPZ4AAAAAMg2LAd4NaXqW8iFPSHenBaSPYppZAJxVsJKY7qVGPSR8yEabwlLWhM633+jIOg38rf0KlUQ7msdBv5U/RBUgrLLg5a1L20uJqJ/Lk7k/2kqUxUKenK1kl5Q2MtTiSDvvmpaWx90NEzhOJ9F5yHyYqVB3wAJi52dNmbb2U3S+KhApTJxODbi4OBAB8u2v4vXeok5lOih9icFBE71PIezwAAAAAZBseA7we0/Ut5EKif704LSR7FNKIBOKvhIzUn2kfMhGm8JS1oXOt9/oyEqzuAYBZcHWdtLs5OUkyuKhUU3kncobCWpxJB33zUtLY+6GiZwnE+i85D5MVKg74AExc7OmzNt7KbpfFQgUpk4nBtxcHAgAg33Qu9I9z5LHo3Pcquc5Ykxqq95t9eLuNXow1/NRx9jbt6louEg9eLuHow9Dj7G3b1LRcJB68XcPRh7R9jbt6louEg9eLuHow9o+xt29S0XCQevF3D0Ye0fY27epaLhIPXi7h6MPQkbMsqgsqN8dm0kVMyR3Sc2JuJFX5nhz3P7lrPbWNalSIe08noq+EjNSfaR8yEabwlLWhc633+jISrO4BgFlwdZ20uzk5STK4qFRTeSdyhsJanEkHffNS0tj7oaJnCcT6LzkPkxUqDvgATFzs6bM23spul8VCBSmTicG3Yy4OBrOMaAVjGgFYxoAcgAA4+AAxoBWMaAVjGgFZWMJGatRtI+ZCNN4SlrQmdb7/RkJVncAwCy4Os7aXZycpJlcVCopvJO5Q2EtTiSDvvmpaWx90NEzhOJ9F5yHyYqVB3wAPVZVc6zLSp66NjXugd0ka5cSL8D2x6scjjRMwEjwXQ1Wqst2Uqu1dTb7iXfl0KPp6H/RfAylV2rqbfcYvy6GOnYf9F8DKVXaupt9wvy6Dp2H/RfAylV2rqbfcL8ug6dh/wBF8F1upa8lt2OyumiZE5z3N6LFVU+C4vvJkGJ6jbRRT8qkrHWEi11VEwvcptIZQbev5V2XbFXQx0MEjYHo1HueuNfgi+5CiTaserav0dBJ0IyYgNiq+qs8GUqu1dTb7jXfl0JPTsP+i+BlKrtXU2+4X5dB07D/AKL4GUqu1dTb7hfl0HTsP+i+CPt6+tVbdmSUM1HDE17mu6bHqqpiXGa4sysRtmolydDtlYyRUfXUVcjlyDALLg6ztpdnJykmVxUKim8k7lDYS1OJIO++alpbH3Q0TOE4n0XnIfJipUHfAAAAAAAAAGuYNM1ottJzFpKYXn7OJpzOu4T6LSvcpKKgxS+mddp7VOVCnmMVx3lE5KH7/akKaSxAAAAAAABZcHWdtLs5OUkyuKhUU3kncobCWpxJB33zUtLY+6GiZwnE+i85D5MVKg74AAAAAAAAA1zBpmtFtpOYtJTC8/ZxNOZ13CfRaV7lJRUGKX0zrtPapyoU8xiuO8onJQ/f7UhTSWIAAAAAAALLg6zspdnJykmVxUKim8m7lDYS1OJPFbVnttSzKihfI6Ns7eir2pjVDxEZbarV/wBN0vGWBFbERP0U/JnS6zqOG0i3Jupd9RRtifIyZ0us6jhtFybqOoo2xPkZM6XWdRw2i5N1HUUbYnyMmdLrOo4bRcm6jqKNsT5GTOl1nUcNouTdR1FG2J8jJnS6zqOG0XJuo6ijbE+RkzpdZ1HDaLk3UdRRtifJabu2Oyw7NbQxyvla1zndN6Ii/Fcf3EmFDSG2yhTzk06ajLFclVZKL3GwjFNte4UFqWnUV0lfNG6d3SVrWNVE+CJ7EWJKte5XV/suZWmosvBbCRiKiHkyZ0us6jhtPFybqSOoo2xPkZM6XWdRw2i5N1HUUbYnyMmdLrOo4bRcm6jqKNsT5GTOl1nUcNouTdR1FG2J8jJnS6zqOG0XJuo6ijbE+RkzpdZ1HDaLk3UdRRtifJIWBcmCxbVjroq2aVzGub0HNREXGmI2Q5ZsN1pFIs5TESahLCc1ELaSSoAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//9k=",
-//     },
-//     {
-//       id: 5,
-//       fundName: "HDFC Short Term Debt Fund",
-//       category: "Debt",
-//       subCategory: "Short Duration",
-//       minSIP: 500,
-//       aumCr: 9000,
-//       minLumpSum: 10000,
-//       oneWeekReturn: 0.28,
-//       logo: "data:image/jpeg;base64,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",
-//     },
-//   ],
-
-//   hybrid: [
-//     {
-//       id: 6,
-//       fundName: "HDFC Balanced Advantage Fund",
-//       category: "Hybrid",
-//       subCategory: "Balanced Advantage",
-//       minSIP: 1000,
-//       aumCr: 35000,
-//       minLumpSum: 10000,
-//       oneWeekReturn: 1.75,
-//       logo: "data:image/jpeg;base64,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",
-//     },
-//     {
-//       id: 7,
-//       fundName: "ICICI Prudential Equity & Debt Fund",
-//       category: "Hybrid",
-//       subCategory: "Aggressive Hybrid",
-//       minSIP: 500,
-//       aumCr: 12000,
-//       minLumpSum: 5000,
-//       oneWeekReturn: 1.25,
-//       logo: "data:image/jpeg;base64,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",
-//     },
-//   ],
-
-//   solution: [
-//     {
-//       id: 8,
-//       fundName: "UTI Retirement Benefit Fund",
-//       category: "Solution",
-//       subCategory: "Retirement",
-//       minSIP: 500,
-//       aumCr: 2000,
-//       minLumpSum: 5000,
-//       oneWeekReturn: 0.95,
-//       logo: "data:image/jpeg;base64,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",
-//     },
-//     {
-//       id: 9,
-//       fundName: "HDFC Children’s Gift Fund",
-//       category: "Solution",
-//       subCategory: "Children",
-//       minSIP: 1000,
-//       aumCr: 3500,
-//       minLumpSum: 5000,
-//       oneWeekReturn: 1.12,
-//       logo: "data:image/jpeg;base64,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",
-//     },
-//   ],
-
-//   others: [
-//     {
-//       id: 10,
-//       fundName: "Nippon India Gold Savings Fund",
-//       category: "Others",
-//       subCategory: "Commodity - Gold",
-//       minSIP: 100,
-//       aumCr: 6000,
-//       minLumpSum: 1000,
-//       oneWeekReturn: 0.75,
-//       logo: "data:image/jpeg;base64,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",
-//     },
-//     {
-//       id: 11,
-//       fundName: "Motilal Oswal Nasdaq 100 Fund of Fund",
-//       category: "Others",
-//       subCategory: "International",
-//       minSIP: 500,
-//       aumCr: 4500,
-//       minLumpSum: 5000,
-//       oneWeekReturn: 2.95,
-//       logo: "data:image/jpeg;base64,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",
-//     },
-//   ],
-// };
-
-// export const banks = [
-//   {
-//     id: "hdfc",
-//     name: "HDFC Bank",
-//     account: "XXXXXXXXXXXX123",
-//     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXgiz41maa34mpQoVYhRyZ8wk8XOMZfHvIrA&s",
-//   },
-//   // {
-//   //   id: "icici",
-//   //   name: "ICICI Bank",
-//   //   account: "XXXXXXXXXXXX456",
-//   //   logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXgiz41maa34mpQoVYhRyZ8wk8XOMZfHvIrA&s",
-//   // },
-//   // {
-//   //   id: "sbi",
-//   //   name: "SBI Bank",
-//   //   account: "XXXXXXXXXXXX789",
-//   //   logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXgiz41maa34mpQoVYhRyZ8wk8XOMZfHvIrA&s",
-//   // },
-// ];
 
 export const paymentOptions = [
   {
@@ -344,3 +376,222 @@ export const paymentOptions = [
     icon: "data:image/png;base64,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", // Replace with better icon if needed
   },
 ];
+
+export const holdingTypeOptions = [
+  { label: "Single", value: "SI" },
+  { label: "Joint", value: "JO" },
+  { label: "Anyone or Survivor", value: "AS" },
+];
+export const holdingCountOptions = [
+  { count: 1, label: "Primary Holder" },
+  { count: 2, label: "Second Holder" },
+  { count: 3, label: "Third Holder" },
+];
+export const genderOptions = [
+  { value: "M", label: "Male" },
+  { value: "F", label: "Female" },
+  { value: "O", label: "Other" },
+];
+export const DuoOptions = [
+  { value: "Yes", label: "Yes" },
+  { value: "No", label: "No" },
+];
+export const Country = [{ value: "INDIA", label: "India" }];
+
+export const taxOptions = [
+  { value: "01", label: "Individual" },
+  // { value: "02", label: "On behalf of minor" },
+  // { value: "03", label: "HUF" },
+  // { value: "04", label: "Company" },
+  // { value: "05", label: "AOP" },
+  // { value: "06", label: "Partnership Firm" },
+  // { value: "07", label: "Body Corporate" },
+  // { value: "08", label: "Trust" },
+  // { value: "09", label: "Society" },
+  // { value: "10", label: "Others" },
+  // { value: "11", label: "NRI-Others" },
+  // { value: "12", label: "DFI" },
+  // { value: "13", label: "Sole Proprietorship" },
+  // { value: "21", label: "NRE" },
+  // { value: "22", label: "OCB" },
+  // { value: "23", label: "FII" },
+  // { value: "24", label: "NRO" },
+  // { value: "25", label: "Overseas Corp. Body - Others" },
+  // { value: "26", label: "NRI Child" },
+  // { value: "27", label: "NRI - HUF (NRO)" },
+  // { value: "28", label: "NRI - Minor (NRO)" },
+  // { value: "29", label: "NRI - HUF (NRE)" },
+  // { value: "31", label: "Provident Fund" },
+  // { value: "32", label: "Super Annuation Fund" },
+  // { value: "33", label: "Gratuity Fund" },
+  // { value: "34", label: "Pension Fund" },
+  // { value: "36", label: "Mutual Funds FOF Schemes" },
+  // { value: "37", label: "NPS Trust" },
+  // { value: "38", label: "Global Development Network" },
+];
+
+export const occupationOptions = [
+  { value: "01", label: "Business" },
+  { value: "02", label: "Services" },
+  { value: "03", label: "Professional" },
+  { value: "04", label: "Agriculture" },
+  { value: "05", label: "Retired" },
+  { value: "06", label: "Housewife" },
+  { value: "07", label: "Student" },
+];
+
+export const accountTypeOptions = [
+  { value: "SB", label: "Savings Bank" },
+  // { value: "CB", label: "Current Bank" },
+  // { value: "NE", label: "NRE Account" },
+  // { value: "NO", label: "NRO Account" },
+];
+
+export const panExemptCategoryOptions = [
+  { value: "01", label: "SIKKIM Resident" },
+  { value: "02", label: "Transactions carried out on behalf of STATE GOVT" },
+  { value: "03", label: "Transactions carried out on behalf of CENTRAL GOVT" },
+  { value: "04", label: "COURT APPOINTED OFFICIALS" },
+  {
+    value: "05",
+    label: "UN Entity/Multilateral agency exempt from paying tax in India",
+  },
+  { value: "06", label: "Official Liquidator" },
+  { value: "07", label: "Court Receiver" },
+  {
+    value: "08",
+    label: "Investment in Mutual Funds Upto Rs. 50,000/- p.a. including SIP",
+  },
+];
+
+export const bankOptions = [
+  { label: "ICICI Bank", value: "ICI" },
+  { label: "State Bank of India", value: "SBI" },
+  { label: "Axis Bank", value: "UTI" },
+  { label: "HDFC Bank", value: "HDF" },
+  { label: "Kotak Mahindra Bank", value: "162" },
+  { label: "AU Small Finance Bank", value: "AUB" },
+  { label: "Bandhan Bank", value: "BDN" },
+  { label: "Bank of Baroda - Retail", value: "BBR" },
+  { label: "Bank of Baroda - Corporate", value: "BBC" },
+  { label: "Bank of India", value: "BOI" },
+  { label: "Canara Bank", value: "CNB" },
+  { label: "Capital Bank", value: "CPB" },
+  { label: "City Union Bank", value: "CUB" },
+  { label: "Cosmos Bank", value: "COB" },
+  { label: "Deutsche Bank", value: "DBK" },
+  { label: "HSBC", value: "HSB" },
+  { label: "IDBI Bank", value: "IDB" },
+  { label: "IDFC Bank", value: "IDN" },
+  { label: "Indian Overseas Bank", value: "IOB" },
+  { label: "IndusInd Bank", value: "IDS" },
+  { label: "Jana Small Finance Bank", value: "JNB" },
+  { label: "Karur Vysya Bank Limited", value: "KVB" },
+  { label: "Kerala Gramin Bank", value: "KGB" },
+  { label: "Punjab and Sind Bank", value: "PSB" },
+  { label: "Punjab National Bank", value: "PNB" },
+  { label: "Ratnakar Bank", value: "RBL" },
+  { label: "Saraswat Bank", value: "SWB" },
+  { label: "SBM Bank", value: "SOM" },
+  { label: "Shivalik Small Finance Bank Ltd.", value: "SHB" },
+  { label: "South Indian Bank", value: "SIB" },
+  { label: "Standard Chartered Bank", value: "SCB" },
+  { label: "Surat Bank", value: "SUR" },
+  { label: "Sutex Bank", value: "SUT" },
+  { label: "UCO Bank", value: "UCO" },
+  { label: "Ujjivan Bank", value: "UJV" },
+  { label: "Union Bank of India", value: "UBI" },
+  { label: "UPI (ICICI Bank Gateway)", value: "IC4" },
+  { label: "Utkarsh Bank", value: "UTK" },
+  { label: "Yes Bank", value: "YBK" },
+];
+
+export const normalizeKycData = (data: any, ckycFlag: boolean) => {
+  if (ckycFlag) {
+    // CKYC true
+    const details =
+      data?.clsDownloadCKYCDataResponse?.download_response?.personal_details;
+
+    return {
+      firstName: details?.first_name || "",
+      middleName: details?.middle_name || "",
+      lastName: details?.last_name || "",
+      pan: details?.pan || "",
+      dob: details?.dob ? dayjs(details.dob, "DD-MM-YYYY") : null,
+      email: details?.email || "",
+      gender:
+        details?.gender === "M"
+          ? "Male"
+          : details?.gender === "F"
+          ? "Female"
+          : "",
+      address1: details?.perm_line1 || "",
+      address2: details?.perm_line2 || "",
+      address3: details?.perm_line3 || "",
+      city: details?.perm_city || "",
+      state: getStateValue(details?.perm_state),
+      country: getCountryValue(details?.perm_country),
+      pincode: details?.perm_pin || "",
+    };
+  } else {
+    // CKYC false
+    const client = data?.[0] || {};
+
+    return {
+      firstName: client?.firstName || "",
+      middleName: client?.middlename || "",
+      lastName: client?.lastname || "",
+      pan: client?.panno || "",
+      // dob: client?.dob || "",
+      email: client?.email || "",
+      address1: client?.address1 || "",
+      address2: client?.address2 || "",
+      address3: client?.address3 || "",
+      city: client?.city || "",
+      state: getStateValue(client?.state),
+      country: getCountryValue(client?.country),
+      pincode: client?.pinCode || "",
+    };
+  }
+};
+
+export const States = [
+  { value: "AN", label: "Andaman & Nicobar Islands" },
+  { value: "AR", label: "Arunachal Pradesh" },
+  { value: "AP", label: "Andhra Pradesh" },
+  { value: "AS", label: "Assam" },
+  { value: "BH", label: "Bihar" },
+  { value: "CH", label: "Chandigarh" },
+  { value: "CG", label: "Chhattisgarh" },
+  { value: "GA", label: "Goa" },
+  { value: "GU", label: "Gujarat" },
+  { value: "HA", label: "Haryana" },
+  { value: "HP", label: "Himachal Pradesh" },
+  { value: "JM", label: "Jammu & Kashmir" },
+  { value: "JK", label: "Jharkhand" },
+  { value: "KA", label: "Karnataka" },
+  { value: "KE", label: "Kerala" },
+  { value: "MP", label: "Madhya Pradesh" },
+  { value: "MA", label: "Maharashtra" },
+  { value: "MN", label: "Manipur" },
+  { value: "ME", label: "Meghalaya" },
+  { value: "MI", label: "Mizoram" },
+  { value: "NA", label: "Nagaland" },
+];
+
+const getStateValue = (state: string) => {
+  if (!state) return "";
+
+  const found = States.find(
+    (s) =>
+      s.label.toLowerCase() === state.toLowerCase() ||
+      s.value.toLowerCase() === state.toLowerCase()
+  );
+
+  return found ? found.value : "";
+};
+
+const getCountryValue = (country: string) => {
+  if (!country) return "";
+  return country.toUpperCase() === "INDIA" ? "INDIA" : country;
+};

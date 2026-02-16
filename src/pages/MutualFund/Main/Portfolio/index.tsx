@@ -116,7 +116,7 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
     setSelectedRow(row);
     BankDetailsForRedeem(row);
     setRedeemModalOpen(true);
-    clientBankDetails();
+    clientBankDetails(row);
   };
 
   const handleModalToggle = () => {
@@ -155,89 +155,20 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
       });
   };
 
-  // interface RedeemRow {
-  //   //remove for live
-  //   folioNumber: string;
-  //   reedosCode: string | number;
-  // }
-
-  // const BankDetailsForRedeem = (row: RedeemRow) => {
-  //   //remove for live
-  //   const mfToken = getDecryptedValue("mfToken");
-
-  //   const payload = {
-  //     sumId: "",
-  //     parameter: row.folioNumber,
-  //     parameter2: row.reedosCode.toString(),
-  //   };
-
-  //   console.log("BankDetailsForRedeem payload:", payload);
-
-  //   dispatch(showLoader("Fetching Bank Details..."));
-
-  //   axios
-  //     .post(
-  //       "http://uatmiddlewareapi.lkp.net.in/api/MF/GetBankDetailsForRedeem",
-  //       payload,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${mfToken}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     )
-  //     .then((response: any) => {
-  //       console.log("GetBankDetailsForRedeem Response:", response);
-
-  //       if (response?.status === 200) {
-  //         const data = response?.data?.data?.folioSchemeDetailList?.[0];
-
-  //         console.log("Bank Data:", data);
-
-  //         if (data) {
-  //           setSelectedBank(data);
-  //         }
-  //       }
-  //     })
-  //     .catch((error: any) => {
-  //       console.error(
-  //         "GetBankDetailsForRedeem Error:",
-  //         error?.response || error
-  //       );
-  //     })
-  //     .finally(() => {
-  //       dispatch(hideLoader());
-  //     });
-  // };
-
-  const clientBankDetails = async () => {
+  const clientBankDetails = async (row: PortfolioRecord) => {
     dispatch(showLoader("Please wait we are processing your request"));
+    console.log(row, "portt");
 
+    let payload = {
+      dpFlag: row?.physicalQuantity > 0 ? "P" : " ",
+    };
     try {
-      const response = await apiServices.ClientProfile();
+      const response = await apiServices.ClientProfile(payload);
       const clientData = response?.data?.data;
       console.log(clientData, "Client Info from portfolio");
       setClientCode(clientData?.clientCode || "");
       setMobile(clientData?.mobileNo || "");
       setEmail(clientData?.email || "");
-
-      // const rawData = clientData?.bankDetails ?? [];
-      // const formattedData: BankDetail[] = rawData.map(
-      //   (item: any, index: number) => ({
-      //     id: index + 1,
-      //     name: item.bankName,
-      //     account: item.bankAccountNumber,
-      //     ifsc: item.ifsc,
-      //     code: item.bankCode,
-      //     paymentMode: item.payMode,
-      //   })
-      // );
-      // setBanks(formattedData);
-      // Select the first bank if available
-      // setBanks(formattedData);
-      // if (formattedData.length > 0) {
-      //   setSelectedBank(formattedData[0]);
-      // }
     } catch (error) {
       console.error("Error fetching bank details:", error);
       setSelectedBank(null);
@@ -330,7 +261,7 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
       const response = await apiServices.BSEStar_MfOrderEntry(payload);
 
       if (response?.status === 200) {
-        const rawData = response?.data?.data?.bsEremarks;
+        const rawData = response?.data?.data;
         console.log("Order Entry Response:", rawData);
         // handleModalToggle();
         SetMessage(rawData);

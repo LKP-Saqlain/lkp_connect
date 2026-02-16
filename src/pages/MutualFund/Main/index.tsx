@@ -30,7 +30,7 @@ import { capitalizeEachWord } from "../../../utils";
 import PhysicalOnboard from "./PhysicalOnboard";
 import MfSearch from "../../../components/common/MutualFunds/Search";
 
-const MutualFundIndex = () => {
+const MutualFundIndex = ({ handleTradingOpen }: any) => {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedMutualFund, setSelectedMutualFund] = useState<string>("");
   const [investMoreDetails, setInvestMoreDetails] = useState(null);
@@ -259,7 +259,9 @@ const MutualFundIndex = () => {
           >
             <Autocomplete
               freeSolo
+              inputValue={clientCode} //  THIS IS THE KEY
               options={suggestions}
+              filterOptions={(x) => x} //  IMPORTANT: disable client-side filtering
               getOptionLabel={(option: any) =>
                 `${option.clientCode} - ${option.clientName}`
               }
@@ -283,7 +285,7 @@ const MutualFundIndex = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Client Code"
+                  label="Client Code / PAN"
                   value={clientCode}
                   onChange={(e) => setClientCode(e.target.value)}
                   variant="outlined"
@@ -383,7 +385,8 @@ const MutualFundIndex = () => {
                 minWidth="fit-content"
               >
                 <Typography fontWeight={500}>
-                  Client: {clientCode} - {capitalizeEachWord(clientName.trim().split(" ")[0])}
+                  Client: {clientCode} -{" "}
+                  {capitalizeEachWord(clientName.trim().split(" ")[0])}
                 </Typography>
                 {showPhysicalOnboard || (
                   <IconButton
@@ -413,6 +416,7 @@ const MutualFundIndex = () => {
                 ClientCode={clientCode}
                 onPhysicalOnboard={() => setShowPhysicalOnboard(true)}
                 investMoreDetails={investMoreDetails}
+                handleTradingOpen={handleTradingOpen}
               />
             ) : (
               mainMenu[activeTab]?.content({

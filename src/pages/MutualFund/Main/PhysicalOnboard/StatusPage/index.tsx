@@ -89,6 +89,7 @@ const StatusCard = () => {
     if (!status) return;
     if (status === "SUCCESS") {
       ShowToast("success", "Physical Registration Successful");
+      updateElogStatus();
     } else {
       ShowToast("error", "Unsuccessful, Please try again");
     }
@@ -121,6 +122,26 @@ const StatusCard = () => {
       })
       .catch((error: any) => {
         console.error("FinalApiCalls Error:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+  const updateElogStatus = () => {
+    let payload = {
+      clientCode,
+      status,
+    };
+    dispatch(showLoader("Processing..."));
+
+    apiServices
+      .UpdateClientElogStatus(payload)
+
+      .then((elogResponse: any) => {
+        console.log("UpdateClientElogStatus Response:", elogResponse);
+      })
+      .catch((error: any) => {
+        console.error("UpdateClientElogStatus Error:", error);
       })
       .finally(() => {
         dispatch(hideLoader());
