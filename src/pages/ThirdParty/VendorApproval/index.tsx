@@ -74,7 +74,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
     console.log("Testtss", tdsFileName, msmeFileName);
 
     const payload = {
-      vendorId: row?.vendorId,
+      vendorId: row?.vid,
       accApproval: entryFlag,
       accUserId: user_id,
       accRemark: remark,
@@ -291,7 +291,7 @@ const VendorApproval = ({ activeSubItem }: any) => {
           dispatch(showLoader("Uploading file..."));
 
           let payload = {
-            vendorId: row?.vendorId,
+            vendorId: row?.vid,
             accUserId: user_id,
             tdsFlag: tdsFlag === "Yes" ? true : false,
             tdsPath: base64Only,
