@@ -57,7 +57,7 @@ export const useAppHealth = () => {
 
       const versionInterval = setInterval(() => {
         checkVersion();
-      }, 60000);
+      }, 30000);
 
       return () => clearInterval(versionInterval);
     }
