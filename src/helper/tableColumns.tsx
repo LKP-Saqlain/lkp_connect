@@ -12091,14 +12091,6 @@ export const expiryContestHistory: GridColDef[] = [
 
 export const RHexpiryContestHistory: GridColDef[] = [
   {
-    field: "zone",
-    headerName: "Zone",
-    flex: 0.8,
-    align: "center",
-    headerAlign: "center",
-    disableColumnMenu: true,
-  },
-  {
     field: "ExpiryDate",
     headerName: "Expiry Date",
     disableColumnMenu: true,
@@ -12132,6 +12124,14 @@ export const RHexpiryContestHistory: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "instrument",
@@ -12385,6 +12385,14 @@ export const employeesContestHistory: GridColDef[] = [
         })
         .replace(/ /g, "-");
     },
+  },
+  {
+    field: "index",
+    headerName: "Index",
+    flex: 1,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
   },
   ...employeesContestProgress,
 ];
