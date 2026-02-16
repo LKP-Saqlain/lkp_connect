@@ -857,7 +857,7 @@ const ModalComponent = ({
           else if (isUploadedFile === "bankFile") docType = "BANK";
 
           // Final file name: authenticationValue_<DOC_TYPE>.<extension>
-          const finalFileName = `${authenticationValue}_${docType}.${fileExt}`;
+          const finalFileName = `${formik.values.panNo}_${docType}.${fileExt}`;
           console.log("customFileName", finalFileName);
 
           if (isUploadedFile === "panFile") {
@@ -934,6 +934,55 @@ const ModalComponent = ({
   useEffect(() => {
     console.log("base64FILE-->", fileBase64);
   }, [fileBase64]);
+
+  const getDownloadableFile = async () => {
+    try {
+      const fileExtension = editData?.pdoc
+        ? `.${editData.pdoc.split(".").pop()?.toLowerCase()}`
+        : "";
+
+      const payload = {
+        fileName: editData?.pdoc,
+        filePath:
+          "\\172.17.100.60\\d$\\WebPortal\\Intranet_New\\Files\\VendorMasterMSME",
+        fileType: fileExtension,
+        contentType: "",
+      };
+      console.log("Payloadd", payload);
+
+      dispatch(showLoader("Loading Preview..."));
+
+      const response = await apiServices.ComplianceDownload(payload);
+
+      if (response?.status === 200 && response?.data) {
+        const fileBlob = new Blob([response.data], {
+          type: response.headers["content-type"] || "application/octet-stream",
+        });
+
+        const file = new File([fileBlob], editData?.pdoc, {
+          type: response.headers["content-type"] || "application/octet-stream",
+        });
+
+        formik.setFieldValue("panFile", file);
+
+        // Optional: trigger download directly
+        const url = window.URL.createObjectURL(fileBlob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = editData?.pdoc || "download";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      } else {
+        ShowToast("info", "Error fetching file");
+      }
+    } catch (error: any) {
+      ShowToast("info", error.message || "Download failed");
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
 
   const handleFileDelete =
     (field: "fileUpload" | "image" | "uploadProof") => () => {
@@ -1302,8 +1351,8 @@ const ModalComponent = ({
   useEffect(() => {
     if (
       editUserCheck &&
-      activeSubItem !== "Unlisted Shares Entry" &&
-      activeSubItem != "Vendor Creation"
+      activeSubItem !== "Unlisted Shares Entry"
+      // activeSubItem != "Vendor Creation"
     ) {
       const fileExtension =
         editData && editData.pdoc
@@ -2614,12 +2663,7 @@ const ModalComponent = ({
                               /> */}
 
                           <DownloadForOfflineIcon
-                            onClick={() =>
-                              handlePreviewFile(
-                                formik.values.panFile,
-                                "panFile"
-                              )
-                            }
+                            onClick={getDownloadableFile}
                             style={{
                               cursor: "pointer",
                               fontSize: "30px",
