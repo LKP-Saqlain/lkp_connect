@@ -8,10 +8,10 @@ import "./assets/scss/themes.scss";
 import SessionExpiryHandler from "./pages/Authentication/sessionExpiryHandler";
 import "./Global.css";
 import ChangePassword from "./pages/Authentication/ChangePassword";
-// import Maintenance from "./pages/Maintenance";
+import Maintenance from "./pages/Maintenance";
 import AmcMembershipSteps from "./pages/AmcMembership/Steps";
 import StatusCard from "./pages/MutualFund/PhysicalOnboard/StatusPage";
-// import { useAppHealth } from "./hooks/useAppHealth";
+import { useAppHealth } from "./hooks/useAppHealth";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(
@@ -28,19 +28,19 @@ const CongratsPage = lazy(() => import("./pages/MTF/congratsScreen"));
 
 const App = () => {
   //this used to check the health of my IIS Server
-  // const { serverOnline, updateAvailable } = useAppHealth();
+  const { serverOnline, updateAvailable } = useAppHealth();
 
-  // if (!serverOnline) {
-  //   return <Maintenance />;
-  // }
+  if (!serverOnline) {
+    return <Maintenance />;
+  }
   return (
     <Router>
-      {/* {updateAvailable && (
+      {updateAvailable && (
         <div className="update-banner">
           A new version is available.
           <button onClick={() => window.location.reload()}>Refresh</button>
         </div>
-      )} */}
+      )}
       <ToastContainer />
       <Loader />
       <SessionExpiryHandler />

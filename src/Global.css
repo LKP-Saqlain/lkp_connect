@@ -3,3 +3,14 @@
   background-color: white !important;
   color: black !important;
 }
+
+.update-banner {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #ff9800;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  z-index: 9999;
+}
