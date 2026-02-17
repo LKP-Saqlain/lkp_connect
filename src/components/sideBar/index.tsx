@@ -782,9 +782,7 @@ const SideBar = () => {
       <RMSPledgeHolding activeSubItem={activeSubItem} />
     ),
     "MTF File Merge": <MtfComponent activeSubItem={activeSubItem} />,
-    "MTF Stock Ageing Report": (
-      <ShortFallReport activeSubItem={activeSubItem} />
-    ),
+    "MTF Shortfall Report": <ShortFallReport activeSubItem={activeSubItem} />,
     "MTF File Upload": <MTFFileUpload activeSubItem={activeSubItem} />,
     "MTF Ageing Report": <MTFAgeingReport activeSubItem={activeSubItem} />,
     "T6 Selling File Upload": <T6SellingUpload activeSubItem={activeSubItem} />,
