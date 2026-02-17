@@ -2165,7 +2165,7 @@ const DataTable = ({
       return TableColumns.clientMISColumns.map((column) => ({
         ...column,
       }));
-    } else if (activeSubItem === "MTF Stock Ageing Report") {
+    } else if (activeSubItem === "MTF Shortfall Report") {
       return TableColumns.shortfallColumns.map((column) => ({
         ...column,
       }));
