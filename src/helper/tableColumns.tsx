@@ -11859,7 +11859,7 @@ export const todaysContestProgress: GridColDef[] = [
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params) => {
-      const isQualified = params.row?.noOfLots >= 500;
+      const isQualified = params.row?.noOfLots >= 100;
 
       return (
         <div
@@ -11881,7 +11881,7 @@ export const todaysContestProgress: GridColDef[] = [
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params) => {
-      const isQualified = params.row?.minBrokerage >= 50000;
+      const isQualified = params.row?.minBrokerage >= 5000;
       return (
         <div
           style={{
@@ -11902,7 +11902,7 @@ export const todaysContestProgress: GridColDef[] = [
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
     renderCell: (params) => {
-      const isQualified = params.row?.uniqueClients >= 20;
+      const isQualified = params.row?.uniqueClients >= 5;
       return (
         <div
           style={{
@@ -12248,7 +12248,125 @@ export const RHtodaysContestProgress: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
   },
-  ...todaysContestProgress,
+  {
+    field: "day",
+    headerName: "Day",
+    disableColumnMenu: true,
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "index",
+    headerName: "Index",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "instrument",
+    headerName: "Instrument",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "noOfLots",
+    headerName: "No of Lots",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.noOfLots >= 500;
+
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "minBrokerage",
+    headerName: "Brokerage",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.minBrokerage >= 50000;
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "uniqueClients",
+    headerName: "Unique Clients",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      const isQualified = params.row?.uniqueClients >= 20;
+      return (
+        <div
+          style={{
+            backgroundColor: isQualified ? "#b1edbf" : "transparent",
+          }}
+        >
+          {formatNumber(params.value)}
+        </div>
+      );
+    },
+  },
+  {
+    field: "qualified",
+    headerName: "Qualified",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "prize",
+    headerName: "Gift Voucher",
+    disableColumnMenu: true,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: ({ value }) => {
+      // null / undefined / empty
+      if (value === null || value === undefined || value === "") {
+        return "-";
+      }
+
+      // string-based NA checks (NA, N/A, n/a, na, etc.)
+      if (typeof value === "string") {
+        if (typeof value === "string" && value.toUpperCase().includes("N")) {
+          return "-";
+        }
+      }
+      return value;
+    },
+  },
 ];
 export const employeesContestProgress: GridColDef[] = [
   {
