@@ -18,11 +18,19 @@ import { useFormik } from "formik";
 import ShowToast from "../../../utils/toastUtils";
 import { TextField } from "@mui/material";
 import UserInfoTable from "../../../components/common/UserInfoTable";
+import { formatDateTime } from "../../../helper/commmon";
+
+interface UploadDetail {
+  type: string;
+  uon: string;
+  uby: string;
+}
 
 const ShortFallReport = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [shortfallData, setShortfallData] = useState<any[]>([]);
+  const [uploadDetails, setUploadDetails] = useState<UploadDetail[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -212,6 +220,36 @@ const ShortFallReport = ({ activeSubItem }: any) => {
         dispatch(hideLoader());
       });
   };
+
+  const fetchFileUploadedDetails = () => {
+    let payload = {
+      option: "MTFSHORTFALL",
+    };
+    dispatch(showLoader(""));
+
+    apiServices
+      .GetFileuploadDetails(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          dispatch(hideLoader());
+          console.log("ResponseeeGetFileuploadDetails", response?.data?.data);
+          const data = response?.data?.data || [];
+          setUploadDetails(data);
+        }
+      })
+      .catch((error) => {
+        console.log("errror", error);
+        dispatch(hideLoader());
+      });
+  };
+
+  useEffect(() => {
+    fetchFileUploadedDetails();
+  }, []);
+
+  const MTFShortfall = uploadDetails.find(
+    (item: any) => item.tp === "MTFSHORTFALL"
+  );
 
   return (
     <React.Fragment>
@@ -447,6 +485,34 @@ const ShortFallReport = ({ activeSubItem }: any) => {
                 }}
               >
                 <CardBody>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-start",
+                      marginBottom: "2px",
+                      width: "100%",
+                    }}
+                  >
+                    {MTFShortfall && (
+                      <div
+                        style={{
+                          fontSize: "11px",
+                          color: "#444",
+                          textAlign: "left",
+                        }}
+                      >
+                        <div>
+                          <strong>Last Uploaded By :</strong>{" "}
+                          {MTFShortfall && MTFShortfall.uby}
+                        </div>
+                        <div>
+                          <strong>Last Uploaded On :</strong>{" "}
+                          {formatDateTime(MTFShortfall?.uon)}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   <UserInfoTable
                     activeSubItem={activeSubItem}
                     T6Data={shortfallData}

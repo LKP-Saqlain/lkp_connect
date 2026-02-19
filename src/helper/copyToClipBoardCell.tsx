@@ -52,6 +52,7 @@ const CopyToClipboardCell: React.FC<Props> = ({
   const handleCopy = () => {
     console.log("testsad", field, selectedRow);
     let textToCopy = field !== "dpMandate" ? fullLink : mandateLink;
+    console.log("textToCopy", textToCopy);
 
     if (field === "dpMandate" || field === "AMC") {
       console.log("clientCode&dP_ID", selectedRow.cc, selectedRow.dP_ID);

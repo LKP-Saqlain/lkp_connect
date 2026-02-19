@@ -70,7 +70,7 @@ const AmcMembershipQ4 = ({ activeMenu }: any) => {
 
         setNonLifetimeData(
           withoutLifetime.map((item: any, index: number) => ({
-            id: index + 1,
+            Id: index + 1,
             ...item,
           }))
         );
