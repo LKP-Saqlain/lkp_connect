@@ -2102,6 +2102,34 @@ const DataTable = ({
       return TableColumns.RHTopClientsColumns.map((column) => ({
         ...column,
       }));
+    } else if (selectedWidget === "Q4_Partner Contest Report") {
+      return TableColumns.getAPContestReportColumnsQ4.map((column) => {
+        if (column.field === "apc") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const handleClick = () => {
+                setSelectedRow(params.row);
+                tog_center();
+              };
+
+              return (
+                <span
+                  style={{
+                    color: "#1976d2",
+                    cursor: "pointer",
+                    // textDecoration: "underline",
+                  }}
+                  onClick={handleClick}
+                >
+                  {params.value}
+                </span>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else if (activeSubItem === "Partner Contest Report") {
       return TableColumns.getAPContestReportColumns.map((column) => {
         if (column.field === "apc") {

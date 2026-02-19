@@ -8034,19 +8034,6 @@ export const getAPContestReportColumns: GridColDef[] = [
     disableColumnMenu: true,
     headerAlign: "center",
   },
-  // {
-  //   field: "qtarget",
-  //   headerName: "Revenue Target",
-  //   flex: 1.2,
-  //   disableColumnMenu: true,
-  //   headerAlign: "center",
-  //   align: "right",
-  //   headerClassName: "header-wrap-custom",
-  //   valueFormatter: (params: any) =>
-  //     new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
-  //       params
-  //     ),
-  // },
   {
     field: "bga",
     headerName: "Revenue Achieved",
@@ -8061,7 +8048,7 @@ export const getAPContestReportColumns: GridColDef[] = [
       ),
   },
   {
-    field: "clientsAchieved", // ✅ unique
+    field: "clientsAchieved",
     headerName: "Clients Achieved",
     flex: 1,
     align: "center",
@@ -8079,7 +8066,7 @@ export const getAPContestReportColumns: GridColDef[] = [
     headerAlign: "center",
   },
   {
-    field: "accountsTraded", // ✅ unique
+    field: "accountsTraded",
     headerName: "Account Traded",
     flex: 1,
     align: "center",
@@ -8089,6 +8076,29 @@ export const getAPContestReportColumns: GridColDef[] = [
       return value ?? "-";
     },
   },
+];
+export const getAPContestReportColumnsQ4: GridColDef[] = [
+  // Take first two columns from base report
+  getAPContestReportColumns[0], // AP Code
+  getAPContestReportColumns[1], // AP Name
+
+  // Add Minimum Brokerage column
+  {
+    field: "mbg",
+    headerName: "Minimum Brokerage",
+    flex: 1.3,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
+        params
+      ),
+  },
+
+  // Add remaining columns after AP Name
+  ...getAPContestReportColumns.slice(2),
 ];
 
 export const clientUnpledgeReport: GridColDef[] = [

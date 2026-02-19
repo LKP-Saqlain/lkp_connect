@@ -541,6 +541,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
               </form>
               <DataTable
                 activeSubItem={activeSubItem}
+                selectedWidget={"Q4_Partner Contest Report"}
                 T6Data={data}
                 selectedTab={tabValue}
               />
