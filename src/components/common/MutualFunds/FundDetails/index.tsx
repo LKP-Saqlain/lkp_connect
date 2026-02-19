@@ -4,8 +4,6 @@ import { MdOutlineScience } from "react-icons/md";
 import { HiOutlineDocumentText } from "react-icons/hi";
 
 const FundDetails = ({ data, fundOverviewData }: any) => {
-  console.log(fundOverviewData, "data ?", data);
-
   // Format launch date
   const formattedLaunchDate = data.launchDate
     ? new Date(data.launchDate).toLocaleDateString("en-IN", {
@@ -14,7 +12,6 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
         year: "numeric",
       })
     : "N/A";
-
   const finalData = fundOverviewData || data || {};
 
   return (

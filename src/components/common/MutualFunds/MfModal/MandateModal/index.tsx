@@ -49,7 +49,7 @@ const CreateMandateModal = ({
       flag: selectedPaymentType === "upi" ? "19" : "06",
       clientCode: clientNo,
       amount: amount.toString(),
-      mandateType: "N",
+      mandateType: selectedPaymentType === "upi" ? "U" : "N",
       accountNo: selectedBank.account,
       accountType: "SB",
       ifsccode: selectedBank.ifsc,
@@ -98,7 +98,7 @@ const CreateMandateModal = ({
   // Today's date and +1 day
   const today = new Date();
   const tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);
+  tomorrow.setDate(today.getDate());
 
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered size="sm">

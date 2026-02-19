@@ -117,6 +117,7 @@ const NomineeDetails = ({
 
       if (!isRegistered) {
         console.warn("Registration NOT successful → skipping Elog");
+        ShowToast("error", regResponse?.data?.message);
         return; // stop further execution
       }
       if (!ClientCode) {

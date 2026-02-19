@@ -6,7 +6,7 @@ import {
   ModalFooter,
   Label,
 } from "reactstrap";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TextField } from "@mui/material";
 import {
   paymentOptions,
@@ -20,8 +20,11 @@ import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import BankCard from "../../BankRadio";
 import ShowToast from "../../../../utils/toastUtils";
-import { getNextPaymentDateString } from "../../../../helper/commmon";
-// import TimerModal from "../../TimerModal";
+import {
+  formatTime,
+  getNextPaymentDateString,
+} from "../../../../helper/commmon";
+import TimerModal from "../../TimerModal";
 
 const MutualFundModal = ({
   isOpen,
@@ -33,6 +36,7 @@ const MutualFundModal = ({
   onOrderSuccess,
   selectedType,
   onBack,
+  redeemFolioNumber,
 }: MutualFundModalProps) => {
   const [amount, setAmount] = useState<string>("500");
   const [selectedPaymentType, setSelectedPaymentType] = useState<string | null>(
@@ -40,7 +44,6 @@ const MutualFundModal = ({
   );
   const [banks, setBanks] = useState<BankDetail[]>([]);
   const [selectedBank, setSelectedBank] = useState<BankDetail | null>(null);
-  const [sipDate, setSipDate] = useState<number | null>(null);
   const [dateSelected, setDateSelected] = useState<number | null>(null);
   const [upiId, setUpiId] = useState("");
   const [upiVerified, setUpiVerified] = useState<boolean>();
@@ -50,8 +53,38 @@ const MutualFundModal = ({
   const [isNestedModalOpen, setNestedModalOpen] = useState(false);
   const toggleNestedModal = () => setNestedModalOpen((prev) => !prev);
   const [upiName, setUpiName] = useState("");
+  const [isTimerOpen, setIsTimerOpen] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(120);
+  const [orderNumber, setOrderNumber] = useState<string>("");
+  // const [internalRefNo, setInternalRefNo] = useState<string>("");
+  const countdownRef = useRef<NodeJS.Timeout | null>(null);
+  const apiRef = useRef<NodeJS.Timeout | null>(null);
+  const internalRefNoRef = useRef<string>("");
+  const orderNumberRef = useRef<string>("");
+  const physical2FAIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const is2FALinkOpenedRef = useRef(false);
 
+  const today = new Date().getDate();
+  const defaultSipDate = today > 28 ? 1 : today;
+
+  const [sipDate, setSipDate] = useState<number>(defaultSipDate);
+  const isUpi = selectedPaymentType === "upi";
   const dispatch = useDispatch<AppDispatch>();
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     clientBankDetails();
+  //   }, 1000);
+  //   console.log("selectedType", selectedType);
+  // }, [selectedType]);
+
+  useEffect(() => {
+    return () => {
+      if (physical2FAIntervalRef.current) {
+        clearInterval(physical2FAIntervalRef.current);
+      }
+    };
+  }, []);
 
   const handleBankSelect = (bankId: number) => {
     const selected = banks.find((bank) => bank.id === bankId);
@@ -65,24 +98,37 @@ const MutualFundModal = ({
       });
     }
   };
+  const minLumpsum = Number(title?.lumpsumMinimum || 0);
+  const minSip = Number(title?.sipMinimum || 0);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (!isOpen && !isNestedModalOpen) {
       setAmount("500");
       setSelectedBank(null);
       setSelectedPaymentType(null);
-      setSipDate(null);
+      setSipDate(defaultSipDate);
       setDateSelected(null);
       setUpiId("");
       setUpiVerified(undefined);
       setUpiName("");
     }
-    console.log(bseSchemeCode, "bseSchemeCode");
-  }, [isOpen]);
+    console.log("modal data", title);
+  }, [isOpen, isNestedModalOpen]);
 
   const extractOrderNumber = (responseData: string): string | null => {
     const match = responseData.match(/ORDER NO: (\d+)/);
     return match ? match[1] : null;
+  };
+  const clearAllIntervals = () => {
+    if (countdownRef.current) {
+      clearInterval(countdownRef.current);
+      countdownRef.current = null;
+    }
+
+    if (apiRef.current) {
+      clearInterval(apiRef.current);
+      apiRef.current = null;
+    }
   };
 
   const createLumpsumOrder = async () => {
@@ -96,7 +142,7 @@ const MutualFundModal = ({
       orderVal: amount,
       qty: "",
       allRedeem: "N",
-      folioNo: "",
+      folioNo: redeemFolioNumber || "",
       remarks: "test",
       dpc: "Y",
       euinVal: "Y",
@@ -128,8 +174,9 @@ const MutualFundModal = ({
       if (response?.status === 200) {
         const rawData = response?.data?.data;
         console.log("Order Entry Response:", rawData);
-
-        const orderNumber = extractOrderNumber(rawData);
+        const orderNo = rawData?.bsEremarks;
+        const internalRefNo = rawData?.uniqueRefNo;
+        const orderNumber = extractOrderNumber(orderNo);
         console.log("orderNo orderNumber is", orderNumber);
 
         if (response?.data?.statusCode === 417) {
@@ -139,9 +186,8 @@ const MutualFundModal = ({
         if (!orderNumber) {
           throw new Error("Could not extract order number from response");
         }
-        onBack && onBack();
-        onOrderSuccess && onOrderSuccess();
-        return orderNumber;
+
+        return { orderNumber, internalRefNo };
       } else {
         throw new Error("Lumpsum order API failed");
       }
@@ -183,71 +229,69 @@ const MutualFundModal = ({
       selectedBank &&
       selectedPaymentType
     ) {
+      toggle();
       setNestedModalOpen(true);
-      return; // Stop here until user confirms in child modal
+
+      return;
+      // Stop here until user confirms in child modal
     }
     dispatch(showLoader("Placing Order..."));
 
     try {
-      let orderNumber = null;
+      // let orderNumber = null;
 
-      // if (modalType === "sip") {
-      //   orderNumber = await createSipOrder();
-      // } else {
-      orderNumber = await createLumpsumOrder();
-      // }
+      const result = await createLumpsumOrder();
 
-      if (!orderNumber) {
-        throw new Error("Failed to generate order number");
+      if (!result) {
+        throw new Error("Failed to generate order");
       }
 
-      const isUpi = selectedPaymentType === "upi";
+      const { orderNumber, internalRefNo } = result;
+      setOrderNumber(orderNumber);
+      // setInternalRefNo(internalRefNo);
 
-      const paymentPayload = {
-        modeofpayment: isUpi ? "UPI" : selectedBank?.paymentMode ?? "DIRECT",
-        bankid: selectedBank?.code ?? "",
-        // bankid: "HDF",
-        accountnumber: selectedBank?.account ?? "",
-        // accountnumber: "008291800000871",
-        ifsc: selectedBank?.ifsc ?? "",
-        // ifsc: "YESB0000082",
-        ordernumber: orderNumber,
-        totalamount: amount.toString(),
-        internalrefno: "",
-        nefTreference: isUpi ? "" : "1",
-        mandateid: "",
-        vpaid: isUpi ? upiId : "",
-        loopbackURL: "https://lkpconnect.net.in/dashboard",
-        allowloopBack: "Y",
-        filler1: "",
-        filler2: "",
-        filler3: "",
-        filler4: "",
-        filler5: "",
-      };
+      internalRefNoRef.current = internalRefNo;
+      orderNumberRef.current = orderNumber;
 
-      const response = await apiServices.BSEStar_SinglePayment(paymentPayload);
+      if (selectedType === "demat") {
+        if (!orderNumber) {
+          throw new Error("Failed to generate order number");
+        }
+        handleSinglePayment(orderNumber);
 
-      const htmlContent = response?.data?.data?.responsestring;
-      if (selectedPaymentType === "upi") {
-        ShowToast("info", htmlContent);
-      } else {
-        // const newWindow = window.open("", "_blank");
-        // if (newWindow) {
-        //   newWindow.document.open();
-        //   newWindow.document.write(htmlContent); // browser interprets it fine
-        //   newWindow.document.close();
-        // }
+        toggle();
+      } else if (selectedType === "physical") {
+        toggle();
+        setIsTimerOpen(true);
+        const totalTime = 220;
+        let remaining = totalTime;
+        setSecondsLeft(remaining);
 
-        const encodedHtml = btoa(htmlContent);
-        await sendEmail({
-          url: encodedHtml,
-          mandateId: "",
-          orderNo: orderNumber,
-          type: "SINGLE",
-        });
+        // ⏱ Countdown every 1 second
+        countdownRef.current = setInterval(() => {
+          remaining -= 1;
+          setSecondsLeft(remaining);
+
+          if (remaining <= 0) {
+            clearAllIntervals();
+            setIsTimerOpen(false);
+            onOrderSuccess && onOrderSuccess();
+            console.log("2FA timer expired");
+          }
+        }, 1000);
+        // reset guards
+        is2FALinkOpenedRef.current = false;
+
+        if (physical2FAIntervalRef.current) {
+          clearInterval(physical2FAIntervalRef.current);
+        }
+
+        physical2FAIntervalRef.current = setInterval(() => {
+          handlePhyicalOrder2FA(internalRefNo);
+        }, 10_000);
       }
-      toggle(); // close modal
+
+      // close modal
     } catch (err) {
       console.error("Investment failed", err);
 
@@ -255,6 +299,118 @@ const MutualFundModal = ({
     } finally {
       dispatch(hideLoader());
     }
+  };
+
+  const handleSinglePayment = async (orderNumber: any) => {
+    const paymentPayload = {
+      modeofpayment: isUpi ? "UPI" : selectedBank?.paymentMode ?? "DIRECT",
+      bankid: selectedBank?.code ?? "",
+      // bankid: "HDF",
+      accountnumber: selectedBank?.account ?? "",
+      // accountnumber: "008291800000871",
+      ifsc: selectedBank?.ifsc ?? "",
+      // ifsc: "YESB0000082",
+      ordernumber: orderNumber,
+      totalamount: amount.toString(),
+      internalrefno: "",
+      nefTreference: isUpi ? "" : "1",
+      mandateid: "",
+      vpaid: isUpi ? upiId : "",
+      loopbackURL: "https://lkpconnect.net.in/dashboard",
+      allowloopBack: "Y",
+      filler1: "",
+      filler2: "",
+      filler3: "",
+      filler4: "",
+      filler5: "",
+      dpFlag: selectedType === "physical" ? "P" : "",
+    };
+
+    const response = await apiServices.BSEStar_SinglePayment(paymentPayload);
+
+    const htmlContent = response?.data?.data?.responsestring;
+    if (selectedPaymentType === "upi") {
+      ShowToast("info", htmlContent);
+      onOrderSuccess && onOrderSuccess();
+      onBack && onBack();
+    } else {
+      const encodedHtml = btoa(htmlContent);
+      await sendEmail({
+        url: encodedHtml,
+        mandateId: "",
+        orderNo: orderNumber,
+        type: "SINGLE",
+      });
+    }
+  };
+
+  const handlePhyicalOrder2FA = async (internalRefNo: string) => {
+    // ⛔ stop if already opened
+    if (is2FALinkOpenedRef.current) return;
+
+    const payload = {
+      clientcode: clientNo,
+      loopbackURL:
+        "https://middlewareapi.lkp.net.in/api/MF/PhysicalOrder2FAResponse",
+      internalrefno: internalRefNo,
+    };
+
+    dispatch(showLoader("Verifying UPI..."));
+
+    try {
+      const response = await apiServices.PhyicalOrder2FA(payload);
+      const url = response?.data?.responseString;
+
+      if (url && url.includes("bsestarmf")) {
+        // ✅ mark opened
+        is2FALinkOpenedRef.current = true;
+
+        // ✅ stop polling immediately
+        if (physical2FAIntervalRef.current) {
+          clearInterval(physical2FAIntervalRef.current);
+          physical2FAIntervalRef.current = null;
+        }
+
+        window.open(url, "_blank", "noopener,noreferrer");
+        handle2FAResponse();
+      }
+    } catch (error) {
+      console.error("Physical 2FA error", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const getPhysicalResponse = async () => {
+    const payload = {
+      internalrefno: internalRefNoRef.current, // ✅ always latest
+      // internalrefno: "2026010514796021075",
+      // internalrefno: "20241227040802000024",
+    };
+    dispatch(showLoader("Verifying UPI..."));
+    try {
+      const response = await apiServices.GetPhysicalResponse(payload);
+      if (response?.data?.physical2FAFlag) {
+        clearAllIntervals();
+        console.log("mfmodal black", response?.data?.orderNumber);
+        handleSinglePayment(response?.data?.orderNumber ?? orderNumber);
+        onOrderSuccess && onOrderSuccess();
+        onBack && onBack();
+        return;
+      }
+    } catch (error) {
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const handle2FAResponse = () => {
+    // setIsTimerOpen(true);
+
+    // 🔁 API hit every 10 seconds
+    apiRef.current = setInterval(() => {
+      getPhysicalResponse();
+    }, 10_000);
   };
 
   const sendEmail = async ({
@@ -279,7 +435,15 @@ const MutualFundModal = ({
 
     try {
       const response = await apiServices.SinglePaymentEmail(payload);
-
+      ShowToast("info", response?.data?.message);
+      if (selectedType === "physical") {
+        onOrderSuccess && onOrderSuccess();
+        onBack && onBack();
+      }
+      if (response?.data?.message === "Email sent successfully") {
+        onOrderSuccess && onOrderSuccess();
+        onBack && onBack();
+      }
       console.log(response, "Email response");
     } catch (error) {
       console.error("Error sending email", error);
@@ -290,9 +454,11 @@ const MutualFundModal = ({
 
   const clientBankDetails = async () => {
     dispatch(showLoader("Please wait we are processing your request"));
-
+    let payload = {
+      dpFlag: selectedType === "physical" ? "P" : " ",
+    };
     try {
-      const response = await apiServices.ClientProfile();
+      const response = await apiServices.ClientProfile(payload);
       const clientData = response?.data?.data;
 
       // Store mobile and email
@@ -355,19 +521,32 @@ const MutualFundModal = ({
     }
   };
 
+  // useEffect(() => {
+  //   clientBankDetails();
+  // }, [hasToken]);
   useEffect(() => {
-    clientBankDetails();
-  }, [hasToken]);
+    if (isOpen && hasToken && selectedType) {
+      clientBankDetails();
+    }
+  }, [isOpen, hasToken, selectedType]);
 
   return (
     <>
+      <TimerModal
+        isOpen={isTimerOpen}
+        toggle={() => setIsTimerOpen(false)}
+        timerPage
+        timerType="Lumpsum"
+        paymentMode="PHYSICAL"
+        secondsLeft={secondsLeft}
+        formatTime={formatTime}
+      />
       <Modal isOpen={isOpen} toggle={toggle} centered size="lg">
         <ModalHeader toggle={toggle}>
-          {title} - {modalType === "oneTime" ? "Lumpsum " : " SIP"}
+          {title?.schemeName} - {modalType === "oneTime" ? "Lumpsum " : " SIP"}
         </ModalHeader>
 
         <ModalBody>
-          {/* {modalType === "redeem" && <h1>redemption Arc</h1>} */}
           {modalType === "oneTime" ? (
             //  Lumpsum UI
             <div style={{ display: "flex", gap: "20px" }}>
@@ -379,9 +558,9 @@ const MutualFundModal = ({
 
                 <TextField
                   type="number"
+                  size="small"
                   value={amount}
                   onChange={(e) => {
-                    // Accept only digits (or empty) so user can backspace fully
                     const val = e.target.value;
                     if (val === "" || /^\d+$/.test(val)) {
                       setAmount(val);
@@ -407,6 +586,18 @@ const MutualFundModal = ({
                     },
                   }}
                 />
+                {minLumpsum > 0 && (
+                  <span
+                    style={{
+                      color: "red",
+                      fontSize: "12px",
+                      display: "block",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    Minimum lumpsum amount is ₹{minLumpsum.toLocaleString()}
+                  </span>
+                )}
 
                 <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                   {[100, 500, 1000, 5000, 10000].map((val) => (
@@ -538,6 +729,7 @@ const MutualFundModal = ({
                 <TextField
                   type="number"
                   value={amount}
+                  size="small"
                   onChange={(e) => {
                     // Accept only digits (or empty) so user can backspace fully
                     const val = e.target.value;
@@ -561,7 +753,16 @@ const MutualFundModal = ({
                     },
                   }}
                 />
-
+                <span
+                  style={{
+                    color: "red",
+                    fontSize: "12px",
+                    display: "block",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Minimum Sip amount is ₹{minSip.toLocaleString()}
+                </span>
                 {/* Quick Add Buttons */}
                 <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                   {[100, 500, 1000, 2000].map((val) => (
@@ -896,6 +1097,9 @@ const MutualFundModal = ({
         //   console.log("Selected mandate:", selected);
         //   finalConfirm(selected)
         // }}
+        redeemFolioNumber={redeemFolioNumber}
+        onOrderSuccess={onOrderSuccess}
+        onBack={onBack}
         selectedType={selectedType}
         clientNo={clientNo}
         banks={banks}

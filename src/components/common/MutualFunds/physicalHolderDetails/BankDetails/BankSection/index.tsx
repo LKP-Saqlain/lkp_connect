@@ -7,7 +7,10 @@ import {
   Select,
   InputLabel,
 } from "@mui/material";
-import { accountTypeOptions } from "../../../../../../pages/MutualFund/mfTypes";
+import {
+  accountTypeOptions,
+  bankOptions,
+} from "../../../../../../pages/MutualFund/mfTypes";
 
 interface Props {
   title: string;
@@ -55,9 +58,9 @@ const BankSection = ({
             onChange={(e) => {
               onChange(e);
               if (e.target.value !== values.bankAccNo) {
-            errors.reBankAccNo = "Bank A/C Numbers do not match";
+                errors.reBankAccNo = "Bank A/C Numbers do not match";
               } else {
-            errors.reBankAccNo = "";
+                errors.reBankAccNo = "";
               }
             }}
             error={touched.reBankAccNo && !!errors.reBankAccNo}
@@ -116,7 +119,7 @@ const BankSection = ({
             fullWidth
             onClick={onVerify}
             disabled={disabled}
-            sx={{ bgcolor: "#2c7a7b"}}
+            sx={{ bgcolor: "#2c7a7b" }}
           >
             {disabled ? "Verified" : "Verify"}
           </Button>
@@ -125,17 +128,31 @@ const BankSection = ({
 
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <TextField
-            name="bankName"
-            label="Bank Name"
-            value={values.bankName}
-            onChange={onChange}
-            error={touched.bankName && !!errors.bankName}
-            helperText={touched.bankName && errors.bankName}
-            disabled={disabled}
+          <FormControl
             fullWidth
             size="small"
-          />
+            error={touched.bankName && Boolean(errors.bankName)}
+            disabled={disabled}
+          >
+            <InputLabel>Bank Name</InputLabel>
+
+            <Select
+              name="bankName"
+              label="Bank Name"
+              value={values.bankName}
+              onChange={onChange}
+            >
+              <MenuItem value="">
+                <em>Select</em>
+              </MenuItem>
+
+              {bankOptions.map((bank) => (
+                <MenuItem key={bank.value} value={bank.label}>
+                  {bank.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </Grid>
 
         <Grid item xs={12} sm={6}>

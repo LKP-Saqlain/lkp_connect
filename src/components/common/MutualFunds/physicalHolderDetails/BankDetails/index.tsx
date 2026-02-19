@@ -92,6 +92,13 @@ const BankDetails = ({
   const SendData = (values: any) => {
     console.log("SendData values: ", values, previousPayload);
 
+    const hasOptionalBankDetails =
+      values.optional.accountType ||
+      values.optional.bankAccNo ||
+      values.optional.ifscCode ||
+      values.optional.micrCode ||
+      values.optional.bankName;
+
     const payload = {
       ...previousPayload,
       // DEFAULT BANK (Bank 1)
@@ -99,13 +106,17 @@ const BankDetails = ({
       accountNo1: values.default.bankAccNo || "",
       micrNo1: values.default.micrCode || "",
       ifscCode1: values.default.ifscCode || "",
+      bankName1: values.default.bankName || "",
       defaultBankFlag1: "Y",
       // OPTIONAL BANK (Bank 2)
-      accountType2: values.optional.accountType || "",
-      accountNo2: values.optional.bankAccNo || "",
-      micrNo2: values.optional.micrCode || "",
-      ifscCode2: values.optional.ifscCode || "",
-      defaultBankFlag2: "",
+      ...(hasOptionalBankDetails && {
+        accountType4: values.optional.accountType || "",
+        accountNo4: values.optional.bankAccNo || "",
+        micrNo4: values.optional.micrCode || "",
+        ifscCode4: values.optional.ifscCode || "",
+        bankName4: values.optional.bankName || "",
+        defaultBankFlag4: "N", // must be "" or "N", never null
+      }),
       // clientType: "p", // remove at end
     };
 

@@ -4,6 +4,7 @@ import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { BasicTabsProps } from "../../../../pages/MutualFund/mfTypes";
+import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 
 function a11yProps(index: number) {
   return {
@@ -20,6 +21,8 @@ export default function BasicTabs({
   returnPeriods = [],
   selectedReturnPeriod,
   onReturnPeriodChange,
+  customCase,
+  onSearchClick,
 }: BasicTabsProps & {
   value: number;
   onChange: (event: React.SyntheticEvent, value: number) => void;
@@ -53,9 +56,17 @@ export default function BasicTabs({
               key={index}
               label={tab.label}
               {...a11yProps(index)}
-              style={{ fontSize: "12px" }}
+              style={{ fontSize: "12px", color: "#666666" }}
             />
-          ))}
+          ))}{" "}
+          {customCase === "Search" && (
+            <Button
+              onClick={onSearchClick}
+              sx={{ color: "#666666", fontSize: "12px" }}
+            >
+              <SearchRoundedIcon /> Search
+            </Button>
+          )}
         </Tabs>
 
         {/* Right Side Time Filters */}
@@ -71,6 +82,10 @@ export default function BasicTabs({
                 }
                 size="small"
                 sx={{
+                  backgroundColor:
+                    selectedReturnPeriod === period.label
+                      ? "#004aad"
+                      : "outlined",
                   textTransform: "none",
                   borderRadius: "20px",
                   fontSize: "11px",
