@@ -1298,4 +1298,18 @@ export const apiServices = {
   UpdateClientElogStatus: async (payload: any) => {
     return await apiService("POST", endpoints.UpdateClientElogStatus, payload);
   },
+  ThirdPartyInvoiceDropdown: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ThirdPartyInvoiceDropdown,
+      payload
+    );
+  },
+  SendCompanyWiseTPInvoiceMail: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SendCompanyWiseTPInvoiceMail,
+      payload
+    );
+  },
 };

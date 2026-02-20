@@ -260,6 +260,8 @@ export const newDomainEndpoints = [
   endpoints.GetReadyToSendTPInvoices,
   endpoints.GenerateTPInvoice,
   endpoints.SendTPInvoiceBulkEmail,
+  endpoints.SendCompanyWiseTPInvoiceMail,
+  endpoints.ThirdPartyInvoiceDropdown,
 
   //Master
   endpoints.GetExcludeOptions,
