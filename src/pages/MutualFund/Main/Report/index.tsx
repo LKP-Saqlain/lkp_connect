@@ -112,7 +112,7 @@ const MfReport = (props: any) => {
         toDate: null,
         assetClassID: 86,
         assetClassIDs: null,
-        asOnDateTime: "2026-02-05T17:41:00.673+05:30",
+        asOnDateTime: "2025-12-05T17:41:00.673+05:30",
         fromDateTime: "2021-02-15T17:41:00.674+05:30",
         toDateTime: "2026-09-01T17:41:00.673+05:30",
         asOnDate: asOnDate,
