@@ -100,9 +100,9 @@ const InvoiceUpload = ({ activeSubItem }: any) => {
       .TPInvoiceUpload(payload)
       .then((response) => {
         if (response?.data?.statusCode === 200) {
-          ShowToast("success", response?.data?.msg);
+          ShowToast("success", response?.data?.data?.msg);
         } else {
-          ShowToast("error", response?.data?.msg || "Upload failed");
+          ShowToast("error", response?.data?.data?.msg || "Upload failed");
         }
       })
       .catch((err) => {
@@ -112,6 +112,7 @@ const InvoiceUpload = ({ activeSubItem }: any) => {
       .finally(() => {
         dispatch(hideLoader());
         setShowConfirmModal(false);
+        setdata([]);
         unStaging();
         handleFileDelete();
       });
@@ -131,6 +132,7 @@ const InvoiceUpload = ({ activeSubItem }: any) => {
       dispatch(hideLoader());
     }
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.name.endsWith(".xlsx")) {
