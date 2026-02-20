@@ -9103,24 +9103,30 @@ export const MutualFundOrderColumns: GridColDef[] = [
     field: "transType",
     headerName: "Transaction Type",
     disableColumnMenu: true,
-    flex: 0.7,
-    minWidth: 60,
+    flex: 1,
+    minWidth: 100,
     align: "center",
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
-    renderCell: (params) => capitalizeEachWord(params.value),
+    renderCell: (params) => {
+      if (params.value?.toLowerCase() === "xsip") {
+        return "Sip";
+      }
+      return capitalizeEachWord(params.value);
+    },
   },
+  // {
+  //   field: "successFlag",
+  //   headerName: "Status",
+  //   disableColumnMenu: true,
+  //   flex: 0.7,
+  //   minWidth: 60,
+  //   align: "center",
+  //   headerAlign: "center",
+  //   renderCell: (params) => capitalizeEachWord(params.value),
+  // },
   {
-    field: "successFlag",
-    headerName: "Status",
-    disableColumnMenu: true,
-    flex: 0.7,
-    minWidth: 60,
-    align: "center",
-    headerAlign: "center",
-    renderCell: (params) => capitalizeEachWord(params.value),
-  },
-  {
-    field: "startDate",
+    field: "orderedDate",
     headerName: "Order Date",
     disableColumnMenu: true,
     flex: 0.7,
@@ -9129,25 +9135,9 @@ export const MutualFundOrderColumns: GridColDef[] = [
     headerAlign: "center",
     renderCell: (params) => {
       const rawDate = params.value;
+      if (!rawDate) return "";
 
-      if (params.row.transType === "LUMPSUMP") {
-        // Fix common formatting issues
-        const cleanedDate = rawDate
-          ?.replace(/\s+/g, " ") // normalize spaces
-          .replace(/(\d)(AM|PM)$/i, "$1 $2") // add space before AM/PM if missing
-          .trim();
-
-        return dayjs(cleanedDate, "MMM D YYYY h:mma").isValid()
-          ? dayjs(cleanedDate, "MMM D YYYY h:mma").format("DD-MMM-YYYY")
-          : "Invalid Date";
-      } else if (params.row.transType === "XSIP") {
-        const parsed = dayjs(rawDate, "DD/MM/YYYY", true); // strict parsing
-        const formattedDate = parsed.isValid()
-          ? parsed.format("DD-MMM-YYYY")
-          : "Invalid Date";
-
-        return formattedDate;
-      }
+      return dayjs(rawDate).format("DD-MM-YYYY");
     },
   },
   // {
