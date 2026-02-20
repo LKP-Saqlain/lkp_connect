@@ -6,7 +6,7 @@ import {
   idTypes,
   minorOptions,
   relationshipOptions,
-} from "../../../../helper/commmon";
+} from "../../../../../helper/commmon";
 
 type NomineeType = {
   name: string;
@@ -242,11 +242,7 @@ export default function Nominee({
             <Button variant="contained" onClick={() => setIsEditing(true)}>
               Edit
             </Button>
-          ) : (
-            <Button variant="contained" color="success" onClick={handleSave}>
-              Save
-            </Button>
-          )}
+          ) : null}
         </Box>
 
         {/* Name */}
@@ -502,6 +498,14 @@ export default function Nominee({
           helperText={errors.country}
           onChange={(e) => emitChange("country", e.target.value)}
         />
+        {/* SAVE BUTTON AT BOTTOM */}
+        {!isNominee1 && isEditing && (
+          <Box mt={3} display="flex" justifyContent="flex-end">
+            <Button variant="contained" color="success" onClick={handleSave}>
+              Save
+            </Button>
+          </Box>
+        )}
       </Paper>
     </Box>
   );

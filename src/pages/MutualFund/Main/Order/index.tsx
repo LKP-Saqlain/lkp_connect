@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import BasicTabs from "../../../components/common/MutualFunds/NavTabs";
+import BasicTabs from "../../../../components/common/MutualFunds/NavTabs";
 import { Card } from "@mui/material";
-import MutualFundTable from "../../../components/common/MutualFunds/MfTable";
+import MutualFundTable from "../../../../components/common/MutualFunds/MfTable";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { apiServices } from "../../../services";
+import { AppDispatch } from "../../../../redux/store";
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../../services";
 
 const tabList = [
   { label: "Completed" },

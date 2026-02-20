@@ -772,8 +772,8 @@ export const apiServices = {
   MF_NFODetails: async () => {
     return await apiService("GET", endpoints.MF_NFODetails);
   },
-  ClientProfile: async () => {
-    return await apiService("GET", endpoints.ClientProfile);
+  ClientProfile: async (payload: any) => {
+    return await apiService("POST", endpoints.ClientProfile, payload);
   },
   MF_TodayOrders: async () => {
     return await apiService("GET", endpoints.MF_TodayOrders);
@@ -1242,5 +1242,60 @@ export const apiServices = {
   },
   SLBMLastUpdate: async (payload: any) => {
     return await apiService("POST", endpoints.SLBMLastUpdate, payload);
+  },
+  PhysicalClientFileUpload: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.PhysicalClientFileUpload,
+      payload
+    );
+  },
+  GetBankDetailsForRedeem: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBankDetailsForRedeem, payload);
+  },
+  PanVerification: async (payload: any) => {
+    return await apiService("POST", endpoints.PanVerification, payload);
+  },
+  GetPhysicalClientDetails: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetPhysicalClientDetails,
+      payload
+    );
+  },
+  EmailOTPForPhysical: async (payload: any) => {
+    return await apiService("POST", endpoints.EmailOTPForPhysical, payload);
+  },
+  EmailVerificationPhysical: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.EmailVerificationPhysical,
+      payload
+    );
+  },
+  KYCverification: async (payload: any) => {
+    return await apiService("POST", endpoints.KYCverification, payload);
+  },
+  KYCOtpVerification: async (payload: any) => {
+    return await apiService("POST", endpoints.KYCOtpVerification, payload);
+  },
+  PhysicalManualOnboarding: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.PhysicalManualOnboarding,
+      payload
+    );
+  },
+  PhyicalOrder2FA: async (payload: any) => {
+    return await apiService("POST", endpoints.PhyicalOrder2FA, payload);
+  },
+  ChildOrder: async (payload: any) => {
+    return await apiService("POST", endpoints.ChildOrder, payload);
+  },
+  GetPhysicalResponse: async (payload: any) => {
+    return await apiService("POST", endpoints.GetPhysicalResponse, payload);
+  },
+  UpdateClientElogStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateClientElogStatus, payload);
   },
 };

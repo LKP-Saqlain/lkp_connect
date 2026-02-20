@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import BasicTabs from "../../components/common/MutualFunds/NavTabs";
-import { mainMenu } from "../../pages/MutualFund/mfTypes";
+import BasicTabs from "../../../components/common/MutualFunds/NavTabs";
+import { mainMenu } from "../mfTypes";
 import {
   Card,
   Container,
@@ -9,7 +9,7 @@ import {
   ModalHeader,
   ModalFooter,
 } from "reactstrap";
-import MfOverview from "../../components/common/MutualFunds/MfOverview";
+import MfOverview from "../../../components/common/MutualFunds/MfOverview";
 import {
   TextField,
   Typography,
@@ -21,26 +21,28 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
-import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
-import { apiServices } from "../../services";
-import { setEncryptedValue } from "../../utils/loocalEncrypt";
-import ShowToast from "../../utils/toastUtils";
-import { capitalizeEachWord } from "../../utils";
+import { AppDispatch } from "../../../redux/store";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../services";
+import { setEncryptedValue } from "../../../utils/loocalEncrypt";
+import ShowToast from "../../../utils/toastUtils";
+import { capitalizeEachWord } from "../../../utils";
 import PhysicalOnboard from "./PhysicalOnboard";
+import MfSearch from "../../../components/common/MutualFunds/Search";
 
-const MutualFundIndex = () => {
+const MutualFundIndex = ({ handleTradingOpen }: any) => {
   const [activeTab, setActiveTab] = useState(0);
   const [selectedMutualFund, setSelectedMutualFund] = useState<string>("");
+  const [investMoreDetails, setInvestMoreDetails] = useState(null);
   const [clientCode, setClientCode] = useState<string>("");
   const [hasToken, setHasToken] = useState(false);
   const [autoReopen, setAutoReopen] = useState(false);
   const [showClientCodeModal, setShowClientCodeModal] = useState(true);
   const [clientName, setClientName] = useState<string>("");
-
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [showPhysicalOnboard, setShowPhysicalOnboard] = useState(false);
+  const [searchModal, setSearchModal] = useState(false);
 
   // Debounce typing (to avoid too many API calls)
   useEffect(() => {
@@ -54,7 +56,10 @@ const MutualFundIndex = () => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleBack = () => setSelectedMutualFund("");
+  const handleBack = () => {
+    setSelectedMutualFund("");
+    setInvestMoreDetails(null);
+  };
 
   const mfToken = "mfToken";
   useEffect(() => {
@@ -169,6 +174,7 @@ const MutualFundIndex = () => {
         console.log("mfLogin response->", res?.data?.statusCode);
         if (res?.data?.statusCode) {
           setHasToken(true);
+          setActiveTab(0);
         } else {
           setHasToken(false);
         }
@@ -200,6 +206,11 @@ const MutualFundIndex = () => {
   return (
     <div className="page-content page-view">
       <Container fluid>
+        <MfSearch
+          searchModal={searchModal}
+          setSearchModal={setSearchModal}
+          setSelectedMutualFund={setSelectedMutualFund}
+        />
         {!hasToken && !showClientCodeModal && (
           <Box
             sx={{
@@ -248,7 +259,9 @@ const MutualFundIndex = () => {
           >
             <Autocomplete
               freeSolo
+              inputValue={clientCode} //  THIS IS THE KEY
               options={suggestions}
+              filterOptions={(x) => x} //  IMPORTANT: disable client-side filtering
               getOptionLabel={(option: any) =>
                 `${option.clientCode} - ${option.clientName}`
               }
@@ -272,7 +285,7 @@ const MutualFundIndex = () => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Client Code"
+                  label="Client Code / PAN"
                   value={clientCode}
                   onChange={(e) => setClientCode(e.target.value)}
                   variant="outlined"
@@ -351,10 +364,16 @@ const MutualFundIndex = () => {
               <BasicTabs
                 tabs={mainMenu.map((m) => ({ label: m.label }))}
                 value={activeTab}
+                customCase={"Search"}
+                onSearchClick={() => {
+                  setSearchModal(true);
+                  setInvestMoreDetails(null);
+                }}
                 onChange={(_e, newValue) => {
                   setActiveTab(newValue);
                   setSelectedMutualFund("");
                   setShowPhysicalOnboard(false);
+                  setInvestMoreDetails(null);
                 }}
               />
             )}
@@ -366,7 +385,8 @@ const MutualFundIndex = () => {
                 minWidth="fit-content"
               >
                 <Typography fontWeight={500}>
-                  Client: {clientCode} - {capitalizeEachWord(clientName)}
+                  Client: {clientCode} -{" "}
+                  {capitalizeEachWord(clientName.trim().split(" ")[0])}
                 </Typography>
                 {showPhysicalOnboard || (
                   <IconButton
@@ -395,12 +415,15 @@ const MutualFundIndex = () => {
                 onOrderSuccess={handleSetOrderTab}
                 ClientCode={clientCode}
                 onPhysicalOnboard={() => setShowPhysicalOnboard(true)}
+                investMoreDetails={investMoreDetails}
+                handleTradingOpen={handleTradingOpen}
               />
             ) : (
               mainMenu[activeTab]?.content({
                 onSelectFund: setSelectedMutualFund,
                 clientCode,
                 hasToken,
+                investMoreDetails: setInvestMoreDetails,
               })
             )}
           </>

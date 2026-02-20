@@ -99,7 +99,7 @@ import InvoiceVerify from "../../pages/ThirdParty/Verify";
 import InvoiceMail from "../../pages/ThirdParty/Mail";
 import InvoiceStatusReport from "../../pages/ThirdParty/InvoiceReport";
 // import PledgeHolding from "../../pages/RMS/PledgeHoldings";
-import MutualFundIndex from "../../pages/MutualFund";
+import MutualFundIndex from "../../pages/MutualFund/Main";
 import MtfComponent from "../../pages/RMS/Mtf";
 import UnpledgeRequest from "../../pages/UnpledgeRequest";
 import DPTransactionIndex from "../../pages/Reports/AMC Transaction";
@@ -125,6 +125,9 @@ import AutoPayReport from "../../pages/ThirdParty/DPAutoPay";
 import EmployeeSPIP from "../../pages/Contest/SPIP/Employee";
 import B2BSPIP from "../../pages/Contest/SPIP/B2B";
 import MTFShortfallUpload from "../../pages/RMS/MTFShortfallUpload";
+import NewClientPhysical from "../../pages/MutualFund/NewClientPhysical";
+import FileUpload from "../../pages/MutualFund/FileUpload";
+
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -677,6 +680,10 @@ const SideBar = () => {
       setActiveSubItem("Client Details Report");
       setSelectedViewMore(value);
     }
+    if (value === "ClientOnboarding") {
+      setActiveMenu("Mutual Fund");
+      setActiveSubItem("Client Onboarding");
+    }
   };
   const handleCopy = () => {
     navigator.clipboard.writeText(
@@ -848,7 +855,11 @@ const SideBar = () => {
     "DP AMC Contest": <AmcMembership activeMenu={activeMenu} />,
     "Partner Contest": <ApnContest activeMenu={activeMenu} />,
   };
-
+  const mutualFundSubItems: Record<string, JSX.Element> = {
+    Investment: <MutualFundIndex handleTradingOpen={handleTradingOpen} />,
+    "Client Onboarding": <NewClientPhysical />,
+    FileUpload: <FileUpload />,
+  };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>
   ): JSX.Element | null => subItems[activeSubItem] || null;
@@ -875,7 +886,7 @@ const SideBar = () => {
       Compliance: getSubItemComponent(complianceSubItems),
       "KYC Dashboard": getSubItemComponent(kycSubItems),
       "Stock Study": <StockStudy />,
-      "Mutual Fund": <MutualFundIndex />,
+      "Mutual Fund": getSubItemComponent(mutualFundSubItems),
       DashBoard: null,
       "Regulatory Announcement": (
         <RegulatorAnnouncement activeMenu={activeMenu} />

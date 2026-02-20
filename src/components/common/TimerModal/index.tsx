@@ -14,7 +14,9 @@ type TimerModalProps = {
   selectedMandateId?: string;
   cancelLabel?: string;
   confirmLabel?: string;
+  timerType?: "SIP" | "Lumpsum";
   handleFinalConfirm?: () => void;
+  paymentMode?: "PHYSICAL" | "NON_PHYSICAL";
 };
 
 const TimerModal: React.FC<TimerModalProps> = ({
@@ -31,7 +33,15 @@ const TimerModal: React.FC<TimerModalProps> = ({
   cancelLabel = "Cancel",
   confirmLabel = "Confirm",
   handleFinalConfirm,
+  timerType = "SIP",
+  paymentMode = "NON_PHYSICAL",
 }) => {
+  const isSIP = timerType === "SIP";
+  const isLumpsum = timerType === "Lumpsum";
+
+  const shouldShowTimer =
+    timerPage && (isSIP || (isLumpsum && paymentMode === "PHYSICAL"));
+
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered size="md">
       <ModalHeader toggle={toggle}>
@@ -47,33 +57,45 @@ const TimerModal: React.FC<TimerModalProps> = ({
               fontFamily: "sans-serif",
             }}
           >
-            <div
-              style={{
-                width: "80px",
-                height: "80px",
-                margin: "0 auto 16px",
-                borderRadius: "50%",
-                border: "4px solid #4CAF50",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "20px",
-                fontWeight: "bold",
-                color: "#4CAF50",
-              }}
-            >
-              {formatTime(secondsLeft)}
-            </div>
+            {/* Timer */}
+            {shouldShowTimer && (
+              <div
+                style={{
+                  width: "80px",
+                  height: "80px",
+                  margin: "0 auto 16px",
+                  borderRadius: "50%",
+                  border: "4px solid #4CAF50",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  color: "#4CAF50",
+                }}
+              >
+                {formatTime(secondsLeft)}
+              </div>
+            )}
 
             <h4 style={{ marginBottom: "10px" }}>Don't close this page!</h4>
             <p style={{ fontSize: "14px", color: "#333" }}>
-              {selectedPaymentType === "upi"
-                ? "Check your UPI app"
-                : !stopEnach
-                ? "Redirecting you to the E-Nach setup."
-                : ""}
+              {isSIP &&
+                (selectedPaymentType === "upi"
+                  ? "Check your UPI app"
+                  : !stopEnach
+                  ? "Check your email"
+                  : "")}
+              {isLumpsum &&
+                paymentMode === "PHYSICAL" &&
+                "Check your email to complete payment"}
+
+              {/* {isLumpsum &&
+                paymentMode !== "PHYSICAL" &&
+                "Complete the payment in the opened window"} */}
             </p>
 
+            {/* Warning box */}
             <div
               style={{
                 backgroundColor: "#f8f8f8",
@@ -84,10 +106,19 @@ const TimerModal: React.FC<TimerModalProps> = ({
                 color: "#444",
               }}
             >
-              Your SIPs will not get registered if you don't complete this
-              process.
+              {isSIP &&
+                "Your SIP will not be registered if you don't complete this process."}
+
+              {isLumpsum &&
+                paymentMode === "PHYSICAL" &&
+                "Your Lumpsum investment will fail if you don't complete this payment within the given time."}
+
+              {isLumpsum &&
+                paymentMode !== "PHYSICAL" &&
+                "This is a one-time payment. Please complete it to proceed."}
             </div>
 
+            {/* Extra info */}
             <p
               style={{
                 fontSize: "13px",
@@ -96,10 +127,9 @@ const TimerModal: React.FC<TimerModalProps> = ({
                 lineHeight: "1.5",
               }}
             >
-              This is a one-time activity in a single step.
-              <br />
-              {selectedPaymentType === "netbanking" &&
-                "Enter Debit card / Netbanking / Aadhaar details to authenticate and proceed."}
+              {isSIP
+                ? "This is a one-time activity in a single step."
+                : "Please complete the transaction to continue."}
             </p>
           </div>
         ) : (
@@ -109,7 +139,7 @@ const TimerModal: React.FC<TimerModalProps> = ({
         )}
       </ModalBody>
 
-      {/*  Only show footer buttons when NOT on timer page */}
+      {/* Footer (only when NOT timer page) */}
       {!timerPage && (
         <ModalFooter>
           <Button color="secondary" onClick={toggle}>
@@ -118,7 +148,7 @@ const TimerModal: React.FC<TimerModalProps> = ({
           <Button
             color="primary"
             onClick={handleFinalConfirm}
-            disabled={!selectedMandateId}
+            disabled={isSIP && !selectedMandateId}
           >
             {confirmLabel}
           </Button>

@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import MutualFundTable from "../../../../components/common/MutualFunds/MfTable";
+import MutualFundTable from "../../../../../components/common/MutualFunds/MfTable";
 // import BasicTabs from "../../../../components/common/MutualFunds/NavTabs";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../redux/store";
-import { apiServices } from "../../../../services";
-import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { AppDispatch } from "../../../../../redux/store";
+import { apiServices } from "../../../../../services";
+import {
+  hideLoader,
+  showLoader,
+} from "../../../../../redux/slices/loaderSlice";
 
 interface MutualFundListProps {
   selectedMfType: string;

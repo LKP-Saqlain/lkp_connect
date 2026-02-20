@@ -1,13 +1,13 @@
 import { useDispatch } from "react-redux";
 import { Card } from "reactstrap";
-import { AppDispatch } from "../../../redux/store";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { AppDispatch } from "../../../../redux/store";
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { useEffect, useState } from "react";
 import { Button } from "rsuite";
 import PrimaryHolder from "./PrimaryHolder";
 import Nominee from "./Nominee";
-import { apiServices } from "../../../services";
-import { encryptAES } from "../../../utils/encryptDecrypt";
+import { apiServices } from "../../../../services";
+import { encryptAES } from "../../../../utils/encryptDecrypt";
 type NomStatus = { [k: number]: boolean };
 
 const PhysicalOnboard = ({ ClientCode, onPhysicalOnboard }: any) => {

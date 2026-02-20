@@ -29,6 +29,7 @@ const CreateMandateModal = ({
   clientNo,
   upiId,
   mandate,
+  selectedType,
 }: any) => {
   const [amount, setAmount] = useState(
     // selectedPaymentType === "upi" ? 15000 : 100000
@@ -48,13 +49,14 @@ const CreateMandateModal = ({
       flag: selectedPaymentType === "upi" ? "19" : "06",
       clientCode: clientNo,
       amount: amount.toString(),
-      mandateType: "N",
+      mandateType: selectedPaymentType === "upi" ? "U" : "N",
       accountNo: selectedBank.account,
       accountType: "SB",
       ifsccode: selectedBank.ifsc,
       micrcode: "",
       startdate: formatDate(tomorrow), // Start date is tomorrow
       enddate: "", // Empty or use formatDate(someDate) if needed
+      dpFlag: selectedType === "physical" ? "P" : "",
     };
 
     // Add UPI-specific fields if needed
@@ -96,7 +98,7 @@ const CreateMandateModal = ({
   // Today's date and +1 day
   const today = new Date();
   const tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);
+  tomorrow.setDate(today.getDate());
 
   return (
     <Modal isOpen={isOpen} toggle={toggle} centered size="sm">

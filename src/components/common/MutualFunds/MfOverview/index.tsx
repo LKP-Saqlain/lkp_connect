@@ -2,12 +2,12 @@ import { Card } from "reactstrap";
 import FundDetails from "../FundDetails";
 import MfAreaChart from "../MfAreaChart";
 import MutualFundModal from "../MfModal";
+import TypeMFModal from "../MfModal/TypeMF";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../redux/store";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
-import TypeMFModal from "../MfModal/TypeMF";
 
 const MfOverview = ({
   schemeCode,
@@ -16,11 +16,14 @@ const MfOverview = ({
   onOrderSuccess,
   ClientCode,
   onPhysicalOnboard,
+  investMoreDetails,
+  handleTradingOpen,
 }: any) => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<any>(null);
   const [modalType, setModalType] = useState<"oneTime" | "sip" | null>(null);
   const [bseSchemeCode, setBseSchemeCode] = useState<any>("");
+  const [redeemFolioNumber, setRedeemFolioNumber] = useState<any>("");
   const [fundOverviewData, setFundOverviewData] = useState<any>(null);
   const [isTypeModalOpen, setIsTypeModalOpen] = useState(false);
   const [selectedMfType, setSelectedMfType] = useState<
@@ -35,6 +38,22 @@ const MfOverview = ({
   >([]);
 
   useEffect(() => {
+    if (!investMoreDetails) {
+      setSelectedMfType(""); // reset type if no investMoreDetails
+      return;
+    }
+    const redeemSelectedMfType =
+      investMoreDetails.physicalQuantity > 0 ? "physical" : "demat";
+    setSelectedMfType(redeemSelectedMfType);
+    setRedeemFolioNumber(investMoreDetails.folioNumber);
+    console.log(
+      investMoreDetails.folioNumber,
+      "<----folioNumber selectedMfType--->",
+      redeemSelectedMfType
+    );
+  }, [investMoreDetails]);
+
+  useEffect(() => {
     const fetchData = async () => {
       dispatch(showLoader("Please wait, we are processing your request..."));
 
@@ -43,7 +62,7 @@ const MfOverview = ({
         const [schemeRes, bseRes] = await Promise.all([
           apiServices.MF_SchemeDetails({ schemeCode }),
           apiServices.MF_FundOverView({
-            pageNumber: 1,
+            pageNumber: 0,
             pageSize: 1,
             searchKey: "",
             schemeCode,
@@ -86,30 +105,35 @@ const MfOverview = ({
 
   return (
     <>
-      <TypeMFModal
-        isOpen={isTypeModalOpen}
-        toggle={() => setIsTypeModalOpen(!isTypeModalOpen)}
-        selectedType={selectedMfType}
-        onTypeSelect={(type) => {
-          setSelectedMfType(type);
-          setIsTypeModalOpen(false); // close Type modal
-          setOpen(true); // NOW open main MF modal
-        }}
-        ClientCode={ClientCode}
-        onPhysicalOnboard={onPhysicalOnboard}
-      />
+      {/* Show TypeMFModal only if type is missing */}
+      {!selectedMfType && isTypeModalOpen && (
+        <TypeMFModal
+          isOpen={isTypeModalOpen}
+          toggle={() => setIsTypeModalOpen(!isTypeModalOpen)}
+          selectedType={selectedMfType}
+          onTypeSelect={(type) => {
+            setSelectedMfType(type);
+            setIsTypeModalOpen(false); // close Type modal
+            setOpen(true); // NOW open main MF modal
+          }}
+          ClientCode={ClientCode}
+          onPhysicalOnboard={onPhysicalOnboard}
+          handleTradingOpen={handleTradingOpen}
+        />
+      )}
 
       {/* Modal */}
       <MutualFundModal
         isOpen={open}
         toggle={toggle}
         modalType={modalType}
-        title={data?.schemeName ?? ""}
+        title={fundOverviewData ?? ""}
         bseSchemeCode={bseSchemeCode}
         selectedType={selectedMfType}
         hasToken={hasToken}
         onOrderSuccess={onOrderSuccess}
         onBack={onBack}
+        redeemFolioNumber={redeemFolioNumber}
       />
 
       <Card>
@@ -149,16 +173,6 @@ const MfOverview = ({
                 marginBottom: "16px",
               }}
             >
-              {/* <h4
-              style={{
-                margin: 0,
-                fontWeight: 600,
-                color: "#333",
-                maxWidth: "70%",
-              }}
-            >
-              {`Overview of ${data?.schemeName || ""}`}
-            </h4> */}
               <div
                 style={{
                   display: "flex",
@@ -176,14 +190,7 @@ const MfOverview = ({
                     objectFit: "contain",
                   }}
                 />
-
-                <h4
-                  style={{
-                    margin: 0,
-                    fontWeight: 600,
-                    color: "#333",
-                  }}
-                >
+                <h4 style={{ margin: 0, fontWeight: 600, color: "#333" }}>
                   {data?.schemeName || ""}
                 </h4>
               </div>
@@ -203,13 +210,11 @@ const MfOverview = ({
                     boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
                     transition: "all 0.2s ease-in-out",
                   }}
-                  // onClick={() => {
-                  //   setModalType("oneTime");
-                  //   setOpen(true);
-                  // }}
                   onClick={() => {
                     setModalType("oneTime");
-                    setIsTypeModalOpen(true); // open type selector first
+                    if (!selectedMfType) setIsTypeModalOpen(true);
+                    // open type modal if type missing
+                    else setOpen(true); // open MF modal if type exists
                   }}
                 >
                   Lumpsum
@@ -229,13 +234,10 @@ const MfOverview = ({
                     boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
                     transition: "all 0.2s ease-in-out",
                   }}
-                  // onClick={() => {
-                  //   setModalType("sip");
-                  //   setOpen(true);
-                  // }}
                   onClick={() => {
                     setModalType("sip");
-                    setIsTypeModalOpen(true); // open type selector first
+                    if (!selectedMfType) setIsTypeModalOpen(true);
+                    else setOpen(true);
                   }}
                 >
                   Start SIP

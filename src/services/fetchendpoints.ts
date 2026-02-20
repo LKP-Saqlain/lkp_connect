@@ -90,6 +90,7 @@ export const mutualFundEndpoints = [
   endpoints.EnachEmailToClient,
   endpoints.SinglePaymentEmail,
   endpoints.VerifyClientCode,
+  endpoints.GetBankDetailsForRedeem,
 ];
 
 export const newDomainEndpoints = [

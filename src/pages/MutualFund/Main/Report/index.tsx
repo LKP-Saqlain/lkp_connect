@@ -1,82 +1,32 @@
 import { useEffect, useState } from "react";
-import BasicTabs from "../../../components/common/MutualFunds/NavTabs";
+import BasicTabs from "../../../../components/common/MutualFunds/NavTabs";
 import { Card, Typography } from "@mui/material";
-import MutualFundTable from "../../../components/common/MutualFunds/MfTable";
-// import { mutualFundRows } from "../../../helper/commmon";
-import { apiServices } from "../../../services";
+import MutualFundTable from "../../../../components/common/MutualFunds/MfTable";
+import { apiServices } from "../../../../services";
 import { useDispatch } from "react-redux";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { AppDispatch } from "../../../redux/store";
-import TradeCard from "../../../components/common/tradeCard";
-
-const tabList = [
-  { label: "Mandates" },
-  { label: "Upcoming SIP" },
-  { label: "Ongoing SIP" },
-  { label: "Transaction" },
-];
-
-interface upComingSIP {
-  id: number;
-  userMasterID: number;
-  reedosName: string;
-  accountId: number;
-  sipRegsNo: string;
-  startDate: string;
-  endDate: string;
-  amount: number;
-  investedAmount: number;
-  currentValue: number;
-  unrealizedProfitLoss: number;
-  totalGain: number;
-  xirr: string | null;
-  totalXIRR: string | null;
-  // ... add other fields if needed
-}
-
-interface TransactionRecord {
-  assetClassId: number;
-  folioNumber: string;
-  security: string;
-  isin: string;
-  transactionDate: string;
-  action: string;
-  quantity: number;
-  transactionPrice: number;
-  netPrice: number;
-  brokerage: number;
-  amount: number;
-  tranId: number;
-  accountID: number;
-  cumulativeQuantity: number;
-  clientName: string;
-  status: any;
-  bankName: string;
-  bankAccNo: any;
-  mandateId: number;
-  regnDate: string;
-
-  // add more fields as per your response if required
-}
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { AppDispatch } from "../../../../redux/store";
+import TradeCard from "../../../../components/common/tradeCard";
+import { tabList, TransactionRecord, upComingSIP } from "../../mfTypes";
 
 const MfReport = (props: any) => {
   const [reportTab, setReportTab] = useState(0);
   const [selectedLabel, setSelectedLabel] = useState<string>(tabList[0].label);
   const [mandateData, setMandateData] = useState<TransactionRecord[]>([]);
-  const [allSIPs, setAllSIPs] = useState<upComingSIP[]>([]);
+  // const [allSIPs, setAllSIPs] = useState<upComingSIP[]>([]);
   const [filteredSIPs, setFilteredSIPs] = useState<upComingSIP[]>([]);
   const [ongoingSIP, setOngoingSIP] = useState<upComingSIP[]>([]);
   const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
-  // const { user_id } = useSelector(
-  //   (state: RootState) => state.UserLogin?.data?.data
-  // );
-
-  useEffect(() => {
-    console.log("propppps", props);
-  }, [props]);
+  const date = new Date();
+  const todaysDate =
+    String(date.getDate()).padStart(2, "0") +
+    "/" +
+    String(date.getMonth() + 1).padStart(2, "0") +
+    "/" +
+    date.getFullYear();
 
   useEffect(() => {
     const { clientCode } = props;
@@ -85,7 +35,7 @@ const MfReport = (props: any) => {
         clientCodeField: clientCode, // "MT0600508"
         fromDateField: "01/01/2000",
         mandateIdField: "",
-        toDateField: "01/09/2026",
+        toDateField: todaysDate,
       };
       dispatch(showLoader(""));
       apiServices
@@ -98,13 +48,12 @@ const MfReport = (props: any) => {
             // const parsedData = JSON.parse(response?.data?.data);
             // console.log("parseData", parsedData);
 
-            const filteredMandateRecords =
-              response?.data?.data?.mandateDetails?.map(
-                (item: any, index: number) => ({
-                  id: index + 1, // unique row id
-                  ...item,
-                })
-              );
+            const filteredMandateRecords = response?.data?.data?.map(
+              (item: any, index: number) => ({
+                id: index + 1, // unique row id
+                ...item,
+              })
+            );
             setMandateData(filteredMandateRecords);
 
             console.log("MandateDetails:", filteredMandateRecords);
@@ -115,8 +64,45 @@ const MfReport = (props: any) => {
           dispatch(hideLoader());
         });
     }
-  }, [dispatch, selectedLabel, props.clientCode, props.hasToken]);
+  }, [dispatch, selectedLabel, props.hasToken]);
 
+  const parseSipDate = (dateStr: string) => {
+    const [day, mon, year] = dateStr.split("-");
+    return new Date(`${mon} ${day}, ${year}`);
+  };
+  const today = new Date();
+
+  const asOnDate = today.toISOString().split("T")[0]; // "YYYY-MM-DD"
+  console.log(asOnDate); // e.g., "2025-12-05"
+
+  const getNextSipDate = (startDateStr: string): Date => {
+    const sipDate = parseSipDate(startDateStr);
+    const sipDay = sipDate.getDate();
+
+    const today = new Date();
+
+    const next = new Date();
+    next.setHours(0, 0, 0, 0);
+
+    // If SIP day is still upcoming this month
+    if (sipDay >= today.getDate()) {
+      next.setDate(sipDay);
+    } else {
+      // next month SIP date
+      next.setMonth(next.getMonth() + 1);
+      next.setDate(sipDay);
+    }
+
+    return next;
+  };
+
+  const getDaysRemaining = (date: Date): number => {
+    const today = new Date().setHours(0, 0, 0, 0);
+    const target = date.setHours(0, 0, 0, 0);
+    return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+  };
+
+  // ************ MAIN USEEFFECT ************
   useEffect(() => {
     if (selectedLabel === "Ongoing SIP" || selectedLabel === "Upcoming SIP") {
       const payload = {
@@ -126,10 +112,10 @@ const MfReport = (props: any) => {
         toDate: null,
         assetClassID: 86,
         assetClassIDs: null,
-        asOnDateTime: "2024-02-15T17:41:00.673+05:30",
-        fromDateTime: "2023-02-15T17:41:00.674+05:30",
+        asOnDateTime: "2025-12-05T17:41:00.673+05:30",
+        fromDateTime: "2021-02-15T17:41:00.674+05:30",
         toDateTime: "2026-09-01T17:41:00.673+05:30",
-        asOnDate: "2024-02-15",
+        asOnDate: asOnDate,
         reportID: 0,
         portfolioID: 1,
         withIndexation: false,
@@ -160,40 +146,52 @@ const MfReport = (props: any) => {
           if (response?.status === 200) {
             dispatch(hideLoader());
             console.log("response", response?.data);
+            let allSipData = response.data.data.dataBucket.r0.map(
+              (item: any, index: number) => {
+                const nextSip = getNextSipDate(item.startDate);
+                const daysRemaining = getDaysRemaining(new Date(nextSip));
 
-            if (selectedLabel === "Upcoming SIP") {
-              if (response.data?.isSuccess) {
-                //  Map to add unique `id`
-                const sipRecords: upComingSIP[] =
-                  response.data.data.dataBucket.r0.map(
-                    (item: any, index: number) => ({
-                      id: index + 1,
-                      ...item,
-                    })
-                  );
-
-                const today = new Date();
-                const filtered = sipRecords.filter((record) => {
-                  if (!record.endDate) return false;
-                  const end = new Date(record.endDate);
-                  return end > today;
-                });
-
-                setAllSIPs(sipRecords);
-                console.log(allSIPs);
-                setFilteredSIPs(filtered);
-                console.log("FilteredRecords", filtered);
+                return {
+                  id: index + 1,
+                  ...item,
+                  nextSipDate: nextSip,
+                  daysRemaining: daysRemaining, // <-- Added here
+                };
               }
+            );
+
+            // setAllSIPs(allSipData);
+
+            // ********** UPCOMING SIP LOGIC **********
+            if (selectedLabel === "Upcoming SIP") {
+              const today = new Date();
+              const next15 = new Date();
+              next15.setDate(today.getDate() + 15);
+
+              const upcomingSIPs = allSipData.filter((sip: any) => {
+                const nextInstallment = sip.nextSipDate;
+                return nextInstallment >= today && nextInstallment <= next15;
+              });
+
+              // sort ascending by upcoming date
+              upcomingSIPs.sort(
+                (a: any, b: any) =>
+                  a.nextSipDate.getTime() - b.nextSipDate.getTime()
+              );
+
+              console.log("Upcoming SIPs:", upcomingSIPs);
+              setFilteredSIPs(upcomingSIPs);
             }
+
+            // ********** ONGOING SIP **********
             if (selectedLabel === "Ongoing SIP") {
-              const onGoingSIPRecords: upComingSIP[] =
-                response.data.data.dataBucket.r0.map(
-                  (item: any, index: number) => ({
-                    id: index + 1,
-                    ...item,
-                  })
-                );
-              setOngoingSIP(onGoingSIPRecords);
+              const sorted = [...allSipData].sort((a, b) => {
+                const da = new Date(a.initialInvestment);
+                const db = new Date(b.initialInvestment);
+                return db.getTime() - da.getTime(); // DESCENDING
+              });
+
+              setOngoingSIP(sorted);
             }
           }
         })
@@ -204,17 +202,23 @@ const MfReport = (props: any) => {
     }
   }, [dispatch, selectedLabel, props.hasToken]);
 
+  const transTodaysDate =
+    String(date.getDate()).padStart(2, "0") +
+    "-" +
+    String(date.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    date.getFullYear();
   useEffect(() => {
     if (selectedLabel === "Transaction") {
       let payload = {
         loginUserMasterID: 0,
         clientMasterID: 0,
-        fromDate: "2020-02-07",
-        toDate: "2026-08-07",
+        fromDate: "2024-12-17",
+        toDate: transTodaysDate,
         assetClassID: 86,
         assetClassIDs: null,
-        asOnDateTime: "2024-02-07T10:54:05.584+05:30",
-        fromDateTime: "2020-02-07T00:00:00",
+        asOnDateTime: "2026-89-07T10:54:05.584+05:30",
+        fromDateTime: "2024-02-07T00:00:00",
         toDateTime: "2026-09-02T10:54:05.584+05:30",
         asOnDate: null,
         reportID: 0,
@@ -245,10 +249,16 @@ const MfReport = (props: any) => {
           dispatch(hideLoader());
           if (response?.data?.isSuccess) {
             const records: TransactionRecord[] =
-              response.data.data?.map((item: any, index: number) => ({
+              response.data.data?.item1?.map((item: any, index: number) => ({
                 id: index + 1, // unique id
                 ...item,
               })) || [];
+
+            records.sort(
+              (a, b) =>
+                new Date(b.transactionDate).getTime() -
+                new Date(a.transactionDate).getTime()
+            );
 
             setTransactions(records);
           }

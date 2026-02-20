@@ -4,8 +4,6 @@ import { MdOutlineScience } from "react-icons/md";
 import { HiOutlineDocumentText } from "react-icons/hi";
 
 const FundDetails = ({ data, fundOverviewData }: any) => {
-  console.log(fundOverviewData, "data ?", data);
-
   // Format launch date
   const formattedLaunchDate = data.launchDate
     ? new Date(data.launchDate).toLocaleDateString("en-IN", {
@@ -14,6 +12,7 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
         year: "numeric",
       })
     : "N/A";
+  const finalData = fundOverviewData || data || {};
 
   return (
     <div style={{ marginTop: "20px" }}>
@@ -32,16 +31,14 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
               <Col md={2}>
                 <strong style={{ fontSize: "13px", color: "#777" }}>NAV</strong>
                 <div>
-                  {fundOverviewData.nav
-                    ? Number(fundOverviewData.nav).toFixed(2)
-                    : "N/A"}
+                  {finalData.nav ? Number(finalData.nav).toFixed(2) : "N/A"}
                 </div>
               </Col>
               <Col md={2}>
                 <strong style={{ fontSize: "13px", color: "#777" }}>AUM</strong>
                 <div>
-                  {fundOverviewData.aum
-                    ? `${parseFloat(fundOverviewData.aum).toFixed(0)} Cr`
+                  {finalData.aum
+                    ? `${parseFloat(finalData.aum).toFixed(0)} Cr`
                     : "N/A"}
                 </div>
               </Col>
@@ -50,9 +47,7 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
                   Min. SIP
                 </strong>
                 <div>
-                  {fundOverviewData.sipMinimum
-                    ? `₹${fundOverviewData.sipMinimum}`
-                    : "N/A"}
+                  {finalData.sipMinimum ? `₹${finalData.sipMinimum}` : "N/A"}
                 </div>
               </Col>
               <Col md={2}>
@@ -60,8 +55,8 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
                   Min. Lump
                 </strong>
                 <div>
-                  {fundOverviewData.lumpsumMinimum
-                    ? `₹${fundOverviewData.lumpsumMinimum}`
+                  {finalData.lumpsumMinimum
+                    ? `₹${finalData.lumpsumMinimum}`
                     : "N/A"}
                 </div>
               </Col>
@@ -69,13 +64,13 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
                 <strong style={{ fontSize: "13px", color: "#777" }}>
                   Risk Category
                 </strong>
-                <div>{fundOverviewData.riskCategory || "N/A"}</div>
+                <div>{finalData.riskCategory || "N/A"}</div>
               </Col>
               <Col md={2}>
                 <strong style={{ fontSize: "13px", color: "#777" }}>
                   Scheme Category
                 </strong>
-                <div>{fundOverviewData.schemeCategory || "N/A"}</div>
+                <div>{finalData.schemeCategory || "N/A"}</div>
               </Col>
             </Row>
           </Card>
@@ -108,7 +103,7 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
                   padding: "8px 0",
                 }}
               >
-                <span>{fundOverviewData.fundManager}</span>
+                <span>{finalData.fundManager}</span>
               </div>
             ) : (
               <div>No Fund Manager Info</div>
@@ -138,7 +133,7 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
               Objective
             </h6>
             <p style={{ fontSize: "14px", color: "#444", lineHeight: "1.6" }}>
-              {fundOverviewData.investmentObjective || "No objective provided."}
+              {finalData.investmentObjective || "No objective provided."}
             </p>
           </Card>
         </Col>
@@ -169,13 +164,13 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
               <strong style={{ fontSize: "13px", color: "#777" }}>
                 Launch Date
               </strong>
-              <div>{formattedLaunchDate}</div>
+              <div>{formattedLaunchDate || "-"}</div>
             </div>
           </Col>
           <Col md={2}>
             <div>
               <strong style={{ fontSize: "13px", color: "#777" }}>ISIN</strong>
-              <div>{fundOverviewData.isin || "N/A"}</div>
+              <div>{finalData.isin || "-"}</div>
             </div>
           </Col>
           <Col md={2}>
@@ -184,9 +179,7 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
                 Expense Ratio
               </strong>
               <div>
-                {fundOverviewData.expenseRatio
-                  ? `${fundOverviewData.expenseRatio}%`
-                  : "N/A"}
+                {finalData.expenseRatio ? `${finalData.expenseRatio}%` : "-"}
               </div>
             </div>
           </Col>
@@ -195,13 +188,13 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
               <strong style={{ fontSize: "13px", color: "#777" }}>
                 Sharpe Ratio
               </strong>
-              <div>{fundOverviewData.sharpeRatio ?? "N/A"}</div>
+              <div>{finalData.sharpeRatio || "-"}</div>
             </div>
           </Col>
           <Col md={2}>
             <div>
               <strong style={{ fontSize: "13px", color: "#777" }}>Beta</strong>
-              <div>{fundOverviewData.beta ?? "N/A"}</div>
+              <div>{finalData.beta || "-"}</div>
             </div>
           </Col>
           <Col md={2}>
@@ -209,7 +202,7 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
               <strong style={{ fontSize: "13px", color: "#777" }}>
                 Lock in
               </strong>
-              <div>{fundOverviewData.lockIn || "N/A"}</div>
+              <div>{finalData.lockIn || "-"}</div>
             </div>
           </Col>
         </Row>

@@ -6,20 +6,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import MutualFundTable from "../../../components/common/MutualFunds/MfTable";
-// import { mutualFundRows } from "../../../helper/commmon";
+import MutualFundTable from "../../../../components/common/MutualFunds/MfTable";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { apiServices } from "../../../services";
-import StatBoxComponent from "../../../components/common/MfStatBox";
+import { AppDispatch } from "../../../../redux/store";
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../../services";
+import StatBoxComponent from "../../../../components/common/MfStatBox";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { BankDetail, PortfolioRecord, PortfolioSummary } from "../mfTypes";
-import { capitalizeEachWord } from "../../../utils";
+import { BankDetail, PortfolioRecord, PortfolioSummary } from "../../mfTypes";
+import { capitalizeEachWord } from "../../../../utils";
+// import axios from "axios"; //remove for live
+// import { getDecryptedValue } from "../../../../utils/loocalEncrypt"; //remove for live
+
 // import ShowToast from "../../../utils/toastUtils";
 
-const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
+const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
   const [portfolioData, setPortfolioData] = useState<PortfolioRecord[]>([]);
   const [portfolioSummary, setPortfolioSummary] =
     useState<PortfolioSummary | null>(null);
@@ -27,8 +29,8 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
   const [confirmation, SetConfirmation] = useState(false);
   const [confirmationMessage, SetConfirmationMessage] = useState(false);
   const [message, SetMessage] = useState("");
-  // const [banks, setBanks] = useState<BankDetail[]>([]);
   const [selectedRow, setSelectedRow] = useState<PortfolioRecord | null>(null);
+  // const [banks, setBanks] = useState<BankDetail[]>([]);
   const [selectedBank, setSelectedBank] = useState<BankDetail | null>(null);
   const [clientCode, setClientCode] = useState("");
   const [mobile, setMobile] = useState("");
@@ -112,8 +114,9 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
 
   const handleRedeemClick = (row: PortfolioRecord) => {
     setSelectedRow(row);
+    BankDetailsForRedeem(row);
     setRedeemModalOpen(true);
-    clientBankDetails();
+    clientBankDetails(row);
   };
 
   const handleModalToggle = () => {
@@ -124,36 +127,48 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
     SetMessage("");
   };
 
-  const clientBankDetails = async () => {
-    dispatch(showLoader("Please wait we are processing your request"));
+  const BankDetailsForRedeem = (row: any) => {
+    const payload = {
+      sumId: "",
+      parameter: row.folioNumber,
+      parameter2: row.reedosCode.toString(),
+    };
+    console.log("BankDetailsForRedeem payload:", payload);
+    dispatch(showLoader("Fetching Bank Details..."));
+    apiServices
+      .GetBankDetailsForRedeem(payload)
+      .then((response) => {
+        console.log("GetBankDetailsForRedeem Response:", response);
 
+        if (response?.status === 200) {
+          const data = response?.data?.data?.folioSchemeDetailList[0];
+          console.log("Bank Data:", data);
+
+          setSelectedBank(data);
+        }
+      })
+      .catch((error) => {
+        console.error("GetBankDetailsForRedeem Error:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
+  const clientBankDetails = async (row: PortfolioRecord) => {
+    dispatch(showLoader("Please wait we are processing your request"));
+    console.log(row, "portt");
+
+    let payload = {
+      dpFlag: row?.physicalQuantity > 0 ? "P" : " ",
+    };
     try {
-      const response = await apiServices.ClientProfile();
+      const response = await apiServices.ClientProfile(payload);
       const clientData = response?.data?.data;
-      console.log(clientData, "Client Info");
+      console.log(clientData, "Client Info from portfolio");
       setClientCode(clientData?.clientCode || "");
       setMobile(clientData?.mobileNo || "");
       setEmail(clientData?.email || "");
-
-      const rawData = clientData?.bankDetails ?? [];
-      const formattedData: BankDetail[] = rawData.map(
-        (item: any, index: number) => ({
-          id: index + 1,
-          name: item.bankName,
-          account: item.bankAccountNumber,
-          ifsc: item.ifsc,
-          code: item.bankCode,
-          paymentMode: item.payMode,
-        })
-      );
-      // setBanks(formattedData);
-
-      // Select the first bank if available
-      if (formattedData.length > 0) {
-        setSelectedBank(formattedData[0]);
-      } else {
-        setSelectedBank(null);
-      }
     } catch (error) {
       console.error("Error fetching bank details:", error);
       setSelectedBank(null);
@@ -168,7 +183,7 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
 
       try {
         const schemeRes = await apiServices.MF_FundOverView({
-          pageNumber: 1,
+          pageNumber: 0,
           pageSize: 1,
           searchKey: "",
           schemeCode: selectedRow?.reedosCode,
@@ -231,7 +246,7 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
       mandateID: "",
       param1: "",
       param2: "",
-      param3: selectedBank?.account,
+      param3: selectedBank?.bankAccountNumber,
       filler1: "",
       filler2: "",
       filler3: "",
@@ -247,9 +262,9 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
 
       if (response?.status === 200) {
         const rawData = response?.data?.data;
-        console.log("Order Entry Response:", rawData);
+        console.log("Order Entry Response:", rawData?.bsEremarks);
         // handleModalToggle();
-        SetMessage(rawData);
+        SetMessage(rawData?.bsEremarks);
         SetConfirmationMessage(true);
         SetConfirmation(false);
         // ShowToast("info","h")
@@ -268,6 +283,7 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
     console.log("Invest More clicked for", row);
     if (onSelectFund) {
       onSelectFund(row.reedosCode.toString());
+      investMoreDetails(row);
     }
   };
 
@@ -407,9 +423,9 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
                   <Typography color="text.secondary">Bank Account</Typography>
                   <Typography fontWeight={600}>
                     {selectedBank
-                      ? `${selectedBank.name} •••• ${selectedBank.account.slice(
-                          -4
-                        )}`
+                      ? `${
+                          selectedBank.bankName
+                        } •••• ${selectedBank.bankAccountNumber.slice(-4)}`
                       : "—"}
                   </Typography>
                 </Box>
@@ -544,10 +560,10 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
               {selectedBank ? (
                 <div>
                   <div style={{ fontWeight: 600, fontSize: "14px" }}>
-                    {selectedBank.name}
+                    {selectedBank.bankName}
                   </div>
                   <div style={{ fontSize: "12px", color: "#666" }}>
-                    xxxxxxxxxx{selectedBank.account.slice(-4)}
+                    xxxxxxxxxx{selectedBank.bankAccountNumber.slice(-4)}
                   </div>
                 </div>
               ) : (
@@ -556,6 +572,44 @@ const MfPortfolio = ({ onSelectFund, hasToken }: any) => {
                 </Typography>
               )}
             </Box>
+            {/* <Box>
+              <Typography fontSize={12} color="text.secondary" mb={1}>
+                Bank Account for Credit
+              </Typography>
+
+              {banks.length > 0 ? (
+                <Stack spacing={1}>
+                  {banks.map((bank) => (
+                    <Box
+                      key={bank.id}
+                      onClick={() => setSelectedBank(bank)}
+                      sx={{
+                        border:
+                          selectedBank?.id === bank.id
+                            ? "2px solid #11395C"
+                            : "1px solid #ddd",
+                        borderRadius: "8px",
+                        padding: "10px 12px",
+                        cursor: "pointer",
+                        backgroundColor:
+                          selectedBank?.id === bank.id
+                            ? "#f3f8ff"
+                            : "transparent",
+                      }}
+                    >
+                      <Typography fontWeight={600}>{bank.name}</Typography>
+                      <Typography fontSize={12} color="text.secondary">
+                        ••••••••{bank.account.slice(-4)}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Stack>
+              ) : (
+                <Typography color="error" fontSize={12}>
+                  No bank details found.
+                </Typography>
+              )}
+            </Box> */}
           </Box>
 
           {/* Notes */}

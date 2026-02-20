@@ -292,7 +292,20 @@ export const endpoints = {
   SendRMMTFShortfallMail: "/api/RMS/SendRMMTFShortfallMail",
   SendRHMTFShortfallMail: "/api/RMS/SendRHMTFShortfallMail",
   SendAPMTFShortfallMail: "/api/RMS/SendAPMTFShortfallMail",
-  SLBMLastUpdate: "/api/ShortAllocation/SLBMLastUpdate",
+  SLBMLastUpdate: "/api/ShortAllocation/SLBMLastUpdate", 
+  PhysicalClientFileUpload: "/api/MF/PhysicalClientFileUpload",
+  GetPhysicalClientDetails: "/api/MF/GetPhysicalClientDetails",
+  EmailOTPForPhysical: "/api/MF/EmailOTPForPhysical",
+  EmailVerificationPhysical: "/api/MF/EmailVerificationPhysical",
+  KYCverification: "/api/MF/KYCverification",
+  KYCOtpVerification: "/api/MF/KYCOtpVerification",
+  PhysicalManualOnboarding: "/api/MF/PhysicalManualOnboarding",
+  PhyicalOrder2FA: "/api/MF/PhyicalOrder2FA",
+  ChildOrder: "/api/MF/ChildOrder",
+  GetPhysicalResponse: "/api/MF/GetPhysicalResponse",
+  UpdateClientElogStatus: "/api/MF/UpdateClientElogStatus",  
+  GetBankDetailsForRedeem: "api/MF/GetBankDetailsForRedeem",
+  PanVerification: "api/MF/PanVerification",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

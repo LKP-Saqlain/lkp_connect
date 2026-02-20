@@ -2,13 +2,17 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from "react-icons/fa";
 import { Card, CardHeader, Button } from "reactstrap";
-import Logo from "../../../../assets/logo.png";
-import { ELOG_STATUS_LIST } from "../../../../helper/commmon";
-import { decryptAES, encryptAES } from "../../../../utils/encryptDecrypt";
-import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import Logo from "../../../../../assets/logo.png";
+import { ELOG_STATUS_LIST } from "../../../../../helper/commmon";
+import { decryptAES, encryptAES } from "../../../../../utils/encryptDecrypt";
+import {
+  hideLoader,
+  showLoader,
+} from "../../../../../redux/slices/loaderSlice";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../redux/store";
-import { apiServices } from "../../../../services";
+import { AppDispatch } from "../../../../../redux/store";
+import { apiServices } from "../../../../../services";
+import ShowToast from "../../../../../utils/toastUtils";
 
 type Status = "SUCCESS" | "FAILURE" | "PENDING";
 
@@ -81,6 +85,16 @@ const StatusCard = () => {
     }
   };
 
+  useEffect(() => {
+    if (!status) return;
+    if (status === "SUCCESS") {
+      ShowToast("success", "Physical Registration Successful");
+      updateElogStatus();
+    } else {
+      ShowToast("error", "Unsuccessful, Please try again");
+    }
+  }, [status]);
+
   const eLogApi = (clientCode: any) => {
     dispatch(showLoader("Processing..."));
 
@@ -108,6 +122,26 @@ const StatusCard = () => {
       })
       .catch((error: any) => {
         console.error("FinalApiCalls Error:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+  const updateElogStatus = () => {
+    let payload = {
+      clientCode,
+      status,
+    };
+    dispatch(showLoader("Processing..."));
+
+    apiServices
+      .UpdateClientElogStatus(payload)
+
+      .then((elogResponse: any) => {
+        console.log("UpdateClientElogStatus Response:", elogResponse);
+      })
+      .catch((error: any) => {
+        console.error("UpdateClientElogStatus Error:", error);
       })
       .finally(() => {
         dispatch(hideLoader());

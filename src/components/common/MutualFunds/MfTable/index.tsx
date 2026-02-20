@@ -76,7 +76,7 @@ const MutualFundTable = ({
                     textTransform: "none",
                     fontWeight: 500,
                     borderRadius: 5,
-                    minWidth: "90px", // optional for consistent button width
+                    minWidth: "80px", // optional for consistent button width
                   }}
                   // onClick={toggle}
                   onClick={() => {
@@ -97,14 +97,14 @@ const MutualFundTable = ({
                     textTransform: "none",
                     fontWeight: 500,
                     borderRadius: 5,
-                    minWidth: "90px", // optional for consistent button width
+                    minWidth: "70px", // optional for consistent button width
                     "&:hover": {
                       backgroundColor: "#08306b",
                     },
                   }}
                   onClick={() => onInvestMoreClick?.(_params.row)}
                 >
-                  Invest More
+                  ADD
                 </Button>
               </Box>
             ),

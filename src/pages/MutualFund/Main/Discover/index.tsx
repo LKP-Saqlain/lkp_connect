@@ -1,21 +1,21 @@
 import { Col, Row, Card } from "reactstrap";
 import SipCalculator from "./sipCalculator";
-import BasicTabs from "../../../components/common/MutualFunds/NavTabs";
-import MfCards from "../../../components/common/MutualFunds/MfCards";
+import BasicTabs from "../../../../components/common/MutualFunds/NavTabs";
+import MfCards from "../../../../components/common/MutualFunds/MfCards";
 import {
   MfCardRecoLabel,
   MfCardPassLabel,
   popularTabList,
   assetClassTabList,
   returnPeriodsTabs,
-} from "../../../pages/MutualFund/mfTypes";
-import MfinfoCard from "../../../components/common/MutualFunds/MfInfoCard";
+} from "../../mfTypes";
+import MfinfoCard from "../../../../components/common/MutualFunds/MfInfoCard";
 import { useEffect, useState } from "react";
 import MutualFundList from "./MutualFundList";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
-import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { apiServices } from "../../../services";
+import { AppDispatch } from "../../../../redux/store";
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../../services";
 
 const MfDiscover = ({ onSelectFund, hasToken }: any) => {
   const [popularTab, setPopularTab] = useState("Large Cap");
@@ -99,8 +99,8 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
       const assetName = productTypeMap[assetTab];
       try {
         const response = await apiServices.MF_FundOverView({
-          pageNumber: 1,
-          pageSize: 5,
+          pageNumber: 0,
+          pageSize: 10,
           searchKey: "",
           schemeCode: 0,
           sipMinimum: "",

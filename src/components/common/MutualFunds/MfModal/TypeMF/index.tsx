@@ -16,6 +16,8 @@ import {
   showLoader,
 } from "../../../../../redux/slices/loaderSlice";
 import ShowToast from "../../../../../utils/toastUtils";
+import { encryptAES } from "../../../../../utils/encryptDecrypt";
+import { apiServices } from "../../../../../services";
 
 type MFType = "physical" | "demat" | "";
 
@@ -26,6 +28,7 @@ interface Props {
   onTypeSelect: (type: "physical" | "demat") => void;
   ClientCode: string;
   onPhysicalOnboard: () => void;
+  handleTradingOpen?: any;
 }
 
 const TypeMFModal: React.FC<Props> = ({
@@ -35,9 +38,11 @@ const TypeMFModal: React.FC<Props> = ({
   onTypeSelect,
   onPhysicalOnboard,
   ClientCode,
+  handleTradingOpen,
 }) => {
   const [type, setType] = useState<MFType>("");
   const [physicalAllowed, setPhysicalAllowed] = useState<boolean | null>(null);
+  const [elogOtp, setElogOtp] = useState<boolean | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -69,18 +74,65 @@ const TypeMFModal: React.FC<Props> = ({
       }
 
       const clientType = data.data[0].physicaldemat; // "PHYSICAL" / "DEMAT"
+      const elogstatus = data.data[0].elogstatus; // "ELOG" / "NOELOG"
 
-      if (clientType === "PHYSICAL") {
+      // CASE 1: PHYSICAL + ELOG → allowed
+      if (clientType === "PHYSICAL" && elogstatus === "ELOG") {
         setPhysicalAllowed(true);
-      } else {
+        return;
+      }
+
+      // CASE 2: PHYSICAL + NOELOG → trigger eLog API
+      if (clientType === "PHYSICAL" && elogstatus === "NOELOG") {
         setPhysicalAllowed(false);
-        // ShowToast("error", "This client is not eligible for Physical mode.");
+        setElogOtp(true);
+      }
+
+      // CASE 3: DEMAT + NOELOG → NEVER allow Physical
+      if (clientType === "DEMAT") {
+        setPhysicalAllowed(false);
+        return;
       }
     } catch (error) {
       console.error(error);
       dispatch(hideLoader());
       setPhysicalAllowed(false);
     }
+  };
+
+  const eLogApi = (clientCode: any) => {
+    dispatch(showLoader("Processing..."));
+
+    let loopBackUrl = encryptAES(clientCode);
+    loopBackUrl = encodeURIComponent(loopBackUrl);
+    loopBackUrl = `${window.location.origin}/PhysicalStats/${loopBackUrl}`;
+    apiServices
+      .ElogForPhysical({
+        clientCode,
+        loopBackUrl,
+      })
+      // })
+      .then((elogResponse: any) => {
+        console.log("ElogForPhysical Response:", elogResponse);
+        if (
+          elogResponse?.data?.message === "ELOG Link Generated Successfully"
+        ) {
+          const url = elogResponse?.data?.data;
+          window.open(url, "_blank", "noopener,noreferrer");
+          console.log("before close", onPhysicalOnboard);
+          // window.close();
+          // window.history.back();
+          console.log("after close");
+        } else {
+          ShowToast("error", elogResponse?.data?.message);
+        }
+      })
+      .catch((error: any) => {
+        console.error("FinalApiCalls Error:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
   };
 
   const handleTypeChange = (value: MFType) => {
@@ -164,8 +216,13 @@ const TypeMFModal: React.FC<Props> = ({
               <Button
                 color="warning"
                 onClick={() => {
+                  if (elogOtp) {
+                    eLogApi(ClientCode);
+                  } else {
+                    // onPhysicalOnboard();
+                    handleTradingOpen("ClientOnboarding");
+                  }
                   toggle();
-                  onPhysicalOnboard();
                 }}
               >
                 Physical Onboarding
