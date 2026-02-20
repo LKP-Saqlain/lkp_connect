@@ -100,7 +100,7 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
       try {
         const response = await apiServices.MF_FundOverView({
           pageNumber: 1,
-          pageSize: 5,
+          pageSize: 10,
           searchKey: "",
           schemeCode: 0,
           sipMinimum: "",
