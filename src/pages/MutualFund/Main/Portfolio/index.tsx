@@ -183,7 +183,7 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
 
       try {
         const schemeRes = await apiServices.MF_FundOverView({
-          pageNumber: 1,
+          pageNumber: 0,
           pageSize: 1,
           searchKey: "",
           schemeCode: selectedRow?.reedosCode,
@@ -262,9 +262,9 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
 
       if (response?.status === 200) {
         const rawData = response?.data?.data;
-        console.log("Order Entry Response:", rawData);
+        console.log("Order Entry Response:", rawData?.bsEremarks);
         // handleModalToggle();
-        SetMessage(rawData);
+        SetMessage(rawData?.bsEremarks);
         SetConfirmationMessage(true);
         SetConfirmation(false);
         // ShowToast("info","h")

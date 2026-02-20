@@ -99,7 +99,7 @@ const MfDiscover = ({ onSelectFund, hasToken }: any) => {
       const assetName = productTypeMap[assetTab];
       try {
         const response = await apiServices.MF_FundOverView({
-          pageNumber: 1,
+          pageNumber: 0,
           pageSize: 10,
           searchKey: "",
           schemeCode: 0,

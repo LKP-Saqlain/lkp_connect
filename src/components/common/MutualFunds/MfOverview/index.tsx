@@ -62,7 +62,7 @@ const MfOverview = ({
         const [schemeRes, bseRes] = await Promise.all([
           apiServices.MF_SchemeDetails({ schemeCode }),
           apiServices.MF_FundOverView({
-            pageNumber: 1,
+            pageNumber: 0,
             pageSize: 1,
             searchKey: "",
             schemeCode,
