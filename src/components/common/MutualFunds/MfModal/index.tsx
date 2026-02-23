@@ -173,15 +173,19 @@ const MutualFundModal = ({
 
       if (response?.status === 200) {
         const rawData = response?.data?.data;
-        console.log("Order Entry Response:", rawData);
-        const orderNo = rawData?.bsEremarks;
-        const internalRefNo = rawData?.uniqueRefNo;
-        const orderNumber = extractOrderNumber(orderNo);
-        console.log("orderNo orderNumber is", orderNumber);
-
-        if (response?.data?.statusCode === 417) {
-          ShowToast("error", response?.data?.data);
+        let internalRefNo;
+        let orderNumber;
+        if (response?.data?.statusCode === 200) {
           console.log("Order Entry Response:", rawData);
+          const orderNo = rawData?.bsEremarks;
+          internalRefNo = rawData?.uniqueRefNo;
+          orderNumber = extractOrderNumber(orderNo);
+          console.log("orderNo orderNumber is", orderNumber);
+        }
+        if (response?.data?.statusCode === 417) {
+          console.log("Order Entry Response:", rawData);
+          ShowToast("error", response?.data?.data);
+          toggle();
         }
         if (!orderNumber) {
           throw new Error("Could not extract order number from response");
