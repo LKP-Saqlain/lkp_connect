@@ -11,7 +11,7 @@ import dayjs from "dayjs";
 import ShowToast from "../../../utils/toastUtils";
 
 export interface UnlistedRecord {
-  rowID: number;
+  rid: number;
   tdt: string;
   cn: string;
   branchCode: string;
@@ -34,11 +34,22 @@ export interface UnlistedRecord {
   id: number;
 }
 
+interface ClientDetail {
+  clientCode: string;
+  clientName: string;
+  dpid: string;
+  dpName: string;
+  bankAccountNumber: string;
+  bankName: string;
+  ifscCode: string;
+}
+
 const InsertUnlistedShares = ({ activeSubItem }: any) => {
   const [modal_grid, setmodal_grid] = useState<boolean>(false);
   const [editUserCheck, setEditUserCheck] = useState(false);
   const [unlistedData, setUnlistedData] = useState<any[]>([]);
   const [editData, setEditData] = useState<UnlistedRecord | null>(null);
+  const [clientDetail, setClientDetail] = useState<ClientDetail | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
@@ -47,7 +58,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
 
   useEffect(() => {
     if (editData) {
-      console.log("Length:", Object.keys(editData).length);
+      console.log("Length:", clientDetail, Object.keys(editData).length);
     } else {
       console.log("editData is null or undefined");
     }
@@ -90,7 +101,9 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
     setmodal_grid(!modal_grid);
     setEditUserCheck(false);
     setEditData(null);
+    setClientDetail(null);
   }
+
   const unformatNumber = (value: any): number =>
     parseFloat(value?.toString().replace(/,/g, "") || "0");
 
@@ -101,16 +114,23 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
 
   const updateUnlistedVals = (data: any, fileBase64: any) => {
     console.log("updateUnlistedVals", data);
+    console.log("EditDataCheck", editData);
 
     const formattedDate = dayjs(editData?.tdt, "DD/MM/YYYY").format(
       "YYYY-MM-DD"
     );
+    const formatIssueDate = dayjs(data?.issueDate, "DD/MM/YYYY").format(
+      "YYYY-MM-DD"
+    );
     console.log(formattedDate, "formattedDate");
     setmodal_grid(false);
+
+    const cleanClientName = data?.cn && data?.cn.replace(/\s\d+$/, "");
+
     let payload = {
       user_Id: user_id,
       transactionDate: formattedDate,
-      clientName: data.cn,
+      clientName: cleanClientName,
       securitiesName: data.nsec,
       noOfShares: cleanNumber(data?.nsh),
       clientRate: data.crt,
@@ -123,8 +143,19 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       sbRate: cleanNumber(data?.sbr) ? cleanNumber(data?.sbr) : 0,
       sbCommission: cleanNumber(data?.sbcm) ?? cleanNumber(editData?.sbcm) ?? 0,
       netBrokerage: cleanNumber(data?.nbg),
-      rowId: editData?.rowID,
+      rowId: editData?.rid,
       dealSheetB64: fileBase64,
+      //new fields
+      clientCode: data?.cc,
+      dpid: data?.dpid,
+      dpName: data?.dpName,
+      bankAccountNumber: data?.bankAccountNumber,
+      bankName: data?.bankName,
+      ifscCode: data?.ifscCode,
+      paymentMode: data?.paymentMode,
+      chequeRefNumber: data?.referenceNumber,
+      isin: data?.isin,
+      issueDate: formatIssueDate,
     };
     console.log("Payload", payload);
 
@@ -199,15 +230,30 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       tdt,
       crt,
       vrt,
+      //new fields
+      dpid,
+      dpName,
+      bankAccountNumber,
+      bankName,
+      ifscCode,
+      paymentMode,
+      referenceNumber,
+      isin,
+      // issueDate,
+      clientCode,
     } = data;
 
     const formattedDate = dayjs(tdt, "DD/MM/YYYY").format("YYYY-MM-DD");
     console.log(formattedDate, "formattedDate");
 
+    // const formattedIssueDate =
+    //   issueDate !== null && dayjs(issueDate, "DD/MM/YYYY").format("YYYY-MM-DD");
+
+    const cleanClientName = cn && cn.replace(/\s\d+$/, "");
     let payload = {
       user_Id: user_id,
       transactionDate: formattedDate,
-      clientName: cn,
+      clientName: cleanClientName,
       securitiesName: nsec,
       noOfShares: unformatNumber(nsh),
       clientRate: unformatNumber(crt),
@@ -222,16 +268,25 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       netBrokerage: unformatNumber(nbg),
       rmCode: rmc?.toString().trim(),
       dealSheetB64: fileBase64,
+      //New Fields
+      dpid: dpid ? dpid : "",
+      dpName: dpName ? dpName : "",
+      bankAccountNumber: bankAccountNumber ? bankAccountNumber : "",
+      bankName: bankName ? bankName : "",
+      ifscCode: ifscCode ? ifscCode : "",
+      paymentMode: paymentMode ? paymentMode : "",
+      chequeRefNumber: referenceNumber ? referenceNumber : "",
+      isin: isin ? isin : "",
+      issueDate: "2026-12-15",
+      clientCode: clientCode ? clientCode : "",
     };
-    console.log("Payload", payload);
-
+    console.log("Payload111", payload);
     dispatch(showLoader(""));
     apiServices
       .InsertUnlistedSharesRecord(payload)
       .then((respones) => {
         if (respones?.status === 200) {
           console.log("InsertResponse", respones?.status);
-
           if (respones?.data?.data === null) {
             ShowToast("error", respones?.data?.msg);
           } else {
@@ -239,11 +294,9 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
           }
           dispatch(hideLoader());
           setmodal_grid(false);
-
           let payload = {
             user_Id: user_id,
           };
-
           dispatch(showLoader(""));
           apiServices
             .ViewUnlistedSharesRecord(payload)
@@ -383,6 +436,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                     editUserCheck={editUserCheck}
                     isUnlistedContent={true}
                     activeSubItem={activeSubItem}
+                    setClientDetail={setClientDetail}
                   />
                 </Box>
                 <DataTable
