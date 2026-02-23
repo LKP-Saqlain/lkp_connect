@@ -125,6 +125,7 @@ import AutoPayReport from "../../pages/ThirdParty/DPAutoPay";
 import EmployeeSPIP from "../../pages/Contest/SPIP/Employee";
 import B2BSPIP from "../../pages/Contest/SPIP/B2B";
 import MTFShortfallUpload from "../../pages/RMS/MTFShortfallUpload";
+import ScriptMaster from "../../pages/Masters/scriptMaster";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -698,6 +699,7 @@ const SideBar = () => {
     "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
     "Client Exclusion": <ExclusionList activeSubItem={activeSubItem} />,
+    "Unlisted Scrip Master": <ScriptMaster activeSubItem={activeSubItem} />,
     // "Menu Master": <Expiry activeSubItem={activeSubItem} />,
   };
 

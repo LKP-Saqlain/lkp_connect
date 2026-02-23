@@ -293,6 +293,13 @@ export const endpoints = {
   SendRHMTFShortfallMail: "/api/RMS/SendRHMTFShortfallMail",
   SendAPMTFShortfallMail: "/api/RMS/SendAPMTFShortfallMail",
   SLBMLastUpdate: "/api/ShortAllocation/SLBMLastUpdate",
+  UnlistedSharesClientSearch: "/api/Account/UnlistedSharesClientSearch",
+  UnlistedSharesClientDetail: "/api/Account/UnlistedSharesClientDetail",
+  UnlistedScripMasterDropdown: "/api/Account/UnlistedScripMasterDropdown",
+  ViewUnlistedScripMaster: "/api/Account/ViewUnlistedScripMaster",
+  InsertUnlistedScripMaster: "/api/Account/InsertUnlistedScripMaster",
+  DeleteUnlistedScripMaster: "/api/Account/DeleteUnlistedScripMaster",
+  UpdateUnlistedScripMaster: "/api/Account/UpdateUnlistedScripMaster",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

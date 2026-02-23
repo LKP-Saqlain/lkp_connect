@@ -377,6 +377,13 @@ export const newDomainEndpoints = [
 
   endpoints.GetSPIPContest,
   endpoints.GetContestSummary,
+  endpoints.UnlistedSharesClientSearch,
+  endpoints.UnlistedSharesClientDetail,
+  endpoints.UnlistedScripMasterDropdown,
+  endpoints.ViewUnlistedScripMaster,
+  endpoints.InsertUnlistedScripMaster,
+  endpoints.DeleteUnlistedScripMaster,
+  endpoints.UpdateUnlistedScripMaster,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

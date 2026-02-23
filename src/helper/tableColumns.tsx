@@ -6367,6 +6367,68 @@ export const unListedTradeColumns: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
+    field: "bnknm",
+    headerName: "Bank Name",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "accno",
+    headerName: "Bank Acc No",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "ifsc",
+    headerName: "IFSC Code",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "dpnm",
+    headerName: "DP Name",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "dpid",
+    headerName: "DP Id",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "paym",
+    headerName: "Payment Mode",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
     field: "nsec",
     headerName: "Securities Name",
     width: 120,
@@ -13095,5 +13157,54 @@ export const mtfAgeingEmailColumns: GridColDef[] = [
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(parseFloat(params)),
+  },
+];
+
+export const scripMasterColumns: GridColDef[] = [
+  {
+    field: "action",
+    headerName: "Actions",
+    headerClassName: "header-wrap-custom",
+    // flex: 1,
+    width: 90,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "isin",
+    headerName: "ISIN",
+    flex: 1,
+    minWidth: 140,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "scpnm",
+    headerName: "Scrip Name",
+    flex: 1.8,
+    minWidth: 250,
+    align: "left",
+    headerAlign: "center",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "isact",
+    headerName: "Status",
+    flex: 0.8,
+    minWidth: 110,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (
+      <span
+        style={{
+          color: params.value ? "#16a34a" : "#dc2626",
+          fontWeight: 600,
+        }}
+      >
+        {params.value ? "Active" : "Inactive"}
+      </span>
+    ),
   },
 ];
