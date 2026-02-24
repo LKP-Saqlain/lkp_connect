@@ -95,7 +95,6 @@ const ThirdPartyMaster = ({ activeSubItem }: any) => {
     const payload = editUserCheck
       ? { ...commonPayload, rowId: editData?.rid }
       : commonPayload;
-    debugger;
     dispatch(showLoader(""));
     console.log(payload, "thirdpartM payload");
 

@@ -1,17 +1,12 @@
 import { GridColDef } from "@mui/x-data-grid";
-// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-// import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-// import { Button } from "@mui/material";
-// import PersonAddIcon from "@mui/icons-material/PersonAdd";
-// import { FaUserPen } from "react-icons/fa6";
-// import ViewListIcon from "@mui/icons-material/ViewList";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import CopyToClipboardCell from "./copyToClipBoardCell";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import { capitalizeEachWord } from "../utils";
+import pako from "pako";
 
 interface ClientRow {
   ClientCode: string;
@@ -6009,10 +6004,25 @@ export const getApproverOneDetails: GridColDef[] = [
       const filename = `Deal_Sheet_${dd}-${mm}-${yy}.pdf`;
 
       const handleDownload = () => {
+        if (!base64Data) return;
+
+        const binaryString = atob(base64Data);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        const decompressed = pako.ungzip(bytes);
+        const blob = new Blob([decompressed], { type: "application/pdf" });
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.href = `data:application/pdf;base64,${base64Data}`;
+        link.href = url;
         link.download = filename;
         link.click();
+
+        window.URL.revokeObjectURL(url);
       };
 
       return (
@@ -6056,6 +6066,67 @@ export const getApproverOneDetails: GridColDef[] = [
     minWidth: 150,
     disableColumnMenu: true,
     headerAlign: "center",
+  },
+  {
+    field: "bnknm",
+    headerName: "Bank Name",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "accno",
+    headerName: "Bank Acc No",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "ifsc",
+    headerName: "IFSC Code",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "dpnm",
+    headerName: "DP Name",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "dpid",
+    headerName: "DP Id",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "paym",
+    headerName: "Payment Mode",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
     field: "bc",
@@ -6267,12 +6338,28 @@ export const getApproverTwoDetails: GridColDef[] = [
       const yy = String(today.getFullYear()).slice(-2);
 
       const filename = `Deal_Sheet_${dd}-${mm}-${yy}.pdf`;
+      console.log("base64Data", base64Data);
 
       const handleDownload = () => {
+        if (!base64Data) return;
+
+        const binaryString = atob(base64Data);
+        const len = binaryString.length;
+        const bytes = new Uint8Array(len);
+
+        for (let i = 0; i < len; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        const decompressed = pako.ungzip(bytes);
+        const blob = new Blob([decompressed], { type: "application/pdf" });
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.href = `data:application/pdf;base64,${base64Data}`;
+        link.href = url;
         link.download = filename;
         link.click();
+
+        window.URL.revokeObjectURL(url);
       };
 
       return (

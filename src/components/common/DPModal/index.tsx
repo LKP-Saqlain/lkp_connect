@@ -297,7 +297,6 @@ const CustomModal = ({
       }
 
       if (action && row) {
-        debugger;
         const entryFlag = action === "approve" ? "A" : "R";
         const standardItems = [
           "Communication Retrival Checker",
