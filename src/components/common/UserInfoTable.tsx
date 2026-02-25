@@ -2615,6 +2615,72 @@ const DataTable = ({
       return TableColumns.mtfAgeingEmailColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Unlisted Scrip Master") {
+      return TableColumns.scripMasterColumns.map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted; // Add condition based on your row data
+
+              const handleEdit = () => {
+                handleEditClick?.(params.row, true); // Call edit function for Communication Retrieval Entry
+              };
+
+              return (
+                <>
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <button
+                    onClick={() => {
+                      setAction("delete");
+                      handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
+                      setSelectedRow(params.row); // Store the selected row for confirmation
+                      tog_center(); // Open the modal for deletion confirmation
+                    }}
+                    disabled={isDeleted}
+                    style={{
+                      color: isDeleted ? "red" : "#11395C",
+                      textDecoration: isDeleted ? "none" : "underline",
+                      background: "none",
+                      border: "none",
+                      cursor: isDeleted ? "default" : "pointer",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    {isDeleted ? (
+                      "Deleted"
+                    ) : (
+                      <Tooltip title="Delete" arrow placement="top">
+                        <IconButton
+                          sx={{ p: 0 }}
+                          color="primary"
+                          onClick={() => handleDeleteEntry?.(params.row)}
+                        >
+                          <DeleteIcon
+                            fontSize="small"
+                            sx={{ color: "#11395C" }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </button>
+                </>
+              );
+            },
+          };
+        }
+
+        // Return other columns unchanged
+        return column;
+      });
     } else {
       return [];
     }
@@ -2686,6 +2752,7 @@ const DataTable = ({
     "Third Party Vendor Approval",
     "Third Party Invoice Verify", // approve/reject message also for this
     "Vendor Approval",
+    "Unlisted Scrip Master",
   ];
 
   if (activeSubItem === "RMS Allocation") {
@@ -2713,6 +2780,8 @@ const DataTable = ({
     (activeSubItem === "Pre Trade Approval" && showDocument)
   ) {
     Msg = "";
+  } else if (actionItems.includes(activeSubItem)) {
+    Msg = `Are you sure want to ${action} this entry`;
   } else {
     Msg = "Are you sure you want to send the email?";
   }

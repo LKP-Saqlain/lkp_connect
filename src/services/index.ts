@@ -1315,4 +1315,49 @@ export const apiServices = {
       payload
     );
   },
+  UnlistedSharesClientSearch: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UnlistedSharesClientSearch,
+      payload
+    );
+  },
+  UnlistedSharesClientDetail: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UnlistedSharesClientDetail,
+      payload
+    );
+  },
+  UnlistedScripMasterDropdown: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UnlistedScripMasterDropdown,
+      payload
+    );
+  },
+  ViewUnlistedScripMaster: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewUnlistedScripMaster, payload);
+  },
+  InsertUnlistedScripMaster: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.InsertUnlistedScripMaster,
+      payload
+    );
+  },
+  DeleteUnlistedScripMaster: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.DeleteUnlistedScripMaster,
+      payload
+    );
+  },
+  UpdateUnlistedScripMaster: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateUnlistedScripMaster,
+      payload
+    );
+  },
 };

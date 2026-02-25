@@ -128,6 +128,7 @@ import MTFShortfallUpload from "../../pages/RMS/MTFShortfallUpload";
 import NewClientPhysical from "../../pages/MutualFund/NewClientPhysical";
 import FileUpload from "../../pages/MutualFund/FileUpload";
 
+import ScriptMaster from "../../pages/Masters/scriptMaster";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -705,6 +706,7 @@ const SideBar = () => {
     "Regulatory Announcement": <RegAnnMaster activeSubItem={activeSubItem} />,
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
     "Client Exclusion": <ExclusionList activeSubItem={activeSubItem} />,
+    "Unlisted Scrip Master": <ScriptMaster activeSubItem={activeSubItem} />,
     // "Menu Master": <Expiry activeSubItem={activeSubItem} />,
   };
 

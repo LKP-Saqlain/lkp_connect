@@ -297,7 +297,6 @@ const CustomModal = ({
       }
 
       if (action && row) {
-        // debugger;
         const entryFlag = action === "approve" ? "A" : "R";
         const standardItems = [
           "Communication Retrival Checker",
@@ -309,6 +308,7 @@ const CustomModal = ({
           "Third Party Invoice Verify",
           "Vendor Approval",
           "mandateCall",
+          "Unlisted Scrip Master",
         ];
         const isStandardFlow = standardItems.includes(activeSubItem);
         const isSpecialRejectCase =
