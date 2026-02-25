@@ -177,6 +177,7 @@ export const endpoints = {
   GetClientsCodeAndName: "api/Client/GetClientsCodeAndName",
   BSEStar_MfMandateStatus: "api/MF/BSEStar_MfMandateStatus",
   MF_OngoingSIP: "api/Dashboard/MF_OngoingSIP",
+  CommonProcessOTP: "api/Client/CommonProcessOTP",
   MF_PortfolioStatementReport: "api/Dashboard/MF_PortfolioStatementReport",
   MF_TransactionReport: "api/Dashboard/MF_TransactionReport",
   MF_NFODetails: "api/MF/MF_NFODetails",

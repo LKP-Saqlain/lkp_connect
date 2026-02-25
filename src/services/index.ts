@@ -796,6 +796,9 @@ export const apiServices = {
   BSEStar_SinglePayment: async (payload: any) => {
     return await apiService("POST", endpoints.BSEStar_SinglePayment, payload);
   },
+  CommonProcessOTP: async (payload: any) => {
+    return await apiService("POST", endpoints.CommonProcessOTP, payload);
+  },
   BSEStar_MfOrderEntry: async (payload: any) => {
     return await apiService("POST", endpoints.BSEStar_MfOrderEntry, payload);
   },

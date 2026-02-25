@@ -8947,7 +8947,7 @@ export const MfPortfolio: GridColDef[] = [
     headerName: "Action",
     disableColumnMenu: true,
     flex: 1.7,
-    minWidth: 120,
+    minWidth: 180,
     align: "center",
     headerAlign: "center",
   },

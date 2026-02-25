@@ -20,8 +20,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 import { setEncryptedValue } from "../../../utils/loocalEncrypt";
@@ -44,6 +44,9 @@ const MutualFundIndex = ({ handleTradingOpen }: any) => {
   const [showPhysicalOnboard, setShowPhysicalOnboard] = useState(false);
   const [searchModal, setSearchModal] = useState(false);
 
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
   // Debounce typing (to avoid too many API calls)
   useEffect(() => {
     const delay = setTimeout(() => {
@@ -118,25 +121,57 @@ const MutualFundIndex = ({ handleTradingOpen }: any) => {
       dispatch(hideLoader());
     }
   };
+  // const ClientList = useCallback(
+  //   async (code: string) => {
+  //     try {
+  //       setLoading(true);
+  //       dispatch(showLoader("Verifying Client Code..."));
+
+  //       const response = await fetch(
+  //         `https://middlewareapi.lkp.net.in/api/Client/GetClientsCodeAndName?SearchKey=${code}`,
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+
+  //       const data = await response.json();
+  //       dispatch(hideLoader());
+  //       setLoading(false);
+
+  //       if (data?.isSuccess && Array.isArray(data.data)) {
+  //         setSuggestions(data.data);
+  //       } else {
+  //         setSuggestions([]);
+  //         ShowToast("error", data?.message || "No clients found");
+  //       }
+  //     } catch (error) {
+  //       console.error("ClientList error:", error);
+  //       dispatch(hideLoader());
+  //       setLoading(false);
+  //     } finally {
+  //       setLoading(false);
+  //       dispatch(hideLoader());
+  //     }
+  //   },
+  //   [dispatch]
+  // );
   const ClientList = useCallback(
     async (code: string) => {
       try {
         setLoading(true);
         dispatch(showLoader("Verifying Client Code..."));
 
-        const response = await fetch(
-          `https://middlewareapi.lkp.net.in/api/Client/GetClientsCodeAndName?SearchKey=${code}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const payload = {
+          searchKey: code,
+          loginId: user_id,
+        };
 
-        const data = await response.json();
-        dispatch(hideLoader());
-        setLoading(false);
+        const response = await apiServices.GetClientsCodeAndName(payload);
+
+        const data = response?.data;
 
         if (data?.isSuccess && Array.isArray(data.data)) {
           setSuggestions(data.data);
@@ -146,14 +181,12 @@ const MutualFundIndex = ({ handleTradingOpen }: any) => {
         }
       } catch (error) {
         console.error("ClientList error:", error);
-        dispatch(hideLoader());
-        setLoading(false);
       } finally {
         setLoading(false);
         dispatch(hideLoader());
       }
     },
-    [dispatch]
+    [dispatch, user_id]
   );
   const handleSubmit = async () => {
     // setClientCode("");

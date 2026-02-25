@@ -16,6 +16,7 @@ import StatBoxComponent from "../../../../components/common/MfStatBox";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { BankDetail, PortfolioRecord, PortfolioSummary } from "../../mfTypes";
 import { capitalizeEachWord } from "../../../../utils";
+import ShowToast from "../../../../utils/toastUtils";
 // import axios from "axios"; //remove for live
 // import { getDecryptedValue } from "../../../../utils/loocalEncrypt"; //remove for live
 
@@ -28,6 +29,8 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
   const [redeemModalOpen, setRedeemModalOpen] = useState(false);
   const [confirmation, SetConfirmation] = useState(false);
   const [confirmationMessage, SetConfirmationMessage] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
   const [message, SetMessage] = useState("");
   const [selectedRow, setSelectedRow] = useState<PortfolioRecord | null>(null);
   // const [banks, setBanks] = useState<BankDetail[]>([]);
@@ -172,6 +175,62 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
     } catch (error) {
       console.error("Error fetching bank details:", error);
       setSelectedBank(null);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+  useEffect(() => {
+    if (!confirmation) return;
+
+    const handleResend = async () => {
+      setOtp(""); // reset OTP input
+      setOtpVerified(false);
+
+      const payload = {
+        mobileNo: mobile,
+        otp: "",
+        action: "Send",
+        emailId: email,
+        sourceType: "MF",
+      };
+
+      dispatch(showLoader("Resending OTP..."));
+
+      try {
+        const response = await apiServices.CommonProcessOTP(payload);
+        console.log(" Resend OTP Response:", response);
+
+        if (response?.data?.isSuccess) {
+          ShowToast("success", "OTP resent successfully");
+        }
+      } catch (error) {
+        console.error(" Error resending OTP:", error);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+    handleResend();
+  }, [confirmation]);
+
+  const handleOtpVerify = async () => {
+    const payload = {
+      mobileNo: mobile,
+      otp: otp,
+      action: "Verify",
+      emailId: email,
+      sourceType: "MF",
+    };
+
+    dispatch(showLoader("Resending OTP..."));
+
+    try {
+      const response = await apiServices.CommonProcessOTP(payload);
+      console.log(" Verify OTP Response:", response);
+
+      const isVerified = response?.data?.data?.isVerified === 1;
+      setOtpVerified(isVerified);
+    } catch (error) {
+      console.error(" Error verifying OTP:", error);
     } finally {
       dispatch(hideLoader());
     }
@@ -394,9 +453,9 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
                 background: "#fff",
                 borderRadius: "12px",
                 boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                p: 3,
+                p: 2,
                 textAlign: "left",
-                mb: 3,
+                mb: 2,
               }}
             >
               <Stack spacing={2}>
@@ -425,11 +484,75 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
                     {selectedBank
                       ? `${
                           selectedBank.bankName
-                        } •••• ${selectedBank.bankAccountNumber.slice(-4)}`
+                        } ••••${selectedBank.bankAccountNumber.slice(-4)}`
                       : "—"}
                   </Typography>
                 </Box>
               </Stack>
+            </Box>
+
+            {/* OTP Section */}
+            <Box
+              sx={{
+                background: "#fff",
+                borderRadius: "12px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                p: 2,
+                textAlign: "left",
+                mb: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                <TextField
+                  label="Enter OTP"
+                  variant="outlined"
+                  size="small"
+                  value={otp}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, ""); // allow only numbers
+                    setOtp(value);
+                    setOtpVerified(false); // reset if user edits OTP
+                  }}
+                  inputProps={{
+                    maxLength: 6,
+                    inputMode: "numeric",
+                  }}
+                  sx={{
+                    width: "250px",
+                    "& .MuiOutlinedInput-root": {
+                      borderRadius: "5px",
+                    },
+                  }}
+                />
+
+                <Button
+                  variant="contained"
+                  disabled={otp.length !== 6}
+                  color="success"
+                  style={{
+                    borderRadius: "10px",
+                    textTransform: "none",
+                    fontWeight: 600,
+                    background: otpVerified ? "#166934" : "#22c55e", // green gradient
+                    border: "1px solid #22c55e",
+                    color: "#fff",
+                    boxShadow: "0 4px 12px #166934",
+                  }}
+                  onClick={() => {
+                    console.log("Entered OTP:", otp);
+                    handleOtpVerify();
+                    // Later replace with API validation
+                  }}
+                >
+                  {otpVerified ? "Verfied" : "Verify"}
+                </Button>
+              </Box>
             </Box>
 
             {/* Action Buttons */}
@@ -453,11 +576,12 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
                   borderRadius: "10px",
                   textTransform: "none",
                   fontWeight: 600,
-                  background: "#22c55e", // green gradient
-                  border: "1px solid #22c55e",
+                  background: "#11395C", // green gradient5C
+                  border: "1px solid #11395C",
                   color: "#fff",
-                  boxShadow: "0 4px 12px rgba(34,197,94,0.4)",
+                  boxShadow: "0 4px 12px rgba(34, 37, 197, 0.4)",
                 }}
+                disabled={!otpVerified}
               >
                 Confirm
               </Button>
@@ -637,9 +761,8 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
 
           <Button
             fullWidth
-            style={{
-              backgroundColor: "#11395C",
-            }}
+            style={{ backgroundColor: "#11395C" }}
+            disabled={!redeemUnits || Number(redeemUnits) <= 0}
             onClick={() => SetConfirmation(true)}
           >
             Redeem Funds

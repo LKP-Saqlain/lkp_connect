@@ -117,6 +117,7 @@ export const newDomainEndpoints = [
   endpoints.Last7dayBrokerage, //
   endpoints.DPDebitRecovery, //
   endpoints.DealerPerformance,
+  endpoints.CommonProcessOTP,
   //
   endpoints.ScripSearch, //Pending
   endpoints.SLBMHoldingsReport,

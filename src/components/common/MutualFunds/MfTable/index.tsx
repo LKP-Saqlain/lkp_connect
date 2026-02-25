@@ -152,7 +152,6 @@ const MutualFundTable = ({
       ? getRecommendationListColumns(selectedReturnPeriod) // ✅ CALL function here
       : getColumns();
 
-  console.log(columns, selectedLabel);
   // const columns = MutualFundList;
 
   const getReturnValue = (fund: any) => {
