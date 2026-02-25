@@ -1288,4 +1288,7 @@ export const apiServices = {
       payload
     );
   },
+  UnlistedSharesMailView: async (payload: any) => {
+    return await apiService("POST", endpoints.UnlistedSharesMailView, payload);
+  },
 };

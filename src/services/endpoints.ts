@@ -300,6 +300,7 @@ export const endpoints = {
   InsertUnlistedScripMaster: "/api/Account/InsertUnlistedScripMaster",
   DeleteUnlistedScripMaster: "/api/Account/DeleteUnlistedScripMaster",
   UpdateUnlistedScripMaster: "/api/Account/UpdateUnlistedScripMaster",
+  UnlistedSharesMailView: "/api/Account/UnlistedSharesMailView",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

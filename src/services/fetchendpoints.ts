@@ -384,6 +384,7 @@ export const newDomainEndpoints = [
   endpoints.InsertUnlistedScripMaster,
   endpoints.DeleteUnlistedScripMaster,
   endpoints.UpdateUnlistedScripMaster,
+  endpoints.UnlistedSharesMailView,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
