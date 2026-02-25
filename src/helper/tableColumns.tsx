@@ -8727,17 +8727,17 @@ export const MfPortfolio: GridColDef[] = [
     field: "reedosName",
     headerName: "Fund Name",
     disableColumnMenu: true,
-    flex: 3, // larger space since names are long
-    minWidth: 200,
+    flex: 2.8, // larger space since names are long
+    minWidth: 180,
   },
   {
     field: "physicalQuantity",
     headerName: "Mode",
     disableColumnMenu: true,
-    flex: 1,
-    minWidth: 120,
-    align: "right",
-    headerAlign: "right",
+    flex: 0.5,
+    minWidth: 100,
+    align: "center",
+    headerAlign: "center",
     valueFormatter: (params: any) => {
       if (params > 0) return "Physical";
       else return "Demat";
@@ -8751,7 +8751,8 @@ export const MfPortfolio: GridColDef[] = [
     flex: 1,
     minWidth: 120,
     align: "right",
-    headerAlign: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "investedAmount",
@@ -8760,7 +8761,8 @@ export const MfPortfolio: GridColDef[] = [
     flex: 1,
     minWidth: 120,
     align: "right",
-    headerAlign: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     renderCell: (params: any) => {
       const value = params.value;
       return value?.toLocaleString("en-IN");
@@ -8774,7 +8776,8 @@ export const MfPortfolio: GridColDef[] = [
     flex: 1, // larger space since names are long
     minWidth: 120,
     align: "right",
-    headerAlign: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
     renderCell: (params: any) => {
       const value = params.value;
       return value?.toLocaleString("en-IN");
@@ -8784,17 +8787,18 @@ export const MfPortfolio: GridColDef[] = [
     field: "xirr",
     headerName: "XIRR Returns",
     disableColumnMenu: true,
-    flex: 1,
+    flex: 0.8,
     minWidth: 60,
+    headerClassName: "header-wrap-custom",
     align: "right",
-    headerAlign: "right",
+    headerAlign: "center",
   },
   {
     field: "action",
     headerName: "Action",
     disableColumnMenu: true,
-    flex: 2,
-    minWidth: 150,
+    flex: 1.7,
+    minWidth: 120,
     align: "center",
     headerAlign: "center",
   },
@@ -9081,13 +9085,86 @@ export const getRecommendationListColumns = (
   },
 ];
 
+// export const MutualFundOrderColumns: GridColDef[] = [
+//   {
+//     field: "schemeName",
+//     headerName: "Fund Name",
+//     disableColumnMenu: true,
+//     // flex: 2,
+//     minWidth: 350,
+//     headerAlign: "center",
+//     renderCell: (params) => (
+//       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+//         <img
+//           src={params.row.logo}
+//           alt={params.row.logo}
+//           style={{ width: "32px", height: "32px", objectFit: "contain" }}
+//         />
+//         <div style={{ fontWeight: 500 }}>{params.row.schemeName}</div>
+//       </div>
+//     ),
+//   },
+//   {
+//     field: "transType",
+//     headerName: "Transaction Type",
+//     disableColumnMenu: true,
+//     // flex: 1,
+//     minWidth: 120,
+//     align: "center",
+//     headerClassName: "header-wrap-custom",
+//     headerAlign: "center",
+//     renderCell: (params) => {
+//       if (params.value?.toLowerCase() === "xsip") {
+//         return "Sip";
+//       }
+//       return capitalizeEachWord(params.value);
+//     },
+//   },
+//   {
+//     field: "orderedDate",
+//     headerName: "Order Date",
+//     disableColumnMenu: true,
+//     // flex: 0.7,
+//     minWidth: 120,
+//     align: "center",
+//     headerAlign: "center",
+//     renderCell: (params) => {
+//       const rawDate = params.value;
+//       if (!rawDate) return "";
+
+//       return dayjs(rawDate).format("DD-MM-YYYY");
+//     },
+//   },
+
+//   {
+//     field: "amount",
+//     headerName: "Amount",
+//     disableColumnMenu: true,
+//     // flex: 0.7,
+//     minWidth: 120,
+
+//     headerAlign: "center",
+//     align: "center",
+//   },
+//   {
+//     field: "remarks",
+//     headerName: "Remarks",
+//     disableColumnMenu: true,
+//     // flex: 2,
+//     minWidth: 800,
+//     headerAlign: "left",
+//     align: "left",
+//     renderCell: (params) => capitalizeEachWord(params.value),
+//   },
+// ];
+
 export const MutualFundOrderColumns: GridColDef[] = [
   {
     field: "schemeName",
     headerName: "Fund Name",
     disableColumnMenu: true,
-    // flex: 2,
     minWidth: 350,
+    headerAlign: "center",
     renderCell: (params) => (
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
         <img
@@ -9095,7 +9172,17 @@ export const MutualFundOrderColumns: GridColDef[] = [
           alt={params.row.logo}
           style={{ width: "32px", height: "32px", objectFit: "contain" }}
         />
-        <div style={{ fontWeight: 500 }}>{params.row.schemeName}</div>
+        <div
+          style={{
+            fontWeight: 500,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+          title={params.row.schemeName} // tooltip on hover
+        >
+          {params.row.schemeName}
+        </div>
       </div>
     ),
   },
@@ -9103,79 +9190,101 @@ export const MutualFundOrderColumns: GridColDef[] = [
     field: "transType",
     headerName: "Transaction Type",
     disableColumnMenu: true,
-    // flex: 1,
     minWidth: 120,
     align: "center",
     headerClassName: "header-wrap-custom",
     headerAlign: "center",
     renderCell: (params) => {
-      if (params.value?.toLowerCase() === "xsip") {
-        return "Sip";
-      }
-      return capitalizeEachWord(params.value);
+      const text =
+        params.value?.toLowerCase() === "xsip"
+          ? "Sip"
+          : capitalizeEachWord(params.value);
+      return (
+        <div
+          style={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+          title={text} // tooltip
+        >
+          {text}
+        </div>
+      );
     },
   },
-  // {
-  //   field: "successFlag",
-  //   headerName: "Status",
-  //   disableColumnMenu: true,
-  //   flex: 0.7,
-  //   minWidth: 60,
-  //   align: "center",
-  //   headerAlign: "center",
-  //   renderCell: (params) => capitalizeEachWord(params.value),
-  // },
   {
     field: "orderedDate",
     headerName: "Order Date",
     disableColumnMenu: true,
-    // flex: 0.7,
     minWidth: 120,
     align: "center",
     headerAlign: "center",
     renderCell: (params) => {
-      const rawDate = params.value;
-      if (!rawDate) return "";
-
-      return dayjs(rawDate).format("DD-MM-YYYY");
+      const formattedDate = params.value
+        ? dayjs(params.value).format("DD-MMM-YYYY")
+        : "";
+      return (
+        <div
+          style={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+          title={formattedDate} // tooltip
+        >
+          {formattedDate}
+        </div>
+      );
     },
   },
-  // {
-  //   field: "clientCode",
-  //   headerName: "Folio Number",
-  //   disableColumnMenu: true,
-  //   flex: 1,
-  //   minWidth: 150,
-  // },
   {
     field: "amount",
     headerName: "Amount",
     disableColumnMenu: true,
-    // flex: 0.7,
     minWidth: 120,
-
     headerAlign: "center",
-    align: "center",
+    align: "right",
+    renderCell: (params) => {
+      const text = params.value ?? "";
+      return (
+        <div
+          style={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+          title={text} // tooltip
+        >
+          {text}
+        </div>
+      );
+    },
   },
   {
     field: "remarks",
     headerName: "Remarks",
     disableColumnMenu: true,
-    // flex: 2,
-    minWidth: 1000,
-    headerAlign: "center",
+    minWidth: 600,
+    flex: 4,
+    headerAlign: "left",
     align: "left",
-    renderCell: (params) => capitalizeEachWord(params.value),
+    renderCell: (params) => {
+      const text = capitalizeEachWord(params.value);
+      return (
+        <div
+          style={{
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+          title={text} // tooltip
+        >
+          {text}
+        </div>
+      );
+    },
   },
-  // {
-  //   field: "memberCode",
-  //   headerName: "Member Code",
-  //   disableColumnMenu: true,
-  //   flex: 1,
-  //   minWidth: 150,
-  //   headerAlign: "center",
-  //   align: "center",
-  // },
 ];
 
 export const dpDebitMandateColumns: GridColDef[] = [

@@ -226,7 +226,8 @@ const MutualFundTable = ({
           sx={{
             "& .MuiDataGrid-columnHeader": {
               fontSize: "13px",
-              backgroundColor: "#e5e9ff",
+              backgroundColor: "#11395C",
+              color: "white",
             },
             "& .MuiDataGrid-cell": {
               fontSize: "12px",

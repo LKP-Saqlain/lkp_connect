@@ -176,23 +176,54 @@ const MfOverview = ({
               <div
                 style={{
                   display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
+                  flexDirection: "column", // stack name and asset info
                   maxWidth: "70%",
                 }}
               >
-                <img
-                  src={data?.amcIcon}
-                  alt={"AMC Logo"}
+                <div
                   style={{
-                    width: "40px",
-                    height: "40px",
-                    objectFit: "contain",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
                   }}
-                />
-                <h4 style={{ margin: 0, fontWeight: 600, color: "#333" }}>
-                  {data?.schemeName || ""}
-                </h4>
+                >
+                  <img
+                    src={data?.amcIcon}
+                    alt="AMC Logo"
+                    style={{
+                      height: "2.6em",
+                      width: "2.6em",
+                      objectFit: "contain",
+                    }}
+                  />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <h4
+                      style={{
+                        margin: 0,
+                        fontWeight: 600,
+                        color: "#333",
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {data?.schemeName || ""}
+                    </h4>
+                    <span
+                      style={{
+                        fontSize: "12px",
+                        color: "#888",
+                        lineHeight: 1.2,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                      }}
+                      title={`${data?.assetClass || ""} | ${
+                        data?.schemeCategory || ""
+                      }`}
+                    >
+                      {data?.assetClass || ""} | {data?.schemeCategory || ""}
+                    </span>
+                  </div>
+                </div>
               </div>
 
               <div style={{ display: "flex", gap: "12px" }}>

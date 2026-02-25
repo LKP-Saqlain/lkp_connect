@@ -174,6 +174,7 @@ export const endpoints = {
   GetEmpContestReport: "/api/MIS/GetEmpContestReport",
   MF_SchemeDetails: "api/MF/MF_SchemeDetails",
   MFLogin: "api/Login/Login/MFLogin",
+  GetClientsCodeAndName: "api/Client/GetClientsCodeAndName",
   BSEStar_MfMandateStatus: "api/MF/BSEStar_MfMandateStatus",
   MF_OngoingSIP: "api/Dashboard/MF_OngoingSIP",
   MF_PortfolioStatementReport: "api/Dashboard/MF_PortfolioStatementReport",
