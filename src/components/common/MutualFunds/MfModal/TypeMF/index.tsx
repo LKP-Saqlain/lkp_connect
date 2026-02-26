@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Modal,
   ModalHeader,
@@ -10,7 +10,7 @@ import {
   Input,
   Button,
 } from "reactstrap";
-import { AppDispatch } from "../../../../../redux/store";
+import { AppDispatch, RootState } from "../../../../../redux/store";
 import {
   hideLoader,
   showLoader,
@@ -45,7 +45,9 @@ const TypeMFModal: React.FC<Props> = ({
   const [elogOtp, setElogOtp] = useState<boolean | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
-
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
   // Reset when modal opens + sync with selectedType from parent
   useEffect(() => {
     if (isOpen) {
@@ -59,13 +61,13 @@ const TypeMFModal: React.FC<Props> = ({
     try {
       dispatch(showLoader("Verifying Client Code..."));
 
-      const response = await fetch(
-        `https://middlewareapi.lkp.net.in/api/Client/GetClientsCodeAndName?SearchKey=${ClientCode}`,
-        { method: "POST", headers: { "Content-Type": "application/json" } }
-      );
+      const payload = {
+        searchKey: ClientCode,
+        loginId: user_id,
+      };
 
-      const data = await response.json();
-      dispatch(hideLoader());
+      const response = await apiServices.GetClientsCodeAndName(payload);
+      const data = response?.data;
 
       if (!data?.isSuccess || !data?.data?.length) {
         ShowToast("error", "Unable to verify client type");
@@ -73,8 +75,7 @@ const TypeMFModal: React.FC<Props> = ({
         return;
       }
 
-      const clientType = data.data[0].physicaldemat; // "PHYSICAL" / "DEMAT"
-      const elogstatus = data.data[0].elogstatus; // "ELOG" / "NOELOG"
+      const { physicaldemat: clientType, elogstatus } = data.data[0];
 
       // CASE 1: PHYSICAL + ELOG → allowed
       if (clientType === "PHYSICAL" && elogstatus === "ELOG") {
@@ -82,21 +83,26 @@ const TypeMFModal: React.FC<Props> = ({
         return;
       }
 
-      // CASE 2: PHYSICAL + NOELOG → trigger eLog API
+      // CASE 2: PHYSICAL + NOELOG → trigger eLog OTP
       if (clientType === "PHYSICAL" && elogstatus === "NOELOG") {
         setPhysicalAllowed(false);
         setElogOtp(true);
+        return;
       }
 
-      // CASE 3: DEMAT + NOELOG → NEVER allow Physical
+      // CASE 3: DEMAT (regardless of elogstatus) → NEVER allow Physical
       if (clientType === "DEMAT") {
         setPhysicalAllowed(false);
         return;
       }
+
+      // Fallback safety
+      setPhysicalAllowed(false);
     } catch (error) {
       console.error(error);
-      dispatch(hideLoader());
       setPhysicalAllowed(false);
+    } finally {
+      dispatch(hideLoader()); // always hide loader
     }
   };
 
