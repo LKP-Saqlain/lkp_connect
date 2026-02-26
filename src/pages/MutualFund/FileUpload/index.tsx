@@ -78,11 +78,10 @@ const FileUpload: React.FC = () => {
       .PhysicalClientFileUpload(formData)
       .then((response) => {
         if (response?.data?.statusCode === 200) {
-          //     console.log(payload, "slbm payload");
-          ShowToast("success", response?.data?.message);
+          ShowToast("success", response?.data?.data);
           resetForm();
         } else {
-          ShowToast("error", response?.data?.message);
+          ShowToast("error", response?.data?.data);
         }
       })
       .catch((error) => {

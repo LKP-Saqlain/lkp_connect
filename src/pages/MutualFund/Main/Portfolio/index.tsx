@@ -31,6 +31,8 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
   const [confirmationMessage, SetConfirmationMessage] = useState(false);
   const [otp, setOtp] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
+  const [timer, setTimer] = useState(30);
+  const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [message, SetMessage] = useState("");
   const [selectedRow, setSelectedRow] = useState<PortfolioRecord | null>(null);
   // const [banks, setBanks] = useState<BankDetail[]>([]);
@@ -44,6 +46,27 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
     selectedRow?.balanceQuantity || ""
   );
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (!confirmation) return;
+    handleSend();
+  }, [confirmation]);
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (isResendDisabled && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    if (timer === 0) {
+      setIsResendDisabled(false);
+    }
+
+    return () => clearInterval(interval);
+  }, [timer, isResendDisabled]);
 
   useEffect(() => {
     const fetchPortfolioData = async () => {
@@ -179,38 +202,39 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
       dispatch(hideLoader());
     }
   };
-  useEffect(() => {
-    if (!confirmation) return;
 
-    const handleResend = async () => {
-      setOtp(""); // reset OTP input
-      setOtpVerified(false);
+  const handleSend = async () => {
+    setOtp("");
+    setOtpVerified(false);
 
-      const payload = {
-        mobileNo: mobile,
-        otp: "",
-        action: "Send",
-        emailId: email,
-        sourceType: "MF",
-      };
-
-      dispatch(showLoader("Resending OTP..."));
-
-      try {
-        const response = await apiServices.CommonProcessOTP(payload);
-        console.log(" Resend OTP Response:", response);
-
-        if (response?.data?.isSuccess) {
-          ShowToast("success", "OTP resent successfully");
-        }
-      } catch (error) {
-        console.error(" Error resending OTP:", error);
-      } finally {
-        dispatch(hideLoader());
-      }
+    const payload = {
+      mobileNo: mobile,
+      otp: "",
+      action: "Send",
+      emailId: email,
+      sourceType: "MF",
     };
-    handleResend();
-  }, [confirmation]);
+
+    dispatch(showLoader("Resending OTP..."));
+
+    try {
+      const response = await apiServices.CommonProcessOTP(payload);
+      if (response?.data?.isSuccess) {
+        ShowToast("success", "OTP Sent Successfully");
+      }
+    } catch (error) {
+      console.error(" Error resending OTP:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const handleResendOtp = () => {
+    console.log("Resending OTP...");
+    handleSend();
+    setTimer(30);
+    setIsResendDisabled(true);
+  };
 
   const handleOtpVerify = async () => {
     const payload = {
@@ -229,6 +253,9 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
 
       const isVerified = response?.data?.data?.isVerified === 1;
       setOtpVerified(isVerified);
+      if (!isVerified) {
+        ShowToast("error", response?.data?.data?.message);
+      }
     } catch (error) {
       console.error(" Error verifying OTP:", error);
     } finally {
@@ -507,56 +534,87 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
                   display: "flex",
                   alignItems: "center",
                   gap: 2,
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
                 }}
               >
-                <TextField
-                  label="Enter OTP"
-                  variant="outlined"
-                  size="small"
-                  value={otp}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/\D/g, ""); // allow only numbers
-                    setOtp(value);
-                    setOtpVerified(false); // reset if user edits OTP
-                  }}
-                  inputProps={{
-                    maxLength: 6,
-                    inputMode: "numeric",
-                  }}
-                  sx={{
-                    width: "250px",
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: "5px",
-                    },
-                  }}
-                />
-
-                <Button
-                  variant="contained"
-                  disabled={otp.length !== 6}
-                  color="success"
+                <div
                   style={{
-                    borderRadius: "10px",
-                    textTransform: "none",
-                    fontWeight: 600,
-                    background: otpVerified ? "#166934" : "#22c55e", // green gradient
-                    border: "1px solid #22c55e",
-                    color: "#fff",
-                    boxShadow: "0 4px 12px #166934",
-                  }}
-                  onClick={() => {
-                    console.log("Entered OTP:", otp);
-                    handleOtpVerify();
-                    // Later replace with API validation
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 18,
+                    flexWrap: "wrap",
                   }}
                 >
-                  {otpVerified ? "Verfied" : "Verify"}
-                </Button>
+                  <TextField
+                    label="Enter OTP"
+                    variant="outlined"
+                    size="small"
+                    value={otp}
+                    disabled={otpVerified}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, ""); // allow only numbers
+                      setOtp(value);
+                      setOtpVerified(false); // reset if user edits OTP
+                    }}
+                    inputProps={{
+                      maxLength: 6,
+                      inputMode: "numeric",
+                    }}
+                    sx={{
+                      width: "150px",
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "5px",
+                      },
+                    }}
+                  />
+
+                  <Button
+                    variant="contained"
+                    disabled={otp.length !== 6 || otpVerified}
+                    color="success"
+                    style={{
+                      borderRadius: "10px",
+                      textTransform: "none",
+                      fontWeight: 600,
+                      background: otpVerified ? "#166934" : "#22c55e", // green gradient
+                      border: `1px solid ${
+                        otpVerified ? "#166934" : "#22c55e"
+                      }`,
+                      color: "#fff",
+                      boxShadow: "0 4px 12px #166934",
+                    }}
+                    onClick={() => {
+                      handleOtpVerify();
+                    }}
+                  >
+                    {otpVerified ? "Verified" : "Verify"}
+                  </Button>
+                </div>
+                {/* Resend Section */}
+                {!otpVerified && (
+                  <Button
+                    variant="contained"
+                    disabled={isResendDisabled}
+                    onClick={handleResendOtp}
+                    style={{
+                      borderRadius: "10px",
+                      textTransform: "none",
+                      fontWeight: 600,
+                      background: "#f44336",
+                      border: "1px solid #f44336",
+                      color: "#fff",
+                      boxShadow: "0 4px 12pxrgb(43, 126, 74)",
+                    }}
+                  >
+                    {isResendDisabled ? `Resend in ${timer}s` : "Resend OTP"}
+                  </Button>
+                )}
               </Box>
             </Box>
 
             {/* Action Buttons */}
-            <Stack direction="row" spacing={2} justifyContent="center">
+            <Stack direction="row" spacing={2} justifyContent="space-evenly">
               <Button
                 onClick={handleModalToggle}
                 style={{

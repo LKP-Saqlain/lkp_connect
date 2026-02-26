@@ -860,7 +860,7 @@ const SideBar = () => {
   const mutualFundSubItems: Record<string, JSX.Element> = {
     Investment: <MutualFundIndex handleTradingOpen={handleTradingOpen} />,
     "Client Onboarding": <NewClientPhysical />,
-    FileUpload: <FileUpload />,
+    "File Upload": <FileUpload />,
   };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>

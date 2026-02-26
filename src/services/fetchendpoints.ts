@@ -68,6 +68,7 @@ export const multipartEndpoints = [
   endpoints.REGBSEFileUpload,
   endpoints.UploadHdfcMerchantFile,
   endpoints.MTFShorfallUpload,
+  endpoints.PhysicalClientFileUpload,
 ];
 
 export const mutualFundEndpoints = [
