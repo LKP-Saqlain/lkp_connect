@@ -126,6 +126,7 @@ import EmployeeSPIP from "../../pages/Contest/SPIP/Employee";
 import B2BSPIP from "../../pages/Contest/SPIP/B2B";
 import MTFShortfallUpload from "../../pages/RMS/MTFShortfallUpload";
 import ScriptMaster from "../../pages/Masters/scriptMaster";
+import ContractNote from "../../pages/UnlistedShare/contractNote";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -810,6 +811,7 @@ const SideBar = () => {
     ),
 
     "Unlisted Shares File Upload": <VendorsFile />,
+    "Unlisted Contract Note": <ContractNote activeSubItem={activeSubItem} />,
   };
   const AccountSubItems: Record<string, JSX.Element> = {
     "Third Party Vendor Master": (

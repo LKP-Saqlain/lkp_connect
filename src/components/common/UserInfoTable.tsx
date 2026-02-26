@@ -22,6 +22,7 @@ import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import InfoIcon from "@mui/icons-material/Info";
 // import { useNavigate } from "react-router-dom";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 interface Trade {
   id: string;
@@ -37,7 +38,7 @@ interface Trade {
 interface SelectedWidgetProps {
   selectedWidget?: string;
   T6Data?: any;
-  getUserDetails?: (value: any) => void;
+  getUserDetails?: (value: any, dis?: any) => void;
   handleExcel?: (value: any) => void;
   apiStatus?: boolean;
   activeGroupedClients?: any;
@@ -93,6 +94,9 @@ interface SelectedWidgetProps {
   openNudgeTable?: () => void;
   selectedTab?: any;
   handleDownloadExcel?: () => void;
+  isCustomBtn?: any;
+  handleContractMailClick?: () => void;
+  tabValue?: any;
 }
 
 const DataTable = ({
@@ -148,6 +152,9 @@ const DataTable = ({
   openNudgeTable,
   selectedTab,
   handleDownloadExcel,
+  isCustomBtn,
+  handleContractMailClick,
+  tabValue,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -2653,6 +2660,44 @@ const DataTable = ({
         // Return other columns unchanged
         return column;
       });
+    } else if (activeSubItem === "Unlisted Contract Note") {
+      const baseColumns = [...TableColumns.unlistedContractColumns];
+
+      if (tabValue === 1) {
+        const rmIndex = baseColumns.findIndex((col) => col.field === "rmc");
+
+        if (rmIndex !== -1) {
+          baseColumns.splice(rmIndex + 1, 0, {
+            field: "disno",
+            headerName: "DIS No",
+            width: 120,
+            headerAlign: "center",
+            align: "center",
+            disableColumnMenu: true,
+            renderCell: (params: any) => {
+              const { value, row } = params;
+
+              if (value) return value;
+
+              return (
+                <Tooltip title="Add DIS Number" arrow placement="top">
+                  <IconButton
+                    sx={{ p: 0, mb: 0.5 }}
+                    onClick={() => {
+                      setSelectedRow(row);
+                      tog_center();
+                    }}
+                  >
+                    <AddCircleOutlineIcon style={{ cursor: "pointer" }} />
+                  </IconButton>
+                </Tooltip>
+              );
+            },
+          });
+        }
+      }
+
+      return baseColumns;
     } else {
       return [];
     }
@@ -2754,6 +2799,8 @@ const DataTable = ({
     Msg = "";
   } else if (actionItems.includes(activeSubItem)) {
     Msg = `Are you sure want to ${action} this entry`;
+  } else if (activeSubItem === "Unlisted Contract Note") {
+    Msg = "Enter DIS Number";
   } else {
     Msg = "Are you sure you want to send the email?";
   }
@@ -2942,6 +2989,27 @@ const DataTable = ({
               },
             }),
           }}
+          slots={
+            isCustomBtn
+              ? {
+                  footer: () => (
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        width: "15%",
+                        m: 2,
+                        color: "#11395C",
+                        textTransform: "none",
+                        borderColor: "#11395C",
+                      }}
+                      onClick={handleContractMailClick}
+                    >
+                      Send Email
+                    </Button>
+                  ),
+                }
+              : undefined
+          }
           slotProps={{
             pagination: {
               sx: {

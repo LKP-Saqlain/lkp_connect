@@ -50,7 +50,7 @@ interface CustomModalProps {
   tog_center: () => void;
   modal_center: boolean;
   setmodal_center: React.Dispatch<React.SetStateAction<boolean>>;
-  getUserDetails?: (value: any) => void;
+  getUserDetails?: (value: any, dis?: any) => void;
   row?: any;
   handleApproval?: (
     value: any,
@@ -191,6 +191,7 @@ const CustomModal = ({
       tdsFlag: "Yes",
       uploadProof: null,
       prefix: "EMP",
+      disNo: "",
 
       // mandateCall fields
       umn: row?.umn || "",
@@ -263,8 +264,22 @@ const CustomModal = ({
 
         mandateUpi: Yup.string().trim().required("UPI ID is required"),
       }),
+      ...(activeSubItem === "Unlisted Contract Note" && {
+        disNo: Yup.string()
+          .trim()
+          .matches(/^[a-zA-Z0-9]*$/, "Only alphanumeric characters allowed")
+          .required("DIS No is required"),
+      }),
     }),
     onSubmit: (values) => {
+      if (activeSubItem === "Unlisted Contract Note") {
+        console.log("Row", row);
+        getUserDetails?.(row, values?.disNo);
+        setmodal_center(false);
+        formik.resetForm();
+        return;
+      }
+
       if (activeSubItem === "mandateCall") {
         console.log({
           umn: values.umn,
@@ -297,7 +312,6 @@ const CustomModal = ({
       }
 
       if (action && row) {
-        debugger;
         const entryFlag = action === "approve" ? "A" : "R";
         const standardItems = [
           "Communication Retrival Checker",
@@ -1178,6 +1192,35 @@ const CustomModal = ({
     setIsDragging(false);
   };
 
+  const renderContractDisFields = () => {
+    return (
+      <TextField
+        label="Enter DIS No"
+        variant="outlined"
+        fullWidth
+        size="small"
+        name="disNo"
+        value={formik.values.disNo}
+        onChange={(e) => {
+          const value = e.target.value;
+
+          // Allow only alphanumeric while typing
+          if (/^[a-zA-Z0-9]*$/.test(value)) {
+            formik.setFieldValue("disNo", value.toUpperCase());
+          }
+        }}
+        onBlur={formik.handleBlur}
+        error={formik.touched.disNo && Boolean(formik.errors.disNo)}
+        helperText={
+          formik.touched.disNo && typeof formik.errors.disNo === "string"
+            ? formik.errors.disNo
+            : ""
+        }
+        sx={{ mt: 2 }}
+      />
+    );
+  };
+
   const renderImagePreview = () => {
     const extension = fileExtension?.toLowerCase(); // optional chaining
     const isImage = [".png", ".jpg", ".jpeg"].includes(extension);
@@ -1484,7 +1527,8 @@ const CustomModal = ({
                 action === "approve" &&
                 renderVendorFields()}
               {isAdmin && renderAdminFields()}
-
+              {activeSubItem === "Unlisted Contract Note" &&
+                renderContractDisFields()}
               {!isAdmin &&
                 !isUploadMode &&
                 !isDropUpload &&

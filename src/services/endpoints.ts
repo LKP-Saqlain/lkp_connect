@@ -301,6 +301,9 @@ export const endpoints = {
   DeleteUnlistedScripMaster: "/api/Account/DeleteUnlistedScripMaster",
   UpdateUnlistedScripMaster: "/api/Account/UpdateUnlistedScripMaster",
   UnlistedSharesMailView: "/api/Account/UnlistedSharesMailView",
+  UnlistedConsentFormMail: "/api/Account/UnlistedConsentFormMail",
+  UnlistedContractNoteMail: "/api/Account/UnlistedContractNoteMail",
+  SetUnlistedSharesDISNumber: "/api/Account/SetUnlistedSharesDISNumber",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);
