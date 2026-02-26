@@ -2830,6 +2830,7 @@ const ModalComponent = ({
                           <MenuItem value="NEFT">NEFT</MenuItem>
                           <MenuItem value="CHEQUE">CHEQUE</MenuItem>
                           <MenuItem value="RTGS">RTGS</MenuItem>
+                          <MenuItem value="UPI">UPI</MenuItem>
                         </TextField>
                       </Col>
                       <Col lg={6}>

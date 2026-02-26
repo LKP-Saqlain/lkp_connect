@@ -1363,4 +1363,24 @@ export const apiServices = {
       payload
     );
   },
+  UnlistedSharesMailView: async (payload: any) => {
+    return await apiService("POST", endpoints.UnlistedSharesMailView, payload);
+  },
+  UnlistedConsentFormMail: async (payload: any) => {
+    return await apiService("POST", endpoints.UnlistedConsentFormMail, payload);
+  },
+  UnlistedContractNoteMail: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UnlistedContractNoteMail,
+      payload
+    );
+  },
+  SetUnlistedSharesDISNumber: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.SetUnlistedSharesDISNumber,
+      payload
+    );
+  },
 };

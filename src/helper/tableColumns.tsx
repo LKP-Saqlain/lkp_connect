@@ -6059,6 +6059,18 @@ export const getApproverOneDetails: GridColDef[] = [
     align: "center",
     disableColumnMenu: true,
     headerAlign: "center",
+    valueFormatter: (value: any) => {
+      console.log("Vallllues", value);
+
+      if (!value) return "—";
+
+      const [datePart] = value.split(" "); // "02/10/2026"
+      console.log("DayPart", datePart);
+
+      const [month, day, year] = datePart.split("/");
+
+      return `${day}-${month}-${year.slice(-2)}`;
+    },
   },
   {
     field: "cn",
@@ -6443,6 +6455,18 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    valueFormatter: (value: any) => {
+      console.log("Vallllues", value);
+
+      if (!value) return "—";
+
+      const [datePart] = value.split(" "); // "02/10/2026"
+      console.log("DayPart", datePart);
+
+      const [month, day, year] = datePart.split("/");
+
+      return `${day}-${month}-${year.slice(-2)}`;
+    },
   },
   {
     field: "cn",
@@ -13404,3 +13428,226 @@ export const scripMasterColumns: GridColDef[] = [
     ),
   },
 ];
+
+export const unlistedContractColumns: GridColDef[] = [
+  {
+    field: "rmc",
+    headerName: "RM Code",
+    width: 90,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "tdt",
+    headerName: "Transaction Date",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (value: any) => {
+      console.log("Vallllues", value);
+
+      if (!value) return "—";
+
+      const [datePart] = value.split(" "); // "02/10/2026"
+      console.log("DayPart", datePart);
+
+      const [month, day, year] = datePart.split("/");
+
+      return `${day}-${month}-${year.slice(-2)}`;
+    },
+  },
+  {
+    field: "cn",
+    headerName: "Client Name",
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "bnknm",
+    headerName: "Bank Name",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: ({ value }) => value || "—",
+  },
+  {
+    field: "accno",
+    headerName: "Bank Acc No",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: ({ value }) => value || "—",
+  },
+  {
+    field: "ifsc",
+    headerName: "IFSC Code",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "dpnm",
+    headerName: "DP Name",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "dpid",
+    headerName: "DP Id",
+    width: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "paym",
+    headerName: "Payment Mode",
+    width: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "nsec",
+    headerName: "Securities Name",
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "nsh",
+    headerName: "No. of Shares",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+  },
+  {
+    field: "crt",
+    headerName: "Client Rate",
+    width: 120,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: ({ value }) => formatCurrency(value),
+  },
+  {
+    field: "vrt",
+    headerName: "Vendor Rate",
+    width: 120,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: ({ value }) => formatCurrency(value),
+  },
+  {
+    field: "lcps",
+    headerName: "LKP Commission/Share",
+    width: 150,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: ({ value }) => formatCurrency(value),
+  },
+  {
+    field: "big",
+    headerName: "Brokerage (Incl. GST)",
+    width: 160,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: ({ value }) => formatCurrency(value),
+  },
+  {
+    field: "gst",
+    headerName: "GST",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: ({ value }) => formatCurrency(value),
+  },
+  {
+    field: "beg",
+    headerName: "Brokerage (Excl. GST)",
+    width: 170,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: ({ value }) => formatCurrency(value),
+  },
+  {
+    field: "sbr",
+    headerName: "SubBroker Rate",
+    width: 130,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: ({ value }) => formatCurrency(value),
+  },
+  {
+    field: "sbc",
+    headerName: "SubBroker Code",
+    width: 140,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "sbcm",
+    headerName: "SubBroker Commission",
+    width: 170,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: ({ value }) => formatCurrency(value),
+  },
+  {
+    field: "nbg",
+    headerName: "Net Brokerage",
+    width: 140,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: ({ value }) => formatCurrency(value),
+  },
+  // {
+  //   field: "rmk",
+  //   headerName: "Remark",
+  //   minWidth: 180,
+  //   flex: 1,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  //   renderCell: ({ value }) => value || "—",
+  // },
+  // {
+  //   field: "sts",
+  //   headerName: "Status",
+  //   minWidth: 150,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  //   renderCell: ({ value }) => value || "—",
+  // },
+];
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value ?? 0);
