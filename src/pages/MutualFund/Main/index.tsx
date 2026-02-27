@@ -298,6 +298,20 @@ const MutualFundIndex = ({ handleTradingOpen }: any) => {
               getOptionLabel={(option: any) =>
                 `${option.clientCode} - ${option.clientName}`
               }
+              // onInputChange={(
+              //   _event,
+              //   //  newInputValue,
+              //   reason
+              // ) => {
+              //   if (reason === "clear") {
+              //     setClientCode("");
+              //     setClientName("");
+              //     setSuggestions([]);
+              //     return;
+              //   }
+
+              //   // setClientCode(newInputValue);
+              // }}
               onChange={(_event, value) => {
                 // Case 1: User pressed ENTER on typed text
                 if (typeof value === "string") {

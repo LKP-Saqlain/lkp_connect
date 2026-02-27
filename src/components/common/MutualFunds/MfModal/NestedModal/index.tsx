@@ -618,65 +618,76 @@ const NestedModal = ({
                   paddingRight: "4px",
                 }}
               >
-                {mandateDetails.map((mandate) => (
-                  <div
-                    key={mandate.mandateId}
-                    onClick={() => {
-                      setSelectedMandateId(mandate.mandateId);
-                      setStopEnach(true);
-                      console.log("setStopEnach", stopEnach);
-                    }}
-                    style={{
-                      border:
-                        selectedMandateId === mandate.mandateId
-                          ? "2px solid #004AAD"
-                          : "1px solid #ddd",
-                      borderRadius: "6px",
-                      padding: "10px 14px",
-                      cursor: "pointer",
-                      backgroundColor:
-                        selectedMandateId === mandate.mandateId
+                {mandateDetails.map((mandate) => {
+                  const isDisabled =
+                    parseFloat(mandate.amount) <= Number(amount);
+
+                  return (
+                    <div
+                      key={mandate.mandateId}
+                      onClick={() => {
+                        if (isDisabled) return; // Prevent selection
+                        setSelectedMandateId(mandate.mandateId);
+                        setStopEnach(true);
+                      }}
+                      style={{
+                        border:
+                          selectedMandateId === mandate.mandateId
+                            ? "2px solid #004AAD"
+                            : "1px solid #ddd",
+                        borderRadius: "6px",
+                        padding: "10px 14px",
+                        cursor: isDisabled ? "not-allowed" : "pointer",
+                        backgroundColor: isDisabled
+                          ? "#f5f5f5"
+                          : selectedMandateId === mandate.mandateId
                           ? "#f5faff"
                           : "#fff",
-                      transition: "border 0.2s ease",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      fontSize: "13px",
-                    }}
-                  >
-                    <div>
-                      <div style={{ fontWeight: 600, fontSize: "14px" }}>
-                        {mandate.clientName}
+                        opacity: isDisabled ? 0.6 : 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        fontSize: "13px",
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 600, fontSize: "14px" }}>
+                          {mandate.clientName}
+                        </div>
+                        <div style={{ marginTop: "2px" }}>
+                          Mandate ID: <b>{mandate.mandateId}</b>
+                        </div>
+                        <div style={{ marginTop: "2px" }}>
+                          Amount: ₹{parseFloat(mandate.amount).toLocaleString()}
+                        </div>
+                        <div style={{ marginTop: "2px", color: "#2E7D32" }}>
+                          Status: <b>{mandate.status}</b>
+                        </div>
                       </div>
-                      <div style={{ marginTop: "2px" }}>
-                        Mandate ID: <b>{mandate.mandateId}</b>
-                      </div>
-                      <div style={{ marginTop: "2px" }}>
-                        Amount: ₹{parseFloat(mandate.amount).toLocaleString()}
-                      </div>
-                      <div style={{ marginTop: "2px", color: "#2E7D32" }}>
-                        Status: <b>{mandate.status}</b>
-                      </div>
-                    </div>
 
-                    <div>
-                      <input
-                        type="radio"
-                        name="selectedMandate"
-                        value={mandate.mandateId}
-                        checked={selectedMandateId === mandate.mandateId}
-                        onChange={() => setSelectedMandateId(mandate.mandateId)}
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                          width: "16px",
-                          height: "16px",
-                          accentColor: "#004AAD",
-                        }}
-                      />
+                      <div>
+                        <input
+                          type="radio"
+                          name="selectedMandate"
+                          value={mandate.mandateId}
+                          checked={selectedMandateId === mandate.mandateId}
+                          disabled={isDisabled} //  Disable radio
+                          onChange={() => {
+                            if (!isDisabled) {
+                              setSelectedMandateId(mandate.mandateId);
+                            }
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                            accentColor: "#004AAD",
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </>
           )}
@@ -732,6 +743,7 @@ const NestedModal = ({
         upiId={upiId}
         mandate={handleNewMandateCreated}
         selectedType={selectedType}
+        minAmount={amount}
       />
     </>
   );

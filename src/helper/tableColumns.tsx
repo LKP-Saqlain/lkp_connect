@@ -8703,7 +8703,7 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
 export const MutualFundList: GridColDef[] = [
   {
     field: "fundName",
-    headerName: "Fund Name",
+    headerName: "Scheme Name",
     disableColumnMenu: true,
     flex: 3, // larger space since names are long
     minWidth: 200,
@@ -8740,7 +8740,7 @@ export const MutualFundList: GridColDef[] = [
 export const MutualFundOrder: GridColDef[] = [
   {
     field: "fundName",
-    headerName: "Fund Name",
+    headerName: "Scheme Name",
     disableColumnMenu: true,
     flex: 3, // larger space since names are long
     minWidth: 200,
@@ -8785,7 +8785,7 @@ export const MutualFundOrder: GridColDef[] = [
 export const MutualFundName: GridColDef[] = [
   {
     field: "fundName",
-    headerName: "Fund Name",
+    headerName: "Scheme Name",
     disableColumnMenu: true,
     flex: 3, // larger space since names are long
     minWidth: 200,
@@ -8794,10 +8794,11 @@ export const MutualFundName: GridColDef[] = [
 export const OrderTransaction: GridColDef[] = [
   {
     field: "security",
-    headerName: "Fund Name",
+    headerName: "Scheme Name",
     disableColumnMenu: true,
     flex: 3, // larger space since names are long
     minWidth: 200,
+    headerAlign: "center",
   },
   {
     field: "transactionPrice",
@@ -8805,7 +8806,7 @@ export const OrderTransaction: GridColDef[] = [
     disableColumnMenu: true,
     flex: 2, // larger space since names are long
     minWidth: 200,
-    headerAlign: "right",
+    headerAlign: "center",
     align: "right",
     valueFormatter: (params: any) => {
       const value = parseFloat(params); // Convert the value to a number
@@ -8821,14 +8822,14 @@ export const OrderTransaction: GridColDef[] = [
     disableColumnMenu: true,
     flex: 2, // larger space since names are long
     minWidth: 200,
-    headerAlign: "right",
+    headerAlign: "center",
     align: "right",
   },
 ];
 export const OrderOngoingSip: GridColDef[] = [
   {
     field: "reedosName",
-    headerName: "Fund Name",
+    headerName: "Scheme Name",
     disableColumnMenu: true,
     flex: 3, // larger space since names are long
     minWidth: 200,
@@ -8851,7 +8852,7 @@ export const OrderOngoingSip: GridColDef[] = [
 export const OrderUpcomingSip: GridColDef[] = [
   {
     field: "reedosName",
-    headerName: "Fund Name",
+    headerName: "Scheme Name",
     disableColumnMenu: true,
     flex: 3, // larger space since names are long
     minWidth: 200,
@@ -8874,7 +8875,7 @@ export const OrderUpcomingSip: GridColDef[] = [
 export const MfPortfolio: GridColDef[] = [
   {
     field: "reedosName",
-    headerName: "Fund Name",
+    headerName: "Scheme Name",
     disableColumnMenu: true,
     flex: 2.8, // larger space since names are long
     minWidth: 180,
@@ -8934,7 +8935,7 @@ export const MfPortfolio: GridColDef[] = [
   },
   {
     field: "xirr",
-    headerName: "XIRR Returns",
+    headerName: "XIRR %",
     disableColumnMenu: true,
     flex: 0.8,
     minWidth: 60,
@@ -9090,7 +9091,7 @@ export const MandateColumns: GridColDef[] = [
 export const NFOList: GridColDef[] = [
   {
     field: "schemeName",
-    headerName: "Fund Name",
+    headerName: "Scheme Name",
     disableColumnMenu: true,
     flex: 4,
     minWidth: 250,
@@ -9150,7 +9151,7 @@ export const getRecommendationListColumns = (
 ): GridColDef[] => [
   {
     field: "schemeName",
-    headerName: "Fund Name",
+    headerName: "Scheme Name",
     disableColumnMenu: true,
     flex: 3,
     minWidth: 250,
@@ -9237,7 +9238,7 @@ export const getRecommendationListColumns = (
 // export const MutualFundOrderColumns: GridColDef[] = [
 //   {
 //     field: "schemeName",
-//     headerName: "Fund Name",
+//     headerName: "Scheme Name",
 //     disableColumnMenu: true,
 //     // flex: 2,
 //     minWidth: 350,
@@ -9310,7 +9311,7 @@ export const getRecommendationListColumns = (
 export const MutualFundOrderColumns: GridColDef[] = [
   {
     field: "schemeName",
-    headerName: "Fund Name",
+    headerName: "Scheme Name",
     disableColumnMenu: true,
     minWidth: 350,
     headerAlign: "center",

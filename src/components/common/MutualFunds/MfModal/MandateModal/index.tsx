@@ -30,6 +30,7 @@ const CreateMandateModal = ({
   upiId,
   mandate,
   selectedType,
+  minAmount,
 }: any) => {
   const [amount, setAmount] = useState(
     // selectedPaymentType === "upi" ? 15000 : 100000
@@ -126,19 +127,17 @@ const CreateMandateModal = ({
             type="number"
             id="amountInput"
             value={amount}
-            onChange={(e) => {
-              const val = Number(e.target.value);
-              const maxLimit = selectedPaymentType === "upi" ? 15000 : 100000;
-              if (val <= maxLimit) {
-                setAmount(val);
-              } else {
-                // optionally ignore or set to maxLimit
-                setAmount(maxLimit);
-              }
-            }}
-            placeholder="Enter amount"
+            placeholder={`Enter amount (min ${minAmount})`}
             style={{ marginBottom: "12px", maxWidth: "200px" }}
-            min={5000}
+            min={minAmount}
+            onChange={(e) => {
+              let val = Number(e.target.value);
+              const maxLimit = selectedPaymentType === "upi" ? 15000 : 100000;
+              // Enforce min and max dynamically
+              if (val < minAmount) val = minAmount;
+              if (val > maxLimit) val = maxLimit;
+              setAmount(val);
+            }}
           />
         </FormGroup>
       </ModalBody>
