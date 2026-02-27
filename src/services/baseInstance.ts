@@ -2,6 +2,7 @@ import axios, { InternalAxiosRequestConfig } from "axios";
 import { getDecryptedValue } from "../utils/loocalEncrypt";
 import {
   fundamentalEndpoints,
+  mtfSegmentActivationEndpoint,
   multipartEndpoints,
   mutualFundEndpoints,
   newDomainEndpoints,
@@ -50,6 +51,7 @@ const getRequestContext = (url?: string) => ({
   isMultipart: isEndpointMatched(url, multipartEndpoints),
   isMutualFund: isEndpointMatched(url, mutualFundEndpoints),
   isNewDomain: isEndpointMatched(url, newDomainEndpoints),
+  isMtfSegmentActivation: isEndpointMatched(url, mtfSegmentActivationEndpoint),
 });
 
 const resolveBaseURL = (context: ReturnType<typeof getRequestContext>) => {
@@ -61,11 +63,16 @@ const resolveBaseURL = (context: ReturnType<typeof getRequestContext>) => {
 const resolveAuthHeader = (context: ReturnType<typeof getRequestContext>) => {
   const token = localStorage.getItem("tkn");
   const mfToken = getDecryptedValue("mfToken");
+  const mtfToken = getDecryptedValue("mtfToken");
+
   if (context.isFundamental) {
     return AUTH_HEADERS.FUNDAMENTAL;
   }
   if (context.isMutualFund && mfToken) {
     return `Bearer ${mfToken}`;
+  }
+  if (context.isMtfSegmentActivation && mtfToken) {
+    return `Bearer ${mtfToken}`;
   }
   if (context.isPublic || !token) {
     return AUTH_HEADERS.PUBLIC;

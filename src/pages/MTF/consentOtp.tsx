@@ -5,7 +5,7 @@ import Logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 
 const MTFOtpVerification = () => {
-  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef<any>([]);
   const [timeLeft, setTimeLeft] = useState(60);
   const [resendVisible, setResendVisible] = useState(false);

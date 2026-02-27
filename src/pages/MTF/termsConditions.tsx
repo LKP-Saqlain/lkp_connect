@@ -14,12 +14,23 @@ import {
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const TermsAndConditions = () => {
+const TermsAndConditions = ({
+  handleChechbox,
+  handleOtpPage,
+}: {
+  handleChechbox: (value: boolean) => void;
+  handleOtpPage: () => void;
+}) => {
   const [tncAccepted, setTncAccepted] = useState(false);
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(false);
   const navigate = useNavigate();
 
-  const handleOtpPage = () => {
-    navigate("/otp");
+  // const handleConsentClick = () => {
+  //   handleChechbox(tncAccepted);
+  // };
+  const handleConsentClick = (value: boolean) => {
+    console.log("value1113423423", value);
+    handleChechbox(value);
   };
   return (
     <>
@@ -160,6 +171,15 @@ const TermsAndConditions = () => {
 
         {/* Scrollable Content Box */}
         <Box
+          onScroll={(e) => {
+            const target = e.currentTarget;
+            const isBottom =
+              target.scrollHeight - target.scrollTop <= target.clientHeight + 5;
+
+            if (isBottom) {
+              setIsScrolledToBottom(true);
+            }
+          }}
           sx={{
             border: "1px solid #D9D9D9",
             borderRadius: "12px",
@@ -1299,7 +1319,13 @@ const TermsAndConditions = () => {
             <Checkbox
               name="tncAccepted"
               checked={tncAccepted}
-              onChange={(e) => setTncAccepted(e.target.checked)}
+              onChange={(e) => {
+                const checked: any = e.target.checked;
+                setTncAccepted(checked);
+                handleConsentClick(checked);
+              }}
+              // onClick={handleConsentClick}
+              disabled={!isScrolledToBottom}
               sx={{
                 color: "grey",
                 "&.Mui-checked": { color: "grey" },
@@ -1315,7 +1341,6 @@ const TermsAndConditions = () => {
 
         <Button
           variant="contained"
-          disabled={!tncAccepted}
           sx={{
             color: "#FFF",
             textTransform: "none",
@@ -1325,6 +1350,7 @@ const TermsAndConditions = () => {
             fontWeight: 500,
             backgroundColor: "#11395C",
           }}
+          disabled={!tncAccepted}
           onClick={handleOtpPage}
         >
           Enable MTF

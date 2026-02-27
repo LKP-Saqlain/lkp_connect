@@ -321,6 +321,9 @@ export const endpoints = {
   UnlistedConsentFormMail: "/api/Account/UnlistedConsentFormMail",
   UnlistedContractNoteMail: "/api/Account/UnlistedContractNoteMail",
   SetUnlistedSharesDISNumber: "/api/Account/SetUnlistedSharesDISNumber",
+  BeginMTFActivation: "/api/RMS/BeginMTFActivation",
+  ValidateSencondAuth: "/api/SencondAuth/ValidateSencondAuth",
+  GetMTFClientDetails: "/api/RMS/GetMTFClientDetails",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

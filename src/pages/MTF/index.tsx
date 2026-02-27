@@ -2,9 +2,53 @@ import { Box } from "@mui/material";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import Logo from "../../assets/logo.png";
 import TermsAndConditions from "./termsConditions";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 // import OTPConsent from "./consentOtp";
+import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const MTFActivation = () => {
+  const [tnc, setTnc] = useState(false);
+  const navigate = useNavigate();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleChechbox = (value: any) => {
+    console.log("Value1332222", value);
+    setTnc(value);
+  };
+
+  const handleOtpPage = () => {
+    const payload = {
+      user_id: user_id,
+      clientCode: "MT0600508",
+      hasAcceptedTerms: tnc,
+    };
+    dispatch(showLoader(""));
+
+    apiServices
+      .BeginMTFActivation(payload)
+      .then((response) => {
+        if (response?.status === 201) {
+          console.log("succesApi", response?.data?.data);
+          navigate("/otp");
+        }
+      })
+      .catch((error) => {
+        console.log("Errrror", error);
+        dispatch(hideLoader());
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   return (
     <>
       <div className="page-content page-view">
@@ -56,7 +100,10 @@ const MTFActivation = () => {
                     height: "100%",
                   }}
                 >
-                  <TermsAndConditions />
+                  <TermsAndConditions
+                    handleChechbox={handleChechbox}
+                    handleOtpPage={handleOtpPage}
+                  />
                   {/* <OTPConsent /> */}
                 </CardBody>
               </Card>
