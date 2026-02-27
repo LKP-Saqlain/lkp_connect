@@ -129,6 +129,7 @@ import NewClientPhysical from "../../pages/MutualFund/NewClientPhysical";
 import FileUpload from "../../pages/MutualFund/FileUpload";
 
 import ScriptMaster from "../../pages/Masters/scriptMaster";
+import ContractNote from "../../pages/UnlistedShare/contractNote";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -817,6 +818,7 @@ const SideBar = () => {
     ),
 
     "Unlisted Shares File Upload": <VendorsFile />,
+    "Unlisted Contract Note": <ContractNote activeSubItem={activeSubItem} />,
   };
   const AccountSubItems: Record<string, JSX.Element> = {
     "Third Party Vendor Master": (
