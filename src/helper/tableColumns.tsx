@@ -8226,6 +8226,7 @@ export const getAPContestReportColumns: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
     renderCell: (params) => {
       const value = params.row.cla;
       return value ?? "-";
@@ -8237,6 +8238,7 @@ export const getAPContestReportColumns: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "accountsTraded",
@@ -8244,6 +8246,7 @@ export const getAPContestReportColumns: GridColDef[] = [
     flex: 1,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
     renderCell: (params) => {
       const value = params.row.cla;
       return value ?? "-";
