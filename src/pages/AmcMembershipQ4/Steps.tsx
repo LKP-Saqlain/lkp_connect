@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import ClientInfo from "./ClientInfo";
-import PaymentChoice from "./PaymentChoice";
+import ClientInfo from "../AmcMembershipQ4/ClientInfo";
+import PaymentChoice from "../AmcMembershipQ4/PaymentChoice";
 import Logo from "../../assets/logo.png";
-// import LedgerOtp from "./Ledger/LedgerOtp";
+import LedgerOtp from "../AmcMembershipQ4/Ledger/LedgerOtp";
 import { Card, CardHeader } from "reactstrap";
-import ESign from "./CommonSteps/ESign";
-import TariffForm from "./CommonSteps/TariffForm";
-import Confirmation from "./CommonSteps/Confirmation";
+import ESign from "../AmcMembershipQ4/CommonSteps/ESign";
+import TariffForm from "../AmcMembershipQ4/CommonSteps/TariffForm";
+import Confirmation from "../AmcMembershipQ4/CommonSteps/Confirmation";
 import { useLocation, useNavigate } from "react-router-dom";
-import Bsda from "./CommonSteps/Bdsa";
+import Bsda from "../AmcMembershipQ4/CommonSteps/Bdsa";
 import { decryptAES } from "../../utils/encryptDecrypt";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../redux/store";
@@ -97,8 +97,8 @@ const AmcMembership = () => {
     console.log("current step", step);
   }, [step]);
 
-  // ✅ Fix typo: use bSDA_Flag (not bsdA_Flag)
-  const isBSDA = selectedRow?.bsda === "Y";
+  //  Fix typo: use bSDA_Flag (not bsdA_Flag)
+  const isBSDA = selectedRow?.bsda === "Active";
 
   // const handleGoBack = () => {
   //   sessionStorage.removeItem("selectedRow"); // cleanup
@@ -203,38 +203,49 @@ const AmcMembership = () => {
           />
         )}
 
-        {/* {flow === "ledger" && (
-            <>
-              {step === 3 && (
-                <LedgerOtp onNext={next} clientData={clientData} />
-              )}
-              {step === 4 && (
-                <Confirmation
-                  onNext={next}
-                  // status={1}
-                  flow={flow}
-                  selectedRow={selectedRow}
-                  totalPayable={totalPayable}
-                  onBackToStep2={goToStep2}
-                  complete={false}
-                />
-              )}
-              {step === 5 && (
-                <TariffForm onNext={next} selectedRow={selectedRow} />
-              )}
-              {step === 6 && <ESign selectedRow={selectedRow} onNext={next} />}
-              {step === 7 && (
-                <Confirmation
-                  flow={flow}
-                  selectedRow={selectedRow}
-                  totalPayable={totalPayable}
-                  onNext={() => {}}
-                  onBackToStep2={goToStep2}
-                  complete={true}
-                />
-              )}
-            </>
-          )} */}
+        {flow === "ledger" && (
+          <>
+            {step === (isBSDA ? 4 : 3) && (
+              <LedgerOtp
+                onNext={() => setStep(isBSDA ? 5 : 4)}
+                clientData={clientData}
+              />
+            )}
+            {step === (isBSDA ? 5 : 4) && (
+              <Confirmation
+                onNext={() => setStep(isBSDA ? 6 : 5)}
+                // status={1}
+                flow={flow}
+                selectedRow={selectedRow}
+                totalPayable={totalPayable}
+                onBackToStep2={goToStep2}
+                complete={false}
+              />
+            )}
+            {step === (isBSDA ? 6 : 5) && (
+              <TariffForm
+                onNext={() => setStep(isBSDA ? 7 : 6)}
+                selectedRow={selectedRow}
+              />
+            )}
+            {step === (isBSDA ? 7 : 6) && (
+              <ESign
+                selectedRow={selectedRow}
+                onNext={() => setStep(isBSDA ? 8 : 7)}
+              />
+            )}
+            {step === (isBSDA ? 8 : 7) && (
+              <Confirmation
+                flow={flow}
+                selectedRow={selectedRow}
+                totalPayable={totalPayable}
+                onNext={() => {}}
+                onBackToStep2={goToStep2}
+                complete={true}
+              />
+            )}
+          </>
+        )}
 
         {flow === "online" && (
           <>

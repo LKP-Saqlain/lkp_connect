@@ -38,7 +38,9 @@ const FundDetails = ({ data, fundOverviewData }: any) => {
                 <strong style={{ fontSize: "13px", color: "#777" }}>AUM</strong>
                 <div>
                   {finalData.aum
-                    ? `${parseFloat(finalData.aum).toFixed(0)} Cr`
+                    ? `${parseFloat(finalData.aum).toLocaleString("en-IN", {
+                        maximumFractionDigits: 0,
+                      })} Cr`
                     : "N/A"}
                 </div>
               </Col>

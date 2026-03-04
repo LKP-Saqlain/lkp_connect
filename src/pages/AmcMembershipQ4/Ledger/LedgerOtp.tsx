@@ -30,11 +30,11 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
   useEffect(() => {
     const sendOtp = async () => {
       const payload = {
-        mobileNo: clientData?.mob,
-        // mobileNo: "99693727591",
+        mob: clientData?.mob,
+        // mob: "99693727591",
         otp: "",
-        action: "Send",
-        emailId: clientData?.em,
+        act: "Send",
+        em: clientData?.em,
       };
 
       dispatch(showLoader("Sending OTP to your registered mobile..."));
@@ -85,11 +85,11 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     }
 
     const payload = {
-      mobileNo: clientData?.mob,
-      // mobileNo: "99693727591",
+      mob: clientData?.mob,
+      // mob: "99693727591",
       otp: enteredOtp,
-      action: "Verify",
-      emailId: clientData?.em,
+      act: "Verify",
+      em: clientData?.em,
     };
 
     dispatch(showLoader("Verifying OTP..."));
@@ -98,7 +98,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
       const response = await apiServices.ProcessOTP(payload);
       console.log(" Verify OTP Response:", response);
 
-      const isVerified = response?.data?.data?.isVerified === 1;
+      const isVerified = response?.data?.data?.iv === 1;
       setOtpVerify(isVerified);
 
       if (isVerified) {
@@ -122,11 +122,11 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     setOtpSent(false);
 
     const payload = {
-      mobileNo: clientData?.mob,
-      // mobileNo: "99693727591",
+      mob: clientData?.mob,
+      // mob: "99693727591",
       otp: "",
-      action: "Send",
-      emailId: clientData?.em,
+      act: "Send",
+      em: clientData?.em,
     };
 
     dispatch(showLoader("Resending OTP..."));
