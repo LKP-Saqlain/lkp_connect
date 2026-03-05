@@ -51,7 +51,7 @@ const getRequestContext = (url?: string) => ({
   isMultipart: isEndpointMatched(url, multipartEndpoints),
   isMutualFund: isEndpointMatched(url, mutualFundEndpoints),
   isNewDomain: isEndpointMatched(url, newDomainEndpoints),
-  isMtfSegmentActivation: isEndpointMatched(url, mtfSegmentActivationEndpoint),
+  isMtf: isEndpointMatched(url, mtfSegmentActivationEndpoint),
 });
 
 const resolveBaseURL = (context: ReturnType<typeof getRequestContext>) => {
@@ -64,6 +64,7 @@ const resolveAuthHeader = (context: ReturnType<typeof getRequestContext>) => {
   const token = localStorage.getItem("tkn");
   const mfToken = getDecryptedValue("mfToken");
   const mtfToken = getDecryptedValue("mtfToken");
+  console.log("MTFToken", mtfToken);
 
   if (context.isFundamental) {
     return AUTH_HEADERS.FUNDAMENTAL;
@@ -71,7 +72,7 @@ const resolveAuthHeader = (context: ReturnType<typeof getRequestContext>) => {
   if (context.isMutualFund && mfToken) {
     return `Bearer ${mfToken}`;
   }
-  if (context.isMtfSegmentActivation && mtfToken) {
+  if (context.isMtf && mtfToken) {
     return `Bearer ${mtfToken}`;
   }
   if (context.isPublic || !token) {

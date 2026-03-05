@@ -96,7 +96,12 @@ export const mutualFundEndpoints = [
   endpoints.GetBankDetailsForRedeem,
 ];
 
-export const mtfSegmentActivationEndpoint = [endpoints.GetMTFClientDetails];
+export const mtfSegmentActivationEndpoint = [
+  endpoints.GetMTFClientDetails,
+  endpoints.BeginMTFActivation,
+  endpoints.MTFVerifyOTP,
+  endpoints.MTFSendOTP,
+];
 
 export const newDomainEndpoints = [
   endpoints.getUpcompingDormantReport, //y
@@ -400,6 +405,9 @@ export const newDomainEndpoints = [
 
   //MTF Segment Activation
   endpoints.BeginMTFActivation,
+  endpoints.GetMTFClientDetails,
+  endpoints.MTFVerifyOTP,
+  endpoints.MTFSendOTP,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

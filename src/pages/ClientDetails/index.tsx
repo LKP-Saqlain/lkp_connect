@@ -12,6 +12,7 @@ import { RootState, AppDispatch } from "../../redux/store";
 import dayjs from "dayjs";
 import { setEncryptedValue } from "../../utils/loocalEncrypt";
 // import { normalizeApiData } from "../../utils/normalizeResponse";
+import { useNavigate } from "react-router-dom";
 
 const allowedFormats = ["pdf", "png", "jpg", "jpeg"];
 
@@ -57,7 +58,7 @@ const ClientDetails = ({
   const [clientDataLoaded, setClientDataLoaded] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-
+  const navigate = useNavigate();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
@@ -371,6 +372,7 @@ const ClientDetails = ({
           console.log("tokenResponse", response?.data?.token);
           const { token } = response?.data;
           setEncryptedValue("mtfToken", token);
+          navigate(`/MTFSegmentActivation?${data?.cc}`);
         }
       })
       .catch((error) => {

@@ -2,7 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { Box, Button, Typography, TextField } from "@mui/material";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import Logo from "../../assets/logo.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
+import ShowToast from "../../utils/toastUtils";
 
 const MTFOtpVerification = () => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -10,6 +15,21 @@ const MTFOtpVerification = () => {
   const [timeLeft, setTimeLeft] = useState(60);
   const [resendVisible, setResendVisible] = useState(false);
   const navigate = useNavigate();
+
+  const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
+  const clientDetails = useSelector(
+    (state: RootState) => state.mtfClient.clientDetails
+  );
+
+  console.log("ClientDetails12", clientDetails);
+
+  const clientCode = location.search.replace("?", "");
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+
   // Timer logic
   useEffect(() => {
     if (timeLeft === 0) {
@@ -36,18 +56,59 @@ const MTFOtpVerification = () => {
   };
 
   const handleResend = () => {
-    setOtp(["", "", "", ""]);
+    setOtp(["", "", "", "", "", ""]);
     setTimeLeft(60);
     setResendVisible(false);
     inputRefs.current[0].focus();
+
+    const payload = {
+      user_id: user_id,
+      clientCode: clientCode,
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .MTFSendOTP(payload)
+      .then((res) => {
+        if (res?.status === 200) {
+          console.log("Resspon123", res?.data);
+          ShowToast("success", res?.data?.message);
+        }
+      })
+      .catch((error) => {
+        console.log("Errror", error);
+        dispatch(hideLoader());
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
   };
 
   const handleSubmit = () => {
     const enteredOtp = otp.join("");
-    console.log("OTP Submitted:", enteredOtp);
-    navigate("/congratulations");
+    console.log("OTP Submitted:", typeof enteredOtp);
+    const payload = {
+      user_id: user_id,
+      clientCode: clientCode,
+      otp: enteredOtp,
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .MTFVerifyOTP(payload)
+      .then((res) => {
+        if (res?.status === 200) {
+          console.log("Resss123", res?.data?.data);
+          ShowToast("success", res?.data?.message);
+          navigate("/congratulations");
+        }
+      })
+      .catch((error) => {
+        console.log("Errror", error);
+        dispatch(hideLoader());
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
   };
-
   const handleBackspace = (e: any, index: any) => {
     if (e.key === "Backspace") {
       if (otp[index] === "") {
@@ -70,6 +131,9 @@ const MTFOtpVerification = () => {
   };
 
   const isOtpComplete = otp.every((digit) => digit !== "");
+  const maskedMobile = clientDetails?.mob
+    ? `XXXXX${clientDetails.mob.slice(-4)}`
+    : "";
 
   return (
     <div className="page-content page-view">
@@ -161,9 +225,9 @@ const MTFOtpVerification = () => {
                       mb: 4,
                     }}
                   >
-                    OTP sent to Client Registered mobile number– XXXXX8412 &{" "}
-                    <br />
-                    Email ID– rahulsharma12@gmail.com to confirm MTF.
+                    OTP sent to Client Registered mobile number– {maskedMobile}{" "}
+                    & <br />
+                    Email ID– {clientDetails?.mail} to confirm MTF.
                   </Typography>
 
                   {/* OTP Inputs */}

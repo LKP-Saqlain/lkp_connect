@@ -12,18 +12,18 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const TermsAndConditions = ({
   handleChechbox,
   handleOtpPage,
+  clientDetails = null,
 }: {
   handleChechbox: (value: boolean) => void;
   handleOtpPage: () => void;
+  clientDetails?: any;
 }) => {
   const [tncAccepted, setTncAccepted] = useState(false);
   const [isScrolledToBottom, setIsScrolledToBottom] = useState(false);
-  const navigate = useNavigate();
 
   // const handleConsentClick = () => {
   //   handleChechbox(tncAccepted);
@@ -75,7 +75,7 @@ const TermsAndConditions = ({
             Client Name
           </Typography>
           <Typography sx={{ fontSize: "13px", fontWeight: 900, mt: 0.5 }}>
-            Rahul Sharma
+            {clientDetails?.cn}
           </Typography>
         </Box>
 
@@ -99,7 +99,7 @@ const TermsAndConditions = ({
             Client Code
           </Typography>
           <Typography sx={{ fontSize: "13px", fontWeight: 900, mt: 0.5 }}>
-            552145651
+            {clientDetails?.cc}
           </Typography>
         </Box>
 
@@ -123,7 +123,7 @@ const TermsAndConditions = ({
             Mobile No
           </Typography>
           <Typography sx={{ fontSize: "13px", fontWeight: 900, mt: 0.5 }}>
-            956478412
+            {clientDetails?.mob}
           </Typography>
         </Box>
 
@@ -147,7 +147,7 @@ const TermsAndConditions = ({
             Email ID
           </Typography>
           <Typography sx={{ fontSize: "13px", fontWeight: 900, mt: 0.5 }}>
-            rahulsharma12@gmail.com
+            {clientDetails?.mail}
           </Typography>
         </Box>
       </Box>
