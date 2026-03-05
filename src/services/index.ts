@@ -1383,4 +1383,19 @@ export const apiServices = {
       payload
     );
   },
+  BeginMTFActivation: async (payload: any) => {
+    return await apiService("POST", endpoints.BeginMTFActivation, payload);
+  },
+  ValidateSencondAuth: async (payload: any) => {
+    return await apiService("POST", endpoints.ValidateSencondAuth, payload);
+  },
+  GetMTFClientDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetMTFClientDetails, payload);
+  },
+  MTFVerifyOTP: async (payload: any) => {
+    return await apiService("POST", endpoints.MTFVerifyOTP, payload);
+  },
+  MTFSendOTP: async (payload: any) => {
+    return await apiService("POST", endpoints.MTFSendOTP, payload);
+  },
 };

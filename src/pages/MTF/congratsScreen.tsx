@@ -2,9 +2,14 @@ import { Box, Button, Typography } from "@mui/material";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import Logo from "../../assets/logo.png";
 import CongratsIcon from "../../assets/images/congratsIcon.png";
+import { useNavigate } from "react-router-dom";
 
 const MTFOtpVerification = () => {
-  const handleSubmit = () => {};
+  const navigate = useNavigate();
+
+  const handleSubmit = () => {
+    navigate("/dashboard");
+  };
 
   return (
     <div className="page-content page-view">

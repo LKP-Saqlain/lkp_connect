@@ -10,7 +10,9 @@ import { Card, CardBody, Container } from "reactstrap";
 import ShowToast from "../../utils/toastUtils";
 import { RootState, AppDispatch } from "../../redux/store";
 import dayjs from "dayjs";
+import { setEncryptedValue } from "../../utils/loocalEncrypt";
 // import { normalizeApiData } from "../../utils/normalizeResponse";
+import { useNavigate } from "react-router-dom";
 
 const allowedFormats = ["pdf", "png", "jpg", "jpeg"];
 
@@ -56,7 +58,7 @@ const ClientDetails = ({
   const [clientDataLoaded, setClientDataLoaded] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-
+  const navigate = useNavigate();
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data
   );
@@ -352,6 +354,35 @@ const ClientDetails = ({
     reader.readAsDataURL(file);
   };
 
+  const fetchMtfToken = (data: any) => {
+    console.log("Data123", data);
+
+    const formattedDob = data?.dob?.split("T")[0];
+    const payload = {
+      user_id: data?.cc, //"MT0600508"
+      user_type: "Client",
+      dob: formattedDob,
+      pan: data?.pan,
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .ValidateSencondAuth(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("tokenResponse", response?.data?.token);
+          const { token } = response?.data;
+          setEncryptedValue("mtfToken", token);
+          navigate(`/MTFSegmentActivation?${data?.cc}`);
+        }
+      })
+      .catch((error) => {
+        console.log("ERRRROR", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   document.title = "LKP Securities | Client Details";
 
   return (
@@ -395,6 +426,7 @@ const ClientDetails = ({
             branch={branchCode}
             handleFileUpload={handleFileUpload}
             uploadedFileName={uploadedFileName}
+            fetchMtfToken={fetchMtfToken}
           />
         )}
       </Container>

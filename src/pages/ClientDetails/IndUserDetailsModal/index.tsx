@@ -20,6 +20,7 @@ import { AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { ClientUserDetails } from "../../../redux/thunk/ClientUserDetails";
 import { useEffect, useState } from "react";
+import Tooltip from "@mui/material/Tooltip";
 
 const UserInfoModal = ({
   isOpen,
@@ -29,6 +30,7 @@ const UserInfoModal = ({
   branch,
   handleFileUpload,
   uploadedFileName,
+  fetchMtfToken,
 }: any) => {
   const [clientDetails, setClientDetails] = useState({
     cn: "", // Client_Name
@@ -57,6 +59,8 @@ const UserInfoModal = ({
     com_fut: 0, // Commodity_Futures
     com_opt: 0, // Commodity_Options
     sts: "", // status
+    dob: "",
+    pan: "",
   });
 
   const isMobile = useMediaQuery("(max-width:768px)");
@@ -338,7 +342,7 @@ const UserInfoModal = ({
                         >
                           {item.label}
                         </p>
-                        <p
+                        {/* <p
                           style={{
                             fontFamily: "Poppins",
                             color: "#777",
@@ -351,7 +355,59 @@ const UserInfoModal = ({
                             sx={{ color: color }}
                           />
                           {status}
+                        </p> */}
+                        <p
+                          style={{
+                            fontFamily: "Poppins",
+                            fontSize: "14px",
+                            margin: 0,
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                          }}
+                        >
+                          <FiberManualRecordIcon
+                            fontSize="small"
+                            sx={{ color: color }}
+                          />
+
+                          {item.key === "mtf" && status === "Inactive" ? (
+                            <Tooltip title="Click to activate MTF" arrow>
+                              <span
+                                style={{
+                                  color: "#777",
+                                  cursor: "pointer",
+                                  textDecoration: "underline",
+                                }}
+                                onClick={() => {
+                                  console.log("Activate MTF clicked");
+                                  fetchMtfToken(clientDetails);
+                                  // call activation API or open modal here
+                                }}
+                              >
+                                {status}
+                              </span>
+                            </Tooltip>
+                          ) : (
+                            <span style={{ color: "#777" }}>{status}</span>
+                          )}
                         </p>
+                        {/* {item.key === "mtf" && status === "Inactive" && (
+                          <span
+                            style={{
+                              fontSize: "10px",
+                              color: "#007bff",
+                              // marginTop: "2px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => {
+                              console.log("Activate MTF clicked");
+                              // call activation API or open modal here
+                            }}
+                          >
+                            Click to activate MTF
+                          </span>
+                        )} */}
                       </CardBody>
                     </Card>
                   </Col>

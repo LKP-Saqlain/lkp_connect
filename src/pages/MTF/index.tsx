@@ -2,9 +2,99 @@ import { Box } from "@mui/material";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import Logo from "../../assets/logo.png";
 import TermsAndConditions from "./termsConditions";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 // import OTPConsent from "./consentOtp";
+import { showLoader, hideLoader } from "../../redux/slices/loaderSlice";
+import { apiServices } from "../../services";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import ShowToast from "../../utils/toastUtils";
+import { mtfClientDetails } from "../../redux/slices/mtf/mtfClientSlice";
+type ClientDetails = {
+  cc: string;
+  cn: string;
+  mob: string;
+  mail: string;
+};
 
 const MTFActivation = () => {
+  const [tnc, setTnc] = useState(false);
+  const [clientDetails, setClientDetails] = useState<ClientDetails | null>(
+    null
+  );
+  const navigate = useNavigate();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data
+  );
+  const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const clientCode = location.search.replace("?", "");
+
+  useEffect(() => {
+    if (!clientCode) return;
+
+    const payload = {
+      clientCode: clientCode,
+    };
+
+    dispatch(showLoader(""));
+
+    apiServices
+      .GetMTFClientDetails(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          const data = response?.data?.data;
+          console.log("Response112", data);
+          setClientDetails(data);
+          dispatch(mtfClientDetails(data));
+          navigate("/MTFSegmentActivation", { replace: true });
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  }, [clientCode]);
+
+  const handleChechbox = (value: any) => {
+    console.log("Value1332222", value);
+    setTnc(value);
+  };
+
+  const handleOtpPage = () => {
+    if (!clientDetails) return;
+
+    const payload = {
+      user_id: user_id,
+      clientCode: clientDetails.cc,
+      hasAcceptedTerms: tnc,
+    };
+    dispatch(showLoader(""));
+
+    apiServices
+      .BeginMTFActivation(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("succesApi", response?.data);
+          ShowToast("success", response?.data?.message);
+          // navigate("/otp");
+          navigate(`/otp?${clientDetails?.cc}`);
+        }
+      })
+      .catch((error) => {
+        console.log("Errrror", error);
+        dispatch(hideLoader());
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   return (
     <>
       <div className="page-content page-view">
@@ -56,7 +146,11 @@ const MTFActivation = () => {
                     height: "100%",
                   }}
                 >
-                  <TermsAndConditions />
+                  <TermsAndConditions
+                    handleChechbox={handleChechbox}
+                    handleOtpPage={handleOtpPage}
+                    clientDetails={clientDetails}
+                  />
                   {/* <OTPConsent /> */}
                 </CardBody>
               </Card>

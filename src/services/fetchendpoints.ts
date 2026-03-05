@@ -28,6 +28,8 @@ export const publicEndpoints = [
   endpoints.GetAMCActivationStatus,
   endpoints.SendOtpSms,
   endpoints.ValidateOtpSms,
+  // endpoints.BeginMTFActivation,
+  endpoints.ValidateSencondAuth,
 ];
 
 export const fundamentalEndpoints = [
@@ -92,6 +94,13 @@ export const mutualFundEndpoints = [
   endpoints.SinglePaymentEmail,
   endpoints.VerifyClientCode,
   endpoints.GetBankDetailsForRedeem,
+];
+
+export const mtfSegmentActivationEndpoint = [
+  endpoints.GetMTFClientDetails,
+  endpoints.BeginMTFActivation,
+  endpoints.MTFVerifyOTP,
+  endpoints.MTFSendOTP,
 ];
 
 export const newDomainEndpoints = [
@@ -393,6 +402,12 @@ export const newDomainEndpoints = [
   endpoints.UnlistedConsentFormMail,
   endpoints.UnlistedContractNoteMail,
   endpoints.SetUnlistedSharesDISNumber,
+
+  //MTF Segment Activation
+  endpoints.BeginMTFActivation,
+  endpoints.GetMTFClientDetails,
+  endpoints.MTFVerifyOTP,
+  endpoints.MTFSendOTP,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
