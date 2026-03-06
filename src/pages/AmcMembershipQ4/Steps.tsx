@@ -24,6 +24,7 @@ const AmcMembership = () => {
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [totalPayable, setTotalPayable] = useState<any>(null);
   const [passUserId, setPassUserId] = useState<string>("");
+  const [otpId, setotpId] = useState<string>("");
 
   const dispatch = useDispatch<AppDispatch>();
   const theme = useTheme();
@@ -209,6 +210,7 @@ const AmcMembership = () => {
               <LedgerOtp
                 onNext={() => setStep(isBSDA ? 5 : 4)}
                 clientData={clientData}
+                setotpId={setotpId}
               />
             )}
             {step === (isBSDA ? 5 : 4) && (
@@ -220,6 +222,7 @@ const AmcMembership = () => {
                 totalPayable={totalPayable}
                 onBackToStep2={goToStep2}
                 complete={false}
+                otpId={otpId}
               />
             )}
             {step === (isBSDA ? 6 : 5) && (

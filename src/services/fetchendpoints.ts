@@ -193,6 +193,8 @@ export const newDomainEndpoints = [
   endpoints.SendThirdHolderSignature,
   endpoints.SendFinalSignedMail,
   endpoints.DownloadSignedPdf,
+  endpoints.ActivateAMC,
+  endpoints.ProcessOTP,
 
   // Employeee contest
   endpoints.GetEmpContestAchievedBrokerage,

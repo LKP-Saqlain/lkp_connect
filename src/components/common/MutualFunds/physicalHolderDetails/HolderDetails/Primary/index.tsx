@@ -1177,7 +1177,7 @@ const HolderDetails = ({
             onClick={goPrev}
             style={{
               padding: "8px 20px",
-              background: "#a0a0a0",
+              background: "#ee4b2b",
               color: "#fff",
               borderRadius: "6px",
               border: "none",

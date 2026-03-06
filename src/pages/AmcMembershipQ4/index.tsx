@@ -215,6 +215,9 @@ const AmcMembershipQ4 = ({ activeMenu }: any) => {
     try {
       const response = await apiServices.GetAMCActivationStatus(payload);
       console.log("EsignStatus response:", response?.data?.data[0]);
+      // if (response?.data?.data[0]?.sts === "Activated") {
+      //   fetchData();
+      // }
       return response?.data?.data[0]?.msg2 === "eSign already submitted";
     } catch (error) {
       console.error(error);

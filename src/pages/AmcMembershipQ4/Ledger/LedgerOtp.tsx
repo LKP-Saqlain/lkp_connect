@@ -8,9 +8,10 @@ import { apiServices } from "../../../services";
 interface LedgerOtpProps {
   onNext: () => void;
   clientData: any;
+  setotpId: any;
 }
 
-const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
+const LedgerOtp = ({ onNext, clientData, setotpId }: LedgerOtpProps) => {
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState<number>(59);
   const [otpVerify, setOtpVerify] = useState<boolean>(false);
@@ -97,8 +98,9 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     try {
       const response = await apiServices.ProcessOTP(payload);
       console.log(" Verify OTP Response:", response);
-
-      const isVerified = response?.data?.data?.iv === 1;
+      const resData = response?.data?.data;
+      const isVerified = resData?.is === "1";
+      setotpId(resData?.otpid);
       setOtpVerify(isVerified);
 
       if (isVerified) {

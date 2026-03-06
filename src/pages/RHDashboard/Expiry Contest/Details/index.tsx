@@ -66,6 +66,7 @@ const Details = () => {
       user_id,
       zone: accessType === "ALL" ? selectedZone : accessCode,
     };
+    if (payload.zone === "all") return;
     console.log(payload, accessCode, accessType, "redux");
 
     dispatch(showLoader("Fetching data..."));
@@ -156,49 +157,6 @@ const Details = () => {
 
     exportToExcel(data, columns, fileName);
   };
-
-  /* ================= EXCEL ================= */
-
-  // const exportToExcel = () => {
-
-  //   const sourceData: any[] =
-  //     view === "HISTORY" ? zoneData ?? [] : employeeData ?? [];
-
-  //   if (sourceData.length === 0) return;
-
-  //   const columns =
-  //     view === "HISTORY" ? expiryContestHistory : employeesContestProgress;
-
-  //   const orderedData = sourceData.map((row: any) => {
-  //     const obj: Record<string, any> = {};
-
-  //     columns.forEach((col: any) => {
-  //       if (col?.headerName && col?.field) {
-  //         obj[col.headerName] = row[col.field] ?? "";
-  //       }
-  //     });
-
-  //     return obj;
-  //   });
-
-  //   const sheet = XLSX.utils.json_to_sheet(orderedData);
-  //   const book = XLSX.utils.book_new();
-
-  //   XLSX.utils.book_append_sheet(
-  //     book,
-  //     sheet,
-  //     view === "HISTORY" ? "History Report" : "Employee Report"
-  //   );
-
-  //   const buffer = XLSX.write(book, { bookType: "xlsx", type: "array" });
-
-  //   saveAs(
-  //     new Blob([buffer]),
-  //     view === "HISTORY"
-  //       ? "Expiry_contest_history.xlsx"
-  //       : "Expiry_contest_employee.xlsx"
-  //   );
-  // };
 
   const handleZoneChange = (zone: any) => {
     console.log("Selected zone:", zone);

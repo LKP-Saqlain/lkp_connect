@@ -14,6 +14,7 @@ type ConfirmationProps = {
   selectedRow: any;
   totalPayable: number;
   complete: boolean;
+  otpId?: string;
 };
 
 const Confirmation = ({
@@ -23,6 +24,7 @@ const Confirmation = ({
   selectedRow,
   totalPayable,
   complete,
+  otpId,
 }: ConfirmationProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -57,7 +59,7 @@ const Confirmation = ({
       boid: selectedRow?.dpid,
       paymentAmount: totalPayable.toFixed(2),
       paymentType: flow,
-      otP_ID: 1,
+      otP_ID: otpId,
       option: "SaveAMC",
     };
 
@@ -66,8 +68,11 @@ const Confirmation = ({
     dispatch(showLoader("Please wait, activating AMC..."));
 
     try {
-      await apiServices.ActivateAMC(payload);
-      setPaymentStatus("success");
+      const response = await apiServices.ActivateAMC(payload);
+      console.log(response?.data, "ActivateAMC response");
+      if (response?.data?.iss === true) {
+        setPaymentStatus("success");
+      }
     } catch (error) {
       console.error("Error activating AMC:", error);
       setPaymentStatus("failure");
