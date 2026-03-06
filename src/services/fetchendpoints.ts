@@ -408,10 +408,20 @@ export const newDomainEndpoints = [
   endpoints.GetMTFClientDetails,
   endpoints.MTFVerifyOTP,
   endpoints.MTFSendOTP,
+
+  //stopp loss
+  endpoints.GetMonths,
+  endpoints.GetSPIPMonths,
+  endpoints.ViewGrid,
+  endpoints.SPIPViewGrid,
+  endpoints.FetchClients,
+  endpoints.FetchSPIPClients,
+  endpoints.SendTrilogyEmail,
+  endpoints.SendSpipEmail,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
   "uniqueEndpointSize2",
   uniqueEndpoints.size,
-  newDomainEndpoints.length
+  newDomainEndpoints.length,
 );

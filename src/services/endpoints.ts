@@ -326,6 +326,15 @@ export const endpoints = {
   GetMTFClientDetails: "/api/RMS/GetMTFClientDetails",
   MTFVerifyOTP: "/api/RMS/MTFVerifyOTP",
   MTFSendOTP: "/api/RMS/MTFSendOTP",
+  //stopLoss
+  GetMonths: "/api/Trilogy/GetMonths",
+  GetSPIPMonths: "/api/SPIP/GetMonths",
+  ViewGrid: "/api/Trilogy/ViewGrid",
+  SPIPViewGrid: "/api/SPIP/ViewGrid",
+  FetchClients: "/api/Trilogy/FetchClients",
+  FetchSPIPClients: "/api/SPIP/FetchClients",
+  SendTrilogyEmail: "/api/Trilogy/SendTrilogyEmail",
+  SendSpipEmail: "/api/SPIP/SendSpipEmail",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

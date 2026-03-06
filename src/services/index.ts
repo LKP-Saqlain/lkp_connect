@@ -35,7 +35,7 @@ export const apiServices = {
       "POST",
       endpoints.getDropDown,
       payload,
-      customHeader
+      customHeader,
     );
   },
   getDormantReport: async (payload: any) => {
@@ -45,7 +45,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.getUpcompingDormantReport,
-      payload
+      payload,
     );
   },
   LastTradeDate: async (payload: any) => {
@@ -56,7 +56,7 @@ export const apiServices = {
       {
         responseType: "blob",
       },
-      155000 //api calling time
+      155000, //api calling time
     );
   },
   GetQuaterlyPayoutGrid: async (payload: any) => {
@@ -92,7 +92,7 @@ export const apiServices = {
       endpoints.DealerPerformance,
       payload,
       {},
-      155000
+      155000,
     );
   },
   ClientDetails: async (payload: any) => {
@@ -114,14 +114,14 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.UpdateClientBrokerageModification,
-      payload
+      payload,
     );
   },
   GetBrokerageModificationHistory: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetBrokerageModificationHistory,
-      payload
+      payload,
     );
   },
   ClientSegmentBrok: async (payload: any) => {
@@ -137,56 +137,56 @@ export const apiServices = {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalOverview}/${isin}`,
-      {}
+      {},
     );
   },
   getFundamentalDividend: async (isin: string) => {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalDividend}/${isin}`,
-      {}
+      {},
     );
   },
   getFundamentalBonus: async (isin: string) => {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalBonus}/${isin}`,
-      {}
+      {},
     );
   },
   getFundamentalRatios: async (isin: string) => {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalRatios}/${isin}`,
-      {}
+      {},
     );
   },
   getFundamentalNewsfeed: async (isin: string) => {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalNewsfeed}/${isin}`,
-      {}
+      {},
     );
   },
   getFundamentalcashflow: async (isin: string) => {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalcashflow}/${isin}`,
-      {}
+      {},
     );
   },
   getFundamentalBoardMeeting: async (isin: string) => {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalBoardMeeting}/${isin}`,
-      {}
+      {},
     );
   },
   getFundamentalSplit: async (isin: string) => {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalSplit}/${isin}`,
-      {}
+      {},
     );
   },
 
@@ -194,7 +194,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalShareholding}/${isin}`, // This dynamically appends ISIN
-      {}
+      {},
     );
   },
 
@@ -202,21 +202,21 @@ export const apiServices = {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalBalanceSheet}/${isin}`,
-      {}
+      {},
     );
   },
   getFundamentalAnnualPNL: async (isin: string) => {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalAnnualPNL}/${isin}`,
-      {}
+      {},
     );
   },
   getFundamentalQuaterlyPNL: async (isin: string) => {
     return await apiService(
       "POST",
       `${endpoints.getFundamentalQuaterlyPNL}/${isin}`,
-      {}
+      {},
     );
   },
   ComplainceReport: async (payload: any) => {
@@ -246,7 +246,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.DeleteMarketingMaterials,
-      payload
+      payload,
     );
   },
   getInUpRegAnnoucement: async (payload: any) => {
@@ -259,7 +259,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.DeleteRegulatoryAnnoucement,
-      payload
+      payload,
     );
   },
   GetAPDashboard: async (payload: any) => {
@@ -285,14 +285,14 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.SavePreTradeApproveStatus,
-      payload
+      payload,
     );
   },
   GetBrokerageModificationStatus: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetBrokerageModificationStatus,
-      payload
+      payload,
     );
   },
   GetBrokerageKycStatus: async (payload: any) => {
@@ -302,28 +302,28 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.UpdateBrokerageKycStatusNew,
-      payload
+      payload,
     );
   },
   GetBrokerageKycStatusNew: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetBrokerageKycStatusNew,
-      payload
+      payload,
     );
   },
   GetBrokerageKycDetailsStatus: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetBrokerageKycDetailsStatus,
-      payload
+      payload,
     );
   },
   UpdateBrokerageKycStatus: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.UpdateBrokerageKycStatus,
-      payload
+      payload,
     );
   },
   GetBrokerageRHStatus: async (payload: any) => {
@@ -339,14 +339,14 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetTechExcelApiResponseNew,
-      payload
+      payload,
     );
   },
   GetBrokerageModificationValidity: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetBrokerageModificationValidity,
-      payload
+      payload,
     );
   },
   GetClientWiseBrokerage: async (payload: any) => {
@@ -359,7 +359,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.DetailedCTCLActivityReport,
-      payload
+      payload,
     );
   },
   TradingPatternReport: async (payload: any) => {
@@ -369,21 +369,21 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.DetailedTradingPatternReport,
-      payload
+      payload,
     );
   },
   SPIPClientPerformanceDashboard: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.SPIPClientPerformanceDashboard,
-      payload
+      payload,
     );
   },
   SPIPClientPerformanceSummary: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.SPIPClientPerformanceSummary,
-      payload
+      payload,
     );
   },
   SPIPsubScriptionDetail: async (payload: any) => {
@@ -402,7 +402,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GenerateAndDownloadInvoice,
-      payload
+      payload,
     );
   },
   EKycSSOLogin: async (payload: any) => {
@@ -418,56 +418,56 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.ApproverActionUnlistedShares,
-      payload
+      payload,
     );
   },
   UploadUnlistedSharesVendorFile: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.UploadUnlistedSharesVendorFile,
-      payload
+      payload,
     );
   },
   ViewUnlistedSharesRecord: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.ViewUnlistedSharesRecord,
-      payload
+      payload,
     );
   },
   InsertUnlistedSharesRecord: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.InsertUnlistedSharesRecord,
-      payload
+      payload,
     );
   },
   UpdateUnlistedSharesRecord: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.UpdateUnlistedSharesRecord,
-      payload
+      payload,
     );
   },
   DeleteUnlistedSharesRecord: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.DeleteUnlistedSharesRecord,
-      payload
+      payload,
     );
   },
   GetAPContestTargetDetails: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetAPContestTargetDetails,
-      payload
+      payload,
     );
   },
   GetEMPContestTargetDetails: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetEMPContestTargetDetails,
-      payload
+      payload,
     );
   },
   GetB2BCommissionSummary: async (payload: any) => {
@@ -483,14 +483,14 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetClientActiveInactiveCount,
-      payload
+      payload,
     );
   },
   GetCommissionRevenueSummary: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetCommissionRevenueSummary,
-      payload
+      payload,
     );
   },
   GetClientPledgeDetails: async (payload: any) => {
@@ -500,49 +500,49 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetEmpContestAchievedSummary,
-      payload
+      payload,
     );
   },
   GetAPContestAchievedBrokerage: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetAPContestAchievedBrokerage,
-      payload
+      payload,
     );
   },
   GetAPContestAchievedClients: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetAPContestAchievedClients,
-      payload
+      payload,
     );
   },
   GetAPContestAchievedSummary: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetAPContestAchievedSummary,
-      payload
+      payload,
     );
   },
   GetEmpContestAchievedBrokerage: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetEmpContestAchievedBrokerage,
-      payload
+      payload,
     );
   },
   GetEmpContestAchievedClients: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetEmpContestAchievedClients,
-      payload
+      payload,
     );
   },
   GetEmpContestAchievedNonBrokerage: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetEmpContestAchievedNonBrokerage,
-      payload
+      payload,
     );
   },
   SLBMHoldingsUpload: async (payload: any) => {
@@ -555,7 +555,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GenerateClientPerformancePdf,
-      payload
+      payload,
     );
   },
   GetExcludeOptions: async (payload: any) => {
@@ -568,14 +568,14 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.InsertClientExclusionEntry,
-      payload
+      payload,
     );
   },
   DeleteClientExclusionEntry: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.DeleteClientExclusionEntry,
-      payload
+      payload,
     );
   },
   GetWebPortalDetails: async (payload: any) => {
@@ -588,21 +588,21 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.InsertThirdPartyMasterRecord,
-      payload
+      payload,
     );
   },
   DeleteThirdPartyMasterRecord: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.DeleteThirdPartyMasterRecord,
-      payload
+      payload,
     );
   },
   UpdateThirdPartyMasterRecord: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.UpdateThirdPartyMasterRecord,
-      payload
+      payload,
     );
   },
   ThirdPartyApproverView: async (payload: any) => {
@@ -612,7 +612,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.ThirdPartyApproverAction,
-      payload
+      payload,
     );
   },
   TPInvoiceStaging: async (payload: any) => {
@@ -637,7 +637,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetReadyToSendTPInvoices,
-      payload
+      payload,
     );
   },
   GenerateTPInvoice: async (payload: any) => {
@@ -659,21 +659,21 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetRevenueTradedClientReport,
-      payload
+      payload,
     );
   },
   GetDeliverySegmentReport: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetDeliverySegmentReport,
-      payload
+      payload,
     );
   },
   GetIntradaySegmentReport: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetIntradaySegmentReport,
-      payload
+      payload,
     );
   },
   GetFuturesRevenue: async (payload: any) => {
@@ -686,14 +686,14 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetCommodityFuturesReport,
-      payload
+      payload,
     );
   },
   GetCommodityOptionsReport: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetCommodityOptionsReport,
-      payload
+      payload,
     );
   },
   GetMonthlyClient: async (payload: any) => {
@@ -728,7 +728,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.ViewAccountVendorDetails,
-      payload
+      payload,
     );
   },
   DeleteVendorDetails: async (payload: any) => {
@@ -748,7 +748,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetUnlistedVendorDropdown,
-      payload
+      payload,
     );
   },
   GetClientAccessLink: async (payload: any) => {
@@ -818,7 +818,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.MF_PortfolioStatementReport,
-      payload
+      payload,
     );
   },
   MF_TransactionReport: async (payload: any) => {
@@ -855,7 +855,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetMandateCallBackDetails,
-      payload
+      payload,
     );
   },
   UpdateUpiMandate: async (payload: any) => {
@@ -868,56 +868,56 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetOverviewBrokRevReport,
-      payload
+      payload,
     );
   },
   GetOverviewUniqueTradedClients: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetOverviewUniqueTradedClients,
-      payload
+      payload,
     );
   },
   GetNewAccountAddedOverview: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetNewAccountAddedOverview,
-      payload
+      payload,
     );
   },
   GetDeliverySegmentOverview: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetDeliverySegmentOverview,
-      payload
+      payload,
     );
   },
   GetFuturesRevenueOverview: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetFuturesRevenueOverview,
-      payload
+      payload,
     );
   },
   GetOptionsRevenueOverview: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetOptionsRevenueOverview,
-      payload
+      payload,
     );
   },
   GetCommodity_FuturesOverview: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetCommodity_FuturesOverview,
-      payload
+      payload,
     );
   },
   GetCommodity_OptionsOverview: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetCommodity_OptionsOverview,
-      payload
+      payload,
     );
   },
   GetslbmOverview: async (payload: any) => {
@@ -948,7 +948,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetClientModuleDataForAmc,
-      payload
+      payload,
     );
   },
   GetZoneTargetdata: async (payload: any) => {
@@ -976,21 +976,21 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.SendFirstHolderSignature,
-      payload
+      payload,
     );
   },
   SendSecondHolderSignature: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.SendSecondHolderSignature,
-      payload
+      payload,
     );
   },
   SendThirdHolderSignature: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.SendThirdHolderSignature,
-      payload
+      payload,
     );
   },
   DownloadSignedPdf: async (payload: any) => {
@@ -1024,7 +1024,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.MTFStockAgeingFileUpload,
-      payload
+      payload,
     );
   },
   T6BSESellingFileUpload: async (payload: any) => {
@@ -1049,7 +1049,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetAPTop10ClientBrokerage,
-      payload
+      payload,
     );
   },
   APContestLeaderboard: async (payload: any) => {
@@ -1077,14 +1077,14 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.ViewMTFStockAgeingReport,
-      payload
+      payload,
     );
   },
   GetDPAMCZoneReportDetails: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetDPAMCZoneReportDetails,
-      payload
+      payload,
     );
   },
   NomineeInsertPhysical: async (payload: any) => {
@@ -1100,7 +1100,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.PhysicalClientRegistration,
-      payload
+      payload,
     );
   },
 
@@ -1108,7 +1108,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetAPGrossBrokeragePerQuarter,
-      payload
+      payload,
     );
   },
   ViewComplianceData: async (payload: any) => {
@@ -1139,7 +1139,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetEmployeeExpiryDetails,
-      payload
+      payload,
     );
   },
   GetClientExpiryDetails: async (payload: any) => {
@@ -1161,7 +1161,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetClientMandateExectionData,
-      payload
+      payload,
     );
   },
   GetMandateJVReportData: async (payload: any) => {
@@ -1171,28 +1171,28 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetDealerExpiryDashBoardData,
-      payload
+      payload,
     );
   },
   GetDealerExpiryHistDashBoardData: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetDealerExpiryHistDashBoardData,
-      payload
+      payload,
     );
   },
   GetZoneExpiryHistDashBoardData: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetZoneExpiryHistDashBoardData,
-      payload
+      payload,
     );
   },
   GetZoneExpiryDashBoardData: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.GetZoneExpiryDashBoardData,
-      payload
+      payload,
     );
   },
   GetSPIPContest: async (payload: any) => {
@@ -1227,14 +1227,14 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.SendClientMTFShortfallMail,
-      payload
+      payload,
     );
   },
   SendDealerMTFShortfallMail: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.SendDealerMTFShortfallMail,
-      payload
+      payload,
     );
   },
   SendRMMTFShortfallMail: async (payload: any) => {
@@ -1253,7 +1253,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.PhysicalClientFileUpload,
-      payload
+      payload,
     );
   },
   GetBankDetailsForRedeem: async (payload: any) => {
@@ -1266,7 +1266,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.GetPhysicalClientDetails,
-      payload
+      payload,
     );
   },
   EmailOTPForPhysical: async (payload: any) => {
@@ -1276,7 +1276,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.EmailVerificationPhysical,
-      payload
+      payload,
     );
   },
   KYCverification: async (payload: any) => {
@@ -1289,7 +1289,7 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.PhysicalManualOnboarding,
-      payload
+      payload,
     );
   },
   PhyicalOrder2FA: async (payload: any) => {
@@ -1308,35 +1308,35 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.ThirdPartyInvoiceDropdown,
-      payload
+      payload,
     );
   },
   SendCompanyWiseTPInvoiceMail: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.SendCompanyWiseTPInvoiceMail,
-      payload
+      payload,
     );
   },
   UnlistedSharesClientSearch: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.UnlistedSharesClientSearch,
-      payload
+      payload,
     );
   },
   UnlistedSharesClientDetail: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.UnlistedSharesClientDetail,
-      payload
+      payload,
     );
   },
   UnlistedScripMasterDropdown: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.UnlistedScripMasterDropdown,
-      payload
+      payload,
     );
   },
   ViewUnlistedScripMaster: async (payload: any) => {
@@ -1346,21 +1346,21 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.InsertUnlistedScripMaster,
-      payload
+      payload,
     );
   },
   DeleteUnlistedScripMaster: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.DeleteUnlistedScripMaster,
-      payload
+      payload,
     );
   },
   UpdateUnlistedScripMaster: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.UpdateUnlistedScripMaster,
-      payload
+      payload,
     );
   },
   UnlistedSharesMailView: async (payload: any) => {
@@ -1373,14 +1373,14 @@ export const apiServices = {
     return await apiService(
       "POST",
       endpoints.UnlistedContractNoteMail,
-      payload
+      payload,
     );
   },
   SetUnlistedSharesDISNumber: async (payload: any) => {
     return await apiService(
       "POST",
       endpoints.SetUnlistedSharesDISNumber,
-      payload
+      payload,
     );
   },
   BeginMTFActivation: async (payload: any) => {
@@ -1397,5 +1397,29 @@ export const apiServices = {
   },
   MTFSendOTP: async (payload: any) => {
     return await apiService("POST", endpoints.MTFSendOTP, payload);
+  },
+  GetMonths: async (payload: any) => {
+    return await apiService("POST", endpoints.GetMonths, payload);
+  },
+  GetSPIPMonths: async (payload: any) => {
+    return await apiService("POST", endpoints.GetSPIPMonths, payload);
+  },
+  ViewGrid: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewGrid, payload);
+  },
+  SPIPViewGrid: async (payload: any) => {
+    return await apiService("POST", endpoints.SPIPViewGrid, payload);
+  },
+  FetchClients: async (payload: any) => {
+    return await apiService("POST", endpoints.FetchClients, payload);
+  },
+  FetchSPIPClients: async (payload: any) => {
+    return await apiService("POST", endpoints.FetchSPIPClients, payload);
+  },
+  SendTrilogyEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendTrilogyEmail, payload);
+  },
+  SendSpipEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendSpipEmail, payload);
   },
 };

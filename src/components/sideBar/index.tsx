@@ -127,7 +127,7 @@ import B2BSPIP from "../../pages/Contest/SPIP/B2B";
 import MTFShortfallUpload from "../../pages/RMS/MTFShortfallUpload";
 import NewClientPhysical from "../../pages/MutualFund/NewClientPhysical";
 import FileUpload from "../../pages/MutualFund/FileUpload";
-
+import StopLoss from "../../pages/Masters/stopLoss";
 import ScriptMaster from "../../pages/Masters/scriptMaster";
 import ContractNote from "../../pages/UnlistedShare/contractNote";
 const drawerWidth = 260;
@@ -186,8 +186,8 @@ const AppBar = styled(MuiAppBar, {
         ? `calc(100% - ${drawerWidth + 30}px)`
         : "calc(100% - 30px)"
       : open
-      ? `calc(100% - ${leftMargin + 30}px)`
-      : `calc(100% - 30px)`,
+        ? `calc(100% - ${leftMargin + 30}px)`
+        : `calc(100% - 30px)`,
     marginLeft: isMobile
       ? open
         ? `${drawerWidth}px`
@@ -268,22 +268,22 @@ const SideBar = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id, user_type } = useSelector(
-    (state: RootState) => state.UserLogin && state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin && state.UserLogin?.data?.data,
   );
 
   const { name, emailID, authenticationValue } = useSelector(
-    (state: RootState) => state.AuthUser && state.AuthUser?.data?.data
+    (state: RootState) => state.AuthUser && state.AuthUser?.data?.data,
   );
   console.log("reduxStateUserName", name, user_type);
 
   const EmployeeLastBrokingDate = useSelector(
-    (state: RootState) => state.userOverView?.data?.data?.data
+    (state: RootState) => state.userOverView?.data?.data?.data,
   );
 
   console.log("EMpLastDate", EmployeeLastBrokingDate);
 
   const apBrokingLastDate = useSelector(
-    (state: RootState) => state.APBrokerage?.data?.data?.data?.dailyRevenue
+    (state: RootState) => state.APBrokerage?.data?.data?.data?.dailyRevenue,
   );
 
   console.log("apBrokingLastDateValue", apBrokingLastDate);
@@ -507,7 +507,7 @@ const SideBar = () => {
         console.log("Error->", message);
         ShowToast(
           "error",
-          message || "Sorry for the inconvenience, please try after some time."
+          message || "Sorry for the inconvenience, please try after some time.",
         );
       })
       .finally(() => {
@@ -689,7 +689,7 @@ const SideBar = () => {
   };
   const handleCopy = () => {
     navigator.clipboard.writeText(
-      "https://rekyc.lkponline.com/v1/company/lkpsec/modification/login"
+      "https://rekyc.lkponline.com/v1/company/lkpsec/modification/login",
     );
     setCopied(true);
     setTimeout(() => setCopied(false), 1500); // Reset after 1.5 seconds
@@ -708,7 +708,7 @@ const SideBar = () => {
     "Marketing Material": <MasterMenuMarketing activeSubItem={activeSubItem} />,
     "Client Exclusion": <ExclusionList activeSubItem={activeSubItem} />,
     "Unlisted Scrip Master": <ScriptMaster activeSubItem={activeSubItem} />,
-    // "Menu Master": <Expiry activeSubItem={activeSubItem} />,
+    "RA Sell Message send": <StopLoss activeSubItem={activeSubItem} />,
   };
 
   const kycSubItems: Record<string, JSX.Element> = {
@@ -865,7 +865,7 @@ const SideBar = () => {
     "File Upload": <FileUpload />,
   };
   const getSubItemComponent = (
-    subItems: Record<string, JSX.Element | null>
+    subItems: Record<string, JSX.Element | null>,
   ): JSX.Element | null => subItems[activeSubItem] || null;
 
   const componentResolver = (menu_order: number, mn: string) => {
@@ -967,7 +967,7 @@ const SideBar = () => {
 
   useEffect(() => {
     const hasMyPerformance = menuItems.some(
-      (menu) => menu.mn === "My Performance"
+      (menu) => menu.mn === "My Performance",
     );
     setShowMyPerformance(hasMyPerformance);
   }, [menuItems]);

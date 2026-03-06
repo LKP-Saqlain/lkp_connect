@@ -18,6 +18,8 @@ import {
   getBrokerageKycDetails,
   MTFStockAgeingColumns,
   extendedAmcReport,
+  stopLossTrilogyColumns,
+  stopLossSPIPColumns,
 } from "../../../helper/tableColumns.tsx";
 import { Stack, TextField } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
@@ -52,7 +54,7 @@ const NudgeTable = ({
   const [remarks, setRemarks] = useState<string>("");
   const [showValidation, setShowValidation] = useState(false); // for red textfield when empty
   const [activeTab, setActiveTab] = useState<"sub" | "cmp">(
-    selectedTab ?? "sub"
+    selectedTab ?? "sub",
   );
 
   useEffect(() => {
@@ -97,8 +99,8 @@ const NudgeTable = ({
         activeTab === "sub"
           ? singleData?.submittedList
           : activeTab === "cmp"
-          ? singleData?.completedList
-          : [];
+            ? singleData?.completedList
+            : [];
 
       // Add index (id) to each row
       return (
@@ -121,25 +123,41 @@ const NudgeTable = ({
     switch (selectedReport) {
       case "Client not traded since last 10 days":
         return clientNotTradedColumns;
+
       case "SPIP Renewal in next 30 days":
         return spipRenewalColumns;
+
       case "New Client added in last 5 days":
         return newClientAddFiveDays;
+
       case "Upcoming Dormant Client":
         return upcomingDormantClientColumns;
+
       case "SPIP Subscription in last 10 days":
         return spipSubscriptionColumns;
+
       case "MTF Stock Ageing Report":
         return MTFStockAgeingColumns;
+
       case "AMC Contest Report":
         return extendedAmcReport;
+
       case "More details about segment":
         return getBrokerageKycDetails(handleDownload ?? (() => {}));
 
+      case "Client List":
+        if (selectedTab === "SPIP") {
+          return stopLossSPIPColumns;
+        }
+        if (selectedTab === "Trilogy") {
+          return stopLossTrilogyColumns;
+        }
+        return [];
+
       default:
-        return []; // If no predefined columns, return an empty array
+        return [];
     }
-  }, [selectedReport]);
+  }, [selectedReport, selectedTab]);
 
   const rowHeight = 40;
   const headerHeight = 56;
@@ -147,7 +165,7 @@ const NudgeTable = ({
   const minHeight = 200;
   const calculatedHeight = Math.min(
     Math.max(reportData.length * rowHeight + headerHeight + padding, minHeight),
-    400
+    400,
   );
 
   const reportDataCustom = filteredData?.[selectedReport]?.[0];

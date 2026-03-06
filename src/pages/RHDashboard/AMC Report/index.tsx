@@ -39,7 +39,7 @@ const AmcReport = ({ activeSubItem }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const [tabValue, setTabValue] = useState(1);
   const [activeBranch, setActiveBranch] = useState<"direct" | "indirect">(
-    "direct"
+    "direct",
   );
   const [selectedZone, setSelectedZone] = useState("all");
   const [activeBadges, setActiveBadges] = useState(["total", "total", "total"]);
@@ -49,7 +49,7 @@ const AmcReport = ({ activeSubItem }: any) => {
 
   const { user_id } = useSelector((s: RootState) => s.UserLogin?.data?.data);
   const { accessType } = useSelector(
-    (s: RootState) => s.AuthUser?.data?.data || {}
+    (s: RootState) => s.AuthUser?.data?.data || {},
   );
 
   const [userData, setUserData] = useState<UserData>({

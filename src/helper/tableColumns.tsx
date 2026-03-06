@@ -17,7 +17,7 @@ interface ClientRow {
 dayjs.extend(customParseFormat);
 export const getClientActivityStatusColumns = (
   handleViewDetails: (row: ClientRow) => void,
-  user_type: string // Added user_type parameter
+  user_type: string, // Added user_type parameter
 ): GridColDef[] => {
   const baseColumns: GridColDef[] = [
     {
@@ -67,8 +67,8 @@ export const getClientActivityStatusColumns = (
               };
               // console.log(handleViewDetails);
               return `20${year}-${monthMap[month]}-${day}`;
-            }
-          )
+            },
+          ),
         );
         return parsedDate;
       },
@@ -148,7 +148,7 @@ export const getClientActivityStatusColumns = (
           (_: any, prefix: any, middle: any, suffix: any) => {
             // console.log(prefix, suffix, handleViewDetails); // Added only for testing purpose
             return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-          }
+          },
         );
         return (
           <Tooltip title={mobile} arrow placement="top">
@@ -506,8 +506,8 @@ export const getCommChecker: GridColDef[] = [
             };
 
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
 
       return parsedDate;
@@ -567,7 +567,7 @@ export const getCommChecker: GridColDef[] = [
 ];
 
 export const getClientDormantStatus = (
-  handleViewDetails: (row: ClientRow) => void
+  handleViewDetails: (row: ClientRow) => void,
 ): GridColDef[] => [
   {
     field: "cc",
@@ -616,8 +616,8 @@ export const getClientDormantStatus = (
               Dec: "12",
             };
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
 
       return parsedDate;
@@ -649,7 +649,7 @@ export const getClientDormantStatus = (
         /^(\d{2})(\d+)(\d{2})$/,
         (_: any, prefix: any, middle: any, suffix: any) => {
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
+        },
       );
 
       return (
@@ -957,8 +957,8 @@ export const clientNotTradedColumns: GridColDef[] = [
               Dec: "12",
             };
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
       return parsedDate;
     },
@@ -1000,8 +1000,8 @@ export const clientNotTradedColumns: GridColDef[] = [
               Dec: "12",
             };
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
       return parsedDate;
     },
@@ -1078,8 +1078,8 @@ export const newClientAddFiveDays: GridColDef[] = [
               Dec: "12",
             };
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
       return parsedDate;
     },
@@ -1129,8 +1129,8 @@ export const newClientAddFiveDays: GridColDef[] = [
               Dec: "12",
             };
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
       return parsedDate;
     },
@@ -1187,7 +1187,7 @@ export const spipRenewalColumns: GridColDef[] = [
         (_: any, prefix: any, middle: any, suffix: any) => {
           console.log(prefix, suffix); // Added only for testing purpose
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
+        },
       );
       // Return tooltip with the masked mobile number
       return (
@@ -1235,8 +1235,8 @@ export const spipRenewalColumns: GridColDef[] = [
               Dec: "12",
             };
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
       return parsedDate;
     },
@@ -1279,8 +1279,8 @@ export const spipRenewalColumns: GridColDef[] = [
               Dec: "12",
             };
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
       return parsedDate;
     },
@@ -1349,8 +1349,8 @@ export const upcomingDormantClientColumns: GridColDef[] = [
               Dec: "12",
             };
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
       return parsedDate;
     },
@@ -1378,7 +1378,7 @@ export const upcomingDormantClientColumns: GridColDef[] = [
         (_: any, prefix: any, middle: any, suffix: any) => {
           console.log(prefix, suffix); // Added only for testing purpose
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
+        },
       );
       // Return tooltip with the masked mobile number
       return (
@@ -1449,7 +1449,7 @@ export const spipSubscriptionColumns: GridColDef[] = [
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
         (_match: any, prefix: any, middle: any, suffix: any) =>
-          `${prefix}${"X".repeat(middle.length)}${suffix}`
+          `${prefix}${"X".repeat(middle.length)}${suffix}`,
       );
       return (
         <Tooltip title={mobile} arrow placement="top">
@@ -1569,8 +1569,8 @@ export const ClientCashColumns: GridColDef[] = [
             };
 
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
 
       return parsedDate;
@@ -1620,7 +1620,7 @@ export const ClientCashColumns: GridColDef[] = [
         /^(\d{2})(\d+)(\d{2})$/,
         (_: any, prefix: any, middle: any, suffix: any) => {
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
+        },
       );
 
       return (
@@ -2134,7 +2134,7 @@ export const DPDebitRecovery: GridColDef[] = [
         (_: any, prefix: any, middle: any, suffix: any) => {
           console.log(prefix, suffix); // Added only for testing purpose
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
+        },
       );
 
       // Return tooltip with the masked mobile number
@@ -2161,7 +2161,7 @@ export const DPDebitRecovery: GridColDef[] = [
         /^(.)(.*)(.@.*)$/, // Regex to capture parts of the email
         (_: any, firstChar: any, middleChars: any, domain: any) => {
           return `${firstChar}${"x".repeat(middleChars.length)}${domain}`;
-        }
+        },
       );
 
       // Return tooltip with the original email and masked email for display
@@ -2359,8 +2359,8 @@ export const DormantOverViewColumns: GridColDef[] = [
             };
 
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
 
       return parsedDate;
@@ -2424,8 +2424,8 @@ export const QPayoutColumns: GridColDef[] = [
             };
 
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
 
       return parsedDate;
@@ -2458,7 +2458,7 @@ export const QPayoutColumns: GridColDef[] = [
         (_: any, prefix: any, middle: any, suffix: any) => {
           console.log(prefix, suffix); // Added only for testing purpose
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
+        },
       );
 
       // Return tooltip with the masked mobile number
@@ -2575,8 +2575,8 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
               };
 
               return `20${year}-${monthMap[month]}-${day}`;
-            }
-          )
+            },
+          ),
         );
 
         return parsedDate;
@@ -2661,8 +2661,8 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
               };
 
               return `20${year}-${monthMap[month]}-${day}`;
-            }
-          )
+            },
+          ),
         );
 
         return parsedDate;
@@ -2687,7 +2687,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         const maskedMobile = mobile.replace(
           /^(\d{2})(\d+)(\d{2})$/,
           (_: any, prefix: any, middle: any, suffix: any) =>
-            `${prefix}${"X".repeat(middle.length)}${suffix}`
+            `${prefix}${"X".repeat(middle.length)}${suffix}`,
         );
 
         return (
@@ -2708,7 +2708,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
         const maskedEmail = email.replace(
           /^(.)(.*)(.@.*)$/,
           (_: any, firstChar: any, middleChars: any, domain: any) =>
-            `${firstChar}${"x".repeat(middleChars.length)}${domain}`
+            `${firstChar}${"x".repeat(middleChars.length)}${domain}`,
         );
 
         return (
@@ -2860,8 +2860,8 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
               };
 
               return `20${year}-${monthMap[month]}-${day}`;
-            }
-          )
+            },
+          ),
         );
 
         return parsedDate;
@@ -2909,8 +2909,8 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
               };
 
               return `20${year}-${monthMap[month]}-${day}`;
-            }
-          )
+            },
+          ),
         );
 
         return parsedDate;
@@ -2939,7 +2939,7 @@ export const dormantColumns = (user_type: string): GridColDef[] => {
           (_: any, prefix: any, middle: any, suffix: any) => {
             console.log(prefix, suffix); // Added only for testing purpose
             return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-          }
+          },
         );
 
         // Return tooltip with the masked mobile number
@@ -3171,7 +3171,7 @@ export const topBirthdays: GridColDef[] = [
         (_: any, prefix: any, middle: any, suffix: any) => {
           console.log(prefix, suffix); // Added only for testing purpose
           return `${prefix}${"X".repeat(middle.length)}${suffix}`;
-        }
+        },
       );
 
       // Return tooltip with the masked mobile number
@@ -3792,7 +3792,7 @@ export const RegionalHead: GridColDef[] = [
 
 export const BrokerageModificationStatus: GridColDef[] = [
   ...RegionalHead.filter(
-    (col) => col.field !== "remark" && col.field !== "cfile"
+    (col) => col.field !== "remark" && col.field !== "cfile",
   ),
   {
     field: "sts",
@@ -3942,12 +3942,12 @@ export const BrokerageKyc: GridColDef[] = [
 ];
 
 export const getBrokerageKycDetails = (
-  handleDownload: (row: any) => void
+  handleDownload: (row: any) => void,
 ): GridColDef[] => {
   return [
     ...RegionalHead.filter(
       (col) =>
-        col.field !== "bc" && col.field !== "remark" && col.field !== "cfile"
+        col.field !== "bc" && col.field !== "remark" && col.field !== "cfile",
     ),
     {
       field: "cfile",
@@ -6425,7 +6425,7 @@ export const getApproverTwoDetails: GridColDef[] = [
     headerAlign: "center",
   },
   ...getApproverOneDetails.filter(
-    (col) => col.field !== "Action" && col.field !== "ds64"
+    (col) => col.field !== "Action" && col.field !== "ds64",
   ),
 ];
 
@@ -6791,7 +6791,7 @@ export const ClientPledgeRequest: GridColDef[] = [
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
         (_: any, prefix: any, middle: any, suffix: any) =>
-          `${prefix}${"X".repeat(middle.length)}${suffix}`
+          `${prefix}${"X".repeat(middle.length)}${suffix}`,
       );
 
       return (
@@ -6852,8 +6852,8 @@ export const ClientPledgeRequest: GridColDef[] = [
               Dec: "12",
             };
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
 
       return parsedDate;
@@ -7462,7 +7462,7 @@ export const ThirdParty: GridColDef[] = [
       const maskedEmail = email.replace(
         /^(.)(.*)(.@.*)$/,
         (_: any, firstChar: any, middleChars: any, domain: any) =>
-          `${firstChar}${"x".repeat(middleChars.length)}${domain}`
+          `${firstChar}${"x".repeat(middleChars.length)}${domain}`,
       );
 
       return (
@@ -8217,7 +8217,7 @@ export const getAPContestReportColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
-        params
+        params,
       ),
   },
   {
@@ -8269,7 +8269,7 @@ export const getAPContestReportColumnsQ4: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
-        params
+        params,
       ),
   },
 
@@ -8380,7 +8380,7 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     align: "right",
     valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
+        params,
       ),
   },
 
@@ -8411,7 +8411,7 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     align: "right",
     valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
+        params,
       ),
   },
 
@@ -8442,7 +8442,7 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     align: "right",
     valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 0 }).format(
-        params
+        params,
       ),
   },
 
@@ -8497,7 +8497,7 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     align: "right",
     valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
+        params,
       ),
   },
 
@@ -8512,7 +8512,7 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     align: "right",
     valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
+        params,
       ),
   },
 
@@ -8527,7 +8527,7 @@ export const EmployeeTargetReportColumns: GridColDef[] = [
     align: "right",
     valueFormatter: (params) =>
       new Intl.NumberFormat("en-IN", { maximumFractionDigits: 2 }).format(
-        params
+        params,
       ),
   },
 
@@ -9174,7 +9174,7 @@ export const NFOList: GridColDef[] = [
 ];
 
 export const getRecommendationListColumns = (
-  selectedReturnPeriod: string
+  selectedReturnPeriod: string,
 ): GridColDef[] => [
   {
     field: "schemeName",
@@ -9718,7 +9718,7 @@ export const AmcLifeMembership: GridColDef[] = [
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
         (_: any, p1: any, mid: any, p2: any) =>
-          `${p1}${"X".repeat(mid.length)}${p2}`
+          `${p1}${"X".repeat(mid.length)}${p2}`,
       );
 
       return (
@@ -9912,7 +9912,7 @@ export const AmcNonLifeMembership: GridColDef[] = [
       console.log(
         params?.row?.sch,
         "Payment_link,  <CopyToClipboardCellEnCAccountCode",
-        fullLink
+        fullLink,
       );
       return (
         <CopyToClipboardCell
@@ -9982,7 +9982,7 @@ export const AmcNonLifeMembership: GridColDef[] = [
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
         (_: any, p1: any, mid: any, p2: any) =>
-          `${p1}${"X".repeat(mid.length)}${p2}`
+          `${p1}${"X".repeat(mid.length)}${p2}`,
       );
 
       return (
@@ -10187,7 +10187,7 @@ export const AmcContest: GridColDef[] = [
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
         (_: any, prefix: any, middle: any, suffix: any) =>
-          `${prefix}${"X".repeat(middle.length)}${suffix}`
+          `${prefix}${"X".repeat(middle.length)}${suffix}`,
       );
 
       return (
@@ -10413,8 +10413,8 @@ export const AmcLedgerReport: GridColDef[] = [
             };
 
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
 
       return parsedDate;
@@ -10590,7 +10590,7 @@ export const clientMISColumns: GridColDef[] = [
       const maskedEmail = email.replace(
         /^(.)(.*)(.@.*)$/,
         (_: any, firstChar: any, middleChars: any, domain: any) =>
-          `${firstChar}${"x".repeat(middleChars.length)}${domain}`
+          `${firstChar}${"x".repeat(middleChars.length)}${domain}`,
       );
       return (
         <Tooltip title={email} arrow placement="top">
@@ -10611,7 +10611,7 @@ export const clientMISColumns: GridColDef[] = [
       const maskedMobile = mobile.replace(
         /^(\d{2})(\d+)(\d{2})$/,
         (_: any, prefix: any, middle: any, suffix: any) =>
-          `${prefix}${"X".repeat(middle.length)}${suffix}`
+          `${prefix}${"X".repeat(middle.length)}${suffix}`,
       );
       return (
         <Tooltip title={mobile} arrow placement="top">
@@ -11462,7 +11462,7 @@ export const AmcZoneReportIndirect: GridColDef[] = [
     renderCell: (params) => params.value || "—",
   },
   ...AmcZoneReportDirect.filter(
-    (col) => col.field !== "emp" && col.field !== "emp_nm"
+    (col) => col.field !== "emp" && col.field !== "emp_nm",
   ),
 ];
 
@@ -11874,8 +11874,8 @@ export const MTFStockAgeingColumns: GridColDef[] = [
               Dec: "12",
             };
             return `20${year}-${monthMap[month]}-${day}`;
-          }
-        )
+          },
+        ),
       );
 
       return parsedDate;
@@ -13650,6 +13650,143 @@ export const unlistedContractColumns: GridColDef[] = [
   //   renderCell: ({ value }) => value || "—",
   // },
 ];
+
+export const stopLossTrilogyColumns: GridColDef[] = [
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1,
+    minWidth: 220,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "pan",
+    headerName: "PAN",
+    width: 140,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile No",
+    width: 140,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "emailId",
+    headerName: "Email ID",
+    flex: 1,
+    minWidth: 220,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "monthName",
+    headerName: "Month",
+    width: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+];
+
+export const stopLossSPIPColumns: GridColDef[] = [
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1,
+    minWidth: 220,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "pan",
+    headerName: "PAN",
+    width: 140,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "mobileNo",
+    headerName: "Mobile No",
+    width: 140,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "emailId",
+    headerName: "Email ID",
+    flex: 1,
+    minWidth: 220,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+];
+
+export const stopLossColumns: GridColDef[] = [
+  {
+    field: "serialNo",
+    headerName: "Serial No",
+    width: 100,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "symbol",
+    headerName: "Symbol",
+    width: 160,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "stoplossPrice",
+    headerName: "Stoploss Price",
+    width: 150,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "targetPrice",
+    headerName: "Target Price",
+    width: 150,
+    headerAlign: "center",
+    align: "right",
+  },
+  {
+    field: "buyPrice",
+    headerName: "Buy Price",
+    width: 150,
+    headerAlign: "center",
+    align: "right",
+  },
+];
+
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat("en-IN", {
     minimumFractionDigits: 2,
