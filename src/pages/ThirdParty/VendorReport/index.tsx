@@ -183,7 +183,7 @@ const VendorReport = ({ activeSubItem }: any) => {
       formik.setFieldError("startDate", "");
       formik.setFieldError("endDate", "");
       const formattedRange = `${moment(start).format("DD/MM/YYYY")} - ${moment(
-        end
+        end,
       ).format("DD/MM/YYYY")}`;
       setFormattedDateRange(formattedRange);
     } else {
@@ -197,7 +197,7 @@ const VendorReport = ({ activeSubItem }: any) => {
 
   const handleDownload = (
     row: any,
-    docType: "TDS" | "MSME" | "BANK" | "PAN"
+    docType: "TDS" | "MSME" | "BANK" | "PAN",
   ) => {
     let base64Data = "";
     let fileExt = "";
@@ -298,10 +298,10 @@ const VendorReport = ({ activeSubItem }: any) => {
       fileExt === "pdf"
         ? "application/pdf"
         : fileExt === "jpg" || fileExt === "jpeg"
-        ? "image/jpeg"
-        : fileExt === "png"
-        ? "image/png"
-        : "application/octet-stream";
+          ? "image/jpeg"
+          : fileExt === "png"
+            ? "image/png"
+            : "application/octet-stream";
 
     // Create Blob and download
     const blob = new Blob([binaryData], { type: mimeType });
@@ -379,8 +379,8 @@ const VendorReport = ({ activeSubItem }: any) => {
                           {formik.touched.startDate && formik.errors.startDate
                             ? formik.errors.startDate
                             : formik.touched.endDate && formik.errors.endDate
-                            ? formik.errors.endDate
-                            : ""}
+                              ? formik.errors.endDate
+                              : ""}
                         </FormHelperText>
                       </FormControl>
                     </Col>
@@ -396,7 +396,7 @@ const VendorReport = ({ activeSubItem }: any) => {
                         <TextField
                           size="small"
                           id="client-code-input"
-                          label="Enter Client Code"
+                          label="Enter Vendor Code"
                           variant="outlined"
                           name="vendorName"
                           type="text"
