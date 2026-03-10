@@ -11590,7 +11590,15 @@ export const DPTransactionColumns: GridColDef[] = [
       return value?.toLocaleString("en-IN");
     },
   },
-
+  {
+    field: "pt", // amount
+    headerName: "Payment Type",
+    minWidth: 120,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
   {
     field: "downloadAMC",
     headerName: "Esign File",

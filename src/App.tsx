@@ -9,7 +9,7 @@ import SessionExpiryHandler from "./pages/Authentication/sessionExpiryHandler";
 import "./Global.css";
 import ChangePassword from "./pages/Authentication/ChangePassword";
 // import Maintenance from "./pages/Maintenance";
-import AmcMembershipSteps from "./pages/AmcMembership/Steps";
+import AmcMembershipSteps from "./pages/AmcMembershipQ4/Steps";
 import StatusCard from "./pages/MutualFund/Main/PhysicalOnboard/StatusPage/index";
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));

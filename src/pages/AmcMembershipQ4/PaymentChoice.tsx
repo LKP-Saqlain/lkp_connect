@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Row, Col, Button } from "reactstrap";
+import { Row, Col } from "reactstrap";
 import { apiServices } from "../../services";
 import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
 import { useDispatch } from "react-redux";
@@ -176,7 +176,7 @@ const PaymentChoice = ({
               </tr>
 
               {/* Ledger Balance */}
-              {/* <tr>
+              <tr>
                 <td style={{ padding: "6px 8px", fontWeight: 600 }}>
                   Ledger Balance:
                 </td>
@@ -189,10 +189,10 @@ const PaymentChoice = ({
                 >
                   {formatCurrency(ledgerBalance)}
                 </td>
-              </tr> */}
+              </tr>
 
               {/* Insufficient balance message */}
-              {/* {!isLedgerSufficient && (
+              {!isLedgerSufficient && (
                 <tr>
                   <td
                     colSpan={2}
@@ -201,40 +201,55 @@ const PaymentChoice = ({
                     Insufficient balance for ledger debit.
                   </td>
                 </tr>
-              )} */}
+              )}
             </tbody>
           </table>
         </Col>
       </Row>
 
       {/* Payment Button */}
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: isMobile ? "1rem" : "2rem",
-        }}
-      >
-        <Button
-          style={{
-            backgroundColor: "#003366",
-            color: "#fff",
-            border: "none",
-            borderRadius: "6px",
-            padding: isMobile ? "0.7rem 1.5rem" : "1rem 2rem",
-            fontSize: isMobile ? "16px" : "18px",
-            fontWeight: 600,
-            width: isMobile ? "100%" : "auto",
-          }}
-          onClick={handleOnlinePayment}
-        >
-          Make Payment
-        </Button>
+      <div style={{ textAlign: "center" }}>
+        <p style={{ fontWeight: "600", color: "#000" }}>
+          Select Payment Method
+        </p>
+
+        <div style={buttonGroupStyle}>
+          <button
+            style={{
+              backgroundColor: isLedgerSufficient ? "#003366" : "#d3d3d3",
+              color: isLedgerSufficient ? "#fff" : "#000",
+              border: "none",
+              borderRadius: "6px",
+              padding: "0.3rem 1.5rem",
+              cursor: isLedgerSufficient ? "pointer" : "not-allowed",
+            }}
+            onClick={onLedger}
+            disabled={!isLedgerSufficient}
+          >
+            Debit from Ledger
+          </button>
+
+          <span style={{ fontWeight: "500", color: "#555" }}>or</span>
+
+          <button
+            style={{
+              backgroundColor: "#003366",
+              color: "#fff",
+              border: "none",
+              borderRadius: "6px",
+              padding: "0.3rem 1.5rem",
+            }}
+            onClick={handleOnlinePayment}
+          >
+            Make Payment
+          </button>
+        </div>
       </div>
     </div>
   );
 };
 
-// 🔹 Shared Styles
+// 🔹 Shared styles
 const dividerStyle = {
   border: "none",
   borderTop: "1px dotted #999",
@@ -249,12 +264,12 @@ const dividerStyle = {
 //   border: "1px solid #eee",
 // };
 
-// const buttonGroupStyle = {
-//   display: "flex",
-//   justifyContent: "center",
-//   alignItems: "center",
-//   gap: "1rem",
-//   marginTop: "1rem",
-// };
+const buttonGroupStyle = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: "1rem",
+  marginTop: "1rem",
+};
 
 export default PaymentChoice;

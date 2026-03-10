@@ -8,9 +8,10 @@ import { apiServices } from "../../../services";
 interface LedgerOtpProps {
   onNext: () => void;
   clientData: any;
+  setotpId: any;
 }
 
-const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
+const LedgerOtp = ({ onNext, clientData, setotpId }: LedgerOtpProps) => {
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState<number>(59);
   const [otpVerify, setOtpVerify] = useState<boolean>(false);
@@ -30,11 +31,11 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
   useEffect(() => {
     const sendOtp = async () => {
       const payload = {
-        mobileNo: clientData?.mob,
-        // mobileNo: "99693727591",
+        mob: clientData?.mob,
+        // mob: "99693727591",
         otp: "",
-        action: "Send",
-        emailId: clientData?.em,
+        act: "Send",
+        em: clientData?.em,
       };
 
       dispatch(showLoader("Sending OTP to your registered mobile..."));
@@ -85,11 +86,11 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     }
 
     const payload = {
-      mobileNo: clientData?.mob,
-      // mobileNo: "99693727591",
+      mob: clientData?.mob,
+      // mob: "99693727591",
       otp: enteredOtp,
-      action: "Verify",
-      emailId: clientData?.em,
+      act: "Verify",
+      em: clientData?.em,
     };
 
     dispatch(showLoader("Verifying OTP..."));
@@ -97,8 +98,9 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     try {
       const response = await apiServices.ProcessOTP(payload);
       console.log(" Verify OTP Response:", response);
-
-      const isVerified = response?.data?.data?.isVerified === 1;
+      const resData = response?.data?.data;
+      const isVerified = resData?.is === "1";
+      setotpId(resData?.otpid);
       setOtpVerify(isVerified);
 
       if (isVerified) {
@@ -122,11 +124,11 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     setOtpSent(false);
 
     const payload = {
-      mobileNo: clientData?.mob,
-      // mobileNo: "99693727591",
+      mob: clientData?.mob,
+      // mob: "99693727591",
       otp: "",
-      action: "Send",
-      emailId: clientData?.em,
+      act: "Send",
+      em: clientData?.em,
     };
 
     dispatch(showLoader("Resending OTP..."));

@@ -93,6 +93,11 @@ const MfOverview = ({
         // handle FundOverView response
         setFundOverviewData(bseRes?.data?.data[0]);
         setBseSchemeCode(bseRes?.data?.data[0]?.bseSchemeCode ?? "");
+        // setBseSchemeCode(
+        //   bseRes?.data?.data?.[0]?.bseSchemeCode ??
+        //     schemeRes?.data?.data?.schemeCode ??
+        //     ""
+        // );
       } catch (err: any) {
         console.error("Error->", err.message);
       } finally {
