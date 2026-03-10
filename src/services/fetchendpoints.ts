@@ -418,6 +418,11 @@ export const newDomainEndpoints = [
   endpoints.FetchSPIPClients,
   endpoints.SendTrilogyEmail,
   endpoints.SendSpipEmail,
+
+  //accounts/bank master
+  endpoints.InsertBankAcoountMaster,
+  endpoints.GetPendingEntryBankAccountMaster,
+  endpoints.GetEntry_Delete,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

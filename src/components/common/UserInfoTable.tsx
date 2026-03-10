@@ -52,7 +52,7 @@ interface SelectedWidgetProps {
   handleEmailSend?: (
     Payment_link: string,
     EnCAccountCode: string,
-    setEmailSent: React.Dispatch<React.SetStateAction<boolean>>
+    setEmailSent: React.Dispatch<React.SetStateAction<boolean>>,
   ) => void;
   emailSent?: boolean;
   emailSentStatus?: any;
@@ -172,7 +172,7 @@ const DataTable = ({
   const [showSearchCustom, setShowSearchCustom] = useState(showSearch);
   // const navigate = useNavigate();
   const { user_type } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data || {}
+    (state: RootState) => state.UserLogin?.data?.data || {},
   );
 
   console.log("userType", user_type);
@@ -189,7 +189,7 @@ const DataTable = ({
       activeSubItem,
       selectedWidget,
       "previewUrl-->",
-      typeof previewUrl
+      typeof previewUrl,
     );
     setCustomLedgerData([]);
   }, [activeSubItem, selectedWidget, previewUrl]);
@@ -403,7 +403,7 @@ const DataTable = ({
     ) {
       return TableColumns.getClientActivityStatusColumns(
         handleViewDetails,
-        user_type
+        user_type,
       );
     } else if (selectedWidget === "Upcoming Dormant Client") {
       return TableColumns.getClientDormantStatus(handleViewDetails);
@@ -508,7 +508,7 @@ const DataTable = ({
                     console.log(
                       params.row,
                       "selectedrow More Details",
-                      setSegmentRow
+                      setSegmentRow,
                     );
                   }}
                   style={{
@@ -797,7 +797,7 @@ const DataTable = ({
     ) {
       return TableColumns.getClientActivityStatusColumns(
         handleViewDetails,
-        user_type
+        user_type,
       );
     } else if (activeSubItem === "Pre Trade Proof Upload") {
       return TableColumns.PreProofUploadColumns.map((column) => {
@@ -1002,8 +1002,8 @@ const DataTable = ({
         reportType === "summarized"
           ? TableColumns.clientTradingPatternSummarizedColumns
           : reportType === "detailed"
-          ? TableColumns.clientTradingPatternDetailedColumns
-          : [];
+            ? TableColumns.clientTradingPatternDetailedColumns
+            : [];
       return (
         selectedColumn &&
         selectedColumn.map((column) => ({
@@ -1015,8 +1015,8 @@ const DataTable = ({
         reportType === "summarized"
           ? TableColumns.ctclUserWiseColumns
           : reportType === "detailed"
-          ? TableColumns.ctclUserWiseDetailedColumns
-          : [];
+            ? TableColumns.ctclUserWiseDetailedColumns
+            : [];
       return (
         selectedColumn &&
         selectedColumn.map((column) => ({
@@ -1471,7 +1471,7 @@ const DataTable = ({
                           onClick={() => {
                             console.log(
                               "Clicked eSign Pending row:",
-                              params.row
+                              params.row,
                             );
                             if (onViewAmcDetails) onViewAmcDetails(params.row);
                           }}
@@ -2726,6 +2726,74 @@ const DataTable = ({
       }
 
       return baseColumns;
+    } else if (activeSubItem === "LKP Bank Entry") {
+      // return TableColumns.pendingBankAccountColumns.map((column) => ({
+      //   ...column,
+      // }));
+
+      return TableColumns.pendingBankAccountColumns.map((column) => {
+        if (column.field === "action") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              const isDeleted = params.row.isDeleted; // Add condition based on your row data
+
+              const handleEdit = () => {
+                handleEditClick?.(params.row, true); // Call edit function for Communication Retrieval Entry
+              };
+
+              return (
+                <>
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+                  <button
+                    onClick={() => {
+                      setAction("delete");
+                      handleDeleteEntry(params.row); // Call delete function for Communication Retrieval Entry
+                      setSelectedRow(params.row); // Store the selected row for confirmation
+                      tog_center(); // Open the modal for deletion confirmation
+                    }}
+                    disabled={isDeleted}
+                    style={{
+                      color: isDeleted ? "red" : "#11395C",
+                      textDecoration: isDeleted ? "none" : "underline",
+                      background: "none",
+                      border: "none",
+                      cursor: isDeleted ? "default" : "pointer",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    {isDeleted ? (
+                      "Deleted"
+                    ) : (
+                      <Tooltip title="Delete" arrow placement="top">
+                        <IconButton
+                          sx={{ p: 0 }}
+                          color="primary"
+                          onClick={() => handleDeleteEntry?.(params.row)}
+                        >
+                          <DeleteIcon
+                            fontSize="small"
+                            sx={{ color: "#11395C" }}
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </button>
+                </>
+              );
+            },
+          };
+        }
+        return column;
+      });
     } else {
       return [];
     }
@@ -2738,7 +2806,7 @@ const DataTable = ({
 
     if (selectedWidget === "Clients With Ledger Balance") {
       const filtered = commonLedgerData.filter((item: any) =>
-        item.ClientName?.toLowerCase().includes(query.toLowerCase())
+        item.ClientName?.toLowerCase().includes(query.toLowerCase()),
       );
       setFilteredLedgerDataDropDown(filtered);
       console.log(query, "query", selectedWidget, filtered);
@@ -2749,26 +2817,26 @@ const DataTable = ({
     Array.isArray(customLedgerData) && customLedgerData.length > 0
       ? customLedgerData
       : Array.isArray(tradeCWCBData) && tradeCWCBData.length > 0
-      ? tradeCWCBData
-      : [];
+        ? tradeCWCBData
+        : [];
   let rowName =
     selectedWidget === "Clients With Ledger Balance"
       ? commonLedgerData
       : selectedWidget === "Total Clients"
-      ? T6Data
-      : selectedWidget === "Active Clients"
-      ? activeGroupedClients
-      : selectedWidget === "Inactive Clients"
-      ? inactiveGroupedClients
-      : selectedWidget === "Active Clients" &&
-        activeSubItem === "DP Debit Recovery"
-      ? activeGroupedClients
-      : selectedWidget === "Inactive Clients" &&
-        activeSubItem === "DP Debit Recovery"
-      ? inactiveGroupedClients
-      : selectedWidget === "Upcoming Dormant Client"
-      ? T6Data
-      : T6Data;
+        ? T6Data
+        : selectedWidget === "Active Clients"
+          ? activeGroupedClients
+          : selectedWidget === "Inactive Clients"
+            ? inactiveGroupedClients
+            : selectedWidget === "Active Clients" &&
+                activeSubItem === "DP Debit Recovery"
+              ? activeGroupedClients
+              : selectedWidget === "Inactive Clients" &&
+                  activeSubItem === "DP Debit Recovery"
+                ? inactiveGroupedClients
+                : selectedWidget === "Upcoming Dormant Client"
+                  ? T6Data
+                  : T6Data;
   console.log("rowName from userinfo", rowName);
 
   useEffect(() => {
@@ -2798,6 +2866,7 @@ const DataTable = ({
     "Third Party Invoice Verify", // approve/reject message also for this
     "Vendor Approval",
     "Unlisted Scrip Master",
+    "LKP Bank Entry",
   ];
 
   if (activeSubItem === "RMS Allocation") {
@@ -2860,8 +2929,8 @@ const DataTable = ({
           activeSubItem === "Pre Trade Report"
             ? true
             : activeSubItem === "Pre Trade Approval" && showDocument
-            ? true
-            : false
+              ? true
+              : false
         }
         previewUrl={previewUrl}
         setSetShowImg={setSetShowImg}
@@ -2907,10 +2976,10 @@ const DataTable = ({
             selectedWidget === "Client Details Report"
               ? "200px"
               : selectedWidget === "Criteria and Rewards"
-              ? T6Data.length < 10
-                ? "auto"
-                : "52vh"
-              : "72vh",
+                ? T6Data.length < 10
+                  ? "auto"
+                  : "52vh"
+                : "72vh",
           width: "100%",
           overflowX: "auto",
           fontFamily: "Public Sans, sans-serif",
@@ -2926,20 +2995,20 @@ const DataTable = ({
                 ? filteredLedgerDataDropDown
                 : commonLedgerData
               : selectedWidget === "Total Clients"
-              ? T6Data
-              : // : selectedWidget === "Active Clients"
-              // ? activeGroupedClients
-              // : selectedWidget === "Inactive Clients"
-              // ? inactiveGroupedClients
-              selectedWidget === "Active Clients" &&
-                activeSubItem === "DP Debit Recovery"
-              ? activeGroupedClients
-              : selectedWidget === "Inactive Clients" &&
-                activeSubItem === "DP Debit Recovery"
-              ? inactiveGroupedClients
-              : selectedWidget === "Upcoming Dormant Client"
-              ? T6Data
-              : T6Data
+                ? T6Data
+                : // : selectedWidget === "Active Clients"
+                  // ? activeGroupedClients
+                  // : selectedWidget === "Inactive Clients"
+                  // ? inactiveGroupedClients
+                  selectedWidget === "Active Clients" &&
+                    activeSubItem === "DP Debit Recovery"
+                  ? activeGroupedClients
+                  : selectedWidget === "Inactive Clients" &&
+                      activeSubItem === "DP Debit Recovery"
+                    ? inactiveGroupedClients
+                    : selectedWidget === "Upcoming Dormant Client"
+                      ? T6Data
+                      : T6Data
           }
           localeText={{ noRowsLabel: "No Records!" }}
           columns={columns}
@@ -2950,34 +3019,34 @@ const DataTable = ({
             row?.rid
               ? row.rid
               : row.Id
-              ? row?.Id
-              : row?.cc
-              ? row?.cc
-              : row.rowID
-              ? row.rowID
-              : row.id
-              ? row.id
-              : row.rowId
-              ? row.rowId
-              : row.ClientCode
-              ? row.ClientCode
-              : row.clientCode
-              ? row.clientCode
-              : row.ctermcode
-              ? row.ctermcode
-              : row.RowId
-              ? row.RowId
-              : row.dummyId
-              ? row.dummyId
-              : row.RowID
-              ? row.RowID
-              : row.ClientName
-              ? row.ClientName
-              : row.clientName
-              ? row.clientName
-              : row.BOID
-              ? `${row.BOName}-${row.TotalDebit}-${Math.random()}`
-              : row.Name
+                ? row?.Id
+                : row?.cc
+                  ? row?.cc
+                  : row.rowID
+                    ? row.rowID
+                    : row.id
+                      ? row.id
+                      : row.rowId
+                        ? row.rowId
+                        : row.ClientCode
+                          ? row.ClientCode
+                          : row.clientCode
+                            ? row.clientCode
+                            : row.ctermcode
+                              ? row.ctermcode
+                              : row.RowId
+                                ? row.RowId
+                                : row.dummyId
+                                  ? row.dummyId
+                                  : row.RowID
+                                    ? row.RowID
+                                    : row.ClientName
+                                      ? row.ClientName
+                                      : row.clientName
+                                        ? row.clientName
+                                        : row.BOID
+                                          ? `${row.BOName}-${row.TotalDebit}-${Math.random()}`
+                                          : row.Name
           }
           // Use the correct identifier for rows
           getRowClassName={(params) => {

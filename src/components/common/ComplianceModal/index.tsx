@@ -50,7 +50,7 @@ const ModalComponent = ({
   const allowedFormats = ["doc", "docx", "pdf", "xls", "xlsx", "jpg", "jpeg"];
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   const dispatch = useDispatch<AppDispatch>();
@@ -68,13 +68,13 @@ const ModalComponent = ({
       TypeOfDocuments: Yup.string().required("Type of Document is required"),
       department: Yup.string().required("Department is required"),
       communicationType: Yup.string().required(
-        "Communication Type is required"
+        "Communication Type is required",
       ),
       dateOfCommunication: Yup.string().required(
-        "Date of Communication is required"
+        "Date of Communication is required",
       ),
       proofOfCommunication: Yup.string().required(
-        "Proof of Communication is required"
+        "Proof of Communication is required",
       ),
       uploadProof: Yup.mixed().when([], {
         is: () => !editData?.cpp, // Check if empty
@@ -118,7 +118,7 @@ const ModalComponent = ({
         try {
           uploadedFileExt = await handleFileUploadAsync(
             uploadedFile,
-            communicationProofPath
+            communicationProofPath,
           ); // Wait for file upload
           setFileExtension(uploadedFileExt);
         } catch (error) {
@@ -135,7 +135,7 @@ const ModalComponent = ({
           "EditData communicationProofPath",
           communicationProofPath,
           "File Extension:",
-          uploadedFileExt
+          uploadedFileExt,
         );
       }
       fetchSubmitForm(uploadedFileExt, communicationProofPath);
@@ -152,7 +152,7 @@ const ModalComponent = ({
 
   const fetchSubmitForm = async (
     uploadedFileExt: string,
-    communicationProofPath: string
+    communicationProofPath: string,
   ) => {
     console.log("uploadedFileExtension", uploadedFileExt);
 
@@ -213,7 +213,7 @@ const ModalComponent = ({
 
   const handleFileUploadAsync = (
     file: any,
-    communicationProofPath: string
+    communicationProofPath: string,
   ): Promise<string> => {
     return new Promise((resolve, reject) => {
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
@@ -351,7 +351,7 @@ const ModalComponent = ({
                         formik.values.dateOfCommunication
                           ? dayjs(
                               formik.values.dateOfCommunication,
-                              "YYYY-MM-DD"
+                              "YYYY-MM-DD",
                             )
                           : null
                       }
@@ -360,14 +360,14 @@ const ModalComponent = ({
                       onChange={(date: Dayjs | null) =>
                         formik.setFieldValue(
                           "dateOfCommunication",
-                          date ? date.format("YYYY-MM-DD") : ""
+                          date ? date.format("YYYY-MM-DD") : "",
                         )
                       }
                       slotProps={{
                         textField: {
                           error: Boolean(
                             formik.touched.dateOfCommunication &&
-                              formik.errors.dateOfCommunication
+                            formik.errors.dateOfCommunication,
                           ),
                           helperText:
                             formik.touched.dateOfCommunication &&

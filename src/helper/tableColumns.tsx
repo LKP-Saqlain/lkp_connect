@@ -13787,6 +13787,128 @@ export const stopLossColumns: GridColDef[] = [
   },
 ];
 
+export const pendingBankAccountColumns: GridColDef[] = [
+  {
+    field: "action",
+    headerName: "Action",
+    width: 120,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "MemberName",
+    headerName: "Member Name",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "BankAccountName",
+    headerName: "Bank Account Name",
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "BankAccountNumber",
+    headerName: "Account Number",
+    width: 170,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "IFSCCode",
+    headerName: "IFSC Code",
+    width: 140,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Purpose",
+    headerName: "Purpose",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "AccountType",
+    headerName: "Account Type",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Division",
+    headerName: "Division",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "OpeningDate",
+    headerName: "Opening Date",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+  },
+  {
+    field: "ClosingDate",
+    headerName: "Closing Date",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+  },
+  {
+    field: "RequestedBy",
+    headerName: "Requested By",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "RequestedDate",
+    headerName: "Requested Date",
+    width: 170,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+  },
+  // {
+  //   field: "Status",
+  //   headerName: "Status",
+  //   width: 120,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  // },
+];
+
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat("en-IN", {
     minimumFractionDigits: 2,

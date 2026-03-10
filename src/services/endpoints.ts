@@ -335,6 +335,10 @@ export const endpoints = {
   FetchSPIPClients: "/api/SPIP/FetchClients",
   SendTrilogyEmail: "/api/Trilogy/SendTrilogyEmail",
   SendSpipEmail: "/api/SPIP/SendSpipEmail",
+  InsertBankAcoountMaster: "/api/Account/InsertBankAcoountMaster",
+  GetPendingEntryBankAccountMaster:
+    "/api/Account/GetPendingEntryBankAccountMaster",
+  GetEntry_Delete: "/api/Account/GetEntry_Delete",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

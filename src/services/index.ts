@@ -1422,4 +1422,17 @@ export const apiServices = {
   SendSpipEmail: async (payload: any) => {
     return await apiService("POST", endpoints.SendSpipEmail, payload);
   },
+  InsertBankAcoountMaster: async (payload: any) => {
+    return await apiService("POST", endpoints.InsertBankAcoountMaster, payload);
+  },
+  GetPendingEntryBankAccountMaster: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetPendingEntryBankAccountMaster,
+      payload,
+    );
+  },
+  GetEntry_Delete: async (payload: any) => {
+    return await apiService("POST", endpoints.GetEntry_Delete, payload);
+  },
 };
