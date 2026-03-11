@@ -7,7 +7,14 @@ import { useDispatch } from "react-redux";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { AppDispatch } from "../../../../redux/store";
 import TradeCard from "../../../../components/common/tradeCard";
-import { tabList, TransactionRecord, upComingSIP } from "../../mfTypes";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import {
+  BankDetail,
+  tabList,
+  TransactionRecord,
+  upComingSIP,
+} from "../../mfTypes";
+import CreateMandateModal from "../../../../components/common/MutualFunds/MfModal/MandateModal";
 
 const MfReport = (props: any) => {
   const [reportTab, setReportTab] = useState(0);
@@ -17,6 +24,9 @@ const MfReport = (props: any) => {
   const [filteredSIPs, setFilteredSIPs] = useState<upComingSIP[]>([]);
   const [ongoingSIP, setOngoingSIP] = useState<upComingSIP[]>([]);
   const [transactions, setTransactions] = useState<TransactionRecord[]>([]);
+  const [banks, setBanks] = useState<BankDetail[]>([]);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [accountType, setAccountType] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -29,6 +39,10 @@ const MfReport = (props: any) => {
     date.getFullYear();
 
   useEffect(() => {
+    mandateReport();
+  }, [dispatch, selectedLabel, props.hasToken]);
+
+  const mandateReport = () => {
     const { clientCode } = props;
     if (selectedLabel === "Mandates") {
       const payload = {
@@ -64,7 +78,7 @@ const MfReport = (props: any) => {
           dispatch(hideLoader());
         });
     }
-  }, [dispatch, selectedLabel, props.hasToken]);
+  };
 
   const parseSipDate = (dateStr: string) => {
     const [day, mon, year] = dateStr.split("-");
@@ -280,9 +294,53 @@ const MfReport = (props: any) => {
     console.log("Selected Tab Label:", label);
   };
 
+  useEffect(() => {
+    clientBankDetails();
+  }, [accountType]);
+
+  const clientBankDetails = async () => {
+    dispatch(showLoader("Please wait we are processing your request"));
+    let payload = {
+      // dpFlag: "P",
+      dpFlag: accountType === "physical" ? "P" : " ",
+    };
+    try {
+      const response = await apiServices.ClientProfile(payload);
+      const clientData = response?.data?.data;
+
+      // Store mobile and email
+
+      console.log(
+        clientData?.mobileNo,
+        clientData?.email,
+        "check Cleintdetails",
+        clientData?.clientCode
+      );
+
+      // Process bank details
+      const rawData = clientData?.bankDetails ?? [];
+      const formattedData: BankDetail[] = rawData.map(
+        (item: any, index: number) => ({
+          id: index + 1,
+          name: item.bankName,
+          account: item.bankAccountNumber,
+          ifsc: item.ifsc,
+          code: item.bankCode,
+          paymentMode: item.payMode,
+        })
+      );
+
+      setBanks(formattedData);
+    } catch (error) {
+      console.error("Error fetching bank details:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
   return (
     <>
-      <Card sx={{ borderRadius: 4, p: 2, mb: 3 }}>
+      <Card sx={{ borderRadius: 4, p: 2, mb: 2 }}>
         <BasicTabs
           heading="Report"
           tabs={tabList}
@@ -290,7 +348,55 @@ const MfReport = (props: any) => {
           onChange={handleTabChange}
         />
       </Card>
-      <Card sx={{ borderRadius: 4, p: 2 }}>
+      {selectedLabel === "Mandates" && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <button
+            style={{
+              backgroundColor: "#11395C",
+              color: "#fff",
+              border: "none",
+              borderRadius: "4px",
+              padding: "10px 20px",
+              cursor: "pointer",
+              fontSize: "16px",
+              marginLeft: ".5rem",
+            }}
+            onClick={() => {
+              console.log("Mandate create");
+              setModalOpen(true);
+              clientBankDetails();
+            }}
+          >
+            Create Mandate
+          </button>
+
+          <button
+            style={{
+              backgroundColor: "#28a745",
+              border: "1px solid #d0d5dd",
+              borderRadius: "6px",
+              padding: "6px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#000",
+            }}
+            onClick={mandateReport}
+            title="Refresh"
+          >
+            Refresh
+            <RefreshIcon sx={{ fontSize: "18px", color: "#11395C" }} />
+          </button>
+        </div>
+      )}
+      <Card sx={{ borderRadius: 4, p: 2, mt: 2 }}>
         {selectedLabel === "Mandates" ? (
           mandateData?.length > 0 ? (
             mandateData.map((item, index) => (
@@ -324,6 +430,14 @@ const MfReport = (props: any) => {
           />
         )}
       </Card>
+      <CreateMandateModal
+        isOpen={modalOpen}
+        toggle={() => setModalOpen(false)}
+        modalType="Report"
+        banks={banks}
+        clientNo={props.clientCode}
+        setAccount={setAccountType}
+      ></CreateMandateModal>
     </>
   );
 };
