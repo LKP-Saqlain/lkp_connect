@@ -17,7 +17,14 @@ interface TradeCardProps {
   targetPrice?: number;
   //   profitPotential?: number;
   //   potentialLeft?: number;
-  status?: "Open" | "Closed" | "Part Profit";
+  status?:
+    | "APPROVED"
+    | "WAITING FOR CLIENT AUTHENTICATION"
+    | "REJECTED"
+    | "Open"
+    | "Closed"
+    | "Part Profit"
+    | undefined;
   category?: any;
   tag?: string;
   dateTime?: string;
@@ -168,7 +175,30 @@ const TradeCard: React.FC<TradeCardProps> = ({
               >
                 {clientName}
               </div>
-              <div style={{ fontSize: "14px", color: "#666" }}>
+              <div
+                style={{
+                  fontSize: "14px",
+                  padding: "4px 10px",
+                  borderRadius: "6px",
+                  display: "inline-block",
+                  backgroundColor:
+                    status === "APPROVED"
+                      ? "#28a745"
+                      : status === "WAITING FOR CLIENT AUTHENTICATION"
+                      ? "#ffc107"
+                      : status === "REJECTED"
+                      ? "#dc3545"
+                      : "#e9ecef",
+                  color:
+                    status === "APPROVED"
+                      ? "#fff"
+                      : status === "WAITING FOR CLIENT AUTHENTICATION"
+                      ? "#000"
+                      : status === "REJECTED"
+                      ? "#fff"
+                      : "#333",
+                }}
+              >
                 {capitalizeEachWord(status)}
               </div>
             </div>
