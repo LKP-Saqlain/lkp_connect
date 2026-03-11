@@ -110,6 +110,7 @@ const ModalComponent = ({
   setDisableFields,
   isScriptMasterContent,
   setClientDetail,
+  isBankMasterContent,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
@@ -120,7 +121,7 @@ const ModalComponent = ({
     bankFileBase64?: any,
     tdsFileExtension?: any,
     msmeFileExtension?: any,
-    bankFileExtension?: any
+    bankFileExtension?: any,
   ) => void;
   editData?: any;
   editUserCheck?: boolean;
@@ -136,6 +137,7 @@ const ModalComponent = ({
   setShowBankUpload?: any;
   isScriptMasterContent?: any;
   setClientDetail?: any;
+  isBankMasterContent?: any;
 }) => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [uploadedPanFile, setUploadedPanFile] = useState<File | null>(null);
@@ -186,7 +188,7 @@ const ModalComponent = ({
   ];
 
   const { authenticationValue, user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
   console.log("PAN1111111", authenticationValue, user_id);
   const rmc = user_id.split("-")[1] || "";
@@ -194,7 +196,7 @@ const ModalComponent = ({
   const dispatch = useDispatch<AppDispatch>();
 
   const getMarketingMaterialValidationSchema = (
-    editData?: IsMarketingMaterialEditData
+    editData?: IsMarketingMaterialEditData,
   ) =>
     Yup.object().shape({
       description: Yup.string().required("Please provide a description."),
@@ -224,7 +226,7 @@ const ModalComponent = ({
   const getRegulatoryValidationSchema = (editData: EditData) =>
     Yup.object().shape({
       dateOfCommunication: Yup.string().required(
-        "Date of Communication is required"
+        "Date of Communication is required",
       ),
       TypeOfDepartment: Yup.string().required("Department is required"),
       SubjectType: Yup.string().required("SubjectType is required"),
@@ -271,7 +273,7 @@ const ModalComponent = ({
 
             const emails = value.split(";");
             return emails.every((email) => isValidEmail(email));
-          }
+          },
         )
         .required("Email ID is required"),
       em1: Yup.string()
@@ -283,7 +285,7 @@ const ModalComponent = ({
             if (!value) return true; // Skip validation if empty
             const emails = value.split(";");
             return emails.every((email) => isValidEmail(email));
-          }
+          },
         ),
 
       em2: Yup.string()
@@ -295,7 +297,7 @@ const ModalComponent = ({
             if (!value) return true; // Skip validation if empty
             const emails = value.split(";");
             return emails.every((email) => isValidEmail(email));
-          }
+          },
         ),
       sac: Yup.string().required("SAC Number is required"),
       ste: Yup.string().required("State is required"),
@@ -312,6 +314,37 @@ const ModalComponent = ({
       isin: Yup.string().required("ISIN is required"),
     });
 
+  const getBankMasterValidationSchema = () =>
+    Yup.object().shape({
+      memberName: Yup.string()
+        .matches(/^[A-Za-z\s]+$/, "Only alphabets allowed")
+        .required("Member Name required"),
+      bankAccountName: Yup.string()
+        .matches(/^[A-Za-z\s]+$/, "Only alphabets allowed")
+        .required("Account Name required"),
+      bankAccountNumber: Yup.string()
+        .matches(/^[0-9\s]+$/, "Only numbers allowed")
+        .required("Account Number required"),
+      accountDescription: Yup.string()
+        .matches(/^[A-Za-z\s]+$/, "No special characters allowed")
+        .required("Description required"),
+      bankMasterIfscCode: Yup.string()
+        .trim()
+        // .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "Invalid IFSC Code")
+        .required("IFSC Code required"),
+      purpose: Yup.string()
+        .matches(/^[A-Za-z\s]+$/, "No special characters allowed")
+        .required("Purpose required"),
+
+      division: Yup.string()
+        .matches(/^[A-Za-z\s]+$/, "No special characters allowed")
+        .required("Division required"),
+      accountType: Yup.string().required("Account Type is required"),
+      status: Yup.string().required("Status is required"),
+      openingDate: Yup.date().required("Opening Date required"),
+      closingDate: Yup.date().required("Closing Date required"),
+    });
+
   const getValidationSchema = (editData?: EditData) => {
     // debugger;
     if (isRegulatoryContent) {
@@ -326,6 +359,8 @@ const ModalComponent = ({
       return getVendorMasterValidationSchema();
     } else if (isScriptMasterContent) {
       return getUnlistedScripMasterSchema();
+    } else if (isBankMasterContent) {
+      return getBankMasterValidationSchema();
     } else {
       return Yup.object(); // fallback schema (or handle general case)
     }
@@ -335,7 +370,7 @@ const ModalComponent = ({
     Yup.object().shape({
       vendorName: Yup.string().required("Vendor Name is required"),
       chequePrintName: Yup.string().required(
-        "Bank Beneficiary Name is required"
+        "Bank Beneficiary Name is required",
       ),
       address1: Yup.string().required("Address 1 is required"),
       // address2: Yup.string().required("Address2 is required"),
@@ -390,106 +425,120 @@ const ModalComponent = ({
         uploadProof: "",
       }
     : isMarketingMaterial
-    ? {
-        fileUpload: "",
-        description: "",
-        image: "",
-      }
-    : isClientExclusion
-    ? {
-        excludeType: "",
-        excludeCode: "",
-        excludeFrom: "",
-        excludeRemark: "",
-      }
-    : isThirdPartyMaster
-    ? {
-        ldc: "",
-        cnm: "",
-        em: "",
-        em1: "",
-        em2: "",
-        sac: "",
-        ste: "",
-        gst: "",
-        gsc: "",
-        pan: "",
-        ad1: "",
-        ad2: "",
-        ad3: "",
-        mob: "",
-      }
-    : isVendorMasterContent
-    ? {
-        vendorName: "",
-        chequePrintName: "",
-        address1: "",
-        address2: "",
-        address3: "",
-        city: "",
-        pinCode: "",
-        state: "",
-        gstNo: "",
-        mobileNo: "",
-        emailId: "",
-        telephoneNo: "",
-        faxNo: "",
-        panNo: "",
-        panFile: null,
-        panExtension: "",
-        panDoc: "",
-        serviceTaxNo: "",
-        websiteName: "",
-        // tdsFlag: "",
-        // tdsFile: null,
-        tdsFileName: "",
-        msmeFlag: "",
-        msmeType: "",
-        msmeFile: null,
-        msmeFileName: "",
-        ifscCode: "",
-        bankAccountNo: "",
-        bankFile: null,
-        bankFileName: "",
-        // directAppLevel: "",
-      }
-    : isScriptMasterContent
-    ? {
-        scriptName: "",
-        isin: "",
-        isActive: false,
-      }
-    : {
-        tdt: null as string | null,
-        cn: null as Client | string | null,
-        cc: null as Client | string | null,
-        isin: "",
-        nsec: "",
-        nsh: null,
-        crt: null,
-        vrt: null,
-        lcps: null,
-        big: null, //Brok inclusive GST
-        gst: null,
-        beg: null,
-        sbc: null,
-        sbr: null,
-        sbcm: null,
-        nbg: null,
-        rmc: rmc,
-        unlistedClientCode: "",
-        scriptName: "",
-        paymentMode: "",
-        issueDate: null as string | null,
-        referenceNumber: "",
-        bankAccountNumber: "",
-        bankName: "",
-        clientCode: "",
-        clientName: "",
-        dpName: "",
-        dpid: "",
-        ifscCode: "",
-      };
+      ? {
+          fileUpload: "",
+          description: "",
+          image: "",
+        }
+      : isClientExclusion
+        ? {
+            excludeType: "",
+            excludeCode: "",
+            excludeFrom: "",
+            excludeRemark: "",
+          }
+        : isThirdPartyMaster
+          ? {
+              ldc: "",
+              cnm: "",
+              em: "",
+              em1: "",
+              em2: "",
+              sac: "",
+              ste: "",
+              gst: "",
+              gsc: "",
+              pan: "",
+              ad1: "",
+              ad2: "",
+              ad3: "",
+              mob: "",
+            }
+          : isVendorMasterContent
+            ? {
+                vendorName: "",
+                chequePrintName: "",
+                address1: "",
+                address2: "",
+                address3: "",
+                city: "",
+                pinCode: "",
+                state: "",
+                gstNo: "",
+                mobileNo: "",
+                emailId: "",
+                telephoneNo: "",
+                faxNo: "",
+                panNo: "",
+                panFile: null,
+                panExtension: "",
+                panDoc: "",
+                serviceTaxNo: "",
+                websiteName: "",
+                // tdsFlag: "",
+                // tdsFile: null,
+                tdsFileName: "",
+                msmeFlag: "",
+                msmeType: "",
+                msmeFile: null,
+                msmeFileName: "",
+                ifscCode: "",
+                bankAccountNo: "",
+                bankFile: null,
+                bankFileName: "",
+                // directAppLevel: "",
+              }
+            : isScriptMasterContent
+              ? {
+                  scriptName: "",
+                  isin: "",
+                  isActive: false,
+                }
+              : isBankMasterContent
+                ? {
+                    memberName: "",
+                    bankAccountName: "",
+                    bankAccountNumber: "",
+                    accountDescription: "",
+                    bankMasterIfscCode: "",
+                    purpose: "",
+                    accountType: "",
+                    status: "",
+                    openingDate: "",
+                    closingDate: "",
+                    division: "",
+                  }
+                : {
+                    tdt: null as string | null,
+                    cn: null as Client | string | null,
+                    cc: null as Client | string | null,
+                    isin: "",
+                    nsec: "",
+                    nsh: null,
+                    crt: null,
+                    vrt: null,
+                    lcps: null,
+                    big: null, //Brok inclusive GST
+                    gst: null,
+                    beg: null,
+                    sbc: null,
+                    sbr: null,
+                    sbcm: null,
+                    nbg: null,
+                    rmc: rmc,
+                    unlistedClientCode: "",
+                    scriptName: "",
+                    paymentMode: "",
+                    issueDate: null as string | null,
+                    referenceNumber: "",
+                    bankAccountNumber: "",
+                    bankName: "",
+                    clientCode: "",
+                    clientName: "",
+                    dpName: "",
+                    dpid: "",
+                    ifscCode: "",
+                  };
   const cleanEmails = (email: any) => normalizeEmailInput(email);
   const formik = useFormik({
     initialValues,
@@ -561,6 +610,8 @@ const ModalComponent = ({
 
           fetchSubmissionValues(thirdPartyPayload); // <- You need to define this function
           return;
+        } else if (isBankMasterContent) {
+          fetchBankMasterContentDetais(setTouched, values);
         } else if (isScriptMasterContent) {
           fetchScripMasterContent(setTouched, values);
           return;
@@ -570,6 +621,19 @@ const ModalComponent = ({
       }
     },
   });
+
+  const fetchBankMasterContentDetais = (setTouched: any, values: any) => {
+    setTouched({
+      memberName: true,
+      bankAccountName: true,
+      bankAccountNumber: true,
+      accountDescription: true,
+      bankMasterIfscCode: true,
+    });
+    console.log("testArgs", setTouched, values);
+    onSubmit?.(values);
+    formik.resetForm();
+  };
 
   const fetchScripMasterContent = async (setTouched: any, values: any) => {
     console.log("testArgs", setTouched, values);
@@ -625,7 +689,7 @@ const ModalComponent = ({
       bankFileBase64,
       panFileExtension,
       msmeFileExtension,
-      bankFileExtension
+      bankFileExtension,
     );
 
     // Reset form
@@ -699,7 +763,7 @@ const ModalComponent = ({
       try {
         uploadedFileExt = await handleFileUploadAsync(
           uploadedFile,
-          communicationProofPath
+          communicationProofPath,
         ); // Wait for file upload
         setFileExtension(uploadedFileExt);
       } catch (error) {
@@ -719,7 +783,7 @@ const ModalComponent = ({
         "EditData communicationProofPath",
         communicationProofPath,
         "File Extension:",
-        uploadedFileExt
+        uploadedFileExt,
       );
     }
     //   fetchSubmitForm(uploadedFileExt, communicationProofPath);
@@ -788,7 +852,7 @@ const ModalComponent = ({
       editData,
       editUserCheck,
       fileExtension,
-      setShowImg
+      setShowImg,
     );
     // debugger;
     if (editData?.RowId > 0) {
@@ -918,13 +982,38 @@ const ModalComponent = ({
         formik.setFieldValue("isin", editData?.isin);
         formik.setFieldValue("isActive", editData?.isact);
       }
+
+      if (isBankMasterContent) {
+        formik.setFieldValue("memberName", editData?.MemberName);
+        formik.setFieldValue("bankAccountName", editData?.BankAccountName);
+        formik.setFieldValue("bankAccountNumber", editData?.BankAccountNumber);
+        formik.setFieldValue(
+          "accountDescription",
+          editData?.AccountDescription,
+        );
+        formik.setFieldValue("bankMasterIfscCode", editData?.IFSCCode);
+        formik.setFieldValue("purpose", editData?.Purpose);
+        formik.setFieldValue("division", editData?.Division);
+        formik.setFieldValue("accountType", editData?.AccountType);
+        formik.setFieldValue("status", editData?.Status);
+
+        formik.setFieldValue(
+          "openingDate",
+          editData?.OpeningDate ? dayjs(editData.OpeningDate) : null,
+        );
+
+        formik.setFieldValue(
+          "closingDate",
+          editData?.ClosingDate ? dayjs(editData.ClosingDate) : null,
+        );
+      }
     }
   }, [editData, editUserCheck]);
 
   const handleFileUploadAsync = (
     file: any,
     communicationProofPath?: string,
-    isUploadedFile?: string
+    isUploadedFile?: string,
   ): Promise<string> => {
     return new Promise((resolve, reject) => {
       console.log("args-->", file, communicationProofPath, isUploadedFile);
@@ -1096,7 +1185,7 @@ const ModalComponent = ({
             fileInputRef.current.value = "";
             formik.setFieldError(
               "uploadProof",
-              "Please upload a proof document"
+              "Please upload a proof document",
             );
           }
           dispatch(hideLoader());
@@ -1182,10 +1271,10 @@ const ModalComponent = ({
       formik.setFieldValue(name, decimalValue);
 
       const crt = parseFloat(
-        name === "crt" ? decimalValue : formik.values.crt || "0"
+        name === "crt" ? decimalValue : formik.values.crt || "0",
       );
       const vrt = parseFloat(
-        name === "vrt" ? decimalValue : formik.values.vrt || "0"
+        name === "vrt" ? decimalValue : formik.values.vrt || "0",
       );
 
       if (!isNaN(crt) && !isNaN(vrt)) {
@@ -1248,7 +1337,7 @@ const ModalComponent = ({
         // const subBrokerCommission = Math.floor(subBrokerValue - stComm);
 
         const beg = Math.floor(
-          parseFloat((formik.values.beg ?? "0").toString().replace(/,/g, ""))
+          parseFloat((formik.values.beg ?? "0").toString().replace(/,/g, "")),
         );
 
         const nbg = Math.floor(Math.abs(beg - subBrokerCommission));
@@ -1320,7 +1409,7 @@ const ModalComponent = ({
 
   const handleDrop = (
     e: React.DragEvent<HTMLDivElement>,
-    fieldName: "bankFile" | "msmeFile" | "panFile"
+    fieldName: "bankFile" | "msmeFile" | "panFile",
   ) => {
     e.preventDefault();
     e.stopPropagation();
@@ -1339,17 +1428,17 @@ const ModalComponent = ({
 
   const handlePreviewFile = (
     file: File | null | undefined,
-    isUploadedFile?: string
+    isUploadedFile?: string,
   ) => {
     // Get the correct file from formik.values if not directly passed
     const selectedFile =
       isUploadedFile === "panFile"
         ? formik.values.panFile
         : isUploadedFile === "msmeFile"
-        ? formik.values.msmeFile
-        : isUploadedFile === "bankFile"
-        ? formik.values.bankFile
-        : file;
+          ? formik.values.msmeFile
+          : isUploadedFile === "bankFile"
+            ? formik.values.bankFile
+            : file;
     console.log("File111111", file, isUploadedFile);
 
     if (!selectedFile || !selectedFile.name) {
@@ -1374,7 +1463,7 @@ const ModalComponent = ({
       const file = base64ToFileAuto(
         editData.msmePath,
         editData?.msmseExtn, // keep exact key from API
-        formik.values.msmeFileName
+        formik.values.msmeFileName,
       );
       console.log("MSME Base64", editData.msmePath.slice(0, 50));
       if (file) formik.setFieldValue("msmeFile", file);
@@ -1384,7 +1473,7 @@ const ModalComponent = ({
       const file = base64ToFileAuto(
         editData.bankDoc,
         editData?.bankDocExtn,
-        formik.values.bankFileName
+        formik.values.bankFileName,
       );
       console.log("Bank Base64", editData.bankDoc.slice(0, 50));
       if (file) formik.setFieldValue("bankFile", file);
@@ -1394,7 +1483,7 @@ const ModalComponent = ({
   function base64ToFileAuto(
     base64: string,
     extn?: string,
-    fileName?: string
+    fileName?: string,
   ): File | null {
     if (!base64) return null;
 
@@ -1424,18 +1513,18 @@ const ModalComponent = ({
       extn?.toLowerCase() === ".pdf" || extn?.toLowerCase() === "pdf"
         ? "application/pdf"
         : extn?.toLowerCase() === ".jpg" ||
-          extn?.toLowerCase() === "jpg" ||
-          extn?.toLowerCase() === ".jpeg" ||
-          extn?.toLowerCase() === "jpeg"
-        ? "image/jpeg"
-        : extn?.toLowerCase() === ".png" || extn?.toLowerCase() === "png"
-        ? "image/png"
-        : "application/octet-stream";
+            extn?.toLowerCase() === "jpg" ||
+            extn?.toLowerCase() === ".jpeg" ||
+            extn?.toLowerCase() === "jpeg"
+          ? "image/jpeg"
+          : extn?.toLowerCase() === ".png" || extn?.toLowerCase() === "png"
+            ? "image/png"
+            : "application/octet-stream";
 
     return new File(
       [new Uint8Array(arrayBuffer)],
       fileName || `file${extn || ""}`,
-      { type: mimeType }
+      { type: mimeType },
     );
   }
 
@@ -1450,7 +1539,8 @@ const ModalComponent = ({
     if (
       editUserCheck &&
       activeSubItem !== "Unlisted Scrip Master" &&
-      activeSubItem !== "Unlisted Shares Entry"
+      activeSubItem !== "Unlisted Shares Entry" &&
+      activeSubItem !== "LKP Bank Entry"
       // activeSubItem != "Vendor Creation"
     ) {
       const fileExtension =
@@ -1570,6 +1660,25 @@ const ModalComponent = ({
     }
   };
 
+  const allowLetters = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^A-Za-z\s]/g, "");
+    formik.setFieldValue(e.target.name, value);
+  };
+
+  const allowNumbers = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9\s]/g, "");
+    formik.setFieldValue(e.target.name, value);
+  };
+
+  const handleIFSC = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "")
+      .slice(0, 10);
+
+    formik.setFieldValue("bankMasterIfscCode", value);
+  };
+
   useEffect(() => {
     if (!isUnlistedContent || inputValue.trim().length < 2) {
       setClientList([]);
@@ -1660,6 +1769,10 @@ const ModalComponent = ({
       formik.setFieldValue("cn", "");
     }
   }, [modal_grid, editData, isUnlistedContent]);
+
+  useEffect(() => {
+    console.log("TestTest", formik.values?.ifscCode);
+  }, [formik.values]);
 
   return (
     <>
@@ -1758,7 +1871,7 @@ const ModalComponent = ({
                             formik.values.dateOfCommunication
                               ? dayjs(
                                   formik.values.dateOfCommunication,
-                                  "YYYY-MM-DD"
+                                  "YYYY-MM-DD",
                                 )
                               : null
                           }
@@ -1767,14 +1880,14 @@ const ModalComponent = ({
                           onChange={(date: Dayjs | null) =>
                             formik.setFieldValue(
                               "dateOfCommunication",
-                              date ? date.format("YYYY-MM-DD") : ""
+                              date ? date.format("YYYY-MM-DD") : "",
                             )
                           }
                           slotProps={{
                             textField: {
                               error: Boolean(
                                 formik.touched.dateOfCommunication &&
-                                  formik.errors.dateOfCommunication
+                                formik.errors.dateOfCommunication,
                               ),
                               helperText:
                                 formik.touched.dateOfCommunication &&
@@ -2059,7 +2172,7 @@ const ModalComponent = ({
                             <MenuItem key={docType.value} value={docType.value}>
                               {docType.label}
                             </MenuItem>
-                          )
+                          ),
                         )}
                       </Select>
                       {formik.touched.excludeFrom &&
@@ -2168,7 +2281,7 @@ const ModalComponent = ({
                               onChange={(date: Dayjs | null) =>
                                 formik.setFieldValue(
                                   "tdt",
-                                  date ? date.format("DD-MM-YYYY") : ""
+                                  date ? date.format("DD-MM-YYYY") : "",
                                 )
                               }
                               slotProps={{
@@ -2192,7 +2305,7 @@ const ModalComponent = ({
                                   },
 
                                   error: Boolean(
-                                    formik.touched.tdt && formik.errors.tdt
+                                    formik.touched.tdt && formik.errors.tdt,
                                   ),
                                   helperText:
                                     formik.touched.tdt && formik.errors.tdt,
@@ -2316,7 +2429,7 @@ const ModalComponent = ({
                             value={
                               clientList.find(
                                 (client) =>
-                                  client.clientCode === formik.values.cc
+                                  client.clientCode === formik.values.cc,
                               ) || null
                             }
                             inputValue={inputValue}
@@ -2324,12 +2437,12 @@ const ModalComponent = ({
                               console.log(
                                 "newInputValue",
                                 event,
-                                newInputValue
+                                newInputValue,
                               );
 
                               const cleanedValue = newInputValue.replace(
                                 /[^a-zA-Z0-9 ]/g,
-                                ""
+                                "",
                               );
                               setInputValue(cleanedValue);
                               console.log("CleanedValue", cleanedValue);
@@ -2373,7 +2486,7 @@ const ModalComponent = ({
                                   const exists = clientList.some(
                                     (client) =>
                                       client.clientName.toLowerCase() ===
-                                      value.toLowerCase()
+                                      value.toLowerCase(),
                                   );
 
                                   if (!exists) {
@@ -2510,7 +2623,7 @@ const ModalComponent = ({
                           options={scripMasterData}
                           value={
                             scripMasterData.find(
-                              (item) => item.isin === formik.values.isin
+                              (item) => item.isin === formik.values.isin,
                             ) || null
                           }
                           onChange={(event, value) => {
@@ -2518,7 +2631,7 @@ const ModalComponent = ({
 
                             formik.setFieldValue(
                               "nsec",
-                              value?.scripName || ""
+                              value?.scripName || "",
                             );
                             formik.setFieldValue("isin", value?.isin || "");
                           }}
@@ -2594,11 +2707,11 @@ const ModalComponent = ({
                           onChange={(e) => {
                             const cleaned = e.target.value.replace(
                               /[^a-zA-Z0-9 ]/g,
-                              ""
+                              "",
                             );
                             formik.setFieldValue(
                               "dpName",
-                              cleaned.toUpperCase()
+                              cleaned.toUpperCase(),
                             );
                           }}
                           onBlur={formik.handleBlur}
@@ -2627,7 +2740,7 @@ const ModalComponent = ({
                           onChange={(e) => {
                             const cleaned = e.target.value.replace(
                               /[^0-9]/g,
-                              ""
+                              "",
                             );
                             formik.setFieldValue("dpid", cleaned);
                           }}
@@ -2687,7 +2800,7 @@ const ModalComponent = ({
                           onChange={(e) => {
                             const cleaned = e.target.value.replace(
                               /[^0-9]/g,
-                              ""
+                              "",
                             );
                             formik.setFieldValue("bankAccountNumber", cleaned);
                           }}
@@ -2728,7 +2841,7 @@ const ModalComponent = ({
                           onChange={(e) => {
                             const cleaned = e.target.value.replace(
                               /[^a-zA-Z ]/g,
-                              ""
+                              "",
                             );
                             formik.setFieldValue("bankName", cleaned);
                           }}
@@ -2850,7 +2963,7 @@ const ModalComponent = ({
                             onChange={(date: Dayjs | null) =>
                               formik.setFieldValue(
                                 "issueDate",
-                                date ? date.format("DD-MM-YYYY") : ""
+                                date ? date.format("DD-MM-YYYY") : "",
                               )
                             }
                             // maxDate={dayjs()} //    Restricts future dates
@@ -2895,7 +3008,7 @@ const ModalComponent = ({
                           onChange={(e) => {
                             const cleaned = e.target.value.replace(
                               /[^a-zA-Z0-9]/g,
-                              ""
+                              "",
                             );
                             formik.setFieldValue("referenceNumber", cleaned);
                           }}
@@ -3783,7 +3896,7 @@ const ModalComponent = ({
                               }
                             />
                           </Box>
-                        )
+                        ),
                       )}
 
                       {vendorFields.map(({ name, label }) => (
@@ -3832,13 +3945,13 @@ const ModalComponent = ({
                                   await handleFileUploadAsync(
                                     file,
                                     file.name,
-                                    "panFile"
+                                    "panFile",
                                   );
                                   formik.setFieldValue("panFile", file);
                                 } catch (error) {
                                   formik.setFieldError(
                                     "panFile",
-                                    "Failed to upload file."
+                                    "Failed to upload file.",
                                   );
                                 }
                               }
@@ -4067,13 +4180,13 @@ const ModalComponent = ({
                                       await handleFileUploadAsync(
                                         file,
                                         file.name,
-                                        "msmeFile"
+                                        "msmeFile",
                                       );
                                       formik.setFieldValue("msmeFile", file);
                                     } catch (error) {
                                       formik.setFieldError(
                                         "msmeFile",
-                                        "Failed to upload file."
+                                        "Failed to upload file.",
                                       );
                                     }
                                   }
@@ -4128,7 +4241,7 @@ const ModalComponent = ({
                                           e.stopPropagation();
                                           formik.setFieldValue(
                                             "msmeFile",
-                                            null
+                                            null,
                                           );
                                           setUploadedMSMEFile(null);
                                           setmsmeFileExtension("");
@@ -4197,7 +4310,7 @@ const ModalComponent = ({
                                   onClick={() =>
                                     handlePreviewFile(
                                       formik.values.msmeFile,
-                                      "msmeFile"
+                                      "msmeFile",
                                     )
                                   }
                                   style={{
@@ -4284,13 +4397,13 @@ const ModalComponent = ({
                                 await handleFileUploadAsync(
                                   file,
                                   file.name,
-                                  "bankFile"
+                                  "bankFile",
                                 );
                                 formik.setFieldValue("bankFile", file);
                               } catch (error) {
                                 formik.setFieldError(
                                   "bankFile",
-                                  "Failed to upload file."
+                                  "Failed to upload file.",
                                 );
                               }
                             }
@@ -4392,7 +4505,7 @@ const ModalComponent = ({
                             onClick={() =>
                               handlePreviewFile(
                                 formik.values.bankFile,
-                                "bankFile"
+                                "bankFile",
                               )
                             }
                             style={{
@@ -4484,6 +4597,223 @@ const ModalComponent = ({
                 </Box>
               )}
 
+              {isBankMasterContent && (
+                <Box
+                  sx={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, 1fr)",
+                    gap: 1,
+                    mt: 1,
+                  }}
+                >
+                  <TextField
+                    label="Member Name"
+                    name="memberName"
+                    size="small"
+                    value={formik.values.memberName}
+                    onChange={allowLetters}
+                    error={
+                      formik.touched.memberName &&
+                      Boolean(formik.errors.memberName)
+                    }
+                    helperText={
+                      formik.touched.memberName && formik.errors.memberName
+                    }
+                  />
+
+                  <TextField
+                    label="Bank Account Name"
+                    name="bankAccountName"
+                    size="small"
+                    value={formik.values.bankAccountName}
+                    onChange={allowLetters}
+                    error={
+                      formik.touched.bankAccountName &&
+                      Boolean(formik.errors.bankAccountName)
+                    }
+                    helperText={
+                      formik.touched.bankAccountName &&
+                      formik.errors.bankAccountName
+                    }
+                  />
+
+                  <TextField
+                    label="Account Number"
+                    name="bankAccountNumber"
+                    size="small"
+                    value={formik.values.bankAccountNumber}
+                    onChange={allowNumbers}
+                    inputProps={{ maxLength: 20 }}
+                    error={
+                      formik.touched.bankAccountNumber &&
+                      Boolean(formik.errors.bankAccountNumber)
+                    }
+                    helperText={
+                      formik.touched.bankAccountNumber &&
+                      formik.errors.bankAccountNumber
+                    }
+                  />
+
+                  <TextField
+                    label="Account Description"
+                    name="accountDescription"
+                    size="small"
+                    value={formik.values.accountDescription}
+                    onChange={allowLetters}
+                    error={
+                      formik.touched.accountDescription &&
+                      Boolean(formik.errors.accountDescription)
+                    }
+                    helperText={
+                      formik.touched.accountDescription &&
+                      formik.errors.accountDescription
+                    }
+                  />
+
+                  {/* <TextField
+                    label="IFSC Code"
+                    name="ifscCode"
+                    size="small"
+                    inputProps={{ maxLength: 11 }}
+                    value={formik.values.ifscCode}
+                    onChange={handleIFSC}
+                    error={
+                      formik.touched.ifscCode && Boolean(formik.errors.ifscCode)
+                    }
+                    helperText={
+                      formik.touched.ifscCode && formik.errors.ifscCode
+                    }
+                  /> */}
+                  <TextField
+                    label="IFSC Code"
+                    name="bankMasterIfscCode"
+                    size="small"
+                    value={formik.values.bankMasterIfscCode}
+                    inputProps={{ maxLength: 10 }}
+                    onChange={handleIFSC}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.bankMasterIfscCode &&
+                      Boolean(formik.errors.bankMasterIfscCode)
+                    }
+                    helperText={
+                      formik.touched.bankMasterIfscCode &&
+                      formik.errors.bankMasterIfscCode
+                    }
+                  />
+
+                  <TextField
+                    label="Purpose"
+                    name="purpose"
+                    size="small"
+                    value={formik.values.purpose}
+                    onChange={allowLetters}
+                    error={
+                      formik.touched.purpose && Boolean(formik.errors.purpose)
+                    }
+                    helperText={formik.touched.purpose && formik.errors.purpose}
+                  />
+
+                  {/* Account Type Dropdown */}
+
+                  <TextField
+                    select
+                    label="Account Type"
+                    name="accountType"
+                    size="small"
+                    value={formik.values.accountType}
+                    onChange={formik.handleChange}
+                  >
+                    <MenuItem value="Client Account">Client Account</MenuItem>
+                  </TextField>
+
+                  {/* Status */}
+
+                  <TextField
+                    select
+                    label="Status"
+                    name="status"
+                    size="small"
+                    value={formik.values.status}
+                    onChange={formik.handleChange}
+                  >
+                    <MenuItem value="Active">Active</MenuItem>
+                    <MenuItem value="Inactive">Inactive</MenuItem>
+                  </TextField>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Opening Date"
+                      format="DD/MM/YYYY"
+                      value={
+                        formik.values.openingDate
+                          ? dayjs(formik.values.openingDate, "YYYY-MM-DD")
+                          : null
+                      }
+                      onChange={(date: Dayjs | null) =>
+                        formik.setFieldValue(
+                          "openingDate",
+                          date ? date.format("YYYY-MM-DD") : "",
+                        )
+                      }
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                          name: "openingDate",
+                          error:
+                            formik.touched.openingDate &&
+                            Boolean(formik.errors.openingDate),
+                          helperText:
+                            formik.touched.openingDate &&
+                            formik.errors.openingDate,
+                        },
+                      }}
+                    />
+                  </LocalizationProvider>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Closing Date"
+                      format="DD/MM/YYYY"
+                      value={
+                        formik.values.closingDate
+                          ? dayjs(formik.values.closingDate, "YYYY-MM-DD")
+                          : null
+                      }
+                      onChange={(date: Dayjs | null) =>
+                        formik.setFieldValue(
+                          "closingDate",
+                          date ? date.format("YYYY-MM-DD") : "",
+                        )
+                      }
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                          name: "closingDate",
+                          error:
+                            formik.touched.closingDate &&
+                            Boolean(formik.errors.closingDate),
+                          helperText:
+                            formik.touched.closingDate &&
+                            formik.errors.closingDate,
+                        },
+                      }}
+                    />
+                  </LocalizationProvider>
+
+                  <TextField
+                    label="Division"
+                    name="division"
+                    size="small"
+                    value={formik.values.division}
+                    onChange={allowLetters}
+                    error={
+                      formik.touched.division && Boolean(formik.errors.division)
+                    }
+                    helperText={
+                      formik.touched.division && formik.errors.division
+                    }
+                  />
+                </Box>
+              )}
               <Col lg={12}>
                 <div className="hstack gap-2 justify-content-end">
                   <Button

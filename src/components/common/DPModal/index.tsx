@@ -57,7 +57,7 @@ interface CustomModalProps {
     remark: string,
     entryFlag: string,
     base64?: string,
-    vendorId?: string
+    vendorId?: string,
   ) => void;
 
   Msg?: string;
@@ -137,8 +137,8 @@ const CustomModal = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log("TestProps", activeSubItem, "row", row);
-  }, [fileExtension, setSetShowImg, previewUrl, activeSubItem, row]);
+    console.log("TestProps", "row", row, action);
+  }, [row, action]);
 
   useEffect(() => {
     if (activeSubItem === "mandateCall" && row) {
@@ -212,14 +212,16 @@ const CustomModal = ({
                 schema
                   .required("TDS Document is required")
                   .test("fileSize", "File too large", (value) =>
-                    value instanceof File ? value.size <= 5 * 1024 * 1024 : true
+                    value instanceof File
+                      ? value.size <= 5 * 1024 * 1024
+                      : true,
                   )
                   .test("fileType", "Unsupported file format", (value) =>
                     value instanceof File
                       ? ["application/pdf", "image/jpeg", "image/png"].includes(
-                          value.type
+                          value.type,
                         )
-                      : true
+                      : true,
                   ),
               otherwise: (schema) => schema.notRequired(),
             }),
@@ -324,6 +326,7 @@ const CustomModal = ({
           "Vendor Approval",
           "mandateCall",
           "Unlisted Scrip Master",
+          "LKP Bank Approval",
         ];
         const isStandardFlow = standardItems.includes(activeSubItem);
         const isSpecialRejectCase =
@@ -397,19 +400,19 @@ const CustomModal = ({
             localStorage.setItem("tkn", token);
             localStorage.setItem(
               "authPan",
-              encryptAES(formik?.values?.userPanValue)
+              encryptAES(formik?.values?.userPanValue),
             );
             console.log("panValue", formik.values?.userPanValue);
             dispatch(setAuthenticationValue(formik.values.userPanValue));
             // localStorage.setItem("userName", name);
             dispatch(
               updateUserId(
-                `${formik.values.prefix}-${formik.values.userChangeValue}`
-              )
+                `${formik.values.prefix}-${formik.values.userChangeValue}`,
+              ),
             );
             localStorage.setItem(
               "Id",
-              `${formik.values.prefix}-${formik.values.userChangeValue}`
+              `${formik.values.prefix}-${formik.values.userChangeValue}`,
             );
             setmodal_center(false);
             formik.resetForm();
@@ -425,7 +428,7 @@ const CustomModal = ({
         // formik.setFieldError("password", message);
         ShowToast(
           "error",
-          message || "Sorry for the inconvenience, please try after some time."
+          message || "Sorry for the inconvenience, please try after some time.",
         );
       })
       .finally(() => {
@@ -492,13 +495,13 @@ const CustomModal = ({
       formik.values.dropdownOption,
       "base64====>",
       base64,
-      action
+      action,
     );
     handleApproval?.(
       row,
       formik.values.remark,
       action ?? "approve",
-      formik.values.dropdownOption
+      formik.values.dropdownOption,
       // base64
     );
     setSelectedFile(null);
@@ -550,7 +553,7 @@ const CustomModal = ({
           if (value && value < 5000) {
             formik.setFieldError(
               "mandateAmount",
-              "Amount must be at least 5000"
+              "Amount must be at least 5000",
             );
           }
         }}
@@ -633,6 +636,7 @@ const CustomModal = ({
       "Third Party Vendor Approval",
       "Vendor Approval",
       "Third Party Invoice Verify",
+      "LKP Bank Approval",
     ];
     return (
       remarkItems.includes(activeSubItem) &&
@@ -1452,9 +1456,9 @@ const CustomModal = ({
         maxWidth: setShowImg
           ? "700px"
           : activeSubItem === "Partner Contest Report" ||
-            activeSubItem === "SPIP Contest Report"
-          ? "90%"
-          : "500px",
+              activeSubItem === "SPIP Contest Report"
+            ? "90%"
+            : "500px",
         borderRadius: "12px",
         overflow: "hidden",
       }}

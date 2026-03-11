@@ -335,6 +335,16 @@ export const endpoints = {
   FetchSPIPClients: "/api/SPIP/FetchClients",
   SendTrilogyEmail: "/api/Trilogy/SendTrilogyEmail",
   SendSpipEmail: "/api/SPIP/SendSpipEmail",
+  InsertBankAcoountMaster: "/api/Account/InsertBankAcoountMaster",
+  GetPendingEntryBankAccountMaster:
+    "/api/Account/GetPendingEntryBankAccountMaster",
+  GetEntry_Delete: "/api/Account/GetEntry_Delete",
+  GetEntry_Update: "/api/Account/GetEntry_Update",
+  GetEntry_Approval: "/api/Account/GetEntry_Approval",
+  GetFinalReportBankAccountMaster:
+    "/api/Account/GetFinalReportBankAccountMaster",
+
+  BankAccountMaster_report: "/api/Account/BankAccountMaster_report",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);
