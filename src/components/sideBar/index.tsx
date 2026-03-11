@@ -131,6 +131,8 @@ import StopLoss from "../../pages/Masters/stopLoss";
 import ScriptMaster from "../../pages/Masters/scriptMaster";
 import ContractNote from "../../pages/UnlistedShare/contractNote";
 import BankRecordEntry from "../../pages/ThirdParty/bankMaster/bankRecordEntry";
+import BankApproval from "../../pages/ThirdParty/bankMaster/bankApproval";
+import BankReport from "../../pages/Reports/BankReport";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -740,6 +742,7 @@ const SideBar = () => {
     ),
     "DP AMC Transaction": <DPTransactionIndex activeSubItem={activeSubItem} />,
     "Pledge Request Report": <PledgeReport activeSubItem={activeSubItem} />,
+    "LKP Bank Report": <BankReport activeSubItem={activeSubItem} />,
   };
 
   // const referalSubItems: Record<string, JSX.Element> = {
@@ -846,6 +849,7 @@ const SideBar = () => {
     "Vendor Details Report": <VendorReport activeSubItem={activeSubItem} />,
     "DP AutoPay Report": <AutoPayReport activeSubItem={activeSubItem} />,
     "LKP Bank Entry": <BankRecordEntry activeSubItem={activeSubItem} />,
+    "LKP Bank Approval": <BankApproval activeSubItem={activeSubItem} />,
   };
 
   const q4SubItems: Record<string, JSX.Element> = {

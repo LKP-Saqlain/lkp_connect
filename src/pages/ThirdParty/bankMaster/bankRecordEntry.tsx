@@ -2,19 +2,39 @@ import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Button, Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import ModalComponent from "../../../components/common/masterModal";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice.ts";
 import { apiServices } from "../../../services/index.ts";
 import DataTable from "../../../components/common/UserInfoTable";
 import ShowToast from "../../../utils/toastUtils.tsx";
+import dayjs from "dayjs";
+
+type BankRecord = {
+  Id: number;
+  MemberName: string;
+  BankAccountName: string;
+  BankAccountNumber: string;
+  AccountDescription: string;
+  IFSCCode: string;
+  Purpose: string;
+  AccountType: string;
+  Status: string;
+  OpeningDate: string;
+  ClosingDate: string;
+  Division: string;
+};
 
 const bankRecordEntry = ({ activeSubItem }: any) => {
   const [modal_grid, setmodal_grid] = useState<boolean>(false);
   const [editUserCheck, setEditUserCheck] = useState(false);
-  const [editData, setEditData] = useState<null | null>(null);
+  const [editData, setEditData] = useState<BankRecord | null>(null);
   const [pendingBankAccounts, setPendingBankAccounts] = useState<any[]>([]);
 
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data,
+  );
+  const userId = user_id?.split("-")[1];
   const dispatch = useDispatch<AppDispatch>();
 
   function tog_grid() {
@@ -22,8 +42,60 @@ const bankRecordEntry = ({ activeSubItem }: any) => {
     setEditUserCheck(false);
   }
 
+  const handleUpdateBankMaster = (data: any) => {
+    console.log("Test123321", data, editData);
+
+    const payload = {
+      actionType: "UPDATE",
+      id: editData && editData?.Id,
+      memberName: data?.memberName,
+      bankAccountName: data?.bankAccountName,
+      bankAccountNumber: data?.bankAccountNumber,
+      accountDescription: data?.accountDescription,
+      ifscCode: data?.bankMasterIfscCode,
+      purpose: data?.purpose,
+      accountType: data?.accountType,
+      status: data?.status,
+      openingDate: data?.openingDate
+        ? dayjs(data.openingDate).format("YYYY-MM-DD")
+        : null,
+
+      closingDate: data?.closingDate
+        ? dayjs(data.closingDate).format("YYYY-MM-DD")
+        : null,
+      division: data?.division,
+      userId: userId,
+    };
+    console.log("Payload", payload);
+
+    dispatch(showLoader(""));
+    apiServices
+      .GetEntry_Update(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          console.log("Insert_Success", response?.data?.data[0]?.msg);
+          ShowToast("success", response?.data?.data[0]?.msg);
+          setmodal_grid(!modal_grid);
+
+          // Call pending API
+          getPendingBankAccounts();
+        }
+      })
+      .catch((error) => {
+        console.log("Insert Error", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
   const handleFormSubmit = (data: any, apiStatus: any) => {
     console.log("Received form data in parent:", data, apiStatus);
+
+    if (editUserCheck) {
+      handleUpdateBankMaster(data);
+      return;
+    }
 
     const payload = {
       actionType: "insert",
@@ -38,7 +110,7 @@ const bankRecordEntry = ({ activeSubItem }: any) => {
       openingDate: data?.openingDate,
       closingDate: data?.closingDate,
       division: data?.division,
-      userId: data?.rmc,
+      userId: userId,
     };
 
     dispatch(showLoader(""));
@@ -48,9 +120,8 @@ const bankRecordEntry = ({ activeSubItem }: any) => {
       .then((response) => {
         if (response?.status === 200) {
           console.log("Insert Success", response?.data?.data);
-
           setmodal_grid(!modal_grid);
-
+          ShowToast("success", response?.data?.data[0].Message);
           // Call pending API
           getPendingBankAccounts();
         }
@@ -67,7 +138,7 @@ const bankRecordEntry = ({ activeSubItem }: any) => {
     const payload = {
       actionType: "GET_PENDING",
     };
-
+    dispatch(showLoader(""));
     apiServices
       .GetPendingEntryBankAccountMaster(payload)
       .then((response) => {
@@ -79,6 +150,9 @@ const bankRecordEntry = ({ activeSubItem }: any) => {
       })
       .catch((error) => {
         console.log("Pending API Error:", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
       });
   };
 
@@ -92,7 +166,7 @@ const bankRecordEntry = ({ activeSubItem }: any) => {
 
     setmodal_grid(true);
     setEditData(data);
-    // setEditUserCheck(editCheck);
+    setEditUserCheck(editCheck);
   };
 
   const getUserDetails = async (value: any) => {
@@ -109,7 +183,7 @@ const bankRecordEntry = ({ activeSubItem }: any) => {
       .then((response) => {
         if (response?.status === 200) {
           console.log("deleteResponse", response?.data?.data[0]);
-          ShowToast("success", response?.data?.data[0].Message);
+          ShowToast("success", response?.data?.data[0].msg);
           getPendingBankAccounts();
         }
       })
@@ -134,6 +208,7 @@ const bankRecordEntry = ({ activeSubItem }: any) => {
         onSubmit={handleFormSubmit}
         editUserCheck={editUserCheck}
         isBankMasterContent={true}
+        activeSubItem={activeSubItem}
       />
       <div className="page-content page-view">
         <div className="container-fluid">

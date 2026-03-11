@@ -423,6 +423,10 @@ export const newDomainEndpoints = [
   endpoints.InsertBankAcoountMaster,
   endpoints.GetPendingEntryBankAccountMaster,
   endpoints.GetEntry_Delete,
+  endpoints.GetEntry_Update,
+  endpoints.GetEntry_Approval,
+  endpoints.GetFinalReportBankAccountMaster,
+  endpoints.BankAccountMaster_report,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

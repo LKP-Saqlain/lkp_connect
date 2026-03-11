@@ -110,7 +110,7 @@ const ModalComponent = ({
   setDisableFields,
   isScriptMasterContent,
   setClientDetail,
-  isBankMasterContent = false,
+  isBankMasterContent,
 }: {
   modal_grid: boolean;
   tog_grid: () => void;
@@ -623,7 +623,13 @@ const ModalComponent = ({
   });
 
   const fetchBankMasterContentDetais = (setTouched: any, values: any) => {
-    // setTouched({ scriptName: true, isin: true, isActive: true });
+    setTouched({
+      memberName: true,
+      bankAccountName: true,
+      bankAccountNumber: true,
+      accountDescription: true,
+      bankMasterIfscCode: true,
+    });
     console.log("testArgs", setTouched, values);
     onSubmit?.(values);
     formik.resetForm();
@@ -975,6 +981,31 @@ const ModalComponent = ({
         formik.setFieldValue("scriptName", editData?.scpnm);
         formik.setFieldValue("isin", editData?.isin);
         formik.setFieldValue("isActive", editData?.isact);
+      }
+
+      if (isBankMasterContent) {
+        formik.setFieldValue("memberName", editData?.MemberName);
+        formik.setFieldValue("bankAccountName", editData?.BankAccountName);
+        formik.setFieldValue("bankAccountNumber", editData?.BankAccountNumber);
+        formik.setFieldValue(
+          "accountDescription",
+          editData?.AccountDescription,
+        );
+        formik.setFieldValue("bankMasterIfscCode", editData?.IFSCCode);
+        formik.setFieldValue("purpose", editData?.Purpose);
+        formik.setFieldValue("division", editData?.Division);
+        formik.setFieldValue("accountType", editData?.AccountType);
+        formik.setFieldValue("status", editData?.Status);
+
+        formik.setFieldValue(
+          "openingDate",
+          editData?.OpeningDate ? dayjs(editData.OpeningDate) : null,
+        );
+
+        formik.setFieldValue(
+          "closingDate",
+          editData?.ClosingDate ? dayjs(editData.ClosingDate) : null,
+        );
       }
     }
   }, [editData, editUserCheck]);
@@ -1508,7 +1539,8 @@ const ModalComponent = ({
     if (
       editUserCheck &&
       activeSubItem !== "Unlisted Scrip Master" &&
-      activeSubItem !== "Unlisted Shares Entry"
+      activeSubItem !== "Unlisted Shares Entry" &&
+      activeSubItem !== "LKP Bank Entry"
       // activeSubItem != "Vendor Creation"
     ) {
       const fileExtension =

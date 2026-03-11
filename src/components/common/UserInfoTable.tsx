@@ -2727,10 +2727,6 @@ const DataTable = ({
 
       return baseColumns;
     } else if (activeSubItem === "LKP Bank Entry") {
-      // return TableColumns.pendingBankAccountColumns.map((column) => ({
-      //   ...column,
-      // }));
-
       return TableColumns.pendingBankAccountColumns.map((column) => {
         if (column.field === "action") {
           return {
@@ -2794,6 +2790,66 @@ const DataTable = ({
         }
         return column;
       });
+    } else if (activeSubItem === "LKP Bank Approval") {
+      return TableColumns.ApprovalBankAccountColumns.map((column) => {
+        if (column.field === "status") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              console.log("checkRow", params?.row);
+
+              return (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "center",
+                  }}
+                >
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.Id);
+                      HandleApprovalModal("approve");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Approve" arrow placement="top">
+                      <CheckCircleIcon style={{ color: "green" }} />
+                    </Tooltip>
+                    {/* <span>Approve</span> */}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "20px",
+                      color: "gray",
+                      margin: "0 5px 0 5px",
+                    }}
+                  >
+                    |
+                  </div>
+                  <div
+                    onClick={() => {
+                      setSelectedRow(params.row.Id);
+                      HandleApprovalModal("reject");
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <Tooltip title="Reject" arrow placement="top">
+                      <CancelIcon style={{ color: "red" }} />
+                    </Tooltip>
+                  </div>
+                </div>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
+    } else if (activeSubItem === "LKP Bank Report") {
+      return TableColumns.BankAccReportColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
@@ -2867,6 +2923,7 @@ const DataTable = ({
     "Vendor Approval",
     "Unlisted Scrip Master",
     "LKP Bank Entry",
+    "LKP Bank Approval",
   ];
 
   if (activeSubItem === "RMS Allocation") {

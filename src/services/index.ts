@@ -1435,4 +1435,24 @@ export const apiServices = {
   GetEntry_Delete: async (payload: any) => {
     return await apiService("POST", endpoints.GetEntry_Delete, payload);
   },
+  GetEntry_Update: async (payload: any) => {
+    return await apiService("POST", endpoints.GetEntry_Update, payload);
+  },
+  GetEntry_Approval: async (payload: any) => {
+    return await apiService("POST", endpoints.GetEntry_Approval, payload);
+  },
+  GetFinalReportBankAccountMaster: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetFinalReportBankAccountMaster,
+      payload,
+    );
+  },
+  BankAccountMaster_report: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.BankAccountMaster_report,
+      payload,
+    );
+  },
 };

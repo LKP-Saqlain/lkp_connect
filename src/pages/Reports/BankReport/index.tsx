@@ -1,61 +1,32 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
-import { apiServices } from "../../../services";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../redux/store";
+import { AppDispatch } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../services";
 import DataTable from "../../../components/common/UserInfoTable";
-import ShowToast from "../../../utils/toastUtils";
 
-const BankApproval = ({ activeSubItem }: any) => {
-  const [pendingBankAccounts, setPendingBankAccounts] = useState<any[]>([]);
+const BankReport = ({ activeSubItem }: any) => {
+  const [bankRecords, SetBankRecords] = useState<any[]>([]);
+
   const dispatch = useDispatch<AppDispatch>();
-  const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data,
-  );
-  const userId = user_id?.split("-")[1];
-
-  const getPendingBankAccounts = () => {
+  const getBankRecords = () => {
     const payload = {
-      actionType: "GET_PENDING",
+      actionType: "FINALREPORT",
     };
     dispatch(showLoader(""));
     apiServices
-      .GetPendingEntryBankAccountMaster(payload)
+      .BankAccountMaster_report(payload)
       .then((response) => {
         if (response?.status === 200) {
           const data = response?.data?.data || [];
-          console.log("Pending Bank Accounts:", response?.data?.data);
-          setPendingBankAccounts(data);
-        }
-      })
-      .catch((error) => {
-        console.log("Pending API Error:", error);
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
-  };
 
-  const handleApproval = (row: any, remark: any, flag: any) => {
-    console.log("ApprovalRecords", row, remark, flag);
-
-    const payload = {
-      actionType: "Approve",
-      id: row,
-      userId: userId,
-      accApproval: flag === "R" ? "R" : "A",
-      accRemark: remark,
-    };
-    dispatch(showLoader(""));
-    apiServices
-      .GetEntry_Approval(payload)
-      .then((response) => {
-        if (response?.status === 200) {
-          const data = response?.data?.data || [];
-          console.log("ApprovalResponse", data);
-          ShowToast("success", data[0].msg);
-          getPendingBankAccounts();
+          const processedData = data.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
+          console.log("BankAccountsRecords:", response?.data?.data);
+          SetBankRecords(processedData);
         }
       })
       .catch((error) => {
@@ -67,8 +38,9 @@ const BankApproval = ({ activeSubItem }: any) => {
   };
 
   useEffect(() => {
-    getPendingBankAccounts();
+    getBankRecords();
   }, []);
+
   return (
     <>
       <div className="page-content page-view">
@@ -93,13 +65,12 @@ const BankApproval = ({ activeSubItem }: any) => {
                   <h4 className="card-title mb-0">{activeSubItem}</h4>
                 </CardHeader>
                 <CardBody>
-                  {" "}
                   <DataTable
                     activeSubItem={activeSubItem}
-                    T6Data={pendingBankAccounts}
+                    T6Data={bankRecords}
                     // getUserDetails={getUserDetails}
                     // handleEditClick={handleEditClick}
-                    handleApproval={handleApproval}
+                    // handleApproval={handleApproval}
                   />
                 </CardBody>
               </Card>
@@ -111,4 +82,4 @@ const BankApproval = ({ activeSubItem }: any) => {
   );
 };
 
-export default BankApproval;
+export default BankReport;

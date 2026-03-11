@@ -13879,18 +13879,111 @@ export const pendingBankAccountColumns: GridColDef[] = [
       return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
     },
   },
+  // {
+  //   field: "RequestedBy",
+  //   headerName: "Requested By",
+  //   width: 130,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  // },
+  // {
+  //   field: "RequestedDate",
+  //   headerName: "Requested Date",
+  //   width: 170,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  //   valueFormatter: (params: any) => {
+  //     if (!params) return "";
+  //     return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+  //   },
+  // },
+  // {
+  //   field: "Status",
+  //   headerName: "Status",
+  //   width: 120,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  // },
+];
+
+export const ApprovalBankAccountColumns: GridColDef[] = [
   {
-    field: "RequestedBy",
-    headerName: "Requested By",
+    field: "status",
+    headerName: "Approve | Reject",
+    headerClassName: "header-wrap-custom",
+    minWidth: 120,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    sortable: false,
+  },
+  {
+    field: "MemberName",
+    headerName: "Member Name",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "BankAccountName",
+    headerName: "Bank Account Name",
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "BankAccountNumber",
+    headerName: "Account Number",
+    width: 170,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "IFSCCode",
+    headerName: "IFSC Code",
+    width: 140,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Purpose",
+    headerName: "Purpose",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "AccountType",
+    headerName: "Account Type",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "Division",
+    headerName: "Division",
     width: 130,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
   },
   {
-    field: "RequestedDate",
-    headerName: "Requested Date",
-    width: 170,
+    field: "OpeningDate",
+    headerName: "Opening Date",
+    width: 150,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -13899,13 +13992,188 @@ export const pendingBankAccountColumns: GridColDef[] = [
       return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
     },
   },
+  {
+    field: "ClosingDate",
+    headerName: "Closing Date",
+    width: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY"); // Converts to "03-Apr-24"
+    },
+  },
+];
+
+export const BankAccReportColumns: GridColDef[] = [
   // {
-  //   field: "Status",
-  //   headerName: "Status",
-  //   width: 120,
+  //   field: "AccRemark",
+  //   headerName: "Remark",
+  //   minWidth: 200,
+  //   flex: 2,
   //   headerAlign: "center",
+  //   renderCell: (params: any) => {
+  //     const status = params.value?.toLowerCase() || "";
+  //     console.log("Statusass", status);
+
+  //     let backgroundColor = "#cfd8dc"; // Default neutral
+  //     let color = "#263238";
+  //     let border = "1px solid #b0bec5";
+
+  //     if (status.includes("approve")) {
+  //       backgroundColor = "#a5d6a7"; // Light green
+  //       color = "#1b5e20";
+  //       border = "1px solid #81c784";
+  //     } else if (status.includes("pending")) {
+  //       backgroundColor = "#FFF4E5"; // Soft peach / beige
+  //       color = "#FF9800"; // Warm orange (not too saturated)
+  //       border = "1px solid #FFB74D"; // Light orange border
+  //     } else if (status.includes("reject") || status.includes("reject")) {
+  //       backgroundColor = "#ef9a9a"; // Light red
+  //       color = "#b71c1c";
+  //       border = "1px solid #e57373";
+  //     }
+
+  //     return (
+  //       <div
+  //         style={{
+  //           display: "flex",
+  //           justifyContent: "center",
+  //           alignItems: "center",
+  //           height: "100%",
+  //           width: "100%",
+  //           fontFamily: "Public Sans",
+  //         }}
+  //       >
+  //         <div
+  //           style={{
+  //             backgroundColor,
+  //             color,
+  //             border,
+  //             borderRadius: "999px",
+  //             padding: "3px 6px",
+  //             fontSize: "11px",
+  //             fontWeight: 600,
+  //             // textTransform: "capitalize",
+  //             whiteSpace: "nowrap",
+  //             display: "inline-block",
+  //             textAlign: "center",
+  //             minWidth: "160px",
+  //             lineHeight: "1",
+  //           }}
+  //         >
+  //           {params.value}
+  //         </div>
+  //       </div>
+  //     );
+  //   },
+  // },
+  {
+    field: "MemberName",
+    headerName: "Member Name",
+    minWidth: 150,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+
+  {
+    field: "BankAccountName",
+    headerName: "Bank Name",
+    minWidth: 150,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+
+  {
+    field: "BankAccountNumber",
+    headerName: "Account Number",
+    minWidth: 150,
+    flex: 1,
+    headerAlign: "center",
+    align: "right",
+  },
+
+  {
+    field: "IFSCCode",
+    headerName: "IFSC Code",
+    minWidth: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+
+  {
+    field: "Purpose",
+    headerName: "Purpose",
+    minWidth: 120,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+
+  {
+    field: "AccountType",
+    headerName: "Account Type",
+    minWidth: 150,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+
+  {
+    field: "Status",
+    headerName: "Status",
+    minWidth: 100,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+  },
+
+  {
+    field: "OpeningDate",
+    headerName: "Opening Date",
+    minWidth: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YYYY");
+    },
+  },
+
+  {
+    field: "ClosingDate",
+    headerName: "Closing Date",
+    minWidth: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    valueFormatter: (params) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YYYY");
+    },
+  },
+
+  {
+    field: "Division",
+    headerName: "Division",
+    minWidth: 120,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+
+  // {
+  //   field: "AccApproval",
+  //   headerName: "Approval",
+  //   minWidth: 100,
+  //   flex: 0.7,
   //   align: "center",
-  //   disableColumnMenu: true,
+  //   headerAlign: "center",
   // },
 ];
 
