@@ -10639,6 +10639,7 @@ export const shortfallColumns: GridColDef[] = [
     minWidth: 80,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "cn",
@@ -10647,6 +10648,7 @@ export const shortfallColumns: GridColDef[] = [
     minWidth: 250,
     align: "left",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "mca",
@@ -10661,6 +10663,7 @@ export const shortfallColumns: GridColDef[] = [
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(parseFloat(params)),
+    disableColumnMenu: true,
   },
   {
     field: "msb",
@@ -10675,6 +10678,7 @@ export const shortfallColumns: GridColDef[] = [
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(parseFloat(params)),
+    disableColumnMenu: true,
   },
   {
     field: "nmc",
@@ -10689,6 +10693,7 @@ export const shortfallColumns: GridColDef[] = [
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(parseFloat(params)),
+    disableColumnMenu: true,
   },
   {
     field: "mld",
@@ -10703,6 +10708,7 @@ export const shortfallColumns: GridColDef[] = [
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(parseFloat(params)),
+    disableColumnMenu: true,
   },
   {
     field: "mse",
@@ -10712,6 +10718,7 @@ export const shortfallColumns: GridColDef[] = [
     headerAlign: "center",
     minWidth: 120,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     renderCell: (params: any) => {
       const value = parseFloat(params.value || 0).toLocaleString("en-IN", {
         minimumFractionDigits: 2,
@@ -10741,6 +10748,7 @@ export const shortfallColumns: GridColDef[] = [
     align: "right",
     headerAlign: "center",
     minWidth: 110,
+    disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
@@ -10755,6 +10763,7 @@ export const shortfallColumns: GridColDef[] = [
     align: "right",
     headerAlign: "center",
     minWidth: 110,
+    disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
@@ -10769,6 +10778,7 @@ export const shortfallColumns: GridColDef[] = [
     align: "right",
     headerAlign: "center",
     minWidth: 110,
+    disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
@@ -10783,6 +10793,7 @@ export const shortfallColumns: GridColDef[] = [
     align: "right",
     headerAlign: "center",
     minWidth: 120,
+    disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
@@ -10797,6 +10808,7 @@ export const shortfallColumns: GridColDef[] = [
     align: "right",
     headerAlign: "center",
     minWidth: 80,
+    disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
@@ -10811,6 +10823,7 @@ export const shortfallColumns: GridColDef[] = [
     align: "center",
     headerAlign: "center",
     minWidth: 80,
+    disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
