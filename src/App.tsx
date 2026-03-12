@@ -14,14 +14,14 @@ import StatusCard from "./pages/MutualFund/Main/PhysicalOnboard/StatusPage/index
 
 const LoginPage = lazy(() => import("./pages/Authentication/Login"));
 const AuthenticateUser = lazy(
-  () => import("./pages/Authentication/authnticateUser")
+  () => import("./pages/Authentication/authnticateUser"),
 );
 const ForgotPassword = lazy(
-  () => import("./pages/Authentication/ForgotPassword")
+  () => import("./pages/Authentication/ForgotPassword"),
 );
 const SideBar = lazy(() => import("./components/sideBar"));
 const DpMandate = lazy(() => import("./pages/Masters/MandateCall"));
-// const FetchMTFActivation = lazy(() => import("./pages/MTF"));
+const FetchMTFActivation = lazy(() => import("./pages/MTF"));
 const ConsentOtp = lazy(() => import("./pages/MTF/consentOtp"));
 const CongratsPage = lazy(() => import("./pages/MTF/congratsScreen"));
 
@@ -89,7 +89,7 @@ const App = () => {
             path="/PhysicalStats/:encryptedCode"
             element={<StatusCard />}
           />
-          {/* <Route
+          <Route
             path="/MTFSegmentActivation"
             element={
               <PrivateRoute
@@ -97,7 +97,7 @@ const App = () => {
                 dashElement={<FetchMTFActivation />}
               />
             }
-          /> */}
+          />
           <Route
             path="/otp"
             element={
