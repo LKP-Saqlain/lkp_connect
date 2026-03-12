@@ -10710,13 +10710,29 @@ export const shortfallColumns: GridColDef[] = [
     flex: 1,
     align: "right",
     headerAlign: "center",
-    minWidth: 95,
+    minWidth: 120,
     headerClassName: "header-wrap-custom",
-    valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", {
+    renderCell: (params: any) => {
+      const value = parseFloat(params.value || 0).toLocaleString("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-      }).format(parseFloat(params)),
+      });
+
+      return (
+        <span
+          style={{
+            backgroundColor: "#f8caca",
+            border: "1px solid #e57373",
+            color: "#c62828",
+            padding: "0px 10px",
+            borderRadius: "16px",
+            fontWeight: 500,
+          }}
+        >
+          {value}
+        </span>
+      );
+    },
   },
   {
     field: "tfa",

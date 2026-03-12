@@ -235,7 +235,8 @@ const CustomModal = ({
         activeSubItem === "Unlisted Shares Approval 1" ||
         activeSubItem === "Third Party Vendor Approval" ||
         activeSubItem === "Vendor Approval" ||
-        activeSubItem === "Pre Trade Approval") &&
+        activeSubItem === "Pre Trade Approval" ||
+        activeSubItem === "LKP Bank Approval") &&
         !isAdmin && {
           remark: Yup.string().trim().required("Remark is required"),
         }),
