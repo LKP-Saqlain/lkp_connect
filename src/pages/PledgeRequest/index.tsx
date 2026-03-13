@@ -73,10 +73,10 @@ const Index = ({ activeMenu }: any) => {
         }
       }
       let payload = {
-        user_id: str === "APN-7161" ? "5376" : extractUserId,
+        user_id: extractUserId,
         option: "zone",
         userType:
-          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+          str === "APN-7161" ? "APN" : userType === "Employee" ? "EMP" : "APN",
         zone: "ALL",
       };
 
@@ -137,10 +137,10 @@ const Index = ({ activeMenu }: any) => {
         }
       }
       const payload = {
-        user_id: str === "APN-7161" ? "5376" : extractUserId,
+        user_id: extractUserId,
         option: "BranchByZone",
         userType:
-          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+          str === "APN-7161" ? "APN" : userType === "Employee" ? "EMP" : "APN",
         zone: formik.values.selectedZone.value,
       };
 
@@ -233,10 +233,8 @@ const Index = ({ activeMenu }: any) => {
     const lowerCaseValue = value.toLowerCase();
 
     const filtered = data.filter((item: any) => {
-      const clientNameMatch = item.clientName
-        ?.toLowerCase()
-        .includes(lowerCaseValue);
-      const accountCodeMatch = item.clientCode
+      const clientNameMatch = item.cn?.toLowerCase().includes(lowerCaseValue);
+      const accountCodeMatch = item.cc
         ?.toString()
         .toLowerCase()
         .includes(lowerCaseValue);
