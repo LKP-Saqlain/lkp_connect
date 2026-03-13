@@ -31,10 +31,10 @@ const Index = ({ activeMenu }: any) => {
   const [searchQuery, setSearchQuery] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
   const { accessType } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data
+    (state: RootState) => state.AuthUser?.data?.data,
   );
 
   interface FormValues {
@@ -59,7 +59,9 @@ const Index = ({ activeMenu }: any) => {
   });
 
   useEffect(() => {
-    if (accessType === "ALL" || accessType === "ZONE") {
+    if (accessType === "ALL" || accessType === "ZONE" || accessType === "") {
+      // if (accessType !== "ZONE" && accessType !== "" && accessType === "ALL")
+      //   return;
       const str = user_id;
       const userType = localStorage.getItem("uIdType");
       let extractUserId: string | null = null;
@@ -115,12 +117,11 @@ const Index = ({ activeMenu }: any) => {
           ShowToast(
             "error",
             errorMessage ||
-              "Sorry for the inconvenience, please try after some time."
+              "Sorry for the inconvenience, please try after some time.",
           );
         });
-
-      dispatch(hideLoader());
     }
+    dispatch(hideLoader());
   }, [dispatch]);
 
   const str = user_id;
@@ -175,7 +176,7 @@ const Index = ({ activeMenu }: any) => {
           ShowToast(
             "error",
             errorMessage ||
-              "Sorry for the inconvenience, please try after some time."
+              "Sorry for the inconvenience, please try after some time.",
           );
         });
     }
@@ -268,7 +269,7 @@ const Index = ({ activeMenu }: any) => {
     window.open(
       url,
       "PledgePopup",
-      `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`
+      `width=${popupWidth},height=${popupHeight},left=${left},top=${top},resizable=yes,scrollbars=yes`,
     );
 
     console.log("Pledge Encrypted Code:", encryptedCode);
@@ -447,7 +448,7 @@ const Index = ({ activeMenu }: any) => {
                         onBlur={formik.handleBlur}
                         fullWidth
                         error={Boolean(
-                          formik.touched.clientCode && formik.errors.clientCode
+                          formik.touched.clientCode && formik.errors.clientCode,
                         )}
                         helperText={
                           formik.touched.clientCode && formik.errors.clientCode

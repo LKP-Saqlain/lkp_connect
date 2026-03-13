@@ -20,7 +20,7 @@ import { AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { ClientUserDetails } from "../../../redux/thunk/ClientUserDetails";
 import { useEffect, useState } from "react";
-import Tooltip from "@mui/material/Tooltip";
+// import Tooltip from "@mui/material/Tooltip";
 
 const UserInfoModal = ({
   isOpen,
@@ -30,7 +30,6 @@ const UserInfoModal = ({
   branch,
   handleFileUpload,
   uploadedFileName,
-  fetchMtfToken,
 }: // fetchMtfToken,
 any) => {
   const [clientDetails, setClientDetails] = useState({
@@ -372,7 +371,7 @@ any) => {
                             sx={{ color: color }}
                           />
 
-                          {item.key === "mtf" && status === "Inactive" ? (
+                          {/* {item.key === "mtf" && status === "Inactive" ? (
                             <Tooltip title="Click to activate MTF" arrow>
                               <span
                                 style={{
@@ -389,9 +388,9 @@ any) => {
                                 {status}
                               </span>
                             </Tooltip>
-                          ) : (
-                            <span style={{ color: "#777" }}>{status}</span>
-                          )}
+                          ) : ( */}
+                          <span style={{ color: "#777" }}>{status}</span>
+                          {/* )} */}
                         </p>
                         {/* {item.key === "mtf" && status === "Inactive" && (
                           <span

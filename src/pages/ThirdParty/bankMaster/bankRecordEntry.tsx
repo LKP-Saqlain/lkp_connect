@@ -108,7 +108,7 @@ const bankRecordEntry = ({ activeSubItem }: any) => {
       accountType: data?.accountType,
       status: data?.status,
       openingDate: data?.openingDate,
-      closingDate: data?.closingDate,
+      closingDate: data?.closingDate === "" ? null : data?.closingDate,
       division: data?.division,
       userId: userId,
     };
@@ -136,11 +136,11 @@ const bankRecordEntry = ({ activeSubItem }: any) => {
 
   const getPendingBankAccounts = () => {
     const payload = {
-      actionType: "GET_PENDING",
+      actionType: "GET",
     };
     dispatch(showLoader(""));
     apiServices
-      .GetPendingEntryBankAccountMaster(payload)
+      .GetFinalReportBankAccountMaster(payload)
       .then((response) => {
         if (response?.status === 200) {
           const data = response?.data?.data || [];

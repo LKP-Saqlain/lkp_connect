@@ -14045,7 +14045,7 @@ export const ApprovalBankAccountColumns: GridColDef[] = [
 
 export const BankAccReportColumns: GridColDef[] = [
   // {
-  //   field: "AccRemark",
+  //   field: "ApprovalStatus",
   //   headerName: "Remark",
   //   minWidth: 200,
   //   flex: 2,
@@ -14106,6 +14106,20 @@ export const BankAccReportColumns: GridColDef[] = [
   //     );
   //   },
   // },
+  {
+    field: "ApprovalStatus",
+    headerName: "Approval",
+    minWidth: 150,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params) =>
+      params.value === "R"
+        ? "Rejected"
+        : params?.value === "A"
+          ? "Approved"
+          : "",
+  },
   {
     field: "MemberName",
     headerName: "Member Name",

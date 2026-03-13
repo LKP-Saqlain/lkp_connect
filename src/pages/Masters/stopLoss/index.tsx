@@ -285,7 +285,7 @@ const StopLoss = ({ activeSubItem }: any) => {
                             }
                             options={zoneOptions}
                             isClearable
-                            placeholder="Select Zone"
+                            placeholder="Select Product"
                           />
 
                           {formik.touched.selectedZone &&

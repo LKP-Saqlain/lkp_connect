@@ -342,7 +342,7 @@ const ModalComponent = ({
       accountType: Yup.string().required("Account Type is required"),
       status: Yup.string().required("Status is required"),
       openingDate: Yup.date().required("Opening Date required"),
-      closingDate: Yup.date().required("Closing Date required"),
+      // closingDate: Yup.date().required("Closing Date required"),
     });
 
   const getValidationSchema = (editData?: EditData) => {
@@ -4771,6 +4771,7 @@ const ModalComponent = ({
                   </LocalizationProvider>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
+                      disabled={formik.values.status === "Active"}
                       label="Closing Date"
                       format="DD/MM/YYYY"
                       value={
