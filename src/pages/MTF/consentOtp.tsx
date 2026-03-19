@@ -19,7 +19,7 @@ const MTFOtpVerification = () => {
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
   const clientDetails = useSelector(
-    (state: RootState) => state.mtfClient.clientDetails
+    (state: RootState) => state.mtfClient.clientDetails,
   );
 
   console.log("ClientDetails12", clientDetails);
@@ -27,7 +27,7 @@ const MTFOtpVerification = () => {
   const clientCode = location.search.replace("?", "");
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   // Timer logic
@@ -95,14 +95,20 @@ const MTFOtpVerification = () => {
     apiServices
       .MTFVerifyOTP(payload)
       .then((res) => {
+        console.log("Response--->", res);
+
         if (res?.status === 200) {
           console.log("Resss123", res?.data?.data);
           ShowToast("success", res?.data?.message);
           navigate("/congratulations");
         }
+        if (res?.status === 502) {
+          ShowToast("error", res?.data?.message);
+        }
       })
       .catch((error) => {
-        console.log("Errror", error);
+        console.log("Errror", error?.response?.data?.message);
+        ShowToast("error", error?.response?.data?.message);
         dispatch(hideLoader());
       })
       .finally(() => {

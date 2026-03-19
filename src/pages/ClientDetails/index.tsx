@@ -12,7 +12,6 @@ import { RootState, AppDispatch } from "../../redux/store";
 import dayjs from "dayjs";
 import { setEncryptedValue } from "../../utils/loocalEncrypt";
 // import { normalizeApiData } from "../../utils/normalizeResponse";
-import { useNavigate } from "react-router-dom";
 
 const allowedFormats = ["pdf", "png", "jpg", "jpeg"];
 
@@ -39,7 +38,7 @@ const ClientDetails = ({
   selectedTrading,
 }: any) => {
   const [selectedCapsule, setSelectedCapsule] = useState<any>(
-    "Upcoming Dormant Client"
+    "Upcoming Dormant Client",
   );
   const [tableData, setTableData] = useState<[]>([]);
   const [userDetails, setUserDetails] = useState(false);
@@ -52,15 +51,14 @@ const ClientDetails = ({
   const [searchValue, setSearchValue] = useState("");
   const [branchCode, setBranchCode] = useState("");
   const [selectedUserInfo, setSelectedUserInfo] = useState<ClientRow | null>(
-    null
+    null,
   );
   const [uploadedFileName, setUploadFileName] = useState("");
   const [clientDataLoaded, setClientDataLoaded] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   useEffect(() => {
@@ -109,7 +107,7 @@ const ClientDetails = ({
                 (item: any, index: number) => ({
                   ...item,
                   Id: index,
-                })
+                }),
               );
 
               setTableData(formatted);
@@ -194,19 +192,19 @@ const ClientDetails = ({
       "Inactive->",
       newInactiveClients,
       "total->",
-      totalClients
+      totalClients,
     );
   }, [newActiveClients, newInactiveClients, totalClients]);
 
   let mainTableData = searchValue
     ? filteredData
     : selectedCapsule === "Active Clients"
-    ? newActiveClients
-    : selectedCapsule === "Inactive Clients"
-    ? newInactiveClients
-    : selectedCapsule === "Total Clients"
-    ? totalClients
-    : tableData;
+      ? newActiveClients
+      : selectedCapsule === "Inactive Clients"
+        ? newInactiveClients
+        : selectedCapsule === "Total Clients"
+          ? totalClients
+          : tableData;
 
   console.log("MainTableData", mainTableData);
 
@@ -268,7 +266,7 @@ const ClientDetails = ({
 
   const handleFileUploadAsync = (
     file: any,
-    communicationProofPath: string
+    communicationProofPath: string,
   ): Promise<string> => {
     return new Promise((resolve, reject) => {
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
@@ -323,7 +321,7 @@ const ClientDetails = ({
     if (!allowedExtensions.includes(fileExt)) {
       ShowToast(
         "error",
-        "Please upload a file in JPG, JPEG, PNG, or PDF format."
+        "Please upload a file in JPG, JPEG, PNG, or PDF format.",
       );
       return;
     }
@@ -372,7 +370,8 @@ const ClientDetails = ({
           console.log("tokenResponse", response?.data?.token);
           const { token } = response?.data;
           setEncryptedValue("mtfToken", token);
-          navigate(`/MTFSegmentActivation?${data?.cc}`);
+          // navigate(`/MTFSegmentActivation?${data?.cc}`);
+          window.open(`/MTFSegmentActivation?${data?.cc}`, "_blank");
         }
       })
       .catch((error) => {
