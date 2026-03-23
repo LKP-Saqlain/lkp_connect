@@ -24,7 +24,6 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     const interval = setInterval(() => setTimer((t) => t - 1), 1000);
     return () => clearInterval(interval);
   }, [timer]);
-  console.log(clientData, "mobile and email OTP");
 
   // 🔹 Send OTP on component mount
   useEffect(() => {
@@ -70,7 +69,7 @@ const LedgerOtp = ({ onNext, clientData }: LedgerOtpProps) => {
     // auto-focus next input
     if (val && index < otp.length - 1) {
       const nextInput = document.getElementById(
-        `otp-${index + 1}`
+        `otp-${index + 1}`,
       ) as HTMLInputElement | null;
       nextInput?.focus();
     }
