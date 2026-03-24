@@ -30,6 +30,7 @@ export const publicEndpoints = [
   endpoints.ValidateOtpSms,
   // endpoints.BeginMTFActivation,
   endpoints.ValidateSencondAuth,
+  endpoints.ProcessOTP,
 ];
 
 export const fundamentalEndpoints = [
