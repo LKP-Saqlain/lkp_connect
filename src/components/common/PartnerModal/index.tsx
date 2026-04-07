@@ -1,36 +1,24 @@
-import { useState } from "react";
-import { Modal, ModalBody, ModalHeader } from "reactstrap";
+import { Modal, ModalBody } from "reactstrap";
+import Stage from "./Stage/Stage";
+import FullInfo from "./FullInfo/index";
 
-const Index = () => {
-  const [isOpen, setIsOpen] = useState(true); // or false initially
-  //   const [type, setType] = useState("Modal Title"); // adjust as needed
-
-  const handleCloseClick = () => {
-    setIsOpen(false);
-  };
-
+const PartnerModal = ({ isOpen, toggle, data, type }: any) => {
+  if (!data) return null;
   return (
     <Modal
       isOpen={isOpen}
-      toggle={handleCloseClick}
-      modalClassName="zoomIn"
+      toggle={toggle}
       centered
-      style={{
-        maxHeight: "100vh",
-        height: "auto",
-        overflowY: "auto",
-      }}
+      className={type === "stage" ? "" : "modal-fullscreen"}
     >
-      <ModalHeader toggle={handleCloseClick} style={{ color: "#11395C" }}>
-        {/* {type} */}
-        <p>This is the head of the modal.</p>
-      </ModalHeader>
       <ModalBody>
-        {/* Your content goes here */}
-        <p>This is the body of the modal.</p>
+        {type === "stage" && <Stage toggle={toggle} />}
+        {type === "appNo" && (
+          <FullInfo data={data} toggle={toggle} type={type} />
+        )}
       </ModalBody>
     </Modal>
   );
 };
 
-export default Index;
+export default PartnerModal;

@@ -3,12 +3,25 @@ import { Tabs, Tab } from "@mui/material";
 import { partnerOnboardingTabs, ProspectRows } from "../../../helper/commmon";
 import { Card, CardBody, CardHeader, Container, Row } from "reactstrap";
 import DataTable from "../../../components/common/UserInfoTable";
+import PartnerModal from "../../../components/common/PartnerModal";
 
 const ApDetails = () => {
   const [tabValue, setTabValue] = useState<string>("Summary");
-  //   const PartnerStatus=() => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState<any>(null);
+  const [modalType, setModalType] = useState<string>("");
 
-  //   }
+  const PartnerStatus = (row: any, type: string) => {
+    setSelectedRow(row); //  store clicked row
+    setIsModalOpen(true);
+    setModalType(type);
+    console.log("Status button clicked", row, type);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedRow(null); // optional reset
+  };
 
   return (
     <div className="page-content page-view">
@@ -76,11 +89,18 @@ const ApDetails = () => {
               <DataTable
                 T6Data={ProspectRows}
                 activeSubItem={"Referal Entry Status"}
+                onStatusClick={PartnerStatus}
               />
             </CardBody>
           </Card>
         )}
       </Container>
+      <PartnerModal
+        isOpen={isModalOpen}
+        toggle={handleCloseModal}
+        data={selectedRow}
+        type={modalType}
+      />
     </div>
   );
 };

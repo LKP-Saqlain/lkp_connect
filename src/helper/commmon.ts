@@ -593,3 +593,44 @@ export const ProspectRows = [
     action: "",
   },
 ];
+
+export const SEGMENTS_DATA = [
+  {
+    title: "NSE",
+    exchange: "NSE",
+    items: [
+      { label: "NSE Cash", value: "nse_cash", amount: 5000 },
+      { label: "NSE FO", value: "nse_fo", amount: 5000 },
+      { label: "NSE Currency", value: "nse_currency", amount: 5000 },
+      { label: "NSE Commodity", value: "nse_commodity", amount: 500 },
+    ],
+  },
+  {
+    title: "BSE",
+    exchange: "BSE",
+    items: [
+      { label: "BSE Cash", value: "bse_cash", amount: 4000 },
+      { label: "BSE FO", value: "bse_fo", amount: 4000 },
+      { label: "BSE Currency", value: "bse_currency", amount: 4000 },
+      { label: "BSE Commodity", value: "bse_commodity", amount: 4000 },
+    ],
+  },
+  {
+    title: "MCX",
+    exchange: "MCX",
+    items: [{ label: "MCX Commodity", value: "mcx_commodity", amount: 2000 }],
+  },
+  {
+    title: "SLBM",
+    exchange: "SLBM",
+    items: [{ label: "SLBM", value: "slbm", amount: 0 }],
+  },
+  {
+    title: "Security Deposit",
+    exchange: "Security Deposit",
+    items: [
+      { label: "Terminal", value: "terminal", amount: 100000 },
+      { label: "Without Terminal", value: "without_terminal", amount: 50000 },
+    ],
+  },
+];

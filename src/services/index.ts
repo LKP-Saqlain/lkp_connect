@@ -1455,4 +1455,7 @@ export const apiServices = {
       payload,
     );
   },
+  ViewApprovalData: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewApprovalData, payload);
+  },
 };

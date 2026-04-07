@@ -92,6 +92,7 @@ interface SelectedWidgetProps {
   onViewAmcDetails?: (row: any) => void;
   handleMTFRow?: (row: any) => void;
   openNudgeTable?: () => void;
+  onStatusClick?: (row: any, type: string) => void;
   selectedTab?: any;
   handleDownloadExcel?: () => void;
   isCustomBtn?: any;
@@ -120,6 +121,7 @@ const DataTable = ({
   handleExcelDownload,
   handleEditClick,
   handleApproval,
+  onStatusClick,
   handleDownload,
   totalCount,
   activeClient,
@@ -2542,6 +2544,7 @@ const DataTable = ({
                 <button
                   onClick={() => {
                     console.log("stage row", params);
+                    onStatusClick?.(params.row, column.field);
                   }}
                   style={{
                     color: "#11395C",
@@ -2567,6 +2570,7 @@ const DataTable = ({
                 <button
                   onClick={() => {
                     console.log("stage row", params);
+                    onStatusClick?.(params.row, column.field);
                   }}
                   style={{
                     color: "#11395C",
