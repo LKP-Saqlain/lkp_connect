@@ -14233,3 +14233,82 @@ const formatCurrency = (value: number) =>
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(value ?? 0);
+
+export const PartnerOnboardingDetails: GridColDef[] = [
+  {
+    field: "srNo",
+    headerName: "Sr. No",
+    width: 90,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "appNo",
+    headerName: "App. No.",
+    width: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "prospectName",
+    headerName: "Name of Prospect",
+    flex: 1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "date",
+    headerName: "Date",
+    width: 140,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY");
+    },
+  },
+  {
+    field: "referredBy",
+    headerName: "Referred By",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "city",
+    headerName: "City",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    flex: 1,
+    disableColumnMenu: true,
+  },
+  {
+    field: "partnerType",
+    headerName: "Partner Type",
+    width: 150,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "stage",
+    headerName: "Stage",
+    width: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+];

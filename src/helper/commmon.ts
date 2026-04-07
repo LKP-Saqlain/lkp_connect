@@ -354,7 +354,7 @@ export const getNextPaymentDateString = (day: string | number) => {
   const nextMonth = new Date(
     today.getFullYear(),
     today.getMonth() + 1,
-    selectedDay
+    selectedDay,
   );
 
   const month = nextMonth.toLocaleString("default", { month: "long" }); // e.g., "October"
@@ -505,7 +505,7 @@ export const expiryContestRewardRows = [
 export const RHexpiryContestRewardRows = [
   {
     id: 1,
-    criteria:"Employee",
+    criteria: "Employee",
     noOfLots: 100,
     minBrok: 5000,
     uniqueClients: 5,
@@ -513,7 +513,7 @@ export const RHexpiryContestRewardRows = [
   },
   {
     id: 2,
-    criteria:"Employee",
+    criteria: "Employee",
     noOfLots: 200,
     minBrok: 10000,
     uniqueClients: 10,
@@ -521,10 +521,75 @@ export const RHexpiryContestRewardRows = [
   },
   {
     id: 3,
-    criteria:"Zone",
+    criteria: "Zone",
     noOfLots: 500,
     minBrok: 50000,
     uniqueClients: 20,
     giftVoucher: 2000,
+  },
+];
+
+export const partnerOnboardingTabs = ["Summary", "Details"];
+
+export const ProspectRows = [
+  {
+    id: 1,
+    srNo: 1,
+    appNo: "APP001",
+    prospectName: "Rahul Sharma",
+    date: "2026-04-01",
+    referredBy: "Amit Verma",
+    city: "Mumbai",
+    partnerType: "Individual",
+    stage: "New",
+    action: "",
+  },
+  {
+    id: 2,
+    srNo: 2,
+    appNo: "APP002",
+    prospectName: "Priya Mehta",
+    date: "2026-04-02",
+    referredBy: "Suresh Patel",
+    city: "Pune",
+    partnerType: "Company",
+    stage: "In Progress",
+    action: "",
+  },
+  {
+    id: 3,
+    srNo: 3,
+    appNo: "APP003",
+    prospectName: "Ankit Gupta",
+    date: "2026-04-03",
+    referredBy: "Neha Joshi",
+    city: "Delhi",
+    partnerType: "Individual",
+    stage: "Approved",
+    action: "",
+  },
+  {
+    id: 4,
+    srNo: 4,
+    appNo: "APP004",
+    prospectName: "Sneha Reddy",
+    date: "2026-04-01",
+    referredBy: "Kiran Rao",
+    city: "Hyderabad",
+    partnerType: "Company",
+    stage: "Rejected",
+    action: "",
+  },
+  {
+    id: 5,
+    srNo: 5,
+    appNo: "APP005",
+    prospectName: "Vikram Singh",
+    date: "2026-04-02",
+    referredBy: "Manoj Kumar",
+    city: "Bangalore",
+    partnerType: "Individual",
+    stage: "In Progress",
+    action: "",
   },
 ];

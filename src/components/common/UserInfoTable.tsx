@@ -2530,6 +2530,61 @@ const DataTable = ({
         // Return unchanged column if not the 'status' or 'document' field
         return column;
       });
+    } else if (activeSubItem === "Referal Entry Status") {
+      return TableColumns.PartnerOnboardingDetails.map((column) => {
+        if (column.field === "stage") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              // Show dash if EsignPending or null/undefined
+
+              return (
+                <button
+                  onClick={() => {
+                    console.log("stage row", params);
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.stage}
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "appNo") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              // Show dash if EsignPending or null/undefined
+
+              return (
+                <button
+                  onClick={() => {
+                    console.log("stage row", params);
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.appNo}
+                </button>
+              );
+            },
+          };
+        }
+        // Return unchanged column if not the 'status' or 'document' field
+        return column;
+      });
     } else if (activeSubItem === "Pledge Request Report") {
       return TableColumns.pledgeReportColumns.map((column) => ({
         ...column,

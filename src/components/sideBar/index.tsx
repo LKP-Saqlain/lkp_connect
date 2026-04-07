@@ -133,6 +133,7 @@ import ContractNote from "../../pages/UnlistedShare/contractNote";
 import BankRecordEntry from "../../pages/ThirdParty/bankMaster/bankRecordEntry";
 import BankApproval from "../../pages/ThirdParty/bankMaster/bankApproval";
 import BankReport from "../../pages/Reports/BankReport";
+import ApDetails from "../../pages/AP Onboarding/Details";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -870,6 +871,9 @@ const SideBar = () => {
     "Client Onboarding": <NewClientPhysical />,
     "File Upload": <FileUpload />,
   };
+  const referralLeadSubItems: Record<string, JSX.Element> = {
+    "Referal Entry Status": <ApDetails />,
+  };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>,
   ): JSX.Element | null => subItems[activeSubItem] || null;
@@ -897,6 +901,7 @@ const SideBar = () => {
       "KYC Dashboard": getSubItemComponent(kycSubItems),
       "Stock Study": <StockStudy />,
       "Mutual Fund": getSubItemComponent(mutualFundSubItems),
+      "Referal Lead": getSubItemComponent(referralLeadSubItems),
       DashBoard: null,
       "Regulatory Announcement": (
         <RegulatorAnnouncement activeMenu={activeMenu} />

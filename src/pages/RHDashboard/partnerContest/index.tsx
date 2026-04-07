@@ -19,7 +19,7 @@ import { Button } from "@mui/material";
 import { useFormik } from "formik";
 import DownloadIcon from "@mui/icons-material/Download";
 import ShowToast from "../../../utils/toastUtils";
-import { getAPContestReportColumns } from "../../../helper/tableColumns";
+import { getAPContestReportColumnsQ4 } from "../../../helper/tableColumns";
 import { Tabs, Tab } from "@mui/material";
 
 const PartnerContestReport = ({ activeSubItem }: any) => {
@@ -31,10 +31,10 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
   const { accessType } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data
+    (state: RootState) => state.AuthUser?.data?.data,
   );
 
   interface OptionType {
@@ -62,9 +62,11 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
   const exportToExcel = (data: any[], fileName: string) => {
     const orderedData = data.map((row) => {
       const orderedRow: any = {};
-      getAPContestReportColumns.forEach((col: any) => {
+      getAPContestReportColumnsQ4.forEach((col: any) => {
         let cellValue = row[col.field as string];
-
+        if (col.field === "clientsAchieved" || col.field === "accountsTraded") {
+          cellValue = row.cla ?? "-";
+        }
         // If valueFormatter exists, apply it
         if (col.valueFormatter) {
           cellValue = col.valueFormatter(cellValue);
@@ -144,7 +146,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
           ShowToast(
             "error",
             errorMessage ||
-              "Sorry for the inconvenience, please try after some time."
+              "Sorry for the inconvenience, please try after some time.",
           );
         });
 
@@ -187,7 +189,7 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
           result.map((item: any, index: number) => ({
             ...item,
             Id: index + 1,
-          }))
+          })),
         );
       } catch (error) {
         console.error("Error fetching compliance data:", error);
@@ -337,13 +339,13 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
                                       onClick={() =>
                                         formik.setFieldValue(
                                           "selectedZone",
-                                          zone
+                                          zone,
                                         )
                                       }
                                       onBlur={() =>
                                         formik.setFieldTouched(
                                           "selectedZone",
-                                          true
+                                          true,
                                         )
                                       }
                                     >
@@ -483,13 +485,13 @@ const PartnerContestReport = ({ activeSubItem }: any) => {
                                       onClick={() =>
                                         formik.setFieldValue(
                                           "selectedZone",
-                                          zone
+                                          zone,
                                         )
                                       }
                                       onBlur={() =>
                                         formik.setFieldTouched(
                                           "selectedZone",
-                                          true
+                                          true,
                                         )
                                       }
                                     >
