@@ -133,7 +133,8 @@ import ContractNote from "../../pages/UnlistedShare/contractNote";
 import BankRecordEntry from "../../pages/ThirdParty/bankMaster/bankRecordEntry";
 import BankApproval from "../../pages/ThirdParty/bankMaster/bankApproval";
 import BankReport from "../../pages/Reports/BankReport";
-import ApDetails from "../../pages/AP Onboarding/Details";
+// import ApDetails from "../../pages/AP Onboarding/Details";
+
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -872,7 +873,7 @@ const SideBar = () => {
     "File Upload": <FileUpload />,
   };
   const referralLeadSubItems: Record<string, JSX.Element> = {
-    "Referal Entry Status": <ApDetails />,
+    // "Referal Entry Status": <ApDetails />,
   };
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>,
