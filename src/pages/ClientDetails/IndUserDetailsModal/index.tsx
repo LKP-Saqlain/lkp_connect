@@ -13,7 +13,7 @@ import { ClientInfoCapsules } from "../../../helper/tableColumns.tsx";
 // import PerformanceHistoryChart from "../PerformanceHistory";
 import SegmentWiseTable from "../../../components/common/fullTable";
 import BrokerageSlab from "../BrokerageSlab";
-import { Tooltip, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import "../style.css";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
@@ -30,7 +30,7 @@ const UserInfoModal = ({
   branch,
   handleFileUpload,
   uploadedFileName,
-  fetchMtfToken,
+  // fetchMtfToken,
 }: any) => {
   const [clientDetails, setClientDetails] = useState({
     cn: "", // Client_Name
@@ -371,7 +371,7 @@ const UserInfoModal = ({
                             sx={{ color: color }}
                           />
 
-                          {item.key === "mtf" && status === "Inactive" ? (
+                          {/* {item.key === "mtf" && status === "Inactive" ? (
                             <Tooltip title="Click to activate MTF" arrow>
                               <span
                                 style={{
@@ -388,9 +388,9 @@ const UserInfoModal = ({
                                 {status}
                               </span>
                             </Tooltip>
-                          ) : (
-                            <span style={{ color: "#777" }}>{status}</span>
-                          )}
+                          ) : ( */}
+                          <span style={{ color: "#777" }}>{status}</span>
+                          {/* )} */}
                         </p>
                         {/* {item.key === "mtf" && status === "Inactive" && (
                           <span

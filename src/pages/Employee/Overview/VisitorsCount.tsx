@@ -14,7 +14,7 @@ const StoreVisits = ({ getActiveClients }: any) => {
   const [chartData, setChartData] = useState<[]>([]);
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
   console.log("user", user_id);
   const dispatch = useDispatch<AppDispatch>();
@@ -31,7 +31,7 @@ const StoreVisits = ({ getActiveClients }: any) => {
         .then((response) => {
           console.log(
             "ClientCountResponse",
-            response?.data?.data?.clientStatus
+            response?.data?.data?.clientStatus,
           );
 
           const firstItem = response?.data?.data?.clientStatus;
@@ -57,7 +57,7 @@ const StoreVisits = ({ getActiveClients }: any) => {
           ShowToast(
             "error",
             message ||
-              "Sorry for the inconvenience, please try after some time."
+              "Sorry for the inconvenience, please try after some time.",
           );
         })
         .finally(() => {

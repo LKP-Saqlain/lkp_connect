@@ -26,7 +26,7 @@ const Revenue = ({}: any) => {
   // const [apiMonths, setApiMonths] = useState([]);
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
   console.log("user", user_id);
   const dispatch = useDispatch<AppDispatch>();
@@ -50,7 +50,7 @@ const Revenue = ({}: any) => {
         .then((response) => {
           console.log(
             "APBrokerageResponse",
-            response?.data?.data?.monthlyBrokerage
+            response?.data?.data?.monthlyBrokerage,
           );
 
           setBrokerageData(response?.data?.data?.monthlyBrokerage);
@@ -59,10 +59,10 @@ const Revenue = ({}: any) => {
           if (fetchedBrokerageData) {
             // Extract GrossBrokerage and APbrokerage data from the API response
             const grossBrokerageData = fetchedBrokerageData.map(
-              (item: any) => item.gb
+              (item: any) => item.gb,
             );
             const apShareData = fetchedBrokerageData.map(
-              (item: any) => item.apb
+              (item: any) => item.apb,
             );
 
             // Update the monthProjectData array
@@ -92,7 +92,7 @@ const Revenue = ({}: any) => {
           ShowToast(
             "error",
             message ||
-              "Sorry for the inconvenience, please try after some time."
+              "Sorry for the inconvenience, please try after some time.",
           );
         })
         .finally(() => {
