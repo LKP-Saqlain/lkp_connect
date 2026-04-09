@@ -344,6 +344,7 @@ export const endpoints = {
   GetFinalReportBankAccountMaster:
     "/api/Account/GetFinalReportBankAccountMaster",
   BankAccountMaster_report: "/api/Account/BankAccountMaster_report",
+  ViewAPDashBoard: "/api/AP/ViewAPDashBoard",
   ViewApprovalData: "api/AP/ViewApprovalData",
 };
 

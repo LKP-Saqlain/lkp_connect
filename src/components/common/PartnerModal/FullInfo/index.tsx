@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import BussinessProfile from "./BusinessProfile";
 import PersonalDetails from "./PersonalDetails";
-import { AppDispatch } from "../../../../redux/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../services";
 import ApprovalFooter from "../components/ApprovalFooter";
@@ -10,6 +10,10 @@ import KycVerification from "./KYC";
 import Infra from "./Infra";
 import Segments from "./Segments";
 import Action from "./Action";
+import PartnerSharing from "./PartnerSharing";
+import Payment from "./Payment";
+import Certificate from "./Certificates";
+// import Esign from "./Esign";
 
 const tabs = [
   "Business Profile",
@@ -27,6 +31,9 @@ const tabs = [
 const FullInfo = ({ data, toggle }: any) => {
   const [activeTab, setActiveTab] = useState("Business Profile");
   const [approvalData, setApprovalData] = useState<any>(null);
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data,
+  );
 
   const dispatch = useDispatch<AppDispatch>();
   console.log(data, "FullInfo data");
@@ -34,9 +41,9 @@ const FullInfo = ({ data, toggle }: any) => {
   useEffect(() => {
     const handleViewApprovalData = async () => {
       const payload = {
-        applNo: 10128,
+        applNo: data.applNo, // Replace with dynamic application number
         viewType: "OpsApprove1ViewDetails",
-        user_id: "EMP-5376",
+        user_id,
       };
 
       dispatch(showLoader("Fetching Details..."));
@@ -66,6 +73,7 @@ const FullInfo = ({ data, toggle }: any) => {
   const kycDocs = approvalData?.kycDocs;
   const infraDetails = approvalData?.infraDetails?.[0];
   const summary = approvalData?.summary;
+  const partnerSharingData = approvalData?.partnerSharing;
 
   return (
     <div style={{}}>
@@ -145,9 +153,9 @@ const FullInfo = ({ data, toggle }: any) => {
             const isActive = activeTab === tab;
             const disabledTabs = [
               // "Partner Sharing",
-              "Payment",
+              // "Payment",
               "E-signed",
-              "Exchange Certificate",
+              // "Exchange Certificate",
             ];
             const isDisabled = disabledTabs.includes(tab);
 
@@ -206,6 +214,12 @@ const FullInfo = ({ data, toggle }: any) => {
         )}
         {activeTab === "Segments" && <Segments data={summary} />}
         {activeTab === "Action" && <Action />}
+        {activeTab === "Partner Sharing" && (
+          <PartnerSharing data={partnerSharingData} />
+        )}
+        {activeTab === "Payment" && <Payment data={summary} />}
+        {/* {activeTab === "Payment" && <Esign data={summary} />} */}
+        {activeTab === "Exchange Certificate" && <Certificate />}
         <ApprovalFooter
           activeTab={activeTab}
           onSubmit={({ decision, remarks }) => {

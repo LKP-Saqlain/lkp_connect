@@ -98,6 +98,8 @@ interface SelectedWidgetProps {
   isCustomBtn?: any;
   handleContractMailClick?: () => void;
   tabValue?: any;
+  editRowAccess?: boolean;
+  setRows?: any;
 }
 
 const DataTable = ({
@@ -157,6 +159,8 @@ const DataTable = ({
   isCustomBtn,
   handleContractMailClick,
   tabValue,
+  setRows,
+  editRowAccess,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -1429,6 +1433,41 @@ const DataTable = ({
       return TableColumns.EmpBrokerageAchieved.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "AP PaymentExchangeData") {
+      return TableColumns.ParOnPaymentexchangeColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "AP PaymentOtherData") {
+      return TableColumns.ParOnPaymentOthers.map((column) => {
+        if (column.field === "Edit") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              if (params.row.isTotal) return null;
+
+              const handleEdit = () => {
+                handleEditClick?.(params.row, true);
+              };
+
+              return (
+                <>
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              );
+            },
+          };
+        }
+
+        return column;
+      });
     } else if (selectedWidget === "Lifetime Membership") {
       return TableColumns.AmcLifeMembership.map((column) => ({
         ...column,
@@ -2560,7 +2599,7 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "appNo") {
+        if (column.field === "applNo") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -2580,7 +2619,7 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  {params.row.appNo}
+                  {params.row.applNo}
                 </button>
               );
             },
@@ -2640,6 +2679,13 @@ const DataTable = ({
     } else if (activeSubItem === "DPMandateJVData") {
       return TableColumns.MandateTab3Columns.map((column) => ({
         ...column,
+      }));
+    } else if (activeSubItem === "partnerSharing") {
+      return TableColumns.ParOnbPartnerSharing.map((column) => ({
+        ...column,
+        editable: column.field !== "segment" && editRowAccess,
+        cellClassName:
+          editRowAccess && column.field !== "segment" ? "editable-cell" : "",
       }));
     } else if (activeSubItem === "contestSPIP") {
       return TableColumns.contestSPIP.map((column) => ({
@@ -3129,6 +3175,16 @@ const DataTable = ({
           localeText={{ noRowsLabel: "No Records!" }}
           columns={columns}
           rowHeight={30}
+          editMode={editRowAccess ? "cell" : undefined}
+          processRowUpdate={(newRow) => {
+            if (setRows) {
+              setRows((prev: any) =>
+                prev.map((row: any) => (row.id === newRow.id ? newRow : row)),
+              );
+            }
+            console.log("Updated Row:", newRow);
+            return newRow;
+          }}
           hideFooter={customHide ? true : false}
           // getRowId={(row: any) => (row.Id ? row?.Id : row?.cc)}
           getRowId={(row: any) =>
@@ -3193,6 +3249,14 @@ const DataTable = ({
               color: "#000",
               border: "1px solid #D3D3D3 !important",
             },
+            "& .editable-cell": {
+              backgroundColor: "#ffffff", // editable cell background color
+              cursor: "pointer",
+            },
+            "& .editable-cell:hover": {
+              backgroundColor: "#cce7ff",
+            },
+
             ...(customCss && {
               "& .duplicate-row": {
                 backgroundColor: "#f9e28e !important", // light yellow

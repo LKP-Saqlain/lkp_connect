@@ -2,6 +2,14 @@ import { Box, Typography } from "@mui/material";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { SectionTitle } from "../../StylingCss";
+import {
+  hideLoader,
+  showLoader,
+} from "../../../../../redux/slices/loaderSlice";
+import ShowToast from "../../../../../utils/toastUtils";
+import { apiServices } from "../../../../../services";
+import { AppDispatch } from "../../../../../redux/store";
+import { useDispatch } from "react-redux";
 
 const REQUIRED_DOCS = [
   "Pan Card",
@@ -18,10 +26,58 @@ const KycVerification = ({ data }: { data: any[] }) => {
   data?.forEach((doc) => {
     docMap[doc.docName] = doc;
   });
-
-  const handleDownload = (doc: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const handleDownload = async (doc: any) => {
     console.log("Download:", doc);
-    // call download API here
+
+    const payload = {
+      // fileName: "danger.jpeg.jpeg",
+      fileName: doc.fileName,
+      filePath: doc.filePath,
+      // filePath: "\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\10128",
+      fileType: doc.fileType,
+      contentType: "",
+    };
+
+    dispatch(showLoader("Downloading..."));
+    console.log("row data", payload);
+
+    apiServices
+      .ComplianceDownload(payload)
+      .then((response) => {
+        console.log("response", response);
+
+        if (response?.status === 200 && response?.data) {
+          const url = window.URL.createObjectURL(new Blob([response?.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute(
+            "download",
+            `${payload.fileName}${payload.fileType}`,
+          );
+          const finalFileName = doc.fileName.endsWith(doc.fileType)
+            ? doc.fileName
+            : `${doc.fileName}${doc.fileType}`;
+
+          link.href = url;
+          link.download = finalFileName;
+          document.body.appendChild(link);
+          link.click();
+          dispatch(hideLoader());
+        } else {
+          console.log("Error during download", response);
+          ShowToast("info", "Error downloading file");
+        }
+      })
+      .catch((error) => {
+        ShowToast(
+          "info",
+          error.message || "An error occurred while downloading",
+        );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
   };
 
   return (

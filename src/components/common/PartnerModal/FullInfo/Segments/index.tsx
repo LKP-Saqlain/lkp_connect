@@ -68,7 +68,14 @@ const Segments = ({ data }: { data: any[] }) => {
           Summary
         </Typography>
 
-        <Table size="small">
+        <Table
+          size="small"
+          sx={{
+            "& .MuiTableCell-root": {
+              border: "1px solid #e5e7eb",
+            },
+          }}
+        >
           <TableHead>
             <TableRow>
               <TableCell>Exchange</TableCell>

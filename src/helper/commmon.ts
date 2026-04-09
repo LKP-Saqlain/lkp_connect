@@ -634,3 +634,41 @@ export const SEGMENTS_DATA = [
     ],
   },
 ];
+
+export const ParOnbPartnerSharingData = [
+  {
+    id: 1,
+    segment: "Equity Cash",
+    ApShare: "70%",
+    LkpShare: "30%",
+    minRentation: "0.5",
+  },
+  {
+    id: 2,
+    segment: "Equity F&O",
+    ApShare: "60%",
+    LkpShare: "40%",
+    minRentation: "0.5",
+  },
+  {
+    id: 3,
+    segment: "Currency",
+    ApShare: "50%",
+    LkpShare: "50%",
+    minRentation: "0.5",
+  },
+  {
+    id: 4,
+    segment: "Commodity",
+    ApShare: "40%",
+    LkpShare: "60%",
+    minRentation: "0.5",
+  },
+  {
+    id: 5,
+    segment: "Security Deposit",
+    ApShare: "30%",
+    LkpShare: "70%",
+    minRentation: "0.5",
+  },
+];

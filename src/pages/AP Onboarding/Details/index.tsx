@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tabs, Tab } from "@mui/material";
-import { partnerOnboardingTabs, ProspectRows } from "../../../helper/commmon";
+import { partnerOnboardingTabs } from "../../../helper/commmon";
 import { Card, CardBody, CardHeader, Container, Row } from "reactstrap";
 import DataTable from "../../../components/common/UserInfoTable";
 import PartnerModal from "../../../components/common/PartnerModal";
+import { apiServices } from "../../../services";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 
 const ApDetails = () => {
   const [tabValue, setTabValue] = useState<string>("Summary");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [modalType, setModalType] = useState<string>("");
+  const [data, setData] = useState<any>(null);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data,
+  );
 
   const PartnerStatus = (row: any, type: string) => {
     setSelectedRow(row); //  store clicked row
@@ -22,6 +32,34 @@ const ApDetails = () => {
     setIsModalOpen(false);
     setSelectedRow(null); // optional reset
   };
+
+  useEffect(() => {
+    const handleViewApprovalData = async () => {
+      const payload = {
+        user_id,
+        optionType: "OpsApprove1View", // for Ops Level1=OpsApprove1View ,compliance=ComplView,Ops Level 2=OpsApprove2View,business=BusinessView,management=ManagementView,Head=HeadView
+      };
+
+      dispatch(showLoader("Fetching Details..."));
+
+      try {
+        const response = await apiServices.ViewAPDashBoard(payload);
+        console.log("response ViewAPDashBoard", response?.data?.data?.data);
+        const filteredData = (response?.data?.data?.data || []).map(
+          (item: any, i: number) => ({ id: i + 1, ...item }),
+        );
+        console.log("response ViewAPDashBoard filteredData", filteredData);
+        //  Save full response data
+        setData(filteredData);
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+
+    handleViewApprovalData();
+  }, []);
 
   return (
     <div className="page-content page-view">
@@ -87,7 +125,7 @@ const ApDetails = () => {
             </CardHeader>
             <CardBody>
               <DataTable
-                T6Data={ProspectRows}
+                T6Data={data}
                 activeSubItem={"Referal Entry Status"}
                 onStatusClick={PartnerStatus}
               />

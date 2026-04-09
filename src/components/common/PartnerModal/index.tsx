@@ -1,6 +1,7 @@
 import { Modal, ModalBody } from "reactstrap";
 import Stage from "./Stage/Stage";
 import FullInfo from "./FullInfo/index";
+import PaymentEdit from "./PaymentEdit";
 
 const PartnerModal = ({ isOpen, toggle, data, type }: any) => {
   if (!data) return null;
@@ -9,12 +10,15 @@ const PartnerModal = ({ isOpen, toggle, data, type }: any) => {
       isOpen={isOpen}
       toggle={toggle}
       centered
-      className={type === "stage" ? "" : "modal-fullscreen"}
+      className={type === "applNo" ? "modal-fullscreen" : ""}
     >
       <ModalBody>
         {type === "stage" && <Stage toggle={toggle} />}
-        {type === "appNo" && (
+        {type === "applNo" && (
           <FullInfo data={data} toggle={toggle} type={type} />
+        )}
+        {type === "EditPartnerPayment" && (
+          <PaymentEdit toggle={toggle} data={data} />
         )}
       </ModalBody>
     </Modal>

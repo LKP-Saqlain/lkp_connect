@@ -1455,6 +1455,9 @@ export const apiServices = {
       payload,
     );
   },
+  ViewAPDashBoard: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewAPDashBoard, payload);
+  },
   ViewApprovalData: async (payload: any) => {
     return await apiService("POST", endpoints.ViewApprovalData, payload);
   },

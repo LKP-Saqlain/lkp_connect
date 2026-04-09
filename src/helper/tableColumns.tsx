@@ -14236,7 +14236,7 @@ const formatCurrency = (value: number) =>
 
 export const PartnerOnboardingDetails: GridColDef[] = [
   {
-    field: "srNo",
+    field: "id",
     headerName: "Sr. No",
     width: 90,
     flex: 1,
@@ -14245,7 +14245,7 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "appNo",
+    field: "applNo",
     headerName: "App. No.",
     width: 130,
     flex: 1,
@@ -14254,7 +14254,7 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "prospectName",
+    field: "aP_Name",
     headerName: "Name of Prospect",
     flex: 1,
     minWidth: 180,
@@ -14303,12 +14303,140 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "stage",
+    field: "applStatus",
     headerName: "Stage",
     width: 130,
     flex: 1,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+  },
+];
+
+export const ParOnbPartnerSharing: GridColDef[] = [
+  {
+    field: "segment",
+    headerName: "Segment",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    editable: false,
+  },
+  {
+    field: "ApShare",
+    headerName: "AP Share",
+    width: 130,
+    headerAlign: "center",
+    align: "center",
+    flex: 1,
+    disableColumnMenu: true,
+  },
+  {
+    field: "LkpShare",
+    headerName: "LKP Share",
+    width: 150,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "minRentation",
+    headerName: "Minimum Rentation",
+    width: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+];
+
+export const ParOnPaymentexchangeColumns: GridColDef[] = [
+  {
+    field: "exchangeName",
+    headerName: "Exchange Charges",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "segmentName",
+    headerName: "Segments",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "gst",
+    headerName: "GST",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "total",
+    headerName: "Total",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+];
+export const ParOnPaymentOthers: GridColDef[] = [
+  {
+    field: "exchangeName",
+    headerName: "Others",
+    flex: 1,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "total",
+    headerName: "Total",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "Edit",
+    headerName: "Edit",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "revisedTotal",
+    headerName: "Revised Total",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+
+  {
+    field: "attachment",
+    headerName: "Attachment",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+  },
+  {
+    field: "remark",
+    headerName: "Remark",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
   },
 ];

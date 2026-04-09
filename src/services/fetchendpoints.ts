@@ -432,6 +432,7 @@ export const newDomainEndpoints = [
   endpoints.BankAccountMaster_report,
 
   // Partner Onboarding
+  endpoints.ViewAPDashBoard,
   endpoints.ViewApprovalData,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
