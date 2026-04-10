@@ -8,7 +8,7 @@ import { apiServices } from "../../../services";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import EsignTest from "../EsignTest";
+// import EsignTest from "../EsignTest";
 
 const ApDetails = () => {
   const [tabValue, setTabValue] = useState<string>("Summary");
@@ -105,7 +105,8 @@ const ApDetails = () => {
 
       {/* 🔹 Example conditional rendering */}
       <Container fluid>
-        <Row>{tabValue === "Summary" && <EsignTest />}</Row>
+        {/* <Row>{tabValue === "Summary" && <EsignTest />}</Row> */}
+        <Row>{tabValue === "Summary" && <div>summary</div>}</Row>
         {tabValue === "Details" && (
           <Card
             style={{
