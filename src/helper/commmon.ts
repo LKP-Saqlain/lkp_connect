@@ -672,3 +672,100 @@ export const ParOnbPartnerSharingData = [
     minRentation: "0.5",
   },
 ];
+
+export const documentList = [
+  // ================= NSE =================
+  {
+    category: "NSE",
+    fileName: "NSE_Annexure-2.html",
+    label: "Undertaking form for applicant AP",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\NSE",
+  },
+  {
+    category: "NSE",
+    fileName: "NSE_Tradingmem&AuthpersonAgree.html",
+    label: "Trading member & Authorised Person Agreement",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\NSE",
+  },
+
+  // ================= BSE =================
+  {
+    category: "BSE",
+    fileName: "BSE_ApplicationForApRegistartion.html",
+    label: "Application for AP Registration",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+  },
+  {
+    category: "BSE",
+    fileName: "BSE_Annexure2(a).html",
+    label:
+      "Application form by the applicant for registration as authorised person with trading member of BSE ltd",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+  },
+  {
+    category: "BSE",
+    fileName: "BSE_Annexure2(b)(i).html",
+    label:
+      "Declaration/Confirmation/Undertaking & Recommendation from Member BSE Limited",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+  },
+  {
+    category: "BSE",
+    fileName: "BSE_Annexure2(b)(ii).html",
+    label: "Undertaking form for applicant AP",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+  },
+  {
+    category: "BSE",
+    fileName: "BSE_Annexure2(b)(iii).html",
+    label:
+      "Application for AP registration (member Covering Letter) should be on LKP letterhead",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+  },
+  {
+    category: "BSE",
+    fileName: "BSE_Annexure2(c).html",
+    label: "Agreement between members & AP",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+  },
+
+  // ================= MCX =================
+  {
+    category: "MCX",
+    fileName: "MCX_Annexure-A.html",
+    label: "Undertaking (for Digitally signed Applications for Registration)",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\MCX",
+  },
+  {
+    category: "MCX",
+    fileName: "MCX_AP-3.html",
+    label: "Details of Individual/Director/Partners",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\MCX",
+  },
+  {
+    category: "MCX",
+    fileName: "MCX_Ap-6.html",
+    label: "Member & Authorised Person Agreement",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\MCX",
+  },
+
+  // ================= AGREEMENT =================
+  {
+    category: "AGREEMENT",
+    fileName: "BusinessAssociateAgreement.html",
+    label: "Business agreement between LKP and AP",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates",
+  },
+
+  { category: "KYC", fileName: "", label: "Pan Card", path: "" },
+  { category: "KYC", fileName: "", label: "Residence Address", path: "" },
+  { category: "KYC", fileName: "", label: "Office Address", path: "" },
+  {
+    category: "KYC",
+    fileName: "",
+    label: "Educational Qualification",
+    path: "",
+  },
+  { category: "KYC", fileName: "", label: "Occupation Proof", path: "" },
+  { category: "KYC", fileName: "", label: "GSTIN Certificate", path: "" },
+];

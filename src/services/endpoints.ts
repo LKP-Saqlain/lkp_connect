@@ -346,6 +346,8 @@ export const endpoints = {
   BankAccountMaster_report: "/api/Account/BankAccountMaster_report",
   ViewAPDashBoard: "/api/AP/ViewAPDashBoard",
   ViewApprovalData: "api/AP/ViewApprovalData",
+  EsignAP_NSE: "api/ESign/EsignAP_NSE",
+  EsignLKP_NSE: "api/ESign/EsignLKP_NSE",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

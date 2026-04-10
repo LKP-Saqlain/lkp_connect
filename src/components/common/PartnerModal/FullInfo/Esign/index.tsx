@@ -1,131 +1,137 @@
-// import { Box, Typography } from "@mui/material";
-// import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
-// import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-// import { SectionTitle } from "../../StylingCss";
+import { Box, Button, Typography } from "@mui/material";
+import { SectionTitle } from "../../StylingCss";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { documentList } from "../../../../../helper/commmon";
 
-// export const previewDocuments = [
-//   {
-//     category: "NSE",
-//     documents: [
-//       "Undertaking form for applicant AP",
-//       "Trading member & Authorised Person Agreement",
-//     ],
-//   },
-//   {
-//     category: "BSE",
-//     documents: [
-//       "Application form by the applicant for registration as authorised person with trading member of BSE ltd",
-//       "Declaration/Confirmation/Undertaking & Recommendation from Member BSE Limited",
-//       "Undertaking form for applicant AP",
-//       "Agreement between members & AP",
-//       "Application for AP registration (member Covering Letter) should be on LKP letterhead",
-//     ],
-//   },
-//   {
-//     category: "MCX",
-//     documents: [
-//       "Undertaking (for Digitally signed Applications for Registration)",
-//       "Details of Individual/Director/Partners",
-//       "Application for appointment as AP",
-//       "Member & Authorised Person Agreement",
-//     ],
-//   },
-//   {
-//     category: "Agreement",
-//     documents: ["Business agreement between LKP and AP"],
-//   },
-//   {
-//     category: "KYC Documents",
-//     documents: ["All KYC Documents"],
-//   },
-// ];
+// ================= ROW COMPONENT =================
+const DocumentRow = ({ doc, onPreview, onEsign }: any) => {
+  return (
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
+      border="1px solid #D0D5DD"
+      borderRadius="10px"
+      p={1}
+      bgcolor="#fff"
+    >
+      {/* Document Name */}
+      <Typography fontSize={14}>{doc.label}</Typography>
 
-// const Esign = () => {
-//   // Map API docs by name for quick lookup
-//   const docMap: Record<string, any> = {};
-//   previewDocuments?.forEach((doc) => {
-//     docMap[doc.docName] = doc;
-//   });
+      {/* Actions */}
+      <Box display="flex" gap={1}>
+        {/* Preview */}
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={() => onPreview(doc)}
+          sx={{
+            minWidth: "40px",
+            color: "#003366",
+            borderColor: "#003366",
+            borderRadius: "11px",
+          }}
+        >
+          <VisibilityIcon fontSize="small" />
+        </Button>
 
-//   const handleDownload = (doc: any) => {
-//     console.log("Download:", doc);
-//     // call download API here
-//   };
+        {/* eSign */}
+        <Button
+          variant="contained"
+          size="small"
+          onClick={() => onEsign(doc)}
+          sx={{
+            backgroundColor: "#003366",
+            textTransform: "none",
+          }}
+        >
+          eSign
+        </Button>
+      </Box>
+    </Box>
+  );
+};
 
-//   return (
-//     <Box pb={3}>
-//       {/* ================= KYC DOCUMENTS ================= */}
-//       <SectionTitle>KYC Dodcument</SectionTitle>
+// ================= MAIN COMPONENT =================
+const Esign = (data: any) => {
+  const forceCategories = ["AGREEMENT", "KYC"];
+  const summary = Array.isArray(data)
+    ? data
+    : Array.isArray(data?.data)
+      ? data.data
+      : [];
+  console.log(data, "press");
+  const allowedCategories = summary
+    .map((item: any) => item.exchangeName)
+    .filter(
+      (name: string) =>
+        name &&
+        !["Total", "Stamp Paper charges", "Security Deposit"].includes(name),
+    );
 
-//       <Box display="flex" justifyContent="flex-end" mb={2}>
-//         <Typography
-//           sx={{
-//             color: "#1F5A96",
-//             cursor: "pointer",
-//             fontSize: 14,
-//             fontWeight: 500,
-//             textDecoration: "underline",
-//           }}
-//         >
-//           Download All Document
-//         </Typography>
-//       </Box>
+  // 🔹 Preview Handler
+  const handlePreview = (doc: any) => {
+    console.log("👁 Preview:", doc);
 
-//       <Box display="flex" flexDirection="column" gap={2}>
-//         {REQUIRED_DOCS.map((docName) => {
-//           const doc = docMap[docName];
-//           const isUploaded = !!doc;
+    const fullPath = `${doc.path}\\${doc.fileName}`;
+    console.log("📂 Path:", fullPath);
 
-//           return (
-//             <Box
-//               key={docName}
-//               display="flex"
-//               alignItems="center"
-//               justifyContent="space-between"
-//               p={1}
-//               border="1px solid #D0D5DD"
-//               borderRadius="12px"
-//               bgcolor="#fff"
-//             >
-//               {/* Left Section */}
-//               <Box display="flex" alignItems="center" gap={2}>
-//                 <Typography fontWeight={500}>{docName}</Typography>
+    // 👉 call preview API here
+  };
 
-//                 {isUploaded ? (
-//                   <Box display="flex" alignItems="center" gap={1}>
-//                     <CheckCircleIcon sx={{ color: "#1f9647", fontSize: 20 }} />
-//                     <Typography fontSize={13} color="#1f9647">
-//                       Uploaded
-//                     </Typography>
-//                   </Box>
-//                 ) : (
-//                   <Typography fontSize={13} color="#E02424">
-//                     Not Uploaded
-//                   </Typography>
-//                 )}
-//               </Box>
+  // 🔹 eSign Handler
+  const handleEsign = (doc: any) => {
+    console.log("✍️ eSign:", doc);
 
-//               {/* Right Section */}
-//               <Box display="flex" gap={2}>
-//                 <Box
-//                   onClick={() => isUploaded && handleDownload(doc)}
-//                   sx={{
-//                     border: "1px solid #1F5A96",
-//                     borderRadius: 2,
-//                     p: 0.5,
-//                     cursor: isUploaded ? "pointer" : "not-allowed",
-//                     opacity: isUploaded ? 1 : 0.4,
-//                   }}
-//                 >
-//                   <DownloadForOfflineIcon sx={{ color: "#1F5A96" }} />
-//                 </Box>
-//               </Box>
-//             </Box>
-//           );
-//         })}
-//       </Box>
-//     </Box>
-//   );
-// };
+    // 👉 call your handleSign logic here
+    // Example:
+    // handleSign(doc.fileName)
+  };
 
-// export default Esign;
+  // 🔹 Group by category (dynamic)
+  const groupedDocs = documentList
+    .filter(
+      (doc) =>
+        allowedCategories.includes(doc.category) ||
+        forceCategories.includes(doc.category),
+    )
+    .reduce((acc: any, doc) => {
+      if (!acc[doc.category]) acc[doc.category] = [];
+      acc[doc.category].push(doc);
+      return acc;
+    }, {});
+
+  return (
+    <Box p={3}>
+      <SectionTitle>Preview Documents</SectionTitle>
+
+      {/* Loop Categories */}
+      {Object.entries(groupedDocs).map(([category, docs]: any) => (
+        <Box key={category} mb={3}>
+          {/* Category Title */}
+          <Typography
+            fontWeight={600}
+            mb={1}
+            sx={{ borderBottom: "1px solid #ccc", pb: 0.5 }}
+          >
+            {category}
+          </Typography>
+
+          {/* Document List */}
+          <Box display="flex" flexDirection="column" gap={1}>
+            {docs.map((doc: any) => (
+              <DocumentRow
+                key={doc.fileName}
+                doc={doc}
+                onPreview={handlePreview}
+                onEsign={handleEsign}
+              />
+            ))}
+          </Box>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
+export default Esign;

@@ -31,6 +31,8 @@ export const publicEndpoints = [
   // endpoints.BeginMTFActivation,
   endpoints.ValidateSencondAuth,
   endpoints.ProcessOTP,
+  endpoints.EsignAP_NSE,
+  endpoints.EsignLKP_NSE,
 ];
 
 export const fundamentalEndpoints = [
@@ -205,7 +207,8 @@ export const newDomainEndpoints = [
   endpoints.DownloadSignedPdf,
   endpoints.ActivateAMC,
   endpoints.ProcessOTP,
-
+  endpoints.EsignAP_NSE,
+  endpoints.EsignLKP_NSE,
   // Employeee contest
   endpoints.GetEmpContestAchievedBrokerage,
   endpoints.GetEmpContestAchievedNonBrokerage,

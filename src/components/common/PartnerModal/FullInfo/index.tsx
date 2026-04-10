@@ -13,7 +13,7 @@ import Action from "./Action";
 import PartnerSharing from "./PartnerSharing";
 import Payment from "./Payment";
 import Certificate from "./Certificates";
-// import Esign from "./Esign";
+import Esign from "./Esign";
 
 const tabs = [
   "Business Profile",
@@ -153,8 +153,8 @@ const FullInfo = ({ data, toggle }: any) => {
             const isActive = activeTab === tab;
             const disabledTabs = [
               // "Partner Sharing",
-              // "Payment",
-              "E-signed",
+              "Payment",
+              // "E-signed",
               // "Exchange Certificate",
             ];
             const isDisabled = disabledTabs.includes(tab);
@@ -218,7 +218,7 @@ const FullInfo = ({ data, toggle }: any) => {
           <PartnerSharing data={partnerSharingData} />
         )}
         {activeTab === "Payment" && <Payment data={summary} />}
-        {/* {activeTab === "Payment" && <Esign data={summary} />} */}
+        {activeTab === "E-signed" && <Esign data={summary} />}
         {activeTab === "Exchange Certificate" && <Certificate />}
         <ApprovalFooter
           activeTab={activeTab}

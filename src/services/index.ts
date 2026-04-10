@@ -1461,4 +1461,10 @@ export const apiServices = {
   ViewApprovalData: async (payload: any) => {
     return await apiService("POST", endpoints.ViewApprovalData, payload);
   },
+  EsignAP_NSE: async (payload: any) => {
+    return await apiService("POST", endpoints.EsignAP_NSE, payload);
+  },
+  EsignLKP_NSE: async (payload: any) => {
+    return await apiService("POST", endpoints.EsignLKP_NSE, payload);
+  },
 };
