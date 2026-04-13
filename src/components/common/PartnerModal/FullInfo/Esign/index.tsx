@@ -1,66 +1,31 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { SectionTitle } from "../../StylingCss";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { documentList } from "../../../../../helper/commmon";
+import DocumentRow from "./componets";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../../redux/store";
+import { apiServices } from "../../../../../services";
+import ShowToast from "../../../../../utils/toastUtils";
+import {
+  hideLoader,
+  showLoader,
+} from "../../../../../redux/slices/loaderSlice";
+import { useMemo } from "react";
 
-// ================= ROW COMPONENT =================
-const DocumentRow = ({ doc, onPreview, onEsign }: any) => {
-  return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-      border="1px solid #D0D5DD"
-      borderRadius="10px"
-      p={1}
-      bgcolor="#fff"
-    >
-      {/* Document Name */}
-      <Typography fontSize={14}>{doc.label}</Typography>
+declare const Digio: any;
 
-      {/* Actions */}
-      <Box display="flex" gap={1}>
-        {/* Preview */}
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => onPreview(doc)}
-          sx={{
-            minWidth: "40px",
-            color: "#003366",
-            borderColor: "#003366",
-            borderRadius: "11px",
-          }}
-        >
-          <VisibilityIcon fontSize="small" />
-        </Button>
+const Esign = ({ data, applNo }: any) => {
+  const dispatch = useDispatch<AppDispatch>();
 
-        {/* eSign */}
-        <Button
-          variant="contained"
-          size="small"
-          onClick={() => onEsign(doc)}
-          sx={{
-            backgroundColor: "#003366",
-            textTransform: "none",
-          }}
-        >
-          eSign
-        </Button>
-      </Box>
-    </Box>
-  );
-};
-
-// ================= MAIN COMPONENT =================
-const Esign = (data: any) => {
   const forceCategories = ["AGREEMENT", "KYC"];
+
+  // ================= SUMMARY =================
   const summary = Array.isArray(data)
     ? data
     : Array.isArray(data?.data)
       ? data.data
       : [];
-  console.log(data, "press");
+
   const allowedCategories = summary
     .map((item: any) => item.exchangeName)
     .filter(
@@ -69,46 +34,139 @@ const Esign = (data: any) => {
         !["Total", "Stamp Paper charges", "Security Deposit"].includes(name),
     );
 
-  // 🔹 Preview Handler
+  // ================= GROUP DOCUMENTS =================
+  const groupedDocs = useMemo(() => {
+    return documentList
+      .filter(
+        (doc) =>
+          allowedCategories.includes(doc.category) ||
+          forceCategories.includes(doc.category),
+      )
+      .reduce((acc: any, doc) => {
+        if (!acc[doc.category]) acc[doc.category] = [];
+        acc[doc.category].push(doc);
+        return acc;
+      }, {});
+  }, [allowedCategories]);
+
+  // ================= BUILD PAYLOAD =================
+  const buildPayload = (doc: any) => {
+    const payload: any = { applNo };
+
+    if (doc.payloadType === "template") {
+      payload.templateName = doc.fileName;
+    }
+
+    if (doc.payloadType === "sourceFile") {
+      const baseName = doc.fileName.replace(".html", "");
+      payload.sourceFile = `${applNo}_${baseName}_AP_Signed.pdf`;
+    }
+
+    return payload;
+  };
+
+  // ================= DIGIO INIT =================
+  const initiateDigio = (
+    documentId: string,
+    signerIdentifier: string,
+    accessToken: string,
+    fileName: string,
+  ) => {
+    if (typeof Digio === "undefined") {
+      ShowToast("error", "Digio SDK not loaded");
+      return;
+    }
+
+    const digio = new Digio({
+      environment: "production",
+      logo: "https://www.lkpsec.com/App_Themes/images/webp/LKP--Final--Logo-New-2021-D2.webp",
+      theme: { primaryColor: "#07152B", secondaryColor: "#000000" },
+      callback: async (resp: any) => {
+        if (resp?.error_code) {
+          ShowToast("error", "Signing failed");
+          return;
+        }
+
+        ShowToast("success", "Signing completed successfully");
+        await downloadSignedPdf(documentId, fileName);
+      },
+    });
+
+    digio.init();
+    digio.submit(documentId, signerIdentifier, accessToken);
+  };
+
+  // ================= HANDLE ESIGN =================
+  const handleEsign = async (doc: any) => {
+    try {
+      if (!doc.lkpApi || !doc.payloadType) {
+        console.log("No LKP config for this document yet.");
+        return;
+      }
+
+      const apiFunc = apiServices[doc.lkpApi as keyof typeof apiServices];
+
+      if (!apiFunc) {
+        ShowToast("error", "API not configured properly");
+        return;
+      }
+
+      const payload = buildPayload(doc);
+
+      ShowToast("info", `Initiating signing for Esign...`);
+      dispatch(showLoader(true));
+
+      const response = await apiFunc(payload);
+
+      const signData = response?.data?.digioResponse?.clsUploadPDFResponse;
+
+      if (!signData?.id || !signData?.access_token?.id) {
+        ShowToast("error", "Invalid response from signature API");
+        dispatch(showLoader(false));
+        return;
+      }
+
+      initiateDigio(
+        signData.id,
+        signData.signing_parties?.[0]?.identifier,
+        signData.access_token.id,
+        signData.file_name,
+      );
+    } catch (error) {
+      console.error(error);
+      ShowToast("error", "Error during signing process");
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  // ================= DOWNLOAD =================
+  const downloadSignedPdf = async (documentId: string, fileName: string) => {
+    try {
+      const response = await apiServices.DownloadSignedPdf_PO({
+        id: documentId,
+        name: fileName,
+      });
+
+      if (response?.status !== 200) {
+        ShowToast("error", response?.data?.message || "Failed to download PDF");
+      }
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
   const handlePreview = (doc: any) => {
-    console.log("👁 Preview:", doc);
-
-    const fullPath = `${doc.path}\\${doc.fileName}`;
-    console.log("📂 Path:", fullPath);
-
-    // 👉 call preview API here
+    console.log(`${doc.path}\\${doc.fileName}`);
   };
 
-  // 🔹 eSign Handler
-  const handleEsign = (doc: any) => {
-    console.log("✍️ eSign:", doc);
-
-    // 👉 call your handleSign logic here
-    // Example:
-    // handleSign(doc.fileName)
-  };
-
-  // 🔹 Group by category (dynamic)
-  const groupedDocs = documentList
-    .filter(
-      (doc) =>
-        allowedCategories.includes(doc.category) ||
-        forceCategories.includes(doc.category),
-    )
-    .reduce((acc: any, doc) => {
-      if (!acc[doc.category]) acc[doc.category] = [];
-      acc[doc.category].push(doc);
-      return acc;
-    }, {});
-
+  // ================= UI =================
   return (
     <Box p={3}>
       <SectionTitle>Preview Documents</SectionTitle>
 
-      {/* Loop Categories */}
       {Object.entries(groupedDocs).map(([category, docs]: any) => (
         <Box key={category} mb={3}>
-          {/* Category Title */}
           <Typography
             fontWeight={600}
             mb={1}
@@ -117,11 +175,10 @@ const Esign = (data: any) => {
             {category}
           </Typography>
 
-          {/* Document List */}
           <Box display="flex" flexDirection="column" gap={1}>
-            {docs.map((doc: any) => (
+            {docs.map((doc: any, index: number) => (
               <DocumentRow
-                key={doc.fileName}
+                key={`${doc.category}-${doc.label}-${index}`}
                 doc={doc}
                 onPreview={handlePreview}
                 onEsign={handleEsign}

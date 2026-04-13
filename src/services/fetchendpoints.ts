@@ -31,8 +31,13 @@ export const publicEndpoints = [
   // endpoints.BeginMTFActivation,
   endpoints.ValidateSencondAuth,
   endpoints.ProcessOTP,
-  endpoints.EsignAP_NSE,
   endpoints.EsignLKP_NSE,
+  endpoints.Esign_BSELKP_Single,
+  endpoints.EsignLKP_BSE,
+  endpoints.Esign_MCX_LKP_Single,
+  endpoints.EsignLKP_MCX,
+  endpoints.EsignLKP_BusinessAssociate,
+  endpoints.DownloadSignedPdf_PO,
 ];
 
 export const fundamentalEndpoints = [
@@ -207,8 +212,7 @@ export const newDomainEndpoints = [
   endpoints.DownloadSignedPdf,
   endpoints.ActivateAMC,
   endpoints.ProcessOTP,
-  endpoints.EsignAP_NSE,
-  endpoints.EsignLKP_NSE,
+
   // Employeee contest
   endpoints.GetEmpContestAchievedBrokerage,
   endpoints.GetEmpContestAchievedNonBrokerage,
@@ -437,6 +441,13 @@ export const newDomainEndpoints = [
   // Partner Onboarding
   endpoints.ViewAPDashBoard,
   endpoints.ViewApprovalData,
+  endpoints.EsignLKP_NSE,
+  endpoints.Esign_BSELKP_Single,
+  endpoints.EsignLKP_BSE,
+  endpoints.Esign_MCX_LKP_Single,
+  endpoints.EsignLKP_MCX,
+  endpoints.EsignLKP_BusinessAssociate,
+  endpoints.DownloadSignedPdf,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

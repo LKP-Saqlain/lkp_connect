@@ -677,15 +677,11 @@ export const documentList = [
   // ================= NSE =================
   {
     category: "NSE",
-    fileName: "NSE_Annexure-2.html",
-    label: "Undertaking form for applicant AP",
-    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\NSE",
-  },
-  {
-    category: "NSE",
     fileName: "NSE_Tradingmem&AuthpersonAgree.html",
     label: "Trading member & Authorised Person Agreement",
-    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\NSE",
+    path: "...",
+    lkpApi: "EsignLKP_NSE",
+    payloadType: "sourceFile",
   },
 
   // ================= BSE =================
@@ -694,13 +690,8 @@ export const documentList = [
     fileName: "BSE_ApplicationForApRegistartion.html",
     label: "Application for AP Registration",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
-  },
-  {
-    category: "BSE",
-    fileName: "BSE_Annexure2(a).html",
-    label:
-      "Application form by the applicant for registration as authorised person with trading member of BSE ltd",
-    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+    lkpApi: "Esign_BSELKP_Single", // template type
+    payloadType: "template",
   },
   {
     category: "BSE",
@@ -708,12 +699,8 @@ export const documentList = [
     label:
       "Declaration/Confirmation/Undertaking & Recommendation from Member BSE Limited",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
-  },
-  {
-    category: "BSE",
-    fileName: "BSE_Annexure2(b)(ii).html",
-    label: "Undertaking form for applicant AP",
-    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+    lkpApi: "Esign_BSELKP_Single",
+    payloadType: "template",
   },
   {
     category: "BSE",
@@ -721,12 +708,16 @@ export const documentList = [
     label:
       "Application for AP registration (member Covering Letter) should be on LKP letterhead",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+    lkpApi: "Esign_BSELKP_Single",
+    payloadType: "template",
   },
   {
     category: "BSE",
     fileName: "BSE_Annexure2(c).html",
     label: "Agreement between members & AP",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+    lkpApi: "EsignLKP_BSE", // sourceFile type
+    payloadType: "sourceFile",
   },
 
   // ================= MCX =================
@@ -735,18 +726,16 @@ export const documentList = [
     fileName: "MCX_Annexure-A.html",
     label: "Undertaking (for Digitally signed Applications for Registration)",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\MCX",
-  },
-  {
-    category: "MCX",
-    fileName: "MCX_AP-3.html",
-    label: "Details of Individual/Director/Partners",
-    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\MCX",
+    lkpApi: "Esign_MCX_LKP_Single",
+    payloadType: "template",
   },
   {
     category: "MCX",
     fileName: "MCX_Ap-6.html",
     label: "Member & Authorised Person Agreement",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\MCX",
+    lkpApi: "EsignLKP_MCX",
+    payloadType: "sourceFile",
   },
 
   // ================= AGREEMENT =================
@@ -755,17 +744,57 @@ export const documentList = [
     fileName: "BusinessAssociateAgreement.html",
     label: "Business agreement between LKP and AP",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates",
+    lkpApi: "EsignLKP_BusinessAssociate",
+    payloadType: "sourceFile",
   },
 
-  { category: "KYC", fileName: "", label: "Pan Card", path: "" },
-  { category: "KYC", fileName: "", label: "Residence Address", path: "" },
-  { category: "KYC", fileName: "", label: "Office Address", path: "" },
+  // ================= KYC =================
+  {
+    category: "KYC",
+    fileName: "",
+    label: "Pan Card",
+    path: "",
+    lkpApi: null,
+    payloadType: null,
+  },
+  {
+    category: "KYC",
+    fileName: "",
+    label: "Residence Address",
+    path: "",
+    lkpApi: null,
+    payloadType: null,
+  },
+  {
+    category: "KYC",
+    fileName: "",
+    label: "Office Address",
+    path: "",
+    lkpApi: null,
+    payloadType: null,
+  },
   {
     category: "KYC",
     fileName: "",
     label: "Educational Qualification",
     path: "",
+    lkpApi: null,
+    payloadType: null,
   },
-  { category: "KYC", fileName: "", label: "Occupation Proof", path: "" },
-  { category: "KYC", fileName: "", label: "GSTIN Certificate", path: "" },
+  {
+    category: "KYC",
+    fileName: "",
+    label: "Occupation Proof",
+    path: "",
+    lkpApi: null,
+    payloadType: null,
+  },
+  {
+    category: "KYC",
+    fileName: "",
+    label: "GSTIN Certificate",
+    path: "",
+    lkpApi: null,
+    payloadType: null,
+  },
 ];

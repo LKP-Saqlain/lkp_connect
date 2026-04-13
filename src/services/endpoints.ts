@@ -346,8 +346,13 @@ export const endpoints = {
   BankAccountMaster_report: "/api/Account/BankAccountMaster_report",
   ViewAPDashBoard: "/api/AP/ViewAPDashBoard",
   ViewApprovalData: "api/AP/ViewApprovalData",
-  EsignAP_NSE: "api/ESign/EsignAP_NSE",
   EsignLKP_NSE: "api/ESign/EsignLKP_NSE",
+  Esign_BSELKP_Single: "api/ESign/Esign_BSELKP_Single",
+  EsignLKP_BSE: "api/ESign/EsignLKP_BSE",
+  Esign_MCX_LKP_Single: "api/ESign/Esign_MCX_LKP_Single",
+  EsignLKP_MCX: "api/ESign/EsignLKP_MCX",
+  EsignLKP_BusinessAssociate: "api/ESign/EsignLKP_BusinessAssociate",
+  DownloadSignedPdf_PO: "/api/ESign/DownloadSignedPdf_PO",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

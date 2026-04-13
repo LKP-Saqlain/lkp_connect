@@ -1461,10 +1461,30 @@ export const apiServices = {
   ViewApprovalData: async (payload: any) => {
     return await apiService("POST", endpoints.ViewApprovalData, payload);
   },
-  EsignAP_NSE: async (payload: any) => {
-    return await apiService("POST", endpoints.EsignAP_NSE, payload);
-  },
+
   EsignLKP_NSE: async (payload: any) => {
     return await apiService("POST", endpoints.EsignLKP_NSE, payload);
+  },
+  EsignLKP_BSE: async (payload: any) => {
+    return await apiService("POST", endpoints.EsignLKP_BSE, payload);
+  },
+  Esign_BSELKP_Single: async (payload: any) => {
+    return await apiService("POST", endpoints.Esign_BSELKP_Single, payload);
+  },
+  Esign_MCX_LKP_Single: async (payload: any) => {
+    return await apiService("POST", endpoints.Esign_MCX_LKP_Single, payload);
+  },
+  EsignLKP_MCX: async (payload: any) => {
+    return await apiService("POST", endpoints.EsignLKP_MCX, payload);
+  },
+  EsignLKP_BusinessAssociate: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.EsignLKP_BusinessAssociate,
+      payload,
+    );
+  },
+  DownloadSignedPdf_PO: async (payload: any) => {
+    return await apiService("POST", endpoints.DownloadSignedPdf_PO, payload);
   },
 };
