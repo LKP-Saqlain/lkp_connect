@@ -1,21 +1,24 @@
 import { useEffect, useState } from "react";
 import { Tabs, Tab } from "@mui/material";
-import { partnerOnboardingTabs } from "../../../helper/commmon";
-import { Card, CardBody, CardHeader, Container, Row } from "reactstrap";
-import DataTable from "../../../components/common/UserInfoTable";
+import {
+  partnerOnboardingTabs,
+  PartnerSideMenu,
+} from "../../../helper/commmon";
+import { Container } from "reactstrap";
 import PartnerModal from "../../../components/common/PartnerModal";
 import { apiServices } from "../../../services";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-// import EsignTest from "../EsignTest";
+import Summary from "./Summary";
+import ApDetails from "./Details";
 
-const ApDetails = () => {
+const Main = ({ activeSubItem }: any) => {
   const [tabValue, setTabValue] = useState<string>("Summary");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [modalType, setModalType] = useState<string>("");
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<any[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
@@ -35,10 +38,11 @@ const ApDetails = () => {
   };
 
   useEffect(() => {
+    // setTabValue("Summary");
     const handleViewApprovalData = async () => {
       const payload = {
         user_id,
-        optionType: "OpsApprove1View", // for Ops Level1=OpsApprove1View ,compliance=ComplView,Ops Level 2=OpsApprove2View,business=BusinessView,management=ManagementView,Head=HeadView
+        optionType: PartnerSideMenu[activeSubItem], // for Ops Level1=OpsApprove1View ,compliance=ComplView,Ops Level 2=OpsApprove2View,business=BusinessView,management=ManagementView,Head=HeadView
       };
 
       dispatch(showLoader("Fetching Details..."));
@@ -60,7 +64,7 @@ const ApDetails = () => {
     };
 
     handleViewApprovalData();
-  }, []);
+  }, [activeSubItem, user_id]);
 
   return (
     <div className="page-content page-view">
@@ -105,34 +109,13 @@ const ApDetails = () => {
 
       {/* 🔹 Example conditional rendering */}
       <Container fluid>
-        {/* <Row>{tabValue === "Summary" && <EsignTest />}</Row> */}
-        <Row>{tabValue === "Summary" && <div>summary</div>}</Row>
+        {tabValue === "Summary" && <Summary />}
         {tabValue === "Details" && (
-          <Card
-            style={{
-              minHeight: "80vh",
-              borderRadius: "15px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-            }}
-          >
-            <CardHeader
-              style={{
-                borderRadius: "15px 15px 0 0",
-                boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
-                backgroundColor: "#fff",
-                padding: "0.2rem 0.8rem",
-              }}
-            >
-              <h5 style={{ margin: 0, fontWeight: 500 }}>Details</h5>
-            </CardHeader>
-            <CardBody>
-              <DataTable
-                T6Data={data}
-                activeSubItem={"Referal Entry Status"}
-                onStatusClick={PartnerStatus}
-              />
-            </CardBody>
-          </Card>
+          <ApDetails
+            data={data}
+            PartnerStatus={PartnerStatus}
+            activeSubItem={activeSubItem}
+          />
         )}
       </Container>
       <PartnerModal
@@ -140,9 +123,10 @@ const ApDetails = () => {
         toggle={handleCloseModal}
         data={selectedRow}
         type={modalType}
+        activeSubItem={activeSubItem}
       />
     </div>
   );
 };
 
-export default ApDetails;
+export default Main;

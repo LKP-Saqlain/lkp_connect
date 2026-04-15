@@ -133,7 +133,7 @@ import ContractNote from "../../pages/UnlistedShare/contractNote";
 import BankRecordEntry from "../../pages/ThirdParty/bankMaster/bankRecordEntry";
 import BankApproval from "../../pages/ThirdParty/bankMaster/bankApproval";
 import BankReport from "../../pages/Reports/BankReport";
-import ApDetails from "../../pages/AP Onboarding/Details";
+import ApDetails from "../../pages/AP Onboarding/Main";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -871,9 +871,18 @@ const SideBar = () => {
     "Client Onboarding": <NewClientPhysical />,
     "File Upload": <FileUpload />,
   };
-  const referralLeadSubItems: Record<string, JSX.Element> = {
-    "Referal Entry Status": <ApDetails />,
+  // const referralLeadSubItems: Record<string, JSX.Element> = {
+  //   "Referal Entry Status": <ApDetails />,
+  // };
+  const PartnerOnBoardingSubItems: Record<string, JSX.Element> = {
+    "Ops Level 1 Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Compliance Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Ops Level 2 Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Business Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Management Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Lkp Esign": <ApDetails activeSubItem={activeSubItem} />,
   };
+
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>,
   ): JSX.Element | null => subItems[activeSubItem] || null;
@@ -901,7 +910,7 @@ const SideBar = () => {
       "KYC Dashboard": getSubItemComponent(kycSubItems),
       "Stock Study": <StockStudy />,
       "Mutual Fund": getSubItemComponent(mutualFundSubItems),
-      "Referal Lead": getSubItemComponent(referralLeadSubItems),
+      // "Referal Lead": getSubItemComponent(referralLeadSubItems),
       DashBoard: null,
       "Regulatory Announcement": (
         <RegulatorAnnouncement activeMenu={activeMenu} />
@@ -947,6 +956,7 @@ const SideBar = () => {
       "DP AMC Contest-Q4": <AmcMembershipQ4 activeMenu={activeMenu} />,
       "Research Calls": <ResearchCalls />,
       "Expiry Contest": <Expiry />,
+      "Partner OnBoarding": getSubItemComponent(PartnerOnBoardingSubItems),
     };
     return map[mn] ?? null;
   };

@@ -2,58 +2,70 @@ import { Box, Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { ActionButton } from "../StylingCss";
 
-type Props = {
-  onSubmit: (data: { decision: "APPROVE" | "REJECT"; remarks: string }) => void;
-  activeTab: string;
-};
-
-const ApprovalFooter = ({ onSubmit, activeTab }: Props) => {
+const ApprovalFooter = ({
+  getNextTab,
+  onApproval,
+  activeTab,
+  activeSubItem,
+}: any) => {
   const [decision, setDecision] = useState<"APPROVE" | "REJECT" | null>(null);
   const [remarks, setRemarks] = useState("");
 
-  const handleSubmit = () => {
-    if (!decision || !remarks) return;
-
-    onSubmit({
-      decision,
-      remarks,
-    });
+  const handleNext = () => {
+    getNextTab(activeTab);
+    setDecision(null);
+    setRemarks("");
   };
 
+  const handleApproval = (decisionType: "APPROVE" | "REJECT") => {
+    console.log(decisionType, remarks, decision);
+    onApproval({
+      decision: decisionType,
+      remarks: remarks || undefined,
+    });
+    setDecision(null);
+    setRemarks("");
+  };
+  const shouldHideActions =
+    activeTab === "Partner Sharing" && activeSubItem === "Business Approval";
   return (
     <Box display="flex" alignItems="center" gap={3} flexWrap="wrap">
       {activeTab !== "Action" && (
         <>
-          <Box minWidth={300}>
-            <TextField
-              label="Remarks *"
-              fullWidth
-              size="small"
-              multiline
-              rows={2}
-              value={remarks}
-              onChange={(e) => setRemarks(e.target.value)}
-            />
-          </Box>
+          {/*  Hide only this block */}
+          {!shouldHideActions && (
+            <>
+              <Box minWidth={300}>
+                <TextField
+                  label="Remarks *"
+                  fullWidth
+                  size="small"
+                  multiline
+                  rows={2}
+                  value={remarks}
+                  onChange={(e) => setRemarks(e.target.value)}
+                />
+              </Box>
 
-          <ActionButton
-            label="Reject"
-            color="#E02424"
-            bg="#FEE2E2"
-            onClick={() => setDecision("REJECT")}
-          />
+              <ActionButton
+                label="Reject"
+                color="#E02424"
+                bg="#FEE2E2"
+                onClick={() => handleApproval("REJECT")}
+              />
 
-          <ActionButton
-            label="Approve"
-            color="#1f9647"
-            bg="#E6F4EA"
-            onClick={() => setDecision("APPROVE")}
-          />
-
+              <ActionButton
+                label="Approve"
+                color="#1f9647"
+                bg="#E6F4EA"
+                onClick={() => handleApproval("APPROVE")}
+              />
+            </>
+          )}
+          {/*   Always visible */}
           <Button
             variant="contained"
-            // disabled={!decision || !remarks}
-            onClick={handleSubmit}
+            onClick={handleNext}
             sx={{
               background: "#1F5A96",
               textTransform: "none",
@@ -63,7 +75,7 @@ const ApprovalFooter = ({ onSubmit, activeTab }: Props) => {
               ml: "auto",
             }}
           >
-            Submit & Continue
+            Next
           </Button>
         </>
       )}

@@ -7,39 +7,39 @@ import { FieldGrid, SectionTitle, SelectableBox } from "../../StylingCss";
 const BusinessPartnerForm = ({ data }: any) => {
   // 🔥 MAP API TO CLEAN UI STRUCTURE
   const mappedData = {
-    mobile: data.mobile,
-    email: data.emailId,
-    city: data.city,
+    mobile: data?.mobile,
+    email: data?.emailId,
+    city: data?.city,
     referral: "",
 
     businessType:
-      data.partnerType === "individual" ? "Individual" : "Proprietorship",
+      data?.partnerType === "individual" ? "Individual" : "Proprietorship",
 
-    pan: data.panNo,
-    dob: data.dob ? new Date(data.dob).toLocaleDateString("en-GB") : "",
-    panName: data.panNo_Name,
-    tradeName: data.tradeName,
-    gstNo: data.gstNo,
+    pan: data?.panNo,
+    dob: data?.dob ? new Date(data?.dob).toLocaleDateString("en-GB") : "",
+    panName: data?.panNo_Name,
+    tradeName: data?.tradeName,
+    gstNo: data?.gstNo,
 
-    offAddress1: data.offAddress1,
-    offAddress2: data.offAddress2,
-    offPincode: data.offPincode,
-    offCity: data.offCity,
-    offState: data.offState,
+    offAddress1: data?.offAddress1,
+    offAddress2: data?.offAddress2,
+    offPincode: data?.offPincode,
+    offCity: data?.offCity,
+    offState: data?.offState,
 
-    resAddress1: data.resAddress1,
-    resAddress2: data.resAddress2,
-    resPincode: data.resPincode,
-    resCity: data.resCity,
-    resState: data.resState,
+    resAddress1: data?.resAddress1,
+    resAddress2: data?.resAddress2,
+    resPincode: data?.resPincode,
+    resCity: data?.resCity,
+    resState: data?.resState,
 
-    ifscCode: data.ifsCcode,
-    accountNumber: data.bankAcctNo,
-    bankName: data.bankName,
-    bankAddress: data.bankAddress,
+    ifscCode: data?.ifsCcode,
+    accountNumber: data?.bankAcctNo,
+    bankName: data?.bankName,
+    bankAddress: data?.bankAddress,
 
     accountType:
-      data.acctType === "savingAcc" ? "Savings Account" : "Current Account",
+      data?.acctType === "savingAcc" ? "Savings Account" : "Current Account",
   };
 
   return (

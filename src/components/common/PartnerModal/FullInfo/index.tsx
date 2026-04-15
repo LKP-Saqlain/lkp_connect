@@ -14,6 +14,7 @@ import PartnerSharing from "./PartnerSharing";
 import Payment from "./Payment";
 import Certificate from "./Certificates";
 import Esign from "./Esign";
+import { approvalConfig } from "../../../../helper/commmon";
 
 const tabs = [
   "Business Profile",
@@ -28,21 +29,35 @@ const tabs = [
   "Exchange Certificate",
 ];
 
-const FullInfo = ({ data, toggle }: any) => {
-  const [activeTab, setActiveTab] = useState("Business Profile");
+const FullInfo = ({ data, toggle, activeSubItem }: any) => {
+  const [activeTab, setActiveTab] = useState("");
   const [approvalData, setApprovalData] = useState<any>(null);
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data,
   );
 
+  const currentConfig = approvalConfig[activeSubItem];
+
   const dispatch = useDispatch<AppDispatch>();
   console.log(data, "FullInfo data");
+
+  useEffect(() => {
+    if (!currentConfig) return;
+
+    const disabledTabs = currentConfig.disabledTabs || [];
+
+    const firstEnabledTab = tabs.find((tab) => !disabledTabs.includes(tab));
+
+    if (firstEnabledTab) {
+      setActiveTab(firstEnabledTab);
+    }
+  }, [activeSubItem]);
 
   useEffect(() => {
     const handleViewApprovalData = async () => {
       const payload = {
         applNo: data.applNo, // Replace with dynamic application number
-        viewType: "OpsApprove1ViewDetails",
+        viewType: currentConfig.viewType,
         user_id,
       };
 
@@ -61,11 +76,58 @@ const FullInfo = ({ data, toggle }: any) => {
     };
 
     handleViewApprovalData();
-  }, []);
+  }, [data?.applNo, currentConfig?.viewType, user_id]);
+
+  const handleApprovalRemarks = async ({ decision, remarks }: any) => {
+    try {
+      dispatch(showLoader("Final Approval..."));
+
+      const currentConfig = approvalConfig[activeSubItem];
+
+      const payload: any = {
+        applNo: data.applNo,
+        userId: user_id,
+      };
+
+      //  Add sectionId only if needed
+      if (currentConfig.hasSection) {
+        const sectionId = tabs.indexOf(activeTab) + 1;
+        payload.sectionId = sectionId;
+      }
+
+      //  Add status dynamically
+      payload[currentConfig.statusKey] = decision === "APPROVE" ? "A" : "R";
+
+      //  Add remark only if allowed
+      if (currentConfig.remarkKey && remarks) {
+        payload[currentConfig.remarkKey] = remarks;
+      }
+
+      console.log("Final Payload:", payload);
+
+      await currentConfig.approveApi(payload);
+
+      const nextTab = getNextTab(activeTab);
+      if (nextTab !== activeTab) {
+        setActiveTab(nextTab);
+      }
+    } catch (error) {
+      console.error("Approval failed", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
 
   const getNextTab = (currentTab: string) => {
     const currentIndex = tabs.indexOf(currentTab);
-    return tabs[currentIndex + 1] || currentTab;
+    const disabledTabs = currentConfig?.disabledTabs || [];
+
+    for (let i = currentIndex + 1; i < tabs.length; i++) {
+      if (!disabledTabs.includes(tabs[i])) {
+        return tabs[i];
+      }
+    }
+    return currentTab;
   };
 
   const businessProfile = approvalData?.businessProfiles?.[0];
@@ -74,6 +136,21 @@ const FullInfo = ({ data, toggle }: any) => {
   const infraDetails = approvalData?.infraDetails?.[0];
   const summary = approvalData?.summary;
   const partnerSharingData = approvalData?.partnerSharing;
+
+  const tabComponents: Record<string, JSX.Element> = {
+    "Business Profile": <BussinessProfile data={businessProfile} />,
+    "Personal Details": <PersonalDetails data={personalDetails} />,
+    "KYC Document": <KycVerification data={kycDocs} />,
+    "Infrastructure details": <Infra data={infraDetails} />,
+    Segments: <Segments data={summary} />,
+    Action: <Action data={data} activeSubItem={activeSubItem} />,
+    "Partner Sharing": (
+      <PartnerSharing data={partnerSharingData} activeSubItem={activeSubItem} />
+    ),
+    Payment: <Payment data={summary} />,
+    "E-signed": <Esign data={summary} applNo={data.applNo} />,
+    "Exchange Certificate": <Certificate />,
+  };
 
   return (
     <div style={{}}>
@@ -151,12 +228,7 @@ const FullInfo = ({ data, toggle }: any) => {
         >
           {tabs.map((tab) => {
             const isActive = activeTab === tab;
-            const disabledTabs = [
-              // "Partner Sharing",
-              "Payment",
-              // "E-signed",
-              // "Exchange Certificate",
-            ];
+            const disabledTabs = currentConfig?.disabledTabs || [];
             const isDisabled = disabledTabs.includes(tab);
 
             return (
@@ -201,36 +273,15 @@ const FullInfo = ({ data, toggle }: any) => {
           boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
         }}
       >
-        {activeTab === "Business Profile" && businessProfile && (
-          <BussinessProfile data={businessProfile} />
-        )}
-        {activeTab === "Personal Details" && (
-          <PersonalDetails data={personalDetails} />
-        )}
-
-        {activeTab === "KYC Document" && <KycVerification data={kycDocs} />}
-        {activeTab === "Infrastructure details" && (
-          <Infra data={infraDetails} />
-        )}
-        {activeTab === "Segments" && <Segments data={summary} />}
-        {activeTab === "Action" && <Action />}
-        {activeTab === "Partner Sharing" && (
-          <PartnerSharing data={partnerSharingData} />
-        )}
-        {activeTab === "Payment" && <Payment data={summary} />}
-        {activeTab === "E-signed" && <Esign data={summary} />}
-        {activeTab === "Exchange Certificate" && <Certificate />}
+        {tabComponents[activeTab]}
         <ApprovalFooter
           activeTab={activeTab}
-          onSubmit={({ decision, remarks }) => {
-            console.log({ decision, remarks, activeTab });
-
-            //  Move to next tab
+          activeSubItem={activeSubItem}
+          onNext={() => {
             const nextTab = getNextTab(activeTab);
             setActiveTab(nextTab);
-
-            //  call API here if needed
           }}
+          onApproval={handleApprovalRemarks}
         />
       </div>
     </div>

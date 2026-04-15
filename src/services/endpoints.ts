@@ -353,6 +353,13 @@ export const endpoints = {
   EsignLKP_MCX: "api/ESign/EsignLKP_MCX",
   EsignLKP_BusinessAssociate: "api/ESign/EsignLKP_BusinessAssociate",
   DownloadSignedPdf_PO: "/api/ESign/DownloadSignedPdf_PO",
+  OpsApproveLevel1: "api/AP/OpsApproveLevel1",
+  ComplianceApprove: "api/AP/ComplianceApprove",
+  OpsApproveLevel2: "api/AP/OpsApproveLevel2",
+  BusinessApprove: "api/AP/BusinessApprove",
+  ManagmentApprove: "api/AP/ManagmentApprove",
+  HeadApprove: "api/AP/HeadApprove",
+  GetApprovalStatus: "api/AP/GetApprovalStatus",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

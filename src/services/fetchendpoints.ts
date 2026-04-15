@@ -448,6 +448,13 @@ export const newDomainEndpoints = [
   endpoints.EsignLKP_MCX,
   endpoints.EsignLKP_BusinessAssociate,
   endpoints.DownloadSignedPdf,
+  endpoints.OpsApproveLevel1,
+  endpoints.ComplianceApprove,
+  endpoints.OpsApproveLevel2,
+  endpoints.BusinessApprove,
+  endpoints.ManagmentApprove,
+  endpoints.HeadApprove,
+  endpoints.GetApprovalStatus,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

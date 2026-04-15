@@ -1487,4 +1487,25 @@ export const apiServices = {
   DownloadSignedPdf_PO: async (payload: any) => {
     return await apiService("POST", endpoints.DownloadSignedPdf_PO, payload);
   },
+  OpsApproveLevel1: async (payload: any) => {
+    return await apiService("POST", endpoints.OpsApproveLevel1, payload);
+  },
+  ComplianceApprove: async (payload: any) => {
+    return await apiService("POST", endpoints.ComplianceApprove, payload);
+  },
+  OpsApproveLevel2: async (payload: any) => {
+    return await apiService("POST", endpoints.OpsApproveLevel2, payload);
+  },
+  BusinessApprove: async (payload: any) => {
+    return await apiService("POST", endpoints.BusinessApprove, payload);
+  },
+  ManagmentApprove: async (payload: any) => {
+    return await apiService("POST", endpoints.ManagmentApprove, payload);
+  },
+  HeadApprove: async (payload: any) => {
+    return await apiService("POST", endpoints.HeadApprove, payload);
+  },
+  GetApprovalStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.GetApprovalStatus, payload);
+  },
 };

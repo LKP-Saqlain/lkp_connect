@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { SectionTitle } from "../../StylingCss";
 
-const PartnerSharing = ({ data }: { data: any }) => {
+const PartnerSharing = ({ data, activeSubItem }: any) => {
   const [isEditing, setIsEditing] = useState(false);
   const [rows, setRows] = useState(ParOnbPartnerSharingData);
   console.log(data);
@@ -44,36 +44,37 @@ const PartnerSharing = ({ data }: { data: any }) => {
       </Box>
 
       {/* Edit / Save Buttons (Below Table Left Aligned) */}
-      <Stack direction="row" spacing={2} mt={2}>
-        <Button
-          variant="outlined"
-          size="small"
-          sx={{
-            borderRadius: "20px",
-            textTransform: "none",
-            px: 3,
-          }}
-          onClick={() => setIsEditing(true)}
-          disabled={isEditing}
-        >
-          Edit
-        </Button>
+      {activeSubItem === "Business Approval" && (
+        <Stack direction="row" spacing={2} mt={2}>
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{
+              borderRadius: "20px",
+              textTransform: "none",
+              px: 3,
+            }}
+            onClick={() => setIsEditing(true)}
+            disabled={isEditing}
+          >
+            Edit
+          </Button>
 
-        <Button
-          variant="outlined"
-          size="small"
-          sx={{
-            borderRadius: "20px",
-            textTransform: "none",
-            px: 3,
-          }}
-          onClick={() => setIsEditing(false)}
-          disabled={!isEditing}
-        >
-          Save
-        </Button>
-      </Stack>
-
+          <Button
+            variant="outlined"
+            size="small"
+            sx={{
+              borderRadius: "20px",
+              textTransform: "none",
+              px: 3,
+            }}
+            onClick={() => setIsEditing(false)}
+            disabled={!isEditing}
+          >
+            Save
+          </Button>
+        </Stack>
+      )}
       {/* Attach Approval Section */}
       <Box mt={4}>
         <SectionTitle>Attach Approval Copy Here</SectionTitle>
