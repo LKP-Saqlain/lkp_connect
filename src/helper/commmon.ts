@@ -149,6 +149,143 @@ export const expiryContestCriteriaRows = [
   },
 ];
 
+export const combinedDataBySource = [
+  {
+    data: [
+      {
+        dummyId: 152,
+        month: "Mumbai",
+        directChannelDIY: 100,
+        DirectSalesTeam: 500,
+        APReferrals: 1000,
+        EmployeeReferrals: 30,
+        REChannel: 25,
+        Total: 1655,
+        datatype: "weekly",
+      },
+
+      {
+        dummyId: 157,
+        month: "Lucknow",
+        directChannelDIY: 85,
+        DirectSalesTeam: 400,
+        APReferrals: 800,
+        EmployeeReferrals: 25,
+        REChannel: 20,
+        Total: 1330,
+        datatype: "monthly",
+      },
+    ],
+    customFlag: "table-1",
+  },
+  {
+    data: [
+      {
+        dummyId: 1,
+        month: "Sep-24",
+        directChannelDIY: 111,
+        DirectSalesTeam: 352,
+        APReferrals: 951,
+        EmployeeReferrals: 15,
+        REChannel: 25,
+        Total: 1454,
+        datatype: "weekly",
+      },
+
+      {
+        dummyId: 21,
+        month: "Feb-24",
+        directChannelDIY: 81,
+        DirectSalesTeam: 361,
+        APReferrals: 1053,
+        EmployeeReferrals: 27,
+        REChannel: 24,
+        Total: 1546,
+        datatype: "monthly",
+      },
+      {
+        dummyId: 22,
+        month: "Apr-24",
+        directChannelDIY: 115,
+        DirectSalesTeam: 453,
+        APReferrals: 1127,
+        EmployeeReferrals: 29,
+        REChannel: 22,
+        Total: 1746,
+        datatype: "yearly",
+      },
+      {
+        dummyId: 23,
+        month: "Jul-24",
+        directChannelDIY: 85,
+        DirectSalesTeam: 378,
+        APReferrals: 1067,
+        EmployeeReferrals: 17,
+        REChannel: 25,
+        Total: 1572,
+        datatype: "Daily",
+      },
+    ],
+    customFlag: "table-2",
+  },
+  {
+    data: [
+      {
+        dummyId: 24,
+        month: "Nov-23",
+        directChannelDIY: 104,
+        DirectSalesTeam: 352,
+        APReferrals: 975,
+        EmployeeReferrals: 31,
+        REChannel: 16,
+        Total: 1578,
+        datatype: "tilldate",
+      },
+
+      {
+        dummyId: 73,
+        month: "Jul-24",
+        directChannelDIY: 104,
+        DirectSalesTeam: 426,
+        APReferrals: 1088,
+        EmployeeReferrals: 30,
+        REChannel: 22,
+        Total: 1670,
+        datatype: "last7days",
+      },
+    ],
+    customFlag: "table-3",
+  },
+  {
+    data: [
+      {
+        dummyId: 42,
+        month: "Aug-23",
+        directChannelDIY: 116,
+        DirectSalesTeam: 402,
+        APReferrals: 1102,
+        EmployeeReferrals: 20,
+        REChannel: 21,
+        Total: 1641,
+        datatype: "yearly",
+      },
+
+      {
+        dummyId: 484,
+        month: "May-24",
+        directChannelDIY: 107,
+        DirectSalesTeam: 390,
+        APReferrals: 1123,
+        EmployeeReferrals: 32,
+        REChannel: 27,
+        Total: 1679,
+        datatype: "monthly",
+      },
+    ],
+    customFlag: "table-7",
+  },
+];
+
 export const expiryContestRewardRows = [
   {
     id: 1,
