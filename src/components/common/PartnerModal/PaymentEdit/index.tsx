@@ -23,61 +23,89 @@ const PaymentEdit = ({ data, toggle }: any) => {
       file: selectedFile,
       comment: commentText,
     };
-
     console.log(payload);
   };
 
   return (
     <Box
       sx={{
-        backgroundColor: "#f3f4f6",
         borderRadius: 3,
-        p: 4,
-        position: "relative",
       }}
     >
-      <IconButton
-        onClick={toggle}
-        sx={{ position: "absolute", top: 16, right: 16 }}
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        mb={3}
       >
-        <CloseIcon />
-      </IconButton>
+        <Typography fontWeight={600} fontSize={18}>
+          {data.exchangeName}
+        </Typography>
 
-      <Typography fontWeight={600} fontSize={18} mb={3}>
-        {data.exchangeName} – {data.segmentName}
-      </Typography>
+        <IconButton onClick={toggle}>
+          <CloseIcon />
+        </IconButton>
+      </Box>
 
       <Box display="flex" gap={3} mb={3}>
+        {/* Proposed */}
         <Box
           sx={{
-            border: "1px solid #ccc",
+            border: "1px solid #D0D5DD",
             borderRadius: 2,
-            px: 2,
-            py: 1.5,
-            backgroundColor: "#fff",
-            minWidth: 200,
+            p: 1,
+            backgroundColor: "#e7e7e7",
+            minWidth: 220,
           }}
         >
-          <Typography fontSize={14} color="text.secondary">
-            Purposed:
+          <Typography fontSize={13} color="text.secondary">
+            Proposed
           </Typography>
-          <Typography fontWeight={500}>
-            {data.amount.toLocaleString("en-IN")}
+          <Typography fontWeight={600} fontSize={16}>
+            ₹ {data?.total?.toLocaleString("en-IN")}
           </Typography>
         </Box>
 
-        <TextField
-          placeholder="Revised"
-          value={revised}
-          onChange={(e) => setRevised(e.target.value)}
-          fullWidth
+        {/* Revised */}
+        <Box
           sx={{
-            "& .MuiOutlinedInput-root": {
-              borderRadius: 2,
-              backgroundColor: "#fff",
-            },
+            border: "1px solid #D0D5DD",
+            borderRadius: 2,
+            p: 1,
+            backgroundColor: "#fff",
+            minWidth: 220,
+            flex: 1,
           }}
-        />
+        >
+          <Typography fontSize={13} color="text.secondary" mb={0.5}>
+            Revised
+          </Typography>
+
+          <TextField
+            variant="standard"
+            type="number"
+            value={revised}
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, "");
+              setRevised(value);
+            }}
+            fullWidth
+            InputProps={{
+              disableUnderline: true,
+              inputProps: {
+                inputMode: "numeric",
+                pattern: "[0-9]*",
+              },
+            }}
+            sx={{
+              "& input": {
+                fontWeight: 600,
+                fontSize: 16,
+                padding: 0,
+              },
+            }}
+          />
+        </Box>
       </Box>
 
       <Typography fontWeight={600} mb={1}>
@@ -102,7 +130,7 @@ const PaymentEdit = ({ data, toggle }: any) => {
       <TextField
         placeholder="Comment"
         multiline
-        rows={5}
+        rows={3}
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
         fullWidth

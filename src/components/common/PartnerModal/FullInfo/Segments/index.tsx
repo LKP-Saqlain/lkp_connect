@@ -38,12 +38,12 @@ const Segments = ({ data }: { data: any[] }) => {
   return (
     <Box>
       {/* ================= SELECT SEGMENT ================= */}
-      <Typography fontSize={18} fontWeight={600} mb={3}>
+      <Typography fontSize={18} fontWeight={600} mb={2}>
         Select Segment
       </Typography>
 
       {SEGMENTS_DATA.map((section) => (
-        <Box key={section.exchange} mb={4}>
+        <Box key={section.exchange} mb={3}>
           <Typography fontSize={14} fontWeight={600} mb={2}>
             {section.title}
           </Typography>
@@ -63,7 +63,7 @@ const Segments = ({ data }: { data: any[] }) => {
       ))}
 
       {/* ================= SUMMARY ================= */}
-      <Box mt={5}>
+      <Box mt={3}>
         <Typography fontSize={18} fontWeight={600} mb={3}>
           Summary
         </Typography>

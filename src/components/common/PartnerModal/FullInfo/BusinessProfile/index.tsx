@@ -1,5 +1,4 @@
-import { Box, Typography } from "@mui/material";
-import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { Box } from "@mui/material";
 import { FieldGrid, SectionTitle, SelectableBox } from "../../StylingCss";
 
 /* ================= MAIN COMPONENT ================= */
@@ -43,7 +42,7 @@ const BusinessPartnerForm = ({ data }: any) => {
   };
 
   return (
-    <Box px={4} py={3}>
+    <Box>
       {/* ================= CONTACT DETAILS ================= */}
       <Box mb={5}>
         <SectionTitle>Contact Details</SectionTitle>
@@ -116,7 +115,7 @@ const BusinessPartnerForm = ({ data }: any) => {
       </Box>
 
       {/* ================= BANK DETAILS ================= */}
-      <Box mb={5}>
+      <Box mb={2}>
         <SectionTitle>Bank Account Details</SectionTitle>
         <FieldGrid
           fields={[
@@ -128,7 +127,7 @@ const BusinessPartnerForm = ({ data }: any) => {
         />
 
         {/* Download Proof */}
-        <Box
+        {/* <Box
           mt={2}
           p={1.2}
           display="flex"
@@ -153,12 +152,12 @@ const BusinessPartnerForm = ({ data }: any) => {
             }}
           >
             <DownloadForOfflineIcon sx={{ fontSize: 22, color: "#11395C" }} />
-          </Box>
-        </Box>
+          </Box> */}
+        {/* </Box> */}
       </Box>
 
       {/* ================= ACCOUNT TYPE ================= */}
-      <Box mb={5}>
+      <Box>
         <SectionTitle>Account Type</SectionTitle>
         <Box display="flex" gap={3}>
           {["Savings Account", "Current Account"].map((type) => (

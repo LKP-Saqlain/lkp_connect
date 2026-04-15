@@ -1,5 +1,4 @@
-import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { FieldGrid, SectionTitle, SelectableBox } from "../../StylingCss";
 
 const PersonalDetails = ({ data }: { data: any }) => {
@@ -29,7 +28,7 @@ const PersonalDetails = ({ data }: { data: any }) => {
   };
 
   return (
-    <Box px={4} py={3}>
+    <Box>
       {/* ================= EDUCATION ================= */}
       <Box mb={5}>
         <SectionTitle>Highest Education Qualification</SectionTitle>
@@ -124,7 +123,7 @@ const PersonalDetails = ({ data }: { data: any }) => {
             { label: "Nominee DOB", value: mappedData.nomineeDob },
           ]}
         />
-        <Box
+        {/* <Box
           mt={2}
           p={1.2}
           display="flex"
@@ -150,11 +149,11 @@ const PersonalDetails = ({ data }: { data: any }) => {
           >
             <DownloadForOfflineIcon sx={{ fontSize: 22, color: "#11395C" }} />
           </Box>
-        </Box>
+        </Box> */}
       </Box>
 
       {/* ================= COMPLIANCE DECLARATIONS ================= */}
-      <Box mb={5}>
+      <Box>
         <SectionTitle>Compliance Declarations</SectionTitle>
 
         <Box display="flex" gap={4} flexWrap="wrap" alignItems="flex-start">

@@ -21,7 +21,7 @@ const certificateData = [
 
 const Certificate = () => {
   return (
-    <Box p={4} bgcolor="#f4f6f8" minHeight="100vh">
+    <Box pb={3}>
       {/* Title */}
       <Typography fontWeight={600} fontSize={18} mb={3}>
         Exchange Certificates

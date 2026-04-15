@@ -12,7 +12,7 @@ const Infra = ({ data }: { data: any }) => {
   };
 
   return (
-    <Box mb={3}>
+    <Box>
       <SectionTitle>Infrastructure Details</SectionTitle>
 
       <FieldGrid

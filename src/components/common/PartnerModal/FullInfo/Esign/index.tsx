@@ -162,7 +162,7 @@ const Esign = ({ data, applNo }: any) => {
 
   // ================= UI =================
   return (
-    <Box p={3}>
+    <Box>
       <SectionTitle>Preview Documents</SectionTitle>
 
       {Object.entries(groupedDocs).map(([category, docs]: any) => (

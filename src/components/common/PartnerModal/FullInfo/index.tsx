@@ -91,7 +91,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
 
       //  Add sectionId only if needed
       if (currentConfig.hasSection) {
-        const sectionId = tabs.indexOf(activeTab) + 1;
+        const sectionId = tabs.indexOf(activeTab) + 2;
         payload.sectionId = sectionId;
       }
 
@@ -143,7 +143,9 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
     "KYC Document": <KycVerification data={kycDocs} />,
     "Infrastructure details": <Infra data={infraDetails} />,
     Segments: <Segments data={summary} />,
-    Action: <Action data={data} activeSubItem={activeSubItem} />,
+    Action: (
+      <Action data={data} activeSubItem={activeSubItem} toggle={toggle} />
+    ),
     "Partner Sharing": (
       <PartnerSharing data={partnerSharingData} activeSubItem={activeSubItem} />
     ),

@@ -14235,15 +14235,15 @@ const formatCurrency = (value: number) =>
   }).format(value ?? 0);
 
 export const PartnerOnboardingDetails: GridColDef[] = [
-  {
-    field: "id",
-    headerName: "Sr. No",
-    width: 90,
-    flex: 1,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
-  },
+  // {
+  //   field: "id",
+  //   headerName: "Sr. No",
+  //   width: 90,
+  //   flex: 1,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  // },
   {
     field: "applNo",
     headerName: "App. No.",
@@ -14279,9 +14279,9 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     field: "referredBy",
     headerName: "Referred By",
     flex: 1,
-    minWidth: 150,
+    minWidth: 120,
     headerAlign: "center",
-    align: "left",
+    align: "center",
     disableColumnMenu: true,
   },
   {
@@ -14378,6 +14378,7 @@ export const ParOnPaymentexchangeColumns: GridColDef[] = [
     flex: 1,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
     field: "gst",
@@ -14385,6 +14386,7 @@ export const ParOnPaymentexchangeColumns: GridColDef[] = [
     flex: 1,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
     field: "total",
@@ -14392,6 +14394,7 @@ export const ParOnPaymentexchangeColumns: GridColDef[] = [
     flex: 1,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
 ];
 export const ParOnPaymentOthers: GridColDef[] = [
@@ -14402,6 +14405,7 @@ export const ParOnPaymentOthers: GridColDef[] = [
     minWidth: 200,
     headerAlign: "center",
     align: "left",
+    disableColumnMenu: true,
   },
   {
     field: "total",
@@ -14409,6 +14413,7 @@ export const ParOnPaymentOthers: GridColDef[] = [
     flex: 1,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
     field: "Edit",
@@ -14416,6 +14421,7 @@ export const ParOnPaymentOthers: GridColDef[] = [
     flex: 1,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
     field: "revisedTotal",
@@ -14423,6 +14429,7 @@ export const ParOnPaymentOthers: GridColDef[] = [
     flex: 1,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
 
   {
@@ -14431,6 +14438,7 @@ export const ParOnPaymentOthers: GridColDef[] = [
     flex: 1,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
   {
     field: "remark",
@@ -14438,5 +14446,6 @@ export const ParOnPaymentOthers: GridColDef[] = [
     flex: 1,
     headerAlign: "center",
     align: "center",
+    disableColumnMenu: true,
   },
 ];

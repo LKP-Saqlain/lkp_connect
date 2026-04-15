@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ActionButton } from "../StylingCss";
 
 const ApprovalFooter = ({
-  getNextTab,
+  onNext,
   onApproval,
   activeTab,
   activeSubItem,
@@ -12,7 +12,7 @@ const ApprovalFooter = ({
   const [remarks, setRemarks] = useState("");
 
   const handleNext = () => {
-    getNextTab(activeTab);
+    onNext(activeTab);
     setDecision(null);
     setRemarks("");
   };
@@ -29,7 +29,7 @@ const ApprovalFooter = ({
   const shouldHideActions =
     activeTab === "Partner Sharing" && activeSubItem === "Business Approval";
   return (
-    <Box display="flex" alignItems="center" gap={3} flexWrap="wrap">
+    <Box display="flex" alignItems="center" gap={3} flexWrap="wrap" pt={3}>
       {activeTab !== "Action" && (
         <>
           {/*  Hide only this block */}
@@ -77,39 +77,6 @@ const ApprovalFooter = ({
           >
             Next
           </Button>
-        </>
-      )}
-      {activeTab === "Action" && (
-        <>
-          <Box display="flex" gap={2}>
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "#1F5A96",
-                color: "#1F5A96",
-                textTransform: "none",
-                borderRadius: "10px",
-                px: 3,
-              }}
-              // onClick={() => onAction("REWORK")}
-            >
-              Send for Rework
-            </Button>
-
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "#1F5A96",
-                color: "#1F5A96",
-                textTransform: "none",
-                borderRadius: "10px",
-                px: 3,
-              }}
-              // onClick={() => onAction("COMPLIANCE")}
-            >
-              Send to Compliance
-            </Button>
-          </Box>
         </>
       )}
     </Box>

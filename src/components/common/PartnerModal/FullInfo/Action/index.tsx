@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { SectionTitle } from "../../StylingCss";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -10,8 +10,9 @@ import {
 import { apiServices } from "../../../../../services";
 import { AppDispatch } from "../../../../../redux/store";
 import { useDispatch } from "react-redux";
+import ShowToast from "../../../../../utils/toastUtils";
 
-const Action = ({ data, activeSubItem }: any) => {
+const Action = ({ data, activeSubItem, toggle }: any) => {
   const [actionStatus, setActionStatus] = useState({});
 
   const dispatch = useDispatch<AppDispatch>();
@@ -56,6 +57,13 @@ const Action = ({ data, activeSubItem }: any) => {
     "Infrastructure Details",
     "Segment Deposit",
   ];
+  const filteredSteps = Array.isArray(actionStatus)
+    ? actionStatus.filter((item: any) => allowedSteps.includes(item.stepName))
+    : [];
+
+  const allApproved =
+    filteredSteps.length > 0 &&
+    filteredSteps.every((item: any) => item.approveStatus === "A");
 
   return (
     <Box pb={3}>
@@ -89,6 +97,28 @@ const Action = ({ data, activeSubItem }: any) => {
                 </Box>
               );
             })}
+        <Box display="flex" gap={2}>
+          <Button
+            variant="outlined"
+            sx={{
+              borderColor: "#1F5A96",
+              color: "#1F5A96",
+              textTransform: "none",
+              borderRadius: "10px",
+              px: 3,
+            }}
+            onClick={() => {
+              if (allApproved) {
+                ShowToast("success", "All steps approved.");
+              } else {
+                ShowToast("error", "Some steps pending. Sent for Rework.");
+              }
+              toggle();
+            }}
+          >
+            {allApproved ? "Approved" : "Send for Rework"}
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

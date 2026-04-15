@@ -85,7 +85,7 @@ const KycVerification = ({ data }: { data: any[] }) => {
       {/* ================= KYC DOCUMENTS ================= */}
       <SectionTitle>KYC Document</SectionTitle>
 
-      <Box display="flex" justifyContent="flex-end" mb={2}>
+      {/* <Box display="flex" justifyContent="flex-end" mb={2}>
         <Typography
           sx={{
             color: "#1F5A96",
@@ -97,7 +97,7 @@ const KycVerification = ({ data }: { data: any[] }) => {
         >
           Download All Document
         </Typography>
-      </Box>
+      </Box> */}
 
       <Box display="flex" flexDirection="column" gap={2}>
         {REQUIRED_DOCS.map((docName) => {
@@ -154,7 +154,7 @@ const KycVerification = ({ data }: { data: any[] }) => {
       </Box>
 
       {/* ================= IPV SECTION ================= */}
-      <Box mt={6}>
+      <Box mt={4}>
         <SectionTitle>IPV (with Geo tagging)</SectionTitle>
 
         <Box
