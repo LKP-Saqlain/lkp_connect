@@ -129,6 +129,12 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
     }
     return currentTab;
   };
+  const goToNextTab = () => {
+    const nextTab = getNextTab(activeTab);
+    if (nextTab !== activeTab) {
+      setActiveTab(nextTab);
+    }
+  };
 
   const businessProfile = approvalData?.businessProfiles?.[0];
   const personalDetails = approvalData?.personalDetails?.[0];
@@ -147,9 +153,16 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
       <Action data={data} activeSubItem={activeSubItem} toggle={toggle} />
     ),
     "Partner Sharing": (
-      <PartnerSharing data={partnerSharingData} activeSubItem={activeSubItem} />
+      <PartnerSharing
+        data={partnerSharingData}
+        activeSubItem={activeSubItem}
+        applNo={data.applNo}
+        goToNextTab={goToNextTab}
+      />
     ),
-    Payment: <Payment data={summary} activeSubItem={activeSubItem} />,
+    Payment: (
+      <Payment data={summary} activeSubItem={activeSubItem} toggle={toggle} />
+    ),
     "E-signed": <Esign data={summary} applNo={data.applNo} />,
     "Exchange Certificate": <Certificate />,
   };

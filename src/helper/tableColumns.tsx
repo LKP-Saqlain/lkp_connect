@@ -14325,7 +14325,7 @@ export const ParOnbPartnerSharing: GridColDef[] = [
     editable: false,
   },
   {
-    field: "ApShare",
+    field: "apshare", // ✅ match API key
     headerName: "AP Share",
     width: 130,
     headerAlign: "center",
@@ -14334,7 +14334,7 @@ export const ParOnbPartnerSharing: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "LkpShare",
+    field: "lkpShare", // ✅ match API key
     headerName: "LKP Share",
     width: 150,
     flex: 1,
@@ -14343,8 +14343,8 @@ export const ParOnbPartnerSharing: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
-    field: "minRentation",
-    headerName: "Minimum Rentation",
+    field: "minRetention", // ✅ match API key
+    headerName: "Minimum Retention",
     width: 130,
     flex: 1,
     headerAlign: "center",

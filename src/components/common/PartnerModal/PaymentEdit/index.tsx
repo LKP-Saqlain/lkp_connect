@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CloseIcon from "@mui/icons-material/Close";
+import { convertToBase64 } from "../../../../helper/method";
 
 const PaymentEdit = ({ data, toggle, onSave }: any) => {
   const [revised, setRevised] = useState<string>("");
@@ -16,17 +17,22 @@ const PaymentEdit = ({ data, toggle, onSave }: any) => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!revised || !commentText || !selectedFile) {
       alert("Please fill all details");
       return;
     }
+    const base64File = await convertToBase64(selectedFile);
     const updatedRow = {
       ...data,
       id: data.id,
       revisedTotal: Number(revised) || data.total,
       remark: commentText,
       attachment: selectedFile ? selectedFile.name : "",
+      // 👇 backend required format
+      fileName: selectedFile.name.split(".")[0],
+      fileType: "." + selectedFile.name.split(".").pop(),
+      contentType: base64File,
     };
 
     onSave(updatedRow);

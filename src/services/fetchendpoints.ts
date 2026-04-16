@@ -457,6 +457,8 @@ export const newDomainEndpoints = [
   endpoints.GetApprovalStatus,
   endpoints.AddBrokSharing,
   endpoints.UpdateRevisedcharges,
+  endpoints.UploadPartnerSharingDocs,
+  endpoints.BrokShareSubmit,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

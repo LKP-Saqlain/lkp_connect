@@ -27,14 +27,14 @@ export const monthOptions = [
   { label: "Mar-26", value: "MAR-26" },
 ];
 export const symbolOptions = [
-  { label: "All", value: "ALL" },  
+  { label: "All", value: "ALL" },
   { label: "Sensex", value: "SENSEX" },
   { label: "Nifty 50", value: "NIFTY" },
 ];
 
 export const extractBarModelData = (
   model: any,
-  type: "Direct" | "Indirect" | "Total"
+  type: "Direct" | "Indirect" | "Total",
 ) => {
   if (!model) return { categories: [], series: [] };
 
@@ -58,8 +58,8 @@ export const extractBarModelData = (
       type === "Total"
         ? `${m.key}_t_tot`
         : type === "Direct"
-        ? `${m.key}_t_dir`
-        : `${m.key}_t_idir`;
+          ? `${m.key}_t_dir`
+          : `${m.key}_t_idir`;
 
     return transformedModel[flag] || 0;
   });
@@ -69,8 +69,8 @@ export const extractBarModelData = (
       type === "Total"
         ? `${m.key}_a_tot`
         : type === "Direct"
-        ? `${m.key}_a_dir`
-        : `${m.key}_a_idir`;
+          ? `${m.key}_a_dir`
+          : `${m.key}_a_idir`;
 
     return transformedModel[flag] || 0;
   });
@@ -107,4 +107,16 @@ export const keyMapping: Record<string, string> = {
   b_Total_Achieved: "b_a_tot",
   c_Target_Total: "c_t_tot",
   c_Total_Achieved: "c_a_tot",
+};
+
+export const convertToBase64 = (file: File) => {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const base64 = (reader.result as string).split(",")[1];
+      resolve(base64);
+    };
+    reader.onerror = (error) => reject(error);
+  });
 };

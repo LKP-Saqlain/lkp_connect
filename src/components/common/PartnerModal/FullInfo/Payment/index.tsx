@@ -2,12 +2,25 @@ import { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import DataTable from "../../../UserInfoTable";
 import PartnerModal from "../../../PartnerModal"; // your modal component
+import {
+  hideLoader,
+  showLoader,
+} from "../../../../../redux/slices/loaderSlice";
+import { AppDispatch, RootState } from "../../../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { apiServices } from "../../../../../services";
+import ShowToast from "../../../../../utils/toastUtils";
 
-const Payment = ({ data, activeSubItem }: any) => {
+const Payment = ({ data, activeSubItem, toggle }: any) => {
   const [paymentData, setPaymentData] = useState<any[]>(data || []);
   const [editRow, setEditRow] = useState<any>(null); // selected row
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data,
+  );
+
+  const dispatch = useDispatch<AppDispatch>();
   // let idCounter = 1;
 
   // ================= EXCHANGE DATA =================
@@ -99,8 +112,42 @@ const Payment = ({ data, activeSubItem }: any) => {
     setIsEditModalOpen(false);
   };
 
-  const handlePaymentNext = () => {
-    console.log(paymentData, "final");
+  const handlePaymentNext = async () => {
+    const securityDepositRow = paymentData.find(
+      (item) => item.exchangeName === "Security Deposit",
+    );
+
+    if (!securityDepositRow) {
+      console.log("Security Deposit not found");
+      return;
+    }
+
+    const formattedPayload = {
+      user_id,
+      applNo: securityDepositRow.applNo,
+      segment: securityDepositRow.segmentName,
+      revisedCharges:
+        securityDepositRow.revisedTotal || securityDepositRow.total || 0,
+      remarks: securityDepositRow.remark || "",
+
+      // ✅ FIXED
+      fileName: securityDepositRow.fileName || "",
+      fileType: securityDepositRow.fileType || "",
+      contentType: securityDepositRow.contentType || "",
+    };
+    dispatch(showLoader("Verifying OTP..."));
+    try {
+      const response = await apiServices.UpdateRevisedcharges(formattedPayload);
+      if (response?.data?.data?.msg === "Success") {
+        ShowToast("success", response?.data?.message);
+        toggle();
+      }
+
+      console.log(formattedPayload, "Final Payload", response);
+    } catch (error) {
+    } finally {
+      dispatch(hideLoader());
+    }
   };
   return (
     <Box>

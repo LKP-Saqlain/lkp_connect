@@ -1,5 +1,4 @@
 import DataTable from "../../../UserInfoTable";
-import { ParOnbPartnerSharingData } from "../../../../../helper/commmon";
 import {
   Box,
   Button,
@@ -9,19 +8,39 @@ import {
   FormControlLabel,
   CircularProgress,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SectionTitle } from "../../StylingCss";
+import { convertToBase64 } from "../../../../../helper/method";
+import { apiServices } from "../../../../../services";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../../redux/store";
+import ShowToast from "../../../../../utils/toastUtils";
 
-const PartnerSharing = ({ data, activeSubItem }: any) => {
+const PartnerSharing = ({ data, activeSubItem, applNo, goToNextTab }: any) => {
   const [attachment1, setAttachment1] = useState<File | null>(null);
   const [attachment2, setAttachment2] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [rows, setRows] = useState(ParOnbPartnerSharingData);
+  // const [rows, setRows] = useState(ParOnbPartnerSharingData);
+  const [rows, setRows] = useState<any[]>([]);
 
-  console.log(data);
+  console.log(data, "check", rows);
 
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data,
+  );
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      const formattedRows = data.map((item: any, index: number) => ({
+        id: index + 1, // increment id
+        ...item, // keep all API fields
+      }));
+
+      setRows(formattedRows);
+    }
+  }, [data]);
   // ---------------- FILE HANDLER ----------------
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -41,7 +60,7 @@ const PartnerSharing = ({ data, activeSubItem }: any) => {
         setAttachment2(file);
       }
       setIsUploading(false);
-    }, 1200); // 1.2 second fake delay
+    }, 1000); // 1.2 second fake delay
   };
 
   // ---------------- VALIDATION ----------------
@@ -49,15 +68,100 @@ const PartnerSharing = ({ data, activeSubItem }: any) => {
     (attachment1 !== null || attachment2 !== null) && isChecked;
 
   // ---------------- FINAL SAVE ----------------
-  const handlePartnerSharingNext = () => {
-    const payload = {
-      updatedRows: rows,
-      attachment1,
-      attachment2,
-      accepted: isChecked,
-    };
+  const handlePartnerSharingNext = async () => {
+    if (!attachment1 && !attachment2) {
+      alert("At least one attachment is required");
+      return;
+    }
 
-    console.log("Final Payload:", payload);
+    const isShareValid = rows.every((row: any) => {
+      const ap = Number(row.apshare ?? row.ApShare);
+      const lkp = Number(row.lkpShare ?? row.LkpShare);
+      return ap + lkp === 100;
+    });
+
+    if (!isShareValid) {
+      alert("AP Share + LKP Share must be exactly 100%");
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+
+      const filesArray: any[] = [];
+
+      if (attachment1) {
+        const base64_1 = await convertToBase64(attachment1);
+        filesArray.push({
+          docId: 11,
+          fileName: "Partner_Sharing_1",
+          fileType: "." + attachment1.name.split(".").pop(),
+          contentType: base64_1,
+        });
+      }
+
+      if (attachment2) {
+        const base64_2 = await convertToBase64(attachment2);
+        filesArray.push({
+          docId: 12,
+          fileName: "Partner_Sharing_2",
+          fileType: "." + attachment2.name.split(".").pop(),
+          contentType: base64_2,
+        });
+      }
+
+      const uploadPayload = {
+        user_id,
+        applNo,
+        files: filesArray,
+      };
+
+      const response1 =
+        await apiServices.UploadPartnerSharingDocs(uploadPayload);
+
+      if (!response1?.data?.isSuccess) {
+        throw new Error("Upload API failed");
+      }
+
+      const formattedItems = rows.map((row: any) => ({
+        segment: row.segment,
+        apShare: Number(row.apshare ?? row.ApShare),
+        lkpShare: Number(row.lkpShare ?? row.LkpShare),
+        minRetn: Number(row.minRetention ?? row.minRentation),
+      }));
+
+      const secondPayload = {
+        applNo,
+        userId: user_id,
+        items: formattedItems,
+      };
+
+      const response2 = await apiServices.AddBrokSharing(secondPayload);
+
+      if (!response2?.data?.isSuccess) {
+        throw new Error("AddBrokSharing API failed");
+      }
+
+      const thirdPayload = {
+        user_id,
+        applNo,
+      };
+
+      const response3 = await apiServices.BrokShareSubmit(thirdPayload);
+      if (response3?.data?.data?.msg === "Success") {
+        ShowToast("success", response3?.data?.data?.msg);
+        goToNextTab();
+      }
+      if (!response3?.data?.isSuccess) {
+        throw new Error("BrokShareSubmit API failed");
+      }
+
+      console.log("All APIs succeeded");
+    } catch (error) {
+      console.error("Process stopped:", error);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (

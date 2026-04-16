@@ -1514,4 +1514,14 @@ export const apiServices = {
   UpdateRevisedcharges: async (payload: any) => {
     return await apiService("POST", endpoints.UpdateRevisedcharges, payload);
   },
+  UploadPartnerSharingDocs: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UploadPartnerSharingDocs,
+      payload,
+    );
+  },
+  BrokShareSubmit: async (payload: any) => {
+    return await apiService("POST", endpoints.BrokShareSubmit, payload);
+  },
 };
