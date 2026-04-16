@@ -1,35 +1,42 @@
 import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import DataTable from "../../../UserInfoTable";
 import PartnerModal from "../../../PartnerModal"; // your modal component
 
-const Payment = ({ data }: any) => {
+const Payment = ({ data, activeSubItem }: any) => {
+  const [paymentData, setPaymentData] = useState<any[]>(data || []);
   const [editRow, setEditRow] = useState<any>(null); // selected row
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  let idCounter = 1;
+  // let idCounter = 1;
 
   // ================= EXCHANGE DATA =================
-  const exchangeData = data
+  const exchangeData = paymentData
     .filter(
       (item: any) =>
         !["Security Deposit", "Stamp Paper charges", "Total"].includes(
           item.exchangeName,
         ),
     )
-    .map((item: any) => ({ ...item, id: idCounter++ }));
+    .map((item: any) => ({
+      ...item,
+      id: `${item.segmentID}-${item.exchangeName}`,
+    }));
 
   // ================= OTHERS DATA =================
-  const othersData = data
+  const othersData = paymentData
     .filter((item: any) =>
       ["Security Deposit", "Stamp Paper charges"].includes(item.exchangeName),
     )
-    .map((item: any) => ({ ...item, id: idCounter++ }));
+    .map((item: any) => ({
+      ...item,
+      id: `${item.segmentID}-${item.exchangeName}`,
+    }));
 
   // ================= TOTAL A =================
   const totalA = exchangeData.reduce(
     (acc: any, curr: any) => {
-      acc.total += curr.total;
+      acc.total += curr.revisedTotal || curr.total || 0;
       return acc;
     },
     { total: 0 },
@@ -38,7 +45,7 @@ const Payment = ({ data }: any) => {
   const exchangeWithTotal = [
     ...exchangeData,
     {
-      id: idCounter++,
+      id: "total-A",
       exchangeName: "Total (A)",
       segmentName: "",
       amount: "",
@@ -51,7 +58,7 @@ const Payment = ({ data }: any) => {
   // ================= TOTAL B =================
   const totalB = othersData.reduce(
     (acc: any, curr: any) => {
-      acc.total += curr.total;
+      acc.total += curr.revisedTotal || curr.total || 0;
       return acc;
     },
     { total: 0 },
@@ -60,7 +67,7 @@ const Payment = ({ data }: any) => {
   const othersWithTotal = [
     ...othersData,
     {
-      id: idCounter++,
+      id: "total-B",
       exchangeName: "Total (B)",
       total: totalB.total,
       revisedTotal: "",
@@ -81,6 +88,20 @@ const Payment = ({ data }: any) => {
     setIsEditModalOpen(true); // open modal
   };
 
+  const handleSaveEdit = (updatedRow: any) => {
+    const updatedData = paymentData.map((item) =>
+      `${item.segmentID}-${item.exchangeName}` === updatedRow.id
+        ? { ...item, ...updatedRow }
+        : item,
+    );
+
+    setPaymentData(updatedData);
+    setIsEditModalOpen(false);
+  };
+
+  const handlePaymentNext = () => {
+    console.log(paymentData, "final");
+  };
   return (
     <Box>
       {/* ================= TABLE A ================= */}
@@ -119,6 +140,24 @@ const Payment = ({ data }: any) => {
         <Typography>Total (A+B)</Typography>
         <Typography>{grandTotal}</Typography>
       </Box>
+      {/* ================= SAVE BUTTON ================= */}
+      {activeSubItem === "Ops Level 2 Approval" && (
+        <Button
+          variant="contained"
+          onClick={handlePaymentNext}
+          sx={{
+            mt: 3,
+            background: "#1F5A96",
+            textTransform: "none",
+            borderRadius: 2,
+            px: 4,
+            height: 40,
+            // opacity: !isFormValid ? 0.6 : 1,
+          }}
+        >
+          Save & proceed
+        </Button>
+      )}
 
       {/* ================= EDIT MODAL ================= */}
       {editRow && (
@@ -127,6 +166,7 @@ const Payment = ({ data }: any) => {
           toggle={() => setIsEditModalOpen(false)}
           data={editRow}
           type="EditPartnerPayment"
+          onSave={handleSaveEdit}
         />
       )}
     </Box>

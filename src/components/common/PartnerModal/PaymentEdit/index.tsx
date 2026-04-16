@@ -3,7 +3,7 @@ import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CloseIcon from "@mui/icons-material/Close";
 
-const PaymentEdit = ({ data, toggle }: any) => {
+const PaymentEdit = ({ data, toggle, onSave }: any) => {
   const [revised, setRevised] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [commentText, setCommentText] = useState<string>(
@@ -17,13 +17,20 @@ const PaymentEdit = ({ data, toggle }: any) => {
   };
 
   const handleSave = () => {
-    const payload = {
+    if (!revised || !commentText || !selectedFile) {
+      alert("Please fill all details");
+      return;
+    }
+    const updatedRow = {
+      ...data,
       id: data.id,
-      revisedAmount: revised,
-      file: selectedFile,
-      comment: commentText,
+      revisedTotal: Number(revised) || data.total,
+      remark: commentText,
+      attachment: selectedFile ? selectedFile.name : "",
     };
-    console.log(payload);
+
+    onSave(updatedRow);
+    console.log(updatedRow, "updatedRow");
   };
 
   return (

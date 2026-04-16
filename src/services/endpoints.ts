@@ -360,6 +360,8 @@ export const endpoints = {
   ManagmentApprove: "api/AP/ManagmentApprove",
   HeadApprove: "api/AP/HeadApprove",
   GetApprovalStatus: "api/AP/GetApprovalStatus",
+  AddBrokSharing: "api/AP/AddBrokSharing",
+  UpdateRevisedcharges: "api/AP/UpdateRevisedcharges",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

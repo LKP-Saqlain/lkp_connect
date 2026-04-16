@@ -3,7 +3,14 @@ import Stage from "./Stage/Stage";
 import FullInfo from "./FullInfo/index";
 import PaymentEdit from "./PaymentEdit";
 
-const PartnerModal = ({ isOpen, toggle, data, type, activeSubItem }: any) => {
+const PartnerModal = ({
+  isOpen,
+  toggle,
+  data,
+  type,
+  activeSubItem,
+  onSave,
+}: any) => {
   if (!data) return null;
   return (
     <Modal
@@ -23,7 +30,7 @@ const PartnerModal = ({ isOpen, toggle, data, type, activeSubItem }: any) => {
           />
         )}
         {type === "EditPartnerPayment" && (
-          <PaymentEdit toggle={toggle} data={data} />
+          <PaymentEdit toggle={toggle} data={data} onSave={onSave} />
         )}
       </ModalBody>
     </Modal>

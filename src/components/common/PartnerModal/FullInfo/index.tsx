@@ -149,7 +149,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
     "Partner Sharing": (
       <PartnerSharing data={partnerSharingData} activeSubItem={activeSubItem} />
     ),
-    Payment: <Payment data={summary} />,
+    Payment: <Payment data={summary} activeSubItem={activeSubItem} />,
     "E-signed": <Esign data={summary} applNo={data.applNo} />,
     "Exchange Certificate": <Certificate />,
   };

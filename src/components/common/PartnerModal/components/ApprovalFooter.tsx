@@ -27,7 +27,8 @@ const ApprovalFooter = ({
     setRemarks("");
   };
   const shouldHideActions =
-    activeTab === "Partner Sharing" && activeSubItem === "Business Approval";
+    (activeTab === "Partner Sharing" || activeTab === "Payment") &&
+    activeSubItem === "Ops Level 2 Approval";
   return (
     <Box display="flex" alignItems="center" gap={3} flexWrap="wrap" pt={3}>
       {activeTab !== "Action" && (
@@ -63,20 +64,22 @@ const ApprovalFooter = ({
             </>
           )}
           {/*   Always visible */}
-          <Button
-            variant="contained"
-            onClick={handleNext}
-            sx={{
-              background: "#1F5A96",
-              textTransform: "none",
-              borderRadius: 2,
-              px: 4,
-              height: 40,
-              ml: "auto",
-            }}
-          >
-            Next
-          </Button>
+          {!shouldHideActions && (
+            <Button
+              variant="contained"
+              onClick={handleNext}
+              sx={{
+                background: "#1F5A96",
+                textTransform: "none",
+                borderRadius: 2,
+                px: 4,
+                height: 40,
+                ml: "auto",
+              }}
+            >
+              Next
+            </Button>
+          )}
         </>
       )}
     </Box>

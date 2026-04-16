@@ -455,6 +455,8 @@ export const newDomainEndpoints = [
   endpoints.ManagmentApprove,
   endpoints.HeadApprove,
   endpoints.GetApprovalStatus,
+  endpoints.AddBrokSharing,
+  endpoints.UpdateRevisedcharges,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

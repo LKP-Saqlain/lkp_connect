@@ -1508,4 +1508,10 @@ export const apiServices = {
   GetApprovalStatus: async (payload: any) => {
     return await apiService("POST", endpoints.GetApprovalStatus, payload);
   },
+  AddBrokSharing: async (payload: any) => {
+    return await apiService("POST", endpoints.AddBrokSharing, payload);
+  },
+  UpdateRevisedcharges: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateRevisedcharges, payload);
+  },
 };
