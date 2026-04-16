@@ -364,6 +364,7 @@ export const endpoints = {
   UpdateRevisedcharges: "api/AP/UpdateRevisedcharges",
   UploadPartnerSharingDocs: "api/AP/UploadPartnerSharingDocs",
   BrokShareSubmit: "api/AP/BrokShareSubmit",
+  GetRevisedPaySummary: "api/AP/GetRevisedPaySummary",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

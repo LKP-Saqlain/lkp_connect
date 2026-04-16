@@ -1437,6 +1437,10 @@ const DataTable = ({
       return TableColumns.ParOnPaymentexchangeColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "AP PaymentOtherConditionData") {
+      return TableColumns.PaymentOtherConditionData.map((column) => ({
+        ...column,
+      }));
     } else if (activeSubItem === "AP PaymentOtherData") {
       return TableColumns.ParOnPaymentOthers.map((column) => {
         if (column.field === "Edit") {

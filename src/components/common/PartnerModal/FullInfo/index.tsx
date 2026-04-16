@@ -29,6 +29,16 @@ const tabs = [
   "Exchange Certificate",
 ];
 
+const sectionIdMap: Record<string, number> = {
+  "Business Profile": 2,
+  "Personal Details": 3,
+  "KYC Document": 4,
+  "Infrastructure details": 5,
+  Segments: 6,
+  "Partner Sharing": 7,
+  Payment: 8,
+  "E-signed": 9,
+};
 const FullInfo = ({ data, toggle, activeSubItem }: any) => {
   const [activeTab, setActiveTab] = useState("");
   const [approvalData, setApprovalData] = useState<any>(null);
@@ -57,7 +67,8 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
     const handleViewApprovalData = async () => {
       const payload = {
         applNo: data.applNo, // Replace with dynamic application number
-        viewType: currentConfig.viewType,
+        // viewType: currentConfig.viewType,
+        viewType: "OpsApprove1ViewDetails",
         user_id,
       };
 
@@ -91,8 +102,10 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
 
       //  Add sectionId only if needed
       if (currentConfig.hasSection) {
-        const sectionId = tabs.indexOf(activeTab) + 2;
-        payload.sectionId = sectionId;
+        const sectionId = sectionIdMap[activeTab];
+        if (sectionId) {
+          payload.sectionId = sectionId;
+        }
       }
 
       //  Add status dynamically
@@ -110,6 +123,8 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
       const nextTab = getNextTab(activeTab);
       if (nextTab !== activeTab) {
         setActiveTab(nextTab);
+      } else {
+        toggle();
       }
     } catch (error) {
       console.error("Approval failed", error);
@@ -158,10 +173,16 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
         activeSubItem={activeSubItem}
         applNo={data.applNo}
         goToNextTab={goToNextTab}
+        kycDocs={kycDocs}
       />
     ),
     Payment: (
-      <Payment data={summary} activeSubItem={activeSubItem} toggle={toggle} />
+      <Payment
+        data={summary}
+        activeSubItem={activeSubItem}
+        toggle={toggle}
+        applNo={data.applNo}
+      />
     ),
     "E-signed": <Esign data={summary} applNo={data.applNo} />,
     "Exchange Certificate": <Certificate />,

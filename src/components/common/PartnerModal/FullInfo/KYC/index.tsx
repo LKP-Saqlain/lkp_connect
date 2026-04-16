@@ -27,6 +27,7 @@ const KycVerification = ({ data }: { data: any[] }) => {
     docMap[doc.docName] = doc;
   });
   const dispatch = useDispatch<AppDispatch>();
+
   const handleDownload = async (doc: any) => {
     console.log("Download:", doc);
 
@@ -84,20 +85,6 @@ const KycVerification = ({ data }: { data: any[] }) => {
     <Box pb={3}>
       {/* ================= KYC DOCUMENTS ================= */}
       <SectionTitle>KYC Document</SectionTitle>
-
-      {/* <Box display="flex" justifyContent="flex-end" mb={2}>
-        <Typography
-          sx={{
-            color: "#1F5A96",
-            cursor: "pointer",
-            fontSize: 14,
-            fontWeight: 500,
-            textDecoration: "underline",
-          }}
-        >
-          Download All Document
-        </Typography>
-      </Box> */}
 
       <Box display="flex" flexDirection="column" gap={2}>
         {REQUIRED_DOCS.map((docName) => {

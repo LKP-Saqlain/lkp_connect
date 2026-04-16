@@ -1524,4 +1524,7 @@ export const apiServices = {
   BrokShareSubmit: async (payload: any) => {
     return await apiService("POST", endpoints.BrokShareSubmit, payload);
   },
+  GetRevisedPaySummary: async (payload: any) => {
+    return await apiService("POST", endpoints.GetRevisedPaySummary, payload);
+  },
 };

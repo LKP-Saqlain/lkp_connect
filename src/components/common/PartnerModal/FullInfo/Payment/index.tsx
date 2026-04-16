@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import DataTable from "../../../UserInfoTable";
 import PartnerModal from "../../../PartnerModal"; // your modal component
@@ -11,10 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { apiServices } from "../../../../../services";
 import ShowToast from "../../../../../utils/toastUtils";
 
-const Payment = ({ data, activeSubItem, toggle }: any) => {
+const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   const [paymentData, setPaymentData] = useState<any[]>(data || []);
   const [editRow, setEditRow] = useState<any>(null); // selected row
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [conditionData, setConditionData] = useState([]);
 
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data,
@@ -149,6 +150,43 @@ const Payment = ({ data, activeSubItem, toggle }: any) => {
       dispatch(hideLoader());
     }
   };
+
+  useEffect(() => {
+    if (
+      activeSubItem === "Business Approval" ||
+      activeSubItem === "Management Approval"
+    ) {
+      handleBusinessManageData();
+    }
+  }, [activeSubItem]);
+
+  const handleBusinessManageData = async () => {
+    const payload = {
+      applNo: applNo,
+    };
+    dispatch(showLoader("Verifying OTP..."));
+    try {
+      const response = await apiServices.GetRevisedPaySummary(payload);
+      setConditionData(
+        response?.data?.data.map((item: any, index: number) => ({
+          id: index + 1,
+          ...item,
+        })),
+      );
+
+      console.log(
+        response?.data?.data[0].map((item: any, index: number) => ({
+          id: index + 1,
+          ...item,
+        })),
+        "handleBusinessManageData",
+      );
+    } catch (error) {
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
   return (
     <Box>
       {/* ================= TABLE A ================= */}
@@ -163,13 +201,25 @@ const Payment = ({ data, activeSubItem, toggle }: any) => {
 
       {/* ================= TABLE B ================= */}
       <Box mb={4}>
-        <DataTable
-          T6Data={othersWithTotal}
-          customHide
-          activeSubItem="AP PaymentOtherData"
-          selectedWidget="Criteria and Rewards"
-          handleEditClick={handleEdit} // pass handleEdit
-        />
+        {activeSubItem !== "Business Approval" &&
+          activeSubItem !== "Management Approval" && (
+            <DataTable
+              T6Data={othersWithTotal}
+              customHide
+              activeSubItem="AP PaymentOtherData"
+              selectedWidget="Criteria and Rewards"
+              handleEditClick={handleEdit} // pass handleEdit
+            />
+          )}
+        {(activeSubItem === "Business Approval" ||
+          activeSubItem === "Management Approval") && (
+          <DataTable
+            T6Data={conditionData}
+            customHide
+            activeSubItem="AP PaymentOtherConditionData"
+            selectedWidget="Criteria and Rewards"
+          />
+        )}
       </Box>
 
       {/* ================= GRAND TOTAL ================= */}

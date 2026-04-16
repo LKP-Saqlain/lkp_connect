@@ -12,19 +12,29 @@ import { useEffect, useState } from "react";
 import { SectionTitle } from "../../StylingCss";
 import { convertToBase64 } from "../../../../../helper/method";
 import { apiServices } from "../../../../../services";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../../redux/store";
 import ShowToast from "../../../../../utils/toastUtils";
+import {
+  hideLoader,
+  showLoader,
+} from "../../../../../redux/slices/loaderSlice";
 
-const PartnerSharing = ({ data, activeSubItem, applNo, goToNextTab }: any) => {
+const PartnerSharing = ({
+  data,
+  activeSubItem,
+  applNo,
+  goToNextTab,
+  kycDocs,
+}: any) => {
   const [attachment1, setAttachment1] = useState<File | null>(null);
   const [attachment2, setAttachment2] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState(false);
-  // const [rows, setRows] = useState(ParOnbPartnerSharingData);
   const [rows, setRows] = useState<any[]>([]);
 
+  const dispatch = useDispatch<AppDispatch>();
   console.log(data, "check", rows);
 
   const { user_id } = useSelector(
@@ -41,6 +51,7 @@ const PartnerSharing = ({ data, activeSubItem, applNo, goToNextTab }: any) => {
       setRows(formattedRows);
     }
   }, [data]);
+
   // ---------------- FILE HANDLER ----------------
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -163,6 +174,49 @@ const PartnerSharing = ({ data, activeSubItem, applNo, goToNextTab }: any) => {
       setIsUploading(false);
     }
   };
+  const partnerDoc1 = kycDocs?.find((doc: any) => doc.docID === 11);
+  const partnerDoc2 = kycDocs?.find((doc: any) => doc.docID === 12);
+
+  const handleDownload = async (doc: any) => {
+    const payload = {
+      fileName: doc.fileName,
+      filePath: doc.filePath,
+      fileType: doc.fileType,
+      contentType: "",
+    };
+
+    dispatch(showLoader("Downloading..."));
+
+    try {
+      const response = await apiServices.ComplianceDownload(payload);
+
+      if (response?.status === 200 && response?.data) {
+        const blob = new Blob([response.data]);
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+
+        const finalFileName = doc.fileName.endsWith(doc.fileType)
+          ? doc.fileName
+          : `${doc.fileName}${doc.fileType}`;
+
+        link.download = finalFileName;
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        window.URL.revokeObjectURL(url);
+      } else {
+        ShowToast("info", "Error downloading file");
+      }
+    } catch (error: any) {
+      ShowToast("info", error.message || "An error occurred while downloading");
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
 
   return (
     <Box>
@@ -212,92 +266,137 @@ const PartnerSharing = ({ data, activeSubItem, applNo, goToNextTab }: any) => {
         </Stack>
       )}
       <Box mt={4}>
-        <SectionTitle>Attach Approval Copy Here</SectionTitle>
+        <SectionTitle>
+          {(activeSubItem === "Business Approval" ? "Download" : "Attach") +
+            " Approval Copy Here"}
+        </SectionTitle>
 
         {/* Attachment 1 */}
-        <Stack direction="row" spacing={2} alignItems="center" mb={2}>
-          <Button
-            variant="outlined"
-            component="label"
-            size="small"
-            sx={{
-              borderRadius: "8px",
-              width: "220px",
-              justifyContent: "flex-start",
-              textTransform: "none",
-            }}
-          >
-            📎 Attachment 1
-            <input
-              hidden
-              type="file"
-              onChange={(e) => handleFileChange(e, "one")}
-            />
-          </Button>
+        {activeSubItem !== "Business Approval" &&
+          activeSubItem !== "Management Approval" && (
+            <Stack>
+              <Stack direction="row" spacing={2} alignItems="center" mb={2}>
+                <Button
+                  variant="outlined"
+                  component="label"
+                  size="small"
+                  sx={{
+                    borderRadius: "8px",
+                    width: "220px",
+                    justifyContent: "flex-start",
+                    textTransform: "none",
+                  }}
+                >
+                  📎 Attachment 1
+                  <input
+                    hidden
+                    type="file"
+                    onChange={(e) => handleFileChange(e, "one")}
+                  />
+                </Button>
 
-          {isUploading ? (
-            <CircularProgress size={18} />
-          ) : (
-            attachment1 && (
-              <Typography fontSize="12px">{attachment1.name}</Typography>
-            )
+                {isUploading ? (
+                  <CircularProgress size={18} />
+                ) : (
+                  attachment1 && (
+                    <Typography fontSize="12px">{attachment1.name}</Typography>
+                  )
+                )}
+              </Stack>
+
+              {/* Attachment 2 */}
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Button
+                  variant="outlined"
+                  component="label"
+                  size="small"
+                  sx={{
+                    borderRadius: "8px",
+                    width: "220px",
+                    justifyContent: "flex-start",
+                    textTransform: "none",
+                  }}
+                >
+                  📎 Attachment 2
+                  <input
+                    hidden
+                    type="file"
+                    onChange={(e) => handleFileChange(e, "two")}
+                  />
+                </Button>
+
+                {isUploading ? (
+                  <CircularProgress size={18} />
+                ) : (
+                  attachment2 && (
+                    <Typography fontSize="12px">{attachment2.name}</Typography>
+                  )
+                )}
+              </Stack>
+            </Stack>
           )}
-        </Stack>
-
-        {/* Attachment 2 */}
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Button
-            variant="outlined"
-            component="label"
-            size="small"
-            sx={{
-              borderRadius: "8px",
-              width: "220px",
-              justifyContent: "flex-start",
-              textTransform: "none",
-            }}
-          >
-            📎 Attachment 2
-            <input
-              hidden
-              type="file"
-              onChange={(e) => handleFileChange(e, "two")}
-            />
-          </Button>
-
-          {isUploading ? (
-            <CircularProgress size={18} />
-          ) : (
-            attachment2 && (
-              <Typography fontSize="12px">{attachment2.name}</Typography>
-            )
-          )}
-        </Stack>
 
         {/* Note */}
-        <Typography
-          variant="body2"
-          sx={{ mt: 2, fontSize: "12px", color: "#555" }}
-        >
-          Note: No changes will be done without an approval
-        </Typography>
+        {activeSubItem !== "Business Approval" &&
+          activeSubItem !== "Management Approval" && (
+            <>
+              <Typography
+                variant="body2"
+                sx={{ mt: 2, fontSize: "12px", color: "#555" }}
+              >
+                Note: No changes will be done without an approval
+              </Typography>
 
-        {/* Checkbox */}
-        <FormControlLabel
-          sx={{ mt: 1 }}
-          control={
-            <Checkbox
-              size="small"
-              checked={isChecked}
-              onChange={(e) => setIsChecked(e.target.checked)}
-            />
-          }
-          label={
-            <Typography fontSize="13px">
-              I have read all details carefully
-            </Typography>
-          }
-        />
+              {/* Checkbox */}
+              <FormControlLabel
+                sx={{ mt: 1 }}
+                control={
+                  <Checkbox
+                    size="small"
+                    checked={isChecked}
+                    onChange={(e) => setIsChecked(e.target.checked)}
+                  />
+                }
+                label={
+                  <Typography fontSize="13px">
+                    I have read all details carefully
+                  </Typography>
+                }
+              />
+            </>
+          )}
+        {(activeSubItem === "Business Approval" ||
+          activeSubItem === "Management Approval") && (
+          <Stack spacing={2}>
+            {partnerDoc1 && (
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => handleDownload(partnerDoc1)}
+                sx={{ width: "220px", textTransform: "none" }}
+              >
+                ⬇ Download Partner Sharing 1
+              </Button>
+            )}
+
+            {partnerDoc2 && (
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => handleDownload(partnerDoc2)}
+                sx={{ width: "220px", textTransform: "none" }}
+              >
+                ⬇ Download Partner Sharing 2
+              </Button>
+            )}
+
+            {!partnerDoc1 && !partnerDoc2 && (
+              <Typography fontSize="12px" color="gray">
+                No Partner Sharing documents uploaded
+              </Typography>
+            )}
+          </Stack>
+        )}
       </Box>
 
       {/* ================= SAVE BUTTON ================= */}

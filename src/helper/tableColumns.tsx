@@ -14325,27 +14325,27 @@ export const ParOnbPartnerSharing: GridColDef[] = [
     editable: false,
   },
   {
-    field: "apshare", // ✅ match API key
+    field: "apshare",
     headerName: "AP Share",
-    width: 130,
+    minWidth: 110,
     headerAlign: "center",
     align: "center",
     flex: 1,
     disableColumnMenu: true,
   },
   {
-    field: "lkpShare", // ✅ match API key
+    field: "lkpShare",
     headerName: "LKP Share",
-    width: 150,
+    minWidth: 110,
     flex: 1,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
   },
   {
-    field: "minRetention", // ✅ match API key
+    field: "minRetention",
     headerName: "Minimum Retention",
-    width: 130,
+    minWidth: 130,
     flex: 1,
     headerAlign: "center",
     align: "center",
@@ -14443,6 +14443,60 @@ export const ParOnPaymentOthers: GridColDef[] = [
   {
     field: "remark",
     headerName: "Remark",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+];
+export const PaymentOtherConditionData: GridColDef[] = [
+  {
+    field: "exchangeName",
+    headerName: "Others",
+    flex: 1,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "segmentName",
+    headerName: "Segment Name",
+    flex: 1,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+
+  {
+    field: "fileName",
+    headerName: "Attachment",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "remarks",
+    headerName: "Remark",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+
+  {
+    field: "amount",
+    headerName: "Total",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "revisedTotal",
+    headerName: "Revised Total",
     flex: 1,
     headerAlign: "center",
     align: "center",

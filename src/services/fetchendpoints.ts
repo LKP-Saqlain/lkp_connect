@@ -459,6 +459,7 @@ export const newDomainEndpoints = [
   endpoints.UpdateRevisedcharges,
   endpoints.UploadPartnerSharingDocs,
   endpoints.BrokShareSubmit,
+  endpoints.GetRevisedPaySummary,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
