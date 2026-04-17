@@ -102,6 +102,10 @@ const KycVerification = ({ data }: { data: any[] }) => {
               border="1px solid #D0D5DD"
               borderRadius="12px"
               bgcolor="#fff"
+              sx={{
+                opacity: isUploaded ? 1 : 0.6,
+                cursor: isUploaded ? "pointer" : "not-allowed",
+              }}
             >
               {/* Left Section */}
               <Box display="flex" alignItems="center" gap={2}>
@@ -115,9 +119,7 @@ const KycVerification = ({ data }: { data: any[] }) => {
                     </Typography>
                   </Box>
                 ) : (
-                  <Typography fontSize={13} color="#E02424">
-                    Not Uploaded
-                  </Typography>
+                  <></>
                 )}
               </Box>
 
@@ -129,8 +131,6 @@ const KycVerification = ({ data }: { data: any[] }) => {
                     border: "1px solid #1F5A96",
                     borderRadius: 2,
                     p: 0.5,
-                    cursor: isUploaded ? "pointer" : "not-allowed",
-                    opacity: isUploaded ? 1 : 0.4,
                   }}
                 >
                   <DownloadForOfflineIcon sx={{ color: "#1F5A96" }} />
@@ -149,7 +149,7 @@ const KycVerification = ({ data }: { data: any[] }) => {
           display="flex"
           alignItems="center"
           justifyContent="space-between"
-          p={2}
+          p={1}
           border="1px solid #D0D5DD"
           borderRadius="12px"
           bgcolor="#fff"
@@ -180,7 +180,7 @@ const KycVerification = ({ data }: { data: any[] }) => {
             sx={{
               border: "1px solid #1F5A96",
               borderRadius: 2,
-              // p: 0.5,
+              p: 0.5,
               cursor: isIpvUploaded ? "pointer" : "not-allowed",
               opacity: isIpvUploaded ? 1 : 0.4,
             }}

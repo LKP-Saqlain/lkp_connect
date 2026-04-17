@@ -14261,6 +14261,7 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "date",
@@ -14276,7 +14277,7 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     },
   },
   {
-    field: "referredBy",
+    field: "referralName",
     headerName: "Referred By",
     flex: 1,
     minWidth: 120,
@@ -14292,6 +14293,7 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     align: "center",
     flex: 1,
     disableColumnMenu: true,
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "partnerType",
@@ -14301,10 +14303,21 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "applStatus",
     headerName: "Stage",
+    width: 130,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => capitalizeEachWord(params.value),
+  },
+  {
+    field: "Download Documents",
+    headerName: "Download",
     width: 130,
     flex: 1,
     headerAlign: "center",
@@ -14409,7 +14422,7 @@ export const ParOnPaymentOthers: GridColDef[] = [
   },
   {
     field: "total",
-    headerName: "Total",
+    headerName: "Proposed Total",
     flex: 1,
     headerAlign: "center",
     align: "center",
@@ -14488,7 +14501,7 @@ export const PaymentOtherConditionData: GridColDef[] = [
 
   {
     field: "amount",
-    headerName: "Total",
+    headerName: "Proposed Total",
     flex: 1,
     headerAlign: "center",
     align: "center",

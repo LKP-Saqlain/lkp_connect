@@ -14,6 +14,14 @@ import { useMemo } from "react";
 
 declare const Digio: any;
 
+const kycDocNameMap: Record<number, string> = {
+  1: "pan",
+  2: "residence",
+  3: "office",
+  4: "education",
+  6: "gst",
+};
+
 const Esign = ({ data, applNo, kycDocs }: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
@@ -37,9 +45,13 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
   const kycDocsFromApi = useMemo(() => {
     if (!Array.isArray(kycDocs)) return [];
 
+    const allowedDocIds = [1, 2, 3, 4, 6];
+
     return kycDocs
       .filter(
-        (item: any) => item.viewType === "KycDocs" && Number(item.docID) <= 7,
+        (item: any) =>
+          item.viewType === "KycDocs" &&
+          allowedDocIds.includes(Number(item.docID)),
       )
       .map((item: any) => ({
         category: "KYC",
@@ -77,17 +89,17 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
     return grouped;
   }, [allowedCategories, kycDocsFromApi]);
 
-  const getKycDocKey = (doc: any) => {
-    const rawValue = doc.fileName || doc.label || "";
+  // const getKycDocKey = (doc: any) => {
+  //   const rawValue = doc.fileName || doc.label || "";
 
-    return rawValue
-      .toLowerCase()
-      .replace(/\s+/g, "")
-      .replace(/documents?/g, "")
-      .replace(/certificate/g, "")
-      .replace(/proof/g, "")
-      .trim();
-  };
+  //   return rawValue
+  //     .toLowerCase()
+  //     .replace(/\s+/g, "")
+  //     .replace(/documents?/g, "")
+  //     .replace(/certificate/g, "")
+  //     .replace(/proof/g, "")
+  //     .trim();
+  // };
 
   // ================= BUILD PAYLOAD =================
   const buildPayload = (doc: any) => {
@@ -103,7 +115,7 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
     }
 
     if (doc.payloadType === "kyc") {
-      payload.DocName = getKycDocKey(doc);
+      payload.DocName = kycDocNameMap[Number(doc.docID)];
     }
 
     return payload;
@@ -161,8 +173,13 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
       dispatch(showLoader(true));
 
       const response = await apiFunc(payload);
-
-      const signData = response?.data?.digioResponse?.clsUploadPDFResponse;
+      console.log(response, "mcx");
+      let signData;
+      if (doc.payloadType === "kyc") {
+        signData = response?.data?.data?.digioResponse?.clsUploadPDFResponse;
+      } else {
+        signData = response?.data?.digioResponse?.clsUploadPDFResponse;
+      }
 
       if (!signData?.id || !signData?.access_token?.id) {
         ShowToast("error", "Invalid response from signature API");

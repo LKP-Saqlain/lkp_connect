@@ -352,7 +352,7 @@ export const endpoints = {
   Esign_MCX_LKP_Single: "api/ESign/Esign_MCX_LKP_Single",
   EsignLKP_MCX: "api/ESign/EsignLKP_MCX",
   EsignKYC_Document_LKP: "api/ESign/EsignKYC_Document_LKP",
-  EsignLKP_BusinessAssociate: "api/ESign/EsignLKP_BusinessAssociate",
+  EsignLKp_BusinessAssociatemerge: "api/ESign/EsignLKp_BusinessAssociatemerge",
   DownloadSignedPdf_PO: "/api/ESign/DownloadSignedPdf_PO",
   OpsApproveLevel1: "api/AP/OpsApproveLevel1",
   ComplianceApprove: "api/AP/ComplianceApprove",

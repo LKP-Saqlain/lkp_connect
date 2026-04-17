@@ -37,7 +37,7 @@ export const publicEndpoints = [
   endpoints.Esign_MCX_LKP_Single,
   endpoints.EsignLKP_MCX,
   endpoints.EsignKYC_Document_LKP,
-  endpoints.EsignLKP_BusinessAssociate,
+  endpoints.EsignLKp_BusinessAssociatemerge,
   endpoints.DownloadSignedPdf_PO,
 ];
 
@@ -447,7 +447,7 @@ export const newDomainEndpoints = [
   endpoints.EsignLKP_BSE,
   endpoints.Esign_MCX_LKP_Single,
   endpoints.EsignLKP_MCX,
-  endpoints.EsignLKP_BusinessAssociate,
+  endpoints.EsignLKp_BusinessAssociatemerge,
   endpoints.DownloadSignedPdf,
   endpoints.OpsApproveLevel1,
   endpoints.ComplianceApprove,
@@ -462,6 +462,7 @@ export const newDomainEndpoints = [
   endpoints.BrokShareSubmit,
   endpoints.GetRevisedPaySummary,
   endpoints.EsignKYC_Document_LKP,
+  endpoints.DownloadSignedPdf_PO,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

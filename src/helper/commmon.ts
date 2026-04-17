@@ -481,7 +481,7 @@ export const documentList = [
     fileName: "BusinessAssociateAgreement.html",
     label: "Business agreement between LKP and AP",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates",
-    lkpApi: "EsignLKP_BusinessAssociate",
+    lkpApi: "EsignLKp_BusinessAssociatemerge",
     payloadType: "sourceFile",
   },
 

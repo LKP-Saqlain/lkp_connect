@@ -1477,10 +1477,10 @@ export const apiServices = {
   EsignLKP_MCX: async (payload: any) => {
     return await apiService("POST", endpoints.EsignLKP_MCX, payload);
   },
-  EsignLKP_BusinessAssociate: async (payload: any) => {
+  EsignLKp_BusinessAssociatemerge: async (payload: any) => {
     return await apiService(
       "POST",
-      endpoints.EsignLKP_BusinessAssociate,
+      endpoints.EsignLKp_BusinessAssociatemerge,
       payload,
     );
   },
