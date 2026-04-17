@@ -38,7 +38,9 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
     if (!Array.isArray(kycDocs)) return [];
 
     return kycDocs
-      .filter((item: any) => item.viewType === "KycDocs")
+      .filter(
+        (item: any) => item.viewType === "KycDocs" && Number(item.docID) <= 7,
+      )
       .map((item: any) => ({
         category: "KYC",
         fileName: item.fileName,

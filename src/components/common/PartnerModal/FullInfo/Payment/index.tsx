@@ -71,8 +71,12 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
 
   // ================= TOTAL B =================
   const totalB = othersData.reduce(
-    (acc: any, curr: any) => {
-      acc.total += curr.revisedTotal || curr.total || 0;
+    (acc, curr) => {
+      if (curr.exchangeName === "Security Deposit") {
+        acc.total += curr.revisedTotal || 0; // ONLY revisedTotal
+      } else {
+        acc.total += curr.total || 0;
+      }
       return acc;
     },
     { total: 0 },
