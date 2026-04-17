@@ -80,7 +80,8 @@ const KycVerification = ({ data }: { data: any[] }) => {
         dispatch(hideLoader());
       });
   };
-
+  const ipvDoc = data?.find((doc) => doc.docID === 9);
+  const isIpvUploaded = !!ipvDoc;
   return (
     <Box pb={3}>
       {/* ================= KYC DOCUMENTS ================= */}
@@ -153,17 +154,39 @@ const KycVerification = ({ data }: { data: any[] }) => {
           borderRadius="12px"
           bgcolor="#fff"
         >
-          <Typography fontWeight={500}>IPV (In Person Verification)</Typography>
+          {/* Left */}
+          <Box display="flex" alignItems="center" gap={2}>
+            <Typography fontWeight={500}>
+              IPV (In Person Verification)
+            </Typography>
 
+            {isIpvUploaded ? (
+              <Box display="flex" alignItems="center" gap={1}>
+                <CheckCircleIcon sx={{ color: "#1f9647", fontSize: 20 }} />
+                <Typography fontSize={13} color="#1f9647">
+                  Uploaded
+                </Typography>
+              </Box>
+            ) : (
+              <Typography fontSize={13} color="#E02424">
+                Not Uploaded
+              </Typography>
+            )}
+          </Box>
+
+          {/* Download Button */}
           <Box
+            onClick={() => isIpvUploaded && handleDownload(ipvDoc)}
             sx={{
-              width: 18,
-              height: 18,
               border: "1px solid #1F5A96",
-              borderRadius: 1,
-              backgroundColor: "#1F5A96",
+              borderRadius: 2,
+              // p: 0.5,
+              cursor: isIpvUploaded ? "pointer" : "not-allowed",
+              opacity: isIpvUploaded ? 1 : 0.4,
             }}
-          />
+          >
+            <DownloadForOfflineIcon sx={{ color: "#1F5A96" }} />
+          </Box>
         </Box>
       </Box>
     </Box>

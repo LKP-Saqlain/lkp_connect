@@ -184,7 +184,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
         applNo={data.applNo}
       />
     ),
-    "E-signed": <Esign data={summary} applNo={data.applNo} />,
+    "E-signed": <Esign data={summary} applNo={data.applNo} kycDocs={kycDocs} />,
     "Exchange Certificate": <Certificate />,
   };
 

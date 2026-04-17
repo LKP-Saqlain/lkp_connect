@@ -14,7 +14,7 @@ import { useMemo } from "react";
 
 declare const Digio: any;
 
-const Esign = ({ data, applNo }: any) => {
+const Esign = ({ data, applNo, kycDocs }: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const forceCategories = ["AGREEMENT", "KYC"];
@@ -33,10 +33,29 @@ const Esign = ({ data, applNo }: any) => {
         name &&
         !["Total", "Stamp Paper charges", "Security Deposit"].includes(name),
     );
+  console.log("allowedCategories:", allowedCategories);
+  const kycDocsFromApi = useMemo(() => {
+    if (!Array.isArray(kycDocs)) return [];
+
+    return kycDocs
+      .filter((item: any) => item.viewType === "KycDocs")
+      .map((item: any) => ({
+        category: "KYC",
+        fileName: item.fileName,
+        label: item.docName,
+        path: item.filePath,
+        docID: item.docID,
+        fileType: item.fileType,
+        applStatus: item.applStatus,
+        lkpApi: "EsignKYC_Document_LKP",
+        payloadType: "kyc",
+        isKyc: true,
+      }));
+  }, [kycDocs]);
 
   // ================= GROUP DOCUMENTS =================
   const groupedDocs = useMemo(() => {
-    return documentList
+    const grouped = documentList
       .filter(
         (doc) =>
           allowedCategories.includes(doc.category) ||
@@ -47,11 +66,30 @@ const Esign = ({ data, applNo }: any) => {
         acc[doc.category].push(doc);
         return acc;
       }, {});
-  }, [allowedCategories]);
+
+    //  Inject API KYC docs dynamically
+    if (kycDocsFromApi.length > 0) {
+      grouped["KYC"] = kycDocsFromApi;
+    }
+
+    return grouped;
+  }, [allowedCategories, kycDocsFromApi]);
+
+  const getKycDocKey = (doc: any) => {
+    const rawValue = doc.fileName || doc.label || "";
+
+    return rawValue
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/documents?/g, "")
+      .replace(/certificate/g, "")
+      .replace(/proof/g, "")
+      .trim();
+  };
 
   // ================= BUILD PAYLOAD =================
   const buildPayload = (doc: any) => {
-    const payload: any = { applNo };
+    const payload: any = { ApplNo: applNo.toString() };
 
     if (doc.payloadType === "template") {
       payload.templateName = doc.fileName;
@@ -60,6 +98,10 @@ const Esign = ({ data, applNo }: any) => {
     if (doc.payloadType === "sourceFile") {
       const baseName = doc.fileName.replace(".html", "");
       payload.sourceFile = `${applNo}_${baseName}_AP_Signed.pdf`;
+    }
+
+    if (doc.payloadType === "kyc") {
+      payload.DocName = getKycDocKey(doc);
     }
 
     return payload;

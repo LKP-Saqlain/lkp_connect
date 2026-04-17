@@ -485,15 +485,15 @@ export const documentList = [
     payloadType: "sourceFile",
   },
 
-  // ================= KYC =================
-  {
-    category: "KYC",
-    fileName: "",
-    label: "KYC Documents",
-    path: "",
-    lkpApi: null,
-    payloadType: null,
-  },
+  // // ================= KYC =================
+  // {
+  //   category: "KYC",
+  //   fileName: "",
+  //   label: "KYC Documents",
+  //   path: "",
+  //   lkpApi: null,
+  //   payloadType: null,
+  // },
 ];
 
 export const PartnerSideMenu: Record<string, string> = {

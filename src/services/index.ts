@@ -1527,4 +1527,7 @@ export const apiServices = {
   GetRevisedPaySummary: async (payload: any) => {
     return await apiService("POST", endpoints.GetRevisedPaySummary, payload);
   },
+  EsignKYC_Document_LKP: async (payload: any) => {
+    return await apiService("POST", endpoints.EsignKYC_Document_LKP, payload);
+  },
 };

@@ -36,6 +36,7 @@ export const publicEndpoints = [
   endpoints.EsignLKP_BSE,
   endpoints.Esign_MCX_LKP_Single,
   endpoints.EsignLKP_MCX,
+  endpoints.EsignKYC_Document_LKP,
   endpoints.EsignLKP_BusinessAssociate,
   endpoints.DownloadSignedPdf_PO,
 ];
@@ -460,6 +461,7 @@ export const newDomainEndpoints = [
   endpoints.UploadPartnerSharingDocs,
   endpoints.BrokShareSubmit,
   endpoints.GetRevisedPaySummary,
+  endpoints.EsignKYC_Document_LKP,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
