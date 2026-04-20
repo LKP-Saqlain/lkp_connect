@@ -54,12 +54,15 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
   useEffect(() => {
     if (!currentConfig) return;
 
-    const disabledTabs = currentConfig.disabledTabs || [];
+    const hiddenApprovalTabs = currentConfig.hideApprovalForTabs || [];
+    const skipTabs = currentConfig.skipTabsInFlow || [];
 
-    const firstEnabledTab = tabs.find((tab) => !disabledTabs.includes(tab));
+    const firstValidTab = tabs.find(
+      (tab) => !hiddenApprovalTabs.includes(tab) && !skipTabs.includes(tab),
+    );
 
-    if (firstEnabledTab) {
-      setActiveTab(firstEnabledTab);
+    if (firstValidTab) {
+      setActiveTab(firstValidTab);
     }
   }, [activeSubItem]);
 
@@ -135,10 +138,10 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
 
   const getNextTab = (currentTab: string) => {
     const currentIndex = tabs.indexOf(currentTab);
-    const disabledTabs = currentConfig?.disabledTabs || [];
+    const skipTabs = currentConfig?.skipTabsInFlow || [];
 
     for (let i = currentIndex + 1; i < tabs.length; i++) {
-      if (!disabledTabs.includes(tabs[i])) {
+      if (!skipTabs.includes(tabs[i])) {
         return tabs[i];
       }
     }
@@ -264,8 +267,10 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
         >
           {tabs.map((tab) => {
             const isActive = activeTab === tab;
-            const disabledTabs = currentConfig?.disabledTabs || [];
+            const disabledTabs = currentConfig?.skipTabsInFlow || [];
             const isDisabled = disabledTabs.includes(tab);
+            const approvedTabs = currentConfig?.hideApprovalForTabs || [];
+            const isApproved = approvedTabs.includes(tab);
 
             return (
               <button
@@ -275,22 +280,43 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
                 style={{
                   padding: "8px 20px",
                   borderRadius: "20px",
-                  border: isDisabled ? "none" : "1px solid #11395C",
+                  border: isDisabled
+                    ? "none"
+                    : isActive
+                      ? "2px solid #11395C"
+                      : isApproved
+                        ? "1px solid #27a12d"
+                        : "1px solid #11395C",
+
                   cursor: isDisabled ? "default" : "pointer",
+
                   backgroundColor: isActive
                     ? "#11395C"
                     : isDisabled
-                      ? "#f0f0f0"
-                      : "#ffffff",
+                      ? "#f3f3f3"
+                      : isApproved
+                        ? "#eaf7ec"
+                        : "#ffffff",
+
                   color: isActive
                     ? "#ffffff"
                     : isDisabled
                       ? "#a3a3a3"
-                      : "#11395C",
+                      : isApproved
+                        ? "#1f7a2e"
+                        : "#11395C",
+
                   fontWeight: isActive ? 600 : 400,
+
                   whiteSpace: "nowrap",
-                  boxShadow: isActive ? "0 2px 6px rgb(0 0 0 / 0.15)" : "none",
-                  transition: "background-color 0.3s, color 0.3s",
+                  boxShadow: isActive
+                    ? "0 2px 6px rgba(0,0,0,0.15)"
+                    : isApproved
+                      ? "0 0 0 1px rgba(39,161,45,0.2)"
+                      : "none",
+
+                  transition: "all 0.2s ease-in-out",
+                  position: "relative",
                 }}
               >
                 {tab}
@@ -310,15 +336,17 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
         }}
       >
         {tabComponents[activeTab]}
-        <ApprovalFooter
-          activeTab={activeTab}
-          activeSubItem={activeSubItem}
-          onNext={() => {
-            const nextTab = getNextTab(activeTab);
-            setActiveTab(nextTab);
-          }}
-          onApproval={handleApprovalRemarks}
-        />
+        {!currentConfig?.hideApprovalForTabs?.includes(activeTab) && (
+          <ApprovalFooter
+            activeTab={activeTab}
+            activeSubItem={activeSubItem}
+            onNext={() => {
+              const nextTab = getNextTab(activeTab);
+              setActiveTab(nextTab);
+            }}
+            onApproval={handleApprovalRemarks}
+          />
+        )}
       </div>
     </div>
   );

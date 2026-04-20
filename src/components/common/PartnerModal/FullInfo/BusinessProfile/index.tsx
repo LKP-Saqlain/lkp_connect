@@ -9,7 +9,7 @@ const BusinessPartnerForm = ({ data }: any) => {
     mobile: data?.mobile,
     email: data?.emailId,
     city: data?.city,
-    referral: "",
+    referral: data?.referralName,
 
     businessType:
       data?.partnerType === "individual" ? "Individual" : "Proprietorship",

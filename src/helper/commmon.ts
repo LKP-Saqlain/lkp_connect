@@ -512,7 +512,10 @@ export const approvalConfig: Record<string, any> = {
     statusKey: "opsApproverStatus1",
     remarkKey: "opsApproverRemark1",
     hasSection: true,
-    disabledTabs: [
+    //  Tabs user can SEE but not approve
+    hideApprovalForTabs: [],
+    //  Tabs that should be SKIPPED in Next flow
+    skipTabsInFlow: [
       "Partner Sharing",
       "Payment",
       "E-signed",
@@ -526,7 +529,8 @@ export const approvalConfig: Record<string, any> = {
     statusKey: "complianceApproverStatus",
     remarkKey: "complianceApproverRemark",
     hasSection: true,
-    disabledTabs: [
+    hideApprovalForTabs: [],
+    skipTabsInFlow: [
       "Partner Sharing",
       "Payment",
       "E-signed",
@@ -540,16 +544,15 @@ export const approvalConfig: Record<string, any> = {
     statusKey: "opsApproverStatus2",
     remarkKey: "opsApproverRemark2",
     hasSection: true,
-    disabledTabs: [
+    hideApprovalForTabs: [
       "Business Profile",
       "Personal Details",
       "KYC Document",
       "Infrastructure details",
       "Segments",
       "Action",
-      "E-signed",
-      "Exchange Certificate",
     ],
+    skipTabsInFlow: ["E-signed", "Exchange Certificate"],
   },
 
   "Business Approval": {
@@ -558,16 +561,15 @@ export const approvalConfig: Record<string, any> = {
     statusKey: "businessApproverStatus",
     remarkKey: "businessApproverRemark",
     hasSection: true,
-    disabledTabs: [
+    hideApprovalForTabs: [
       "Business Profile",
       "Personal Details",
       "KYC Document",
       "Infrastructure details",
       "Segments",
       "Action",
-      "E-signed",
-      "Exchange Certificate",
     ],
+    skipTabsInFlow: ["E-signed", "Exchange Certificate"],
   },
 
   "Management Approval": {
@@ -576,16 +578,15 @@ export const approvalConfig: Record<string, any> = {
     statusKey: "managmentApproverStatus",
     remarkKey: "managmentApproverRemark",
     hasSection: false,
-    disabledTabs: [
+    hideApprovalForTabs: [
       "Business Profile",
       "Personal Details",
       "KYC Document",
       "Infrastructure details",
       "Segments",
       "Action",
-      "E-signed",
-      "Exchange Certificate",
     ],
+    skipTabsInFlow: ["E-signed", "Exchange Certificate"],
   },
 
   "Lkp Esign": {
@@ -594,7 +595,7 @@ export const approvalConfig: Record<string, any> = {
     statusKey: "headApproverStatus",
     remarkKey: null,
     hasSection: false,
-    disabledTabs: [
+    hideApprovalForTabs: [
       "Business Profile",
       "Personal Details",
       "KYC Document",
@@ -604,5 +605,6 @@ export const approvalConfig: Record<string, any> = {
       "Partner Sharing",
       "Payment",
     ],
+    skipTabsInFlow: [],
   },
 };

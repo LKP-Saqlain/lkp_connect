@@ -64,7 +64,7 @@ const Main = ({ activeSubItem }: any) => {
     };
 
     handleViewApprovalData();
-  }, [activeSubItem, user_id]);
+  }, [activeSubItem, user_id, isModalOpen]);
 
   return (
     <div className="page-content page-view">

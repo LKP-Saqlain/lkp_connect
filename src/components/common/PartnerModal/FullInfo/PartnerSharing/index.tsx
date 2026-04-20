@@ -10,7 +10,10 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SectionTitle } from "../../StylingCss";
-import { convertToBase64 } from "../../../../../helper/method";
+import {
+  convertToBase64,
+  validatePartnerSharingRows,
+} from "../../../../../helper/method";
 import { apiServices } from "../../../../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../../../redux/store";
@@ -76,23 +79,12 @@ const PartnerSharing = ({
 
   // ---------------- VALIDATION ----------------
   const isFormValid =
-    (attachment1 !== null || attachment2 !== null) && isChecked;
+    !isEditing && (attachment1 !== null || attachment2 !== null) && isChecked;
 
   // ---------------- FINAL SAVE ----------------
   const handlePartnerSharingNext = async () => {
     if (!attachment1 && !attachment2) {
       alert("At least one attachment is required");
-      return;
-    }
-
-    const isShareValid = rows.every((row: any) => {
-      const ap = Number(row.apshare ?? row.ApShare);
-      const lkp = Number(row.lkpShare ?? row.LkpShare);
-      return ap + lkp === 100;
-    });
-
-    if (!isShareValid) {
-      alert("AP Share + LKP Share must be exactly 100%");
       return;
     }
 
@@ -257,7 +249,16 @@ const PartnerSharing = ({
           <Button
             variant="outlined"
             size="small"
-            onClick={() => setIsEditing(false)}
+            onClick={() => {
+              const result = validatePartnerSharingRows(rows);
+
+              if (!result.valid) {
+                ShowToast("error", result.message);
+                return;
+              }
+
+              setIsEditing(false);
+            }}
             disabled={!isEditing}
             sx={{ borderRadius: "20px", textTransform: "none", px: 3 }}
           >

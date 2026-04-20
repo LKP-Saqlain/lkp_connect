@@ -116,7 +116,7 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
               toggle();
             }}
           >
-            {allApproved ? "Approved" : "Send for Rework"}
+            {allApproved ? "Approve" : "Send for Rework"}
           </Button>
         </Box>
       </Box>

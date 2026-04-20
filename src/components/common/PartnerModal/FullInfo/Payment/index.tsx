@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import DataTable from "../../../UserInfoTable";
 import PartnerModal from "../../../PartnerModal"; // your modal component
@@ -96,7 +96,10 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   ];
 
   // ================= GRAND TOTAL =================
-  const grandTotal = totalA.total + totalB.total;
+  // const grandTotal = totalA.total + totalB.total;
+  const grandTotal = useMemo(() => {
+    return totalA.total + totalB.total;
+  }, [totalA.total, totalB.total]);
 
   // ================= HANDLE EDIT =================
   const handleEdit = (row: any) => {

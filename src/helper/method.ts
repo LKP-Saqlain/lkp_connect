@@ -120,3 +120,49 @@ export const convertToBase64 = (file: File) => {
     reader.onerror = (error) => reject(error);
   });
 };
+
+export const validatePartnerSharingRows = (rows: any[]): any => {
+  const numberRegex = /^-?\d+$/;
+
+  const isValidNumber = (value: any) => {
+    if (value === null || value === undefined || value === "") return false;
+
+    const str = String(value).trim();
+    if (!numberRegex.test(str)) return false;
+
+    const num = Number(str);
+
+    if (num % 5 !== 0) return false;
+    if (Math.abs(num) > 99) return false;
+
+    return true;
+  };
+
+  for (const row of rows) {
+    const apRaw = row.apshare ?? row.ApShare;
+    const lkpRaw = row.lkpShare ?? row.LkpShare;
+
+    if (!isValidNumber(apRaw) || !isValidNumber(lkpRaw)) {
+      return {
+        valid: false,
+        message:
+          "Only whole numbers (multiple of 5, max 2 digits) allowed. No decimals or symbols.",
+      };
+    }
+
+    const ap = Number(apRaw);
+    const lkp = Number(lkpRaw);
+
+    if (ap + lkp !== 100) {
+      return {
+        valid: false,
+        message: "AP Share + LKP Share must equal 100%",
+      };
+    }
+  }
+
+  return {
+    valid: true,
+    message: "",
+  };
+};

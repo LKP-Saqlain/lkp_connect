@@ -124,21 +124,36 @@ const PaymentEdit = ({ data, toggle, onSave }: any) => {
       <Typography fontWeight={600} mb={1}>
         Attach Approval Copy Here
       </Typography>
+      <Box display="flex" alignItems="center" gap={2} mb={3}>
+        <Button
+          variant="outlined"
+          component="label"
+          startIcon={<AttachFileIcon />}
+          sx={{
+            borderRadius: 2,
+            textTransform: "none",
+            backgroundColor: "#fff",
+          }}
+        >
+          Attachment
+          <input type="file" hidden onChange={handleFileChange} />
+        </Button>
 
-      <Button
-        variant="outlined"
-        component="label"
-        startIcon={<AttachFileIcon />}
-        sx={{
-          borderRadius: 2,
-          textTransform: "none",
-          backgroundColor: "#fff",
-          mb: 3,
-        }}
-      >
-        Attachment
-        <input type="file" hidden onChange={handleFileChange} />
-      </Button>
+        {selectedFile && (
+          <Typography
+            sx={{
+              fontSize: "13px",
+              color: "#555",
+              maxWidth: "200px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {selectedFile.name}
+          </Typography>
+        )}
+      </Box>
 
       <TextField
         placeholder="Comment"
