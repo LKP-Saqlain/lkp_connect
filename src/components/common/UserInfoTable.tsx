@@ -2575,7 +2575,7 @@ const DataTable = ({
         // Return unchanged column if not the 'status' or 'document' field
         return column;
       });
-    } else if (activeSubItem === "Referal Entry Status") {
+    } else if (activeSubItem === "AP Partner Details") {
       return TableColumns.PartnerOnboardingDetails.map((column) => {
         if (column.field === "stage") {
           return {
@@ -2624,6 +2624,30 @@ const DataTable = ({
                   }}
                 >
                   {params.row.applNo}
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "Download Documents") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    console.log("stage row", params);
+                    handleDownload(params.row.applNo);
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Download
                 </button>
               );
             },

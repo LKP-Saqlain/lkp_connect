@@ -1530,4 +1530,7 @@ export const apiServices = {
   EsignKYC_Document_LKP: async (payload: any) => {
     return await apiService("POST", endpoints.EsignKYC_Document_LKP, payload);
   },
+  DownloadAllDocs: async (payload: any) => {
+    return await apiService("POST", endpoints.DownloadAllDocs, payload);
+  },
 };

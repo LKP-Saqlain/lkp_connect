@@ -22,13 +22,12 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   );
 
   const dispatch = useDispatch<AppDispatch>();
-  // let idCounter = 1;
 
   // ================= EXCHANGE DATA =================
   const exchangeData = paymentData
     .filter(
       (item: any) =>
-        !["Security Deposit", "Stamp Paper charges", "Total"].includes(
+        !["Security Deposit", "Stamp Paper", "Total"].includes(
           item.exchangeName,
         ),
     )
@@ -40,7 +39,7 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   // ================= OTHERS DATA =================
   const othersData = paymentData
     .filter((item: any) =>
-      ["Security Deposit", "Stamp Paper charges"].includes(item.exchangeName),
+      ["Security Deposit", "Stamp Paper"].includes(item.exchangeName),
     )
     .map((item: any) => ({
       ...item,
@@ -72,7 +71,10 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   // ================= TOTAL B =================
   const totalB = othersData.reduce(
     (acc, curr) => {
-      if (curr.exchangeName === "Security Deposit") {
+      if (
+        curr.exchangeName === "Security Deposit" &&
+        curr.exchangeName === "Stamp Paper"
+      ) {
         acc.total += curr.revisedTotal || 0; // ONLY revisedTotal
       } else {
         acc.total += curr.total || 0;

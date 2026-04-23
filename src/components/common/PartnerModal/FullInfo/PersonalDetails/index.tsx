@@ -91,24 +91,25 @@ const PersonalDetails = ({ data, kycDocs }: any) => {
 
     apActiveBroker: data.apActive_Broker === "N" ? "Yes" : "No",
   };
-
+  const Education = [
+    { label: "Graduate", value: "graduate" },
+    { label: "Post Graduate", value: "PostGraduate" },
+    { label: "12th (HSC)", value: "12HSC" },
+    { label: "10th (SSC)", value: "10SSC" },
+  ];
   return (
     <Box>
       {/* ================= EDUCATION ================= */}
       <Box mb={5}>
         <SectionTitle>Highest Education Qualification</SectionTitle>
         <Box display="flex" gap={3} flexWrap="wrap">
-          {["Graduate", "Post Graduate", "12th (HSC)", "10th (SSC)"].map(
-            (edu) => (
-              <SelectableBox
-                key={edu}
-                label={edu}
-                selected={
-                  mappedData.highestEdu.toLowerCase() === edu.toLowerCase()
-                }
-              />
-            ),
-          )}
+          {[...Education].map((item) => (
+            <SelectableBox
+              key={item.value}
+              label={item.label}
+              selected={mappedData.highestEdu === item.value}
+            />
+          ))}
         </Box>
       </Box>
 

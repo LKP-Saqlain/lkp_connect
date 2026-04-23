@@ -63,6 +63,7 @@ export const pdfDownloadEndpoints = [
   endpoints.GenerateClientPerformancePdf,
   endpoints.GenerateTPInvoice,
   endpoints.DPAMCDownloadFile,
+  endpoints.DownloadAllDocs,
 ];
 
 export const multipartEndpoints = [
@@ -463,6 +464,7 @@ export const newDomainEndpoints = [
   endpoints.GetRevisedPaySummary,
   endpoints.EsignKYC_Document_LKP,
   endpoints.DownloadSignedPdf_PO,
+  endpoints.DownloadAllDocs,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
