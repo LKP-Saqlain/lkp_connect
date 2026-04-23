@@ -1,9 +1,74 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { FieldGrid, SectionTitle, SelectableBox } from "../../StylingCss";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../../redux/store";
+import {
+  hideLoader,
+  showLoader,
+} from "../../../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../../../services";
+import ShowToast from "../../../../../utils/toastUtils";
 
-const PersonalDetails = ({ data }: { data: any }) => {
+const PersonalDetails = ({ data, kycDocs }: any) => {
   if (!data) return null;
+  const dispatch = useDispatch<AppDispatch>();
 
+  const handleCommonDownload = async (doc: any) => {
+    console.log("Download:", doc);
+
+    const payload = {
+      // fileName: "danger.jpeg.jpeg",
+      fileName: doc.fileName,
+      filePath: doc.filePath,
+      // filePath: "\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\10128",
+      fileType: doc.fileType,
+      contentType: "",
+    };
+
+    dispatch(showLoader("Downloading..."));
+    console.log("row data", payload);
+
+    apiServices
+      .ComplianceDownload(payload)
+      .then((response) => {
+        console.log("response", response);
+
+        if (response?.status === 200 && response?.data) {
+          const url = window.URL.createObjectURL(new Blob([response?.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute(
+            "download",
+            `${payload.fileName}${payload.fileType}`,
+          );
+          const finalFileName = doc.fileName.endsWith(doc.fileType)
+            ? doc.fileName
+            : `${doc.fileName}${doc.fileType}`;
+
+          link.href = url;
+          link.download = finalFileName;
+          document.body.appendChild(link);
+          link.click();
+          dispatch(hideLoader());
+        } else {
+          console.log("Error during download", response);
+          ShowToast("info", "Error downloading file");
+        }
+      })
+      .catch((error) => {
+        ShowToast(
+          "info",
+          error.message || "An error occurred while downloading",
+        );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
+
+  const bankDoc = kycDocs?.find((doc: any) => doc.docID === 8);
+  const isDisabled = !bankDoc;
   // 🔥 Safe mapping
   const mappedData = {
     highestEdu: data.highestEdu || "",
@@ -123,7 +188,7 @@ const PersonalDetails = ({ data }: { data: any }) => {
             { label: "Nominee DOB", value: mappedData.nomineeDob },
           ]}
         />
-        {/* <Box
+        <Box
           mt={2}
           p={1.2}
           display="flex"
@@ -132,7 +197,7 @@ const PersonalDetails = ({ data }: { data: any }) => {
           border="1px solid #D0D5DD"
           borderRadius="12px"
           bgcolor="#fff"
-          sx={{ width: "fit-content" }}
+          sx={{ width: "fit-content", opacity: isDisabled ? 0.5 : 1 }}
         >
           <Typography fontSize={14} fontWeight={500}>
             Download Nominee ID Proof
@@ -140,16 +205,30 @@ const PersonalDetails = ({ data }: { data: any }) => {
 
           <Box
             sx={{
-              border: "1px solid #11395C",
+              border: "1px solid",
+              borderColor: isDisabled ? "#D0D5DD" : "#11395C",
               borderRadius: 2,
               p: 0.7,
-              cursor: "pointer",
-              "&:hover": { bgcolor: "#F3F4F6" },
+              cursor: isDisabled ? "not-allowed" : "pointer",
+              pointerEvents: isDisabled ? "none" : "auto",
+              "&:hover": {
+                bgcolor: isDisabled ? "transparent" : "#F3F4F6",
+              },
             }}
           >
-            <DownloadForOfflineIcon sx={{ fontSize: 22, color: "#11395C" }} />
+            <DownloadForOfflineIcon
+              sx={{
+                fontSize: 22,
+                color: isDisabled ? "#98A2B3" : "#11395C",
+              }}
+              onClick={() => {
+                if (!isDisabled) {
+                  handleCommonDownload(bankDoc);
+                }
+              }}
+            />
           </Box>
-        </Box> */}
+        </Box>
       </Box>
 
       {/* ================= COMPLIANCE DECLARATIONS ================= */}

@@ -162,8 +162,12 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
   const partnerSharingData = approvalData?.partnerSharing;
 
   const tabComponents: Record<string, JSX.Element> = {
-    "Business Profile": <BussinessProfile data={businessProfile} />,
-    "Personal Details": <PersonalDetails data={personalDetails} />,
+    "Business Profile": (
+      <BussinessProfile data={businessProfile} kycDocs={kycDocs} />
+    ),
+    "Personal Details": (
+      <PersonalDetails data={personalDetails} kycDocs={kycDocs} />
+    ),
     "KYC Document": <KycVerification data={kycDocs} />,
     "Infrastructure details": <Infra data={infraDetails} />,
     Segments: <Segments data={summary} />,

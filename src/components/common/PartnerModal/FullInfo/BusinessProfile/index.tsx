@@ -1,10 +1,75 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { FieldGrid, SectionTitle, SelectableBox } from "../../StylingCss";
+import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../../redux/store";
+import {
+  hideLoader,
+  showLoader,
+} from "../../../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../../../services";
+import ShowToast from "../../../../../utils/toastUtils";
 
 /* ================= MAIN COMPONENT ================= */
 
-const BusinessPartnerForm = ({ data }: any) => {
+const BusinessPartnerForm = ({ data, kycDocs }: any) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleCommonDownload = async (doc: any) => {
+    console.log("Download:", doc);
+
+    const payload = {
+      // fileName: "danger.jpeg.jpeg",
+      fileName: doc.fileName,
+      filePath: doc.filePath,
+      // filePath: "\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\10128",
+      fileType: doc.fileType,
+      contentType: "",
+    };
+
+    dispatch(showLoader("Downloading..."));
+    console.log("row data", payload);
+
+    apiServices
+      .ComplianceDownload(payload)
+      .then((response) => {
+        console.log("response", response);
+
+        if (response?.status === 200 && response?.data) {
+          const url = window.URL.createObjectURL(new Blob([response?.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute(
+            "download",
+            `${payload.fileName}${payload.fileType}`,
+          );
+          const finalFileName = doc.fileName.endsWith(doc.fileType)
+            ? doc.fileName
+            : `${doc.fileName}${doc.fileType}`;
+
+          link.href = url;
+          link.download = finalFileName;
+          document.body.appendChild(link);
+          link.click();
+          dispatch(hideLoader());
+        } else {
+          console.log("Error during download", response);
+          ShowToast("info", "Error downloading file");
+        }
+      })
+      .catch((error) => {
+        ShowToast(
+          "info",
+          error.message || "An error occurred while downloading",
+        );
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
   // 🔥 MAP API TO CLEAN UI STRUCTURE
+  console.log(data, kycDocs, "data, kycDoc");
+
   const mappedData = {
     mobile: data?.mobile,
     email: data?.emailId,
@@ -40,7 +105,8 @@ const BusinessPartnerForm = ({ data }: any) => {
     accountType:
       data?.acctType === "savingAcc" ? "Savings Account" : "Current Account",
   };
-
+  const bankDoc = kycDocs?.find((doc: any) => doc.docID === 7);
+  const isDisabled = !bankDoc;
   return (
     <Box>
       {/* ================= CONTACT DETAILS ================= */}
@@ -127,7 +193,7 @@ const BusinessPartnerForm = ({ data }: any) => {
         />
 
         {/* Download Proof */}
-        {/* <Box
+        <Box
           mt={2}
           p={1.2}
           display="flex"
@@ -136,7 +202,7 @@ const BusinessPartnerForm = ({ data }: any) => {
           border="1px solid #D0D5DD"
           borderRadius="12px"
           bgcolor="#fff"
-          sx={{ width: "fit-content" }}
+          sx={{ width: "fit-content", opacity: isDisabled ? 0.5 : 1 }}
         >
           <Typography fontSize={14} fontWeight={500}>
             Download Bank Proof
@@ -144,16 +210,30 @@ const BusinessPartnerForm = ({ data }: any) => {
 
           <Box
             sx={{
-              border: "1px solid #11395C",
+              border: "1px solid",
+              borderColor: isDisabled ? "#D0D5DD" : "#11395C",
               borderRadius: 2,
               p: 0.7,
-              cursor: "pointer",
-              "&:hover": { bgcolor: "#F3F4F6" },
+              cursor: isDisabled ? "not-allowed" : "pointer",
+              pointerEvents: isDisabled ? "none" : "auto",
+              "&:hover": {
+                bgcolor: isDisabled ? "transparent" : "#F3F4F6",
+              },
             }}
           >
-            <DownloadForOfflineIcon sx={{ fontSize: 22, color: "#11395C" }} />
-          </Box> */}
-        {/* </Box> */}
+            <DownloadForOfflineIcon
+              sx={{
+                fontSize: 22,
+                color: isDisabled ? "#98A2B3" : "#11395C",
+              }}
+              onClick={() => {
+                if (!isDisabled) {
+                  handleCommonDownload(bankDoc);
+                }
+              }}
+            />
+          </Box>
+        </Box>
       </Box>
 
       {/* ================= ACCOUNT TYPE ================= */}

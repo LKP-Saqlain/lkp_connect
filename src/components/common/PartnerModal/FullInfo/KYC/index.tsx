@@ -153,6 +153,10 @@ const KycVerification = ({ data }: { data: any[] }) => {
           border="1px solid #D0D5DD"
           borderRadius="12px"
           bgcolor="#fff"
+          sx={{
+            opacity: isIpvUploaded ? 1 : 0.6,
+            cursor: isIpvUploaded ? "pointer" : "not-allowed",
+          }}
         >
           {/* Left */}
           <Box display="flex" alignItems="center" gap={2}>
@@ -168,9 +172,7 @@ const KycVerification = ({ data }: { data: any[] }) => {
                 </Typography>
               </Box>
             ) : (
-              <Typography fontSize={13} color="#E02424">
-                Not Uploaded
-              </Typography>
+              <></>
             )}
           </Box>
 
@@ -181,8 +183,6 @@ const KycVerification = ({ data }: { data: any[] }) => {
               border: "1px solid #1F5A96",
               borderRadius: 2,
               p: 0.5,
-              cursor: isIpvUploaded ? "pointer" : "not-allowed",
-              opacity: isIpvUploaded ? 1 : 0.4,
             }}
           >
             <DownloadForOfflineIcon sx={{ color: "#1F5A96" }} />
