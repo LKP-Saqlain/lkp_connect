@@ -163,11 +163,11 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
 
       const responses = await Promise.all(promises);
 
-      const allSuccess = responses.every(
+      const anySuccess = responses.some(
         (res) => res?.data?.data?.msg === "Success",
       );
 
-      if (allSuccess) {
+      if (anySuccess) {
         ShowToast("success", "Updated successfully");
         toggle();
       } else {
