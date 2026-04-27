@@ -1514,6 +1514,7 @@ export const apiServices = {
   UpdateRevisedcharges: async (payload: any) => {
     return await apiService("POST", endpoints.UpdateRevisedcharges, payload);
   },
+
   UploadPartnerSharingDocs: async (payload: any) => {
     return await apiService(
       "POST",
@@ -1531,6 +1532,9 @@ export const apiServices = {
     return await apiService("POST", endpoints.EsignKYC_Document_LKP, payload);
   },
   DownloadAllDocs: async (payload: any) => {
+    return await apiService("POST", endpoints.DownloadAllDocs, payload);
+  },
+  UpdateRevisedStampcharges: async (payload: any) => {
     return await apiService("POST", endpoints.DownloadAllDocs, payload);
   },
 };

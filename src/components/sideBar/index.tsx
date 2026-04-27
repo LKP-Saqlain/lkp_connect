@@ -370,6 +370,7 @@ const SideBar = () => {
       activeMenu !== "Trading" &&
       activeMenu !== "Zone Overview" &&
       activeMenu !== "Account" &&
+      activeMenu !== "Partner OnBoarding" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {

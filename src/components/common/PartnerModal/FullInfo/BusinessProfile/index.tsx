@@ -158,8 +158,18 @@ const BusinessPartnerForm = ({ data, kycDocs }: any) => {
         <SectionTitle>Office Address</SectionTitle>
         <FieldGrid
           fields={[
-            { label: "Address Line 1", value: mappedData.offAddress1 },
-            { label: "Address Line 2", value: mappedData.offAddress2 },
+            {
+              label: "Address Line 1",
+              value: mappedData.resAddress1,
+              md: 6,
+              lg: 6,
+            },
+            {
+              label: "Address Line 2",
+              value: mappedData.resAddress2,
+              md: 6,
+              lg: 6,
+            },
             { label: "Pincode", value: mappedData.offPincode },
             { label: "City", value: mappedData.offCity },
             { label: "State", value: mappedData.offState },
@@ -171,8 +181,20 @@ const BusinessPartnerForm = ({ data, kycDocs }: any) => {
         <SectionTitle>Residential Address</SectionTitle>
         <FieldGrid
           fields={[
-            { label: "Address Line 1", value: mappedData.resAddress1 },
-            { label: "Address Line 2", value: mappedData.resAddress2 },
+            // { label: "Address Line 1", value: mappedData.resAddress1 },
+            // { label: "Address Line 2", value: mappedData.resAddress2 },
+            {
+              label: "Address Line 1",
+              value: mappedData.offAddress1,
+              md: 6,
+              lg: 6,
+            },
+            {
+              label: "Address Line 2",
+              value: mappedData.offAddress2,
+              md: 6,
+              lg: 6,
+            },
             { label: "Pincode", value: mappedData.resPincode },
             { label: "City", value: mappedData.resCity },
             { label: "State", value: mappedData.resState },

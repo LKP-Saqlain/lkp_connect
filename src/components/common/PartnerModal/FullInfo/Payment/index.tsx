@@ -27,7 +27,7 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   const exchangeData = paymentData
     .filter(
       (item: any) =>
-        !["Security Deposit", "Stamp Paper", "Total"].includes(
+        !["Security Deposit", "Stamp Paper Charges", "Total"].includes(
           item.exchangeName,
         ),
     )
@@ -39,7 +39,7 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   // ================= OTHERS DATA =================
   const othersData = paymentData
     .filter((item: any) =>
-      ["Security Deposit", "Stamp Paper"].includes(item.exchangeName),
+      ["Security Deposit", "Stamp Paper Charges"].includes(item.exchangeName),
     )
     .map((item: any) => ({
       ...item,
@@ -73,7 +73,7 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
     (acc, curr) => {
       if (
         curr.exchangeName === "Security Deposit" &&
-        curr.exchangeName === "Stamp Paper"
+        curr.exchangeName === "Stamp Paper Charges"
       ) {
         acc.total += curr.revisedTotal || 0; // ONLY revisedTotal
       } else {
@@ -123,38 +123,61 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   };
 
   const handlePaymentNext = async () => {
-    const securityDepositRow = paymentData.find(
-      (item) => item.exchangeName === "Security Deposit",
-    );
+    dispatch(showLoader(""));
 
-    if (!securityDepositRow) {
-      console.log("Security Deposit not found");
-      return;
-    }
-
-    const formattedPayload = {
-      user_id,
-      applNo: securityDepositRow.applNo,
-      segment: securityDepositRow.segmentName,
-      revisedCharges:
-        securityDepositRow.revisedTotal || securityDepositRow.total || 0,
-      remarks: securityDepositRow.remark || "",
-
-      // ✅ FIXED
-      fileName: securityDepositRow.fileName || "",
-      fileType: securityDepositRow.fileType || "",
-      contentType: securityDepositRow.contentType || "",
-    };
-    dispatch(showLoader("Verifying OTP..."));
     try {
-      const response = await apiServices.UpdateRevisedcharges(formattedPayload);
-      if (response?.data?.data?.msg === "Success") {
-        ShowToast("success", response?.data?.message);
-        toggle();
+      const filteredData = paymentData.filter((item) =>
+        ["Security Deposit", "Stamp Paper Charges"].includes(item.exchangeName),
+      );
+
+      const editedRows = filteredData.filter((item) => {
+        return (
+          item.revisedTotal !== item.total ||
+          (item.remark && item.remark.trim() !== "") ||
+          item.fileName
+        );
+      });
+
+      if (!editedRows.length) {
+        ShowToast("info", "No changes to update");
+        return;
       }
 
-      console.log(formattedPayload, "Final Payload", response);
-    } catch (error) {
+      const promises = editedRows.map((item) => {
+        const payload = {
+          user_id,
+          applNo: item.applNo,
+          segment: item.segmentName,
+          revisedCharges: item.revisedTotal || item.total || 0,
+          remarks: item.remark || "",
+          fileName: item.fileName || "",
+          fileType: item.fileType || "",
+          contentType: item.contentType || "",
+        };
+        console.log("Payload111", payload);
+
+        return item.exchangeName === "Stamp Paper Charges"
+          ? apiServices.UpdateRevisedStampcharges(payload)
+          : apiServices.UpdateRevisedcharges(payload);
+      });
+
+      const responses = await Promise.all(promises);
+
+      const allSuccess = responses.every(
+        (res) => res?.data?.data?.msg === "Success",
+      );
+
+      if (allSuccess) {
+        ShowToast("success", "Updated successfully");
+        toggle();
+      } else {
+        ShowToast("error", "Some updates failed");
+      }
+
+      console.log("Edited Responses:", responses);
+    } catch (error: any) {
+      console.error("Payment update failed", error);
+      ShowToast("error", error.message || "Something went wrong");
     } finally {
       dispatch(hideLoader());
     }

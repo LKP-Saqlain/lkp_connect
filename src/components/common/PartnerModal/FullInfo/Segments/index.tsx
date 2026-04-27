@@ -53,9 +53,11 @@ const Segments = ({ data }: { data: any[] }) => {
               <SelectableBox
                 key={item.value}
                 selected={isSelected(section.title, item.label)}
-                label={`${item.label} - ${formatCurrency(
-                  item.amount,
-                )} + 18% GST`}
+                label={
+                  item.label === "Terminal" || item.label === "Without Terminal"
+                    ? `${item.label} - ${formatCurrency(item.amount)}`
+                    : `${item.label} - ${formatCurrency(item.amount)} + 18% GST`
+                }
               />
             ))}
           </Box>

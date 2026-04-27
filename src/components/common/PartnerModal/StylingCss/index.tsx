@@ -40,7 +40,14 @@ export const DisplayBox = ({ value }: { value?: string }) => (
 export const FieldGrid = ({ fields }: any) => (
   <Grid container spacing={3}>
     {fields.map((item: any, i: number) => (
-      <Grid key={i} item xs={12} sm={6} md={4} lg={3}>
+      <Grid
+        key={i}
+        item
+        xs={12}
+        sm={item.sm || 6}
+        md={item.md || 4}
+        lg={item.lg || 3}
+      >
         <Label>{item.label}</Label>
         <DisplayBox value={item.value} />
       </Grid>
