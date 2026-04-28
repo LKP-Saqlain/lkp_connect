@@ -1535,6 +1535,10 @@ export const apiServices = {
     return await apiService("POST", endpoints.DownloadAllDocs, payload);
   },
   UpdateRevisedStampcharges: async (payload: any) => {
-    return await apiService("POST", endpoints.DownloadAllDocs, payload);
+    return await apiService(
+      "POST",
+      endpoints.UpdateRevisedStampcharges,
+      payload,
+    );
   },
 };

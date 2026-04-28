@@ -465,6 +465,7 @@ export const newDomainEndpoints = [
   endpoints.EsignKYC_Document_LKP,
   endpoints.DownloadSignedPdf_PO,
   endpoints.DownloadAllDocs,
+  endpoints.UpdateRevisedStampcharges,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

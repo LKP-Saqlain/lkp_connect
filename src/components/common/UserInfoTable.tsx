@@ -3204,6 +3204,10 @@ const DataTable = ({
           columns={columns}
           rowHeight={30}
           editMode={editRowAccess ? "cell" : undefined}
+          isCellEditable={(params) => {
+            if (params.row.segment === "SLBM") return false;
+            return !!editRowAccess;
+          }}
           processRowUpdate={(newRow) => {
             if (setRows) {
               setRows((prev: any) =>

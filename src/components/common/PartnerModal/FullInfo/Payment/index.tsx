@@ -143,25 +143,47 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
         return;
       }
 
-      const promises = editedRows.map((item) => {
+      //  Check if Stamp Paper exists
+      const stampRow = editedRows.find(
+        (item) =>
+          item.exchangeName?.trim().toLowerCase() === "stamp paper charges",
+      );
+
+      let responses;
+
+      if (stampRow) {
+        // ONLY call Stamp API
         const payload = {
           user_id,
-          applNo: item.applNo,
-          segment: item.segmentName,
-          revisedCharges: item.revisedTotal || item.total || 0,
-          remarks: item.remark || "",
-          fileName: item.fileName || "",
-          fileType: item.fileType || "",
-          contentType: item.contentType || "",
+          applNo: stampRow.applNo,
+          segment: stampRow.segmentName,
+          revisedCharges: stampRow.revisedTotal || stampRow.total || 0,
+          remarks: stampRow.remark || "",
+          fileName: stampRow.fileName || "",
+          fileType: stampRow.fileType || "",
+          contentType: stampRow.contentType || "",
         };
-        console.log("Payload111", payload);
 
-        return item.exchangeName === "Stamp Paper Charges"
-          ? apiServices.UpdateRevisedStampcharges(payload)
-          : apiServices.UpdateRevisedcharges(payload);
-      });
+        responses = [await apiServices.UpdateRevisedStampcharges(payload)];
+      } else {
+        //  Only call normal API for others
+        const promises = editedRows.map((item) => {
+          const payload = {
+            user_id,
+            applNo: item.applNo,
+            segment: item.segmentName,
+            revisedCharges: item.revisedTotal || item.total || 0,
+            remarks: item.remark || "",
+            fileName: item.fileName || "",
+            fileType: item.fileType || "",
+            contentType: item.contentType || "",
+          };
 
-      const responses = await Promise.all(promises);
+          return apiServices.UpdateRevisedcharges(payload);
+        });
+
+        responses = await Promise.all(promises);
+      }
 
       const anySuccess = responses.some(
         (res) => res?.data?.data?.msg === "Success",
@@ -173,8 +195,6 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
       } else {
         ShowToast("error", "Some updates failed");
       }
-
-      console.log("Edited Responses:", responses);
     } catch (error: any) {
       console.error("Payment update failed", error);
       ShowToast("error", error.message || "Something went wrong");

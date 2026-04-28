@@ -14345,7 +14345,20 @@ export const ParOnbPartnerSharing: GridColDef[] = [
     align: "center",
     flex: 1,
     disableColumnMenu: true,
-    valueFormatter: (params: any) => (params != null ? `${params}%` : "-"),
+    renderCell: (params) => {
+      const isDisabled = params.row.segment === "SLBM";
+
+      return (
+        <span
+          style={{
+            opacity: isDisabled ? 0.5 : 1,
+            pointerEvents: isDisabled ? "none" : "auto",
+          }}
+        >
+          {params.value != null ? `${params.value}%` : "-"}
+        </span>
+      );
+    },
   },
   {
     field: "lkpShare",
@@ -14355,7 +14368,15 @@ export const ParOnbPartnerSharing: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
-    valueFormatter: (params: any) => (params != null ? `${params}%` : "-"),
+    renderCell: (params) => {
+      const isDisabled = params.row.segment === "SLBM";
+
+      return (
+        <span style={{ opacity: isDisabled ? 0.5 : 1 }}>
+          {params.value != null ? `${params.value}%` : "-"}
+        </span>
+      );
+    },
   },
   {
     field: "minRetention",
@@ -14366,7 +14387,15 @@ export const ParOnbPartnerSharing: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
-    valueFormatter: (params) => (params != null ? `₹ ${params}` : "-"),
+    renderCell: (params) => {
+      const isDisabled = params.row.segment === "SLBM";
+
+      return (
+        <span style={{ opacity: isDisabled ? 0.5 : 1 }}>
+          {params.value != null ? `₹ ${params.value}` : "-"}
+        </span>
+      );
+    },
   },
 ];
 

@@ -3,6 +3,7 @@ import { Box, Button, IconButton, TextField, Typography } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CloseIcon from "@mui/icons-material/Close";
 import { convertToBase64 } from "../../../../helper/method";
+import ShowToast from "../../../../utils/toastUtils";
 
 const PaymentEdit = ({ data, toggle, onSave }: any) => {
   const [revised, setRevised] = useState<string>("");
@@ -19,7 +20,7 @@ const PaymentEdit = ({ data, toggle, onSave }: any) => {
 
   const handleSave = async () => {
     if (!revised || !commentText || !selectedFile) {
-      alert("Please fill all details");
+      ShowToast("error", "Please fill all details");
       return;
     }
     const base64File = await convertToBase64(selectedFile);
