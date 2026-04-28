@@ -1541,4 +1541,7 @@ export const apiServices = {
       payload,
     );
   },
+  UpdateEsignStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateEsignStatus, payload);
+  },
 };

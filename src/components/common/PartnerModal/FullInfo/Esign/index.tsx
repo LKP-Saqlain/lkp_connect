@@ -146,12 +146,67 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
 
         ShowToast("success", "Signing completed successfully");
         await downloadSignedPdf(documentId, fileName);
+
+        const statusPayload = {
+          applNo: applNo.toString(),
+          digioDocId: documentId, // THIS is important
+        };
+
+        const statusRes: any =
+          await apiServices.UpdateEsignStatus(statusPayload);
+        console.log("Response11", statusRes);
+        if (statusRes?.status === 200) {
+          ShowToast("success", statusRes?.data?.message || "Status updated");
+        } else {
+          ShowToast(
+            "error",
+            statusRes?.data?.message || "Status update failed",
+          );
+        }
       },
     });
 
     digio.init();
     digio.submit(documentId, signerIdentifier, accessToken);
   };
+
+  //  const digio = new Digio({
+  //       environment: "production",
+  //       logo: "https://www.lkpsec.com/App_Themes/images/webp/LKP--Final--Logo-New-2021-D2.webp",
+  //       theme: {
+  //         primaryColor: "#07152B",
+  //         secondaryColor: "#000000",
+  //       },
+  //       callback: async (resp: any) => {
+  //         if (resp?.error_code) {
+  //           ShowToast("error", "Signing failed");
+  //           return;
+  //         }
+
+  //         try {
+  //           setSignedDocs((prev) => [...prev, fileName]);
+  //           ShowToast("success", "Signing completed successfully");
+
+  //           await downloadSignedPdf(documentId, signedFileName);
+
+  //           const statusPayload = {
+  //             applNo: apNo,
+  //             digioDocId: documentId, // THIS is important
+  //           };
+
+  //           const statusRes = await UpdateEsignStatus(statusPayload);
+
+  //           if (statusRes?.status === 1) {
+  //             ShowToast("success", statusRes?.message || "Status updated");
+  //           } else {
+  //             ShowToast("error", statusRes?.message || "Status update failed");
+  //           }
+  //         } catch (err) {
+  //           console.error("Post-sign error:", err);
+  //           ShowToast("error", "Error after signing");
+  //         }
+  //       },
+  //     });
 
   // ================= HANDLE ESIGN =================
   const handleEsign = async (doc: any) => {

@@ -39,6 +39,7 @@ export const publicEndpoints = [
   endpoints.EsignKYC_Document_LKP,
   endpoints.EsignLKp_BusinessAssociatemerge,
   endpoints.DownloadSignedPdf_PO,
+  endpoints.UpdateEsignStatus,
 ];
 
 export const fundamentalEndpoints = [
@@ -466,6 +467,7 @@ export const newDomainEndpoints = [
   endpoints.DownloadSignedPdf_PO,
   endpoints.DownloadAllDocs,
   endpoints.UpdateRevisedStampcharges,
+  endpoints.UpdateEsignStatus,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

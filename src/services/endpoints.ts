@@ -368,6 +368,7 @@ export const endpoints = {
   GetRevisedPaySummary: "api/AP/GetRevisedPaySummary",
   DownloadAllDocs: "api/AP/DownloadAllDocs",
   UpdateRevisedStampcharges: "api/AP/UpdateRevisedStampcharges",
+  UpdateEsignStatus: "api/ESign/UpdateEsignStatus",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);
