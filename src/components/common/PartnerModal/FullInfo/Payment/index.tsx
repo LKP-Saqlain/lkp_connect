@@ -105,13 +105,15 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
 
   // ================= HANDLE EDIT =================
   const handleEdit = (row: any) => {
-    console.log(row);
+    console.log("TestRow", row);
 
     setEditRow(row); // save row to state
     setIsEditModalOpen(true); // open modal
   };
 
   const handleSaveEdit = (updatedRow: any) => {
+    console.log("Test11", updatedRow);
+
     const updatedData = paymentData.map((item) =>
       `${item.segmentID}-${item.exchangeName}` === updatedRow.id
         ? { ...item, ...updatedRow }
@@ -143,47 +145,34 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
         return;
       }
 
-      //  Check if Stamp Paper exists
-      const stampRow = editedRows.find(
-        (item) =>
-          item.exchangeName?.trim().toLowerCase() === "stamp paper charges",
-      );
+      const buildPayload = (item: any) => ({
+        user_id,
+        applNo: item.applNo,
+        segment: item.segmentName,
+        revisedCharges: item.revisedTotal || item.total || 0,
+        remarks: item.remark || "",
+        fileName: item.fileName || "",
+        fileType: item.fileType || "",
+        contentType: item.contentType || "",
+      });
 
-      let responses;
+      const promises: Promise<any>[] = [];
 
-      if (stampRow) {
-        // ONLY call Stamp API
-        const payload = {
-          user_id,
-          applNo: stampRow.applNo,
-          segment: stampRow.segmentName,
-          revisedCharges: stampRow.revisedTotal || stampRow.total || 0,
-          remarks: stampRow.remark || "",
-          fileName: stampRow.fileName || "",
-          fileType: stampRow.fileType || "",
-          contentType: stampRow.contentType || "",
-        };
+      editedRows.forEach((item) => {
+        const name = item.exchangeName?.trim().toLowerCase();
 
-        responses = [await apiServices.UpdateRevisedStampcharges(payload)];
-      } else {
-        //  Only call normal API for others
-        const promises = editedRows.map((item) => {
-          const payload = {
-            user_id,
-            applNo: item.applNo,
-            segment: item.segmentName,
-            revisedCharges: item.revisedTotal || item.total || 0,
-            remarks: item.remark || "",
-            fileName: item.fileName || "",
-            fileType: item.fileType || "",
-            contentType: item.contentType || "",
-          };
+        const payload = buildPayload(item);
 
-          return apiServices.UpdateRevisedcharges(payload);
-        });
+        if (name === "security deposit") {
+          promises.push(apiServices.UpdateRevisedcharges(payload));
+        }
 
-        responses = await Promise.all(promises);
-      }
+        if (name === "stamp paper charges") {
+          promises.push(apiServices.UpdateRevisedStampcharges(payload));
+        }
+      });
+
+      const responses = await Promise.all(promises);
 
       const anySuccess = responses.some(
         (res) => res?.data?.data?.msg === "Success",
@@ -196,7 +185,7 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
         ShowToast("error", "Some updates failed");
       }
     } catch (error: any) {
-      console.error("Payment update failed", error);
+      console.error(error);
       ShowToast("error", error.message || "Something went wrong");
     } finally {
       dispatch(hideLoader());

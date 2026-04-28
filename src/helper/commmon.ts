@@ -478,7 +478,7 @@ export const documentList = [
   // ================= AGREEMENT =================
   {
     category: "AGREEMENT",
-    fileName: "BusinessAssociateAgreement.html",
+    fileName: "BA_Commercial_Signed.html",
     label: "Business agreement between LKP and AP",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates",
     lkpApi: "EsignLKp_BusinessAssociatemerge",

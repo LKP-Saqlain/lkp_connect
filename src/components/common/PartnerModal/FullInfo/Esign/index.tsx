@@ -103,6 +103,7 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
 
   // ================= BUILD PAYLOAD =================
   const buildPayload = (doc: any) => {
+    console.log("Test", doc);
     const payload: any = { ApplNo: applNo.toString() };
 
     if (doc.payloadType === "template") {
@@ -111,7 +112,7 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
 
     if (doc.payloadType === "sourceFile") {
       const baseName = doc.fileName.replace(".html", "");
-      payload.sourceFile = `${applNo}_${baseName}_AP_Signed.pdf`;
+      payload.sourceFile = `${applNo}_${baseName}.pdf`;
     }
 
     if (doc.payloadType === "kyc") {
