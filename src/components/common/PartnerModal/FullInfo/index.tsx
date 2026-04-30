@@ -66,29 +66,28 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
     }
   }, [activeSubItem]);
 
-  useEffect(() => {
-    const handleViewApprovalData = async () => {
-      const payload = {
-        applNo: data.applNo, // Replace with dynamic application number
-        // viewType: currentConfig.viewType,
-        viewType: "OpsApprove1ViewDetails",
-        user_id,
-      };
-
-      dispatch(showLoader("Fetching Details..."));
-
-      try {
-        const response = await apiServices.ViewApprovalData(payload);
-
-        // ✅ Save full response data
-        setApprovalData(response?.data?.data);
-      } catch (error) {
-        console.error("Error fetching details:", error);
-      } finally {
-        dispatch(hideLoader());
-      }
+  const handleViewApprovalData = async () => {
+    const payload = {
+      applNo: data.applNo, // Replace with dynamic application number
+      // viewType: currentConfig.viewType,
+      viewType: "OpsApprove1ViewDetails",
+      user_id,
     };
 
+    dispatch(showLoader("Fetching Details..."));
+
+    try {
+      const response = await apiServices.ViewApprovalData(payload);
+
+      setApprovalData(response?.data?.data);
+    } catch (error) {
+      console.error("Error fetching details:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  useEffect(() => {
     handleViewApprovalData();
   }, [data?.applNo, currentConfig?.viewType, user_id]);
 
@@ -160,6 +159,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
   const infraDetails = approvalData?.infraDetails?.[0];
   const summary = approvalData?.summary;
   const partnerSharingData = approvalData?.partnerSharing;
+  const esignDocs = approvalData?.esignDocs;
 
   const tabComponents: Record<string, JSX.Element> = {
     "Business Profile": (
@@ -191,7 +191,15 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
         applNo={data.applNo}
       />
     ),
-    "E-signed": <Esign data={summary} applNo={data.applNo} kycDocs={kycDocs} />,
+    "E-signed": (
+      <Esign
+        data={summary}
+        applNo={data.applNo}
+        kycDocs={kycDocs}
+        esignDocs={esignDocs}
+        handleViewApprovalData={handleViewApprovalData}
+      />
+    ),
     "Exchange Certificate": <Certificate />,
   };
 

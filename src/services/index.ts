@@ -1544,4 +1544,11 @@ export const apiServices = {
   UpdateEsignStatus: async (payload: any) => {
     return await apiService("POST", endpoints.UpdateEsignStatus, payload);
   },
+  ApAdminDocumentsFileDownload: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ApAdminDocumentsFileDownload,
+      payload,
+    );
+  },
 };

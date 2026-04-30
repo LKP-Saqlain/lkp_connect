@@ -10,7 +10,8 @@ import {
   hideLoader,
   showLoader,
 } from "../../../../../redux/slices/loaderSlice";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import axios from "axios";
 
 declare const Digio: any;
 
@@ -22,12 +23,31 @@ const kycDocNameMap: Record<number, string> = {
   6: "gst",
 };
 
-const Esign = ({ data, applNo, kycDocs }: any) => {
+const Esign = ({
+  data,
+  applNo,
+  kycDocs,
+  esignDocs,
+  handleViewApprovalData,
+}: any) => {
   const dispatch = useDispatch<AppDispatch>();
+
+  const signedDocIds = useMemo(() => {
+    return new Set((esignDocs || []).map((d: any) => Number(d.isEsignDisable)));
+  }, [esignDocs]);
+
+  const isDocSigned = (doc: any) => {
+    // KYC docs mapping
+    if (doc.isKyc) {
+      return signedDocIds.has(Number(doc.docID));
+    }
+
+    // Normal docs mapping (from config)
+    return signedDocIds.has(Number(doc.esignId));
+  };
 
   const forceCategories = ["AGREEMENT", "KYC"];
 
-  // ================= SUMMARY =================
   const summary = Array.isArray(data)
     ? data
     : Array.isArray(data?.data)
@@ -112,7 +132,7 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
 
     if (doc.payloadType === "sourceFile") {
       const baseName = doc.fileName.replace(".html", "");
-      payload.sourceFile = `${applNo}_${baseName}.pdf`;
+      payload.sourceFile = `${applNo}_${baseName}_AP_Signed.pdf`;
     }
 
     if (doc.payloadType === "kyc") {
@@ -157,6 +177,7 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
         console.log("Response11", statusRes);
         if (statusRes?.status === 200) {
           ShowToast("success", statusRes?.data?.message || "Status updated");
+          handleViewApprovalData();
         } else {
           ShowToast(
             "error",
@@ -273,11 +294,72 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
     }
   };
 
-  const handlePreview = (doc: any) => {
-    console.log(`${doc.path}\\${doc.fileName}`);
+  const getSignedDoc = (doc: any) => {
+    return (esignDocs || []).find(
+      (item: any) => Number(item.isEsignDisable) === doc.esignId,
+    );
   };
 
-  // ================= UI =================
+  const handlePreview = async (doc: any) => {
+    console.log("Test1111", doc);
+
+    try {
+      let token = localStorage.getItem("tkn");
+      dispatch(showLoader(""));
+      const signedDoc = getSignedDoc(doc);
+      const payload = {
+        fileName: signedDoc ? signedDoc.fileName : doc.fileName,
+        filePath: signedDoc ? signedDoc.filePath : doc.path,
+        fileType: signedDoc
+          ? `.${signedDoc.fileType}`
+          : `.${doc.fileType}` || ".pdf",
+        contentType: "",
+        applNo: applNo,
+      };
+      console.log("Payload11", payload);
+
+      const response = await axios.post(
+        `https://api.lkpconnect.net.in/api/AP/ApAdminDocumentsFileDownload`,
+        payload,
+        {
+          responseType: "blob", // Ensures the response is treated as a binary file
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const blob = new Blob([response?.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+
+      const finalFileName = doc.fileName.endsWith(".pdf")
+        ? doc.fileName
+        : `${doc.fileName}.pdf`;
+
+      link.setAttribute("download", finalFileName);
+
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      ShowToast("success", "File downloaded successfully");
+    } catch (err) {
+      console.error("Preview download error:", err);
+      ShowToast("error", "Failed to download file");
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  useEffect(() => {
+    console.log("tes1212t", esignDocs, kycDocs);
+  }, [esignDocs, kycDocs]);
+
   return (
     <Box>
       <SectionTitle>Preview Documents</SectionTitle>
@@ -299,6 +381,7 @@ const Esign = ({ data, applNo, kycDocs }: any) => {
                 doc={doc}
                 onPreview={handlePreview}
                 onEsign={handleEsign}
+                isSigned={isDocSigned(doc)}
               />
             ))}
           </Box>

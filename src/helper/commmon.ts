@@ -411,7 +411,6 @@ export const ParOnbPartnerSharingData = [
 ];
 
 export const documentList = [
-  // ================= NSE =================
   {
     category: "NSE",
     fileName: "NSE_Tradingmem&AuthpersonAgree.html",
@@ -419,16 +418,17 @@ export const documentList = [
     path: "...",
     lkpApi: "EsignLKP_NSE",
     payloadType: "sourceFile",
+    esignId: 1,
   },
 
-  // ================= BSE =================
   {
     category: "BSE",
     fileName: "BSE_ApplicationForApRegistartion.html",
     label: "Application for AP Registration",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
-    lkpApi: "Esign_BSELKP_Single", // template type
+    lkpApi: "Esign_BSELKP_Single",
     payloadType: "template",
+    esignId: 2,
   },
   {
     category: "BSE",
@@ -438,6 +438,7 @@ export const documentList = [
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
     lkpApi: "Esign_BSELKP_Single",
     payloadType: "template",
+    esignId: 3,
   },
   {
     category: "BSE",
@@ -447,6 +448,7 @@ export const documentList = [
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
     lkpApi: "Esign_BSELKP_Single",
     payloadType: "template",
+    esignId: 4,
   },
   {
     category: "BSE",
@@ -455,9 +457,9 @@ export const documentList = [
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
     lkpApi: "EsignLKP_BSE", // sourceFile type
     payloadType: "sourceFile",
+    esignId: 5,
   },
 
-  // ================= MCX =================
   {
     category: "MCX",
     fileName: "MCX_Annexure-A.html",
@@ -465,6 +467,7 @@ export const documentList = [
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\MCX",
     lkpApi: "Esign_MCX_LKP_Single",
     payloadType: "template",
+    esignId: 6,
   },
   {
     category: "MCX",
@@ -473,6 +476,7 @@ export const documentList = [
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\MCX",
     lkpApi: "EsignLKP_MCX",
     payloadType: "sourceFile",
+    esignId: 7,
   },
 
   // ================= AGREEMENT =================
@@ -483,19 +487,25 @@ export const documentList = [
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates",
     lkpApi: "EsignLKp_BusinessAssociatemerge",
     payloadType: "sourceFile",
+    esignId: 8,
   },
-
-  // // ================= KYC =================
-  // {
-  //   category: "KYC",
-  //   fileName: "",
-  //   label: "KYC Documents",
-  //   path: "",
-  //   lkpApi: null,
-  //   payloadType: null,
-  // },
 ];
 
+export const kycDocNameMap = {
+  1: "pan",
+  2: "residence",
+  3: "office",
+  4: "education",
+  6: "gst",
+};
+
+export const KYC_ESIGN_MAP: Record<number, number> = {
+  1: 9,
+  2: 10,
+  3: 11,
+  4: 12,
+  6: 13,
+};
 export const PartnerSideMenu: Record<string, string> = {
   "Ops Level 1 Approval": "OpsApprove1View",
   "Compliance Approval": "ComplView",

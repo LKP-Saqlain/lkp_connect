@@ -5,9 +5,15 @@ interface DocumentRowProps {
   doc: any;
   onPreview: (doc: any) => void;
   onEsign: (doc: any) => void;
+  isSigned?: any;
 }
 
-const DocumentRow = ({ doc, onPreview, onEsign }: DocumentRowProps) => {
+const DocumentRow = ({
+  doc,
+  onPreview,
+  onEsign,
+  isSigned,
+}: DocumentRowProps) => {
   return (
     <Box
       display="flex"
@@ -43,12 +49,13 @@ const DocumentRow = ({ doc, onPreview, onEsign }: DocumentRowProps) => {
           variant="contained"
           size="small"
           onClick={() => onEsign(doc)}
+          disabled={isSigned}
           sx={{
             backgroundColor: "#003366",
             textTransform: "none",
           }}
         >
-          eSign
+          {isSigned ? "Signed" : "eSign"}
         </Button>
       </Box>
     </Box>
