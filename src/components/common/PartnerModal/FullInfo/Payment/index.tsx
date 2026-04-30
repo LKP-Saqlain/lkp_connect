@@ -11,11 +11,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { apiServices } from "../../../../../services";
 import ShowToast from "../../../../../utils/toastUtils";
 
+export interface PaymentItem {
+  applNo: number | null;
+  exchangeName: string;
+  segmentId: number | null;
+  segmentName: string | null;
+  amount: number;
+  revisedTotal: number | null;
+  remarks: string | null;
+  fileName: string | null;
+  filePath: string | null;
+}
+
 const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   const [paymentData, setPaymentData] = useState<any[]>(data || []);
   const [editRow, setEditRow] = useState<any>(null); // selected row
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [conditionData, setConditionData] = useState([]);
+  const [conditionData, setConditionData] = useState<PaymentItem[]>([]);
 
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data,
@@ -100,9 +112,11 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   // ================= GRAND TOTAL =================
   // const grandTotal = totalA.total + totalB.total;
   const grandTotal = useMemo(() => {
-    return totalA.total + totalB.total;
-  }, [totalA.total, totalB.total]);
+    const a = totalA?.total ?? 0;
+    const b = conditionData?.[2]?.amount ?? 0;
 
+    return a + b;
+  }, [totalA?.total, conditionData]);
   // ================= HANDLE EDIT =================
   const handleEdit = (row: any) => {
     console.log("TestRow", row);
@@ -227,6 +241,10 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
       dispatch(hideLoader());
     }
   };
+
+  useEffect(() => {
+    console.log("Test123", totalA, totalB, conditionData[2]?.amount);
+  }, [totalA, totalB, conditionData]);
 
   return (
     <Box>
