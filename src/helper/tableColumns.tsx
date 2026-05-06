@@ -14380,7 +14380,7 @@ export const ParOnbPartnerSharing: GridColDef[] = [
   },
   {
     field: "minRetention",
-    headerName: "Minimum Retention (₹)",
+    headerName: "Minimum Retention",
     minWidth: 130,
     headerClassName: "header-wrap-custom",
     flex: 1,
@@ -14392,7 +14392,7 @@ export const ParOnbPartnerSharing: GridColDef[] = [
 
       return (
         <span style={{ opacity: isDisabled ? 0.5 : 1 }}>
-          {params.value != null ? `₹ ${params.value}` : "-"}
+          {params.value != null ? `${params.value}` : "-"}
         </span>
       );
     },

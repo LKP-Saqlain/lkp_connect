@@ -80,43 +80,57 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
     },
   ];
 
-  // ================= TOTAL B =================
-  const totalB = othersData.reduce(
-    (acc, curr) => {
+  // ================= TOTAL B ================= (FIXED)
+  const totalB = useMemo(() => {
+    // For Business/Management Approval, use conditionData
+    if (
+      activeSubItem === "Business Approval" ||
+      activeSubItem === "Management Approval"
+    ) {
+      const totalRow = conditionData.find(
+        (item) => item.exchangeName === "Total",
+      );
+      return totalRow?.revisedTotal ?? 0;
+    }
+
+    // For other cases, calculate from othersData
+    return othersData.reduce((acc, curr) => {
       if (
-        curr.exchangeName === "Security Deposit" &&
+        curr.exchangeName === "Security Deposit" ||
         curr.exchangeName === "Stamp Paper Charges"
       ) {
-        acc.total += curr.revisedTotal || 0; // ONLY revisedTotal
-      } else {
-        acc.total += curr.total || 0;
+        acc += curr.revisedTotal ?? curr.total ?? 0;
       }
       return acc;
-    },
-    { total: 0 },
-  );
+    }, 0);
+  }, [activeSubItem, conditionData, othersData]);
 
-  const othersWithTotal = [
-    ...othersData,
-    {
-      id: "total-B",
-      exchangeName: "Total (B)",
-      total: totalB.total,
-      revisedTotal: "",
-      attachment: "",
-      remark: "",
-      isTotal: true,
-    },
-  ];
+  // ================= OTHERS WITH TOTAL ================= (FIXED)
+  const othersWithTotal = useMemo(
+    () => [
+      ...othersData,
+      {
+        id: "total-B",
+        exchangeName: "Total (B)",
+        segmentName: "",
+        total: "", // Keep empty for display
+        revisedTotal: totalB, // Show the calculated total here
+        attachment: "",
+        remark: "",
+        isTotal: true,
+      },
+    ],
+    [othersData, totalB],
+  );
 
   // ================= GRAND TOTAL =================
   // const grandTotal = totalA.total + totalB.total;
   const grandTotal = useMemo(() => {
     const a = totalA?.total ?? 0;
-    const b = conditionData?.[2]?.amount ?? 0;
+    const b = totalB ?? 0;
 
     return a + b;
-  }, [totalA?.total, conditionData]);
+  }, [totalA?.total, totalB]);
   // ================= HANDLE EDIT =================
   const handleEdit = (row: any) => {
     console.log("TestRow", row);
@@ -128,11 +142,21 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   const handleSaveEdit = (updatedRow: any) => {
     console.log("Test11", updatedRow);
 
-    const updatedData = paymentData.map((item) =>
-      `${item.segmentID}-${item.exchangeName}` === updatedRow.id
-        ? { ...item, ...updatedRow }
-        : item,
-    );
+    const updatedData = paymentData.map((item) => {
+      const itemId = `${item.segmentID}-${item.exchangeName}`;
+      if (itemId === updatedRow.id) {
+        return {
+          ...item,
+          revisedTotal: updatedRow.revisedTotal, // Explicitly update revisedTotal
+          remark: updatedRow.remark,
+          attachment: updatedRow.attachment,
+          fileName: updatedRow.fileName,
+          fileType: updatedRow.fileType,
+          contentType: updatedRow.contentType,
+        };
+      }
+      return item;
+    });
 
     setPaymentData(updatedData);
     setIsEditModalOpen(false);
@@ -222,21 +246,31 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
     dispatch(showLoader("Verifying OTP..."));
     try {
       const response = await apiServices.GetRevisedPaySummary(payload);
-      setConditionData(
-        response?.data?.data.map((item: any, index: number) => ({
-          id: index + 1,
-          ...item,
-        })),
+
+      const transformedData = response?.data?.data.map(
+        (item: any, index: number) => {
+          // For the Total row, move amount to revisedTotal
+          if (item.exchangeName === "Total") {
+            return {
+              id: index + 1,
+              ...item,
+              revisedTotal: item.amount, // Move amount to revisedTotal
+              amount: null, // Clear amount or keep it, depending on your need
+            };
+          }
+
+          return {
+            id: index + 1,
+            ...item,
+          };
+        },
       );
 
-      console.log(
-        response?.data?.data[0].map((item: any, index: number) => ({
-          id: index + 1,
-          ...item,
-        })),
-        "handleBusinessManageData",
-      );
+      setConditionData(transformedData);
+
+      console.log(transformedData, "handleBusinessManageData");
     } catch (error) {
+      console.error(error);
     } finally {
       dispatch(hideLoader());
     }
