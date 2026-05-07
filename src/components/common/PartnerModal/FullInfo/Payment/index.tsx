@@ -129,7 +129,7 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
     const a = totalA?.total ?? 0;
     const b = totalB ?? 0;
 
-    return a + b;
+    return new Intl.NumberFormat("en-IN").format(a + b);
   }, [totalA?.total, totalB]);
   // ================= HANDLE EDIT =================
   const handleEdit = (row: any) => {

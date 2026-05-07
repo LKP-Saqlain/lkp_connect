@@ -14425,6 +14425,8 @@ export const ParOnPaymentexchangeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "gst",
@@ -14433,6 +14435,8 @@ export const ParOnPaymentexchangeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "total",
@@ -14441,6 +14445,8 @@ export const ParOnPaymentexchangeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
 ];
 export const ParOnPaymentOthers: GridColDef[] = [
@@ -14460,6 +14466,8 @@ export const ParOnPaymentOthers: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "Edit",
@@ -14476,6 +14484,10 @@ export const ParOnPaymentOthers: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    valueFormatter: (params: any) =>
+      typeof params === "number" && !isNaN(params)
+        ? new Intl.NumberFormat("en-IN").format(params)
+        : params,
   },
 
   {
@@ -14539,6 +14551,8 @@ export const PaymentOtherConditionData: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
   {
     field: "revisedTotal",
@@ -14547,5 +14561,7 @@ export const PaymentOtherConditionData: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
   },
 ];
