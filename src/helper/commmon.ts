@@ -482,7 +482,7 @@ export const documentList = [
   // ================= AGREEMENT =================
   {
     category: "AGREEMENT",
-    fileName: "BA_Commercial_Signed.html",
+    fileName: "BA_Commercial.html",
     label: "Business agreement between LKP and AP",
     path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates",
     lkpApi: "EsignLKp_BusinessAssociatemerge",
@@ -497,6 +497,7 @@ export const kycDocNameMap = {
   3: "office",
   4: "education",
   6: "gst",
+  14: "other",
 };
 
 export const KYC_ESIGN_MAP: Record<number, number> = {
@@ -505,6 +506,7 @@ export const KYC_ESIGN_MAP: Record<number, number> = {
   3: 11,
   4: 12,
   6: 13,
+  14: 14,
 };
 export const PartnerSideMenu: Record<string, string> = {
   "Ops Level 1 Approval": "OpsApprove1View",

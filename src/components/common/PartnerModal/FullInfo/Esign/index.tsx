@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { SectionTitle } from "../../StylingCss";
-import { documentList } from "../../../../../helper/commmon";
+import { documentList, KYC_ESIGN_MAP } from "../../../../../helper/commmon";
 import DocumentRow from "./componets";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../../../redux/store";
@@ -21,6 +21,7 @@ const kycDocNameMap: Record<number, string> = {
   3: "office",
   4: "education",
   6: "gst",
+  14: "other",
 };
 
 const Esign = ({
@@ -39,10 +40,12 @@ const Esign = ({
   const isDocSigned = (doc: any) => {
     // KYC docs mapping
     if (doc.isKyc) {
-      return signedDocIds.has(Number(doc.docID));
+      const mappedEsignId = KYC_ESIGN_MAP[Number(doc.docID)];
+
+      return signedDocIds.has(Number(mappedEsignId));
     }
 
-    // Normal docs mapping (from config)
+    // Normal docs mapping
     return signedDocIds.has(Number(doc.esignId));
   };
 
@@ -65,7 +68,7 @@ const Esign = ({
   const kycDocsFromApi = useMemo(() => {
     if (!Array.isArray(kycDocs)) return [];
 
-    const allowedDocIds = [1, 2, 3, 4, 6];
+    const allowedDocIds = [1, 2, 3, 4, 6, 14];
 
     return kycDocs
       .filter(
@@ -131,6 +134,7 @@ const Esign = ({
     }
 
     if (doc.payloadType === "sourceFile") {
+      console.log("Test11", doc);
       const baseName = doc.fileName.replace(".html", "");
       payload.sourceFile = `${applNo}_${baseName}_AP_Signed.pdf`;
     }
