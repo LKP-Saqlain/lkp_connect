@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Tabs, Tab } from "@mui/material";
+// import { Tabs, Tab } from "@mui/material";
 import {
-  partnerOnboardingTabs,
+  // partnerOnboardingTabs,
   PartnerSideMenu,
 } from "../../../helper/commmon";
 import { Container } from "reactstrap";
@@ -10,11 +10,11 @@ import { apiServices } from "../../../services";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { AppDispatch, RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import Summary from "./Summary";
+// import Summary from "./Summary";
 import ApDetails from "./Details";
 
 const Main = ({ activeSubItem }: any) => {
-  const [tabValue, setTabValue] = useState<string>("Summary");
+  // const [tabValue, setTabValue] = useState<string>("Details");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<any>(null);
   const [modalType, setModalType] = useState<string>("");
@@ -68,7 +68,7 @@ const Main = ({ activeSubItem }: any) => {
 
   return (
     <div className="page-content page-view">
-      <Tabs
+      {/* <Tabs
         value={tabValue}
         onChange={(_, value) => setTabValue(value)}
         TabIndicatorProps={{ style: { display: "none" } }}
@@ -105,18 +105,25 @@ const Main = ({ activeSubItem }: any) => {
             }}
           />
         ))}
-      </Tabs>
+      </Tabs> */}
 
       {/* 🔹 Example conditional rendering */}
       <Container fluid>
-        {tabValue === "Summary" && <Summary />}
-        {tabValue === "Details" && (
+        {/* {tabValue === "Summary" && <Summary />}  */}
+        {/* {tabValue === "Details" && (
           <ApDetails
             data={data}
             PartnerStatus={PartnerStatus}
             activeSubItem={activeSubItem}
           />
-        )}
+        )} */}
+        {/* {tabValue === "Details" && ( */}
+        <ApDetails
+          data={data}
+          PartnerStatus={PartnerStatus}
+          activeSubItem={activeSubItem}
+        />
+        {/* )} */}
       </Container>
       <PartnerModal
         isOpen={isModalOpen}
