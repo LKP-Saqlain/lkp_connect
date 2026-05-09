@@ -299,61 +299,86 @@ const Esign = ({
   };
 
   const getSignedDoc = (doc: any) => {
+    // this is for  KYC DOCS
+    if (doc.isKyc) {
+      const mappedEsignId = KYC_ESIGN_MAP[Number(doc.docID)];
+
+      return (esignDocs || []).find(
+        (item: any) => Number(item.isEsignDisable) === Number(mappedEsignId),
+      );
+    }
+
+    // bro this is for NORMAL DOCS
     return (esignDocs || []).find(
-      (item: any) => Number(item.isEsignDisable) === doc.esignId,
+      (item: any) => Number(item.isEsignDisable) === Number(doc.esignId),
     );
   };
 
   const handlePreview = async (doc: any) => {
-    console.log("Test1111", doc);
+    console.log("Preview Doc:", doc);
 
     try {
-      let token = localStorage.getItem("tkn");
+      const token = localStorage.getItem("tkn");
+
       dispatch(showLoader(""));
+
       const signedDoc = getSignedDoc(doc);
+
+      console.log("SignedDoc:", signedDoc);
+
       const payload = {
-        fileName: signedDoc ? signedDoc.fileName : doc.fileName,
-        filePath: signedDoc ? signedDoc.filePath : doc.path,
-        fileType: signedDoc
-          ? `.${signedDoc.fileType}`
-          : `.${doc.fileType}` || ".pdf",
+        fileName: signedDoc?.fileName || doc.fileName,
+        filePath: signedDoc?.filePath || doc.path || doc.filePath,
+        fileType: signedDoc?.fileType
+          ? `.${signedDoc.fileType.replace(".", "")}`
+          : doc.fileType?.startsWith(".")
+            ? doc.fileType
+            : `.${doc.fileType || "pdf"}`,
         contentType: "",
-        applNo: applNo,
+        applNo,
       };
-      console.log("Payload11", payload);
+
+      console.log("Final Payload:", payload);
 
       const response = await axios.post(
         `https://api.lkpconnect.net.in/api/AP/ApAdminDocumentsFileDownload`,
         payload,
         {
-          responseType: "blob", // Ensures the response is treated as a binary file
+          responseType: "blob",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
       );
 
-      const blob = new Blob([response?.data], { type: "application/pdf" });
+      const blob = new Blob([response.data], {
+        type: "application/pdf",
+      });
+
       const url = window.URL.createObjectURL(blob);
 
       const link = document.createElement("a");
+
       link.href = url;
 
-      const finalFileName = doc.fileName.endsWith(".pdf")
-        ? doc.fileName
-        : `${doc.fileName}.pdf`;
+      const finalFileName = payload.fileName.endsWith(".pdf")
+        ? payload.fileName
+        : `${payload.fileName}.pdf`;
 
       link.setAttribute("download", finalFileName);
 
       document.body.appendChild(link);
+
       link.click();
 
       link.remove();
+
       window.URL.revokeObjectURL(url);
 
       ShowToast("success", "File downloaded successfully");
     } catch (err) {
       console.error("Preview download error:", err);
+
       ShowToast("error", "Failed to download file");
     } finally {
       dispatch(hideLoader());
