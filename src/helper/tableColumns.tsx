@@ -6014,7 +6014,7 @@ export const getApproverOneDetails: GridColDef[] = [
           bytes[i] = binaryString.charCodeAt(i);
         }
 
-        const decompressed = pako.ungzip(bytes) as Uint8Array<ArrayBuffer>;
+        const decompressed = pako.ungzip(bytes);
         const blob = new Blob([decompressed], { type: "application/pdf" });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -6363,7 +6363,7 @@ export const getApproverTwoDetails: GridColDef[] = [
           bytes[i] = binaryString.charCodeAt(i);
         }
 
-        const decompressed = pako.ungzip(bytes) as Uint8Array<ArrayBuffer>;
+        const decompressed = pako.ungzip(bytes);
         const blob = new Blob([decompressed], { type: "application/pdf" });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
