@@ -42,6 +42,7 @@ const sectionIdMap: Record<string, number> = {
 const FullInfo = ({ data, toggle, activeSubItem }: any) => {
   const [activeTab, setActiveTab] = useState("");
   const [approvalData, setApprovalData] = useState<any>(null);
+  const [referralCode, setReferralCode] = useState("");
   const { user_id } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data,
   );
@@ -101,7 +102,9 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
         applNo: data.applNo,
         userId: user_id,
       };
-
+      if (activeSubItem === "Ops Level 1 Approval") {
+        payload.referralCode = referralCode.split("-")[0];
+      }
       //  Add sectionId only if needed
       if (currentConfig.hasSection) {
         const sectionId = sectionIdMap[activeTab];
@@ -163,7 +166,12 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
 
   const tabComponents: Record<string, JSX.Element> = {
     "Business Profile": (
-      <BussinessProfile data={businessProfile} kycDocs={kycDocs} />
+      <BussinessProfile
+        data={businessProfile}
+        kycDocs={kycDocs}
+        activeSubItem={activeSubItem}
+        setReferralCode={setReferralCode}
+      />
     ),
     "Personal Details": (
       <PersonalDetails data={personalDetails} kycDocs={kycDocs} />

@@ -42,6 +42,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // import StarBurst2 from "../../assets/images/starburst2.png";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TroubleshootIcon from "@mui/icons-material/Troubleshoot";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import Lottie from "react-lottie-player";
 import newIcon from "../../assets/images/new.json";
 
@@ -117,6 +118,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "Q4 Contest": <LocalPoliceIcon />,
     "Q3 Contest": <LocalPoliceIcon />,
     "Expiry Contest": <CampaignIcon />,
+    "Partner OnBoarding": <FolderCopyIcon />,
   };
 
   const getIcon = (title: string) => {

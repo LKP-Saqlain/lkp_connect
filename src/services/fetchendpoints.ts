@@ -469,6 +469,7 @@ export const newDomainEndpoints = [
   endpoints.UpdateRevisedStampcharges,
   endpoints.UpdateEsignStatus,
   endpoints.ApAdminDocumentsFileDownload,
+  endpoints.GetApApplicationStatusFlow,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

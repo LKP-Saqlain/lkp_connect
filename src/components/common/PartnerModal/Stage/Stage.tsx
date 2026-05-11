@@ -1,16 +1,83 @@
-const stages = [
-  { label: "In Progress", date: "19-Mar-2026", active: true },
-  { label: "Submitted – Under Review", date: "19-Mar-2026", active: true },
-  { label: "Rejected", date: "20-Mar-2026", active: true },
-  { label: "Under Review - Compliance", date: "22-Mar-2026", active: true },
-  { label: "Commercial Approved", active: false },
-  { label: "Payment Confirmed", active: false },
-  { label: "Documents Submitted", active: false },
-  { label: "Exchange Registration In Progress", active: false },
-  { label: "Activated", active: false },
-];
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../../redux/store";
+import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
+import { apiServices } from "../../../../services";
+import { useEffect, useState } from "react";
 
-const Stage = ({ toggle }: { toggle: () => void }) => {
+const Stage = ({ toggle, data }: any) => {
+  const [statusData, setStatusData] = useState([]);
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    const GetApApplicationStatusFlow = async () => {
+      const payload = {
+        applNo: data.applNo, // Replace with dynamic application number
+      };
+
+      dispatch(showLoader("Fetching Details..."));
+
+      try {
+        const response = await apiServices.GetApApplicationStatusFlow(payload);
+        console.log(response, "GetApApplicationStatusFlow");
+
+        setStatusData(response?.data?.data);
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      } finally {
+        dispatch(hideLoader());
+      }
+    };
+    GetApApplicationStatusFlow();
+  }, []);
+
+  const getStageStyle = (item: any) => {
+    const stepName = item.stepName?.toLowerCase() || "";
+
+    const isInactive = item.statusDate === "0001-01-01T00:00:00";
+
+    if (isInactive) {
+      return {
+        bg: "#e6e6e6",
+        dot: "#bdbdbd",
+        opacity: 0.6,
+      };
+    }
+
+    if (stepName.includes("reject")) {
+      return {
+        bg: "#ffe5e5",
+        dot: "#ff4d4f",
+        opacity: 1,
+      };
+    }
+
+    if (stepName.includes("review")) {
+      return {
+        bg: "#fff7d6",
+        dot: "#f5b301",
+        opacity: 1,
+      };
+    }
+
+    if (
+      stepName.includes("approved") ||
+      stepName.includes("activated") ||
+      stepName.includes("completed")
+    ) {
+      return {
+        bg: "#d9f7e8",
+        dot: "#00b386",
+        opacity: 1,
+      };
+    }
+
+    return {
+      bg: "#cfe0f1",
+      dot: "#095192",
+      opacity: 1,
+    };
+  };
+
   return (
     <div style={{ width: "100%", maxWidth: 500, margin: "0 auto" }}>
       {/* Header */}
@@ -68,55 +135,70 @@ const Stage = ({ toggle }: { toggle: () => void }) => {
           borderRadius: "0 0 16px 16px",
         }}
       >
-        {stages.map((item, index) => (
-          <div
-            key={index}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              background: item.active ? "#cfe0f1" : "#e6e6e6",
-              padding: "12px 14px",
-              borderRadius: "12px",
-              marginBottom: 10,
-              opacity: item.active ? 1 : 0.7,
-            }}
-          >
-            {/* Left side */}
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        {statusData.map((item: any, index) => {
+          const styles = getStageStyle(item);
+
+          return (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: styles.bg,
+                padding: "12px 14px",
+                borderRadius: "12px",
+                marginBottom: 10,
+                opacity: styles.opacity,
+              }}
+            >
+              {/* Left side */}
               <div
                 style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: "50%",
-                  background: item.active ? "#00b386" : "#bdbdbd",
-                }}
-              />
-              <span
-                style={{
-                  fontSize: 14,
-                  color: "#11395C",
-                  fontWeight: 500,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
                 }}
               >
-                {item.label}
-              </span>
-            </div>
+                <div
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: "50%",
+                    background: styles.dot,
+                  }}
+                />
 
-            {/* Date */}
-            {item.date && (
-              <span
-                style={{
-                  fontSize: 13,
-                  color: "#11395C",
-                  fontWeight: 500,
-                }}
-              >
-                {item.date}
-              </span>
-            )}
-          </div>
-        ))}
+                <span
+                  style={{
+                    fontSize: 14,
+                    color: "#11395C",
+                    fontWeight: 500,
+                  }}
+                >
+                  {item.stepName}
+                </span>
+              </div>
+
+              {/* Date */}
+              {item.statusDate !== "0001-01-01T00:00:00" && (
+                <span
+                  style={{
+                    fontSize: 13,
+                    color: "#11395C",
+                    fontWeight: 500,
+                  }}
+                >
+                  {new Date(item.statusDate).toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

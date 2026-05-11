@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { hideLoader, showLoader } from "../../../../redux/slices/loaderSlice";
 import ShowToast from "../../../../utils/toastUtils";
 
-const ApDetails = ({ data, PartnerStatus }: any) => {
+const ApDetails = ({ data, PartnerStatus, activeSubItem }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const handleDownload = async (applNo: any) => {
     console.log(applNo, "Details");
@@ -55,7 +55,7 @@ const ApDetails = ({ data, PartnerStatus }: any) => {
           padding: "0.2rem 0.8rem",
         }}
       >
-        <h5 style={{ margin: 0, fontWeight: 500 }}>Details</h5>
+        <h5 style={{ margin: 0, fontWeight: 500 }}>{activeSubItem} Details</h5>
       </CardHeader>
       <CardBody>
         <DataTable

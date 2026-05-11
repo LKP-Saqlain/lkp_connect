@@ -9,11 +9,28 @@ import {
 } from "../../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../../services";
 import ShowToast from "../../../../../utils/toastUtils";
+import { useEffect, useState } from "react";
 
 /* ================= MAIN COMPONENT ================= */
 
-const BusinessPartnerForm = ({ data, kycDocs }: any) => {
+const BusinessPartnerForm = ({
+  data,
+  kycDocs,
+  activeSubItem,
+  setReferralCode: setParentReferralCode,
+}: any) => {
+  const [referralCode, setReferralCode] = useState("");
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (data?.referralName) {
+      setReferralCode(data.referralName);
+    }
+  }, [data?.referralName]);
+
+  useEffect(() => {
+    setParentReferralCode?.(referralCode);
+  }, [referralCode]);
 
   const handleCommonDownload = async (doc: any) => {
     console.log("Download:", doc);
@@ -119,7 +136,11 @@ const BusinessPartnerForm = ({ data, kycDocs }: any) => {
             { label: "City", value: mappedData.city },
             {
               label: "Referral By (Employee Code)",
-              value: mappedData.referral,
+              value: referralCode,
+              ...(activeSubItem === "Ops Level 1 Approval" && {
+                editable: !mappedData.referral?.trim(),
+                onChange: setReferralCode,
+              }),
             },
           ]}
         />

@@ -1551,4 +1551,11 @@ export const apiServices = {
       payload,
     );
   },
+  GetApApplicationStatusFlow: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetApApplicationStatusFlow,
+      payload,
+    );
+  },
 };

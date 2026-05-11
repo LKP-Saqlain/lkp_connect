@@ -6014,7 +6014,7 @@ export const getApproverOneDetails: GridColDef[] = [
           bytes[i] = binaryString.charCodeAt(i);
         }
 
-        const decompressed = pako.ungzip(bytes);
+        const decompressed = pako.ungzip(bytes) as Uint8Array<ArrayBuffer>;
         const blob = new Blob([decompressed], { type: "application/pdf" });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -6363,7 +6363,7 @@ export const getApproverTwoDetails: GridColDef[] = [
           bytes[i] = binaryString.charCodeAt(i);
         }
 
-        const decompressed = pako.ungzip(bytes);
+        const decompressed = pako.ungzip(bytes) as Uint8Array<ArrayBuffer>;
         const blob = new Blob([decompressed], { type: "application/pdf" });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -14247,27 +14247,29 @@ export const PartnerOnboardingDetails: GridColDef[] = [
   {
     field: "applNo",
     headerName: "App. No.",
-    width: 130,
-    flex: 1,
+    width: 100,
+    flex: 0.7,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "aP_Name",
     headerName: "Name of Prospect",
-    flex: 1,
+    flex: 1.1,
     minWidth: 180,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
     renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "date",
     headerName: "Date",
     width: 140,
-    flex: 1,
+    flex: 0.8,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -14279,19 +14281,20 @@ export const PartnerOnboardingDetails: GridColDef[] = [
   {
     field: "referralName",
     headerName: "Referred By",
-    flex: 1,
+    flex: 1.4,
     minWidth: 120,
     headerAlign: "center",
-    align: "center",
+    align: "left",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   {
     field: "city",
     headerName: "City",
     width: 130,
     headerAlign: "center",
-    align: "center",
-    flex: 1,
+    align: "left",
+    flex: 0.8,
     disableColumnMenu: true,
     renderCell: (params) => capitalizeEachWord(params.value),
   },
@@ -14299,17 +14302,18 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     field: "partnerType",
     headerName: "Partner Type",
     width: 150,
-    flex: 1,
+    flex: 0.8,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
     renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "applStatus",
-    headerName: "Stage",
+    headerName: "Status",
     width: 130,
-    flex: 1,
+    flex: 0.8,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -14319,10 +14323,20 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     field: "Download Documents",
     headerName: "Download",
     width: 130,
-    flex: 1,
+    flex: 0.8,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+  },
+  {
+    field: "stage",
+    headerName: "Track Application",
+    width: 130,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
 ];
 

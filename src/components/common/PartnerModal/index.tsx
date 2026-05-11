@@ -20,7 +20,7 @@ const PartnerModal = ({
       className={type === "applNo" ? "modal-fullscreen" : ""}
     >
       <ModalBody>
-        {type === "stage" && <Stage toggle={toggle} />}
+        {type === "stage" && <Stage toggle={toggle} data={data} />}
         {type === "applNo" && (
           <FullInfo
             data={data}

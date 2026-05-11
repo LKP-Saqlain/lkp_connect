@@ -19,9 +19,14 @@ const ApprovalFooter = ({
 
   const handleApproval = (decisionType: "APPROVE" | "REJECT") => {
     console.log(decisionType, remarks, decision);
+    if (!remarks.trim()) {
+      alert("Remarks are required");
+      return;
+    }
+
     onApproval({
       decision: decisionType,
-      remarks: remarks || undefined,
+      remarks: remarks.trim(), // addded trim to remove extra spaces referral code
     });
     setDecision(null);
     setRemarks("");

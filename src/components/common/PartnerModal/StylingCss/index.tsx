@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, Button } from "@mui/material";
+import { Box, Grid, Typography, Button, TextField } from "@mui/material";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 
@@ -49,11 +49,65 @@ export const FieldGrid = ({ fields }: any) => (
         lg={item.lg || 3}
       >
         <Label>{item.label}</Label>
-        <DisplayBox value={item.value} />
+
+        {item.editable ? (
+          <EditableDisplayBox
+            value={item.value}
+            onChange={item.onChange}
+            editable={item.editable}
+          />
+        ) : (
+          <DisplayBox value={item.value} />
+        )}
       </Grid>
     ))}
   </Grid>
 );
+
+export const EditableDisplayBox = ({
+  value,
+  onChange,
+  editable,
+}: {
+  value?: string;
+  onChange?: (value: string) => void;
+  editable?: boolean;
+}) => {
+  console.log(value, "editable value", editable);
+
+  if (editable) {
+    return (
+      <TextField
+        fullWidth
+        size="small"
+        placeholder="Enter Employee Code"
+        value={value || ""}
+        onChange={(e) => {
+          const onlyNums = e.target.value.replace(/\D/g, "");
+          // allow max 4 digits
+          if (onlyNums.length <= 4) {
+            onChange?.(onlyNums);
+          }
+        }}
+        inputProps={{
+          maxLength: 4,
+          inputMode: "numeric",
+          pattern: "[0-9]*",
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            borderRadius: 2,
+            bgcolor: "#fff",
+            fontSize: 14,
+            minHeight: 42,
+          },
+        }}
+      />
+    );
+  }
+
+  return <DisplayBox value={value} />;
+};
 
 export const SelectableBox = ({
   label,
