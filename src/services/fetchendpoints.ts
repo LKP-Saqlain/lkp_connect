@@ -430,6 +430,8 @@ export const newDomainEndpoints = [
   endpoints.GetEntry_Approval,
   endpoints.GetFinalReportBankAccountMaster,
   endpoints.BankAccountMaster_report,
+
+  endpoints.InitBOLogin,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

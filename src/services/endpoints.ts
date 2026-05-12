@@ -343,8 +343,8 @@ export const endpoints = {
   GetEntry_Approval: "/api/Account/GetEntry_Approval",
   GetFinalReportBankAccountMaster:
     "/api/Account/GetFinalReportBankAccountMaster",
-
   BankAccountMaster_report: "/api/Account/BankAccountMaster_report",
+  InitBOLogin: "/api/MaxFolio/InitBOLogin",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

@@ -1455,4 +1455,7 @@ export const apiServices = {
       payload,
     );
   },
+  InitBOLogin: async (payload: any) => {
+    return await apiService("POST", endpoints.InitBOLogin, payload);
+  },
 };
