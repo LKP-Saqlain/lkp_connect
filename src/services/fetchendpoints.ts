@@ -470,6 +470,7 @@ export const newDomainEndpoints = [
   endpoints.UpdateEsignStatus,
   endpoints.ApAdminDocumentsFileDownload,
   endpoints.GetApApplicationStatusFlow,
+  endpoints.SendRejectionMail,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

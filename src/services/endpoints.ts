@@ -371,6 +371,7 @@ export const endpoints = {
   UpdateEsignStatus: "api/ESign/UpdateEsignStatus",
   ApAdminDocumentsFileDownload: "api/AP/ApAdminDocumentsFileDownload",
   GetApApplicationStatusFlow: "api/AP/GetApApplicationStatusFlow",
+  SendRejectionMail: "api/AP/SendRejectionMail",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

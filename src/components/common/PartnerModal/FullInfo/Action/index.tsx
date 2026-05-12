@@ -8,12 +8,15 @@ import {
   showLoader,
 } from "../../../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../../../services";
-import { AppDispatch } from "../../../../../redux/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import ShowToast from "../../../../../utils/toastUtils";
 
 const Action = ({ data, activeSubItem, toggle }: any) => {
   const [actionStatus, setActionStatus] = useState({});
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data,
+  );
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -50,6 +53,30 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
     handleActionStatusData();
   }, []);
 
+  const handleRejectionMail = async () => {
+    const optionType =
+      activeSubItem === "Ops Level 1 Approval"
+        ? "OpsLevel1"
+        : activeSubItem === "Compliance Approval"
+          ? "Compliance"
+          : "";
+    const payload = {
+      applNo: data.applNo, // Replace with dynamic application number
+      optionType,
+      user_id,
+    };
+    dispatch(showLoader("Fetching Details..."));
+
+    try {
+      const response = await apiServices.SendRejectionMail(payload);
+      ShowToast("error", response?.data?.message);
+    } catch (error) {
+      console.error("Error fetching details:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
   const allowedSteps = [
     "Business Profile",
     "Personal Details",
@@ -64,6 +91,10 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
   const allApproved =
     filteredSteps.length > 0 &&
     filteredSteps.every((item: any) => item.approveStatus === "A");
+
+  const hasRejected =
+    filteredSteps.length > 0 &&
+    filteredSteps.some((item: any) => item.approveStatus === "R");
 
   return (
     <Box pb={3}>
@@ -97,7 +128,7 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
                 </Box>
               );
             })}
-        <Box display="flex" gap={2}>
+        {/* <Box display="flex" gap={2}>
           <Button
             variant="outlined"
             sx={{
@@ -111,13 +142,52 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
               if (allApproved) {
                 ShowToast("success", "All steps approved.");
               } else {
-                ShowToast("error", "Some steps pending. Sent for Rework.");
+                handleRejectionMail();
               }
               toggle();
             }}
           >
             {allApproved ? "Approve" : "Send for Rework"}
           </Button>
+        </Box> */}
+        <Box display="flex" gap={2}>
+          {hasRejected && (
+            <Button
+              variant="outlined"
+              sx={{
+                borderColor: "#1F5A96",
+                color: "#1F5A96",
+                textTransform: "none",
+                borderRadius: "10px",
+                px: 3,
+              }}
+              onClick={() => {
+                handleRejectionMail();
+                toggle();
+              }}
+            >
+              Send for Rework
+            </Button>
+          )}
+
+          {allApproved && (
+            <Button
+              variant="outlined"
+              sx={{
+                borderColor: "#1f9647",
+                color: "#1f9647",
+                textTransform: "none",
+                borderRadius: "10px",
+                px: 3,
+              }}
+              onClick={() => {
+                ShowToast("success", "All steps approved.");
+                toggle();
+              }}
+            >
+              Approve
+            </Button>
+          )}
         </Box>
       </Box>
     </Box>

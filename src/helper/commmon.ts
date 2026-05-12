@@ -589,7 +589,7 @@ export const approvalConfig: Record<string, any> = {
     approveApi: apiServices.ManagmentApprove,
     statusKey: "managmentApproverStatus",
     remarkKey: "managmentApproverRemark",
-    hasSection: false,
+    hasSection: true,
     hideApprovalForTabs: [
       "Business Profile",
       "Personal Details",

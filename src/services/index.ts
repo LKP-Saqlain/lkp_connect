@@ -1558,4 +1558,7 @@ export const apiServices = {
       payload,
     );
   },
+  SendRejectionMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendRejectionMail, payload);
+  },
 };
