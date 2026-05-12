@@ -6015,7 +6015,10 @@ export const getApproverOneDetails: GridColDef[] = [
         }
 
         const decompressed = pako.ungzip(bytes);
-        const blob = new Blob([decompressed], { type: "application/pdf" });
+        // const blob = new Blob([decompressed], { type: "application/pdf" });
+        const blob = new Blob([new Uint8Array(decompressed)], {
+          type: "application/pdf",
+        }); // FIX: Ensure it's a Uint8Array
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -6364,7 +6367,10 @@ export const getApproverTwoDetails: GridColDef[] = [
         }
 
         const decompressed = pako.ungzip(bytes);
-        const blob = new Blob([decompressed], { type: "application/pdf" });
+        // const blob = new Blob([decompressed], { type: "application/pdf" });
+        const blob = new Blob([new Uint8Array(decompressed)], {
+          type: "application/pdf",
+        }); // FIX: Ensure it's a Uint8Array
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
