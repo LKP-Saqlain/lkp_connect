@@ -54,7 +54,9 @@ const Segments = ({ data }: { data: any[] }) => {
                 key={item.value}
                 selected={isSelected(section.title, item.label)}
                 label={
-                  item.label === "Terminal" || item.label === "Without Terminal"
+                  item.label === "Terminal" ||
+                  item.label === "Without Terminal" ||
+                  item.label === "SLBM"
                     ? `${item.label} - ${formatCurrency(item.amount)}`
                     : `${item.label} - ${formatCurrency(item.amount)} + 18% GST`
                 }

@@ -15,6 +15,7 @@ import Payment from "./Payment";
 import Certificate from "./Certificates";
 import Esign from "./Esign";
 import { approvalConfig } from "../../../../helper/commmon";
+import { Box } from "@mui/material";
 
 const tabs = [
   "Business Profile",
@@ -51,6 +52,19 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
   console.log(data, "FullInfo data");
+  const remarkMap: Record<string, string | undefined> = {
+    "Business Profile": approvalData?.businessProfiles?.[0]?.processRemarks,
+
+    "Personal Details": approvalData?.personalDetails?.[0]?.processRemarks,
+
+    "Infrastructure details": approvalData?.infraDetails?.[0]?.processRemarks,
+
+    Segments: approvalData?.summary?.[0]?.processRemarks,
+
+    "Partner Sharing": approvalData?.partnerSharing?.[0]?.processRemarks,
+
+    Payment: approvalData?.summary?.[0]?.processRemarks,
+  };
 
   useEffect(() => {
     if (!currentConfig) return;
@@ -291,6 +305,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
             const isDisabled = disabledTabs.includes(tab);
             const approvedTabs = currentConfig?.hideApprovalForTabs || [];
             const isApproved = approvedTabs.includes(tab);
+            const hasRemark = !!remarkMap[tab];
 
             return (
               <button
@@ -300,31 +315,36 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
                 style={{
                   padding: "8px 20px",
                   borderRadius: "20px",
+                  cursor: isDisabled ? "default" : "pointer",
                   border: isDisabled
                     ? "none"
                     : isActive
                       ? "2px solid #11395C"
-                      : isApproved
-                        ? "1px solid #27a12d"
-                        : "1px solid #11395C",
-
-                  cursor: isDisabled ? "default" : "pointer",
+                      : hasRemark
+                        ? "1px solid #f59e0b"
+                        : isApproved
+                          ? "1px solid #27a12d"
+                          : "1px solid #11395C",
 
                   backgroundColor: isActive
                     ? "#11395C"
                     : isDisabled
                       ? "#f3f3f3"
-                      : isApproved
-                        ? "#eaf7ec"
-                        : "#ffffff",
+                      : hasRemark
+                        ? "#fff7ed"
+                        : isApproved
+                          ? "#eaf7ec"
+                          : "#ffffff",
 
                   color: isActive
                     ? "#ffffff"
                     : isDisabled
                       ? "#a3a3a3"
-                      : isApproved
-                        ? "#1f7a2e"
-                        : "#11395C",
+                      : hasRemark
+                        ? "#c2410c"
+                        : isApproved
+                          ? "#1f7a2e"
+                          : "#11395C",
 
                   fontWeight: isActive ? 600 : 400,
 
@@ -339,6 +359,19 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
                   position: "relative",
                 }}
               >
+                {hasRemark && isActive && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "6px",
+                      right: "6px",
+                      width: "8px",
+                      height: "8px",
+                      borderRadius: "50%",
+                      background: "#f59e0b",
+                    }}
+                  />
+                )}
                 {tab}
               </button>
             );
@@ -355,6 +388,48 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
           boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
         }}
       >
+        {remarkMap[activeTab] && (
+          <Box
+            mb={2}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              background: "#fff8e6",
+              border: "1px solid #f5d27a",
+              borderLeft: "5px solid #f59e0b",
+              borderRadius: "12px",
+              padding: "12px 16px",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+              overflow: "hidden",
+            }}
+          >
+            <Box
+              sx={{
+                fontSize: "13px",
+                fontWeight: 700,
+                color: "#92400e",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Reviewer Remark:
+            </Box>
+
+            <Box
+              sx={{
+                fontSize: "14px",
+                color: "#4b5563",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                flex: 1,
+              }}
+              title={remarkMap[activeTab]}
+            >
+              {remarkMap[activeTab]}
+            </Box>
+          </Box>
+        )}
         {tabComponents[activeTab]}
         {!currentConfig?.hideApprovalForTabs?.includes(activeTab) && (
           <ApprovalFooter

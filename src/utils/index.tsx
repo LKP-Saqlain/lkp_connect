@@ -33,6 +33,7 @@ export const CombinedStyles = {
 
 // utils/formatters.js
 export const capitalizeEachWord = (text: any) => {
+  // CamelCase to Title Case
   if (!text || typeof text !== "string") return "";
 
   return text
@@ -45,7 +46,7 @@ export const capitalizeEachWord = (text: any) => {
 export const exportToExcel = (
   data: any[],
   columns: { headerName: string; field: string }[],
-  fileName: string
+  fileName: string,
 ) => {
   const formattedData = data.map((row) => {
     const obj: any = {};

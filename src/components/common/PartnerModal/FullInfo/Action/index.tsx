@@ -29,7 +29,7 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
             ? "ComplianceApprovalStatus"
             : activeSubItem === "Ops Level 2 Approval"
               ? "Ops2ApprovalStatus"
-              : "";
+              : "Ops2ApprovalStatus";
       const payload = {
         applNo: data.applNo, // Replace with dynamic application number
         optionType,
@@ -181,7 +181,7 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
                 px: 3,
               }}
               onClick={() => {
-                ShowToast("success", "All steps approved.");
+                ShowToast("success", "Approved.");
                 toggle();
               }}
             >
