@@ -59,7 +59,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
 
     "Infrastructure details": approvalData?.infraDetails?.[0]?.processRemarks,
 
-    Segments: approvalData?.summary?.[0]?.processRemarks,
+    Segments: approvalData?.segments?.[0]?.processRemarks,
 
     "Partner Sharing": approvalData?.partnerSharing?.[0]?.processRemarks,
 
@@ -175,6 +175,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
   const kycDocs = approvalData?.kycDocs;
   const infraDetails = approvalData?.infraDetails?.[0];
   const summary = approvalData?.summary;
+  const segments = approvalData?.segments;
   const partnerSharingData = approvalData?.partnerSharing;
   const esignDocs = approvalData?.esignDocs;
 
@@ -192,7 +193,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
     ),
     "KYC Document": <KycVerification data={kycDocs} />,
     "Infrastructure details": <Infra data={infraDetails} />,
-    Segments: <Segments data={summary} />,
+    Segments: <Segments data={segments} />,
     Action: (
       <Action data={data} activeSubItem={activeSubItem} toggle={toggle} />
     ),
