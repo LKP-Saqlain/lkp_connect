@@ -134,7 +134,7 @@ import BankRecordEntry from "../../pages/ThirdParty/bankMaster/bankRecordEntry";
 import BankApproval from "../../pages/ThirdParty/bankMaster/bankApproval";
 import BankReport from "../../pages/Reports/BankReport";
 import ApDetails from "../../pages/AP Onboarding/Main";
-import DocsDownload from "../../pages/AP Onboarding/DocsDownload";
+// import DocsDownload from "../../pages/AP Onboarding/DocsDownload";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -873,9 +873,9 @@ const SideBar = () => {
     "Client Onboarding": <NewClientPhysical />,
     "File Upload": <FileUpload />,
   };
-  const referralLeadSubItems: Record<string, JSX.Element> = {
-    "Referal Entry Status": <DocsDownload activeSubItem={activeSubItem} />,
-  };
+  // const referralLeadSubItems: Record<string, JSX.Element> = {
+  //   "Referal Entry Status": <DocsDownload activeSubItem={activeSubItem} />,
+  // };
   const PartnerOnBoardingSubItems: Record<string, JSX.Element> = {
     "Ops Level 1 Approval": <ApDetails activeSubItem={activeSubItem} />,
     "Compliance Approval": <ApDetails activeSubItem={activeSubItem} />,
@@ -912,7 +912,7 @@ const SideBar = () => {
       "KYC Dashboard": getSubItemComponent(kycSubItems),
       "Stock Study": <StockStudy />,
       "Mutual Fund": getSubItemComponent(mutualFundSubItems),
-      "Referal Lead": getSubItemComponent(referralLeadSubItems),
+      // "Referal Lead": getSubItemComponent(referralLeadSubItems),
       DashBoard: null,
       "Regulatory Announcement": (
         <RegulatorAnnouncement activeMenu={activeMenu} />
