@@ -14585,3 +14585,71 @@ export const PaymentOtherConditionData: GridColDef[] = [
       new Intl.NumberFormat("en-IN").format(params),
   },
 ];
+
+export const ApDocsDownload: GridColDef[] = [
+  {
+    field: "applNo",
+    headerName: "App. No.",
+    width: 100,
+    flex: 0.7,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "aP_Name",
+    headerName: "Name of Prospect",
+    flex: 1.1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => capitalizeEachWord(params.value),
+  },
+  {
+    field: "date",
+    headerName: "Date",
+    width: 140,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY");
+    },
+  },
+  {
+    field: "referralName",
+    headerName: "Referred By",
+    flex: 1.4,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "city",
+    headerName: "City",
+    width: 130,
+    headerAlign: "center",
+    align: "left",
+    flex: 0.8,
+    disableColumnMenu: true,
+    renderCell: (params) => capitalizeEachWord(params.value),
+  },
+  {
+    field: "partnerType",
+    headerName: "Partner Type",
+    width: 150,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => capitalizeEachWord(params.value),
+  },
+];

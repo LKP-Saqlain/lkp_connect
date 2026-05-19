@@ -413,13 +413,35 @@ const DataTable = ({
       );
     } else if (selectedWidget === "Upcoming Dormant Client") {
       return TableColumns.getClientDormantStatus(handleViewDetails);
-    }
-    // else if (activeSubItem === "Referal Entry Status") {
-    //   return getAccountDetails.map((column) => ({
-    //     ...column,
-    //   }));
-    // }
-    else if (activeSubItem === "RH Approval") {
+    } else if (activeSubItem === "Referal Entry Status") {
+      return TableColumns.ApDocsDownload.map((column) => {
+        if (column.field === "applNo") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    console.log("stage row", params);
+                    onStatusClick?.(params.row, column.field);
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.applNo}
+                </button>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "RH Approval") {
       return TableColumns.RegionalHead.map((column) => {
         if (column.field === "remark") {
           return {

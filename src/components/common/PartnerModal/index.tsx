@@ -2,6 +2,7 @@ import { Modal, ModalBody } from "reactstrap";
 import Stage from "./Stage/Stage";
 import FullInfo from "./FullInfo/index";
 import PaymentEdit from "./PaymentEdit";
+import DocsDownload from "./DocsDownload";
 
 const PartnerModal = ({
   isOpen,
@@ -17,7 +18,9 @@ const PartnerModal = ({
       isOpen={isOpen}
       toggle={toggle}
       centered
-      className={type === "applNo" ? "modal-fullscreen" : ""}
+      className={
+        type === "applNo" || type === "DocsDownload" ? "modal-fullscreen" : ""
+      }
     >
       <ModalBody>
         {type === "stage" && <Stage toggle={toggle} data={data} />}
@@ -31,6 +34,13 @@ const PartnerModal = ({
         )}
         {type === "EditPartnerPayment" && (
           <PaymentEdit toggle={toggle} data={data} onSave={onSave} />
+        )}
+        {type === "DocsDownload" && (
+          <DocsDownload
+            toggle={toggle}
+            data={data}
+            activeSubItem={activeSubItem}
+          />
         )}
       </ModalBody>
     </Modal>
