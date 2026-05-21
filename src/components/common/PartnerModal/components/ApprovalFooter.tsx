@@ -23,7 +23,20 @@ const ApprovalFooter = ({
       alert("Remarks are required");
       return;
     }
+    if (
+      (activeSubItem === "Business Approval" ||
+        activeSubItem === "Management Approval") &&
+      activeTab === "Partner Sharing"
+    ) {
+      localStorage.setItem("decisionType", decisionType);
+    }
 
+    if (
+      (activeSubItem === "Business Approval" ||
+        activeSubItem === "Management Approval") &&
+      activeTab === "Payment"
+    ) {
+    }
     onApproval({
       decision: decisionType,
       remarks: remarks.trim(), // addded trim to remove extra spaces referral code
@@ -32,8 +45,9 @@ const ApprovalFooter = ({
     setRemarks("");
   };
   const shouldHideActions =
-    (activeTab === "Partner Sharing" || activeTab === "Payment") &&
-    activeSubItem === "Ops Level 2 Approval";
+    activeTab === "E-signed" ||
+    ((activeTab === "Partner Sharing" || activeTab === "Payment") &&
+      activeSubItem === "Ops Level 2 Approval");
   return (
     <Box display="flex" alignItems="center" gap={3} flexWrap="wrap" pt={3}>
       {activeTab !== "Action" && (

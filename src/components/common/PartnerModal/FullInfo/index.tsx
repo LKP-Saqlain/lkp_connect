@@ -106,7 +106,55 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
     handleViewApprovalData();
   }, [data?.applNo, currentConfig?.viewType, user_id]);
 
+  useEffect(() => {
+    ["MailDecision", "decisionType"].forEach((key) => {
+      if (localStorage.getItem(key)) {
+        localStorage.removeItem(key);
+      }
+    });
+  }, [data]);
+
   const handleApprovalRemarks = async ({ decision, remarks }: any) => {
+    const decisionType = localStorage.getItem("decisionType");
+
+    if (!decisionType && decision !== "REJECT") {
+      alert("Please complete Partner Sharing approval first");
+      return;
+    }
+
+    let templateType = "";
+
+    // =========================
+    // Business Approval
+    // =========================
+    if (activeSubItem === "Business Approval") {
+      // Current action is reject
+      if (decision === "REJECT") {
+        templateType = "BROK_REJ";
+      }
+
+      // Current action approve -> depend on localStorage
+      else if (decision === "APPROVE") {
+        if (decisionType === "APPROVE") {
+          templateType = "BROK_APPROVE";
+        } else if (decisionType === "REJECT") {
+          templateType = "BROK_REJ";
+        }
+      }
+    }
+
+    // =========================
+    // Management Approval
+    // =========================
+    if (activeSubItem === "Management Approval") {
+      // Current reject always reject mail
+      if (decision === "REJECT") {
+        templateType = "MG_REJECT";
+      }
+
+      // APPROVE => do nothing
+    }
+
     try {
       dispatch(showLoader("Final Approval..."));
 
@@ -139,6 +187,11 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
 
       await currentConfig.approveApi(payload);
 
+      // Send mail only on Payment tab
+      if (templateType && activeTab === "Payment") {
+        await handleAlertMail(templateType);
+      }
+
       const nextTab = getNextTab(activeTab);
       if (nextTab !== activeTab) {
         setActiveTab(nextTab);
@@ -147,6 +200,26 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
       }
     } catch (error) {
       console.error("Approval failed", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const handleAlertMail = async (templateType: string) => {
+    const payload = {
+      applNo: data.applNo,
+      templateType,
+    };
+
+    dispatch(showLoader("Fetching Details..."));
+
+    console.log("payload for mail", payload);
+
+    try {
+      const response = await apiServices.SendMailToApprover(payload);
+      console.log(response);
+    } catch (error) {
+      console.error("Error fetching details:", error);
     } finally {
       dispatch(hideLoader());
     }

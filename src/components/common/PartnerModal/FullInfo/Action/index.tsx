@@ -76,6 +76,31 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
       dispatch(hideLoader());
     }
   };
+  const handleComplianceAlertMail = async () => {
+    const templateType =
+      activeSubItem === "Ops Level 1 Approval"
+        ? "COMPL-ALERT"
+        : activeSubItem === "Compliance Approval"
+          ? "OPS_BROK"
+          : "";
+    const payload = {
+      applNo: data.applNo, // Replace with dynamic application number
+      templateType,
+    };
+    dispatch(showLoader("Fetching Details..."));
+    console.log("payload for compliance alert mail", payload);
+
+    try {
+      const response = await apiServices.SendMailToApprover(payload);
+      console.log(response);
+
+      ShowToast("success", "Approved.");
+    } catch (error) {
+      console.error("Error fetching details:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
 
   const allowedSteps = [
     "Business Profile",
@@ -170,7 +195,7 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
             </Button>
           )}
 
-          {allApproved && (
+          {allApproved && activeSubItem === "Ops Level 1 Approval" && (
             <Button
               variant="outlined"
               sx={{
@@ -181,7 +206,7 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
                 px: 3,
               }}
               onClick={() => {
-                ShowToast("success", "Approved.");
+                handleComplianceAlertMail();
                 toggle();
               }}
             >

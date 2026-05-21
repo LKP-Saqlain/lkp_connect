@@ -40,6 +40,8 @@ export const publicEndpoints = [
   endpoints.EsignLKp_BusinessAssociatemerge,
   endpoints.DownloadSignedPdf_PO,
   endpoints.UpdateEsignStatus,
+  endpoints.SendRejectionMail,
+  endpoints.SendMailToApprover,
 ];
 
 export const fundamentalEndpoints = [
@@ -471,6 +473,7 @@ export const newDomainEndpoints = [
   endpoints.ApAdminDocumentsFileDownload,
   endpoints.GetApApplicationStatusFlow,
   endpoints.SendRejectionMail,
+  endpoints.SendMailToApprover,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

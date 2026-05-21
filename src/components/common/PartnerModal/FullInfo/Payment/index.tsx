@@ -163,6 +163,12 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
   };
 
   const handlePaymentNext = async () => {
+    const decisionType = localStorage.getItem("MailDecision");
+
+    if (!decisionType) {
+      alert("Please complete Partner Sharing approval first");
+      return;
+    }
     dispatch(showLoader(""));
 
     try {
@@ -218,6 +224,9 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
 
       if (anySuccess) {
         ShowToast("success", "Updated successfully");
+        if (localStorage.getItem("MailDecision") === "true") {
+          handleComplianceAlertMail();
+        }
         toggle();
       } else {
         ShowToast("error", "Some updates failed");
@@ -225,6 +234,24 @@ const Payment = ({ data, activeSubItem, toggle, applNo }: any) => {
     } catch (error: any) {
       console.error(error);
       ShowToast("error", error.message || "Something went wrong");
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const handleComplianceAlertMail = async () => {
+    const payload = {
+      applNo: applNo, // Replace with dynamic application number
+      templateType: "BROK_SAVE",
+    };
+    dispatch(showLoader("Fetching Details..."));
+    console.log("payload for mail", payload);
+
+    try {
+      const response = await apiServices.SendMailToApprover(payload);
+      console.log(response);
+    } catch (error) {
+      console.error("Error fetching details:", error);
     } finally {
       dispatch(hideLoader());
     }

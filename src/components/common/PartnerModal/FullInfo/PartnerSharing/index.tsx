@@ -87,6 +87,9 @@ const PartnerSharing = ({
       alert("At least one attachment is required");
       return;
     }
+    if (activeSubItem === "Ops Level 2 Approval") {
+      localStorage.setItem("MailDecision", "true");
+    }
 
     try {
       setIsUploading(true);

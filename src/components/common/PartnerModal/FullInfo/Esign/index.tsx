@@ -1,16 +1,16 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { SectionTitle } from "../../StylingCss";
 import { documentList, KYC_ESIGN_MAP } from "../../../../../helper/commmon";
 import DocumentRow from "./componets";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../../../redux/store";
 import { apiServices } from "../../../../../services";
 import ShowToast from "../../../../../utils/toastUtils";
 import {
   hideLoader,
   showLoader,
 } from "../../../../../redux/slices/loaderSlice";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import axios from "axios";
 
 declare const Digio: any;
@@ -32,7 +32,9 @@ const Esign = ({
   handleViewApprovalData,
 }: any) => {
   const dispatch = useDispatch<AppDispatch>();
-
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data,
+  );
   const signedDocIds = useMemo(() => {
     return new Set((esignDocs || []).map((d: any) => Number(d.isEsignDisable)));
   }, [esignDocs]);
@@ -111,6 +113,11 @@ const Esign = ({
 
     return grouped;
   }, [allowedCategories, kycDocsFromApi]);
+
+  //  PLACE HERE
+  const allDocuments = Object.values(groupedDocs).flat();
+
+  const allSigned = allDocuments.every((doc: any) => isDocSigned(doc));
 
   // const getKycDocKey = (doc: any) => {
   //   const rawValue = doc.fileName || doc.label || "";
@@ -385,9 +392,42 @@ const Esign = ({
     }
   };
 
-  useEffect(() => {
-    console.log("tes1212t", esignDocs, kycDocs);
-  }, [esignDocs, kycDocs]);
+  const handleComplianceAlertMail = async () => {
+    try {
+      dispatch(showLoader("Processing Approval..."));
+
+      const approvalPayload = {
+        applNo: applNo,
+        userId: user_id,
+        headApproverStatus: "A",
+      };
+
+      console.log("Head Approval Payload:", approvalPayload);
+
+      const approvalResponse = await apiServices.HeadApprove(approvalPayload);
+
+      console.log("Head Approval Response:", approvalResponse);
+
+      const mailPayload = {
+        applNo: applNo,
+        templateType: "LKP_ESIGN",
+      };
+
+      console.log("Mail Payload:", mailPayload);
+
+      const mailResponse = await apiServices.SendMailToApprover(mailPayload);
+
+      console.log("Mail Response:", mailResponse);
+
+      ShowToast("success", "Approval completed and mail sent");
+    } catch (error) {
+      console.error("Error:", error);
+
+      ShowToast("error", "Something went wrong");
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
 
   return (
     <Box>
@@ -416,6 +456,27 @@ const Esign = ({
           </Box>
         </Box>
       ))}
+      <Button
+        variant="contained"
+        disabled={!allSigned}
+        sx={{
+          background: allSigned ? "#1F5A96" : "#b0b0b0",
+          textTransform: "none",
+          borderRadius: 2,
+          px: 4,
+          height: 40,
+          ml: "auto",
+          cursor: allSigned ? "pointer" : "not-allowed",
+
+          "&.Mui-disabled": {
+            background: "#d3d3d3",
+            color: "#777",
+          },
+        }}
+        onClick={handleComplianceAlertMail}
+      >
+        Submit
+      </Button>
     </Box>
   );
 };
