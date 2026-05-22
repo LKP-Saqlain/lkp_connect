@@ -13,14 +13,15 @@ const PartnerModal = ({
   onSave,
 }: any) => {
   if (!data) return null;
+
+  const fullScreenTypes = ["applNo", "DocsDownload"];
+
   return (
     <Modal
       isOpen={isOpen}
       toggle={toggle}
       centered
-      className={
-        type === "applNo" || type === "DocsDownload" ? "modal-fullscreen" : ""
-      }
+      className={fullScreenTypes.includes(type) ? "modal-fullscreen" : ""}
     >
       <ModalBody>
         {type === "stage" && <Stage toggle={toggle} data={data} />}

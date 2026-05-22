@@ -42,6 +42,8 @@ export const publicEndpoints = [
   endpoints.UpdateEsignStatus,
   endpoints.SendRejectionMail,
   endpoints.SendMailToApprover,
+  endpoints.GetDetailsByAppl,
+  endpoints.GetEsignDocument,
 ];
 
 export const fundamentalEndpoints = [
@@ -474,6 +476,8 @@ export const newDomainEndpoints = [
   endpoints.GetApApplicationStatusFlow,
   endpoints.SendRejectionMail,
   endpoints.SendMailToApprover,
+  endpoints.GetDetailsByAppl,
+  endpoints.GetEsignDocument,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

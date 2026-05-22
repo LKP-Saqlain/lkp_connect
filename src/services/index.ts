@@ -1564,4 +1564,10 @@ export const apiServices = {
   SendMailToApprover: async (payload: any) => {
     return await apiService("POST", endpoints.SendMailToApprover, payload);
   },
+  GetDetailsByAppl: async (payload: any) => {
+    return await apiService("POST", endpoints.GetDetailsByAppl, payload);
+  },
+  GetEsignDocument: async (payload: any) => {
+    return await apiService("POST", endpoints.GetEsignDocument, payload);
+  },
 };

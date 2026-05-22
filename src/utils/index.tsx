@@ -1,5 +1,8 @@
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { hideLoader, showLoader } from "../redux/slices/loaderSlice";
+import { apiServices } from "../services";
+import ShowToast from "./toastUtils";
 
 export const directStyle = {
   bgcolor: "#A8D4FB",
@@ -73,4 +76,57 @@ export const exportToExcel = (
   });
 
   saveAs(blob, `${fileName}.xlsx`);
+};
+
+export const handleCommonDownload = async ({
+  fileName,
+  filePath,
+  fileType,
+  dispatch,
+}: any) => {
+  console.log(fileName, filePath, fileType, "payload for common download");
+
+  const payload = {
+    fileName,
+    // fileName: "danger",
+    filePath,
+    // filePath: "\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\10128",
+    fileType,
+    //fileType: ".pdf",
+    contentType: "",
+  };
+
+  dispatch(showLoader("Downloading..."));
+  console.log("row data", payload);
+
+  apiServices
+    .ComplianceDownload(payload)
+    .then((response) => {
+      console.log("response", response);
+
+      if (response?.status === 200 && response?.data) {
+        const url = window.URL.createObjectURL(new Blob([response?.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `${payload.fileName}${payload.fileType}`);
+        const finalFileName = fileName.endsWith(fileType)
+          ? fileName
+          : `${fileName}${fileType}`;
+
+        link.href = url;
+        link.download = finalFileName;
+        document.body.appendChild(link);
+        link.click();
+        dispatch(hideLoader());
+      } else {
+        console.log("Error during download", response);
+        ShowToast("info", "Error downloading file");
+      }
+    })
+    .catch((error) => {
+      ShowToast("info", error.message || "An error occurred while downloading");
+    })
+    .finally(() => {
+      dispatch(hideLoader());
+    });
 };

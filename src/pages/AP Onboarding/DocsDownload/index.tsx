@@ -2,24 +2,47 @@ import { Card, CardBody, CardHeader } from "reactstrap";
 import DataTable from "../../../components/common/UserInfoTable";
 import { Container } from "reactstrap";
 import PartnerModal from "../../../components/common/PartnerModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { apiServices } from "../../../services";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
 
-let data = [
-  {
-    id: 1,
-    applNo: 1087,
-    date: "27-Apr-26",
-    aP_Name: "Platipus Perry",
-    city: "York New",
-    partnerType: null,
-    referralName: "",
-    applStatus: "Rejected",
-  },
-];
 const DocsDownload = ({ activeSubItem }: any) => {
+  const [data, setData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<any>(null);
-  //   const [modalType, setModalType] = useState<string>("DocsDownload");
+  const dispatch = useDispatch<AppDispatch>();
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data,
+  );
+
+  useEffect(() => {
+    handleComplianceAlertMail();
+  }, []);
+
+  const handleComplianceAlertMail = async () => {
+    const payload = {
+      user_id,
+      optionType: "ComplianceEsignView",
+    };
+    dispatch(showLoader("Fetching Details..."));
+    console.log("payload for mail", payload);
+
+    try {
+      const response = await apiServices.ViewAPDashBoard(payload);
+      const filteredData = (response?.data?.data?.data || []).map(
+        (item: any, i: number) => ({ id: i + 1, ...item }),
+      );
+      console.log("response GetDetailsByAppl filteredData", filteredData);
+      //  Save full response data
+      setData(filteredData);
+    } catch (error) {
+      console.error("Error fetching details:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
