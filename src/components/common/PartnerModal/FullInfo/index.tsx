@@ -117,7 +117,12 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
   const handleApprovalRemarks = async ({ decision, remarks }: any) => {
     const decisionType = localStorage.getItem("decisionType");
 
-    if (!decisionType && decision !== "REJECT") {
+    if (
+      !decisionType &&
+      decision !== "REJECT" &&
+      (activeSubItem === "Business Approval" ||
+        activeSubItem === "Management Approval")
+    ) {
       alert("Please complete Partner Sharing approval first");
       return;
     }
