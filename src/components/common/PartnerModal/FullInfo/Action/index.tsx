@@ -195,24 +195,26 @@ const Action = ({ data, activeSubItem, toggle }: any) => {
             </Button>
           )}
 
-          {allApproved && activeSubItem === "Ops Level 1 Approval" && (
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "#1f9647",
-                color: "#1f9647",
-                textTransform: "none",
-                borderRadius: "10px",
-                px: 3,
-              }}
-              onClick={() => {
-                handleComplianceAlertMail();
-                toggle();
-              }}
-            >
-              Approve
-            </Button>
-          )}
+          {allApproved &&
+            (activeSubItem === "Ops Level 1 Approval" ||
+              activeSubItem === "Compliance Approval") && (
+              <Button
+                variant="outlined"
+                sx={{
+                  borderColor: "#1f9647",
+                  color: "#1f9647",
+                  textTransform: "none",
+                  borderRadius: "10px",
+                  px: 3,
+                }}
+                onClick={() => {
+                  handleComplianceAlertMail();
+                  toggle();
+                }}
+              >
+                Approve
+              </Button>
+            )}
         </Box>
       </Box>
     </Box>
