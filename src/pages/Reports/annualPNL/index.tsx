@@ -24,6 +24,7 @@ const financialYears = [
   // { value: "2023-2024", label: "2023-2024" },
   { value: "2024-2025", label: "2024-2025" },
   { value: "2025-2026", label: "2025-2026" },
+  { value: "2026-2027", label: "2026-2027" },
 ];
 
 const AnnualPNL = () => {
@@ -31,7 +32,7 @@ const AnnualPNL = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   // Formik and Yup setup
@@ -84,7 +85,7 @@ const AnnualPNL = () => {
             reader.readAsText(response.data);
           } else if (
             contentType.includes(
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
           ) {
             // Download the Excel file
@@ -93,7 +94,7 @@ const AnnualPNL = () => {
             link.href = url;
             link.setAttribute(
               "download",
-              `TAX P&L_${payload.clientCode}_${payload.finYear}.xlsx`
+              `TAX P&L_${payload.clientCode}_${payload.finYear}.xlsx`,
             );
             document.body.appendChild(link);
             link.click();

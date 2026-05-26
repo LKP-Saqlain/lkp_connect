@@ -14,7 +14,7 @@ const ComChecker = ({ activeSubItem }: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
   const today = new Date();
   const day = today.getDate().toString().padStart(2, "0");
@@ -153,7 +153,7 @@ const ComChecker = ({ activeSubItem }: any) => {
           link.href = url;
           link.setAttribute(
             "download",
-            `${payload.fileName}${payload.fileType}`
+            `${payload.fileName}${payload.fileType}`,
           );
           document.body.appendChild(link);
           link.click();
@@ -166,7 +166,7 @@ const ComChecker = ({ activeSubItem }: any) => {
       .catch((error) => {
         ShowToast(
           "info",
-          error.message || "An error occurred while downloading"
+          error.message || "An error occurred while downloading",
         );
       })
       .finally(() => {

@@ -375,6 +375,7 @@ export const endpoints = {
   SendMailToApprover: "api/AP/SendMailToApprover",
   GetDetailsByAppl: "api/ESign/GetDetailsByAppl",
   GetEsignDocument: "api/ESign/GetEsignDocument",
+  InitBOLogin: "/api/MaxFolio/InitBOLogin",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

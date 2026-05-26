@@ -1570,4 +1570,7 @@ export const apiServices = {
   GetEsignDocument: async (payload: any) => {
     return await apiService("POST", endpoints.GetEsignDocument, payload);
   },
+  InitBOLogin: async (payload: any) => {
+    return await apiService("POST", endpoints.InitBOLogin, payload);
+  },
 };

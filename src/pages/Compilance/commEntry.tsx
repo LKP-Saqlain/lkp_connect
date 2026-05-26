@@ -70,7 +70,7 @@ const CommEntry = ({ activeSubItem }: any) => {
 
   const dispatch = useDispatch();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   useEffect(() => {

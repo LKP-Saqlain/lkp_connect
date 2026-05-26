@@ -13,13 +13,16 @@ import { ClientInfoCapsules } from "../../../helper/tableColumns.tsx";
 // import PerformanceHistoryChart from "../PerformanceHistory";
 import SegmentWiseTable from "../../../components/common/fullTable";
 import BrokerageSlab from "../BrokerageSlab";
-import { Tooltip, useMediaQuery } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import "../style.css";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { ClientUserDetails } from "../../../redux/thunk/ClientUserDetails";
 import { useEffect, useState } from "react";
+import AbbakusImg from "../../../assets/images/Abakkus.png";
+import NarnoliaImg from "../../../assets/images/Narnolia.png";
+import RenassImg from "../../../assets/images/renaissance.png";
 // import Tooltip from "@mui/material/Tooltip";
 
 const UserInfoModal = ({
@@ -30,7 +33,7 @@ const UserInfoModal = ({
   branch,
   handleFileUpload,
   uploadedFileName,
-  fetchMtfToken,
+  // fetchMtfToken,
 }: any) => {
   const [clientDetails, setClientDetails] = useState({
     cn: "", // Client_Name
@@ -273,6 +276,175 @@ const UserInfoModal = ({
             </Row>
           </CardBody>
         </Card>
+        <Card
+          style={{
+            borderRadius: "23px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
+            maxHeight: "80px",
+          }}
+        >
+          <CardBody
+            style={{
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              padding: "10px 20px",
+            }}
+          >
+            <Row
+              style={{
+                width: "100%",
+                alignItems: "center",
+              }}
+            >
+              {/* LEFT SIDE */}
+              <Col
+                md={3}
+                xs={12}
+                style={{
+                  borderRight: isMobile ? "none" : "1px solid #E5E7EB",
+                  marginBottom: isMobile ? "20px" : "0px",
+                }}
+              >
+                <div
+                  style={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    padding: "0px 10px 0px 0px",
+                  }}
+                >
+                  <h5
+                    style={{
+                      fontFamily: "Poppins",
+                      fontWeight: "700",
+                      fontSize: "18px",
+                      color: "#11395C",
+                      margin: 0,
+                    }}
+                  >
+                    Research Advisory Products
+                  </h5>
+                </div>
+              </Col>
+
+              {/* RIGHT SIDE */}
+              <Col md={9} xs={12}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                    padding: "0px 0px 0px 10px",
+                  }}
+                >
+                  {/* ICONS + BUTTON */}
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "15px",
+                      width: "100%",
+                      alignItems: "center",
+                      flexWrap: isMobile ? "wrap" : "nowrap",
+                    }}
+                  >
+                    {/* ICON 1 */}
+                    <div
+                      style={{
+                        width: "120px",
+                        height: "40px",
+                        border: "4px solid #C7DCF7",
+                        borderRadius: "12px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background:
+                          "linear-gradient(360deg, #FFFFFF 0%, #D6EBFF 100%)",
+                      }}
+                    >
+                      <img
+                        src={AbbakusImg}
+                        alt="abakkus"
+                        style={{
+                          width: "90px",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </div>
+
+                    {/* ICON 2 */}
+                    <div
+                      style={{
+                        width: "120px",
+                        height: "40px",
+                        border: "4px solid #C7DCF7",
+                        borderRadius: "12px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background:
+                          "linear-gradient(360deg, #FFFFFF 0%, #D6EBFF 100%)",
+                      }}
+                    >
+                      <img
+                        src={NarnoliaImg}
+                        alt="narnolia"
+                        style={{
+                          width: "90px",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </div>
+
+                    {/* ICON 3 */}
+                    <div
+                      style={{
+                        width: "120px",
+                        height: "40px",
+                        border: "4px solid #C7DCF7",
+                        borderRadius: "12px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background:
+                          "linear-gradient(360deg, #FFFFFF 0%, #D6EBFF 100%)",
+                      }}
+                    >
+                      <img
+                        src={RenassImg}
+                        alt="renaissance"
+                        style={{
+                          width: "90px",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </div>
+
+                    {/* BUTTON */}
+                    <Button
+                      onClick={() =>
+                        window.open("http://test.lkp.net.in/", "_blank")
+                      }
+                      style={{
+                        backgroundColor: "#11395C",
+                        border: "none",
+                        borderRadius: "10px",
+                        padding: "10px 18px",
+                        fontSize: "14px",
+                        fontWeight: "600",
+                        whiteSpace: "nowrap",
+                        marginLeft: "auto",
+                      }}
+                    >
+                      Click Here To Subscribe
+                    </Button>
+                  </div>
+                </div>
+              </Col>
+            </Row>
+          </CardBody>
+        </Card>
         <Row className="gx-3 gy-2 align-items-start">
           {/* Left Side: Last Trade Date */}
           <Col md={3}>
@@ -371,7 +543,7 @@ const UserInfoModal = ({
                             sx={{ color: color }}
                           />
 
-                          {item.key === "mtf" && status === "Inactive" ? (
+                          {/* {item.key === "mtf" && status === "Inactive" ? (
                             <Tooltip title="Click to activate MTF" arrow>
                               <span
                                 style={{
@@ -388,9 +560,9 @@ const UserInfoModal = ({
                                 {status}
                               </span>
                             </Tooltip>
-                          ) : (
-                            <span style={{ color: "#777" }}>{status}</span>
-                          )}
+                          ) : ( */}
+                          <span style={{ color: "#777" }}>{status}</span>
+                          {/* )} */}
                         </p>
                         {/* {item.key === "mtf" && status === "Inactive" && (
                           <span
