@@ -1056,7 +1056,7 @@ const SideBar = () => {
   const handleResearchAdvisoryClick = () => {
     const payload = {
       syncPointPartnerCode: "LKPDIS",
-      ssoUserCode: emailID,
+      ssoUserCode: `${user_type === "Partner" ? "AP" : "EMP"}${user_id.slice(-4)}`,
     };
 
     dispatch(showLoader(""));

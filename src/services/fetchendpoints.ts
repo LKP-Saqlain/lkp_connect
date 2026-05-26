@@ -40,7 +40,6 @@ export const publicEndpoints = [
   endpoints.EsignLKp_BusinessAssociatemerge,
   endpoints.DownloadSignedPdf_PO,
   endpoints.UpdateEsignStatus,
-  endpoints.SendRejectionMail,
   endpoints.SendMailToApprover,
   endpoints.GetDetailsByAppl,
   endpoints.GetEsignDocument,

@@ -208,9 +208,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
             />
           ))}
 
-        {(title === "Zone Overview" ||
-          title === "Mutual Fund" ||
-          title === "Q4 Contest") && (
+        {title === "Zone Overview" && (
           <div className="starburst-bg">
             <Lottie
               loop
