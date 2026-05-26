@@ -40,7 +40,6 @@ export const publicEndpoints = [
   endpoints.EsignLKp_BusinessAssociatemerge,
   endpoints.DownloadSignedPdf_PO,
   endpoints.UpdateEsignStatus,
-  endpoints.SendRejectionMail,
   endpoints.SendMailToApprover,
   endpoints.GetDetailsByAppl,
   endpoints.GetEsignDocument,
@@ -445,6 +444,7 @@ export const newDomainEndpoints = [
   endpoints.GetFinalReportBankAccountMaster,
   endpoints.BankAccountMaster_report,
 
+  endpoints.InitBOLogin,
   // Partner Onboarding
   endpoints.ViewAPDashBoard,
   endpoints.ViewApprovalData,
@@ -478,7 +478,6 @@ export const newDomainEndpoints = [
   endpoints.SendMailToApprover,
   endpoints.GetDetailsByAppl,
   endpoints.GetEsignDocument,
-  endpoints.InitBOLogin,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

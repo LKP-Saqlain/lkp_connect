@@ -344,6 +344,7 @@ export const endpoints = {
   GetFinalReportBankAccountMaster:
     "/api/Account/GetFinalReportBankAccountMaster",
   BankAccountMaster_report: "/api/Account/BankAccountMaster_report",
+  InitBOLogin: "/api/MaxFolio/InitBOLogin",
   ViewAPDashBoard: "/api/AP/ViewAPDashBoard",
   ViewApprovalData: "api/AP/ViewApprovalData",
   EsignLKP_NSE: "api/ESign/EsignLKP_NSE",
@@ -375,7 +376,6 @@ export const endpoints = {
   SendMailToApprover: "api/AP/SendMailToApprover",
   GetDetailsByAppl: "api/ESign/GetDetailsByAppl",
   GetEsignDocument: "api/ESign/GetEsignDocument",
-  InitBOLogin: "/api/MaxFolio/InitBOLogin",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);
