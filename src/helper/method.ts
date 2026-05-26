@@ -25,16 +25,18 @@ export const monthOptions = [
   { label: "Jan-26", value: "JAN-26" },
   { label: "Feb-26", value: "FEB-26" },
   { label: "Mar-26", value: "MAR-26" },
+  { label: "Apr-26", value: "APR-26" },
+  { label: "May-26", value: "MAY-26" },
 ];
 export const symbolOptions = [
-  { label: "All", value: "ALL" },  
+  { label: "All", value: "ALL" },
   { label: "Sensex", value: "SENSEX" },
   { label: "Nifty 50", value: "NIFTY" },
 ];
 
 export const extractBarModelData = (
   model: any,
-  type: "Direct" | "Indirect" | "Total"
+  type: "Direct" | "Indirect" | "Total",
 ) => {
   if (!model) return { categories: [], series: [] };
 
@@ -58,8 +60,8 @@ export const extractBarModelData = (
       type === "Total"
         ? `${m.key}_t_tot`
         : type === "Direct"
-        ? `${m.key}_t_dir`
-        : `${m.key}_t_idir`;
+          ? `${m.key}_t_dir`
+          : `${m.key}_t_idir`;
 
     return transformedModel[flag] || 0;
   });
@@ -69,8 +71,8 @@ export const extractBarModelData = (
       type === "Total"
         ? `${m.key}_a_tot`
         : type === "Direct"
-        ? `${m.key}_a_dir`
-        : `${m.key}_a_idir`;
+          ? `${m.key}_a_dir`
+          : `${m.key}_a_idir`;
 
     return transformedModel[flag] || 0;
   });
@@ -107,4 +109,62 @@ export const keyMapping: Record<string, string> = {
   b_Total_Achieved: "b_a_tot",
   c_Target_Total: "c_t_tot",
   c_Total_Achieved: "c_a_tot",
+};
+
+export const convertToBase64 = (file: File) => {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const base64 = (reader.result as string).split(",")[1];
+      resolve(base64);
+    };
+    reader.onerror = (error) => reject(error);
+  });
+};
+
+export const validatePartnerSharingRows = (rows: any[]): any => {
+  const numberRegex = /^-?\d+$/;
+
+  const isValidNumber = (value: any) => {
+    if (value === null || value === undefined || value === "") return false;
+
+    const str = String(value).trim();
+    if (!numberRegex.test(str)) return false;
+
+    const num = Number(str);
+
+    if (num % 5 !== 0) return false;
+    if (Math.abs(num) > 99) return false;
+
+    return true;
+  };
+
+  for (const row of rows) {
+    const apRaw = row.apshare ?? row.ApShare;
+    const lkpRaw = row.lkpShare ?? row.LkpShare;
+
+    if (!isValidNumber(apRaw) || !isValidNumber(lkpRaw)) {
+      return {
+        valid: false,
+        message:
+          "Only whole numbers (multiple of 5, max 2 digits) allowed. No decimals or symbols.",
+      };
+    }
+
+    const ap = Number(apRaw);
+    const lkp = Number(lkpRaw);
+
+    if (ap + lkp !== 100) {
+      return {
+        valid: false,
+        message: "AP Share + LKP Share must equal 100%",
+      };
+    }
+  }
+
+  return {
+    valid: true,
+    message: "",
+  };
 };

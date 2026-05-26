@@ -1,36 +1,51 @@
-import { useState } from "react";
-import { Modal, ModalBody, ModalHeader } from "reactstrap";
+import { Modal, ModalBody } from "reactstrap";
+import Stage from "./Stage/Stage";
+import FullInfo from "./FullInfo/index";
+import PaymentEdit from "./PaymentEdit";
+import DocsDownload from "./DocsDownload";
 
-const Index = () => {
-  const [isOpen, setIsOpen] = useState(true); // or false initially
-  //   const [type, setType] = useState("Modal Title"); // adjust as needed
+const PartnerModal = ({
+  isOpen,
+  toggle,
+  data,
+  type,
+  activeSubItem,
+  onSave,
+}: any) => {
+  if (!data) return null;
 
-  const handleCloseClick = () => {
-    setIsOpen(false);
-  };
+  const fullScreenTypes = ["applNo", "DocsDownload"];
 
   return (
     <Modal
       isOpen={isOpen}
-      toggle={handleCloseClick}
-      modalClassName="zoomIn"
+      toggle={toggle}
       centered
-      style={{
-        maxHeight: "100vh",
-        height: "auto",
-        overflowY: "auto",
-      }}
+      className={fullScreenTypes.includes(type) ? "modal-fullscreen" : ""}
     >
-      <ModalHeader toggle={handleCloseClick} style={{ color: "#11395C" }}>
-        {/* {type} */}
-        <p>This is the head of the modal.</p>
-      </ModalHeader>
       <ModalBody>
-        {/* Your content goes here */}
-        <p>This is the body of the modal.</p>
+        {type === "stage" && <Stage toggle={toggle} data={data} />}
+        {type === "applNo" && (
+          <FullInfo
+            data={data}
+            toggle={toggle}
+            type={type}
+            activeSubItem={activeSubItem}
+          />
+        )}
+        {type === "EditPartnerPayment" && (
+          <PaymentEdit toggle={toggle} data={data} onSave={onSave} />
+        )}
+        {type === "DocsDownload" && (
+          <DocsDownload
+            toggle={toggle}
+            data={data}
+            activeSubItem={activeSubItem}
+          />
+        )}
       </ModalBody>
     </Modal>
   );
 };
 
-export default Index;
+export default PartnerModal;

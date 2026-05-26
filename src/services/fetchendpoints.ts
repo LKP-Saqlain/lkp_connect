@@ -31,6 +31,19 @@ export const publicEndpoints = [
   // endpoints.BeginMTFActivation,
   endpoints.ValidateSencondAuth,
   endpoints.ProcessOTP,
+  endpoints.EsignLKP_NSE,
+  endpoints.Esign_BSELKP_Single,
+  endpoints.EsignLKP_BSE,
+  endpoints.Esign_MCX_LKP_Single,
+  endpoints.EsignLKP_MCX,
+  endpoints.EsignKYC_Document_LKP,
+  endpoints.EsignLKp_BusinessAssociatemerge,
+  endpoints.DownloadSignedPdf_PO,
+  endpoints.UpdateEsignStatus,
+  endpoints.SendRejectionMail,
+  endpoints.SendMailToApprover,
+  endpoints.GetDetailsByAppl,
+  endpoints.GetEsignDocument,
 ];
 
 export const fundamentalEndpoints = [
@@ -55,6 +68,7 @@ export const pdfDownloadEndpoints = [
   endpoints.GenerateClientPerformancePdf,
   endpoints.GenerateTPInvoice,
   endpoints.DPAMCDownloadFile,
+  endpoints.DownloadAllDocs,
 ];
 
 export const multipartEndpoints = [
@@ -432,6 +446,39 @@ export const newDomainEndpoints = [
   endpoints.BankAccountMaster_report,
 
   endpoints.InitBOLogin,
+  // Partner Onboarding
+  endpoints.ViewAPDashBoard,
+  endpoints.ViewApprovalData,
+  endpoints.EsignLKP_NSE,
+  endpoints.Esign_BSELKP_Single,
+  endpoints.EsignLKP_BSE,
+  endpoints.Esign_MCX_LKP_Single,
+  endpoints.EsignLKP_MCX,
+  endpoints.EsignLKp_BusinessAssociatemerge,
+  endpoints.DownloadSignedPdf,
+  endpoints.OpsApproveLevel1,
+  endpoints.ComplianceApprove,
+  endpoints.OpsApproveLevel2,
+  endpoints.BusinessApprove,
+  endpoints.ManagmentApprove,
+  endpoints.HeadApprove,
+  endpoints.GetApprovalStatus,
+  endpoints.AddBrokSharing,
+  endpoints.UpdateRevisedcharges,
+  endpoints.UploadPartnerSharingDocs,
+  endpoints.BrokShareSubmit,
+  endpoints.GetRevisedPaySummary,
+  endpoints.EsignKYC_Document_LKP,
+  endpoints.DownloadSignedPdf_PO,
+  endpoints.DownloadAllDocs,
+  endpoints.UpdateRevisedStampcharges,
+  endpoints.UpdateEsignStatus,
+  endpoints.ApAdminDocumentsFileDownload,
+  endpoints.GetApApplicationStatusFlow,
+  endpoints.SendRejectionMail,
+  endpoints.SendMailToApprover,
+  endpoints.GetDetailsByAppl,
+  endpoints.GetEsignDocument,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

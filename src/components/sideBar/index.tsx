@@ -133,8 +133,8 @@ import ContractNote from "../../pages/UnlistedShare/contractNote";
 import BankRecordEntry from "../../pages/ThirdParty/bankMaster/bankRecordEntry";
 import BankApproval from "../../pages/ThirdParty/bankMaster/bankApproval";
 import BankReport from "../../pages/Reports/BankReport";
-// import ApDetails from "../../pages/AP Onboarding/Details";
-
+import ApDetails from "../../pages/AP Onboarding/Main";
+import DocsDownload from "../../pages/AP Onboarding/DocsDownload";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -371,6 +371,7 @@ const SideBar = () => {
       activeMenu !== "Trading" &&
       activeMenu !== "Zone Overview" &&
       activeMenu !== "Account" &&
+      activeMenu !== "Partner OnBoarding" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -873,8 +874,17 @@ const SideBar = () => {
     "File Upload": <FileUpload />,
   };
   const referralLeadSubItems: Record<string, JSX.Element> = {
-    // "Referal Entry Status": <ApDetails />,
+    "Referal Entry Status": <DocsDownload activeSubItem={activeSubItem} />,
   };
+  const PartnerOnBoardingSubItems: Record<string, JSX.Element> = {
+    "Ops Level 1 Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Compliance Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Ops Level 2 Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Business Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Management Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Lkp Esign": <ApDetails activeSubItem={activeSubItem} />,
+  };
+
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>,
   ): JSX.Element | null => subItems[activeSubItem] || null;
@@ -948,6 +958,7 @@ const SideBar = () => {
       "DP AMC Contest-Q4": <AmcMembershipQ4 activeMenu={activeMenu} />,
       "Research Calls": <ResearchCalls />,
       "Expiry Contest": <Expiry />,
+      "Partner OnBoarding": getSubItemComponent(PartnerOnBoardingSubItems),
     };
     return map[mn] ?? null;
   };

@@ -42,7 +42,7 @@ const ESign = ({ onNext, selectedRow }: ESignProps) => {
     if (signCount === totalHolders && totalHolders > 0) {
       ShowToast(
         "success",
-        "All holders have signed. Proceeding to next step..."
+        "All holders have signed. Proceeding to next step...",
       );
       setTimeout(() => {
         sendFinalEmail();
