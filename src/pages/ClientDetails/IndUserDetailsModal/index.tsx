@@ -20,9 +20,9 @@ import { AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { ClientUserDetails } from "../../../redux/thunk/ClientUserDetails";
 import { useEffect, useState } from "react";
-// import AbbakusImg from "../../../assets/images/Abakkus.png";
-// import NarnoliaImg from "../../../assets/images/Narnolia.png";
-// import RenassImg from "../../../assets/images/renaissance.png";
+import AbbakusImg from "../../../assets/images/Abakkus.png";
+import NarnoliaImg from "../../../assets/images/Narnolia.png";
+import RenassImg from "../../../assets/images/renaissance.png";
 // import Tooltip from "@mui/material/Tooltip";
 
 const UserInfoModal = ({
@@ -276,7 +276,7 @@ const UserInfoModal = ({
             </Row>
           </CardBody>
         </Card>
-        {/* <Card
+        <Card
           style={{
             borderRadius: "23px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
@@ -297,7 +297,6 @@ const UserInfoModal = ({
                 alignItems: "center",
               }}
             >
-         
               <Col
                 md={3}
                 xs={12}
@@ -329,7 +328,6 @@ const UserInfoModal = ({
                 </div>
               </Col>
 
-             
               <Col md={9} xs={12}>
                 <div
                   style={{
@@ -339,7 +337,6 @@ const UserInfoModal = ({
                     padding: "0px 0px 0px 10px",
                   }}
                 >
-                
                   <div
                     style={{
                       display: "flex",
@@ -349,7 +346,6 @@ const UserInfoModal = ({
                       flexWrap: isMobile ? "wrap" : "nowrap",
                     }}
                   >
-             
                     <div
                       style={{
                         width: "120px",
@@ -373,7 +369,6 @@ const UserInfoModal = ({
                       />
                     </div>
 
-                 
                     <div
                       style={{
                         width: "120px",
@@ -397,7 +392,6 @@ const UserInfoModal = ({
                       />
                     </div>
 
-                   
                     <div
                       style={{
                         width: "120px",
@@ -421,7 +415,6 @@ const UserInfoModal = ({
                       />
                     </div>
 
-                    
                     <Button
                       onClick={() =>
                         window.open("http://test.lkp.net.in/", "_blank")
@@ -444,7 +437,7 @@ const UserInfoModal = ({
               </Col>
             </Row>
           </CardBody>
-        </Card> */}
+        </Card>
         <Row className="gx-3 gy-2 align-items-start">
           {/* Left Side: Last Trade Date */}
           <Col md={3}>

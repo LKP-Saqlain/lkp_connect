@@ -299,6 +299,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
         kycDocs={kycDocs}
         esignDocs={esignDocs}
         handleViewApprovalData={handleViewApprovalData}
+        toggle={toggle}
       />
     ),
     "Exchange Certificate": <Certificate />,

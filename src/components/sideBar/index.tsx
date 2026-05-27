@@ -1053,34 +1053,34 @@ const SideBar = () => {
       });
   };
 
-  // const handleResearchAdvisoryClick = () => {
-  //   const payload = {
-  //     syncPointPartnerCode: "LKPDIS",
-  //     ssoUserCode: `${user_type === "Partner" ? "AP" : "EMP"}${user_id.slice(-4)}`,
-  //   };
+  const handleResearchAdvisoryClick = () => {
+    const payload = {
+      syncPointPartnerCode: "LKPDIS",
+      ssoUserCode: `${user_type === "Partner" ? "AP" : "EMP"}${user_id.slice(-4)}`,
+    };
 
-  //   dispatch(showLoader(""));
+    dispatch(showLoader(""));
 
-  //   apiServices
-  //     .InitBOLogin(payload)
-  //     .then((response) => {
-  //       if (response?.status === 200) {
-  //         const url = response?.data?.data?.url;
+    apiServices
+      .InitBOLogin(payload)
+      .then((response) => {
+        if (response?.status === 200) {
+          const url = response?.data?.data?.url;
 
-  //         console.log("INITBBO", url);
+          console.log("INITBBO", url);
 
-  //         if (url) {
-  //           window.open(url, "_blank", "noopener,noreferrer");
-  //         }
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log("ERRRRROR", error);
-  //     })
-  //     .finally(() => {
-  //       dispatch(hideLoader());
-  //     });
-  // };
+          if (url) {
+            window.open(url, "_blank", "noopener,noreferrer");
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("ERRRRROR", error);
+      })
+      .finally(() => {
+        dispatch(hideLoader());
+      });
+  };
 
   return (
     <>
@@ -1139,7 +1139,7 @@ const SideBar = () => {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
-            {/* <div
+            <div
               style={{
                 position: "relative",
                 display: "inline-block",
@@ -1192,7 +1192,7 @@ const SideBar = () => {
               >
                 Research Advisory Products
               </Button>
-            </div> */}
+            </div>
             <Button
               onClick={handleWebPortalLogin}
               variant="outlined"
