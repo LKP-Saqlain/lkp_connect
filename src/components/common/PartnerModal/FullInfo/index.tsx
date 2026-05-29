@@ -153,7 +153,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
     // =========================
     if (activeSubItem === "Management Approval") {
       // Current reject always reject mail
-      if (decision === "REJECT") {
+      if (decisionType === "REJECT") {
         templateType = "MG_REJECT";
       }
 
