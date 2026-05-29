@@ -23,14 +23,12 @@ const initialData = [
 const Certificate = () => {
   const [certificateData, setCertificateData] = useState(initialData);
 
-  // update registration number
   const handleRegChange = (index: any, value: any) => {
     const updated = [...certificateData];
     updated[index].regNo = value;
     setCertificateData(updated);
   };
 
-  // optional handlers for upload/preview
   const handleUpload = (exchange: string) => {
     console.log("Upload for:", exchange);
   };
@@ -41,7 +39,6 @@ const Certificate = () => {
 
   const handleSubmit = () => {
     console.log("Final Data:", certificateData);
-    // 👉 send API here
   };
 
   return (
@@ -62,12 +59,12 @@ const Certificate = () => {
       >
         <Table>
           <TableHead>
-            <TableRow sx={{ backgroundColor: "#f9fafb" }}>
-              <TableCell sx={{ fontWeight: 600 }}>Exchange</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>
+            <TableRow sx={{ backgroundColor: "#e8f2ff" }}>
+              <TableCell sx={{ fontWeight: 700 }}>Exchange</TableCell>
+              <TableCell sx={{ fontWeight: 700 }}>
                 Registration Number
               </TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>Upload Document</TableCell>
+              <TableCell sx={{ fontWeight: 700 }}>Document Actions</TableCell>
             </TableRow>
           </TableHead>
 

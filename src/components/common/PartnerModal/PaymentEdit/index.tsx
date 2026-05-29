@@ -8,9 +8,7 @@ import ShowToast from "../../../../utils/toastUtils";
 const PaymentEdit = ({ data, toggle, onSave }: any) => {
   const [revised, setRevised] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [commentText, setCommentText] = useState<string>(
-    data.processRemarks || "",
-  );
+  const [commentText, setCommentText] = useState<string>("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {

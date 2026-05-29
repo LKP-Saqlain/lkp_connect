@@ -1053,6 +1053,35 @@ const SideBar = () => {
       });
   };
 
+  // const handleResearchAdvisoryClick = () => {
+  //   const payload = {
+  //     syncPointPartnerCode: "LKPDIS",
+  //     ssoUserCode: `${user_type === "Partner" ? "AP" : "EMP"}${user_id.slice(-4)}`,
+  //   };
+
+  //   dispatch(showLoader(""));
+
+  //   apiServices
+  //     .InitBOLogin(payload)
+  //     .then((response) => {
+  //       if (response?.status === 200) {
+  //         const url = response?.data?.data?.url;
+
+  //         console.log("INITBBO", url);
+
+  //         if (url) {
+  //           window.open(url, "_blank", "noopener,noreferrer");
+  //         }
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("ERRRRROR", error);
+  //     })
+  //     .finally(() => {
+  //       dispatch(hideLoader());
+  //     });
+  // };
+
   return (
     <>
       <CustomModal
@@ -1110,6 +1139,60 @@ const SideBar = () => {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
+            {/* <div
+              style={{
+                position: "relative",
+                display: "inline-block",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  top: "-11px",
+                  right: "5px",
+                  width: "25px",
+                  height: "25px",
+                  background: "#FF5A54",
+                  clipPath:
+                    "polygon(50% 0%, 58% 18%, 78% 5%, 82% 25%, 100% 18%, 92% 38%, 100% 50%, 92% 62%, 100% 82%, 82% 75%, 78% 95%, 58% 82%, 50% 100%, 42% 82%, 22% 95%, 18% 75%, 0% 82%, 8% 62%, 0% 50%, 8% 38%, 0% 18%, 18% 25%, 22% 5%, 42% 18%)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 10,
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                  transform: "rotate(25deg)",
+                }}
+              >
+                <span
+                  style={{
+                    color: "#fff",
+                    fontSize: "6.5px",
+                    fontWeight: 700,
+                    fontFamily: "Public Sans",
+                  }}
+                >
+                  NEW
+                </span>
+              </div>
+
+              <Button
+                variant="outlined"
+                onClick={handleResearchAdvisoryClick}
+                style={{
+                  height: "25px",
+                  borderRadius: "5px",
+                  fontSize: "12px",
+                  padding: "4px 12px",
+                  fontFamily: "Public Sans",
+                  borderColor: "#11395C",
+                  color: "#11395C",
+                  textTransform: "none",
+                  marginRight: "1rem",
+                }}
+              >
+                Research Advisory Products
+              </Button>
+            </div> */}
             <Button
               onClick={handleWebPortalLogin}
               variant="outlined"
