@@ -20,9 +20,9 @@ import { AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import { ClientUserDetails } from "../../../redux/thunk/ClientUserDetails";
 import { useEffect, useState } from "react";
-import AbbakusImg from "../../../assets/images/Abakkus.png";
-import NarnoliaImg from "../../../assets/images/Narnolia.png";
-import RenassImg from "../../../assets/images/renaissance.png";
+// import AbbakusImg from "../../../assets/images/Abakkus.png";
+// import NarnoliaImg from "../../../assets/images/Narnolia.png";
+// import RenassImg from "../../../assets/images/renaissance.png";
 // import Tooltip from "@mui/material/Tooltip";
 
 const UserInfoModal = ({
@@ -276,7 +276,7 @@ const UserInfoModal = ({
             </Row>
           </CardBody>
         </Card>
-        <Card
+        {/* <Card
           style={{
             borderRadius: "23px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.4)",
@@ -440,7 +440,7 @@ const UserInfoModal = ({
               </Col>
             </Row>
           </CardBody>
-        </Card>
+        </Card> */}
         <Row className="gx-3 gy-2 align-items-start">
           {/* Left Side: Last Trade Date */}
           <Col md={3}>
