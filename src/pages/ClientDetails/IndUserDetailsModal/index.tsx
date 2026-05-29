@@ -297,7 +297,6 @@ const UserInfoModal = ({
                 alignItems: "center",
               }}
             >
-         
               <Col
                 md={3}
                 xs={12}
@@ -329,7 +328,6 @@ const UserInfoModal = ({
                 </div>
               </Col>
 
-             
               <Col md={9} xs={12}>
                 <div
                   style={{
@@ -339,7 +337,6 @@ const UserInfoModal = ({
                     padding: "0px 0px 0px 10px",
                   }}
                 >
-                
                   <div
                     style={{
                       display: "flex",
@@ -349,7 +346,6 @@ const UserInfoModal = ({
                       flexWrap: isMobile ? "wrap" : "nowrap",
                     }}
                   >
-             
                     <div
                       style={{
                         width: "120px",
@@ -373,7 +369,6 @@ const UserInfoModal = ({
                       />
                     </div>
 
-                 
                     <div
                       style={{
                         width: "120px",
@@ -397,7 +392,6 @@ const UserInfoModal = ({
                       />
                     </div>
 
-                   
                     <div
                       style={{
                         width: "120px",
@@ -421,10 +415,12 @@ const UserInfoModal = ({
                       />
                     </div>
 
-                    
                     <Button
                       onClick={() =>
-                        window.open("http://test.lkp.net.in/", "_blank")
+                        window.open(
+                          "https://researchproducts.lkpsec.com/",
+                          "_blank",
+                        )
                       }
                       style={{
                         backgroundColor: "#11395C",

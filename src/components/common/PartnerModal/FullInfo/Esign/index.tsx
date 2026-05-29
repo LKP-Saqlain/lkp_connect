@@ -30,6 +30,7 @@ const Esign = ({
   kycDocs,
   esignDocs,
   handleViewApprovalData,
+  toggle,
 }: any) => {
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
@@ -420,6 +421,7 @@ const Esign = ({
       console.log("Mail Response:", mailResponse);
 
       ShowToast("success", "Approval completed and mail sent");
+      toggle();
     } catch (error) {
       console.error("Error:", error);
 
