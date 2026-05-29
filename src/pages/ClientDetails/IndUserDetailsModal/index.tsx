@@ -417,7 +417,10 @@ const UserInfoModal = ({
 
                     <Button
                       onClick={() =>
-                        window.open("http://test.lkp.net.in/", "_blank")
+                        window.open(
+                          "https://researchproducts.lkpsec.com/",
+                          "_blank",
+                        )
                       }
                       style={{
                         backgroundColor: "#11395C",
