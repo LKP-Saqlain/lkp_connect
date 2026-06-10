@@ -374,6 +374,7 @@ export const endpoints = {
   GetApApplicationStatusFlow: "api/AP/GetApApplicationStatusFlow",
   SendRejectionMail: "api/AP/SendRejectionMail",
   SendMailToApprover: "api/AP/SendMailToApprover",
+  UploadExchangeCertificate: "api/AP/UploadExchangeCertificate",
   GetDetailsByAppl: "api/ESign/GetDetailsByAppl",
   GetEsignDocument: "api/ESign/GetEsignDocument",
 };

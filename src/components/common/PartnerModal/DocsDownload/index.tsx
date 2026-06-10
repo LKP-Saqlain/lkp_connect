@@ -15,7 +15,7 @@ const index = ({ toggle, data }: any) => {
 
   const tabComponents: Record<string, JSX.Element> = {
     "Final Document": <FinalDocs ApplNo={infoData?.ApplNo} />,
-    "Exchange Certificate": <Certificate />,
+    "Exchange Certificate": <Certificate ApplNo={infoData?.ApplNo} />,
   };
 
   useEffect(() => {

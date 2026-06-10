@@ -1573,4 +1573,11 @@ export const apiServices = {
   GetEsignDocument: async (payload: any) => {
     return await apiService("POST", endpoints.GetEsignDocument, payload);
   },
+  UploadExchangeCertificate: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UploadExchangeCertificate,
+      payload,
+    );
+  },
 };

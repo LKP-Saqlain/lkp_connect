@@ -478,6 +478,7 @@ export const newDomainEndpoints = [
   endpoints.SendMailToApprover,
   endpoints.GetDetailsByAppl,
   endpoints.GetEsignDocument,
+  endpoints.UploadExchangeCertificate,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

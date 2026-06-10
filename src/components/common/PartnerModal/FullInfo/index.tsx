@@ -12,7 +12,7 @@ import Segments from "./Segments";
 import Action from "./Action";
 import PartnerSharing from "./PartnerSharing";
 import Payment from "./Payment";
-import Certificate from "./Certificates";
+// import Certificate from "./Certificates";
 import Esign from "./Esign";
 import { approvalConfig } from "../../../../helper/commmon";
 import { Box } from "@mui/material";
@@ -27,7 +27,7 @@ const tabs = [
   "Partner Sharing",
   "Payment",
   "E-signed",
-  "Exchange Certificate",
+  // "Exchange Certificate",
 ];
 
 const sectionIdMap: Record<string, number> = {
@@ -302,7 +302,7 @@ const FullInfo = ({ data, toggle, activeSubItem }: any) => {
         toggle={toggle}
       />
     ),
-    "Exchange Certificate": <Certificate />,
+    // "Exchange Certificate": <Certificate />,
   };
 
   return (
