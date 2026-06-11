@@ -22,6 +22,7 @@ import {
 import { apiServices } from "../../../../../services";
 import { convertToBase64 } from "../../../../../helper/method";
 import { handleCommonDownload } from "../../../../../utils";
+import ShowToast from "../../../../../utils/toastUtils";
 
 const initialData = [
   { exchange: "NSE", regNo: "", docId: 15, fileName: "" },
@@ -42,8 +43,28 @@ const Certificate = ({ ApplNo }: any) => {
     setCertificateData(updated);
   };
 
-  const handleSubmit = () => {
-    console.log("Final Data:", certificateData);
+  const handleSubmit = async () => {
+    const payload = {
+      applNo: ApplNo,
+    };
+    dispatch(showLoader("Uploading Certificate..."));
+    try {
+      const response = await apiServices.SendExchangeCertMail(payload);
+      console.log("SendExchangeCertMail response:", response?.data);
+      if (response?.data?.message === "Exch Cert Mail Sent Successfully!!!") {
+        ShowToast(
+          "success",
+          "Certificates submitted and mail sent successfully!",
+        );
+        setCertificateData(initialData);
+      } else {
+        ShowToast("error", "Failed to send mail. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error fetching details:", error);
+    } finally {
+      dispatch(hideLoader());
+    }
   };
 
   const handleUploadCertificate = async (
@@ -214,9 +235,9 @@ const Certificate = ({ ApplNo }: any) => {
               backgroundColor: "#0f2f4a",
             },
           }}
-          disabled={certificateData.some(
-            (item) => !item.regNo || !item.fileName,
-          )} // Disable if any regNo or fileName is missing
+          disabled={
+            !certificateData.some((item) => item.regNo.trim() && item.fileName)
+          }
         >
           Submit
         </Button>

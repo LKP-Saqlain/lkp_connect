@@ -21,6 +21,19 @@ const DocsDownload = ({ activeSubItem }: any) => {
     handleComplianceAlertMail();
   }, []);
 
+  // const sampleData = [
+  //   {
+  //     applNo: 10403,
+  //     date: "29-May-26",
+  //     aP_Name: "Umesh Nadkar",
+  //     city: "MUMBAI",
+  //     partnerType: "individual",
+  //     referralName: "5431-Ashish Sankpal",
+  //     applStatus: "E-sign",
+  //     id: 1,
+  //   },
+  // ];
+
   const handleComplianceAlertMail = async () => {
     const payload = {
       user_id,
@@ -37,6 +50,7 @@ const DocsDownload = ({ activeSubItem }: any) => {
       console.log("response GetDetailsByAppl filteredData", filteredData);
       //  Save full response data
       setData(filteredData);
+      // setData(sampleData);
     } catch (error) {
       console.error("Error fetching details:", error);
     } finally {

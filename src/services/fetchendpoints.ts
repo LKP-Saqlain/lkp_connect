@@ -43,6 +43,7 @@ export const publicEndpoints = [
   endpoints.SendMailToApprover,
   endpoints.GetDetailsByAppl,
   endpoints.GetEsignDocument,
+  endpoints.SendExchangeCertMail,
 ];
 
 export const fundamentalEndpoints = [
@@ -479,6 +480,7 @@ export const newDomainEndpoints = [
   endpoints.GetDetailsByAppl,
   endpoints.GetEsignDocument,
   endpoints.UploadExchangeCertificate,
+  endpoints.SendExchangeCertMail,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

@@ -1580,4 +1580,7 @@ export const apiServices = {
       payload,
     );
   },
+  SendExchangeCertMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendExchangeCertMail, payload);
+  },
 };

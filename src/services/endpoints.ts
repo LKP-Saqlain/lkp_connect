@@ -375,6 +375,7 @@ export const endpoints = {
   SendRejectionMail: "api/AP/SendRejectionMail",
   SendMailToApprover: "api/AP/SendMailToApprover",
   UploadExchangeCertificate: "api/AP/UploadExchangeCertificate",
+  SendExchangeCertMail: "api/AP/SendExchangeCertMail",
   GetDetailsByAppl: "api/ESign/GetDetailsByAppl",
   GetEsignDocument: "api/ESign/GetEsignDocument",
 };
