@@ -873,9 +873,9 @@ const SideBar = () => {
     "Client Onboarding": <NewClientPhysical />,
     "File Upload": <FileUpload />,
   };
-  const referralLeadSubItems: Record<string, JSX.Element> = {
-    "Referal Entry Status": <DocsDownload activeSubItem={activeSubItem} />,
-  };
+  // const referralLeadSubItems: Record<string, JSX.Element> = {
+  //   "Referal Entry Status": <DocsDownload activeSubItem={activeSubItem} />,
+  // };
   const PartnerOnBoardingSubItems: Record<string, JSX.Element> = {
     "Ops Level 1 Approval": <ApDetails activeSubItem={activeSubItem} />,
     "Compliance Approval": <ApDetails activeSubItem={activeSubItem} />,
@@ -883,6 +883,7 @@ const SideBar = () => {
     "Business Approval": <ApDetails activeSubItem={activeSubItem} />,
     "Management Approval": <ApDetails activeSubItem={activeSubItem} />,
     "Lkp Esign": <ApDetails activeSubItem={activeSubItem} />,
+    "Exchange Activation": <DocsDownload activeSubItem={activeSubItem} />,
   };
 
   const getSubItemComponent = (
@@ -912,7 +913,7 @@ const SideBar = () => {
       "KYC Dashboard": getSubItemComponent(kycSubItems),
       "Stock Study": <StockStudy />,
       "Mutual Fund": getSubItemComponent(mutualFundSubItems),
-      "Referal Lead": getSubItemComponent(referralLeadSubItems),
+      // "Referal Lead": getSubItemComponent(referralLeadSubItems),
       DashBoard: null,
       "Regulatory Announcement": (
         <RegulatorAnnouncement activeMenu={activeMenu} />
