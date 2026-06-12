@@ -413,7 +413,7 @@ const DataTable = ({
       );
     } else if (selectedWidget === "Upcoming Dormant Client") {
       return TableColumns.getClientDormantStatus(handleViewDetails);
-    } else if (activeSubItem === "Referal Entry Status") {
+    } else if (activeSubItem === "Exchange Activation") {
       return TableColumns.ApDocsDownload.map((column) => {
         if (column.field === "applNo") {
           return {
