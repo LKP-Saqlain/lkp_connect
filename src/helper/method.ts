@@ -27,7 +27,7 @@ export const monthOptions = [
   { label: "Mar-26", value: "MAR-26" },
   { label: "Apr-26", value: "APR-26" },
   { label: "May-26", value: "MAY-26" },
-  { label: "Jun-26", value: "JUN -26" },
+  { label: "Jun-26", value: "JUN-26" },
 ];
 export const symbolOptions = [
   { label: "All", value: "ALL" },
