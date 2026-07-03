@@ -620,3 +620,16 @@ export const approvalConfig: Record<string, any> = {
     skipTabsInFlow: [],
   },
 };
+
+export const sampleVendorData = [
+  {
+    objectId: 1001,
+    name: "LPK WEALTH ADVISORY LTD",
+    rate: 50.0,
+  },
+  {
+    objectId: 1002,
+    name: "RASHI CAPITAL PARTNERS",
+    rate: 65.0,
+  },
+];

@@ -53,7 +53,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   useEffect(() => {
@@ -85,7 +85,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
               Id: index + 1,
               transactionDate: item.tdt?.split(" ")[0],
               dealSheetB64: item.ds64 ? item.ds64 : null,
-            })
+            }),
           );
           console.log("ViewListedShareRecord", filteredResponse);
 
@@ -117,10 +117,10 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
     console.log("EditDataCheck", editData);
 
     const formattedDate = dayjs(editData?.tdt, "DD/MM/YYYY").format(
-      "YYYY-MM-DD"
+      "YYYY-MM-DD",
     );
     const formatIssueDate = dayjs(data?.issueDate, "DD/MM/YYYY").format(
-      "YYYY-MM-DD"
+      "YYYY-MM-DD",
     );
     console.log(formattedDate, "formattedDate");
     setmodal_grid(false);
@@ -190,7 +190,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                     ...item,
                     Id: index + 1,
                     transactionDate: item.tdt?.split(" ")[0],
-                  })
+                  }),
                 );
                 setUnlistedData(filteredResponse);
                 setEditData(null);
@@ -312,7 +312,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
                     ...item,
                     Id: index + 1,
                     transactionDate: item.tdt?.split(" ")[0],
-                  })
+                  }),
                 );
                 setUnlistedData(filteredResponse);
                 setEditData(null);
@@ -367,7 +367,7 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
           ...item,
           Id: index + 1,
           transactionDate: item.tdt?.split(" ")[0],
-        })
+        }),
       );
       setUnlistedData(filteredResponse);
     } else {

@@ -51,6 +51,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import CustomModal from "../../../components/common/DPModal";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import pako from "pako";
+import { capitalizeEachWord } from "../../../utils/index.tsx";
+import { sampleVendorData } from "../../../helper/commmon.ts";
 
 interface IsMarketingMaterialEditData {
   CommunicationProofPath?: string;
@@ -513,7 +515,10 @@ const ModalComponent = ({
                     cn: null as Client | string | null,
                     cc: null as Client | string | null,
                     isin: "",
-                    nsec: "",
+                    vendorId: "",
+                    vendorName: "",
+                    rate: "",
+                    nsec: null,
                     nsh: null,
                     crt: null,
                     vrt: null,
@@ -2221,50 +2226,50 @@ const ModalComponent = ({
                       boxShadow: "0 4px 12px rgba(0,0,0,0.18)",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontWeight: 600,
-                        mb: 2,
-                        fontSize: "15px",
-                        color: "#1f2937",
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
                       }}
                     >
-                      Transaction Details
-                    </Typography>
-
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          mb: 2,
+                          fontSize: "15px",
+                          color: "#1f2937",
+                        }}
+                      >
+                        Transaction Details
+                      </Typography>{" "}
+                      <TextField
+                        fullWidth
+                        id="rmc"
+                        name="rmc"
+                        label="Enter RM Code"
+                        variant="outlined"
+                        size="small"
+                        disabled={true}
+                        value={formik.values.rmc}
+                        onChange={handleCustomChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.rmc && Boolean(formik.errors.rmc)}
+                        sx={{
+                          width: 200,
+                          "& .MuiInputBase-root": {
+                            height: 30,
+                          },
+                          "& .MuiInputLabel-root": {
+                            transform: "translate(14px, 6px) scale(1)",
+                          },
+                          "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-root.MuiFormLabel-filled":
+                            {
+                              transform: "translate(14px, -10px) scale(0.75)",
+                            },
+                        }}
+                      />{" "}
+                    </div>
                     <Row className="g-3">
-                      {/* RM Code */}
-                      <Col lg={6}>
-                        {" "}
-                        <TextField
-                          fullWidth
-                          id="rmc"
-                          name="rmc"
-                          label="Enter RM Code"
-                          variant="outlined"
-                          size="small"
-                          disabled={true}
-                          value={formik.values.rmc}
-                          onChange={handleCustomChange}
-                          onBlur={formik.handleBlur}
-                          error={
-                            formik.touched.rmc && Boolean(formik.errors.rmc)
-                          }
-                          sx={{
-                            "& .MuiInputBase-root": {
-                              height: 30,
-                            },
-                            "& .MuiInputLabel-root": {
-                              transform: "translate(14px, 6px) scale(1)",
-                            },
-                            "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-root.MuiFormLabel-filled":
-                              {
-                                transform: "translate(14px, -10px) scale(0.75)",
-                              },
-                          }}
-                        />{" "}
-                      </Col>
-
                       {/* Date */}
                       <Col lg={6}>
                         <FormControl fullWidth>
@@ -2569,56 +2574,6 @@ const ModalComponent = ({
                         />
                       </Col> */}
                       <Col lg={6}>
-                        {/* <Autocomplete
-                          options={scripMasterData}
-                          value={
-                            scripMasterData.find(
-                              (item) => item.scripName === formik.values.nsec
-                            ) || null
-                          }
-                          onChange={(event, value) => {
-                            formik.setFieldValue(
-                              "nsec",
-                              value?.scripName || ""
-                            );
-                            formik.setFieldValue("isin", value?.isin);
-                          }}
-                          getOptionLabel={(option) =>
-                            `${option.scripName} (${option.isin})`
-                          }
-                          isOptionEqualToValue={(option, value) =>
-                            option.rowId === value.rowId
-                          }
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              label="Select Securities Name"
-                              size="small"
-                              error={
-                                formik.touched.nsec &&
-                                Boolean(formik.errors.nsec)
-                              }
-                              helperText={
-                                formik.touched.nsec && formik.errors.nsec
-                              }
-                              sx={{
-                                "& .MuiInputBase-root": {
-                                  height: 30,
-                                  fontSize: "13px",
-                                },
-                                "& .MuiInputLabel-root": {
-                                  fontSize: "12px",
-                                  transform: "translate(14px, 6px) scale(1)",
-                                },
-                                "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-root.MuiFormLabel-filled":
-                                  {
-                                    transform:
-                                      "translate(14px, -8px) scale(0.75)",
-                                  },
-                              }}
-                            />
-                          )}
-                        /> */}
                         <Autocomplete
                           options={scripMasterData}
                           value={
@@ -2636,7 +2591,7 @@ const ModalComponent = ({
                             formik.setFieldValue("isin", value?.isin || "");
                           }}
                           getOptionLabel={(option) =>
-                            `${option.scripName} (${option.isin})`
+                            `${capitalizeEachWord(option.scripName)} (${option.isin})`
                           }
                           isOptionEqualToValue={(option, value) =>
                             option.isin === value.isin
@@ -2652,6 +2607,63 @@ const ModalComponent = ({
                               }
                               helperText={
                                 formik.touched.nsec && formik.errors.nsec
+                              }
+                              sx={{
+                                "& .MuiInputBase-root": {
+                                  height: 30,
+                                  fontSize: "12px",
+                                },
+                                "& .MuiInputLabel-root": {
+                                  fontSize: "12px",
+                                  transform: "translate(14px, 6px) scale(1)",
+                                },
+                                "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-root.MuiFormLabel-filled":
+                                  {
+                                    transform:
+                                      "translate(14px, -8px) scale(0.75)",
+                                  },
+                              }}
+                            />
+                          )}
+                        />
+                      </Col>
+                      <Col lg={6}>
+                        <Autocomplete
+                          options={sampleVendorData}
+                          value={
+                            sampleVendorData.find(
+                              (item) =>
+                                item.objectId ===
+                                Number(formik.values.vendorId),
+                            ) || null
+                          }
+                          onChange={(_, value) => {
+                            formik.setFieldValue(
+                              "vendorId",
+                              value?.objectId || "",
+                            );
+                            formik.setFieldValue(
+                              "vendorName",
+                              value?.name || "",
+                            );
+                            formik.setFieldValue("rate", value?.rate || "");
+                          }}
+                          getOptionLabel={(option) => `${option.name}`}
+                          isOptionEqualToValue={(option, value) =>
+                            option.objectId === value.objectId
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Select Vendor Name"
+                              size="small"
+                              error={
+                                formik.touched.vendorName &&
+                                Boolean(formik.errors.vendorName)
+                              }
+                              helperText={
+                                formik.touched.vendorName &&
+                                formik.errors.vendorName
                               }
                               sx={{
                                 "& .MuiInputBase-root": {
