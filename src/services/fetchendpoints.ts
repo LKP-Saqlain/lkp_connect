@@ -480,6 +480,8 @@ export const newDomainEndpoints = [
   endpoints.GetEsignDocument,
   endpoints.UploadExchangeCertificate,
   endpoints.SendExchangeCertMail,
+  endpoints.GetEmployeeRevenueTarget,
+  endpoints.GetZoneRevenueTarget,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

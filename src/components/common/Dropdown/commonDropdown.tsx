@@ -19,10 +19,10 @@ const ComDropDown: React.FC<ComDropDownProps> = ({ onZoneChange }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data || {}
+    (state: RootState) => state.UserLogin?.data?.data || {},
   );
   const { accessType } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data || {}
+    (state: RootState) => state.AuthUser?.data?.data || {},
   );
 
   const [zones, setZones] = useState<ZoneOption[]>([]);
@@ -61,7 +61,7 @@ const ComDropDown: React.FC<ComDropDownProps> = ({ onZoneChange }) => {
             zoneOptions.length > 8 ? zoneOptions[8] : zoneOptions[0] || null;
           setSelectedZone(preselected);
           if (typeof onZoneChange === "function") {
-            onZoneChange(preselected);
+            onZoneChange?.(preselected);
           }
         }
       } catch (err: any) {

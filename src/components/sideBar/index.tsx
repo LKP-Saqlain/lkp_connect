@@ -135,6 +135,8 @@ import BankApproval from "../../pages/ThirdParty/bankMaster/bankApproval";
 import BankReport from "../../pages/Reports/BankReport";
 import ApDetails from "../../pages/AP Onboarding/Main";
 import DocsDownload from "../../pages/AP Onboarding/DocsDownload";
+import EmployeeTarget from "../../pages/Revamp/Employee Target";
+import ZoneTarget from "../../pages/Revamp/Zone Target";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -873,8 +875,13 @@ const SideBar = () => {
     "Client Onboarding": <NewClientPhysical />,
     "File Upload": <FileUpload />,
   };
+  const targetSubItems: Record<string, JSX.Element> = {
+    "My Target": <EmployeeTarget />,
+    "Zone Target": <ZoneTarget />,
+  };
   // const referralLeadSubItems: Record<string, JSX.Element> = {
-  //   "Referal Entry Status": <DocsDownload activeSubItem={activeSubItem} />,
+  //   "Referal Entry Status": <EmployeeTarget />,
+  //   "Referal Lead Updation": <ZoneTarget />,
   // };
   const PartnerOnBoardingSubItems: Record<string, JSX.Element> = {
     "Ops Level 1 Approval": <ApDetails activeSubItem={activeSubItem} />,
@@ -914,6 +921,7 @@ const SideBar = () => {
       "Stock Study": <StockStudy />,
       "Mutual Fund": getSubItemComponent(mutualFundSubItems),
       // "Referal Lead": getSubItemComponent(referralLeadSubItems),
+      Target: getSubItemComponent(targetSubItems),
       DashBoard: null,
       "Regulatory Announcement": (
         <RegulatorAnnouncement activeMenu={activeMenu} />
