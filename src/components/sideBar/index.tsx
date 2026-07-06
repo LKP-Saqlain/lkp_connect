@@ -25,7 +25,8 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 // import { SlSizeFullscreen } from "react-icons/sl";
 // import { BsFullscreen } from "react-icons/bs";
-import Logo from "../../assets/logo.png";
+// import Logos from "../../assets/logo.png";
+import Logo from "../../assets/images/NewLogo.jpg";
 import Logo1 from "../../assets/images/logo1.png";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState, persistor } from "../../redux/store";
@@ -1128,7 +1129,7 @@ const SideBar = () => {
                 onClick={handleDrawerOpen}
                 edge="start"
                 sx={[
-                  { marginRight: isMobile ? 0 : 5 },
+                  { marginRight: isMobile ? 0 : 2 },
                   open && { display: "none" },
                 ]}
               >
