@@ -25,9 +25,9 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 // import { SlSizeFullscreen } from "react-icons/sl";
 // import { BsFullscreen } from "react-icons/bs";
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/LKP Logo (Light Theme).svg";
 // import Logo from "../../assets/images/NewLogo.jpg";
-import Logo1 from "../../assets/images/logo1.png";
+import Logo1 from "../../assets/images/LKP New Logo (Dark Theme).svg";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState, persistor } from "../../redux/store";
 import { GetMenu } from "../../redux/thunk/GetMenus";
@@ -1397,7 +1397,7 @@ const SideBar = () => {
                 display: "flex",
                 justifyContent: "center",
                 // zIndex: 1,
-                marginTop: isMobile ? "0px" : "10px",
+                marginTop: isMobile ? "0px" : "0px",
               }}
             >
               <Box
@@ -1405,12 +1405,12 @@ const SideBar = () => {
                 alt="Logo"
                 src={Logo1}
                 width={"auto"}
-                height="65px"
+                height="85px"
                 style={{ marginLeft: isMobile ? "0px" : " -20px" }}
               />
             </Box>
 
-            <List>
+            <List sx={{ py: 0 }}>
               {menuItems.map((item) => (
                 <DrawerItem
                   key={item.mc}
@@ -1435,9 +1435,9 @@ const SideBar = () => {
           component="main"
           sx={{
             flexGrow: 1,
-            p: 0.9,
-            pt: "72px", // Adjust according to actual AppBar height
-            backgroundColor: "#E5E4E2",
+            p: 2,
+            pt: "79px", // Adjust according to actual AppBar height
+            backgroundColor: "#f1f1f1",
             overflow: "hidden",
             // width: "100vw", // Full width of the viewport
             // height: "100vh", // Full height of the viewport

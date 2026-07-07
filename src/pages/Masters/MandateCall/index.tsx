@@ -20,7 +20,7 @@ import { AppDispatch } from "../../../redux/store";
 import ShowToast from "../../../utils/toastUtils";
 // import { encryptAES } from "../../../utils/encryptDecrypt";
 import { useNavigate, useParams } from "react-router-dom";
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/LKP Logo (Light Theme).svg";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 // import IconButton from "@mui/material/IconButton";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -49,7 +49,7 @@ const MandateCall = () => {
   //  Normalize it once — decode URL and fix "+" issue
   const normalizedCode = decodeURIComponent(encryptedCode || "").replace(
     / /g,
-    "+"
+    "+",
   );
 
   // (Optional) Decrypt only if you need to display the client code locally
@@ -139,7 +139,7 @@ const MandateCall = () => {
         if (response?.data?.isSuccess) {
           ShowToast(
             "success",
-            response?.data?.message || "UPI Verified Successfully"
+            response?.data?.message || "UPI Verified Successfully",
           );
           setIsMandateEnabled(true);
         } else {
@@ -161,7 +161,7 @@ const MandateCall = () => {
     console.log(
       "MandateTableData",
       mandateTableData,
-      mandateCallBackData[0]?.mandateStatus
+      mandateCallBackData[0]?.mandateStatus,
     );
     if (mandateCallBackData[0]?.mandateStatus === "ACTIVE") {
       ShowToast("error", "Previous Mandate is Already Active");
@@ -337,7 +337,7 @@ const MandateCall = () => {
         ShowToast(
           "error",
           error?.message ||
-            "Sorry for the inconvenience, please try after some time."
+            "Sorry for the inconvenience, please try after some time.",
         );
       })
       .finally(() => dispatch(hideLoader()));
@@ -406,7 +406,7 @@ const MandateCall = () => {
 
   const handleOtpKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     if (e.key !== "Backspace") return;
 

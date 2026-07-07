@@ -2,7 +2,7 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaCheckCircle, FaTimesCircle, FaHourglassHalf } from "react-icons/fa";
 import { Card, CardHeader, Button } from "reactstrap";
-import Logo from "../../../../../assets/logo.png";
+import Logo from "../../../../../assets/LKP Logo (Light Theme).svg";
 import { ELOG_STATUS_LIST } from "../../../../../helper/commmon";
 import { decryptAES, encryptAES } from "../../../../../utils/encryptDecrypt";
 import {

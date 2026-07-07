@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/LKP Logo (Light Theme).svg";
 
 function Header() {
   return (

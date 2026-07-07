@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/LKP Logo (Light Theme).svg";
 import TermsAndConditions from "./termsConditions";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
@@ -22,11 +22,11 @@ type ClientDetails = {
 const MTFActivation = () => {
   const [tnc, setTnc] = useState(false);
   const [clientDetails, setClientDetails] = useState<ClientDetails | null>(
-    null
+    null,
   );
   const navigate = useNavigate();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();

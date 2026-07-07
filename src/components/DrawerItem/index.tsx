@@ -151,6 +151,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           minHeight: 48,
           justifyContent: open ? "initial" : "center",
           px: 2.5,
+          py: 0,
           backgroundColor: isMenuOpen ? "#ffffff" : "transparent",
           borderRadius: "10px",
           margin: "5px",

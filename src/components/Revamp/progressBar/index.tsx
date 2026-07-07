@@ -70,7 +70,8 @@ const ProgressBar = ({
             color,
           }}
         >
-          {percentage.toFixed(1)}% • {achieved} / {target}
+          {/* {percentage.toFixed(1)}% • */}
+          {achieved} / {target}
         </Typography>
       )}
     </Box>

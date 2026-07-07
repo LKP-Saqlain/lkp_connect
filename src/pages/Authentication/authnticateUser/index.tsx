@@ -33,7 +33,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { AuthUser } from "../../../redux/thunk/AuthUser";
 import { setAuthenticationValue } from "../../../redux/slices/AuthnticateUser";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/LKP Logo (Light Theme).svg";
 import { setIsNewUser } from "../../../redux/slices/userSlice";
 import "../style.css";
 
@@ -46,7 +46,7 @@ const AuthenticateUser = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { verifyPassword } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
   const IdType = localStorage.getItem("uIdType");
 
@@ -57,7 +57,7 @@ const AuthenticateUser = () => {
         schema
           .required("PAN is Required")
           .test("is-valid-pan", "Invalid PAN format", (value) =>
-            isValidPANNo(value)
+            isValidPANNo(value),
           ),
       otherwise: (schema) => schema.notRequired(),
     }),
@@ -144,7 +144,7 @@ const AuthenticateUser = () => {
         // formik.setFieldError("password", message);
         ShowToast(
           "error",
-          message || "Sorry for the inconvenience, please try after some time."
+          message || "Sorry for the inconvenience, please try after some time.",
         );
       })
       .finally(() => {
@@ -210,7 +210,7 @@ const AuthenticateUser = () => {
           alt="Logo"
           src={Logo}
           width={"auto"}
-          height="50px"
+          height="100px"
           sx={{
             position: "absolute",
             top: 10, // Adjust as needed
@@ -372,13 +372,13 @@ const AuthenticateUser = () => {
                 onChange={(date: Dayjs | null) =>
                   formik.setFieldValue(
                     "DateOfBirth",
-                    date ? date.format("DD/MM/YYYY") : ""
+                    date ? date.format("DD/MM/YYYY") : "",
                   )
                 }
                 slotProps={{
                   textField: {
                     error: Boolean(
-                      formik.touched.DateOfBirth && formik.errors.DateOfBirth
+                      formik.touched.DateOfBirth && formik.errors.DateOfBirth,
                     ),
                     helperText:
                       formik.touched.DateOfBirth && formik.errors.DateOfBirth,
