@@ -25,8 +25,8 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 // import { SlSizeFullscreen } from "react-icons/sl";
 // import { BsFullscreen } from "react-icons/bs";
-// import Logos from "../../assets/logo.png";
-import Logo from "../../assets/images/NewLogo.jpg";
+import Logo from "../../assets/logo.png";
+// import Logo from "../../assets/images/NewLogo.jpg";
 import Logo1 from "../../assets/images/logo1.png";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState, persistor } from "../../redux/store";
@@ -1137,7 +1137,7 @@ const SideBar = () => {
               </IconButton>
             )}
             {!open && (
-              <Box sx={{ flexGrow: 0, backgroundColor: "#F9F6EE" }}>
+              <Box sx={{ flexGrow: 0 }}>
                 <Box
                   component="img"
                   alt="Logo"
@@ -1405,8 +1405,8 @@ const SideBar = () => {
                 alt="Logo"
                 src={Logo1}
                 width={"auto"}
-                height="50px"
-                style={{ marginLeft: isMobile ? "0px" : "-60px" }}
+                height="65px"
+                style={{ marginLeft: isMobile ? "0px" : " -20px" }}
               />
             </Box>
 

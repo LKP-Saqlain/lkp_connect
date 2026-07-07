@@ -111,6 +111,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     IVR: <PublishedWithChangesIcon />,
     SPIP: <AnalyticsIcon />,
     "TPD Report": <FaFileInvoice size={17} />,
+    Target: <FaFileInvoice size={17} />,
     "SPIP Dashboard": <SpaceDashboardIcon />,
     "Client Request": <PublishedWithChangesIcon />,
     "Mutual Fund": <AttachMoneyIcon />,
@@ -208,7 +209,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
             />
           ))}
 
-        {title === "Zone Overview" && (
+        {title === "Target" && (
           <div className="starburst-bg">
             <Lottie
               loop
