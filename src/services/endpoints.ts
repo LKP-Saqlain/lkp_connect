@@ -381,6 +381,9 @@ export const endpoints = {
   GetEsignDocument: "api/ESign/GetEsignDocument",
   GetEmployeeRevenueTarget: "api/Revenue/GetEmployeeRevenueTarget",
   GetZoneRevenueTarget: "api/Revenue/GetZoneRevenueTarget",
+  SendTLMTFEmail: "api/RMS/SendTLMTFEmail",
+  SendBMMTFEmail: "api/RMS/SendBMMTFEmail",
+  SendAHMTFEmail: "api/RMS/SendAHMTFEmail",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

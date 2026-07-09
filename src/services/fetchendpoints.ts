@@ -343,6 +343,9 @@ export const newDomainEndpoints = [
   endpoints.SendRMMTFShortfallMail,
   endpoints.SendRHMTFShortfallMail,
   endpoints.SendAPMTFShortfallMail,
+  endpoints.SendTLMTFEmail,
+  endpoints.SendTLMTFEmail,
+  endpoints.SendAHMTFEmail,
   //SPIP
   endpoints.SPIPClientPerformanceSummary,
   endpoints.SPIPClientPerformanceDashboard,

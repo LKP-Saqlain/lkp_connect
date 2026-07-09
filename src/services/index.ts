@@ -1593,4 +1593,13 @@ export const apiServices = {
   GetZoneRevenueTarget: async (payload: any) => {
     return await apiService("POST", endpoints.GetZoneRevenueTarget, payload);
   },
+  SendTLMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendTLMTFEmail, payload);
+  },
+  SendBMMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendBMMTFEmail, payload);
+  },
+  SendAHMTFEmail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendAHMTFEmail, payload);
+  },
 };

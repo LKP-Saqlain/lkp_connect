@@ -28,7 +28,7 @@ const MTFShortfallUpload = ({ activeSubItem }: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   const formik = useFormik({
@@ -41,7 +41,7 @@ const MTFShortfallUpload = ({ activeSubItem }: any) => {
         .test(
           "fileType",
           "Only .xls  files are allowed",
-          (value: any) => value && value.name && /\.(xls)$/i.test(value.name)
+          (value: any) => value && value.name && /\.(xls)$/i.test(value.name),
         ),
     }),
     onSubmit: () => {},
@@ -184,7 +184,7 @@ const MTFShortfallUpload = ({ activeSubItem }: any) => {
 
     const callApi = async (
       apiFn: (payload: any) => Promise<any>,
-      apiName: string
+      apiName: string,
     ) => {
       try {
         const res = await apiFn(payload);
@@ -202,6 +202,9 @@ const MTFShortfallUpload = ({ activeSubItem }: any) => {
     await callApi(apiServices.SendRMMTFShortfallMail, "RM MTF Email");
     await callApi(apiServices.SendRHMTFShortfallMail, "RH MTF Email");
     await callApi(apiServices.SendAPMTFShortfallMail, "AP MTF Email");
+    await callApi(apiServices.SendTLMTFEmail, "TL MTF Email");
+    await callApi(apiServices.SendBMMTFEmail, "BM MTF Email");
+    await callApi(apiServices.SendAHMTFEmail, "AH MTF Email");
 
     dispatch(hideLoader());
 
