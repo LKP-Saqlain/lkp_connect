@@ -37,7 +37,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
   const [mtfEmailRecords, SetMTFEmailRecords] = useState<any[]>([]);
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   const formik = useFormik({
@@ -113,7 +113,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    fieldName: "shortfallFile" | "ageingFile"
+    fieldName: "shortfallFile" | "ageingFile",
   ) => {
     const file = e.currentTarget.files?.[0];
 
@@ -149,7 +149,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
 
   const handleUpload = async (
     type: "shortfall" | "ageing",
-    file: File | null
+    file: File | null,
   ) => {
     if (!file) return;
 
@@ -175,7 +175,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
       }
       formik.setFieldValue(
         type === "shortfall" ? "shortfallFile" : "ageingFile",
-        null
+        null,
       );
     } catch (error) {
       console.error(`${type} upload error:`, error);
@@ -187,7 +187,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
 
   const renderUploadBox = (
     fieldName: "shortfallFile" | "ageingFile",
-    file: File | null
+    file: File | null,
   ) => (
     <div
       style={{
@@ -268,7 +268,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
   );
 
   const MTFStockAgeing = uploadDetails.find(
-    (item: any) => item.tp === "MTFStockAgeing"
+    (item: any) => item.tp === "MTFStockAgeing",
   );
   const MTFAgeing = uploadDetails.find((item: any) => item.tp === "MTFAgeing");
 
@@ -283,7 +283,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
 
     const callApi = async (
       apiFn: (payload: any) => Promise<any>,
-      apiName: string
+      apiName: string,
     ) => {
       try {
         const res = await apiFn(payload);
@@ -301,6 +301,10 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
     await callApi(apiServices.SendRMMTFEmail, "RM MTF Email");
     await callApi(apiServices.SendRHMTFEmail, "RH MTF Email");
     await callApi(apiServices.SendAPMTFEmail, "AP MTF Email");
+    //new apis'
+    await callApi(apiServices.SendTLMTFEmail, "TL MTF Email");
+    await callApi(apiServices.SendBMMTFEmail, "MB MTF Email");
+    await callApi(apiServices.SendAHMTFEmail, "AH MTF Email");
 
     dispatch(hideLoader());
 
@@ -415,7 +419,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
                   </label>
                   {renderUploadBox(
                     "shortfallFile",
-                    formik.values.shortfallFile
+                    formik.values.shortfallFile,
                   )}
                   <div style={{ marginTop: "10px" }}>
                     <Button
