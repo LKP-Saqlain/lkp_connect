@@ -1593,4 +1593,7 @@ export const apiServices = {
   GetZoneRevenueTarget: async (payload: any) => {
     return await apiService("POST", endpoints.GetZoneRevenueTarget, payload);
   },
+  GetBrokerageReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetBrokerageReport, payload);
+  },
 };

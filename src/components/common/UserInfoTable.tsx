@@ -2718,6 +2718,23 @@ const DataTable = ({
       return TableColumns.employeesContestHistory.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "Brokerage Report") {
+      let columns = [...TableColumns.brokerageWiseColumns];
+
+      if (tabValue === "ClientWise") {
+        columns = columns.filter(
+          (col) => !["tradeDate", "branchName"].includes(col.field),
+        );
+      } else if (tabValue === "BranchWise") {
+        columns = columns.filter(
+          (col) =>
+            !["tradeDate", "clientCode", "clientName"].includes(col.field),
+        );
+      } else if (tabValue === "DateWise") {
+        columns = columns.filter((col) => !["branchName"].includes(col.field));
+      }
+
+      return columns;
     } else if (activeSubItem === "DP AutoPay Report") {
       return TableColumns.ClientMandateColumns.map((column) => ({
         ...column,

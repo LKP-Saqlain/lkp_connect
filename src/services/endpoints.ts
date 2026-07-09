@@ -381,6 +381,7 @@ export const endpoints = {
   GetEsignDocument: "api/ESign/GetEsignDocument",
   GetEmployeeRevenueTarget: "api/Revenue/GetEmployeeRevenueTarget",
   GetZoneRevenueTarget: "api/Revenue/GetZoneRevenueTarget",
+  GetBrokerageReport: "api/Brokerage/GetBrokerageReport",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

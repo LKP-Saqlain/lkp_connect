@@ -482,6 +482,7 @@ export const newDomainEndpoints = [
   endpoints.SendExchangeCertMail,
   endpoints.GetEmployeeRevenueTarget,
   endpoints.GetZoneRevenueTarget,
+  endpoints.GetBrokerageReport,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
