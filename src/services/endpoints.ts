@@ -384,6 +384,9 @@ export const endpoints = {
   SendTLMTFEmail: "api/RMS/SendTLMTFEmail",
   SendBMMTFEmail: "api/RMS/SendBMMTFEmail",
   SendAHMTFEmail: "api/RMS/SendAHMTFEmail",
+  SendTLMTFShortfallMail: "api/RMS/SendTLMTFShortfallMail",
+  SendBMMTFShortfallMail: "api/RMS/SendBMMTFShortfallMail",
+  SendAHMTFShortfallMail: "api/RMS/SendAHMTFShortfallMail",
   GetBrokerageReport: "api/Brokerage/GetBrokerageReport",
 };
 

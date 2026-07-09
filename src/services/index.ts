@@ -1602,6 +1602,15 @@ export const apiServices = {
   SendAHMTFEmail: async (payload: any) => {
     return await apiService("POST", endpoints.SendAHMTFEmail, payload);
   },
+  SendTLMTFShortfallMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendTLMTFShortfallMail, payload);
+  },
+  SendBMMTFShortfallMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendBMMTFShortfallMail, payload);
+  },
+  SendAHMTFShortfallMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendAHMTFShortfallMail, payload);
+  },
   GetBrokerageReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetBrokerageReport, payload);
   },
