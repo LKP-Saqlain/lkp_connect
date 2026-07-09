@@ -432,6 +432,8 @@ export const newDomainEndpoints = [
   endpoints.BankAccountMaster_report,
 
   endpoints.InitBOLogin,
+
+  endpoints.ResearchCallData,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
