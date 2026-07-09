@@ -12844,6 +12844,187 @@ export const employeesContestHistory: GridColDef[] = [
   ...employeesContestProgress,
 ];
 
+export const brokerageWiseColumns: GridColDef[] = [
+  {
+    field: "tradeDate",
+    headerName: "Trade Date",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => {
+      if (!params.value) return "-";
+
+      return new Date(params.value)
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
+  },
+  {
+    field: "branchCode",
+    headerName: "Branch",
+    flex: 0.7,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+
+  {
+    field: "branchType",
+    headerName: "Branch Type",
+    flex: 0.7,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "branchName",
+    headerName: "Branch Name",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value || "-",
+  },
+  {
+    field: "clientCode",
+    headerName: "Client Code",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "clientName",
+    headerName: "Client Name",
+    flex: 1.5,
+    align: "left",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+
+  {
+    field: "eQ_Brok",
+    headerName: "EQ Brokerage",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
+  },
+  {
+    field: "fnO_Brok",
+    headerName: "F&O Brokerage",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
+  },
+  {
+    field: "comm_Brok",
+    headerName: "Commodity Brokerage",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
+  },
+  {
+    field: "slbM_Brok",
+    headerName: "SLBM Brokerage",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
+  },
+  {
+    field: "total_Brok",
+    headerName: "Total Brokerage",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
+  },
+  {
+    field: "apSharing_Brok",
+    headerName: "AP Sharing Brokerage",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
+  },
+  {
+    field: "neT_To_LKP_Brok",
+    headerName: "Net To LKP Brokerage",
+    flex: 1,
+    align: "right",
+    headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (params: any) => {
+      const value = parseFloat(params); // Convert the value to a number
+      return new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(value);
+    },
+  },
+];
+
 export const ClientMandateColumns: GridColDef[] = [
   {
     field: "zone",

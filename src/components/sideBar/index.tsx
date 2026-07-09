@@ -138,6 +138,7 @@ import ApDetails from "../../pages/AP Onboarding/Main";
 import DocsDownload from "../../pages/AP Onboarding/DocsDownload";
 import EmployeeTarget from "../../pages/Revamp/Employee Target";
 import ZoneTarget from "../../pages/Revamp/Zone Target";
+import BrokerageData from "../../pages/Brokerage";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -749,6 +750,7 @@ const SideBar = () => {
     "DP AMC Transaction": <DPTransactionIndex activeSubItem={activeSubItem} />,
     "Pledge Request Report": <PledgeReport activeSubItem={activeSubItem} />,
     "LKP Bank Report": <BankReport activeSubItem={activeSubItem} />,
+    "Brokerage Report": <BrokerageData activeSubItem={activeSubItem} />,
   };
 
   // const referalSubItems: Record<string, JSX.Element> = {
