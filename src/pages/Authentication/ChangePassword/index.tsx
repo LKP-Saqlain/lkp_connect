@@ -28,7 +28,7 @@ import {
   AppDispatch,
   RootState,
 } from "../../../redux/store";
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/LKP Logo (Light Theme).svg";
 import "../style.css";
 import { apiServices } from "../../../services";
 
@@ -43,7 +43,7 @@ const ChangePassword = () => {
   const navigate = useNavigate();
 
   const { user_id, user_type } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data || {}
+    (state: RootState) => state.UserLogin?.data?.data || {},
   );
 
   const theme = useTheme();
@@ -164,7 +164,7 @@ const ChangePassword = () => {
           alt="Logo"
           src={Logo}
           width={"auto"}
-          height="50px"
+          height="100px"
           sx={{
             position: "absolute",
             top: 10, // Adjust as needed

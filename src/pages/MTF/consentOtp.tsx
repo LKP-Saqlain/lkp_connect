@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, Button, Typography, TextField } from "@mui/material";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/LKP Logo (Light Theme).svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";

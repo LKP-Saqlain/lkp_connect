@@ -32,7 +32,7 @@ import { useDispatch } from "react-redux";
 import ShowToast from "../../../utils/toastUtils";
 import { AppDispatch } from "../../../redux/store";
 import { UserLogin } from "../../../redux/thunk/Login/login";
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/LKP Logo (Light Theme).svg";
 import { verifyPassword } from "../../../redux/slices/Login/login";
 
 const LoginPage = () => {
@@ -83,7 +83,7 @@ const LoginPage = () => {
     authentication: Yup.string()
       .required("PAN is required")
       .test("is-valid-pan", "Invalid PAN format", (value) =>
-        isValidPANNo(value)
+        isValidPANNo(value),
       ),
   });
 
@@ -146,7 +146,7 @@ const LoginPage = () => {
         // formik.setFieldError("password", message);
         ShowToast(
           "error",
-          message || "Sorry for the inconvenience, please try after some time."
+          message || "Sorry for the inconvenience, please try after some time.",
         );
       })
       .finally(() => {
@@ -214,7 +214,7 @@ const LoginPage = () => {
           alt="Logo"
           src={Logo}
           width={"auto"}
-          height="50px"
+          height="100px"
           sx={{
             position: "absolute",
             top: 10, // Adjust as needed

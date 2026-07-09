@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ClientInfo from "./ClientInfo";
 import PaymentChoice from "./PaymentChoice";
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/LKP Logo (Light Theme).svg";
 // import LedgerOtp from "./Ledger/LedgerOtp";
 import { Card, CardHeader } from "reactstrap";
 import ESign from "./CommonSteps/ESign";
@@ -42,10 +42,10 @@ const AmcMembership = () => {
     if (isAMCLink && queryParams.get("boid") && queryParams.get("user")) {
       // External link scenario or pasted link
       const decryptedBOID = decryptAES(
-        decodeURIComponent(queryParams.get("boid")!)
+        decodeURIComponent(queryParams.get("boid")!),
       );
       const decryptedUserId = decryptAES(
-        decodeURIComponent(queryParams.get("user")!)
+        decodeURIComponent(queryParams.get("user")!),
       );
       setPassUserId(decryptedUserId);
 

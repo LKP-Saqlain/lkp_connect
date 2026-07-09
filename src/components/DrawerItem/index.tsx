@@ -42,6 +42,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // import StarBurst2 from "../../assets/images/starburst2.png";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TroubleshootIcon from "@mui/icons-material/Troubleshoot";
+import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import Lottie from "react-lottie-player";
 import newIcon from "../../assets/images/new.json";
 
@@ -110,6 +111,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     IVR: <PublishedWithChangesIcon />,
     SPIP: <AnalyticsIcon />,
     "TPD Report": <FaFileInvoice size={17} />,
+    Target: <FaFileInvoice size={17} />,
     "SPIP Dashboard": <SpaceDashboardIcon />,
     "Client Request": <PublishedWithChangesIcon />,
     "Mutual Fund": <AttachMoneyIcon />,
@@ -117,6 +119,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "Q4 Contest": <LocalPoliceIcon />,
     "Q3 Contest": <LocalPoliceIcon />,
     "Expiry Contest": <CampaignIcon />,
+    "Partner OnBoarding": <FolderCopyIcon />,
   };
 
   const getIcon = (title: string) => {
@@ -148,6 +151,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
           minHeight: 48,
           justifyContent: open ? "initial" : "center",
           px: 2.5,
+          py: 0,
           backgroundColor: isMenuOpen ? "#ffffff" : "transparent",
           borderRadius: "10px",
           margin: "5px",
@@ -206,9 +210,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
             />
           ))}
 
-        {(title === "Zone Overview" ||
-          title === "Mutual Fund" ||
-          title === "Q4 Contest") && (
+        {title === "Target" && (
           <div className="starburst-bg">
             <Lottie
               loop

@@ -6015,7 +6015,10 @@ export const getApproverOneDetails: GridColDef[] = [
         }
 
         const decompressed = pako.ungzip(bytes);
-        const blob = new Blob([decompressed], { type: "application/pdf" });
+        // const blob = new Blob([decompressed], { type: "application/pdf" });
+        const blob = new Blob([new Uint8Array(decompressed)], {
+          type: "application/pdf",
+        }); // FIX: Ensure it's a Uint8Array
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -6364,7 +6367,10 @@ export const getApproverTwoDetails: GridColDef[] = [
         }
 
         const decompressed = pako.ungzip(bytes);
-        const blob = new Blob([decompressed], { type: "application/pdf" });
+        // const blob = new Blob([decompressed], { type: "application/pdf" });
+        const blob = new Blob([new Uint8Array(decompressed)], {
+          type: "application/pdf",
+        }); // FIX: Ensure it's a Uint8Array
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -14235,38 +14241,41 @@ const formatCurrency = (value: number) =>
   }).format(value ?? 0);
 
 export const PartnerOnboardingDetails: GridColDef[] = [
+  // {
+  //   field: "id",
+  //   headerName: "Sr. No",
+  //   width: 90,
+  //   flex: 1,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  // },
   {
-    field: "srNo",
-    headerName: "Sr. No",
-    width: 90,
-    flex: 1,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
-  },
-  {
-    field: "appNo",
+    field: "applNo",
     headerName: "App. No.",
-    width: 130,
-    flex: 1,
+    width: 100,
+    flex: 0.7,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
   },
   {
-    field: "prospectName",
+    field: "aP_Name",
     headerName: "Name of Prospect",
-    flex: 1,
+    flex: 1.1,
     minWidth: 180,
     headerAlign: "center",
     align: "left",
     disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "date",
     headerName: "Date",
     width: 140,
-    flex: 1,
+    flex: 0.8,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -14276,8 +14285,144 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     },
   },
   {
-    field: "referredBy",
+    field: "referralName",
     headerName: "Referred By",
+    flex: 1.4,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "city",
+    headerName: "City",
+    width: 130,
+    headerAlign: "center",
+    align: "left",
+    flex: 0.8,
+    disableColumnMenu: true,
+    renderCell: (params) => capitalizeEachWord(params.value),
+  },
+  {
+    field: "partnerType",
+    headerName: "Partner Type",
+    width: 150,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => capitalizeEachWord(params.value),
+  },
+  {
+    field: "applStatus",
+    headerName: "Status",
+    width: 130,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => capitalizeEachWord(params.value),
+  },
+  {
+    field: "Download Documents",
+    headerName: "Download",
+    width: 130,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "stage",
+    headerName: "Track Application",
+    width: 130,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+];
+
+export const ParOnbPartnerSharing: GridColDef[] = [
+  {
+    field: "segment",
+    headerName: "Segment",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    editable: false,
+  },
+  {
+    field: "apshare",
+    headerName: "AP Share (%)",
+    minWidth: 110,
+    headerAlign: "center",
+    align: "center",
+    flex: 1,
+    disableColumnMenu: true,
+    renderCell: (params) => {
+      const isDisabled = params.row.segment === "SLBM";
+
+      return (
+        <span
+          style={{
+            opacity: isDisabled ? 0.5 : 1,
+            pointerEvents: isDisabled ? "none" : "auto",
+          }}
+        >
+          {params.value != null ? `${params.value}%` : "-"}
+        </span>
+      );
+    },
+  },
+  {
+    field: "lkpShare",
+    headerName: "LKP Share (%)",
+    minWidth: 110,
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => {
+      const isDisabled = params.row.segment === "SLBM";
+
+      return (
+        <span style={{ opacity: isDisabled ? 0.5 : 1 }}>
+          {params.value != null ? `${params.value}%` : "-"}
+        </span>
+      );
+    },
+  },
+  {
+    field: "minRetention",
+    headerName: "Minimum Retention",
+    minWidth: 130,
+    headerClassName: "header-wrap-custom",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => {
+      const isDisabled = params.row.segment === "SLBM";
+
+      return (
+        <span style={{ opacity: isDisabled ? 0.5 : 1 }}>
+          {params.value != null ? `${params.value}` : "-"}
+        </span>
+      );
+    },
+  },
+];
+
+export const ParOnPaymentexchangeColumns: GridColDef[] = [
+  {
+    field: "exchangeName",
+    headerName: "Exchange Charges",
     flex: 1,
     minWidth: 150,
     headerAlign: "center",
@@ -14285,30 +14430,226 @@ export const PartnerOnboardingDetails: GridColDef[] = [
     disableColumnMenu: true,
   },
   {
+    field: "segmentName",
+    headerName: "Segments",
+    flex: 1,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "amount",
+    headerName: "Amount",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+  {
+    field: "gst",
+    headerName: "GST",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+  {
+    field: "total",
+    headerName: "Total",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+];
+export const ParOnPaymentOthers: GridColDef[] = [
+  {
+    field: "exchangeName",
+    headerName: "Others",
+    flex: 1,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "total",
+    headerName: "Proposed Total",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+  {
+    field: "Edit",
+    headerName: "Edit",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "revisedTotal",
+    headerName: "Revised Total",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) =>
+      typeof params === "number" && !isNaN(params)
+        ? new Intl.NumberFormat("en-IN").format(params)
+        : params,
+  },
+
+  {
+    field: "attachment",
+    headerName: "Attachment",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "remark",
+    headerName: "Remark",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+];
+export const PaymentOtherConditionData: GridColDef[] = [
+  {
+    field: "exchangeName",
+    headerName: "Others",
+    flex: 1,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "segmentName",
+    headerName: "Segment Name",
+    flex: 1,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+
+  {
+    field: "fileName",
+    headerName: "Attachment",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "remarks",
+    headerName: "Remark",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+
+  {
+    field: "amount",
+    headerName: "Proposed Total",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+  {
+    field: "revisedTotal",
+    headerName: "Revised Total",
+    flex: 1,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: number) =>
+      new Intl.NumberFormat("en-IN").format(params),
+  },
+];
+
+export const ApDocsDownload: GridColDef[] = [
+  {
+    field: "applNo",
+    headerName: "App. No.",
+    width: 100,
+    flex: 0.7,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "aP_Name",
+    headerName: "Name of Prospect",
+    flex: 1.1,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => capitalizeEachWord(params.value),
+  },
+  {
+    field: "date",
+    headerName: "Date",
+    width: 140,
+    flex: 0.8,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) => {
+      if (!params) return "";
+      return dayjs(params).format("DD-MMM-YY");
+    },
+  },
+  {
+    field: "referralName",
+    headerName: "Referred By",
+    flex: 1.4,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+  },
+  {
     field: "city",
     headerName: "City",
     width: 130,
     headerAlign: "center",
-    align: "center",
-    flex: 1,
+    align: "left",
+    flex: 0.8,
     disableColumnMenu: true,
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
   {
     field: "partnerType",
     headerName: "Partner Type",
     width: 150,
-    flex: 1,
+    flex: 0.8,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
-  },
-  {
-    field: "stage",
-    headerName: "Stage",
-    width: 130,
-    flex: 1,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => capitalizeEachWord(params.value),
   },
 ];

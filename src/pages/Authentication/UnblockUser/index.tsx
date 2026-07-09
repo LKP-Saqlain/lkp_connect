@@ -35,7 +35,7 @@ import {
   //   ForgotUserPassword,
 } from "../../../redux/thunk/ForgotPassword";
 import { UnblockUsers } from "../../../redux/thunk/unblockUser/unblockUser";
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/LKP Logo (Light Theme).svg";
 import "../style.css";
 
 const UnblockUser = () => {
@@ -138,7 +138,7 @@ const UnblockUser = () => {
           ShowToast(
             "error",
             message ||
-              "Sorry for the inconvenience, please try after some time."
+              "Sorry for the inconvenience, please try after some time.",
           );
         })
         .finally(() => {
@@ -171,7 +171,7 @@ const UnblockUser = () => {
         dispatch(hideLoader());
         ShowToast(
           "error",
-          message || "Sorry for the inconvenience, please try after some time."
+          message || "Sorry for the inconvenience, please try after some time.",
         );
       })
       .finally(() => {
@@ -205,7 +205,7 @@ const UnblockUser = () => {
           alt="Logo"
           src={Logo}
           width={"auto"}
-          height="50px"
+          height="100px"
           sx={{
             position: "absolute",
             top: 10, // Adjust as needed

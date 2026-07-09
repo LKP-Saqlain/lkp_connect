@@ -92,11 +92,14 @@ interface SelectedWidgetProps {
   onViewAmcDetails?: (row: any) => void;
   handleMTFRow?: (row: any) => void;
   openNudgeTable?: () => void;
+  onStatusClick?: (row: any, type: string) => void;
   selectedTab?: any;
   handleDownloadExcel?: () => void;
   isCustomBtn?: any;
   handleContractMailClick?: () => void;
   tabValue?: any;
+  editRowAccess?: boolean;
+  setRows?: any;
 }
 
 const DataTable = ({
@@ -120,6 +123,7 @@ const DataTable = ({
   handleExcelDownload,
   handleEditClick,
   handleApproval,
+  onStatusClick,
   handleDownload,
   totalCount,
   activeClient,
@@ -155,6 +159,8 @@ const DataTable = ({
   isCustomBtn,
   handleContractMailClick,
   tabValue,
+  setRows,
+  editRowAccess,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -407,13 +413,35 @@ const DataTable = ({
       );
     } else if (selectedWidget === "Upcoming Dormant Client") {
       return TableColumns.getClientDormantStatus(handleViewDetails);
-    }
-    // else if (activeSubItem === "Referal Entry Status") {
-    //   return getAccountDetails.map((column) => ({
-    //     ...column,
-    //   }));
-    // }
-    else if (activeSubItem === "RH Approval") {
+    } else if (activeSubItem === "Exchange Activation") {
+      return TableColumns.ApDocsDownload.map((column) => {
+        if (column.field === "applNo") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    console.log("stage row", params);
+                    onStatusClick?.(params.row, column.field);
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {params.row.applNo}
+                </button>
+              );
+            },
+          };
+        }
+        return column;
+      });
+    } else if (activeSubItem === "RH Approval") {
       return TableColumns.RegionalHead.map((column) => {
         if (column.field === "remark") {
           return {
@@ -1427,6 +1455,45 @@ const DataTable = ({
       return TableColumns.EmpBrokerageAchieved.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "AP PaymentExchangeData") {
+      return TableColumns.ParOnPaymentexchangeColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "AP PaymentOtherConditionData") {
+      return TableColumns.PaymentOtherConditionData.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "AP PaymentOtherData") {
+      return TableColumns.ParOnPaymentOthers.map((column) => {
+        if (column.field === "Edit") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              if (params.row.isTotal) return null;
+
+              const handleEdit = () => {
+                handleEditClick?.(params.row, true);
+              };
+
+              return (
+                <>
+                  <Tooltip title="Edit" arrow placement="top">
+                    <IconButton
+                      sx={{ p: 0 }}
+                      color="primary"
+                      onClick={handleEdit}
+                    >
+                      <EditIcon fontSize="small" sx={{ color: "#11395C" }} />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              );
+            },
+          };
+        }
+
+        return column;
+      });
     } else if (selectedWidget === "Lifetime Membership") {
       return TableColumns.AmcLifeMembership.map((column) => ({
         ...column,
@@ -2530,7 +2597,7 @@ const DataTable = ({
         // Return unchanged column if not the 'status' or 'document' field
         return column;
       });
-    } else if (activeSubItem === "Referal Entry Status") {
+    } else if (activeSubItem === "AP Partner Details") {
       return TableColumns.PartnerOnboardingDetails.map((column) => {
         if (column.field === "stage") {
           return {
@@ -2542,6 +2609,7 @@ const DataTable = ({
                 <button
                   onClick={() => {
                     console.log("stage row", params);
+                    onStatusClick?.(params.row, column.field);
                   }}
                   style={{
                     color: "#11395C",
@@ -2551,13 +2619,13 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  {params.row.stage}
+                  Track
                 </button>
               );
             },
           };
         }
-        if (column.field === "appNo") {
+        if (column.field === "applNo") {
           return {
             ...column,
             renderCell: (params: any) => {
@@ -2567,6 +2635,7 @@ const DataTable = ({
                 <button
                   onClick={() => {
                     console.log("stage row", params);
+                    onStatusClick?.(params.row, column.field);
                   }}
                   style={{
                     color: "#11395C",
@@ -2576,7 +2645,31 @@ const DataTable = ({
                     cursor: "pointer",
                   }}
                 >
-                  {params.row.appNo}
+                  {params.row.applNo}
+                </button>
+              );
+            },
+          };
+        }
+        if (column.field === "Download Documents") {
+          return {
+            ...column,
+            renderCell: (params: any) => {
+              return (
+                <button
+                  onClick={() => {
+                    console.log("stage row", params);
+                    handleDownload(params.row.applNo);
+                  }}
+                  style={{
+                    color: "#11395C",
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Download
                 </button>
               );
             },
@@ -2636,6 +2729,13 @@ const DataTable = ({
     } else if (activeSubItem === "DPMandateJVData") {
       return TableColumns.MandateTab3Columns.map((column) => ({
         ...column,
+      }));
+    } else if (activeSubItem === "partnerSharing") {
+      return TableColumns.ParOnbPartnerSharing.map((column) => ({
+        ...column,
+        editable: column.field !== "segment" && editRowAccess,
+        cellClassName:
+          editRowAccess && column.field !== "segment" ? "editable-cell" : "",
       }));
     } else if (activeSubItem === "contestSPIP") {
       return TableColumns.contestSPIP.map((column) => ({
@@ -3125,6 +3225,20 @@ const DataTable = ({
           localeText={{ noRowsLabel: "No Records!" }}
           columns={columns}
           rowHeight={30}
+          editMode={editRowAccess ? "cell" : undefined}
+          isCellEditable={(params) => {
+            if (params.row.segment === "SLBM") return false;
+            return !!editRowAccess;
+          }}
+          processRowUpdate={(newRow) => {
+            if (setRows) {
+              setRows((prev: any) =>
+                prev.map((row: any) => (row.id === newRow.id ? newRow : row)),
+              );
+            }
+            console.log("Updated Row:", newRow);
+            return newRow;
+          }}
           hideFooter={customHide ? true : false}
           // getRowId={(row: any) => (row.Id ? row?.Id : row?.cc)}
           getRowId={(row: any) =>
@@ -3189,6 +3303,14 @@ const DataTable = ({
               color: "#000",
               border: "1px solid #D3D3D3 !important",
             },
+            "& .editable-cell": {
+              backgroundColor: "#ffffff", // editable cell background color
+              cursor: "pointer",
+            },
+            "& .editable-cell:hover": {
+              backgroundColor: "#cce7ff",
+            },
+
             ...(customCss && {
               "& .duplicate-row": {
                 backgroundColor: "#f9e28e !important", // light yellow

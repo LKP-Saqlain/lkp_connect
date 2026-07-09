@@ -34,7 +34,7 @@ import {
   SendOtp,
   ForgotUserPassword,
 } from "../../../redux/thunk/ForgotPassword";
-import Logo from "../../../assets/logo.png";
+import Logo from "../../../assets/LKP Logo (Light Theme).svg";
 import "../style.css";
 
 const ForgotPassword = () => {
@@ -151,7 +151,7 @@ const ForgotPassword = () => {
           ShowToast(
             "error",
             message ||
-              "Sorry for the inconvenience, please try after some time."
+              "Sorry for the inconvenience, please try after some time.",
           );
         })
         .finally(() => {
@@ -186,7 +186,7 @@ const ForgotPassword = () => {
         dispatch(hideLoader());
         ShowToast(
           "error",
-          message || "Sorry for the inconvenience, please try after some time."
+          message || "Sorry for the inconvenience, please try after some time.",
         );
       })
       .finally(() => {
@@ -220,7 +220,7 @@ const ForgotPassword = () => {
           alt="Logo"
           src={Logo}
           width={"auto"}
-          height="50px"
+          height="100px"
           sx={{
             position: "absolute",
             top: 10, // Adjust as needed

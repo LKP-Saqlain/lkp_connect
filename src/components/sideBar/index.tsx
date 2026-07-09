@@ -25,8 +25,9 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 // import { SlSizeFullscreen } from "react-icons/sl";
 // import { BsFullscreen } from "react-icons/bs";
-import Logo from "../../assets/logo.png";
-import Logo1 from "../../assets/images/logo1.png";
+import Logo from "../../assets/LKP Logo (Light Theme).svg";
+// import Logo from "../../assets/images/NewLogo.jpg";
+import Logo1 from "../../assets/images/LKP New Logo (Dark Theme).svg";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState, persistor } from "../../redux/store";
 import { GetMenu } from "../../redux/thunk/GetMenus";
@@ -133,8 +134,10 @@ import ContractNote from "../../pages/UnlistedShare/contractNote";
 import BankRecordEntry from "../../pages/ThirdParty/bankMaster/bankRecordEntry";
 import BankApproval from "../../pages/ThirdParty/bankMaster/bankApproval";
 import BankReport from "../../pages/Reports/BankReport";
-// import ApDetails from "../../pages/AP Onboarding/Details";
-
+import ApDetails from "../../pages/AP Onboarding/Main";
+import DocsDownload from "../../pages/AP Onboarding/DocsDownload";
+import EmployeeTarget from "../../pages/Revamp/Employee Target";
+import ZoneTarget from "../../pages/Revamp/Zone Target";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -371,6 +374,7 @@ const SideBar = () => {
       activeMenu !== "Trading" &&
       activeMenu !== "Zone Overview" &&
       activeMenu !== "Account" &&
+      activeMenu !== "Partner OnBoarding" &&
       activeSubItem
     ) {
       const timeoutId = setTimeout(() => {
@@ -872,9 +876,24 @@ const SideBar = () => {
     "Client Onboarding": <NewClientPhysical />,
     "File Upload": <FileUpload />,
   };
-  const referralLeadSubItems: Record<string, JSX.Element> = {
-    // "Referal Entry Status": <ApDetails />,
+  const targetSubItems: Record<string, JSX.Element> = {
+    "My Target": <EmployeeTarget />,
+    "Zone Target": <ZoneTarget />,
   };
+  // const referralLeadSubItems: Record<string, JSX.Element> = {
+  //   "Referal Entry Status": <EmployeeTarget />,
+  //   "Referal Lead Updation": <ZoneTarget />,
+  // };
+  const PartnerOnBoardingSubItems: Record<string, JSX.Element> = {
+    "Ops Level 1 Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Compliance Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Ops Level 2 Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Business Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Management Approval": <ApDetails activeSubItem={activeSubItem} />,
+    "Lkp Esign": <ApDetails activeSubItem={activeSubItem} />,
+    "Exchange Activation": <DocsDownload activeSubItem={activeSubItem} />,
+  };
+
   const getSubItemComponent = (
     subItems: Record<string, JSX.Element | null>,
   ): JSX.Element | null => subItems[activeSubItem] || null;
@@ -902,7 +921,8 @@ const SideBar = () => {
       "KYC Dashboard": getSubItemComponent(kycSubItems),
       "Stock Study": <StockStudy />,
       "Mutual Fund": getSubItemComponent(mutualFundSubItems),
-      "Referal Lead": getSubItemComponent(referralLeadSubItems),
+      // "Referal Lead": getSubItemComponent(referralLeadSubItems),
+      Target: getSubItemComponent(targetSubItems),
       DashBoard: null,
       "Regulatory Announcement": (
         <RegulatorAnnouncement activeMenu={activeMenu} />
@@ -948,6 +968,7 @@ const SideBar = () => {
       "DP AMC Contest-Q4": <AmcMembershipQ4 activeMenu={activeMenu} />,
       "Research Calls": <ResearchCalls />,
       "Expiry Contest": <Expiry />,
+      "Partner OnBoarding": getSubItemComponent(PartnerOnBoardingSubItems),
     };
     return map[mn] ?? null;
   };
@@ -1042,34 +1063,34 @@ const SideBar = () => {
       });
   };
 
-  const handleResearchAdvisoryClick = () => {
-    const payload = {
-      syncPointPartnerCode: "LKPDIS",
-      ssoUserCode: emailID,
-    };
+  // const handleResearchAdvisoryClick = () => {
+  //   const payload = {
+  //     syncPointPartnerCode: "LKPDIS",
+  //     ssoUserCode: `${user_type === "Partner" ? "AP" : "EMP"}${user_id.slice(-4)}`,
+  //   };
 
-    dispatch(showLoader(""));
+  //   dispatch(showLoader(""));
 
-    apiServices
-      .InitBOLogin(payload)
-      .then((response) => {
-        if (response?.status === 200) {
-          const url = response?.data?.data?.url;
+  //   apiServices
+  //     .InitBOLogin(payload)
+  //     .then((response) => {
+  //       if (response?.status === 200) {
+  //         const url = response?.data?.data?.url;
 
-          console.log("INITBBO", url);
+  //         console.log("INITBBO", url);
 
-          if (url) {
-            window.open(url, "_blank", "noopener,noreferrer");
-          }
-        }
-      })
-      .catch((error) => {
-        console.log("ERRRRROR", error);
-      })
-      .finally(() => {
-        dispatch(hideLoader());
-      });
-  };
+  //         if (url) {
+  //           window.open(url, "_blank", "noopener,noreferrer");
+  //         }
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("ERRRRROR", error);
+  //     })
+  //     .finally(() => {
+  //       dispatch(hideLoader());
+  //     });
+  // };
 
   return (
     <>
@@ -1108,7 +1129,7 @@ const SideBar = () => {
                 onClick={handleDrawerOpen}
                 edge="start"
                 sx={[
-                  { marginRight: isMobile ? 0 : 5 },
+                  { marginRight: isMobile ? 0 : 2 },
                   open && { display: "none" },
                 ]}
               >
@@ -1116,7 +1137,7 @@ const SideBar = () => {
               </IconButton>
             )}
             {!open && (
-              <Box sx={{ flexGrow: 0, backgroundColor: "#F9F6EE" }}>
+              <Box sx={{ flexGrow: 0 }}>
                 <Box
                   component="img"
                   alt="Logo"
@@ -1128,13 +1149,12 @@ const SideBar = () => {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
-            <div
+            {/* <div
               style={{
                 position: "relative",
                 display: "inline-block",
               }}
             >
-              {/* NEW BADGE */}
               <div
                 style={{
                   position: "absolute",
@@ -1182,7 +1202,7 @@ const SideBar = () => {
               >
                 Research Advisory Products
               </Button>
-            </div>
+            </div> */}
             <Button
               onClick={handleWebPortalLogin}
               variant="outlined"
@@ -1201,7 +1221,6 @@ const SideBar = () => {
             >
               Old Web Portal
             </Button>
-
             {/* {showMyPerformance && ( */}
             <>
               <Button
@@ -1378,7 +1397,7 @@ const SideBar = () => {
                 display: "flex",
                 justifyContent: "center",
                 // zIndex: 1,
-                marginTop: isMobile ? "0px" : "10px",
+                marginTop: isMobile ? "0px" : "0px",
               }}
             >
               <Box
@@ -1386,12 +1405,12 @@ const SideBar = () => {
                 alt="Logo"
                 src={Logo1}
                 width={"auto"}
-                height="50px"
-                style={{ marginLeft: isMobile ? "0px" : "-60px" }}
+                height="85px"
+                style={{ marginLeft: isMobile ? "0px" : " -20px" }}
               />
             </Box>
 
-            <List>
+            <List sx={{ py: 0 }}>
               {menuItems.map((item) => (
                 <DrawerItem
                   key={item.mc}
@@ -1416,9 +1435,9 @@ const SideBar = () => {
           component="main"
           sx={{
             flexGrow: 1,
-            p: 0.9,
-            pt: "72px", // Adjust according to actual AppBar height
-            backgroundColor: "#E5E4E2",
+            p: 2,
+            pt: "79px", // Adjust according to actual AppBar height
+            backgroundColor: "#f1f1f1",
             overflow: "hidden",
             // width: "100vw", // Full width of the viewport
             // height: "100vh", // Full height of the viewport

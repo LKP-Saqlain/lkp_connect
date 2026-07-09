@@ -1,3 +1,5 @@
+import { apiServices } from "../services";
+
 export const ButtonsLabel = [
   { id: "1", label: "Daily" },
   { id: "2", label: "Weekly" },
@@ -6,346 +8,7 @@ export const ButtonsLabel = [
   { id: "5", label: "Last 7 Days" },
   { id: "6", label: "Till Date" },
 ];
-export const RegulatorAnnouncements = [
-  {
-    dummyId: 1,
-    date: "2023-01-10",
-    department: "KYC",
-    subject:
-      "acus. Id malesuada blandit cursus sollicitudin amet neque egestas malesuada montes. Netus ipsum ultrices in sed vel blandit euismod commodo. Aliquet eget purus varius nisi nibh.",
-    lkpComments: "View",
-    circular: "https://example.com/download/circular1.pdf",
-    modalText:
-      "Lorem ipsum dolor sit amet consectetur. Tempor egeit amet consectetur. Tempor egeit amet consectetur. Tempor egeit amet consectetur. Tempor eget porttitor aliquet lacus. Id malesuada blandit cursus sollicitudin amet neque egestas malesuada montes. Netus ipsum ultrices in sed vel blandit euismod commodo. Aliquet eget purus varius ",
-  },
-  {
-    dummyId: 3,
-    date: "2023-01-10",
-    department: "Compliance",
-    subject:
-      "Lorem ipsum dolor sit atus ipsum ultrices in sed vel blandit euismod commodo. Aliquet eget purus varius nisi nibh.",
-    lkpComments: "View",
-    circular: "https://example.com/download/circular3.pdf",
-    modalText:
-      "Lnsectetur. Tempor egeit amet consectetur. Tempor egeit amet consectetur. Tempor eget porttitor aliquet lacus. Id malesuada blandit cursus sollicitudin amet neque egestas malesuada montes. Netus ipsum ultrices in sed vel blandit euismod commodo. Aliquet eget purus varius ",
-  },
-];
 
-export const dummyClientPlanData = [
-  {
-    dummyId: 1,
-    zone: "West",
-    status: "Pending",
-    branch: "Mumbai",
-    ClientCode: "CL001",
-    ClientName: "Rohit Sharma",
-    ClientType: "Direct",
-    segment: "Equity",
-    existingPlan: "Plan A",
-    proposedPlan: "Plan B",
-  },
-];
-export const monthlyDataT = [];
-
-export const combinedDataBySource = [
-  {
-    data: [
-      {
-        dummyId: 152,
-        month: "Mumbai",
-        directChannelDIY: 100,
-        DirectSalesTeam: 500,
-        APReferrals: 1000,
-        EmployeeReferrals: 30,
-        REChannel: 25,
-        Total: 1655,
-        datatype: "weekly",
-      },
-
-      {
-        dummyId: 157,
-        month: "Lucknow",
-        directChannelDIY: 85,
-        DirectSalesTeam: 400,
-        APReferrals: 800,
-        EmployeeReferrals: 25,
-        REChannel: 20,
-        Total: 1330,
-        datatype: "monthly",
-      },
-    ],
-    customFlag: "table-1",
-  },
-  {
-    data: [
-      {
-        dummyId: 1,
-        month: "Sep-24",
-        directChannelDIY: 111,
-        DirectSalesTeam: 352,
-        APReferrals: 951,
-        EmployeeReferrals: 15,
-        REChannel: 25,
-        Total: 1454,
-        datatype: "weekly",
-      },
-
-      {
-        dummyId: 21,
-        month: "Feb-24",
-        directChannelDIY: 81,
-        DirectSalesTeam: 361,
-        APReferrals: 1053,
-        EmployeeReferrals: 27,
-        REChannel: 24,
-        Total: 1546,
-        datatype: "monthly",
-      },
-      {
-        dummyId: 22,
-        month: "Apr-24",
-        directChannelDIY: 115,
-        DirectSalesTeam: 453,
-        APReferrals: 1127,
-        EmployeeReferrals: 29,
-        REChannel: 22,
-        Total: 1746,
-        datatype: "yearly",
-      },
-      {
-        dummyId: 23,
-        month: "Jul-24",
-        directChannelDIY: 85,
-        DirectSalesTeam: 378,
-        APReferrals: 1067,
-        EmployeeReferrals: 17,
-        REChannel: 25,
-        Total: 1572,
-        datatype: "Daily",
-      },
-    ],
-    customFlag: "table-2",
-  },
-  {
-    data: [
-      {
-        dummyId: 24,
-        month: "Nov-23",
-        directChannelDIY: 104,
-        DirectSalesTeam: 352,
-        APReferrals: 975,
-        EmployeeReferrals: 31,
-        REChannel: 16,
-        Total: 1578,
-        datatype: "tilldate",
-      },
-
-      {
-        dummyId: 73,
-        month: "Jul-24",
-        directChannelDIY: 104,
-        DirectSalesTeam: 426,
-        APReferrals: 1088,
-        EmployeeReferrals: 30,
-        REChannel: 22,
-        Total: 1670,
-        datatype: "last7days",
-      },
-    ],
-    customFlag: "table-3",
-  },
-  {
-    data: [
-      {
-        dummyId: 42,
-        month: "Aug-23",
-        directChannelDIY: 116,
-        DirectSalesTeam: 402,
-        APReferrals: 1102,
-        EmployeeReferrals: 20,
-        REChannel: 21,
-        Total: 1641,
-        datatype: "yearly",
-      },
-
-      {
-        dummyId: 484,
-        month: "May-24",
-        directChannelDIY: 107,
-        DirectSalesTeam: 390,
-        APReferrals: 1123,
-        EmployeeReferrals: 32,
-        REChannel: 27,
-        Total: 1679,
-        datatype: "monthly",
-      },
-    ],
-    customFlag: "table-7",
-  },
-];
-
-export const mutualFundRows = [
-  {
-    id: 1,
-    fundName: "Axis Bluechip Fund",
-    minSIP: 100,
-    minLumpSum: 5000,
-    aumCr: 32000,
-    returns: 143332.5,
-  },
-  {
-    id: 2,
-    fundName: "SBI Small Cap Fund",
-    minSIP: 500,
-    minLumpSum: 5000,
-    aumCr: 15000,
-    returns: 18.2,
-  },
-  {
-    id: 3,
-    fundName: "HDFC Top 100 Fund",
-    minSIP: 100,
-    minLumpSum: 5000,
-    aumCr: 42000,
-    returns: 11.8,
-  },
-  {
-    id: 4,
-    fundName: "ICICI Prudential Equity & Debt Fund",
-    minSIP: 500,
-    minLumpSum: 5000,
-    aumCr: 28000,
-    returns: 13.4,
-  },
-  {
-    id: 5,
-    fundName: "Kotak Flexicap Fund",
-    minSIP: 100,
-    minLumpSum: 5000,
-    aumCr: 19000,
-    returns: 14.1,
-  },
-  {
-    id: 6,
-    fundName: "Nippon India Growth Fund",
-    minSIP: 100,
-    minLumpSum: 5000,
-    aumCr: 22000,
-    returns: 16.7,
-  },
-  {
-    id: 7,
-    fundName: "UTI Nifty Index Fund",
-    minSIP: 100,
-    minLumpSum: 1000,
-    aumCr: 10500,
-    returns: 10.2,
-  },
-  {
-    id: 8,
-    fundName: "Mirae Asset Large Cap Fund",
-    minSIP: 1000,
-    minLumpSum: 5000,
-    aumCr: 36000,
-    returns: 13.6,
-  },
-  {
-    id: 9,
-    fundName: "Parag Parikh Flexi Cap Fund",
-    minSIP: 1000,
-    minLumpSum: 1000,
-    aumCr: 27000,
-    returns: 15.9,
-  },
-  {
-    id: 10,
-    fundName: "Canara Robeco Bluechip Equity Fund",
-    minSIP: 1000,
-    minLumpSum: 5000,
-    aumCr: 9500,
-    returns: 12.9,
-  },
-  {
-    id: 11,
-    fundName: "Axis Midcap Fund",
-    minSIP: 500,
-    minLumpSum: 5000,
-    aumCr: 18000,
-    returns: 17.4,
-  },
-  {
-    id: 12,
-    fundName: "SBI Magnum Multicap Fund",
-    minSIP: 100,
-    minLumpSum: 5000,
-    aumCr: 12000,
-    returns: 13.1,
-  },
-  {
-    id: 13,
-    fundName: "ICICI Prudential Value Discovery Fund",
-    minSIP: 100,
-    minLumpSum: 5000,
-    aumCr: 21000,
-    returns: 12.7,
-  },
-  {
-    id: 14,
-    fundName: "Franklin India Smaller Companies Fund",
-    minSIP: 500,
-    minLumpSum: 5000,
-    aumCr: 8000,
-    returns: 19.5,
-  },
-  {
-    id: 15,
-    fundName: "Aditya Birla Sun Life Tax Relief 96",
-    minSIP: 500,
-    minLumpSum: 500,
-    aumCr: 9200,
-    returns: 14.8,
-  },
-  {
-    id: 16,
-    fundName: "DSP Midcap Fund",
-    minSIP: 500,
-    minLumpSum: 5000,
-    aumCr: 10000,
-    returns: 16.3,
-  },
-  {
-    id: 17,
-    fundName: "Motilal Oswal Nasdaq 100 FOF",
-    minSIP: 500,
-    minLumpSum: 500,
-    aumCr: 4200,
-    returns: 20.2,
-  },
-  {
-    id: 18,
-    fundName: "Edelweiss Balanced Advantage Fund",
-    minSIP: 500,
-    minLumpSum: 5000,
-    aumCr: 8500,
-    returns: 9.8,
-  },
-  {
-    id: 19,
-    fundName: "Tata Digital India Fund",
-    minSIP: 500,
-    minLumpSum: 5000,
-    aumCr: 7500,
-    returns: 21.4,
-  },
-  {
-    id: 20,
-    fundName: "Invesco India Growth Opportunities Fund",
-    minSIP: 1000,
-    minLumpSum: 1000,
-    aumCr: 6400,
-    returns: 15.2,
-  },
-];
 export const getNextPaymentDateString = (day: string | number) => {
   const today = new Date();
   const selectedDay = Number(day);
@@ -486,6 +149,143 @@ export const expiryContestCriteriaRows = [
   },
 ];
 
+export const combinedDataBySource = [
+  {
+    data: [
+      {
+        dummyId: 152,
+        month: "Mumbai",
+        directChannelDIY: 100,
+        DirectSalesTeam: 500,
+        APReferrals: 1000,
+        EmployeeReferrals: 30,
+        REChannel: 25,
+        Total: 1655,
+        datatype: "weekly",
+      },
+
+      {
+        dummyId: 157,
+        month: "Lucknow",
+        directChannelDIY: 85,
+        DirectSalesTeam: 400,
+        APReferrals: 800,
+        EmployeeReferrals: 25,
+        REChannel: 20,
+        Total: 1330,
+        datatype: "monthly",
+      },
+    ],
+    customFlag: "table-1",
+  },
+  {
+    data: [
+      {
+        dummyId: 1,
+        month: "Sep-24",
+        directChannelDIY: 111,
+        DirectSalesTeam: 352,
+        APReferrals: 951,
+        EmployeeReferrals: 15,
+        REChannel: 25,
+        Total: 1454,
+        datatype: "weekly",
+      },
+
+      {
+        dummyId: 21,
+        month: "Feb-24",
+        directChannelDIY: 81,
+        DirectSalesTeam: 361,
+        APReferrals: 1053,
+        EmployeeReferrals: 27,
+        REChannel: 24,
+        Total: 1546,
+        datatype: "monthly",
+      },
+      {
+        dummyId: 22,
+        month: "Apr-24",
+        directChannelDIY: 115,
+        DirectSalesTeam: 453,
+        APReferrals: 1127,
+        EmployeeReferrals: 29,
+        REChannel: 22,
+        Total: 1746,
+        datatype: "yearly",
+      },
+      {
+        dummyId: 23,
+        month: "Jul-24",
+        directChannelDIY: 85,
+        DirectSalesTeam: 378,
+        APReferrals: 1067,
+        EmployeeReferrals: 17,
+        REChannel: 25,
+        Total: 1572,
+        datatype: "Daily",
+      },
+    ],
+    customFlag: "table-2",
+  },
+  {
+    data: [
+      {
+        dummyId: 24,
+        month: "Nov-23",
+        directChannelDIY: 104,
+        DirectSalesTeam: 352,
+        APReferrals: 975,
+        EmployeeReferrals: 31,
+        REChannel: 16,
+        Total: 1578,
+        datatype: "tilldate",
+      },
+
+      {
+        dummyId: 73,
+        month: "Jul-24",
+        directChannelDIY: 104,
+        DirectSalesTeam: 426,
+        APReferrals: 1088,
+        EmployeeReferrals: 30,
+        REChannel: 22,
+        Total: 1670,
+        datatype: "last7days",
+      },
+    ],
+    customFlag: "table-3",
+  },
+  {
+    data: [
+      {
+        dummyId: 42,
+        month: "Aug-23",
+        directChannelDIY: 116,
+        DirectSalesTeam: 402,
+        APReferrals: 1102,
+        EmployeeReferrals: 20,
+        REChannel: 21,
+        Total: 1641,
+        datatype: "yearly",
+      },
+
+      {
+        dummyId: 484,
+        month: "May-24",
+        directChannelDIY: 107,
+        DirectSalesTeam: 390,
+        APReferrals: 1123,
+        EmployeeReferrals: 32,
+        REChannel: 27,
+        Total: 1679,
+        datatype: "monthly",
+      },
+    ],
+    customFlag: "table-7",
+  },
+];
+
 export const expiryContestRewardRows = [
   {
     id: 1,
@@ -531,65 +331,292 @@ export const RHexpiryContestRewardRows = [
 
 export const partnerOnboardingTabs = ["Summary", "Details"];
 
-export const ProspectRows = [
+export const SEGMENTS_DATA = [
+  {
+    title: "NSE",
+    exchange: "NSE",
+    items: [
+      { label: "NSE Cash", value: "nse_cash", amount: 5000 },
+      { label: "NSE FO", value: "nse_fo", amount: 5000 },
+      { label: "NSE Currency", value: "nse_currency", amount: 5000 },
+      { label: "NSE Commodity", value: "nse_commodity", amount: 500 },
+    ],
+  },
+  {
+    title: "BSE",
+    exchange: "BSE",
+    items: [
+      { label: "BSE Cash", value: "bse_cash", amount: 4000 },
+      { label: "BSE FO", value: "bse_fo", amount: 4000 },
+      { label: "BSE Currency", value: "bse_currency", amount: 4000 },
+      { label: "BSE Commodity", value: "bse_commodity", amount: 4000 },
+    ],
+  },
+  {
+    title: "MCX",
+    exchange: "MCX",
+    items: [{ label: "MCX Commodity", value: "mcx_commodity", amount: 2000 }],
+  },
+  {
+    title: "SLBM",
+    exchange: "SLBM",
+    items: [{ label: "SLBM", value: "slbm", amount: 0 }],
+  },
+  {
+    title: "Security Deposit",
+    exchange: "Security Deposit",
+    items: [
+      { label: "Terminal", value: "terminal", amount: 100000 },
+      { label: "Without Terminal", value: "without_terminal", amount: 50000 },
+    ],
+  },
+];
+
+export const ParOnbPartnerSharingData = [
   {
     id: 1,
-    srNo: 1,
-    appNo: "APP001",
-    prospectName: "Rahul Sharma",
-    date: "2026-04-01",
-    referredBy: "Amit Verma",
-    city: "Mumbai",
-    partnerType: "Individual",
-    stage: "New",
-    action: "",
+    segment: "Equity Cash",
+    ApShare: "70%",
+    LkpShare: "30%",
+    minRentation: "0.5",
   },
   {
     id: 2,
-    srNo: 2,
-    appNo: "APP002",
-    prospectName: "Priya Mehta",
-    date: "2026-04-02",
-    referredBy: "Suresh Patel",
-    city: "Pune",
-    partnerType: "Company",
-    stage: "In Progress",
-    action: "",
+    segment: "Equity F&O",
+    ApShare: "60%",
+    LkpShare: "40%",
+    minRentation: "0.5",
   },
   {
     id: 3,
-    srNo: 3,
-    appNo: "APP003",
-    prospectName: "Ankit Gupta",
-    date: "2026-04-03",
-    referredBy: "Neha Joshi",
-    city: "Delhi",
-    partnerType: "Individual",
-    stage: "Approved",
-    action: "",
+    segment: "Currency",
+    ApShare: "50%",
+    LkpShare: "50%",
+    minRentation: "0.5",
   },
   {
     id: 4,
-    srNo: 4,
-    appNo: "APP004",
-    prospectName: "Sneha Reddy",
-    date: "2026-04-01",
-    referredBy: "Kiran Rao",
-    city: "Hyderabad",
-    partnerType: "Company",
-    stage: "Rejected",
-    action: "",
+    segment: "Commodity",
+    ApShare: "40%",
+    LkpShare: "60%",
+    minRentation: "0.5",
   },
   {
     id: 5,
-    srNo: 5,
-    appNo: "APP005",
-    prospectName: "Vikram Singh",
-    date: "2026-04-02",
-    referredBy: "Manoj Kumar",
-    city: "Bangalore",
-    partnerType: "Individual",
-    stage: "In Progress",
-    action: "",
+    segment: "Security Deposit",
+    ApShare: "30%",
+    LkpShare: "70%",
+    minRentation: "0.5",
   },
 ];
+
+export const documentList = [
+  {
+    category: "NSE",
+    fileName: "NSE_Tradingmem&AuthpersonAgree.html",
+    label: "Trading member & Authorised Person Agreement",
+    path: "...",
+    lkpApi: "EsignLKP_NSE",
+    payloadType: "sourceFile",
+    esignId: 1,
+  },
+
+  {
+    category: "BSE",
+    fileName: "BSE_ApplicationForApRegistartion.html",
+    label: "Application for AP Registration",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+    lkpApi: "Esign_BSELKP_Single",
+    payloadType: "template",
+    esignId: 2,
+  },
+  {
+    category: "BSE",
+    fileName: "BSE_Annexure2(b)(i).html",
+    label:
+      "Declaration/Confirmation/Undertaking & Recommendation from Member BSE Limited",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+    lkpApi: "Esign_BSELKP_Single",
+    payloadType: "template",
+    esignId: 3,
+  },
+  {
+    category: "BSE",
+    fileName: "BSE_Annexure2(b)(iii).html",
+    label:
+      "Application for AP registration (member Covering Letter) should be on LKP letterhead",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+    lkpApi: "Esign_BSELKP_Single",
+    payloadType: "template",
+    esignId: 4,
+  },
+  {
+    category: "BSE",
+    fileName: "BSE_Annexure2(c).html",
+    label: "Agreement between members & AP",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\BSE",
+    lkpApi: "EsignLKP_BSE", // sourceFile type
+    payloadType: "sourceFile",
+    esignId: 5,
+  },
+
+  {
+    category: "MCX",
+    fileName: "MCX_Annexure-A.html",
+    label: "Undertaking (for Digitally signed Applications for Registration)",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\MCX",
+    lkpApi: "Esign_MCX_LKP_Single",
+    payloadType: "template",
+    esignId: 6,
+  },
+  {
+    category: "MCX",
+    fileName: "MCX_Ap-6.html",
+    label: "Member & Authorised Person Agreement",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates\\MCX",
+    lkpApi: "EsignLKP_MCX",
+    payloadType: "sourceFile",
+    esignId: 7,
+  },
+
+  // ================= AGREEMENT =================
+  {
+    category: "AGREEMENT",
+    fileName: "BA_Commercial.html",
+    label: "Business agreement between LKP and AP",
+    path: "\\\\172.17.100.60\\d$\\FileUpload\\PartnerOnBoarding\\Templates",
+    lkpApi: "EsignLKp_BusinessAssociatemerge",
+    payloadType: "sourceFile",
+    esignId: 8,
+  },
+];
+
+export const kycDocNameMap = {
+  1: "pan",
+  2: "residence",
+  3: "office",
+  4: "education",
+  6: "gst",
+  14: "other",
+};
+
+export const KYC_ESIGN_MAP: Record<number, number> = {
+  1: 9,
+  2: 10,
+  3: 11,
+  4: 12,
+  6: 13,
+  14: 14,
+};
+export const PartnerSideMenu: Record<string, string> = {
+  "Ops Level 1 Approval": "OpsApprove1View",
+  "Compliance Approval": "ComplView",
+  "Ops Level 2 Approval": "OpsApprove2View",
+  "Business Approval": "BusinessView",
+  "Management Approval": "ManagementView",
+  "Lkp Esign": "HeadView",
+};
+
+export const approvalConfig: Record<string, any> = {
+  "Ops Level 1 Approval": {
+    viewType: "OpsApprove1ViewDetails",
+    approveApi: apiServices.OpsApproveLevel1,
+    statusKey: "opsApproverStatus1",
+    remarkKey: "opsApproverRemark1",
+    hasSection: true,
+    //  Tabs user can SEE but not approve
+    hideApprovalForTabs: [],
+    //  Tabs that should be SKIPPED in Next flow
+    skipTabsInFlow: [
+      "Partner Sharing",
+      "Payment",
+      "E-signed",
+      "Exchange Certificate",
+    ],
+  },
+
+  "Compliance Approval": {
+    viewType: "ComplViewDetails",
+    approveApi: apiServices.ComplianceApprove,
+    statusKey: "complianceApproverStatus",
+    remarkKey: "complianceApproverRemark",
+    hasSection: true,
+    hideApprovalForTabs: [],
+    skipTabsInFlow: [
+      "Partner Sharing",
+      "Payment",
+      "E-signed",
+      "Exchange Certificate",
+    ],
+  },
+
+  "Ops Level 2 Approval": {
+    viewType: "OpsApprove2ViewDetails",
+    approveApi: apiServices.OpsApproveLevel2,
+    statusKey: "opsApproverStatus2",
+    remarkKey: "opsApproverRemark2",
+    hasSection: true,
+    hideApprovalForTabs: [
+      "Business Profile",
+      "Personal Details",
+      "KYC Document",
+      "Infrastructure details",
+      "Segments",
+      "Action",
+    ],
+    skipTabsInFlow: ["E-signed", "Exchange Certificate"],
+  },
+
+  "Business Approval": {
+    viewType: "BusinessViewDetails",
+    approveApi: apiServices.BusinessApprove,
+    statusKey: "businessApproverStatus",
+    remarkKey: "businessApproverRemark",
+    hasSection: true,
+    hideApprovalForTabs: [
+      "Business Profile",
+      "Personal Details",
+      "KYC Document",
+      "Infrastructure details",
+      "Segments",
+      "Action",
+    ],
+    skipTabsInFlow: ["E-signed", "Exchange Certificate"],
+  },
+
+  "Management Approval": {
+    viewType: "ManagementViewDetails",
+    approveApi: apiServices.ManagmentApprove,
+    statusKey: "managmentApproverStatus",
+    remarkKey: "managmentApproverRemark",
+    hasSection: true,
+    hideApprovalForTabs: [
+      "Business Profile",
+      "Personal Details",
+      "KYC Document",
+      "Infrastructure details",
+      "Segments",
+      "Action",
+    ],
+    skipTabsInFlow: ["E-signed", "Exchange Certificate"],
+  },
+
+  "Lkp Esign": {
+    viewType: "HeadViewDetails",
+    approveApi: apiServices.HeadApprove,
+    statusKey: "headApproverStatus",
+    remarkKey: null,
+    hasSection: false,
+    hideApprovalForTabs: [
+      "Business Profile",
+      "Personal Details",
+      "KYC Document",
+      "Infrastructure details",
+      "Segments",
+      "Action",
+      "Partner Sharing",
+      "Payment",
+    ],
+    skipTabsInFlow: [],
+  },
+};

@@ -1458,4 +1458,139 @@ export const apiServices = {
   InitBOLogin: async (payload: any) => {
     return await apiService("POST", endpoints.InitBOLogin, payload);
   },
+  ViewAPDashBoard: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewAPDashBoard, payload);
+  },
+  ViewApprovalData: async (payload: any) => {
+    return await apiService("POST", endpoints.ViewApprovalData, payload);
+  },
+
+  EsignLKP_NSE: async (payload: any) => {
+    return await apiService("POST", endpoints.EsignLKP_NSE, payload);
+  },
+  EsignLKP_BSE: async (payload: any) => {
+    return await apiService("POST", endpoints.EsignLKP_BSE, payload);
+  },
+  Esign_BSELKP_Single: async (payload: any) => {
+    return await apiService("POST", endpoints.Esign_BSELKP_Single, payload);
+  },
+  Esign_MCX_LKP_Single: async (payload: any) => {
+    return await apiService("POST", endpoints.Esign_MCX_LKP_Single, payload);
+  },
+  EsignLKP_MCX: async (payload: any) => {
+    return await apiService("POST", endpoints.EsignLKP_MCX, payload);
+  },
+  EsignLKp_BusinessAssociatemerge: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.EsignLKp_BusinessAssociatemerge,
+      payload,
+    );
+  },
+  DownloadSignedPdf_PO: async (payload: any) => {
+    return await apiService("POST", endpoints.DownloadSignedPdf_PO, payload);
+  },
+  OpsApproveLevel1: async (payload: any) => {
+    return await apiService("POST", endpoints.OpsApproveLevel1, payload);
+  },
+  ComplianceApprove: async (payload: any) => {
+    return await apiService("POST", endpoints.ComplianceApprove, payload);
+  },
+  OpsApproveLevel2: async (payload: any) => {
+    return await apiService("POST", endpoints.OpsApproveLevel2, payload);
+  },
+  BusinessApprove: async (payload: any) => {
+    return await apiService("POST", endpoints.BusinessApprove, payload);
+  },
+  ManagmentApprove: async (payload: any) => {
+    return await apiService("POST", endpoints.ManagmentApprove, payload);
+  },
+  HeadApprove: async (payload: any) => {
+    return await apiService("POST", endpoints.HeadApprove, payload);
+  },
+  GetApprovalStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.GetApprovalStatus, payload);
+  },
+  AddBrokSharing: async (payload: any) => {
+    return await apiService("POST", endpoints.AddBrokSharing, payload);
+  },
+  UpdateRevisedcharges: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateRevisedcharges, payload);
+  },
+
+  UploadPartnerSharingDocs: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UploadPartnerSharingDocs,
+      payload,
+    );
+  },
+  BrokShareSubmit: async (payload: any) => {
+    return await apiService("POST", endpoints.BrokShareSubmit, payload);
+  },
+  GetRevisedPaySummary: async (payload: any) => {
+    return await apiService("POST", endpoints.GetRevisedPaySummary, payload);
+  },
+  EsignKYC_Document_LKP: async (payload: any) => {
+    return await apiService("POST", endpoints.EsignKYC_Document_LKP, payload);
+  },
+  DownloadAllDocs: async (payload: any) => {
+    return await apiService("POST", endpoints.DownloadAllDocs, payload);
+  },
+  UpdateRevisedStampcharges: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UpdateRevisedStampcharges,
+      payload,
+    );
+  },
+  UpdateEsignStatus: async (payload: any) => {
+    return await apiService("POST", endpoints.UpdateEsignStatus, payload);
+  },
+  ApAdminDocumentsFileDownload: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ApAdminDocumentsFileDownload,
+      payload,
+    );
+  },
+  GetApApplicationStatusFlow: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetApApplicationStatusFlow,
+      payload,
+    );
+  },
+  SendRejectionMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendRejectionMail, payload);
+  },
+  SendMailToApprover: async (payload: any) => {
+    return await apiService("POST", endpoints.SendMailToApprover, payload);
+  },
+  GetDetailsByAppl: async (payload: any) => {
+    return await apiService("POST", endpoints.GetDetailsByAppl, payload);
+  },
+  GetEsignDocument: async (payload: any) => {
+    return await apiService("POST", endpoints.GetEsignDocument, payload);
+  },
+  UploadExchangeCertificate: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.UploadExchangeCertificate,
+      payload,
+    );
+  },
+  SendExchangeCertMail: async (payload: any) => {
+    return await apiService("POST", endpoints.SendExchangeCertMail, payload);
+  },
+  GetEmployeeRevenueTarget: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.GetEmployeeRevenueTarget,
+      payload,
+    );
+  },
+  GetZoneRevenueTarget: async (payload: any) => {
+    return await apiService("POST", endpoints.GetZoneRevenueTarget, payload);
+  },
 };
