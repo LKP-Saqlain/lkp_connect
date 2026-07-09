@@ -30,7 +30,7 @@ const BrokerageData = ({ activeSubItem }: any) => {
   const [branchCodeOptions, setBranchCodeOptions] = useState<any[]>([]);
   const [selectedZone, setSelectedZone] = useState<any>(null);
   const [data, setData] = useState<any[]>([]);
-
+  const { allowedMaxDays, afterToday, combine } = DateRangePicker;
   const dispatch = useDispatch<AppDispatch>();
   const { user_id, user_type } = useSelector(
     (state: RootState) => state.UserLogin?.data?.data,
@@ -318,8 +318,12 @@ const BrokerageData = ({ activeSubItem }: any) => {
                     }}
                     format="dd/MM/yyyy"
                     placeholder="Select Date Range"
-                    oneTap={false}
                     cleanable
+                    oneTap={false}
+                    shouldDisableDate={combine(
+                      allowedMaxDays(365), // Maximum range of 365 days
+                      afterToday(), // Disables future dates
+                    )}
                     style={{
                       width: 230,
                       height: 36,
