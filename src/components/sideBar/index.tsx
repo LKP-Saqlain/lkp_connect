@@ -138,7 +138,7 @@ import ApDetails from "../../pages/AP Onboarding/Main";
 import DocsDownload from "../../pages/AP Onboarding/DocsDownload";
 import EmployeeTarget from "../../pages/Revamp/Employee Target";
 import ZoneTarget from "../../pages/Revamp/Zone Target";
-import BrokerageData from "../../pages/Brokerage";
+import BrokerageData from "../../pages/Reports/Brokerage";
 const drawerWidth = 260;
 
 // Utility functions for Drawer

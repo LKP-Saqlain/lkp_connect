@@ -12,11 +12,14 @@ import {
 } from "@mui/material";
 import { Card, CardBody, CardHeader } from "reactstrap";
 import { DateRangePicker } from "rsuite";
-import { apiServices } from "../../services";
+import { apiServices } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-import { hideLoader, showLoader } from "../../redux/slices/loaderSlice";
-import DataTable from "../../components/common/UserInfoTable";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
+import DataTable from "../../../components/common/UserInfoTable";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const BrokerageData = ({ activeSubItem }: any) => {
   const [formData, setFormData] = useState({
@@ -192,6 +195,82 @@ const BrokerageData = ({ activeSubItem }: any) => {
   //     });
   //   };
 
+  const handleExportExcel = () => {
+    if (!data.length) {
+      alert("No data available.");
+      return;
+    }
+
+    let exportData: any[] = [];
+
+    switch (formData.reportType) {
+      case "ClientWise":
+        exportData = data.map((row) => ({
+          Branch: row.branchCode,
+          "Branch Type": row.branchType,
+          "Client Code": row.clientCode,
+          "Client Name": row.clientName,
+          "EQ Brokerage": row.eQ_Brok,
+          "F&O Brokerage": row.fnO_Brok,
+          "Commodity Brokerage": row.comm_Brok,
+          "SLBM Brokerage": row.slbM_Brok,
+          "Total Brokerage": row.total_Brok,
+          "AP Sharing Brokerage": row.apSharing_Brok,
+          "LKP Share": row.neT_To_LKP_Brok,
+        }));
+        break;
+
+      case "BranchWise":
+        exportData = data.map((row) => ({
+          Branch: row.branchCode,
+          "Branch Type": row.branchType,
+          "Branch Name": row.branchName,
+          "EQ Brokerage": row.eQ_Brok,
+          "F&O Brokerage": row.fnO_Brok,
+          "Commodity Brokerage": row.comm_Brok,
+          "SLBM Brokerage": row.slbM_Brok,
+          "Total Brokerage": row.total_Brok,
+          "AP Sharing Brokerage": row.apSharing_Brok,
+          "LKP Share": row.neT_To_LKP_Brok,
+        }));
+        break;
+
+      case "DateWise":
+        exportData = data.map((row) => ({
+          "Trade Date": row.tradeDate,
+          Branch: row.branchCode,
+          "Branch Type": row.branchType,
+          "Client Code": row.clientCode,
+          "Client Name": row.clientName,
+          "EQ Brokerage": row.eQ_Brok,
+          "F&O Brokerage": row.fnO_Brok,
+          "Commodity Brokerage": row.comm_Brok,
+          "SLBM Brokerage": row.slbM_Brok,
+          "Total Brokerage": row.total_Brok,
+          "AP Sharing Brokerage": row.apSharing_Brok,
+          "LKP Share": row.neT_To_LKP_Brok,
+        }));
+        break;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, formData.reportType);
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    saveAs(blob, `${formData.reportType}_Brokerage_Report.xlsx`);
+  };
+
   return (
     <div className="page-content page-view">
       <Card
@@ -364,6 +443,21 @@ const BrokerageData = ({ activeSubItem }: any) => {
                   }}
                 >
                   Submit
+                </Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  endIcon={<DownloadIcon fontSize="small" />}
+                  onClick={handleExportExcel}
+                  sx={{
+                    height: 34,
+                    ml: 1,
+                    color: "#fff",
+                    backgroundColor: "#11395c",
+                    textTransform: "none",
+                  }}
+                >
+                  Excel
                 </Button>
               </Grid>
             </Grid>
