@@ -346,6 +346,7 @@ export const newDomainEndpoints = [
   endpoints.SendTLMTFEmail,
   endpoints.SendTLMTFEmail,
   endpoints.SendAHMTFEmail,
+  endpoints.SendBMMTFEmail,
   endpoints.SendTLMTFShortfallMail,
   endpoints.SendBMMTFShortfallMail,
   endpoints.SendAHMTFShortfallMail,

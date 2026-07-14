@@ -303,7 +303,7 @@ const MTFFileUpload = ({ activeSubItem }: any) => {
     await callApi(apiServices.SendAPMTFEmail, "AP MTF Email");
     //new apis'
     await callApi(apiServices.SendTLMTFEmail, "TL MTF Email");
-    await callApi(apiServices.SendBMMTFEmail, "MB MTF Email");
+    await callApi(apiServices.SendBMMTFEmail, "BM MTF Email");
     await callApi(apiServices.SendAHMTFEmail, "AH MTF Email");
 
     dispatch(hideLoader());
