@@ -17,8 +17,8 @@ import dayjs from "dayjs";
 // import { Pagination } from "@mui/material";
 
 interface T6Selling {
-  ClientCode: string;
-  ClientName: string;
+  cc: string;
+  cn: string;
   ClosingBal: string;
   T1: string;
   T2: string;
@@ -34,8 +34,8 @@ interface CWCB {
   Brokerage_for_3months: number; // Brokerage for 3 months
   Brokerage_for_currentmonth: number; // Brokerage for the current month
   Cash: number; // Cash balance
-  ClientCode: string; // Client code
-  ClientName: string; // Client name
+  cc: string; // Client code
+  cn: string; // Client name
   LastTradeDate: string; // Last trade date (format: YYYY-MM-DD)
   MobileNo: string; // Mobile number
 }
@@ -51,7 +51,7 @@ const DashboardCrypto = ({
   showMyPerformance,
 }: DashboardCrypto) => {
   const [selectedItem, setSelectedItem] = useState(
-    "Clients With Ledger Balance"
+    "Clients With Ledger Balance",
   );
   const [t6Data, setT6Data] = useState<T6Selling[]>([]);
   const [tradeCWCBData, setTradeCWCBData] = useState<CWCB[]>([]);
@@ -96,7 +96,7 @@ const DashboardCrypto = ({
   //ends here
   const dispatch = useDispatch<AppDispatch>();
   const sessionExpired = useSelector(
-    (state: RootState) => state.sessionExpired.data.session
+    (state: RootState) => state.sessionExpired.data.session,
   );
 
   useEffect(() => {
@@ -113,11 +113,11 @@ const DashboardCrypto = ({
   }, [selectedViewMore]);
 
   const { accessType } = useSelector(
-    (state: RootState) => state.AuthUser?.data?.data
+    (state: RootState) => state.AuthUser?.data?.data,
   );
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
   console.log("accessType----", accessType);
 
@@ -205,7 +205,7 @@ const DashboardCrypto = ({
                 (item: any, index: number) => ({
                   ...item,
                   Id: index + 1,
-                })
+                }),
               );
 
               console.log("Updated Data with Id:", updatedData);
@@ -240,7 +240,7 @@ const DashboardCrypto = ({
         };
         try {
           dispatch(
-            showLoader("Please wait, we are processing your request...")
+            showLoader("Please wait, we are processing your request..."),
           );
           const response = await apiServices.T6Selling(payload);
           console.log("ClientCashResponse", response?.data?.data);
@@ -253,7 +253,7 @@ const DashboardCrypto = ({
               (item: any, index: number) => ({
                 ...item,
                 Id: index + 1,
-              })
+              }),
             );
 
             console.log("T6 Updated Data with Id:", updatedData);
@@ -295,7 +295,7 @@ const DashboardCrypto = ({
         XLSX.utils.book_append_sheet(
           workbook,
           worksheet,
-          "Clients Ageing Report Data"
+          "Clients Ageing Report Data",
         );
         // Convert the workbook to a binary file
         const excelBuffer = XLSX.write(workbook, {
@@ -319,7 +319,7 @@ const DashboardCrypto = ({
       "handleSearchBasedOnInputValue  upper",
       selectedItem,
       tradeCWCBData,
-      value.toUpperCase()
+      value.toUpperCase(),
     );
     // debugger;
     setSearchValue(value);
@@ -329,21 +329,21 @@ const DashboardCrypto = ({
     if (selectedItem === "Clients Ageing Report") {
       filteredAllClients = t6Data.filter(
         (item: any) =>
-          item.ClientName.toLowerCase().includes(value.toLowerCase()) ||
-          item.ClientCode.toLowerCase().includes(value.toLowerCase())
+          item.cn.toLowerCase().includes(value.toLowerCase()) ||
+          item.cc.toLowerCase().includes(value.toLowerCase()),
       );
     } else if (selectedItem === "Clients With Ledger Balance") {
       filteredtradeCWCBData = tradeCWCBData.filter(
         (item: any) =>
-          item.ClientName.toLowerCase().includes(value.toLowerCase()) ||
-          item.ClientCode.toLowerCase().includes(value.toLowerCase())
+          item.cn.toLowerCase().includes(value.toLowerCase()) ||
+          item.cc.toLowerCase().includes(value.toLowerCase()),
       );
       console.log(
         "ledger agee",
         filteredtradeCWCBData,
         tradeCWCBData,
         searchValue,
-        value
+        value,
       );
     }
 
@@ -365,23 +365,23 @@ const DashboardCrypto = ({
     if (value === 0) filteredByCategory = allCalls;
     if (value === 1)
       filteredByCategory = allCalls.filter(
-        (item) => item.category === "Equity"
+        (item) => item.category === "Equity",
       );
     if (value === 2)
       filteredByCategory = allCalls.filter((item) => item.category === "F&O");
     if (value === 3)
       filteredByCategory = allCalls.filter(
-        (item) => item.category === "Commodity"
+        (item) => item.category === "Commodity",
       );
     if (value === 4)
       filteredByCategory = allCalls.filter(
-        (item) => item.category === "Currency"
+        (item) => item.category === "Currency",
       );
 
     // Apply subCategory filter if not "All"
     if (selectedSubCategory && selectedSubCategory !== "All" && value !== 0) {
       filteredByCategory = filteredByCategory.filter(
-        (item) => item.subCategory === selectedSubCategory
+        (item) => item.subCategory === selectedSubCategory,
       );
     }
 
@@ -411,15 +411,15 @@ const DashboardCrypto = ({
 
           setAllCalls(data);
           setEquityCalls(
-            data.filter((item: any) => item.category === "Equity")
+            data.filter((item: any) => item.category === "Equity"),
           );
           setFoCalls(data.filter((item: any) => item.category === "F&O"));
           setCommodityCalls(
-            data.filter((item: any) => item.category === "Commodity")
+            data.filter((item: any) => item.category === "Commodity"),
           );
 
           setCurrencyCalls(
-            data.filter((item: any) => item.category === "Currency")
+            data.filter((item: any) => item.category === "Currency"),
           );
 
           const uniqueSubs: any = [
@@ -439,7 +439,7 @@ const DashboardCrypto = ({
             equityCalls,
             foCalls,
             commodityCalls,
-            currencyCalls
+            currencyCalls,
           );
           setFilteredCalls(data);
           console.log("uniqueSubCategories-->", selectedTab);
@@ -668,11 +668,11 @@ const DashboardCrypto = ({
                           // Prefer insertionTime if available, else fallback to validity
                           const dateA = dayjs(
                             a.insertionTime || a.validity,
-                            "DD-MM-YYYY HH:mm:ss"
+                            "DD-MM-YYYY HH:mm:ss",
                           );
                           const dateB = dayjs(
                             b.insertionTime || b.validity,
-                            "DD-MM-YYYY HH:mm:ss"
+                            "DD-MM-YYYY HH:mm:ss",
                           );
 
                           // Invalid dates go last
