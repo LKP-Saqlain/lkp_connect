@@ -90,8 +90,8 @@ interface SelectedWidgetProps {
   beneficiaryName?: any;
   // handleUpdate?: (data: any) => void;
   onViewAmcDetails?: (row: any) => void;
-  handleMTFRow?: (row: any) => void;
-  openNudgeTable?: () => void;
+  handleMTFRow?: (row: any, field: any) => void;
+
   onStatusClick?: (row: any, type: string) => void;
   selectedTab?: any;
   handleDownloadExcel?: () => void;
@@ -153,7 +153,7 @@ const DataTable = ({
   onViewAmcDetails,
   beneficiaryName,
   handleMTFRow,
-  openNudgeTable,
+
   selectedTab,
   handleDownloadExcel,
   isCustomBtn,
@@ -2285,8 +2285,7 @@ const DataTable = ({
                     // textDecoration: "underline",
                   }}
                   onClick={() => {
-                    handleMTFRow?.(params?.row);
-                    openNudgeTable?.();
+                    handleMTFRow?.(params?.row, "cc");
                   }}
                 >
                   <Tooltip
@@ -2311,6 +2310,41 @@ const DataTable = ({
                 </span>
               );
             },
+          };
+        }
+        if (column.field === "Action") {
+          return {
+            ...column,
+            renderCell: (params: any) => (
+              <Tooltip
+                title={
+                  <span
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    <InfoIcon sx={{ fontSize: "14px" }} />
+                    Click here for Calculation
+                  </span>
+                }
+                arrow
+                placement="top"
+              >
+                <span
+                  style={{
+                    color: "#1976d2",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    handleMTFRow?.(params?.row, "Action");
+                  }}
+                >
+                  Sell
+                </span>
+              </Tooltip>
+            ),
           };
         }
         return column;

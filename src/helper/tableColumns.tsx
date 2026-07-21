@@ -8905,6 +8905,137 @@ export const OrderUpcomingSip: GridColDef[] = [
     minWidth: 200,
   },
 ];
+
+export const MTFStockAgeingSaleColumns: GridColDef[] = [
+  {
+    field: "scripName",
+    headerName: "Scrip Name",
+    disableColumnMenu: true,
+    flex: 1.2,
+    minWidth: 140,
+    align: "left",
+    headerAlign: "center",
+  },
+  {
+    field: "ageingDays",
+    headerName: "Ageing Days",
+    disableColumnMenu: true,
+    flex: 0.8,
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "availableQty",
+    headerName: "Available Qty",
+    disableColumnMenu: true,
+    flex: 0.8,
+    minWidth: 110,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "effectivePrice",
+    headerName: "Effective Price",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 120,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return params.value?.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    },
+  },
+  {
+    field: "marginPercent",
+    headerName: "Margin %",
+    disableColumnMenu: true,
+    flex: 0.8,
+    minWidth: 100,
+    align: "right",
+    headerClassName: "header-wrap-custom",
+    headerAlign: "center",
+    renderCell: (params: any) => {
+      return params.value != null ? `${params.value}%` : "";
+    },
+  },
+  {
+    field: "marginValuePerShare",
+    headerName: "Margin Value Per Share",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 150,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return params.value?.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    },
+  },
+  {
+    field: "sellQty",
+    headerName: "Sell Qty",
+    disableColumnMenu: true,
+    flex: 0.8,
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+  },
+  {
+    field: "recoveredMargin",
+    headerName: "Recovered Margin",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return params.value?.toLocaleString("en-IN");
+    },
+  },
+  {
+    field: "actualMarginShortfall",
+    headerName: "Actual Margin Shortfall",
+    disableColumnMenu: true,
+    flex: 1.2,
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return params.value?.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    },
+  },
+  {
+    field: "remainingShortfall",
+    headerName: "Remaining Shortfall",
+    disableColumnMenu: true,
+    flex: 1,
+    minWidth: 140,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params: any) => {
+      return params.value?.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    },
+  },
+];
 export const MfPortfolio: GridColDef[] = [
   {
     field: "reedosName",
@@ -10840,6 +10971,15 @@ export const shortfallColumns: GridColDef[] = [
 ];
 
 export const ageingColumns: GridColDef[] = [
+  {
+    field: "Action",
+    headerName: "Action",
+    headerClassName: "header-wrap-custom",
+    flex: 0.6,
+    minWidth: 60,
+    align: "center",
+    headerAlign: "center",
+  },
   {
     field: "zn",
     headerName: "Zone",

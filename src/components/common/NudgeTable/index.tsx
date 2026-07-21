@@ -20,6 +20,7 @@ import {
   extendedAmcReport,
   stopLossTrilogyColumns,
   stopLossSPIPColumns,
+  MTFStockAgeingSaleColumns,
 } from "../../../helper/tableColumns.tsx";
 import { Stack, TextField } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
@@ -138,6 +139,9 @@ const NudgeTable = ({
 
       case "MTF Stock Ageing Report":
         return MTFStockAgeingColumns;
+
+      case "MTF Stock Ageing Sale Report":
+        return MTFStockAgeingSaleColumns;
 
       case "AMC Contest Report":
         return extendedAmcReport;

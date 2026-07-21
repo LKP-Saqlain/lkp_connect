@@ -1614,4 +1614,7 @@ export const apiServices = {
   GetBrokerageReport: async (payload: any) => {
     return await apiService("POST", endpoints.GetBrokerageReport, payload);
   },
+  GetMTFShortfallSellQty: async (payload: any) => {
+    return await apiService("POST", endpoints.GetMTFShortfallSellQty, payload);
+  },
 };
