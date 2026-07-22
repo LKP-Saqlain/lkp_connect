@@ -10769,6 +10769,15 @@ export const clientMISColumns: GridColDef[] = [
 
 export const shortfallColumns: GridColDef[] = [
   {
+    field: "Action",
+    headerName: "Action",
+    headerClassName: "header-wrap-custom",
+    flex: 0.6,
+    minWidth: 60,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
     field: "cc",
     headerName: "Client Code",
     headerClassName: "header-wrap-custom",
@@ -10971,15 +10980,15 @@ export const shortfallColumns: GridColDef[] = [
 ];
 
 export const ageingColumns: GridColDef[] = [
-  {
-    field: "Action",
-    headerName: "Action",
-    headerClassName: "header-wrap-custom",
-    flex: 0.6,
-    minWidth: 60,
-    align: "center",
-    headerAlign: "center",
-  },
+  // {
+  //   field: "Action",
+  //   headerName: "Action",
+  //   headerClassName: "header-wrap-custom",
+  //   flex: 0.6,
+  //   minWidth: 60,
+  //   align: "center",
+  //   headerAlign: "center",
+  // },
   {
     field: "zn",
     headerName: "Zone",

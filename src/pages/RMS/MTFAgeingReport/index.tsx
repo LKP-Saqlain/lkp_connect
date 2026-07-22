@@ -241,10 +241,11 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
     if (field === "cc") {
       setSelectedReport("MTF Stock Ageing Report");
       fetchStockAgeing(selectedRow);
-    } else {
-      setSelectedReport("MTF Stock Ageing Sale Report");
-      fetchSaleCalculation(selectedRow);
     }
+    // else {
+    //   setSelectedReport("MTF Stock Ageing Sale Report");
+    //   fetchSaleCalculation(selectedRow);
+    // }
 
     setIsNudgeTableOpen(true);
   };
@@ -283,33 +284,33 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
       });
   };
 
-  const fetchSaleCalculation = (selectedRow: any) => {
-    const payload = {
-      user_id: user_id,
-      clientCode: selectedRow.cc,
-    };
-    dispatch(showLoader(""));
-    apiServices
-      .GetMTFShortfallSellQty(payload)
-      .then((response) => {
-        dispatch(hideLoader());
-        const data = response?.data?.data;
+  // const fetchSaleCalculation = (selectedRow: any) => {
+  //   const payload = {
+  //     user_id: user_id,
+  //     clientCode: selectedRow.cc,
+  //   };
+  //   dispatch(showLoader(""));
+  //   apiServices
+  //     .GetMTFShortfallSellQty(payload)
+  //     .then((response) => {
+  //       dispatch(hideLoader());
+  //       const data = response?.data?.data;
 
-        if (response?.status === 200 && Array.isArray(data)) {
-          const recordsWithId = data.map((item: any, index: number) => ({
-            Id: index + 1,
-            ...item,
-          }));
+  //       if (response?.status === 200 && Array.isArray(data)) {
+  //         const recordsWithId = data.map((item: any, index: number) => ({
+  //           Id: index + 1,
+  //           ...item,
+  //         }));
 
-          setMTFStockAgeingRecords(recordsWithId);
-          console.log("MTF_Ageing_Records-->", recordsWithId);
-        }
-      })
-      .catch((error) => {
-        console.log("Error", error);
-        dispatch(hideLoader());
-      });
-  };
+  //         setMTFStockAgeingRecords(recordsWithId);
+  //         console.log("MTF_Ageing_Records-->", recordsWithId);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error", error);
+  //       dispatch(hideLoader());
+  //     });
+  // };
 
   useEffect(() => {
     fetchFileUploadedDetails();
@@ -349,7 +350,6 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
               selectedReport={selectedReport}
               filteredData={{
                 "MTF Stock Ageing Report": MTFStockAgeingRecords,
-                "MTF Stock Ageing Sale Report": MTFStockAgeingRecords,
               }}
             />
             <Col lg={12}>

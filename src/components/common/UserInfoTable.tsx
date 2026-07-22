@@ -2268,9 +2268,46 @@ const DataTable = ({
         ...column,
       }));
     } else if (activeSubItem === "MTF Shortfall Report") {
-      return TableColumns.shortfallColumns.map((column) => ({
-        ...column,
-      }));
+      return TableColumns.shortfallColumns.map((column) => {
+        if (column.field === "Action") {
+          return {
+            ...column,
+            renderCell: (params: any) => (
+              <Tooltip
+                title={
+                  <span
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                    }}
+                  >
+                    <InfoIcon sx={{ fontSize: "14px" }} />
+                    Click here for Calculation
+                  </span>
+                }
+                arrow
+                placement="top"
+              >
+                <span
+                  style={{
+                    color: "#1976d2",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    console.log(params?.row);
+
+                    handleMTFRow?.(params?.row, "Action");
+                  }}
+                >
+                  Sell
+                </span>
+              </Tooltip>
+            ),
+          };
+        }
+        return column;
+      });
     } else if (activeSubItem === "MTF Ageing Report") {
       return TableColumns.ageingColumns.map((column) => {
         if (column.field === "cc") {
@@ -2312,41 +2349,7 @@ const DataTable = ({
             },
           };
         }
-        if (column.field === "Action") {
-          return {
-            ...column,
-            renderCell: (params: any) => (
-              <Tooltip
-                title={
-                  <span
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                    }}
-                  >
-                    <InfoIcon sx={{ fontSize: "14px" }} />
-                    Click here for Calculation
-                  </span>
-                }
-                arrow
-                placement="top"
-              >
-                <span
-                  style={{
-                    color: "#1976d2",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    handleMTFRow?.(params?.row, "Action");
-                  }}
-                >
-                  Sell
-                </span>
-              </Tooltip>
-            ),
-          };
-        }
+
         return column;
       });
     } else if (activeSubItem === "Vendor Details Report") {

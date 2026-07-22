@@ -19,6 +19,7 @@ import ShowToast from "../../../utils/toastUtils";
 import { TextField } from "@mui/material";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import { formatDateTime } from "../../../helper/commmon";
+import NudgeTable from "../../../components/common/NudgeTable";
 
 interface UploadDetail {
   type: string;
@@ -31,11 +32,13 @@ const ShortFallReport = ({ activeSubItem }: any) => {
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [shortfallData, setShortfallData] = useState<any[]>([]);
   const [uploadDetails, setUploadDetails] = useState<UploadDetail[]>([]);
+  const [MTFStockAgeingRecords, setMTFStockAgeingRecords] = useState<any>({});
+  const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   const validationSchema = Yup.object({
@@ -125,7 +128,7 @@ const ShortFallReport = ({ activeSubItem }: any) => {
         ShowToast(
           "error",
           errorMessage ||
-            "Sorry for the inconvenience, please try after some time."
+            "Sorry for the inconvenience, please try after some time.",
         );
       });
 
@@ -183,7 +186,7 @@ const ShortFallReport = ({ activeSubItem }: any) => {
           ShowToast(
             "error",
             errorMessage ||
-              "Sorry for the inconvenience, please try after some time."
+              "Sorry for the inconvenience, please try after some time.",
           );
         });
     }
@@ -207,7 +210,7 @@ const ShortFallReport = ({ activeSubItem }: any) => {
             (item: any, index: number) => ({
               Id: index + 1, // Add unique ID
               ...item,
-            })
+            }),
           );
 
           setShortfallData(recordsWithId);
@@ -248,14 +251,64 @@ const ShortFallReport = ({ activeSubItem }: any) => {
   }, []);
 
   const MTFShortfall = uploadDetails.find(
-    (item: any) => item.tp === "MTFSHORTFALL"
+    (item: any) => item.tp === "MTFSHORTFALL",
   );
 
+  const handleMTFRow = (selectedRow: any, field: string) => {
+    setMTFStockAgeingRecords([]);
+    // setSelectedMtfRow(selectedRow);
+    console.log(field);
+
+    fetchSaleCalculation(selectedRow);
+
+    setIsNudgeTableOpen(true);
+  };
+
+  const fetchSaleCalculation = (selectedRow: any) => {
+    const payload = {
+      user_id: user_id,
+      clientCode: selectedRow.cc,
+    };
+    dispatch(showLoader(""));
+    apiServices
+      .GetMTFShortfallSellQty(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+        const data = response?.data?.data;
+
+        if (response?.status === 200 && Array.isArray(data)) {
+          const recordsWithId = data?.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          setMTFStockAgeingRecords(recordsWithId);
+          console.log("MTF_Ageing_Records-->", recordsWithId);
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error);
+        dispatch(hideLoader());
+      });
+  };
+  const closeNudgeTable = () => {
+    setIsNudgeTableOpen(false);
+    // tog_animationZoom(); // Reopen Nudge modal when closing NudgeTable
+  };
   return (
     <React.Fragment>
       <div className="page-content page-view">
         <div className="container-fluid">
           <Row className="row-font">
+            {" "}
+            <NudgeTable
+              isOpen={isNudgeTableOpen}
+              onClose={closeNudgeTable}
+              selectedReport={"MTF Stock Ageing Sale Report"}
+              filteredData={{
+                "MTF Stock Ageing Sale Report": MTFStockAgeingRecords,
+              }}
+            />
             <Col lg={12}>
               <Card
                 style={{
@@ -339,7 +392,7 @@ const ShortFallReport = ({ activeSubItem }: any) => {
                               onChange={(option) =>
                                 formik.setFieldValue(
                                   "selectedBranchCode",
-                                  option
+                                  option,
                                 )
                               }
                               onBlur={formik.handleBlur}
@@ -401,7 +454,7 @@ const ShortFallReport = ({ activeSubItem }: any) => {
                                   .toUpperCase(); // Force uppercase
                                 formik.setFieldValue(
                                   "clientCode",
-                                  cleanedValue
+                                  cleanedValue,
                                 );
                               }}
                               onBlur={formik.handleBlur}
@@ -516,6 +569,7 @@ const ShortFallReport = ({ activeSubItem }: any) => {
                   <UserInfoTable
                     activeSubItem={activeSubItem}
                     T6Data={shortfallData}
+                    handleMTFRow={handleMTFRow}
                   />
                 </CardBody>
               </Card>
