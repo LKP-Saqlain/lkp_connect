@@ -1583,4 +1583,7 @@ export const apiServices = {
   SendExchangeCertMail: async (payload: any) => {
     return await apiService("POST", endpoints.SendExchangeCertMail, payload);
   },
+  GetVendorData: async (payload: any) => {
+    return await apiService("POST", endpoints.GetVendorData, payload);
+  },
 };

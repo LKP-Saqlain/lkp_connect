@@ -239,6 +239,8 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       paymentMode,
       referenceNumber,
       isin,
+      panno,
+      vendorId,
       // issueDate,
       clientCode,
     } = data;
@@ -279,6 +281,8 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       isin: isin ? isin : "",
       issueDate: "2026-12-15",
       clientCode: clientCode ? clientCode : "",
+      panno: panno ? panno : "",
+      vendorName: vendorId ? vendorId : "",
     };
     console.log("Payload111", payload);
     dispatch(showLoader(""));

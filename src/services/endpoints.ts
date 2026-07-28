@@ -379,6 +379,7 @@ export const endpoints = {
   SendExchangeCertMail: "api/AP/SendExchangeCertMail",
   GetDetailsByAppl: "api/ESign/GetDetailsByAppl",
   GetEsignDocument: "api/ESign/GetEsignDocument",
+  GetVendorData: "api/Account/GetVendorData",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

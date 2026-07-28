@@ -6062,18 +6062,18 @@ export const getApproverOneDetails: GridColDef[] = [
     align: "center",
     disableColumnMenu: true,
     headerAlign: "center",
-    valueFormatter: (value: any) => {
-      console.log("Vallllues", value);
+    // valueFormatter: (value: any) => {
+    //   console.log("Vallllues", value);
 
-      if (!value) return "—";
+    //   if (!value) return "—";
 
-      const [datePart] = value.split(" "); // "02/10/2026"
-      console.log("DayPart", datePart);
+    //   const [datePart] = value.split(" "); // "02/10/2026"
+    //   console.log("DayPart", datePart);
 
-      const [month, day, year] = datePart.split("/");
+    //   const [month, day, year] = datePart.split("/");
 
-      return `${day}-${month}-${year.slice(-2)}`;
-    },
+    //   return `${day}-${month}-${year.slice(-2)}`;
+    // },
   },
   {
     field: "cn",
@@ -6461,18 +6461,18 @@ export const unListedTradeColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
-    valueFormatter: (value: any) => {
-      console.log("Vallllues", value);
+    // valueFormatter: (value: any) => {
+    //   console.log("Vallllues", value);
 
-      if (!value) return "—";
+    //   if (!value) return "—";
 
-      const [datePart] = value.split(" "); // "02/10/2026"
-      console.log("DayPart", datePart);
+    //   const [datePart] = value.split(" "); // "02/10/2026"
+    //   console.log("DayPart", datePart);
 
-      const [month, day, year] = datePart.split("/");
+    //   const [month, day, year] = datePart.split("/");
 
-      return `${day}-${month}-${year.slice(-2)}`;
-    },
+    //   return `${day}-${month}-${year.slice(-2)}`;
+    // },
   },
   {
     field: "cn",
@@ -13492,18 +13492,18 @@ export const unlistedContractColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
-    valueFormatter: (value: any) => {
-      console.log("Vallllues", value);
+    // valueFormatter: (value: any) => {
+    //   console.log("Vallllues", value);
 
-      if (!value) return "—";
+    //   if (!value) return "—";
 
-      const [datePart] = value.split(" "); // "02/10/2026"
-      console.log("DayPart", datePart);
+    //   const [datePart] = value.split(" "); // "02/10/2026"
+    //   console.log("DayPart", datePart);
 
-      const [month, day, year] = datePart.split("/");
+    //   const [month, day, year] = datePart.split("/");
 
-      return `${day}-${month}-${year.slice(-2)}`;
-    },
+    //   return `${day}-${month}-${year.slice(-2)}`;
+    // },
   },
   {
     field: "cn",
