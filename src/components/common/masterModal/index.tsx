@@ -923,6 +923,18 @@ const ModalComponent = ({
         formik.setFieldValue("vrt", editData?.vrt || null);
         formik.setFieldValue("paymentMode", editData?.paym || "");
         formik.setFieldValue("referenceNumber", editData?.cqnum || "");
+        formik.setFieldValue("panno", editData?.panno || "");
+        const selectedVendor = vendorData.find(
+          (vendor) =>
+            vendor.vendorName?.trim().toLowerCase() ===
+            editData?.vnm?.trim().toLowerCase(),
+        );
+
+        formik.setFieldValue(
+          "vendorName",
+          selectedVendor?.vendorName || editData?.vnm || "",
+        );
+        formik.setFieldValue("vendorId", selectedVendor?.rowId || "");
         //new fields
 
         const formattedIssueDate = editData?.isudt
@@ -943,7 +955,7 @@ const ModalComponent = ({
         formik.setFieldValue("clientCode", editData?.cc);
         formik.setFieldValue("clientName", editData?.cn);
         formik.setFieldValue("dpName", editData?.dpnm);
-        formik.setFieldValue("panno", editData?.panno);
+        formik.setFieldValue("vendorName", editData?.vnm);
         formik.setFieldValue("dpid", editData?.dpid);
         formik.setFieldValue("ifscCode", editData?.ifsc);
         formik.setFieldValue("issueDate", formattedIssueDate);
@@ -1302,29 +1314,24 @@ const ModalComponent = ({
       const lcps = parseFloat(formik.values.lcps || "0");
 
       if (nsh > 0 && lcps > 0) {
-        const inclusiveGST = Math.floor(nsh * lcps);
-        const gst = Math.floor(inclusiveGST / 1.18);
-        const exclusiveGST = Math.floor(inclusiveGST - gst);
+        const brokerageInclusive = Math.floor(nsh * lcps);
 
-        formik.setFieldValue("big", formatIndianNumber(inclusiveGST));
-        formik.setFieldValue("gst", formatIndianNumber(exclusiveGST));
-        formik.setFieldValue("beg", formatIndianNumber(gst));
+        const brokerageExclusive = Math.floor(brokerageInclusive / 1.18);
 
-        // Leave it blank until sbr is provided
+        const gst = Math.floor(brokerageInclusive - brokerageExclusive);
+
+        formik.setFieldValue("big", formatIndianNumber(brokerageInclusive));
+        formik.setFieldValue("beg", formatIndianNumber(brokerageExclusive));
+        formik.setFieldValue("gst", formatIndianNumber(gst));
+
         const sbr = parseFloat(formik.values.sbr || "0");
-        if (sbr > 0) {
-          const sbValue = sbr * nsh;
-          const subBrokerCommission = Math.floor(sbValue / 1.18);
 
-          const beg = exclusiveGST;
-          const nbg = Math.floor(beg - subBrokerCommission);
+        const sbCommission = Math.floor((sbr * nsh) / 1.18);
 
-          formik.setFieldValue("sbcm", subBrokerCommission);
-          formik.setFieldValue("nbg", formatIndianNumber(nbg));
-        } else {
-          formik.setFieldValue("sbcm", "");
-          formik.setFieldValue("nbg", ""); // keep empty until sbr entered
-        }
+        const netBrokerage = Math.floor(brokerageExclusive - sbCommission);
+
+        formik.setFieldValue("sbcm", formatIndianNumber(sbCommission));
+        formik.setFieldValue("nbg", formatIndianNumber(netBrokerage));
       } else {
         resetBrokerageFields();
       }
@@ -1337,9 +1344,9 @@ const ModalComponent = ({
       formik.setFieldValue(name, decimalValue);
 
       const nsh = parseInt(formik.values.nsh || "0");
-      const sbr = parseFloat(decimalValue);
+      const sbr = parseFloat(decimalValue || "0");
 
-      if (nsh > 0 && !isNaN(sbr)) {
+      if (nsh > 0) {
         const subBrokerValue = sbr * nsh; //1600
         const subBrokerCommission = Math.floor(subBrokerValue / 1.18);
         console.log("sbCoMMISSION", subBrokerCommission);

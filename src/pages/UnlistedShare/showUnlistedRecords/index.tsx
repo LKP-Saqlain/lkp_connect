@@ -156,6 +156,8 @@ const InsertUnlistedShares = ({ activeSubItem }: any) => {
       chequeRefNumber: data?.referenceNumber,
       isin: data?.isin,
       issueDate: formatIssueDate,
+      vendorName: data?.vendorId,
+      panno: data?.panno,
     };
     console.log("Payload", payload);
 
