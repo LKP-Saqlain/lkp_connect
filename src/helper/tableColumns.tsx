@@ -6190,6 +6190,20 @@ export const getApproverOneDetails: GridColDef[] = [
     headerAlign: "center",
   },
   {
+    field: "VendorName",
+    headerName: "Vendor Name",
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "panno",
+    headerName: "Pan Number",
+    minWidth: 120,
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
     field: "nsh",
     headerName: "No of Shares",
     minWidth: 90,
@@ -6462,21 +6476,41 @@ export const unListedTradeColumns: GridColDef[] = [
     align: "center",
     disableColumnMenu: true,
     valueFormatter: (value: any) => {
-      console.log("Vallllues", value);
-
       if (!value) return "—";
 
-      const [datePart] = value.split(" "); // "02/10/2026"
-      console.log("DayPart", datePart);
+      const [datePart] = value.split(" "); // "02/04/2026"
+      const [month, day, year] = datePart.split("/"); // MM/DD/YYYY
 
-      const [month, day, year] = datePart.split("/");
+      const date = new Date(Number(year), Number(month) - 1, Number(day));
 
-      return `${day}-${month}-${year.slice(-2)}`;
+      const dd = String(date.getDate()).padStart(2, "0");
+      const mmm = date.toLocaleString("en-US", { month: "short" });
+      const yy = String(date.getFullYear()).slice(-2);
+
+      return `${dd}-${mmm}-${yy}`;
     },
   },
   {
     field: "cn",
     headerName: "Client Name",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "vnm",
+    headerName: "Vendor Name",
+    flex: 1,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "panno",
+    headerName: "Pan Number",
     flex: 1,
     minWidth: 160,
     headerAlign: "center",
@@ -13818,18 +13852,20 @@ export const unlistedContractColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
-    valueFormatter: (value: any) => {
-      console.log("Vallllues", value);
+    // valueFormatter: (value: any) => {
+    //   if (!value) return "—";
 
-      if (!value) return "—";
+    //   const [datePart] = value.split(" "); // "02/04/2026"
+    //   const [month, day, year] = datePart.split("/"); // MM/DD/YYYY
 
-      const [datePart] = value.split(" "); // "02/10/2026"
-      console.log("DayPart", datePart);
+    //   const date = new Date(Number(year), Number(month) - 1, Number(day));
 
-      const [month, day, year] = datePart.split("/");
+    //   const dd = String(date.getDate()).padStart(2, "0");
+    //   const mmm = date.toLocaleString("en-US", { month: "short" });
+    //   const yy = String(date.getFullYear()).slice(-2);
 
-      return `${day}-${month}-${year.slice(-2)}`;
-    },
+    //   return `${dd}-${mmm}-${yy}`;
+    // },
   },
   {
     field: "cn",

@@ -494,6 +494,7 @@ export const newDomainEndpoints = [
   endpoints.GetZoneRevenueTarget,
   endpoints.GetBrokerageReport,
   endpoints.GetMTFShortfallSellQty,
+  endpoints.GetVendorData,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
