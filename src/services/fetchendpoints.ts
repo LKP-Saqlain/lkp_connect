@@ -68,6 +68,7 @@ export const pdfDownloadEndpoints = [
   endpoints.GenerateClientPerformancePdf,
   endpoints.GenerateTPInvoice,
   endpoints.DPAMCDownloadFile,
+  endpoints.DownloadAllDocs,
 ];
 
 export const multipartEndpoints = [
