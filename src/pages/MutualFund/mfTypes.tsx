@@ -31,7 +31,7 @@ export const holderSchema = Yup.object().shape({
     .test(
       "age",
       "You must be at least 18 years old",
-      (value) => value && dayjs().diff(value, "year") >= 18
+      (value) => value && dayjs().diff(value, "year") >= 18,
     ),
 
   gender: Yup.string().required("Gender is required"),
@@ -67,7 +67,7 @@ export const optionalBankSchema = Yup.object()
     if (!value) return true;
 
     const hasAnyValue = Object.entries(value).some(
-      ([key, val]) => key !== "isVerified" && Boolean(val)
+      ([key, val]) => key !== "isVerified" && Boolean(val),
     );
 
     if (!hasAnyValue) return true;
@@ -118,7 +118,7 @@ export const holderBankSchema = Yup.object().shape({
         // BANK 2 partially filled → require all
         const bank2AllFilled = Object.values(bank2).every((v) => v !== "");
         return bank2AllFilled;
-      }
+      },
     ),
 });
 
@@ -523,8 +523,8 @@ export const normalizeKycData = (data: any, ckycFlag: boolean) => {
         details?.gender === "M"
           ? "Male"
           : details?.gender === "F"
-          ? "Female"
-          : "",
+            ? "Female"
+            : "",
       address1: details?.perm_line1 || "",
       address2: details?.perm_line2 || "",
       address3: details?.perm_line3 || "",
@@ -577,6 +577,22 @@ export const States = [
   { value: "ME", label: "Meghalaya" },
   { value: "MI", label: "Mizoram" },
   { value: "NA", label: "Nagaland" },
+  { value: "ND", label: "New Delhi" },
+  { value: "OR", label: "Orissa" },
+  { value: "PO", label: "Pondicherry" },
+  { value: "PU", label: "Punjab" },
+  { value: "RA", label: "Rajasthan" },
+  { value: "SI", label: "Sikkim" },
+  { value: "TG", label: "Telengana" },
+  { value: "TN", label: "Tamil Nadu" },
+  { value: "TR", label: "Tripura" },
+  { value: "UP", label: "Uttar Pradesh" },
+  { value: "UC", label: "Uttaranchal" },
+  { value: "WB", label: "West Bengal" },
+  { value: "DN", label: "Dadra and Nagar Haveli" },
+  { value: "DD", label: "Daman and Diu" },
+  { value: "LD", label: "Lakshadweep" },
+  { value: "OH", label: "Others" },
 ];
 
 const getStateValue = (state: string) => {
@@ -585,7 +601,7 @@ const getStateValue = (state: string) => {
   const found = States.find(
     (s) =>
       s.label.toLowerCase() === state.toLowerCase() ||
-      s.value.toLowerCase() === state.toLowerCase()
+      s.value.toLowerCase() === state.toLowerCase(),
   );
 
   return found ? found.value : "";
