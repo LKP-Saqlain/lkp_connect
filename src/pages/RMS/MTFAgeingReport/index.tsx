@@ -40,7 +40,7 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   const validationSchema = Yup.object({
@@ -89,7 +89,13 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
       user_id: str === "APN-7161" ? "5376" : extractUserId,
       option: "zone",
       userType:
-        str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+        str === "APN-7161"
+          ? "EMP"
+          : userType === "Employee"
+            ? "EMP"
+            : userType === "Partner"
+              ? "APN"
+              : "APN",
       zone: "ALL",
     };
 
@@ -130,7 +136,7 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
         ShowToast(
           "error",
           errorMessage ||
-            "Sorry for the inconvenience, please try after some time."
+            "Sorry for the inconvenience, please try after some time.",
         );
       });
 
@@ -153,7 +159,13 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
         user_id: str === "APN-7161" ? "5376" : extractUserId,
         option: "BranchByZone",
         userType:
-          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+          str === "APN-7161"
+            ? "EMP"
+            : userType === "Employee"
+              ? "EMP"
+              : userType === "Partner"
+                ? "APN"
+                : "APN",
         zone: formik.values.selectedZone.value,
       };
 
@@ -188,7 +200,7 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
           ShowToast(
             "error",
             errorMessage ||
-              "Sorry for the inconvenience, please try after some time."
+              "Sorry for the inconvenience, please try after some time.",
           );
         });
     }

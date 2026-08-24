@@ -394,7 +394,7 @@ const CustomModal = ({
       .then((response) => {
         console.log("2FAresponse", response);
         if (response?.status === 200) {
-          const { token } = response?.data;
+          const { token, user_type } = response?.data;
           setTimeout(() => {
             console.log("2FA_Response", response?.data);
             localStorage.setItem("authenticated", "true");
@@ -403,6 +403,7 @@ const CustomModal = ({
               "authPan",
               encryptAES(formik?.values?.userPanValue),
             );
+            localStorage.setItem("uIdType", user_type);
             console.log("panValue", formik.values?.userPanValue);
             dispatch(setAuthenticationValue(formik.values.userPanValue));
             // localStorage.setItem("userName", name);
