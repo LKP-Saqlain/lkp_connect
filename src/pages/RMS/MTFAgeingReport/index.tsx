@@ -32,7 +32,6 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
   const [branchCodeOptions, setBranchCodeOptions] = useState([]);
   const [ageingRecords, setAgeingRecords] = useState<any[]>([]);
   const [MTFStockAgeingRecords, setMTFStockAgeingRecords] = useState<any[]>([]);
-  const [selectedMtfRow, setSelectedMtfRow] = useState<any | null>(null);
   const [isNudgeTableOpen, setIsNudgeTableOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState("");
   const [uploadDetails, setUploadDetails] = useState<UploadDetail[]>([]);
@@ -247,9 +246,20 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
       });
   };
 
-  const handleMTFRow = (selectedRow: any) => {
-    console.log("TestSelectedRow", selectedRow);
-    setSelectedMtfRow(selectedRow);
+  const handleMTFRow = (selectedRow: any, field: string) => {
+    setMTFStockAgeingRecords([]);
+    // setSelectedMtfRow(selectedRow);
+
+    if (field === "cc") {
+      setSelectedReport("MTF Stock Ageing Report");
+      fetchStockAgeing(selectedRow);
+    }
+    // else {
+    //   setSelectedReport("MTF Stock Ageing Sale Report");
+    //   fetchSaleCalculation(selectedRow);
+    // }
+
+    setIsNudgeTableOpen(true);
   };
 
   const closeNudgeTable = () => {
@@ -257,50 +267,62 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
     // tog_animationZoom(); // Reopen Nudge modal when closing NudgeTable
   };
 
-  const openNudgeTable = () => {
-    // console.log("reportName", reportName);
-    setSelectedReport("MTF Stock Ageing Report");
-    setIsNudgeTableOpen(true);
+  const fetchStockAgeing = (selectedRow: any) => {
+    const payload = {
+      user_id: user_id,
+      clientCode: selectedRow.cc,
+    };
+    dispatch(showLoader(""));
+
+    apiServices
+      .ViewMTFStockAgeingReport(payload)
+      .then((response) => {
+        dispatch(hideLoader());
+        const data = response?.data?.data;
+
+        if (response?.status === 200 && Array.isArray(data)) {
+          const recordsWithId = data.map((item: any, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }));
+
+          setMTFStockAgeingRecords(recordsWithId);
+          console.log("MTF_Ageing_Records-->", recordsWithId);
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error);
+        dispatch(hideLoader());
+      });
   };
 
-  useEffect(() => {
-    if (!selectedMtfRow?.cc) return;
+  // const fetchSaleCalculation = (selectedRow: any) => {
+  //   const payload = {
+  //     user_id: user_id,
+  //     clientCode: selectedRow.cc,
+  //   };
+  //   dispatch(showLoader(""));
+  //   apiServices
+  //     .GetMTFShortfallSellQty(payload)
+  //     .then((response) => {
+  //       dispatch(hideLoader());
+  //       const data = response?.data?.data;
 
-    const fetchMTFStockAgeingRecords = () => {
-      const payload = {
-        user_id: user_id,
-        clientCode: selectedMtfRow.cc,
-      };
-      dispatch(showLoader(""));
+  //       if (response?.status === 200 && Array.isArray(data)) {
+  //         const recordsWithId = data.map((item: any, index: number) => ({
+  //           Id: index + 1,
+  //           ...item,
+  //         }));
 
-      apiServices
-        .ViewMTFStockAgeingReport(payload)
-        .then((response) => {
-          dispatch(hideLoader());
-          const data = response?.data?.data;
-
-          if (response?.status === 200 && Array.isArray(data)) {
-            const recordsWithId = data.map((item: any, index: number) => ({
-              Id: index + 1,
-              ...item,
-            }));
-
-            setMTFStockAgeingRecords(recordsWithId);
-            console.log("MTF_Ageing_Records-->", recordsWithId);
-          }
-        })
-        .catch((error) => {
-          console.log("Error", error);
-          dispatch(hideLoader());
-        });
-    };
-
-    fetchMTFStockAgeingRecords();
-  }, [selectedMtfRow?.cc]);
-
-  useEffect(() => {
-    console.log("stateUpdate", selectedMtfRow);
-  }, [dispatch, selectedMtfRow]);
+  //         setMTFStockAgeingRecords(recordsWithId);
+  //         console.log("MTF_Ageing_Records-->", recordsWithId);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error", error);
+  //       dispatch(hideLoader());
+  //     });
+  // };
 
   useEffect(() => {
     fetchFileUploadedDetails();
@@ -584,7 +606,6 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
                     activeSubItem={activeSubItem}
                     T6Data={ageingRecords}
                     handleMTFRow={handleMTFRow}
-                    openNudgeTable={openNudgeTable}
                   />
                 </CardBody>
               </Card>

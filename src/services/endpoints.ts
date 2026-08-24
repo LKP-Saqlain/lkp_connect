@@ -388,6 +388,7 @@ export const endpoints = {
   SendBMMTFShortfallMail: "api/RMS/SendBMMTFShortfallMail",
   SendAHMTFShortfallMail: "api/RMS/SendAHMTFShortfallMail",
   GetBrokerageReport: "api/Brokerage/GetBrokerageReport",
+  GetMTFShortfallSellQty: "api/RMS/GetMTFShortfallSellQty",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

@@ -20,6 +20,7 @@ import {
   extendedAmcReport,
   stopLossTrilogyColumns,
   stopLossSPIPColumns,
+  MTFStockAgeingSaleColumns,
 } from "../../../helper/tableColumns.tsx";
 import { Stack, TextField } from "@mui/material";
 // import { useTheme } from "@mui/material/styles";
@@ -98,24 +99,23 @@ const NudgeTable = ({
       const list =
         activeTab === "sub"
           ? singleData?.submittedList
-          : activeTab === "cmp"
-            ? singleData?.completedList
-            : [];
+          : singleData?.completedList;
 
-      // Add index (id) to each row
-      return (
-        list?.map((item: any, index: number) => ({
-          ...item,
-          id: index + 1,
-        })) || []
-      );
+      return Array.isArray(list)
+        ? list.map((item, index) => ({
+            ...item,
+            id: index + 1,
+          }))
+        : [];
     }
 
-    if (singleData && Array.isArray(singleData)) {
+    if (Array.isArray(singleData)) {
       return singleData;
     }
 
-    return filteredData?.[selectedReport] || [];
+    const data = filteredData?.[selectedReport];
+
+    return Array.isArray(data) ? data : [];
   }, [filteredData, singleData, selectedReport, activeTab]);
 
   // Select columns based on the selectedReport
@@ -138,6 +138,9 @@ const NudgeTable = ({
 
       case "MTF Stock Ageing Report":
         return MTFStockAgeingColumns;
+
+      case "MTF Stock Ageing Sale Report":
+        return MTFStockAgeingSaleColumns;
 
       case "AMC Contest Report":
         return extendedAmcReport;
