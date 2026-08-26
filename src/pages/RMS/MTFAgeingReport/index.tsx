@@ -88,7 +88,13 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
       user_id: str === "APN-7161" ? "5376" : extractUserId,
       option: "zone",
       userType:
-        str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+        str === "APN-7161"
+          ? "EMP"
+          : userType === "Employee"
+            ? "EMP"
+            : userType === "Partner"
+              ? "APN"
+              : "APN",
       zone: "ALL",
     };
 
@@ -152,7 +158,13 @@ const MTFAgeingReport = ({ activeSubItem }: any) => {
         user_id: str === "APN-7161" ? "5376" : extractUserId,
         option: "BranchByZone",
         userType:
-          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
+          str === "APN-7161"
+            ? "EMP"
+            : userType === "Employee"
+              ? "EMP"
+              : userType === "Partner"
+                ? "APN"
+                : "APN",
         zone: formik.values.selectedZone.value,
       };
 
