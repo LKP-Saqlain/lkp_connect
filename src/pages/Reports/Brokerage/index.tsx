@@ -127,8 +127,17 @@ const BrokerageData = ({ activeSubItem }: any) => {
     });
   };
 
+  const formatLocalDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
   const handleSearch = () => {
     // Validation
+    console.log(formData, "raw data");
+
     if (!formData.reportType) {
       alert("Please select Report Type.");
       return;
@@ -153,13 +162,13 @@ const BrokerageData = ({ activeSubItem }: any) => {
     }
 
     const payload = {
-      firstDate: formData.dateRange[0].toISOString().split("T")[0],
-      lastDate: formData.dateRange[1].toISOString().split("T")[0],
+      firstDate: formatLocalDate(formData.dateRange[0]),
+      lastDate: formatLocalDate(formData.dateRange[1]),
       zone: formData.zone,
       branchCode: formData.branchCode,
       clientCode: formData.clientCode,
       reportType: formData.reportType,
-      userID: user_id, // Replace with logged-in user ID
+      userID: user_id,
     };
     handleReportData(payload);
     console.log("payload:", payload);
