@@ -46,7 +46,7 @@ const TypeMFModal: React.FC<Props> = ({
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
   // Reset when modal opens + sync with selectedType from parent
   useEffect(() => {
@@ -58,6 +58,7 @@ const TypeMFModal: React.FC<Props> = ({
 
   // API call – Only when user selects PHYSICAL
   const verifyPhysical = async () => {
+    debugger;
     try {
       dispatch(showLoader("Verifying Client Code..."));
 
@@ -85,6 +86,8 @@ const TypeMFModal: React.FC<Props> = ({
 
       // CASE 2: PHYSICAL + NOELOG → trigger eLog OTP
       if (clientType === "PHYSICAL" && elogstatus === "NOELOG") {
+        console.log("test2 parent");
+
         setPhysicalAllowed(false);
         setElogOtp(true);
         return;
@@ -223,6 +226,8 @@ const TypeMFModal: React.FC<Props> = ({
                 color="warning"
                 onClick={() => {
                   if (elogOtp) {
+                    console.log("test elog");
+
                     eLogApi(ClientCode);
                   } else {
                     // onPhysicalOnboard();

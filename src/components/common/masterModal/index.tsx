@@ -1,7 +1,6 @@
 import {
   Button,
   Col,
-  Input,
   Label,
   Modal,
   ModalBody,
@@ -51,6 +50,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import CustomModal from "../../../components/common/DPModal";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import pako from "pako";
+import { capitalizeEachWord } from "../../../utils/index.tsx";
 
 interface IsMarketingMaterialEditData {
   CommunicationProofPath?: string;
@@ -158,9 +158,12 @@ const ModalComponent = ({
   const fileInputRefDocument = useRef<HTMLInputElement>(null);
   const [setShowImg, setSetShowImg] = useState<boolean>(false);
   const [modal_center, setModalCenter] = useState(false);
-  const [selectedFileB64, setSelectedFileB64] = useState<string | null>(null);
+  // const [selectedFileB64, setSelectedFileB64] = useState<string | null>(null);
   const [clientList, setClientList] = useState<
     { clientCode: string; clientName: string }[]
+  >([]);
+  const [vendorData, setVendorData] = useState<
+    { rowId: number; vendorName: string }[]
   >([]);
   const [scripMasterData, setScripMasterData] = useState<
     { rowId: number; isin: string; scripName: string }[]
@@ -174,7 +177,7 @@ const ModalComponent = ({
   // const [selectedDealSheetFileB64, setSelectedDealSheetFileB64] = useState<
   //   string | null
   // >(null);
-  const [selectedFileObj, setSelectedFileObj] = useState<File | null>(null);
+  // const [selectedFileObj, setSelectedFileObj] = useState<File | null>(null);
 
   const allowedFormats = [
     "doc",
@@ -513,7 +516,10 @@ const ModalComponent = ({
                     cn: null as Client | string | null,
                     cc: null as Client | string | null,
                     isin: "",
-                    nsec: "",
+                    vendorId: null,
+                    vendorName: "",
+                    rate: "",
+                    nsec: null,
                     nsh: null,
                     crt: null,
                     vrt: null,
@@ -535,6 +541,7 @@ const ModalComponent = ({
                     bankName: "",
                     clientCode: "",
                     clientName: "",
+                    panno: "",
                     dpName: "",
                     dpid: "",
                     ifscCode: "",
@@ -642,23 +649,23 @@ const ModalComponent = ({
     formik.resetForm();
   };
 
-  useEffect(() => {
-    if (editData?.dealSheetB64) {
-      const base64Data = editData.dealSheetB64;
-      const byteCharacters = atob(base64Data);
-      const byteNumbers = new Array(byteCharacters.length)
-        .fill(null)
-        .map((_, i) => byteCharacters.charCodeAt(i));
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: "application/pdf" });
+  // useEffect(() => {
+  //   if (editData?.dealSheetB64) {
+  //     const base64Data = editData.dealSheetB64;
+  //     const byteCharacters = atob(base64Data);
+  //     const byteNumbers = new Array(byteCharacters.length)
+  //       .fill(null)
+  //       .map((_, i) => byteCharacters.charCodeAt(i));
+  //     const byteArray = new Uint8Array(byteNumbers);
+  //     const blob = new Blob([byteArray], { type: "application/pdf" });
 
-      const fileName = `Deal_Sheet_${dayjs().format("YYYY-MM-DD")}.pdf`;
-      const file = new File([blob], fileName, { type: "application/pdf" });
+  //     const fileName = `Deal_Sheet_${dayjs().format("YYYY-MM-DD")}.pdf`;
+  //     const file = new File([blob], fileName, { type: "application/pdf" });
 
-      setSelectedFileObj(file);
-      setSelectedFileB64(`data:application/pdf;base64,${base64Data}`);
-    }
-  }, [editData]);
+  //     setSelectedFileObj(file);
+  //     setSelectedFileB64(`data:application/pdf;base64,${base64Data}`);
+  //   }
+  // }, [editData]);
 
   const fetchVendorMastertContent = async (setTouched: any, values: any) => {
     console.log("fetchVendorMasterValues", setTouched, values);
@@ -696,14 +703,14 @@ const ModalComponent = ({
     formik.resetForm();
   };
 
-  const convertFileToBase64WithPrefix = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file); // Keeps full "data:application/pdf;base64,..." prefix
-      reader.onload = () => resolve(reader.result?.toString() || "");
-      reader.onerror = (error) => reject(error);
-    });
-  };
+  // const convertFileToBase64WithPrefix = (file: File): Promise<string> => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file); // Keeps full "data:application/pdf;base64,..." prefix
+  //     reader.onload = () => resolve(reader.result?.toString() || "");
+  //     reader.onerror = (error) => reject(error);
+  //   });
+  // };
 
   const fetchUnlistedContent = async (setTouched: any, values: any) => {
     console.log("unlistedValuess", values);
@@ -718,13 +725,14 @@ const ModalComponent = ({
       sbr: true,
     });
 
-    if (!selectedFileB64 || selectedFileB64.trim() === "") {
-      ShowToast("error", "Please upload a PDF document before submitting.");
-      return; // stop execution
-    }
+    // if (!selectedFileB64 || selectedFileB64.trim() === "") {
+    //   ShowToast("error", "Please upload a PDF document before submitting.");
+    //   return; // stop execution
+    // }
     console.log("EditClick", values);
 
-    onSubmit?.(values, selectedFileB64);
+    onSubmit?.(values);
+    // onSubmit?.(values, selectedFileB64);
 
     formik.resetForm();
     // formik.setFieldValue("cn", "");
@@ -915,6 +923,18 @@ const ModalComponent = ({
         formik.setFieldValue("vrt", editData?.vrt || null);
         formik.setFieldValue("paymentMode", editData?.paym || "");
         formik.setFieldValue("referenceNumber", editData?.cqnum || "");
+        formik.setFieldValue("panno", editData?.panno || "");
+        const selectedVendor = vendorData.find(
+          (vendor) =>
+            vendor.vendorName?.trim().toLowerCase() ===
+            editData?.vnm?.trim().toLowerCase(),
+        );
+
+        formik.setFieldValue(
+          "vendorName",
+          selectedVendor?.vendorName || editData?.vnm || "",
+        );
+        formik.setFieldValue("vendorId", selectedVendor?.rowId || "");
         //new fields
 
         const formattedIssueDate = editData?.isudt
@@ -925,6 +945,7 @@ const ModalComponent = ({
           clientName: editData.cn,
           dpid: editData.dpid,
           dpName: editData.dpnm,
+          panno: editData.panno,
           bankAccountNumber: editData.accno,
           bankName: editData.bnknm,
           ifscCode: editData.ifsc,
@@ -934,6 +955,7 @@ const ModalComponent = ({
         formik.setFieldValue("clientCode", editData?.cc);
         formik.setFieldValue("clientName", editData?.cn);
         formik.setFieldValue("dpName", editData?.dpnm);
+        formik.setFieldValue("vendorName", editData?.vnm);
         formik.setFieldValue("dpid", editData?.dpid);
         formik.setFieldValue("ifscCode", editData?.ifsc);
         formik.setFieldValue("issueDate", formattedIssueDate);
@@ -1292,29 +1314,24 @@ const ModalComponent = ({
       const lcps = parseFloat(formik.values.lcps || "0");
 
       if (nsh > 0 && lcps > 0) {
-        const inclusiveGST = Math.floor(nsh * lcps);
-        const gst = Math.floor(inclusiveGST / 1.18);
-        const exclusiveGST = Math.floor(inclusiveGST - gst);
+        const brokerageInclusive = Math.floor(nsh * lcps);
 
-        formik.setFieldValue("big", formatIndianNumber(inclusiveGST));
-        formik.setFieldValue("gst", formatIndianNumber(exclusiveGST));
-        formik.setFieldValue("beg", formatIndianNumber(gst));
+        const brokerageExclusive = Math.floor(brokerageInclusive / 1.18);
 
-        // Leave it blank until sbr is provided
+        const gst = Math.floor(brokerageInclusive - brokerageExclusive);
+
+        formik.setFieldValue("big", formatIndianNumber(brokerageInclusive));
+        formik.setFieldValue("beg", formatIndianNumber(brokerageExclusive));
+        formik.setFieldValue("gst", formatIndianNumber(gst));
+
         const sbr = parseFloat(formik.values.sbr || "0");
-        if (sbr > 0) {
-          const sbValue = sbr * nsh;
-          const subBrokerCommission = Math.floor(sbValue / 1.18);
 
-          const beg = exclusiveGST;
-          const nbg = Math.floor(beg - subBrokerCommission);
+        const sbCommission = Math.floor((sbr * nsh) / 1.18);
 
-          formik.setFieldValue("sbcm", subBrokerCommission);
-          formik.setFieldValue("nbg", formatIndianNumber(nbg));
-        } else {
-          formik.setFieldValue("sbcm", "");
-          formik.setFieldValue("nbg", ""); // keep empty until sbr entered
-        }
+        const netBrokerage = Math.floor(brokerageExclusive - sbCommission);
+
+        formik.setFieldValue("sbcm", formatIndianNumber(sbCommission));
+        formik.setFieldValue("nbg", formatIndianNumber(netBrokerage));
       } else {
         resetBrokerageFields();
       }
@@ -1327,9 +1344,9 @@ const ModalComponent = ({
       formik.setFieldValue(name, decimalValue);
 
       const nsh = parseInt(formik.values.nsh || "0");
-      const sbr = parseFloat(decimalValue);
+      const sbr = parseFloat(decimalValue || "0");
 
-      if (nsh > 0 && !isNaN(sbr)) {
+      if (nsh > 0) {
         const subBrokerValue = sbr * nsh; //1600
         const subBrokerCommission = Math.floor(subBrokerValue / 1.18);
         console.log("sbCoMMISSION", subBrokerCommission);
@@ -1590,39 +1607,39 @@ const ModalComponent = ({
     }
   }, [editUserCheck, editData, dispatch, activeSubItem]);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileInput = e.target;
-    const file = fileInput.files?.[0];
-    if (!file) return;
+  // const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const fileInput = e.target;
+  //   const file = fileInput.files?.[0];
+  //   if (!file) return;
 
-    const fileExtension = file.name.split(".").pop()?.toLowerCase();
-    const mimeType = file.type;
+  //   const fileExtension = file.name.split(".").pop()?.toLowerCase();
+  //   const mimeType = file.type;
 
-    if (fileExtension !== "pdf" || mimeType !== "application/pdf") {
-      ShowToast("error", "Please upload PDF file only.");
-      fileInput.value = "";
-      setSelectedFileB64(null);
-      setSelectedFileObj(null);
-      return;
-    }
+  //   if (fileExtension !== "pdf" || mimeType !== "application/pdf") {
+  //     ShowToast("error", "Please upload PDF file only.");
+  //     fileInput.value = "";
+  //     setSelectedFileB64(null);
+  //     setSelectedFileObj(null);
+  //     return;
+  //   }
 
-    try {
-      const base64 = await convertFileToBase64WithPrefix(file);
-      setSelectedFileB64(base64);
-      setSelectedFileObj(file);
-    } catch (error) {
-      console.error("File conversion error:", error);
-      ShowToast("error", "Failed to process the PDF file.");
-      fileInput.value = "";
-      setSelectedFileB64(null);
-      setSelectedFileObj(null);
-    }
-  };
+  //   try {
+  //     const base64 = await convertFileToBase64WithPrefix(file);
+  //     setSelectedFileB64(base64);
+  //     setSelectedFileObj(file);
+  //   } catch (error) {
+  //     console.error("File conversion error:", error);
+  //     ShowToast("error", "Failed to process the PDF file.");
+  //     fileInput.value = "";
+  //     setSelectedFileB64(null);
+  //     setSelectedFileObj(null);
+  //   }
+  // };
 
-  const handleRemoveFile = () => {
-    setSelectedFileObj(null);
-    setSelectedFileB64(null);
-  };
+  // const handleRemoveFile = () => {
+  //   setSelectedFileObj(null);
+  //   setSelectedFileB64(null);
+  // };
 
   // const isClientInList = (value: string) => {
   //   return clientList.some(
@@ -1650,6 +1667,7 @@ const ModalComponent = ({
         formik.setFieldValue("clientCode", data?.clientCode);
         formik.setFieldValue("clientName", data?.clientName);
         formik.setFieldValue("dpName", data?.dpName);
+        formik.setFieldValue("panno", data?.panno);
         formik.setFieldValue("dpid", data?.dpid);
         formik.setFieldValue("ifscCode", data?.ifscCode);
       }
@@ -1709,31 +1727,48 @@ const ModalComponent = ({
   useEffect(() => {
     if (!isUnlistedContent) return;
 
-    const fetchScripMaster = async () => {
+    const fetchData = async () => {
       try {
         dispatch(showLoader(""));
 
-        const res = await apiServices.UnlistedScripMasterDropdown({
+        // API 1: Scrip Master
+        const scripRes = await apiServices.UnlistedScripMasterDropdown({
           user_id,
         });
 
-        if (res?.status === 200) {
-          const formattedData = (res?.data?.data ?? []).map((item: any) => ({
-            rowId: item.rid,
-            isin: item.isin,
-            scripName: item.scpnm,
-          }));
+        if (scripRes?.status === 200) {
+          const formattedData = (scripRes?.data?.data ?? []).map(
+            (item: any) => ({
+              rowId: item.rid,
+              isin: item.isin,
+              scripName: item.scpnm,
+            }),
+          );
 
           setScripMasterData(formattedData);
         }
+
+        // API 2: Vendor Data
+        const vendorRes = await apiServices.GetVendorData({});
+
+        if (vendorRes?.status === 200) {
+          const formattedVendorData = (vendorRes?.data?.data ?? []).map(
+            (item: any) => ({
+              rowId: item.rowId,
+              vendorName: item.vendorName,
+            }),
+          );
+
+          setVendorData(formattedVendorData);
+        }
       } catch (error) {
-        console.error("Scrip master error:", error);
+        console.error("API error:", error);
       } finally {
         dispatch(hideLoader());
       }
     };
 
-    fetchScripMaster();
+    fetchData();
   }, [isUnlistedContent, user_id]);
 
   useEffect(() => {
@@ -2221,21 +2256,26 @@ const ModalComponent = ({
                       boxShadow: "0 4px 12px rgba(0,0,0,0.18)",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontWeight: 600,
-                        mb: 2,
-                        fontSize: "15px",
-                        color: "#1f2937",
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
                       }}
                     >
-                      Transaction Details
-                    </Typography>
-
+                      <Typography
+                        sx={{
+                          fontWeight: 600,
+                          mb: 2,
+                          fontSize: "15px",
+                          color: "#1f2937",
+                        }}
+                      >
+                        Transaction Details
+                      </Typography>{" "}
+                    </div>
                     <Row className="g-3">
-                      {/* RM Code */}
+                      {/* Date */}
                       <Col lg={6}>
-                        {" "}
                         <TextField
                           fullWidth
                           id="rmc"
@@ -2251,6 +2291,7 @@ const ModalComponent = ({
                             formik.touched.rmc && Boolean(formik.errors.rmc)
                           }
                           sx={{
+                            // width: 200,
                             "& .MuiInputBase-root": {
                               height: 30,
                             },
@@ -2264,8 +2305,6 @@ const ModalComponent = ({
                           }}
                         />{" "}
                       </Col>
-
-                      {/* Date */}
                       <Col lg={6}>
                         <FormControl fullWidth>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -2569,56 +2608,6 @@ const ModalComponent = ({
                         />
                       </Col> */}
                       <Col lg={6}>
-                        {/* <Autocomplete
-                          options={scripMasterData}
-                          value={
-                            scripMasterData.find(
-                              (item) => item.scripName === formik.values.nsec
-                            ) || null
-                          }
-                          onChange={(event, value) => {
-                            formik.setFieldValue(
-                              "nsec",
-                              value?.scripName || ""
-                            );
-                            formik.setFieldValue("isin", value?.isin);
-                          }}
-                          getOptionLabel={(option) =>
-                            `${option.scripName} (${option.isin})`
-                          }
-                          isOptionEqualToValue={(option, value) =>
-                            option.rowId === value.rowId
-                          }
-                          renderInput={(params) => (
-                            <TextField
-                              {...params}
-                              label="Select Securities Name"
-                              size="small"
-                              error={
-                                formik.touched.nsec &&
-                                Boolean(formik.errors.nsec)
-                              }
-                              helperText={
-                                formik.touched.nsec && formik.errors.nsec
-                              }
-                              sx={{
-                                "& .MuiInputBase-root": {
-                                  height: 30,
-                                  fontSize: "13px",
-                                },
-                                "& .MuiInputLabel-root": {
-                                  fontSize: "12px",
-                                  transform: "translate(14px, 6px) scale(1)",
-                                },
-                                "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-root.MuiFormLabel-filled":
-                                  {
-                                    transform:
-                                      "translate(14px, -8px) scale(0.75)",
-                                  },
-                              }}
-                            />
-                          )}
-                        /> */}
                         <Autocomplete
                           options={scripMasterData}
                           value={
@@ -2636,7 +2625,7 @@ const ModalComponent = ({
                             formik.setFieldValue("isin", value?.isin || "");
                           }}
                           getOptionLabel={(option) =>
-                            `${option.scripName} (${option.isin})`
+                            `${capitalizeEachWord(option.scripName)} (${option.isin})`
                           }
                           isOptionEqualToValue={(option, value) =>
                             option.isin === value.isin
@@ -2670,6 +2659,94 @@ const ModalComponent = ({
                               }}
                             />
                           )}
+                        />
+                      </Col>
+                      <Col lg={6}>
+                        <Autocomplete
+                          options={vendorData}
+                          value={
+                            vendorData.find(
+                              (item) =>
+                                item.rowId === Number(formik.values.vendorId),
+                            ) || null
+                          }
+                          onChange={(_, value) => {
+                            formik.setFieldValue(
+                              "vendorId",
+                              value?.rowId || "",
+                            );
+
+                            formik.setFieldValue(
+                              "vendorName",
+                              value?.vendorName || "",
+                            );
+                          }}
+                          getOptionLabel={(option) => option.vendorName || ""}
+                          isOptionEqualToValue={(option, value) =>
+                            option.rowId === value.rowId
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Select Vendor Name"
+                              size="small"
+                              error={
+                                formik.touched.vendorName &&
+                                Boolean(formik.errors.vendorName)
+                              }
+                              helperText={
+                                formik.touched.vendorName &&
+                                formik.errors.vendorName
+                              }
+                              sx={{
+                                "& .MuiInputBase-root": {
+                                  height: 30,
+                                  fontSize: "12px",
+                                },
+                                "& .MuiInputLabel-root": {
+                                  fontSize: "12px",
+                                  transform: "translate(14px, 6px) scale(1)",
+                                },
+                                "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-root.MuiFormLabel-filled":
+                                  {
+                                    transform:
+                                      "translate(14px, -8px) scale(0.75)",
+                                  },
+                              }}
+                            />
+                          )}
+                        />
+                      </Col>
+                      <Col lg={6}>
+                        <TextField
+                          fullWidth
+                          label="Enter Pan Card"
+                          size="small"
+                          name="panno"
+                          value={formik.values.panno}
+                          onChange={(e) => {
+                            const cleaned = e.target.value.replace(
+                              /[^a-zA-Z0-9 ]/g,
+                              "",
+                            );
+                            formik.setFieldValue(
+                              "panno",
+                              cleaned.toUpperCase(),
+                            );
+                          }}
+                          onBlur={formik.handleBlur}
+                          sx={{
+                            "& .MuiInputBase-root": {
+                              height: 30,
+                            },
+                            "& .MuiInputLabel-root": {
+                              transform: "translate(14px, 6px) scale(1)",
+                            },
+                            "& .MuiInputLabel-root.Mui-focused, & .MuiInputLabel-root.MuiFormLabel-filled":
+                              {
+                                transform: "translate(14px, -10px) scale(0.75)",
+                              },
+                          }}
                         />
                       </Col>
                     </Row>
@@ -3487,14 +3564,8 @@ const ModalComponent = ({
                           }}
                         />
                       </Col>
-                      <Col lg={6}>
-                        {/* <Label
-                          htmlFor="dealSheet"
-                          style={{ fontSize: "10px" }}
-                          className="form-label"
-                        >
-                          Upload Document
-                        </Label> */}
+                      {/* <Col lg={6}>
+                       
 
                         {!selectedFileObj ? (
                           <Input
@@ -3503,11 +3574,7 @@ const ModalComponent = ({
                             accept=".pdf"
                             className="form-control mb-3"
                             onChange={handleFileChange}
-                            // style={{
-                            //   width: "100%",
-                            //   minHeight: "40px",
-                            //   borderColor: "#C4C4C4",
-                            // }}
+                            
 
                             sx={{
                               "& .MuiOutlinedInput-root": {
@@ -3552,14 +3619,14 @@ const ModalComponent = ({
                             </span>
 
                             <CloseIcon
-                              // color="#ff4d4f"
+                            
                               style={{ cursor: "pointer" }}
                               onClick={handleRemoveFile}
                               fontSize="small"
                             />
                           </div>
                         )}
-                      </Col>
+                      </Col> */}
                     </Row>
                   </Box>
                 </>
