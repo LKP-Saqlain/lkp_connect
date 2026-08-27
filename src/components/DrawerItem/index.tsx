@@ -45,6 +45,7 @@ import TroubleshootIcon from "@mui/icons-material/Troubleshoot";
 import FolderCopyIcon from "@mui/icons-material/FolderCopy";
 import Lottie from "react-lottie-player";
 import newIcon from "../../assets/images/new.json";
+import AssessmentIcon from "@mui/icons-material/Assessment";
 
 // import "./style.css";
 
@@ -120,6 +121,7 @@ const DrawerItem: React.FC<DrawerItemProps> = ({
     "Q3 Contest": <LocalPoliceIcon />,
     "Expiry Contest": <CampaignIcon />,
     "Partner OnBoarding": <FolderCopyIcon />,
+    Incentive: <AssessmentIcon />,
   };
 
   const getIcon = (title: string) => {
