@@ -58,7 +58,6 @@ const TypeMFModal: React.FC<Props> = ({
 
   // API call – Only when user selects PHYSICAL
   const verifyPhysical = async () => {
-    debugger;
     try {
       dispatch(showLoader("Verifying Client Code..."));
 
