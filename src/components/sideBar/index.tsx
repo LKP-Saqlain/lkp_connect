@@ -139,6 +139,7 @@ import DocsDownload from "../../pages/AP Onboarding/DocsDownload";
 import EmployeeTarget from "../../pages/Revamp/Employee Target";
 import ZoneTarget from "../../pages/Revamp/Zone Target";
 import BrokerageData from "../../pages/Reports/Brokerage";
+import IncentiveTracker from "../../pages/IncentiveTracker";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -971,6 +972,7 @@ const SideBar = () => {
       "Research Calls": <ResearchCalls />,
       "Expiry Contest": <Expiry />,
       "Partner OnBoarding": getSubItemComponent(PartnerOnBoardingSubItems),
+      Incentive: <IncentiveTracker />,
     };
     return map[mn] ?? null;
   };
