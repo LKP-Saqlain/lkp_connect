@@ -12,7 +12,7 @@ const RegMaster = ({ activeSubItem }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const RegMaster = ({ activeSubItem }: any) => {
             (item: any, index: number) => ({
               Id: index + 1,
               ...item,
-            })
+            }),
           );
 
           console.log("Processed Records:", records);

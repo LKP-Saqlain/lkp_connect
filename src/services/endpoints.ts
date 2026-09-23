@@ -390,6 +390,7 @@ export const endpoints = {
   GetBrokerageReport: "api/Brokerage/GetBrokerageReport",
   GetMTFShortfallSellQty: "api/RMS/GetMTFShortfallSellQty",
   GetVendorData: "api/Account/GetVendorData",
+  ViewT6PostPreSellingData: "api/RMS/ViewT6PostPreSellingData",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

@@ -140,6 +140,7 @@ import EmployeeTarget from "../../pages/Revamp/Employee Target";
 import ZoneTarget from "../../pages/Revamp/Zone Target";
 import BrokerageData from "../../pages/Reports/Brokerage";
 import IncentiveTracker from "../../pages/IncentiveTracker";
+import T6SellingDetailReport from "../../pages/RMS/T6SellingDetailReport";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -814,6 +815,9 @@ const SideBar = () => {
     "REG Master Records": <RegMaster activeSubItem={activeSubItem} />,
     "MTF Shortfall Upload": (
       <MTFShortfallUpload activeSubItem={activeSubItem} />
+    ),
+    "T6 Selling Detail (Pre&Post)": (
+      <T6SellingDetailReport activeSubItem={activeSubItem} />
     ),
   };
   const tpdSubItems: Record<string, JSX.Element> = {

@@ -1620,4 +1620,11 @@ export const apiServices = {
   GetVendorData: async (payload: any) => {
     return await apiService("POST", endpoints.GetVendorData, payload);
   },
+  ViewT6PostPreSellingData: async (payload: any) => {
+    return await apiService(
+      "POST",
+      endpoints.ViewT6PostPreSellingData,
+      payload,
+    );
+  },
 };

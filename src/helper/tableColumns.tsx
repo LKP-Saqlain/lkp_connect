@@ -11570,6 +11570,56 @@ export const regMasterColumns: GridColDef[] = [
     headerClassName: "header-wrap-custom",
     renderCell: (params) => params.value || "—",
   },
+  {
+    field: "uns",
+    headerName: "UnsolicitedSMS",
+    flex: 1,
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "smp",
+    headerName: "SocialMediaPlatforms",
+    flex: 1,
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "mmp",
+    headerName: "Mandatory Market Period",
+    flex: 1,
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "uz",
+    headerName: "Z Group",
+    flex: 1,
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "ssn",
+    headerName: "SME Scrip NonRegtraded",
+    flex: 1,
+    minWidth: 100,
+    align: "right",
+    headerAlign: "center",
+    headerClassName: "header-wrap-custom",
+    renderCell: (params) => params.value || "—",
+  },
 ];
 
 export const AmcZoneReportDirect: GridColDef[] = [
@@ -15001,5 +15051,158 @@ export const ApDocsDownload: GridColDef[] = [
     disableColumnMenu: true,
     headerClassName: "header-wrap-custom",
     renderCell: (params) => capitalizeEachWord(params.value),
+  },
+];
+
+export const T6SellingDetailReportColumns: GridColDef[] = [
+  {
+    field: "cn",
+    headerName: "Client Name",
+    // flex: 1.6,
+    minWidth: 210,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "cc",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "zn",
+    headerName: "Zone",
+    flex: 0.6,
+    minWidth: 70,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "bc",
+    headerName: "Branch Code",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 90,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "bt",
+    headerName: "Branch Type",
+    minWidth: 110,
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    align: "center",
+    headerAlign: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "ex",
+    headerName: "Exchange",
+    headerClassName: "header-wrap-custom",
+    flex: 0.8,
+    minWidth: 75,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "rmc",
+    headerName: "RM Code",
+    minWidth: 80,
+    align: "center",
+    disableColumnMenu: true,
+    headerAlign: "center",
+  },
+  {
+    field: "rmn",
+    headerName: "RM Name",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "left",
+  },
+  {
+    field: "dlc",
+    headerName: "Dealer Code",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 150,
+    headerClassName: "header-wrap-custom",
+    // renderCell: (params: any) => {
+    //   const dealerName = (params.row?.dln || "").trim();
+    //   const dealerCode = (params.row?.dlc || "").trim();
+
+    //   if (!dealerName && !dealerCode) return "—";
+    //   if (!dealerName) return dealerCode;
+    //   if (!dealerCode) return dealerName;
+
+    //   return `${dealerName} - (${dealerCode})`;
+    // },
+  },
+  {
+    field: "dln",
+    headerName: "Dealer Name",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 150,
+    headerClassName: "header-wrap-custom",
+  },
+  {
+    field: "ag",
+    headerName: "Ageing",
+    flex: 1,
+    minWidth: 160,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "ss",
+    headerName: "Short Sell",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "pre",
+    headerName: "Pre",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
+    field: "po",
+    headerName: "Post",
+    flex: 0.9,
+    minWidth: 130,
+    align: "right",
+    headerAlign: "center",
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
   },
 ];
