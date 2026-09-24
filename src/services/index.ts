@@ -1627,4 +1627,7 @@ export const apiServices = {
       payload,
     );
   },
+  MarketingData: async (payload: any) => {
+    return await apiService("POST", endpoints.MarketingData, payload);
+  },
 };

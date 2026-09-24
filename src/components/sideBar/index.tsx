@@ -141,6 +141,7 @@ import ZoneTarget from "../../pages/Revamp/Zone Target";
 import BrokerageData from "../../pages/Reports/Brokerage";
 import IncentiveTracker from "../../pages/IncentiveTracker";
 import T6SellingDetailReport from "../../pages/RMS/T6SellingDetailReport";
+import SLBMClientResponse from "../../pages/Reports/SLBMClientResponse";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -753,6 +754,9 @@ const SideBar = () => {
     "Pledge Request Report": <PledgeReport activeSubItem={activeSubItem} />,
     "LKP Bank Report": <BankReport activeSubItem={activeSubItem} />,
     "Brokerage Report": <BrokerageData activeSubItem={activeSubItem} />,
+    "SLBM Client Response": (
+      <SLBMClientResponse activeSubItem={activeSubItem} />
+    ),
   };
 
   // const referalSubItems: Record<string, JSX.Element> = {

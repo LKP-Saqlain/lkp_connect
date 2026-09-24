@@ -3063,6 +3063,10 @@ const DataTable = ({
       return TableColumns.T6SellingDetailReportColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "SLBM Client Response") {
+      return TableColumns.SLBMClientResponseColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }
