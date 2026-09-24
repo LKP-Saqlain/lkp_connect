@@ -15155,7 +15155,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
   },
   {
     field: "ag",
-    headerName: "Ageing",
+    headerName: "T6 Ageing Value",
     flex: 1,
     minWidth: 160,
     align: "right",
@@ -15168,7 +15168,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
   },
   {
     field: "ss",
-    headerName: "Short Sell",
+    headerName: "T6 Selling StockValue",
     flex: 0.9,
     minWidth: 130,
     align: "right",
@@ -15181,7 +15181,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
   },
   {
     field: "pre",
-    headerName: "Pre",
+    headerName: "Pre Excess Deficit",
     flex: 0.9,
     minWidth: 130,
     align: "right",
@@ -15194,7 +15194,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
   },
   {
     field: "po",
-    headerName: "Post",
+    headerName: "Post Excess Deficit",
     flex: 0.9,
     minWidth: 130,
     align: "right",
