@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import { apiServices } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,7 +6,11 @@ import { RootState, AppDispatch } from "../../../redux/store";
 import { showLoader, hideLoader } from "../../../redux/slices/loaderSlice";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 
+import Button from "@mui/material/Button";
+import RefreshIcon from "@mui/icons-material/Refresh";
+
 interface SLBMClientData {
+  Id: number;
   Zone: string | null;
   BranchCode: string | null;
   M_Type: string | null;
@@ -21,7 +25,7 @@ interface SLBMClientData {
 }
 
 const SLBMClientResponse = ({ activeSubItem }: any) => {
-  const [SLBMClientData, setSLBMClientData] = useState<SLBMClientData[]>([]);
+  const [slbmClientData, setSLBMClientData] = useState<SLBMClientData[]>([]);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -29,7 +33,7 @@ const SLBMClientResponse = ({ activeSubItem }: any) => {
     (state: RootState) => state.UserLogin?.data?.data,
   );
 
-  useEffect(() => {
+  const fetchSLBMClientData = useCallback(() => {
     const payload = {
       emailId: "",
       option: "View",
@@ -46,21 +50,27 @@ const SLBMClientResponse = ({ activeSubItem }: any) => {
 
         const data = response?.data?.data ?? [];
 
-        const recordsWithId = data.map((item: any, index: number) => ({
-          Id: index + 1,
-          ...item,
-        }));
+        const recordsWithId = data.map(
+          (item: Omit<SLBMClientData, "Id">, index: number) => ({
+            Id: index + 1,
+            ...item,
+          }),
+        );
 
         setSLBMClientData(recordsWithId);
-
-        dispatch(hideLoader());
       })
       .catch((error) => {
         console.log("Error fetching MarketingData:", error);
         setSLBMClientData([]);
+      })
+      .finally(() => {
         dispatch(hideLoader());
       });
   }, [dispatch, user_id]);
+
+  useEffect(() => {
+    fetchSLBMClientData();
+  }, [fetchSLBMClientData]);
 
   return (
     <React.Fragment>
@@ -77,18 +87,48 @@ const SLBMClientResponse = ({ activeSubItem }: any) => {
               >
                 <CardHeader
                   style={{
+                    position: "relative",
                     borderRadius: "15px 15px 0 0",
                     boxShadow: "0 -4px 8px rgba(0, 0, 0, 0.15)",
                     backgroundColor: "#fff",
-                    padding: "0.2rem 0.8rem",
+                    padding: "0.5rem 0.8rem",
+                    minHeight: "48px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
+                  {/* Centered title */}
                   <h4 className="card-title mb-0">{activeSubItem}</h4>
+
+                  {/* Right-side refresh button */}
+                  <Button
+                    variant="outlined"
+                    onClick={fetchSLBMClientData}
+                    startIcon={<RefreshIcon />}
+                    sx={{
+                      position: "absolute",
+                      right: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      // minWidth: "auto",
+                      height: "30px",
+                      padding: "0 14px",
+                      borderRadius: "8px",
+                      textTransform: "none",
+                      fontWeight: 500,
+                      color: "#11395C",
+                      borderColor: "#11395C",
+                    }}
+                  >
+                    Refresh
+                  </Button>
                 </CardHeader>
+
                 <CardBody>
                   <UserInfoTable
                     activeSubItem={activeSubItem}
-                    T6Data={SLBMClientData}
+                    T6Data={slbmClientData}
                   />
                 </CardBody>
               </Card>

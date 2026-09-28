@@ -15214,7 +15214,7 @@ export const SLBMClientResponseColumns: GridColDef[] = [
     flex: 1,
     minWidth: 120,
     headerAlign: "center",
-    align: "left",
+    align: "center",
     disableColumnMenu: true,
     renderCell: (params) => (params.value ? params.value : "—"),
   },
