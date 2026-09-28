@@ -15269,6 +15269,16 @@ export const SLBMClientResponseColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
+    field: "SLBM_Status",
+    headerName: "SLBM Status",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
     field: "ClientStatus",
     headerName: "Client Status",
     flex: 1,
