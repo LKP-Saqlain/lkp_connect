@@ -142,6 +142,8 @@ import BrokerageData from "../../pages/Reports/Brokerage";
 import IncentiveTracker from "../../pages/IncentiveTracker";
 import T6SellingDetailReport from "../../pages/RMS/T6SellingDetailReport";
 import SLBMClientResponse from "../../pages/Reports/SLBMClientResponse";
+import { FaHandHoldingMedical } from "react-icons/fa";
+
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -1161,6 +1163,31 @@ const SideBar = () => {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
+            <Button
+              onClick={() => {
+                window.open(
+                  "/insurance/insurance-summary.html",
+                  "_blank",
+                  "noopener,noreferrer",
+                );
+              }}
+              variant="outlined"
+              style={{
+                height: "25px", // increased height for better readability
+                // minWidth: "220px", // ensure full text fits
+                borderRadius: "5px",
+                fontSize: "12px",
+                padding: "4px 12px",
+                fontFamily: "Public Sans",
+                borderColor: "#11395C", // outlined border color
+                color: "#11395C", // text color matches border
+                textTransform: "none",
+                marginRight: "1rem",
+              }}
+            >
+              Insurance
+              <FaHandHoldingMedical style={{ marginLeft: "5px" }} />{" "}
+            </Button>
             {/* <div
               style={{
                 position: "relative",
