@@ -15208,16 +15208,16 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
 ];
 
 export const SLBMClientResponseColumns: GridColDef[] = [
-  {
-    field: "Zone",
-    headerName: "Zone",
-    flex: 1,
-    minWidth: 120,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
-    renderCell: (params) => (params.value ? params.value : "—"),
-  },
+  // {
+  //   field: "Zone",
+  //   headerName: "Zone",
+  //   flex: 1,
+  //   minWidth: 120,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  //   renderCell: (params) => (params.value ? params.value : "—"),
+  // },
   {
     field: "BranchCode",
     headerName: "Branch Code",
@@ -15327,6 +15327,20 @@ export const SLBMClientResponseColumns: GridColDef[] = [
     align: "left",
     disableColumnMenu: true,
     renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "HoldingValue",
+    headerName: "Holding Value",
+    flex: 1.5,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
   },
 ];
 
