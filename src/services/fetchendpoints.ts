@@ -498,6 +498,7 @@ export const newDomainEndpoints = [
   endpoints.GetVendorData,
   endpoints.ViewT6PostPreSellingData,
   endpoints.MarketingData,
+  endpoints.SLBMPosition,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

@@ -392,6 +392,7 @@ export const endpoints = {
   GetVendorData: "api/Account/GetVendorData",
   ViewT6PostPreSellingData: "api/RMS/ViewT6PostPreSellingData",
   MarketingData: "api/MIS/MarketingData",
+  SLBMPosition: "api/ShortAllocation/SLBMPosition",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

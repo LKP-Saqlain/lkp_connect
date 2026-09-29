@@ -142,6 +142,7 @@ import BrokerageData from "../../pages/Reports/Brokerage";
 import IncentiveTracker from "../../pages/IncentiveTracker";
 import T6SellingDetailReport from "../../pages/RMS/T6SellingDetailReport";
 import SLBMClientResponse from "../../pages/Reports/SLBMClientResponse";
+import ClientPosition from "../../pages/Reports/ClientPosition";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -757,6 +758,7 @@ const SideBar = () => {
     "SLBM Client Response": (
       <SLBMClientResponse activeSubItem={activeSubItem} />
     ),
+    "SLBM Client Position": <ClientPosition activeSubItem={activeSubItem} />,
   };
 
   // const referalSubItems: Record<string, JSX.Element> = {

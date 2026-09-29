@@ -1630,4 +1630,8 @@ export const apiServices = {
   MarketingData: async (payload: any) => {
     return await apiService("POST", endpoints.MarketingData, payload);
   },
+
+  SLBMPosition: async (payload: any) => {
+    return await apiService("POST", endpoints.SLBMPosition, payload);
+  },
 };
