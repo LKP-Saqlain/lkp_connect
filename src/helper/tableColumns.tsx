@@ -15056,22 +15056,6 @@ export const ApDocsDownload: GridColDef[] = [
 
 export const T6SellingDetailReportColumns: GridColDef[] = [
   {
-    field: "cn",
-    headerName: "Client Name",
-    // flex: 1.6,
-    minWidth: 210,
-    headerClassName: "header-wrap-custom",
-    disableColumnMenu: true,
-  },
-  {
-    field: "cc",
-    headerName: "Client Code",
-    flex: 1,
-    minWidth: 150,
-    align: "center",
-    headerAlign: "center",
-  },
-  {
     field: "zn",
     headerName: "Zone",
     flex: 0.6,
@@ -15098,6 +15082,23 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     headerAlign: "center",
     disableColumnMenu: true,
   },
+  {
+    field: "cn",
+    headerName: "Client Name",
+    // flex: 1.6,
+    minWidth: 210,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+  },
+  {
+    field: "cc",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+
   {
     field: "ex",
     headerName: "Exchange",
@@ -15172,6 +15173,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     flex: 0.9,
     minWidth: 130,
     align: "right",
+    headerClassName: "header-wrap-custom",
     headerAlign: "center",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
@@ -15181,7 +15183,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
   },
   {
     field: "pre",
-    headerName: "Pre Excess Deficit",
+    headerName: "Pre Excess/Deficit",
     flex: 0.9,
     minWidth: 130,
     align: "right",
@@ -15194,7 +15196,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
   },
   {
     field: "po",
-    headerName: "Post Excess Deficit",
+    headerName: "Post Excess/Deficit",
     flex: 0.9,
     minWidth: 130,
     align: "right",
@@ -15204,6 +15206,33 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(parseFloat(params)),
+  },
+  {
+    field: "act",
+    headerName: "Active",
+    flex: 0.9,
+    minWidth: 130,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "poa",
+    headerName: "POA",
+    flex: 0.9,
+    minWidth: 130,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "nri",
+    headerName: "NriFlag",
+    flex: 0.9,
+    minWidth: 130,
+    align: "center",
+    headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
 ];
 
