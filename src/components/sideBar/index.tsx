@@ -1163,31 +1163,69 @@ const SideBar = () => {
             )}
 
             <Box sx={{ flexGrow: 1 }} />
-            <Button
-              onClick={() => {
-                window.open(
-                  "/insurance/insurance-summary.html",
-                  "_blank",
-                  "noopener,noreferrer",
-                );
-              }}
-              variant="outlined"
-              style={{
-                height: "25px", // increased height for better readability
-                // minWidth: "220px", // ensure full text fits
-                borderRadius: "5px",
-                fontSize: "12px",
-                padding: "4px 12px",
-                fontFamily: "Public Sans",
-                borderColor: "#11395C", // outlined border color
-                color: "#11395C", // text color matches border
-                textTransform: "none",
+            <Box
+              sx={{
+                position: "relative",
+                display: "inline-block",
                 marginRight: "1rem",
               }}
             >
-              Insurance
-              <FaHandHoldingMedical style={{ marginLeft: "5px" }} />{" "}
-            </Button>
+              {/* Blinking NEW badge */}
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "-9px",
+                  right: "-10px",
+                  backgroundColor: "#E53935",
+                  color: "#fff",
+                  fontSize: "9px",
+                  fontWeight: 700,
+                  lineHeight: 1,
+                  padding: "3px 6px",
+                  borderRadius: "10px",
+                  zIndex: 2,
+                  fontFamily: "Public Sans",
+
+                  // Blink animation
+                  animation: "blinkNew 1s infinite",
+
+                  "@keyframes blinkNew": {
+                    "0%, 50%": {
+                      opacity: 1,
+                    },
+                    "51%, 100%": {
+                      opacity: 0,
+                    },
+                  },
+                }}
+              >
+                NEW
+              </Box>
+
+              <Button
+                onClick={() => {
+                  window.open(
+                    "/insurance/insurance-summary.html",
+                    "_blank",
+                    "noopener,noreferrer",
+                  );
+                }}
+                variant="outlined"
+                style={{
+                  height: "25px",
+                  borderRadius: "5px",
+                  fontSize: "12px",
+                  padding: "4px 12px",
+                  fontFamily: "Public Sans",
+                  borderColor: "#11395C",
+                  color: "#11395C",
+                  textTransform: "none",
+                }}
+              >
+                Insurance
+                <FaHandHoldingMedical style={{ marginLeft: "5px" }} />
+              </Button>
+            </Box>
             {/* <div
               style={{
                 position: "relative",

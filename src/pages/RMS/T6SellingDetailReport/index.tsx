@@ -18,6 +18,9 @@ import { useFormik } from "formik";
 import ShowToast from "../../../utils/toastUtils";
 import { TextField } from "@mui/material";
 import UserInfoTable from "../../../components/common/UserInfoTable";
+import DownloadIcon from "@mui/icons-material/Download";
+import * as XLSX from "xlsx";
+import { T6SellingDetailReportColumns } from "../../../helper/tableColumns";
 
 const T6SellingDetailReport = ({ activeSubItem }: any) => {
   const [noSortingGroup, setNoSortingGroup] = useState([]);
@@ -222,6 +225,51 @@ const T6SellingDetailReport = ({ activeSubItem }: any) => {
       });
   };
 
+  const handleExcelDownload = () => {
+    if (!T6Records.length) {
+      ShowToast("error", "No data available to download");
+      return;
+    }
+
+    // Columns to export (field -> header), same order as the grid
+    const exportColumns = T6SellingDetailReportColumns.map((col) => ({
+      field: col.field,
+      header: col.headerName || col.field,
+    }));
+
+    const rows = T6Records.map((record) => {
+      const row: Record<string, any> = {};
+      exportColumns.forEach(({ field, header }) => {
+        const value = record[field];
+        // keep numbers as numbers so Excel can sum/sort them
+        row[header] =
+          typeof value === "string"
+            ? value.trim() || "—"
+            : value === null || value === undefined
+              ? "—"
+              : value;
+      });
+      return row;
+    });
+
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+
+    // Auto column widths
+    worksheet["!cols"] = exportColumns.map(({ header }) => {
+      const maxLen = Math.max(
+        header.length,
+        ...rows.map((r) => String(r[header] ?? "").length),
+      );
+      return { wch: Math.min(maxLen + 2, 40) };
+    });
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "T6 Selling Detail");
+
+    const date = new Date().toISOString().slice(0, 10);
+    XLSX.writeFile(workbook, `T6_Selling_Detail_Report_${date}.xlsx`);
+  };
+
   return (
     <React.Fragment>
       <div className="page-content page-view">
@@ -388,32 +436,53 @@ const T6SellingDetailReport = ({ activeSubItem }: any) => {
                         </Col>
 
                         <Col
-                          className="d-flex flex-column-reverse"
+                          xl={4}
+                          className="d-flex align-items-end gap-2"
                           style={{
+                            position: "relative",
+                            marginBottom: "1rem", // replaces the old spacer <div className="mb-3" />
                             top:
                               (formik.touched.selectedZone &&
                                 formik.errors.selectedZone) ||
                               (formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode) ||
-                              (formik.touched.clientCode &&
-                                formik.errors.clientCode)
+                                formik.errors.selectedBranchCode)
                                 ? "-18px"
                                 : "",
                           }}
                         >
-                          <div className="mb-3" />
                           <Button
                             style={{
                               backgroundColor: "#11395C",
                               fontSize: "12px",
                               height: "40px",
-                              maxWidth: "100px",
+                              minWidth: "90px",
                             }}
-                            // onClick={handleSubmit}
                             type="submit"
                           >
                             Submit
                           </Button>
+
+                          {T6Records.length > 0 && (
+                            <Button
+                              type="button" // important: prevents it from submitting the form
+                              className="btn-font"
+                              style={{
+                                backgroundColor: "#11395C",
+                                height: "40px",
+                                minWidth: "90px",
+                                fontSize: "12px",
+                                padding: "4px 10px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "4px",
+                              }}
+                              onClick={handleExcelDownload}
+                            >
+                              Excel{" "}
+                              <DownloadIcon style={{ fontSize: "16px" }} />
+                            </Button>
+                          )}
                         </Col>
                       </Row>
                     </div>

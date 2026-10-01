@@ -15116,6 +15116,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     align: "center",
     disableColumnMenu: true,
     headerAlign: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
     field: "rmn",
@@ -15124,7 +15125,8 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     flex: 1,
     disableColumnMenu: true,
     headerAlign: "center",
-    align: "left",
+    align: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
     field: "dlc",
@@ -15134,6 +15136,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     headerAlign: "center",
     minWidth: 150,
     headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
     // renderCell: (params: any) => {
     //   const dealerName = (params.row?.dln || "").trim();
     //   const dealerCode = (params.row?.dlc || "").trim();
@@ -15153,6 +15156,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     headerAlign: "center",
     minWidth: 150,
     headerClassName: "header-wrap-custom",
+    renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
     field: "ag",
