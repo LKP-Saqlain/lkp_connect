@@ -96,7 +96,7 @@ const RMSPledgeHolding = ({ activeSubItem }: any) => {
   /** ⬇️ Drag & Drop */
   const handleDrop = (
     e: React.DragEvent<HTMLDivElement>,
-    fieldName: string
+    fieldName: string,
   ) => {
     e.preventDefault();
     const file = e.dataTransfer.files?.[0];
@@ -110,7 +110,7 @@ const RMSPledgeHolding = ({ activeSubItem }: any) => {
   /** ⬇️ Manual File Change */
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    fieldName: string
+    fieldName: string,
   ) => {
     const file = e.currentTarget.files?.[0];
     validateAndSetFile(file, fieldName);
@@ -134,7 +134,7 @@ const RMSPledgeHolding = ({ activeSubItem }: any) => {
         fieldName,
         fieldName === "csvFile"
           ? "Only .csv files are accepted"
-          : "Only .xls/.xlsx files are accepted"
+          : "Only .xls/.xlsx files are accepted",
       );
     }
   };
@@ -261,7 +261,7 @@ const RMSPledgeHolding = ({ activeSubItem }: any) => {
     if (!formik.values.csvFile || !formik.values.excelFile) {
       ShowToast(
         "error",
-        "Please upload both CSV and Excel files before downloading"
+        "Please upload both CSV and Excel files before downloading",
       );
       return;
     }

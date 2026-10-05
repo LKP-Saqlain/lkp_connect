@@ -22,7 +22,7 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   const formik = useFormik({
@@ -63,7 +63,7 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
 
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    fieldName: "nseFile" | "bseFile"
+    fieldName: "nseFile" | "bseFile",
   ) => {
     const file = e.currentTarget.files?.[0];
 
@@ -112,7 +112,7 @@ const T6SellingFileUpload = ({ activeSubItem }: any) => {
 
   const renderUploadBox = (
     fieldName: "nseFile" | "bseFile",
-    file: File | null
+    file: File | null,
   ) => (
     <div
       style={{

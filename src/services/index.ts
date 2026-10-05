@@ -1630,4 +1630,7 @@ export const apiServices = {
   MarketingData: async (payload: any) => {
     return await apiService("POST", endpoints.MarketingData, payload);
   },
+  UploadT5T6AgeingDebit: async (payload: any) => {
+    return await apiService("POST", endpoints.UploadT5T6AgeingDebit, payload);
+  },
 };

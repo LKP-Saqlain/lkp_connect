@@ -143,6 +143,7 @@ import IncentiveTracker from "../../pages/IncentiveTracker";
 import T6SellingDetailReport from "../../pages/RMS/T6SellingDetailReport";
 import SLBMClientResponse from "../../pages/Reports/SLBMClientResponse";
 import { FaHandHoldingMedical } from "react-icons/fa";
+import T5T6DebitAgeing from "../../pages/RMS/T5T6DebitAgeing";
 
 const drawerWidth = 260;
 
@@ -824,6 +825,9 @@ const SideBar = () => {
     ),
     "T6 Selling Detail (Pre&Post)": (
       <T6SellingDetailReport activeSubItem={activeSubItem} />
+    ),
+    "T5/T6 Debit Ageing File upload": (
+      <T5T6DebitAgeing activeSubItem={activeSubItem} />
     ),
   };
   const tpdSubItems: Record<string, JSX.Element> = {

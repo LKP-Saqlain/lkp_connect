@@ -86,6 +86,7 @@ export const multipartEndpoints = [
   endpoints.UploadHdfcMerchantFile,
   endpoints.MTFShorfallUpload,
   endpoints.PhysicalClientFileUpload,
+  endpoints.UploadT5T6AgeingDebit,
 ];
 
 export const mutualFundEndpoints = [
@@ -498,6 +499,7 @@ export const newDomainEndpoints = [
   endpoints.GetVendorData,
   endpoints.ViewT6PostPreSellingData,
   endpoints.MarketingData,
+  endpoints.UploadT5T6AgeingDebit,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(
