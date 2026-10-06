@@ -37,7 +37,7 @@ const UserInfoModal = ({
   handleFileUpload,
   uploadedFileName,
   selectedWidget,
-  // fetchMtfToken,
+  fetchMtfToken,
 }: any) => {
   const [clientDetails, setClientDetails] = useState({
     cn: "", // Client_Name
@@ -681,7 +681,6 @@ const UserInfoModal = ({
                                   }}
                                   onClick={() => {
                                     console.log("Activate MTF clicked");
-                                    // fetchMtfToken(clientDetails);
                                     handleSlbmActivation();
                                     // call activation API or open modal here
                                   }}
@@ -690,6 +689,23 @@ const UserInfoModal = ({
                                 </span>
                               </Tooltip>
                             </>
+                          ) : item.key === "mtf" && status === "Inactive" ? (
+                            <Tooltip title="Click to activate MTF" arrow>
+                              <span
+                                style={{
+                                  color: "#777",
+                                  cursor: "pointer",
+                                  textDecoration: "underline",
+                                }}
+                                onClick={() => {
+                                  console.log("Activate MTF clicked");
+                                  fetchMtfToken(clientDetails);
+                                  // call activation API or open modal here
+                                }}
+                              >
+                                {status}
+                              </span>
+                            </Tooltip>
                           ) : (
                             <span style={{ color: "#777" }}>{status}</span>
                           )}
