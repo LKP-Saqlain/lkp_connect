@@ -25,7 +25,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
   // const toastShownRef = useRef(false);
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
       activeSubItem,
       uploadedFile,
       fileExtension,
-      fileBase64
+      fileBase64,
     );
   }, [activeSubItem, uploadedFile, fileExtension, fileBase64]);
 
@@ -59,7 +59,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
         console.log("getAllRecordsReponse->", response?.data);
         if (response?.status === 200) {
           dispatch(hideLoader());
-          // setGetPreTradeRecords(response?.data?.data);
+          // setGetPreTradeRecords(response?.data?.data)  ;
           const rawData = response?.data?.data || [];
           const filteredData = rawData.filter((item: any) => {
             return item !== null; // replace with your actual filter condition
@@ -90,7 +90,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
 
   const handleFileUploadAsync = (
     file: any,
-    communicationProofPath: string
+    communicationProofPath: string,
   ): Promise<string> => {
     return new Promise((resolve, reject) => {
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
@@ -159,7 +159,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
     if (!allowedExtensions.includes(fileExt)) {
       ShowToast(
         "error",
-        "Please upload a file in JPG, JPEG, PNG, or PDF format."
+        "Please upload a file in JPG, JPEG, PNG, or PDF format.",
       );
       return;
     }
