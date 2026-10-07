@@ -15062,6 +15062,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     minWidth: 70,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "bc",
@@ -15071,6 +15072,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     minWidth: 90,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
   {
     field: "bt",
@@ -15097,6 +15099,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     minWidth: 150,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
   },
 
   {
@@ -15104,10 +15107,11 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     headerName: "Exchange",
     headerClassName: "header-wrap-custom",
     flex: 0.8,
-    minWidth: 75,
+    minWidth: 85,
     align: "center",
     headerAlign: "center",
     renderCell: (params) => (params.value ? params.value : "—"),
+    disableColumnMenu: true,
   },
   {
     field: "rmc",
@@ -15118,16 +15122,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     headerAlign: "center",
     renderCell: (params) => (params.value ? params.value : "—"),
   },
-  {
-    field: "rmn",
-    headerName: "RM Name",
-    minWidth: 150,
-    flex: 1,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-    renderCell: (params) => (params.value ? params.value : "—"),
-  },
+
   {
     field: "dlc",
     headerName: "Dealer Code",
@@ -15136,26 +15131,29 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     headerAlign: "center",
     minWidth: 150,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     renderCell: (params) => (params.value ? params.value : "—"),
-    // renderCell: (params: any) => {
-    //   const dealerName = (params.row?.dln || "").trim();
-    //   const dealerCode = (params.row?.dlc || "").trim();
-
-    //   if (!dealerName && !dealerCode) return "—";
-    //   if (!dealerName) return dealerCode;
-    //   if (!dealerCode) return dealerName;
-
-    //   return `${dealerName} - (${dealerCode})`;
-    // },
   },
   {
-    field: "dln",
-    headerName: "Dealer Name",
+    field: "me",
+    headerName: "Multiple Of Excess",
     flex: 1,
     align: "center",
     headerAlign: "center",
     minWidth: 150,
     headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "per",
+    headerName: "Extra Selling Perc",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 150,
+    headerClassName: "header-wrap-custom",
+    disableColumnMenu: true,
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
@@ -15164,6 +15162,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     flex: 1,
     minWidth: 160,
     align: "right",
+    disableColumnMenu: true,
     headerAlign: "center",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
@@ -15179,6 +15178,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     align: "right",
     headerClassName: "header-wrap-custom",
     headerAlign: "center",
+    disableColumnMenu: true,
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
@@ -15192,6 +15192,8 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     minWidth: 130,
     align: "right",
     headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
@@ -15205,6 +15207,8 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     minWidth: 130,
     align: "right",
     headerAlign: "center",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
     valueFormatter: (params: any) =>
       new Intl.NumberFormat("en-IN", {
         minimumFractionDigits: 2,
@@ -15218,6 +15222,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     minWidth: 130,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
@@ -15226,6 +15231,7 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     flex: 0.9,
     minWidth: 130,
     align: "center",
+    disableColumnMenu: true,
     headerAlign: "center",
     renderCell: (params) => (params.value ? params.value : "—"),
   },
@@ -15236,6 +15242,28 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
     minWidth: 130,
     align: "center",
     headerAlign: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "rmn",
+    headerName: "RM Name",
+    minWidth: 150,
+    flex: 1,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "dln",
+    headerName: "Dealer Name",
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+    minWidth: 150,
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
     renderCell: (params) => (params.value ? params.value : "—"),
   },
 ];
