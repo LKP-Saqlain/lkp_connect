@@ -633,3 +633,106 @@ export const sampleVendorData = [
     rate: 65.0,
   },
 ];
+
+export const ACCOUNT_TYPES = [
+  {
+    label: "Current Account",
+    value: "CURRENT ACCOUNT",
+  },
+];
+export const MEMBER_NAMES = [
+  {
+    label: "LKP Securities Limited",
+    value: "LKP SECURITIES LIMITED",
+  },
+  {
+    label: "LKP IFSC Private Limited",
+    value: "LKP IFSC PRIVATE LIMITED",
+  },
+  {
+    label: "LKP Wealth Advisory Limited",
+    value: "LKP WEALTH ADVISORY LIMITED",
+  },
+];
+
+export const BANK_NAMES = [
+  {
+    label: "Bank of India",
+    value: "BANK OF INDIA",
+  },
+  {
+    label: "Axis Bank Ltd",
+    value: "AXIS BANK LTD",
+  },
+  {
+    label: "HDFC Bank Ltd",
+    value: "HDFC BANK LTD",
+  },
+  {
+    label: "Yes Bank Ltd",
+    value: "YES BANK LTD",
+  },
+  {
+    label: "South Indian Bank",
+    value: "SOUTH INDIAN BANK",
+  },
+  {
+    label: "IDFC First Bank",
+    value: "IDFC FIRST BANK",
+  },
+  {
+    label: "The Federal Bank Limited",
+    value: "THE FEDERAL BANK LIMITED",
+  },
+  {
+    label: "ICICI Bank Ltd",
+    value: "ICICI BANK LTD",
+  },
+  {
+    label: "Jammu and Kashmir Bank Ltd",
+    value: "JAMMU AND KASHMIR BANK LTD",
+  },
+  {
+    label: "State Bank of India",
+    value: "STATE BANK OF INDIA",
+  },
+  {
+    label: "Punjab National Bank",
+    value: "PUNJAB NATIONAL BANK",
+  },
+  {
+    label: "Abu Dhabi Commercial Bank",
+    value: "ABU DHABI COMMERCIAL BANK",
+  },
+  {
+    label: "Union Bank of India",
+    value: "Union Bank of India",
+  },
+  {
+    label: "Federal Bank",
+    value: "FEDERAL BANK",
+  },
+  {
+    label: "Hongkong Bank",
+    value: "HONGKONG Bank",
+  },
+];
+
+export const PURPOSES = [
+  {
+    label: "Own / Proprietary Account",
+    value: "OWN/PROPRIETARY ACCOUNT",
+  },
+  {
+    label: "Settlement Account",
+    value: "SETTLEMENT ACCOUNT",
+  },
+  {
+    label: "Client Bank Account",
+    value: "CLIENT BANK ACCOUNT",
+  },
+  {
+    label: "Any Other",
+    value: "ANY OTHER",
+  },
+];
