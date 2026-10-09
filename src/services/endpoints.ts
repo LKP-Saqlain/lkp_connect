@@ -393,6 +393,7 @@ export const endpoints = {
   ViewT6PostPreSellingData: "api/RMS/ViewT6PostPreSellingData",
   MarketingData: "api/MIS/MarketingData",
   UploadT5T6AgeingDebit: "api/RMS/UploadT5T6AgeingDebit",
+  SLBMPosition: "api/ShortAllocation/SLBMPosition",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

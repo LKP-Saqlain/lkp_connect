@@ -15269,16 +15269,16 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
 ];
 
 export const SLBMClientResponseColumns: GridColDef[] = [
-  {
-    field: "Zone",
-    headerName: "Zone",
-    flex: 1,
-    minWidth: 120,
-    headerAlign: "center",
-    align: "center",
-    disableColumnMenu: true,
-    renderCell: (params) => (params.value ? params.value : "—"),
-  },
+  // {
+  //   field: "Zone",
+  //   headerName: "Zone",
+  //   flex: 1,
+  //   minWidth: 120,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   disableColumnMenu: true,
+  //   renderCell: (params) => (params.value ? params.value : "—"),
+  // },
   {
     field: "BranchCode",
     headerName: "Branch Code",
@@ -15388,5 +15388,150 @@ export const SLBMClientResponseColumns: GridColDef[] = [
     align: "left",
     disableColumnMenu: true,
     renderCell: (params) => (params.value ? params.value : "—"),
+  },
+  {
+    field: "HoldingValue",
+    headerName: "Holding Value",
+    flex: 1.5,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+];
+
+export const SLBMPositionResponseColumns: GridColDef[] = [
+  {
+    field: "zone",
+    headerName: "Zone",
+    flex: 1,
+    minWidth: 100,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "branchcode",
+    headerName: "Branch Code",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "branchname",
+    headerName: "Branch Name",
+    flex: 1.5,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "branchtype",
+    headerName: "Branch Type",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "clientcode",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "clientname",
+    headerName: "Client Name",
+    flex: 1.5,
+    minWidth: 200,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "positionDate",
+    headerName: "Position Date",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "symbol",
+    headerName: "Symbol",
+    flex: 1.5,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "expirydate",
+    headerName: "Expiry Date",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => (params.value ? params.value : "—"),
+  },
+
+  {
+    field: "lenderqty",
+    headerName: "Lender Qty",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+
+  {
+    field: "borrowerqty",
+    headerName: "Borrower Qty",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
   },
 ];

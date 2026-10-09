@@ -418,6 +418,7 @@ const ClientDetails = ({
           </>
         ) : (
           <UserInfo
+            selectedWidget={selectedCapsule}
             isOpen={isModalOpen}
             onClose={getUserBrokergageModificationDetails}
             handleModalClose={handleModalClose}

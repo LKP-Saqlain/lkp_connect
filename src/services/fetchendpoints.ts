@@ -500,6 +500,7 @@ export const newDomainEndpoints = [
   endpoints.ViewT6PostPreSellingData,
   endpoints.MarketingData,
   endpoints.UploadT5T6AgeingDebit,
+  endpoints.SLBMPosition,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

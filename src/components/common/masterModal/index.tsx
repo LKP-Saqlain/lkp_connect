@@ -51,6 +51,12 @@ import CustomModal from "../../../components/common/DPModal";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import pako from "pako";
 import { capitalizeEachWord } from "../../../utils/index.tsx";
+import {
+  ACCOUNT_TYPES,
+  BANK_NAMES,
+  MEMBER_NAMES,
+  PURPOSES,
+} from "../../../helper/commmon.ts";
 
 interface IsMarketingMaterialEditData {
   CommunicationProofPath?: string;
@@ -320,10 +326,10 @@ const ModalComponent = ({
   const getBankMasterValidationSchema = () =>
     Yup.object().shape({
       memberName: Yup.string()
-        .matches(/^[A-Za-z\s]+$/, "Only alphabets allowed")
+        // .matches(/^[A-Za-z\s]+$/, "Only alphabets allowed")
         .required("Member Name required"),
       bankAccountName: Yup.string()
-        .matches(/^[A-Za-z\s]+$/, "Only alphabets allowed")
+        // .matches(/^[A-Za-z\s]+$/, "Only alphabets allowed")
         .required("Account Name required"),
       bankAccountNumber: Yup.string()
         .matches(/^[0-9\s]+$/, "Only numbers allowed")
@@ -336,7 +342,7 @@ const ModalComponent = ({
         // .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "Invalid IFSC Code")
         .required("IFSC Code required"),
       purpose: Yup.string()
-        .matches(/^[A-Za-z\s]+$/, "No special characters allowed")
+        // .matches(/^[A-Za-z\s]+$/, "No special characters allowed")
         .required("Purpose required"),
 
       division: Yup.string()
@@ -631,8 +637,6 @@ const ModalComponent = ({
 
   const fetchBankMasterContentDetais = (setTouched: any, values: any) => {
     setTouched({
-      memberName: true,
-      bankAccountName: true,
       bankAccountNumber: true,
       accountDescription: true,
       bankMasterIfscCode: true,
@@ -4674,35 +4678,33 @@ const ModalComponent = ({
                   }}
                 >
                   <TextField
+                    select
                     label="Member Name"
                     name="memberName"
                     size="small"
                     value={formik.values.memberName}
-                    onChange={allowLetters}
-                    error={
-                      formik.touched.memberName &&
-                      Boolean(formik.errors.memberName)
-                    }
-                    helperText={
-                      formik.touched.memberName && formik.errors.memberName
-                    }
-                  />
-
+                    onChange={formik.handleChange}
+                  >
+                    {MEMBER_NAMES.map((member) => (
+                      <MenuItem key={member.value} value={member.value}>
+                        {member.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                   <TextField
-                    label="Bank Account Name"
+                    select
+                    label="Bank Name"
                     name="bankAccountName"
                     size="small"
                     value={formik.values.bankAccountName}
-                    onChange={allowLetters}
-                    error={
-                      formik.touched.bankAccountName &&
-                      Boolean(formik.errors.bankAccountName)
-                    }
-                    helperText={
-                      formik.touched.bankAccountName &&
-                      formik.errors.bankAccountName
-                    }
-                  />
+                    onChange={formik.handleChange}
+                  >
+                    {BANK_NAMES.map((bank) => (
+                      <MenuItem key={bank.value} value={bank.value}>
+                        {bank.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
 
                   <TextField
                     label="Account Number"
@@ -4770,16 +4772,19 @@ const ModalComponent = ({
                   />
 
                   <TextField
+                    select
                     label="Purpose"
                     name="purpose"
                     size="small"
                     value={formik.values.purpose}
-                    onChange={allowLetters}
-                    error={
-                      formik.touched.purpose && Boolean(formik.errors.purpose)
-                    }
-                    helperText={formik.touched.purpose && formik.errors.purpose}
-                  />
+                    onChange={formik.handleChange}
+                  >
+                    {PURPOSES.map((purpose) => (
+                      <MenuItem key={purpose.value} value={purpose.value}>
+                        {purpose.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
 
                   {/* Account Type Dropdown */}
 
@@ -4791,7 +4796,14 @@ const ModalComponent = ({
                     value={formik.values.accountType}
                     onChange={formik.handleChange}
                   >
-                    <MenuItem value="Client Account">Client Account</MenuItem>
+                    {ACCOUNT_TYPES.map((accountType) => (
+                      <MenuItem
+                        key={accountType.value}
+                        value={accountType.value}
+                      >
+                        {accountType.label}
+                      </MenuItem>
+                    ))}
                   </TextField>
 
                   {/* Status */}

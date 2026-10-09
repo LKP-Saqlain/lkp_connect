@@ -145,6 +145,7 @@ import SLBMClientResponse from "../../pages/Reports/SLBMClientResponse";
 import { FaHandHoldingMedical } from "react-icons/fa";
 import T5T6DebitAgeing from "../../pages/RMS/T5T6DebitAgeing";
 
+import ClientPosition from "../../pages/Reports/ClientPosition";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -760,6 +761,7 @@ const SideBar = () => {
     "SLBM Client Response": (
       <SLBMClientResponse activeSubItem={activeSubItem} />
     ),
+    "SLBM Client Position": <ClientPosition activeSubItem={activeSubItem} />,
   };
 
   // const referalSubItems: Record<string, JSX.Element> = {

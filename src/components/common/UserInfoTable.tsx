@@ -3067,6 +3067,10 @@ const DataTable = ({
       return TableColumns.SLBMClientResponseColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "SLBM Client Position") {
+      return TableColumns.SLBMPositionResponseColumns.map((column) => ({
+        ...column,
+      }));
     } else {
       return [];
     }

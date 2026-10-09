@@ -1633,4 +1633,8 @@ export const apiServices = {
   UploadT5T6AgeingDebit: async (payload: any) => {
     return await apiService("POST", endpoints.UploadT5T6AgeingDebit, payload);
   },
+
+  SLBMPosition: async (payload: any) => {
+    return await apiService("POST", endpoints.SLBMPosition, payload);
+  },
 };
