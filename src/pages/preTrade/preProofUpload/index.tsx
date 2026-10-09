@@ -47,6 +47,8 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
       uploadedFile,
       fileExtension,
       fileBase64,
+      uploadApiStatus,
+      isSubmitted,
     );
   }, [activeSubItem, uploadedFile, fileExtension, fileBase64]);
 
