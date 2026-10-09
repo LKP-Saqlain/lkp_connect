@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Card,
@@ -8,272 +8,105 @@ import {
   Label,
   Row,
 } from "reactstrap";
-import UserInfoTable from "../../../components/common/UserInfoTable";
-import ShowToast from "../../../utils/toastUtils";
-import Select from "react-select";
+import { TextField } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import type { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { apiServices } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
+import { apiServices } from "../../../services";
 import { RootState, AppDispatch } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { DateRangePicker } from "rsuite";
-import moment from "moment";
-import "../style.css";
-import { TextField } from "@mui/material";
+import ShowToast from "../../../utils/toastUtils";
+import UserInfoTable from "../../../components/common/UserInfoTable";
 import { regEx } from "../../../helper/method";
+import "../style.css";
 
 interface preTradeReport {
   activeSubItem: string;
 }
 
 const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
-  const [noSortingGroup, setNoSortingGroup] = useState([]);
-  const [branchCodeOptions, setBranchCodeOptions] = useState([]);
-  const [formattedDateRange, setFormattedDateRange] = useState<string>("");
-  const [startDate, setStartDate] = useState<string | null>(null);
-  const [endDate, setEndDate] = useState<string | null>(null);
-  const [selectedDateRange, setSelectedDateRange] = useState<
-    [Date | null, Date | null]
-  >([null, null]);
-  const [preTradeReportData, setPreTradeReportData] = useState<[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
+  const [preTradeReportData, setPreTradeReportData] = useState<any[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [setShowImg, setSetShowImg] = useState<boolean>(false);
   const [fileType, setFileType] = useState<string | null>(null);
-  const dispatch = useDispatch<AppDispatch>();
-  const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
-  );
-  const { afterToday } = DateRangePicker;
 
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { user_id } = useSelector(
+    (state: RootState) => state.UserLogin?.data?.data,
+  );
   const validationSchema = Yup.object({
-    // selectedZone: Yup.object().nullable().required("Zone is required"),
-    // selectedBranchCode: Yup.object()
-    //   .nullable()
-    //   .required("Branch code is required"),
-    // isInValue: Yup.string().required("SYMBOL / ISIN is required"),
-    // dateRange: Yup.array()
-    //   .of(Yup.date().nullable())
-    //   .min(2, "Date range is required")
-    //   .required("Date range is required"),
+    clientCode: Yup.string(),
   });
 
   interface FormValues {
-    selectedZone: { label: string; value: string } | null;
-    selectedBranchCode: { label: string; value: string } | null;
-    isInValue: string;
     clientCode: string;
-    dateRange: any;
   }
 
   const formik = useFormik<FormValues>({
     initialValues: {
-      selectedZone: null,
-      selectedBranchCode: null,
-      isInValue: "",
       clientCode: "",
-      dateRange: [],
     },
     validationSchema,
-    onSubmit: (values) => {
-      // Only called if no validation errors
-      if (formattedDateRange === "") {
-        ShowToast("error", "Please select Date Range");
+    onSubmit: async (values) => {
+      if (!selectedDate) {
+        ShowToast("error", "Please select a trade date");
         return;
       }
-      console.log("values1-->", values, fileType);
-      handleViewReport();
+
+      await handleViewReport(values);
     },
   });
-  useEffect(() => {
-    const str = user_id;
-    const userType = localStorage.getItem("uIdType");
-    let extractUserId: string | null = null;
 
-    if (str) {
-      const parts = str.split("-");
-      if (parts.length > 1) {
-        extractUserId = parts[1];
-      }
+  const handleViewReport = async (values: FormValues) => {
+    if (!selectedDate) {
+      ShowToast("error", "Please select a trade date");
+      return;
     }
-    let payload = {
-      user_id: str === "APN-7161" ? "5376" : extractUserId,
-      option: "zone",
-      userType:
-        str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
-      zone: "ALL",
-    };
 
-    const username = "admin";
-    const password = "admin";
-    const credentials = `${username}:${password}`;
-    const encodedCredentials = btoa(credentials); // Base64 encode
-    const LoginauthHeader = `Basic ${encodedCredentials}`;
-
-    const customHeaders = {
-      Authorization: LoginauthHeader, // Use LoginauthHeader for this request
+    const payload = {
+      userId: user_id,
+      clientCode: values.clientCode.trim(),
+      tradedate: selectedDate.format("YYYY-MM-DD"),
     };
 
     dispatch(showLoader("Please wait, we are processing your request..."));
-    apiServices
-      .getDropDown(payload, customHeaders)
-      .then((res) => {
-        console.log("Response-->", res);
-        if (res?.status === 200) {
-          let zoneDropdown = res?.data.data.map((item: any) => ({
-            label: item.desc, // This will be displayed in the dropdown
-            value: item.val, // This will be the actual value
-          }));
-          console.log("dropdown value", zoneDropdown);
-          setNoSortingGroup(zoneDropdown);
-          if (zoneDropdown.length > 0) {
-            formik.setFieldValue("selectedZone", zoneDropdown[0]);
-          }
-          // setSelectedNoSortingGroup(selectedNoSortingGroup);
-        }
-      })
-      .catch((Err) => {
-        const { message } = Err.response.data;
-        console.log("Error->", message);
-        dispatch(hideLoader());
-        // formik.setFieldError("password", message);
-        const errorMessage = Err.response.data.message;
-        ShowToast(
-          "error",
-          errorMessage ||
-            "Sorry for the inconvenience, please try after some time."
-        );
-      });
 
-    dispatch(hideLoader());
-  }, [dispatch]);
+    try {
+      const res = await apiServices.GetPreTradeReport(payload);
 
-  const str = user_id;
-  useEffect(() => {
-    if (formik.values.selectedZone) {
-      const userType = localStorage.getItem("uIdType");
-      let extractUserId: string | null = null;
+      if (res?.status === 200) {
+        const rawData = Array.isArray(res.data) ? res.data : [];
 
-      if (str) {
-        const parts = str.split("-");
-        if (parts.length > 1) {
-          extractUserId = parts[1];
-        }
-      }
-      const payload = {
-        user_id: str === "APN-7161" ? "5376" : extractUserId,
-        option: "BranchByZone",
-        userType:
-          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
-        zone: formik.values.selectedZone.value,
-      };
-
-      dispatch(showLoader("Please wait, we are processing your request..."));
-
-      apiServices
-        .getDropDown(payload)
-        .then((res) => {
-          console.log("response->", res);
-          if (res?.status === 200) {
-            let branchDropdown = res?.data.data.map((item: any) => ({
-              label: item.val,
-              value: item.val,
-            }));
-            branchDropdown = [
-              { label: "ALL", value: "ALL" },
-              ...branchDropdown,
-            ];
-
-            setBranchCodeOptions(branchDropdown);
-            if (branchDropdown.length > 0) {
-              formik.setFieldValue("selectedBranchCode", branchDropdown[0]);
-            }
-          }
-          dispatch(hideLoader());
-        })
-        .catch((Err) => {
-          const { message } = Err.response.data;
-          console.log("Error->", message);
-          dispatch(hideLoader());
-          // formik.setFieldError("password", message);
-          const errorMessage = Err.response.data.message;
-          ShowToast(
-            "error",
-            errorMessage ||
-              "Sorry for the inconvenience, please try after some time."
-          );
-        });
-    }
-  }, [formik.values.selectedZone, dispatch]); // This effect runs when `selectedZone` changes
-
-  const handleDateChange = (value: [Date | null, Date | null]) => {
-    const [start, end] = value;
-    if (start && end) {
-      const isoStart = moment(start).format("YYYY-MM-DD");
-      const isoEnd = moment(end).format("YYYY-MM-DD");
-
-      setStartDate(isoStart);
-      setEndDate(isoEnd);
-
-      const formattedStartDate = moment(start).format("DD/MM/YYYY");
-      const formattedEndDate = moment(end).format("DD/MM/YYYY");
-      const formattedRange = `${formattedStartDate} - ${formattedEndDate}`;
-      setFormattedDateRange(formattedRange);
-
-      console.log("Payload:", {
-        startDate: isoStart,
-        endDate: isoEnd,
-      });
-    } else {
-      setStartDate(null);
-      setEndDate(null);
-      setFormattedDateRange("");
-    }
-  };
-
-  const handleViewReport = () => {
-    let payload = {
-      user_id,
-      clientCode: formik.values.clientCode,
-      dealerID: "",
-      dealerName: "",
-      branch: formik.values.selectedBranchCode?.value,
-      zone: formik.values.selectedZone?.value,
-      startDate: startDate,
-      endDate: endDate,
-    };
-    dispatch(showLoader("Please wait, we are processing your request..."));
-    apiServices
-      .GetPreTradeReport(payload)
-      .then((res) => {
-        console.log("ResponsePreTrade", res);
-
-        if (res?.status === 200) {
-          dispatch(hideLoader());
-          // setPreTradeReportData(res?.data?.data);
-          const rawData = res?.data?.data || [];
-          console.log("GetPreTradeReportResponse", rawData);
-          const filteredData = rawData.filter((item: any) => {
-            return item !== null;
-          });
-          const finalData = filteredData.map((item: any, index: number) => ({
+        const finalData = rawData
+          .filter((item: any) => item !== null)
+          .map((item: any, index: number) => ({
             ...item,
-            Id: index + 1,
+            Id: item.rid ?? index + 1,
           }));
-          console.log("FinalData", finalData);
 
-          setPreTradeReportData(finalData);
-          // if (res?.data?.data.length === 0) {
-          //   ShowToast("error", res?.data?.message);
-          // } else {
-          //   ShowToast("success", res?.data?.message);
-          // }
+        setPreTradeReportData(finalData);
+
+        if (finalData.length === 0) {
+          ShowToast("info", "No records found for the selected criteria");
         }
-      })
-      .catch((error) => {
-        console.log("error", error);
-        dispatch(hideLoader());
-      });
+      } else {
+        setPreTradeReportData([]);
+        ShowToast("error", "Failed to fetch PreTrade report");
+      }
+    } catch (error) {
+      console.error("GetPreTradeReport error:", error);
+      setPreTradeReportData([]);
+      ShowToast("error", "Something went wrong while fetching the report");
+    } finally {
+      dispatch(hideLoader());
+    }
   };
   // const handleDownload = async (row: any) => {
   //   const fileExtension = row.userRemarks
@@ -322,6 +155,8 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
   // };
 
   const handlePreview = async (row: any) => {
+    console.log("handlePreview", row);
+
     setPreviewUrl("");
     const fileExtension = row.userRemarks
       ? `.${row.userRemarks.split(".").pop()?.toLowerCase()}`
@@ -404,147 +239,36 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                 <CardBody>
                   <form onSubmit={formik.handleSubmit}>
                     <Row className="align-items-end">
-                      <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
-                        <Label
-                          htmlFor="zone-select"
-                          className="form-label text-muted label-font"
-                        >
-                          Zone
+                      <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
+                        <Label className="form-label text-muted label-font">
+                          Trade Date
                         </Label>
-                        <Select
-                          value={formik.values.selectedZone}
-                          onChange={(option: any) =>
-                            formik.setFieldValue("selectedZone", option)
-                          }
-                          onBlur={formik.handleBlur}
-                          options={noSortingGroup}
-                          isClearable
-                          className="placeholder-font"
-                          id="zone-select"
-                          styles={{
-                            control: (base: any) => ({
-                              ...base,
-                              cursor: "pointer",
-                              borderColor:
-                                formik.touched.selectedZone &&
-                                formik.errors.selectedZone
-                                  ? "#DC4535"
-                                  : base.borderColor,
-                              "&:hover": {
-                                borderColor:
-                                  formik.touched.selectedZone &&
-                                  formik.errors.selectedZone
-                                    ? "#DC4535"
-                                    : base.borderColor,
+
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            value={selectedDate}
+                            onChange={(newValue) => setSelectedDate(newValue)}
+                            maxDate={dayjs()}
+                            format="DD-MM-YYYY"
+                            slotProps={{
+                              textField: {
+                                size: "small",
+                                fullWidth: true,
+                                placeholder: "Select trade date",
                               },
-                            }),
-                          }}
-                        />
-                        {formik.touched.selectedZone &&
-                          formik.errors.selectedZone && (
-                            <div
-                              className="text-danger"
-                              style={{ fontSize: "12px" }}
-                            >
-                              {formik.errors.selectedZone}
-                            </div>
-                          )}
+                            }}
+                          />
+                        </LocalizationProvider>
                       </Col>
-                      <Col xl={2} lg={2} className="mb-3">
-                        <Label
-                          htmlFor="branch-code-select"
-                          className="form-label text-muted label-font"
-                        >
-                          Branch Code
-                        </Label>
-                        <Select
-                          value={formik.values.selectedBranchCode}
-                          onChange={(option) =>
-                            formik.setFieldValue("selectedBranchCode", option)
-                          }
-                          onBlur={formik.handleBlur}
-                          options={branchCodeOptions}
-                          isClearable
-                          className="placeholder-font"
-                          id="branch-code-select"
-                          styles={{
-                            control: (base: any) => ({
-                              ...base,
-                              cursor: "pointer",
-                              borderColor:
-                                formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode
-                                  ? "#DC4535"
-                                  : base.borderColor,
-                              "&:hover": {
-                                borderColor:
-                                  formik.touched.selectedBranchCode &&
-                                  formik.errors.selectedBranchCode
-                                    ? "#DC4535"
-                                    : base.borderColor,
-                              },
-                            }),
-                          }}
-                        />
-                        {formik.touched.selectedBranchCode &&
-                          formik.errors.selectedBranchCode && (
-                            <div
-                              className="text-danger"
-                              style={{ fontSize: "12px" }}
-                            >
-                              {formik.errors.selectedBranchCode}
-                            </div>
-                          )}
-                      </Col>
-                      <Col
-                        xl={3}
-                        lg={2}
-                        md={6}
-                        sm={12}
-                        xs={12}
-                        className="mb-3"
-                      >
-                        <Label
-                          htmlFor="date-range-picker"
-                          className="form-label text-muted label-font"
-                        >
-                          Select Date Range
-                        </Label>
-                        <DateRangePicker
-                          id="date-range-picker"
-                          size="md"
-                          value={
-                            selectedDateRange &&
-                            selectedDateRange[0] &&
-                            selectedDateRange[1]
-                              ? [selectedDateRange[0], selectedDateRange[1]]
-                              : undefined
-                          }
-                          onChange={(value: any) => {
-                            setSelectedDateRange(value);
-                            handleDateChange(value);
-                          }}
-                          placeholder="Start date & End date"
-                          showOneCalendar
-                          shouldDisableDate={afterToday()}
-                          placement="bottomStart"
-                          style={{ width: "100%", fontSize: "12px" }}
-                        />
-                      </Col>
-                      <Col
-                        xl={3}
-                        lg={2}
-                        md={6}
-                        sm={12}
-                        xs={12}
-                        className="mb-3"
-                      >
+
+                      <Col xl={3} lg={4} md={6} sm={12} className="mb-3">
                         <Label
                           htmlFor="client-code-input"
                           className="form-label text-muted label-font"
                         >
                           Client Code
                         </Label>
+
                         <TextField
                           size="small"
                           id="client-code-input"
@@ -566,19 +290,20 @@ const PreTradeReport = ({ activeSubItem }: preTradeReport) => {
                           fullWidth
                         />
                       </Col>
-                      <Button
-                        style={{
-                          backgroundColor: "#11395C",
-                          fontSize: "12px",
-                          minWidth: "140px",
-                          width: "15%",
-                          marginBottom: "1rem",
-                        }}
-                        // onClick={handleSubmit}
-                        type="submit"
-                      >
-                        View
-                      </Button>
+
+                      <Col xs="auto" className="mb-3">
+                        <Button
+                          type="submit"
+                          style={{
+                            backgroundColor: "#11395C",
+                            fontSize: "12px",
+                            minWidth: "120px",
+                            height: "40px",
+                          }}
+                        >
+                          View
+                        </Button>
+                      </Col>
                     </Row>
                   </form>
                 </CardBody>

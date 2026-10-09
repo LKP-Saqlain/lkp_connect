@@ -4018,7 +4018,8 @@ export const PreProofUploadColumns: GridColDef[] = [
   {
     field: "file_upload",
     headerName: "Upload",
-    width: 80,
+    flex: 0.6,
+    minWidth: 80,
     headerAlign: "center",
     align: "center",
     disableColumnMenu: true,
@@ -4027,7 +4028,8 @@ export const PreProofUploadColumns: GridColDef[] = [
   {
     field: "cc",
     headerName: "ClientCode",
-    width: 100,
+    flex: 0.8,
+    minWidth: 110,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -4035,16 +4037,33 @@ export const PreProofUploadColumns: GridColDef[] = [
   {
     field: "td",
     headerName: "Order Date Time",
-    width: 100,
+    flex: 1,
+    minWidth: 140,
     disableColumnMenu: true,
     headerAlign: "center",
     headerClassName: "header-wrap-custom",
     align: "center",
+    renderCell: (params) => {
+      if (!params.value) return "";
+
+      const date = new Date(params.value);
+
+      if (Number.isNaN(date.getTime())) return "";
+
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
   },
   {
     field: "bs",
     headerName: "Buy Sell",
-    width: 70,
+    flex: 0.6,
+    minWidth: 80,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -4052,13 +4071,15 @@ export const PreProofUploadColumns: GridColDef[] = [
   {
     field: "symbolSeries",
     headerName: "Symbol / Series",
-    width: 160,
+    flex: 1.3,
+    minWidth: 150,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
       const symbol = (params.row?.sym || "").trim();
       const series = (params.row?.ser || "").trim();
+
       return `${symbol} / ${series}`;
     },
   },
@@ -4066,29 +4087,32 @@ export const PreProofUploadColumns: GridColDef[] = [
     field: "ed",
     headerName: "Expiry Date",
     headerClassName: "header-wrap-custom",
-    width: 100,
+    flex: 0.8,
+    minWidth: 110,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
-  },
+    renderCell: (params) => {
+      if (!params.value) return "";
 
-  // {
-  //   field: "symbolSeries", // this is a virtual column, not from the API
-  //   headerName: "Symbol / Series",
-  //   width: 160,
-  //   disableColumnMenu: true,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   valueGetter: (params: any) => {
-  //     const symbol = (params.symbol || "").trim();
-  //     const series = (params.series || "").trim();
-  //     return `${symbol} / ${series}`;
-  //   },
-  // },
+      const date = new Date(params.value);
+
+      if (Number.isNaN(date.getTime())) return "";
+
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
+  },
   {
     field: "inst",
     headerName: "Instrument Type",
-    width: 90,
+    flex: 0.8,
+    minWidth: 110,
     headerClassName: "header-wrap-custom",
     disableColumnMenu: true,
     headerAlign: "center",
@@ -4097,8 +4121,9 @@ export const PreProofUploadColumns: GridColDef[] = [
   {
     field: "sp",
     headerName: "Strike Price",
+    flex: 0.6,
+    minWidth: 85,
     headerClassName: "header-wrap-custom",
-    width: 60,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
@@ -4106,17 +4131,18 @@ export const PreProofUploadColumns: GridColDef[] = [
   {
     field: "qty",
     headerName: "Quantity",
-    width: 90,
+    flex: 0.6,
+    minWidth: 85,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
   },
   {
     field: "ton",
-    flex: 2,
     headerName: "Order Number",
     headerClassName: "header-wrap-custom",
-    width: 160,
+    flex: 1.1,
+    minWidth: 130,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -4135,65 +4161,101 @@ export const preTradeColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "sts",
-    headerName: "Status",
-    width: 100,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
     field: "cc",
-    headerName: "ClientCode",
-    width: 100,
+    headerName: "Client Code",
+    flex: 0.8,
+    minWidth: 110,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
   },
   {
     field: "td",
-    headerName: "Order Date",
-    width: 100,
+    headerName: "Order Date Time",
+    headerClassName: "header-wrap-custom",
+    flex: 1.2,
+    minWidth: 155,
     disableColumnMenu: true,
     headerAlign: "center",
-    headerClassName: "header-wrap-custom",
     align: "center",
+    renderCell: (params) => {
+      if (!params.value) return "—";
+
+      const date = new Date(params.value);
+
+      if (Number.isNaN(date.getTime())) return "—";
+
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
   },
   {
     field: "bs",
     headerName: "Buy Sell",
-    width: 70,
+    flex: 0.65,
+    minWidth: 80,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "symbolSeries",
-    headerName: "Symbol / Series",
-    width: 160,
-    align: "center",
-    headerAlign: "center",
+    field: "sym",
+    headerName: "Symbol",
+    flex: 1.2,
+    minWidth: 140,
     disableColumnMenu: true,
-    renderCell: (params: any) => {
-      const symbol = (params.row?.sym || "").trim();
-      const series = (params.row?.ser || "").trim();
-      return `${symbol} / ${series}`;
-    },
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params) =>
+      typeof params.value === "string" ? params.value.trim() || "—" : "—",
   },
   {
     field: "ed",
     headerName: "Expiry Date",
     headerClassName: "header-wrap-custom",
-    width: 100,
+    flex: 0.85,
+    minWidth: 110,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
+    renderCell: (params) => {
+      if (!params.value) return "—";
+
+      const date = new Date(params.value);
+
+      if (Number.isNaN(date.getTime())) return "—";
+
+      return date
+        .toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(/ /g, "-");
+    },
   },
   {
     field: "inst",
-    headerName: "Instrument Type",
-    width: 90,
+    headerName: "Instrument Name",
     headerClassName: "header-wrap-custom",
+    flex: 0.9,
+    minWidth: 115,
+    disableColumnMenu: true,
+    headerAlign: "center",
+    align: "center",
+    renderCell: (params) =>
+      typeof params.value === "string" ? params.value.trim() || "—" : "—",
+  },
+  {
+    field: "seg",
+    headerName: "Segment",
+    flex: 0.7,
+    minWidth: 85,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
@@ -4202,7 +4264,8 @@ export const preTradeColumns: GridColDef[] = [
     field: "sp",
     headerName: "Strike Price",
     headerClassName: "header-wrap-custom",
-    width: 60,
+    flex: 0.7,
+    minWidth: 90,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
@@ -4210,7 +4273,8 @@ export const preTradeColumns: GridColDef[] = [
   {
     field: "qty",
     headerName: "Quantity",
-    width: 72,
+    flex: 0.7,
+    minWidth: 85,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
@@ -4219,35 +4283,30 @@ export const preTradeColumns: GridColDef[] = [
     field: "ton",
     headerName: "Order Number",
     headerClassName: "header-wrap-custom",
-    width: 160,
+    flex: 1.2,
+    minWidth: 150,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
   },
   {
-    field: "dlr_nm",
-    headerName: "Dealer Name",
-    width: 140,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "dlr_id",
-    headerName: "Dealer ID",
-    width: 80,
+    field: "tp",
+    headerName: "Trade Price",
+    flex: 0.7,
+    minWidth: 85,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "right",
   },
-  {
-    field: "rmk",
-    headerName: "Remark",
-    width: 160,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
+  // {
+  //   field: "un",
+  //   headerName: "User ID",
+  //   flex: 0.85,
+  //   minWidth: 105,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
 ];
 
 export const PreTradeApprovalColumns: GridColDef[] = [
@@ -4272,24 +4331,24 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "cc",
+    field: "Client_id",
     headerName: "ClientCode",
     width: 100,
     disableColumnMenu: true,
     headerAlign: "center",
     align: "center",
   },
+  // {
+  //   field: "td",
+  //   headerName: "Order Date",
+  //   width: 100,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   headerClassName: "header-wrap-custom",
+  //   align: "center",
+  // },
   {
-    field: "td",
-    headerName: "Order Date",
-    width: 100,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    headerClassName: "header-wrap-custom",
-    align: "center",
-  },
-  {
-    field: "bs",
+    field: "Buy_Sale",
     headerName: "Buy Sell",
     width: 70,
     disableColumnMenu: true,
@@ -4297,38 +4356,38 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "center",
   },
   {
-    field: "symbolSeries",
+    field: "sSymbol",
     headerName: "Symbol / Series",
     width: 160,
     align: "center",
     headerAlign: "center",
     disableColumnMenu: true,
     renderCell: (params: any) => {
-      const symbol = (params.row?.sym || "").trim();
+      const symbol = (params.row?.sSymbol || "").trim();
       const series = (params.row?.ser || "").trim();
       return `${symbol} / ${series}`;
     },
   },
+  // {
+  //   field: "ExpiryDate",
+  //   headerName: "Expiry Date",
+  //   headerClassName: "header-wrap-custom",
+  //   width: 100,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
+  // {
+  //   field: "inst",
+  //   headerName: "Instrument Type",
+  //   width: 90,
+  //   headerClassName: "header-wrap-custom",
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
   {
-    field: "ed",
-    headerName: "Expiry Date",
-    headerClassName: "header-wrap-custom",
-    width: 100,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "inst",
-    headerName: "Instrument Type",
-    width: 90,
-    headerClassName: "header-wrap-custom",
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "sp",
+    field: "StrikePrice",
     headerName: "Strike Price",
     headerClassName: "header-wrap-custom",
     width: 60,
@@ -4337,7 +4396,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "right",
   },
   {
-    field: "qty",
+    field: "Quantity",
     headerName: "Quantity",
     width: 72,
     disableColumnMenu: true,
@@ -4345,7 +4404,7 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     align: "right",
   },
   {
-    field: "ton",
+    field: "order_number",
     headerName: "Order Number",
     headerClassName: "header-wrap-custom",
     width: 160,
@@ -4353,24 +4412,24 @@ export const PreTradeApprovalColumns: GridColDef[] = [
     headerAlign: "center",
     align: "center",
   },
+  // {
+  //   field: "dlr_nm",
+  //   headerName: "Dealer Name",
+  //   width: 140,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "center",
+  // },
+  // {
+  //   field: "dlr_id",
+  //   headerName: "Dealer ID",
+  //   width: 80,
+  //   disableColumnMenu: true,
+  //   headerAlign: "center",
+  //   align: "right",
+  // },
   {
-    field: "dlr_nm",
-    headerName: "Dealer Name",
-    width: 140,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "center",
-  },
-  {
-    field: "dlr_id",
-    headerName: "Dealer ID",
-    width: 80,
-    disableColumnMenu: true,
-    headerAlign: "center",
-    align: "right",
-  },
-  {
-    field: "rmk",
+    field: "UserRemark",
     headerName: "Remark",
     width: 160,
     disableColumnMenu: true,

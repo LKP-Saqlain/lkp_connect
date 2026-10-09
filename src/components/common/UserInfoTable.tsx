@@ -986,7 +986,7 @@ const DataTable = ({
                 <div
                   onClick={() => {
                     HandleApprovalModal("approve");
-                    setSelectedRow(params.row.rid);
+                    setSelectedRow(params.row.Row_id);
                     console.log(params.row.dummyId, "selectedrow approve");
                   }}
                   style={{
@@ -1006,7 +1006,7 @@ const DataTable = ({
                 <div
                   onClick={() => {
                     HandleApprovalModal("reject");
-                    setSelectedRow(params.row.rid);
+                    setSelectedRow(params.row.Row_id);
                   }}
                   style={{
                     cursor: "pointer",

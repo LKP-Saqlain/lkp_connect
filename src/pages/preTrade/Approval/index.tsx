@@ -1,41 +1,18 @@
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Label,
-  Row,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Row } from "reactstrap";
 import UserInfoTable from "../../../components/common/UserInfoTable";
 import ShowToast from "../../../utils/toastUtils";
-import Select from "react-select";
-import * as Yup from "yup";
-import { useFormik } from "formik";
 import { apiServices } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../redux/store";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
-import { DateRangePicker } from "rsuite";
-import moment from "moment";
 import "../style.css";
-import { TextField } from "@mui/material";
-import { regEx } from "../../../helper/method";
 
 interface PreTradeApproval {
   activeSubItem: string;
 }
 
 const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
-  const [noSortingGroup, setNoSortingGroup] = useState([]);
-  const [branchCodeOptions, setBranchCodeOptions] = useState([]);
-  const [formattedDateRange, setFormattedDateRange] = useState<string>("");
-  const [startDate, setStartDate] = useState<string | null>(null);
-  const [endDate, setEndDate] = useState<string | null>(null);
-  const [selectedDateRange, setSelectedDateRange] = useState<
-    [Date | null, Date | null]
-  >([null, null]);
   const [preTradeReportData, setPreTradeReportData] = useState<[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [setShowImg, setSetShowImg] = useState<boolean>(false);
@@ -45,218 +22,26 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
-  const { afterToday } = DateRangePicker;
 
-  const validationSchema = Yup.object({
-    // selectedZone: Yup.object().nullable().required("Zone is required"),
-    // selectedBranchCode: Yup.object()
-    //   .nullable()
-    //   .required("Branch code is required"),
-    // isInValue: Yup.string().required("SYMBOL / ISIN is required"),
-    // dateRange: Yup.array()
-    //   .of(Yup.date().nullable())
-    //   .min(2, "Date range is required")
-    //   .required("Date range is required"),
-  });
-
-  interface FormValues {
-    selectedZone: { label: string; value: string } | null;
-    selectedBranchCode: { label: string; value: string } | null;
-    isInValue: string;
-    clientCode: string;
-    dateRange: any;
-  }
-
-  const formik = useFormik<FormValues>({
-    initialValues: {
-      selectedZone: null,
-      selectedBranchCode: null,
-      isInValue: "",
-      clientCode: "",
-      dateRange: [],
-    },
-    validationSchema,
-    onSubmit: (values) => {
-      console.log("values1-->", values, formattedDateRange);
-      handleViewReport();
-    },
-  });
-
-  console.log(startDate, endDate);
-
+  // useEffect(() => {
+  //   console.log("updateFlag", flag);
+  //   if (flag === true) {
+  //     handleViewReport();
+  //   }
+  // }, [flag]);
   useEffect(() => {
-    console.log("updateFlag", flag);
-    if (flag === true) {
-      handleViewReport();
-    }
+    void handleViewReport();
   }, [flag]);
-
-  useEffect(() => {
-    const str = user_id;
-    const userType = localStorage.getItem("uIdType");
-    let extractUserId: string | null = null;
-
-    if (str) {
-      const parts = str.split("-");
-      if (parts.length > 1) {
-        extractUserId = parts[1];
-      }
-    }
-    let payload = {
-      user_id: str === "APN-7161" ? "5376" : extractUserId,
-      option: "zone",
-      userType:
-        str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
-      zone: "ALL",
-    };
-
-    const username = "admin";
-    const password = "admin";
-    const credentials = `${username}:${password}`;
-    const encodedCredentials = btoa(credentials); // Base64 encode
-    const LoginauthHeader = `Basic ${encodedCredentials}`;
-
-    const customHeaders = {
-      Authorization: LoginauthHeader, // Use LoginauthHeader for this request
-    };
-
-    dispatch(showLoader("Please wait, we are processing your request..."));
-    apiServices
-      .getDropDown(payload, customHeaders)
-      .then((res) => {
-        console.log("Response-->", res);
-        if (res?.status === 200) {
-          let zoneDropdown = res?.data.data.map((item: any) => ({
-            label: item.desc, // This will be displayed in the dropdown
-            value: item.val, // This will be the actual value
-          }));
-          console.log("dropdown value", zoneDropdown);
-          setNoSortingGroup(zoneDropdown);
-          if (zoneDropdown.length > 0) {
-            formik.setFieldValue("selectedZone", zoneDropdown[0]);
-          }
-          // setSelectedNoSortingGroup(selectedNoSortingGroup);
-        }
-      })
-      .catch((Err) => {
-        const { message } = Err.response.data;
-        console.log("Error->", message);
-        dispatch(hideLoader());
-        // formik.setFieldError("password", message);
-        const errorMessage = Err.response.data.message;
-        ShowToast(
-          "error",
-          errorMessage ||
-            "Sorry for the inconvenience, please try after some time."
-        );
-      });
-
-    dispatch(hideLoader());
-  }, [dispatch]);
-
-  const str = user_id;
-  useEffect(() => {
-    if (formik.values.selectedZone) {
-      const userType = localStorage.getItem("uIdType");
-      let extractUserId: string | null = null;
-
-      if (str) {
-        const parts = str.split("-");
-        if (parts.length > 1) {
-          extractUserId = parts[1];
-        }
-      }
-      const payload = {
-        user_id: str === "APN-7161" ? "5376" : extractUserId,
-        option: "BranchByZone",
-        userType:
-          str === "APN-7161" ? "EMP" : userType === "Employee" ? "EMP" : "APN",
-        zone: formik.values.selectedZone.value,
-      };
-
-      dispatch(showLoader("Please wait, we are processing your request..."));
-
-      apiServices
-        .getDropDown(payload)
-        .then((res) => {
-          console.log("response->", res);
-          if (res?.status === 200) {
-            let branchDropdown = res?.data.data.map((item: any) => ({
-              label: item.val,
-              value: item.val,
-            }));
-            branchDropdown = [
-              { label: "ALL", value: "ALL" },
-              ...branchDropdown,
-            ];
-
-            setBranchCodeOptions(branchDropdown);
-            if (branchDropdown.length > 0) {
-              formik.setFieldValue("selectedBranchCode", branchDropdown[0]);
-            }
-          }
-          dispatch(hideLoader());
-        })
-        .catch((Err) => {
-          const { message } = Err.response.data;
-          console.log("Error->", message);
-          dispatch(hideLoader());
-          // formik.setFieldError("password", message);
-          const errorMessage = Err.response.data.message;
-          ShowToast(
-            "error",
-            errorMessage ||
-              "Sorry for the inconvenience, please try after some time."
-          );
-        });
-    }
-  }, [formik.values.selectedZone, dispatch]); // This effect runs when `selectedZone` changes
-
-  const handleDateChange = (value: [Date | null, Date | null]) => {
-    const [start, end] = value;
-    if (start && end) {
-      const isoStart = moment(start).format("YYYY-MM-DD");
-      const isoEnd = moment(end).format("YYYY-MM-DD");
-
-      setStartDate(isoStart);
-      setEndDate(isoEnd);
-
-      const formattedStartDate = moment(start).format("DD/MM/YYYY");
-      const formattedEndDate = moment(end).format("DD/MM/YYYY");
-      const formattedRange = `${formattedStartDate} - ${formattedEndDate}`;
-      setFormattedDateRange(formattedRange);
-
-      console.log("Payload:", {
-        startDate: isoStart,
-        endDate: isoEnd,
-      });
-    } else {
-      setStartDate(null);
-      setEndDate(null);
-      setFormattedDateRange("");
-    }
-  };
 
   const handleViewReport = () => {
     let payload = {
-      // clientCode: formik.values.clientCode,
-      // dealerID: "",
-      // dealerName: "",
-      // branch: formik.values.selectedBranchCode?.value,
-      // zone: formik.values.selectedZone?.value,
-      // startDate: startDate,
-      // endDate: endDate,
-      user_id,
+      client_id: "",
+      sSymbol: "",
       start: 0,
-      pageSize: 0,
-      rowId: 0,
-      clientCode: formik.values.clientCode,
-      symbol: "",
-      series: "",
-      strikePrice: "",
-      filePath: "",
+      pagesize: 0,
+      userId: user_id,
     };
     dispatch(showLoader("Please wait, we are processing your request..."));
     apiServices
@@ -266,8 +51,7 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
 
         if (res?.status === 200) {
           dispatch(hideLoader());
-          // setPreTradeReportData(res?.data?.data);
-          const rawData = res?.data?.data || [];
+          const rawData = res?.data || [];
           console.log("GetPreTradeReportResponse", rawData);
           const filteredData = rawData.filter((item: any) => {
             return item !== null;
@@ -384,18 +168,6 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
       });
   };
 
-  const handleCustomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target;
-    console.log("value", name, value);
-    if (name === "clientCode") {
-      if (regEx.alphaNumeric.test(value)) {
-        formik.setFieldValue(name, value.toUpperCase().replace(/\s/g, ""));
-      }
-    } else {
-      formik.handleChange(e);
-    }
-  };
-
   const handleApproval = (rid: number, remark: string, entryFlag: string) => {
     console.log("arggss->", rid, remark, entryFlag);
     const payload = {
@@ -403,9 +175,8 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
       // rHflag: entryFlag,
       // rhUserId: user_id,
       // rhRemark: remark,
-      user_id,
       rowId: rid,
-      statusFlag: entryFlag,
+      statusApprove: entryFlag,
       statusRemarks: remark,
       approvedby: user_id,
     };
@@ -444,195 +215,6 @@ const PreTradeApproval = ({ activeSubItem }: PreTradeApproval) => {
                 >
                   <h4 className="card-title mb-0">PreTrade Approval</h4>
                 </CardHeader>
-                <CardBody>
-                  <form onSubmit={formik.handleSubmit}>
-                    <Row className="align-items-end">
-                      <Col xl={2} lg={3} md={4} sm={6} xs={12} className="mb-3">
-                        <Label
-                          htmlFor="zone-select"
-                          className="form-label text-muted label-font"
-                        >
-                          Zone
-                        </Label>
-                        <Select
-                          value={formik.values.selectedZone}
-                          onChange={(option: any) =>
-                            formik.setFieldValue("selectedZone", option)
-                          }
-                          onBlur={formik.handleBlur}
-                          options={noSortingGroup}
-                          isClearable
-                          className="placeholder-font"
-                          id="zone-select"
-                          styles={{
-                            control: (base: any) => ({
-                              ...base,
-                              cursor: "pointer",
-                              borderColor:
-                                formik.touched.selectedZone &&
-                                formik.errors.selectedZone
-                                  ? "#DC4535"
-                                  : base.borderColor,
-                              "&:hover": {
-                                borderColor:
-                                  formik.touched.selectedZone &&
-                                  formik.errors.selectedZone
-                                    ? "#DC4535"
-                                    : base.borderColor,
-                              },
-                            }),
-                          }}
-                        />
-                        {formik.touched.selectedZone &&
-                          formik.errors.selectedZone && (
-                            <div
-                              className="text-danger"
-                              style={{ fontSize: "12px" }}
-                            >
-                              {formik.errors.selectedZone}
-                            </div>
-                          )}
-                      </Col>
-                      <Col xl={2} lg={2} className="mb-3">
-                        <Label
-                          htmlFor="branch-code-select"
-                          className="form-label text-muted label-font"
-                        >
-                          Branch Code
-                        </Label>
-                        <Select
-                          value={formik.values.selectedBranchCode}
-                          onChange={(option) =>
-                            formik.setFieldValue("selectedBranchCode", option)
-                          }
-                          onBlur={formik.handleBlur}
-                          options={branchCodeOptions}
-                          isClearable
-                          className="placeholder-font"
-                          id="branch-code-select"
-                          styles={{
-                            control: (base: any) => ({
-                              ...base,
-                              cursor: "pointer",
-                              borderColor:
-                                formik.touched.selectedBranchCode &&
-                                formik.errors.selectedBranchCode
-                                  ? "#DC4535"
-                                  : base.borderColor,
-                              "&:hover": {
-                                borderColor:
-                                  formik.touched.selectedBranchCode &&
-                                  formik.errors.selectedBranchCode
-                                    ? "#DC4535"
-                                    : base.borderColor,
-                              },
-                            }),
-                          }}
-                        />
-                        {formik.touched.selectedBranchCode &&
-                          formik.errors.selectedBranchCode && (
-                            <div
-                              className="text-danger"
-                              style={{ fontSize: "12px" }}
-                            >
-                              {formik.errors.selectedBranchCode}
-                            </div>
-                          )}
-                      </Col>
-                      <Col
-                        xl={3}
-                        lg={2}
-                        md={6}
-                        sm={12}
-                        xs={12}
-                        className="mb-3"
-                      >
-                        <Label
-                          htmlFor="date-range-picker"
-                          className="form-label text-muted label-font"
-                        >
-                          Select Date Range
-                        </Label>
-                        <DateRangePicker
-                          id="date-range-picker"
-                          size="md"
-                          value={
-                            selectedDateRange &&
-                            selectedDateRange[0] &&
-                            selectedDateRange[1]
-                              ? [selectedDateRange[0], selectedDateRange[1]]
-                              : undefined
-                          }
-                          onChange={(value: any) => {
-                            setSelectedDateRange(value);
-                            handleDateChange(value);
-                          }}
-                          placeholder="Start date & End date"
-                          showOneCalendar
-                          shouldDisableDate={afterToday()}
-                          placement="bottomStart"
-                          style={{ width: "100%", fontSize: "12px" }}
-                        />
-                      </Col>
-                      <Col
-                        xl={3}
-                        lg={2}
-                        md={6}
-                        sm={12}
-                        xs={12}
-                        className="mb-3"
-                      >
-                        <Label
-                          htmlFor="client-code-input"
-                          className="form-label text-muted label-font"
-                        >
-                          Client Code
-                        </Label>
-                        <TextField
-                          size="small"
-                          id="client-code-input"
-                          variant="outlined"
-                          placeholder="Enter Client Code"
-                          name="clientCode"
-                          type="text"
-                          value={formik.values.clientCode}
-                          onChange={handleCustomChange}
-                          onBlur={formik.handleBlur}
-                          error={
-                            formik.touched.clientCode &&
-                            Boolean(formik.errors.clientCode)
-                          }
-                          helperText={
-                            formik.touched.clientCode &&
-                            formik.errors.clientCode
-                          }
-                          fullWidth
-                        />
-                      </Col>
-                      <Button
-                        style={{
-                          backgroundColor: "#11395C",
-                          fontSize: "12px",
-                          minWidth: "140px",
-                          width: "15%",
-                          marginBottom: "1rem",
-                        }}
-                        // onClick={handleSubmit}
-                        type="submit"
-                      >
-                        View
-                      </Button>
-                    </Row>
-                  </form>
-                </CardBody>
-              </Card>
-              <Card
-                style={{
-                  minHeight: "80vh",
-                  borderRadius: "15px",
-                  boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-                }}
-              >
                 <CardBody>
                   <UserInfoTable
                     activeSubItem={activeSubItem}

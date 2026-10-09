@@ -7,6 +7,16 @@ import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 import { RootState } from "../../../redux/store";
 import dayjs from "dayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import type { Dayjs } from "dayjs";
+import { Box, Button } from "@mui/material";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface preProofUpload {
   activeSubItem: string;
@@ -21,11 +31,13 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
   const [fileBase64, setFileBase64] = useState<string | null>(null);
   const [getPreTradeRecords, setGetPreTradeRecords] = useState<[]>([]);
   const [uploadApiStatus, setUploadApiStatus] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // const toastShownRef = useRef(false);
 
   const { user_id } = useSelector(
-    (state: RootState) => state.UserLogin?.data?.data
+    (state: RootState) => state.UserLogin?.data?.data,
   );
 
   useEffect(() => {
@@ -34,63 +46,105 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
       activeSubItem,
       uploadedFile,
       fileExtension,
-      fileBase64
+      fileBase64,
     );
   }, [activeSubItem, uploadedFile, fileExtension, fileBase64]);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    let payload = {
-      user_id,
-      start: 0,
-      pageSize: 0,
-      rowId: 0,
-      clientCode: "",
-      symbol: "",
-      series: "",
-      strikePrice: "",
-      filePath: "",
+  const handleSubmit = async () => {
+    if (!selectedDate) {
+      ShowToast("error", "Please select a trade date");
+      return;
+    }
+
+    const payload = {
+      option: "View",
+      tradedatetime: selectedDate.format("YYYY-MM-DD"),
+      userId: user_id, // "EMP-5434",
     };
+
     dispatch(showLoader("Please wait, we are processing your request..."));
-    apiServices
-      .GetAllRecords(payload)
-      .then((response) => {
-        console.log("getAllRecordsReponse->", response?.data);
-        if (response?.status === 200) {
-          dispatch(hideLoader());
-          // setGetPreTradeRecords(response?.data?.data);
-          const rawData = response?.data?.data || [];
-          const filteredData = rawData.filter((item: any) => {
-            return item !== null; // replace with your actual filter condition
-          });
-          const finalData = filteredData.map((item: any, index: number) => ({
+
+    try {
+      const response = await apiServices.GetAllRecords(payload);
+
+      if (response?.status === 200) {
+        const rawData = response?.data?.data || [];
+
+        const finalData = rawData
+          .filter((item: any) => item !== null)
+          .map((item: any, index: number) => ({
             ...item,
             Id: index + 1,
           }));
-          console.log("finalFilterData", finalData);
 
-          setGetPreTradeRecords(finalData);
-          // if (!toastShownRef.current) {
-          //   toastShownRef.current = true;
+        setGetPreTradeRecords(finalData);
+        setIsSubmitted(true);
+      } else {
+        setGetPreTradeRecords([]);
+        setIsSubmitted(false);
 
-          //   if (response?.data?.data.length === 0) {
-          //     ShowToast("error", response?.data?.message);
-          //   } else {
-          //     ShowToast("success", response?.data?.message);
-          //   }
-          // }
-        }
-      })
-      .catch((error) => {
-        console.log("Error--->", error);
-        dispatch(hideLoader());
-      });
-  }, [dispatch, uploadApiStatus]);
+        ShowToast(
+          "error",
+          response?.data?.message || "Failed to fetch records",
+        );
+      }
+    } catch (error) {
+      console.error("GetAllRecords error:", error);
+      setGetPreTradeRecords([]);
+      setIsSubmitted(false);
+
+      ShowToast("error", "Something went wrong while fetching records");
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  // useEffect(() => {
+  //   let payload = {
+  //     option: "View",
+  //     userId: user_id,
+  //   };
+  //   dispatch(showLoader("Please wait, we are processing your request..."));
+  //   apiServices
+  //     .GetAllRecords(payload)
+  //     .then((response) => {
+  //       console.log("getAllRecordsReponse->", response?.data);
+  //       if (response?.status === 200) {
+  //         dispatch(hideLoader());
+  //         // setGetPreTradeRecords(response?.data?.data);
+  //         const rawData = response?.data?.data || [];
+  //         const filteredData = rawData.filter((item: any) => {
+  //           return item !== null; // replace with your actual filter condition
+  //         });
+  //         const finalData = filteredData.map((item: any, index: number) => ({
+  //           ...item,
+  //           Id: index + 1,
+  //         }));
+  //         console.log("finalFilterData", finalData);
+
+  //         setGetPreTradeRecords(finalData);
+  //         // if (!toastShownRef.current) {
+  //         //   toastShownRef.current = true;
+
+  //         //   if (response?.data?.data.length === 0) {
+  //         //     ShowToast("error", response?.data?.message);
+  //         //   } else {
+  //         //     ShowToast("success", response?.data?.message);
+  //         //   }
+  //         // }
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("Error--->", error);
+  //       dispatch(hideLoader());
+  //     });
+  // }, [dispatch, uploadApiStatus]);
 
   const handleFileUploadAsync = (
     file: any,
-    communicationProofPath: string
+    communicationProofPath: string,
   ): Promise<string> => {
     return new Promise((resolve, reject) => {
       const fileExt = file.name.split(".").pop()?.toLowerCase() || "";
@@ -159,7 +213,7 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
     if (!allowedExtensions.includes(fileExt)) {
       ShowToast(
         "error",
-        "Please upload a file in JPG, JPEG, PNG, or PDF format."
+        "Please upload a file in JPG, JPEG, PNG, or PDF format.",
       );
       return;
     }
@@ -188,12 +242,14 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
         await handleFileUploadAsync(file, communicationProofPath);
 
         const payload = {
-          user_id,
           rowId: row?.rid,
           fileName: communicationProofPath,
           uploadedBy: user_id,
-          uploadedDate: new Date().toISOString(),
+          uploadedDate: dayjs()
+            .tz("Asia/Kolkata")
+            .format("YYYY-MM-DDTHH:mm:ss"),
           remarks: remark,
+          user_id,
         };
 
         console.log("Payload to send:", payload);
@@ -232,74 +288,6 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
     reader.readAsDataURL(file);
   };
 
-  // const preProofUploadDummyData = [
-  //   {
-  //     id: 1,
-  //     ClientCode: "CL001",
-  //     tradeDate: "2025-05-01",
-  //     expiryDate: "2025-06-01",
-  //     symbol: "NIFTY",
-  //     series: "EQ",
-  //     instrumentType: "FUTSTK",
-  //     strikePrice: "N/A",
-  //     qty: 150,
-  //     buySell: "Buy",
-  //     tradeOrderNumber: "ORD123456",
-  //   },
-  //   {
-  //     id: 2,
-  //     ClientCode: "CL002",
-  //     tradeDate: "2025-05-02",
-  //     expiryDate: "2025-06-01",
-  //     symbol: "BANKNIFTY",
-  //     series: "EQ",
-  //     instrumentType: "OPTSTK",
-  //     strikePrice: "36000",
-  //     qty: 75,
-  //     buySell: "Sell",
-  //     tradeOrderNumber: "ORD123457",
-  //   },
-  //   {
-  //     id: 3,
-  //     ClientCode: "CL003",
-  //     tradeDate: "2025-05-03",
-  //     expiryDate: "2025-06-01",
-  //     symbol: "RELIANCE",
-  //     series: "EQ",
-  //     instrumentType: "FUTSTK",
-  //     strikePrice: "N/A",
-  //     qty: 50,
-  //     buySell: "Buy",
-  //     tradeOrderNumber: "ORD123458",
-  //   },
-  //   {
-  //     id: 4,
-  //     ClientCode: "CL004",
-  //     tradeDate: "2025-05-04",
-  //     expiryDate: "2025-06-01",
-  //     symbol: "INFY",
-  //     series: "EQ",
-  //     instrumentType: "OPTSTK",
-  //     strikePrice: "1450",
-  //     qty: 100,
-  //     buySell: "Sell",
-  //     tradeOrderNumber: "ORD123459",
-  //   },
-  //   {
-  //     id: 5,
-  //     ClientCode: "CL005",
-  //     tradeDate: "2025-05-05",
-  //     expiryDate: "2025-06-01",
-  //     symbol: "TCS",
-  //     series: "EQ",
-  //     instrumentType: "FUTSTK",
-  //     strikePrice: "N/A",
-  //     qty: 200,
-  //     buySell: "Buy",
-  //     tradeOrderNumber: "ORD123460",
-  //   },
-  // ];
-
   return (
     <div className="page-content page-view">
       <Container fluid>
@@ -321,6 +309,49 @@ const ProofUpload = ({ activeSubItem }: preProofUpload) => {
             </h4>
           </CardHeader>
           <CardBody>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                flexWrap: "wrap",
+                mb: 3,
+              }}
+            >
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Trade Date"
+                  value={selectedDate}
+                  onChange={(newValue) => setSelectedDate(newValue)}
+                  maxDate={dayjs()}
+                  format="DD-MM-YYYY"
+                  slotProps={{
+                    textField: {
+                      size: "small",
+                      sx: { minWidth: 220 },
+                    },
+                  }}
+                />
+              </LocalizationProvider>
+
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                disabled={!selectedDate}
+                sx={{
+                  height: 40,
+                  px: 3,
+                  borderRadius: "8px",
+                  textTransform: "none",
+                  backgroundColor: "#11395C",
+                  "&:hover": {
+                    backgroundColor: "#0C2D62",
+                  },
+                }}
+              >
+                Submit
+              </Button>
+            </Box>
             <UserInfoTable
               activeSubItem={activeSubItem}
               T6Data={getPreTradeRecords}
