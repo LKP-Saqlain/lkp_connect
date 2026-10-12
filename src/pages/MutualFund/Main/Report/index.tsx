@@ -66,7 +66,7 @@ const MfReport = (props: any) => {
               (item: any, index: number) => ({
                 id: index + 1, // unique row id
                 ...item,
-              })
+              }),
             );
             setMandateData(filteredMandateRecords);
 
@@ -128,7 +128,7 @@ const MfReport = (props: any) => {
         assetClassIDs: null,
         asOnDateTime: "2025-12-05T17:41:00.673+05:30",
         fromDateTime: "2021-02-15T17:41:00.674+05:30",
-        toDateTime: "2026-09-01T17:41:00.673+05:30",
+        toDateTime: "2027-09-01T17:41:00.673+05:30",
         asOnDate: asOnDate,
         reportID: 0,
         portfolioID: 1,
@@ -171,7 +171,7 @@ const MfReport = (props: any) => {
                   nextSipDate: nextSip,
                   daysRemaining: daysRemaining, // <-- Added here
                 };
-              }
+              },
             );
 
             // setAllSIPs(allSipData);
@@ -190,7 +190,7 @@ const MfReport = (props: any) => {
               // sort ascending by upcoming date
               upcomingSIPs.sort(
                 (a: any, b: any) =>
-                  a.nextSipDate.getTime() - b.nextSipDate.getTime()
+                  a.nextSipDate.getTime() - b.nextSipDate.getTime(),
               );
 
               console.log("Upcoming SIPs:", upcomingSIPs);
@@ -231,9 +231,9 @@ const MfReport = (props: any) => {
         toDate: transTodaysDate,
         assetClassID: 86,
         assetClassIDs: null,
-        asOnDateTime: "2026-89-07T10:54:05.584+05:30",
+        asOnDateTime: "2027-89-07T10:54:05.584+05:30",
         fromDateTime: "2024-02-07T00:00:00",
-        toDateTime: "2026-09-02T10:54:05.584+05:30",
+        toDateTime: "2027-09-02T10:54:05.584+05:30",
         asOnDate: null,
         reportID: 0,
         portfolioID: 1,
@@ -271,7 +271,7 @@ const MfReport = (props: any) => {
             records.sort(
               (a, b) =>
                 new Date(b.transactionDate).getTime() -
-                new Date(a.transactionDate).getTime()
+                new Date(a.transactionDate).getTime(),
             );
 
             setTransactions(records);
@@ -314,7 +314,7 @@ const MfReport = (props: any) => {
         clientData?.mobileNo,
         clientData?.email,
         "check Cleintdetails",
-        clientData?.clientCode
+        clientData?.clientCode,
       );
 
       // Process bank details
@@ -327,7 +327,7 @@ const MfReport = (props: any) => {
           ifsc: item.ifsc,
           code: item.bankCode,
           paymentMode: item.payMode,
-        })
+        }),
       );
 
       setBanks(formattedData);
@@ -421,10 +421,10 @@ const MfReport = (props: any) => {
               selectedLabel === "Upcoming SIP"
                 ? filteredSIPs
                 : selectedLabel === "Ongoing SIP"
-                ? ongoingSIP
-                : selectedLabel === "Transaction"
-                ? transactions
-                : []
+                  ? ongoingSIP
+                  : selectedLabel === "Transaction"
+                    ? transactions
+                    : []
             }
             selectedLabel={selectedLabel}
           />
