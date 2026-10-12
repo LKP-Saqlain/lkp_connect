@@ -43,7 +43,7 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
   const [bseSchemeCode, setBseSchemeCode] = useState<any>("");
 
   const [redeemUnits, setRedeemUnits] = useState<number | string>(
-    selectedRow?.balanceQuantity || ""
+    selectedRow?.balanceQuantity || "",
   );
   const dispatch = useDispatch<AppDispatch>();
 
@@ -71,7 +71,8 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
   useEffect(() => {
     const fetchPortfolioData = async () => {
       dispatch(showLoader("Please wait!!..."));
-
+      const today = new Date();
+      const asOnDate = today.toISOString().split("T")[0]; // "YYYY-MM-DD"
       const payload = {
         loginUserMasterID: 0,
         clientMasterID: 0,
@@ -79,10 +80,10 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
         toDate: "",
         assetClassID: 86,
         assetClassIDs: "",
-        asOnDateTime: "2026-08-08",
+        asOnDateTime: "2027-08-08",
         fromDateTime: "2000-01-01",
-        toDateTime: "2026-09-01",
-        asOnDate: "2026-09-01",
+        toDateTime: "2027-09-01",
+        asOnDate: asOnDate,
         reportID: 0,
         portfolioID: 1,
         withIndexation: false,
@@ -113,7 +114,7 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
               (item: any, index: number) => ({
                 id: index + 1,
                 ...item,
-              })
+              }),
             ) || [];
 
           const r1 = res?.data?.data?.dataBucket?.r1?.[0] || null; //  take first r1 record
@@ -304,7 +305,7 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
     console.log(
       selectedRow.physicalQuantity > 0 ? "P" : "C",
       "Confirmed!",
-      bseSchemeCode
+      bseSchemeCode,
     );
 
     const payload = {
@@ -726,7 +727,9 @@ const MfPortfolio = ({ onSelectFund, hasToken, investMoreDetails }: any) => {
                   checked={redeemUnits === selectedRow?.balanceQuantity}
                   onChange={(e) =>
                     setRedeemUnits(
-                      e.target.checked ? selectedRow?.balanceQuantity ?? "" : ""
+                      e.target.checked
+                        ? (selectedRow?.balanceQuantity ?? "")
+                        : "",
                     )
                   }
                   size="small"
