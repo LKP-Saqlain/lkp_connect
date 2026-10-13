@@ -15377,16 +15377,6 @@ export const T6SellingDetailReportColumns: GridColDef[] = [
 ];
 
 export const SLBMClientResponseColumns: GridColDef[] = [
-  // {
-  //   field: "Zone",
-  //   headerName: "Zone",
-  //   flex: 1,
-  //   minWidth: 120,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   disableColumnMenu: true,
-  //   renderCell: (params) => (params.value ? params.value : "—"),
-  // },
   {
     field: "BranchCode",
     headerName: "Branch Code",
@@ -15397,16 +15387,7 @@ export const SLBMClientResponseColumns: GridColDef[] = [
     disableColumnMenu: true,
     renderCell: (params) => (params.value ? params.value : "—"),
   },
-  // {
-  //   field: "M_Type",
-  //   headerName: "M Type",
-  //   flex: 1,
-  //   minWidth: 100,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   disableColumnMenu: true,
-  //   renderCell: (params) => (params.value ? params.value : "—"),
-  // },
+
   {
     field: "ClientCode",
     headerName: "Client Code",
@@ -15478,6 +15459,20 @@ export const SLBMClientResponseColumns: GridColDef[] = [
     renderCell: (params) => (params.value ? params.value : "—"),
   },
   {
+    field: "HoldingValue",
+    headerName: "Holding Value",
+    flex: 1.5,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (params: any) =>
+      new Intl.NumberFormat("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(parseFloat(params)),
+  },
+  {
     field: "RMName",
     headerName: "RM Name",
     flex: 1.5,
@@ -15496,20 +15491,6 @@ export const SLBMClientResponseColumns: GridColDef[] = [
     align: "left",
     disableColumnMenu: true,
     renderCell: (params) => (params.value ? params.value : "—"),
-  },
-  {
-    field: "HoldingValue",
-    headerName: "Holding Value",
-    flex: 1.5,
-    minWidth: 140,
-    headerAlign: "center",
-    align: "right",
-    disableColumnMenu: true,
-    valueFormatter: (params: any) =>
-      new Intl.NumberFormat("en-IN", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(parseFloat(params)),
   },
 ];
 
