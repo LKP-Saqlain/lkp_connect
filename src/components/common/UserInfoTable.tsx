@@ -100,6 +100,7 @@ interface SelectedWidgetProps {
   tabValue?: any;
   editRowAccess?: boolean;
   setRows?: any;
+  selectedSummary?: any;
 }
 
 const DataTable = ({
@@ -161,6 +162,7 @@ const DataTable = ({
   tabValue,
   setRows,
   editRowAccess,
+  selectedSummary,
 }: SelectedWidgetProps) => {
   const [tradeData, setTradeData] = useState<Trade[]>([]);
   const [totalRows, setTotalRows] = useState<number>(0); // Total rows for pagination
@@ -3069,6 +3071,14 @@ const DataTable = ({
       }));
     } else if (activeSubItem === "SLBM Client Position") {
       return TableColumns.SLBMPositionResponseColumns.map((column) => ({
+        ...column,
+      }));
+    } else if (activeSubItem === "IVR Dashboard") {
+      const detailColumns =
+        selectedSummary === "matchCount" || selectedSummary === "mismatchCount"
+          ? TableColumns.IVRMatchMismatchColumns
+          : TableColumns.IVRTradeResponseColumns;
+      return detailColumns.map((column) => ({
         ...column,
       }));
     } else {

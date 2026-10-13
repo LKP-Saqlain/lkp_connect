@@ -1637,4 +1637,12 @@ export const apiServices = {
   SLBMPosition: async (payload: any) => {
     return await apiService("POST", endpoints.SLBMPosition, payload);
   },
+
+  GetIVRTradeSummaryCount: async (payload: any) => {
+    return await apiService("POST", endpoints.GetIVRTradeSummaryCount, payload);
+  },
+
+  GetIVRTradeSummary: async (payload: any) => {
+    return await apiService("POST", endpoints.GetIVRTradeSummary, payload);
+  },
 };

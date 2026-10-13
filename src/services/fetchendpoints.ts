@@ -501,6 +501,8 @@ export const newDomainEndpoints = [
   endpoints.MarketingData,
   endpoints.UploadT5T6AgeingDebit,
   endpoints.SLBMPosition,
+  endpoints?.GetIVRTradeSummaryCount,
+  endpoints?.GetIVRTradeSummary,
 ];
 const uniqueEndpoints = new Set(newDomainEndpoints);
 console.log(

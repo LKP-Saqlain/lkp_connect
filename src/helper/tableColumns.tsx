@@ -7,6 +7,7 @@ import CopyToClipboardCell from "./copyToClipBoardCell";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import { capitalizeEachWord } from "../utils";
 import pako from "pako";
+import { useState } from "react";
 
 interface ClientRow {
   ClientCode: string;
@@ -15641,5 +15642,352 @@ export const SLBMPositionResponseColumns: GridColDef[] = [
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(parseFloat(params)),
+  },
+];
+
+const AudioPlayerCell = ({ audioUrl }: { audioUrl?: string }) => {
+  const [playing, setPlaying] = useState(false);
+
+  if (!audioUrl) return <>—</>;
+
+  return (
+    <audio
+      controls
+      preload="none"
+      src={audioUrl}
+      style={{ width: 120, height: 10 }}
+      onPlay={() => setPlaying(true)}
+      onPause={() => setPlaying(false)}
+      onEnded={() => setPlaying(false)}
+    />
+  );
+};
+export const IVRTradeResponseColumns: GridColDef[] = [
+  {
+    field: "TradeNo",
+    headerName: "Trade No",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "FilePath",
+    headerName: "Audio",
+    flex: 0.7,
+    minWidth: 100,
+    headerAlign: "center",
+    align: "center",
+    sortable: false,
+    filterable: false,
+    disableColumnMenu: true,
+    renderCell: (params) => <AudioPlayerCell audioUrl={params.row.FilePath} />,
+  },
+  {
+    field: "sSymbol",
+    headerName: "Symbol",
+    flex: 1.2,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value?.trim() || "—",
+  },
+  {
+    field: "nTradedPrice",
+    headerName: "Traded Price",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (value: number | null | undefined) =>
+      value == null
+        ? "—"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value),
+  },
+  {
+    field: "nQuantityTraded",
+    headerName: "Traded Quantity",
+    flex: 1,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "nTradedTime",
+    headerName: "Traded Time",
+    flex: 1.4,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => {
+      if (!params.value) return "—";
+
+      const date = new Date(params.value);
+      return Number.isNaN(date.getTime()) ? "—" : date.toLocaleString("en-IN");
+    },
+  },
+  {
+    field: "Client_Id",
+    headerName: "Client ID",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "ClientCode",
+    headerName: "Client Code",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "Order_number",
+    headerName: "Order Number",
+    flex: 1.5,
+    minWidth: 190,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "Buy_Sale",
+    headerName: "Buy / Sale",
+    flex: 1,
+    minWidth: 110,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "Quantity",
+    headerName: "Quantity",
+    flex: 1,
+    minWidth: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "Total_Turnover",
+    headerName: "Total Turnover",
+    flex: 1.3,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (value: number | null | undefined) =>
+      value == null
+        ? "—"
+        : new Intl.NumberFormat("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(value),
+  },
+  {
+    field: "Trade_Remark",
+    headerName: "Trade Remark",
+    flex: 1.3,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "Terminal_id",
+    headerName: "Terminal ID",
+    flex: 1.3,
+    minWidth: 170,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "Odin_Segment",
+    headerName: "Odin Segment",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "TE_Segment",
+    headerName: "TE Segment",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value || "—",
+  },
+  {
+    field: "InstrumentName",
+    headerName: "Instrument Name",
+    flex: 1.3,
+    minWidth: 160,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value?.trim() || "—",
+  },
+  {
+    field: "OptionType",
+    headerName: "Option Type",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value?.trim() || "—",
+  },
+  {
+    field: "ExpiryDate",
+    headerName: "Expiry Date",
+    flex: 1.2,
+    minWidth: 150,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => {
+      if (!params.value || params.value.startsWith("1980-01-01")) {
+        return "—";
+      }
+
+      const date = new Date(params.value);
+      return Number.isNaN(date.getTime())
+        ? "—"
+        : date.toLocaleDateString("en-IN");
+    },
+  },
+  {
+    field: "Strikeprice",
+    headerName: "Strike Price",
+    flex: 1,
+    minWidth: 120,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "LoginId",
+    headerName: "Login ID",
+    flex: 1,
+    minWidth: 110,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "UserName",
+    headerName: "User Name",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "Broker_ID",
+    headerName: "Broker ID",
+    flex: 1,
+    minWidth: 110,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "CallId",
+    headerName: "Call ID",
+    flex: 1.2,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "CallDateTime",
+    headerName: "Call Date & Time",
+    flex: 1.5,
+    minWidth: 180,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => {
+      if (!params.value) return "—";
+
+      const date = new Date(params.value);
+      return Number.isNaN(date.getTime()) ? "—" : date.toLocaleString("en-IN");
+    },
+  },
+  {
+    field: "TelephoneNo",
+    headerName: "Telephone No",
+    flex: 1.2,
+    minWidth: 140,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "UserID",
+    headerName: "User ID",
+    flex: 1,
+    minWidth: 100,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+  {
+    field: "Duration",
+    headerName: "Duration (Sec)",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? "—",
+  },
+];
+
+export const IVRMatchMismatchColumns: GridColDef[] = [
+  ...IVRTradeResponseColumns,
+  {
+    field: "Status",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 130,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+    renderCell: (params) => params.value ?? params.row?.[""] ?? "—",
   },
 ];

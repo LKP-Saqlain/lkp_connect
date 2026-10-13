@@ -146,6 +146,7 @@ import { FaHandHoldingMedical } from "react-icons/fa";
 import T5T6DebitAgeing from "../../pages/RMS/T5T6DebitAgeing";
 
 import ClientPosition from "../../pages/Reports/ClientPosition";
+import IVRDashboard from "../../pages/preTrade/IVRDashboard";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -804,6 +805,7 @@ const SideBar = () => {
     "Referal Product Wise MIS Report": (
       <KycBrokerage activeSubItem={activeSubItem} />
     ),
+    "IVR Dashboard": <IVRDashboard activeSubItem={activeSubItem} />,
   };
   // const tradingSubItems: Record<string, JSX.Element> = {
   //   "Client Pledge Request": <PledgeRequest activeSubItem={activeSubItem} />,
