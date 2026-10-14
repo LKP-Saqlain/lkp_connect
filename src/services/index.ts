@@ -1637,4 +1637,15 @@ export const apiServices = {
   SLBMPosition: async (payload: any) => {
     return await apiService("POST", endpoints.SLBMPosition, payload);
   },
+
+  GetSLBMDDL: async (payload: any) => {
+    return await apiService("GET", endpoints.GetSLBMDDL, payload);
+  },
+
+  GetNSESLBMScripSummary: async (payload: any) => {
+    return await apiService("POST", endpoints.GetNSESLBMScripSummary, payload);
+  },
+  GetNSESLBMClientDetails: async (payload: any) => {
+    return await apiService("POST", endpoints.GetNSESLBMClientDetails, payload);
+  },
 };
