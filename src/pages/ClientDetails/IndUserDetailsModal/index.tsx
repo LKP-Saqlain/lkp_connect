@@ -666,7 +666,7 @@ const UserInfoModal = ({
                           ) : ( */}
                           {/* <span style={{ color: "#777" }}>{status}</span> */}
                           {/* )} */}
-
+                          {/* 
                           {item.key === "slbm" &&
                           status === "Inactive" &&
                           selectedWidget === "Inactive Clients" ? (
@@ -708,7 +708,8 @@ const UserInfoModal = ({
                             </Tooltip>
                           ) : (
                             <span style={{ color: "#777" }}>{status}</span>
-                          )}
+                          )} */}
+                          {status}
                         </p>
                         {/* {item.key === "mtf" && status === "Inactive" && (
                           <span
