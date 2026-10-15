@@ -23,7 +23,10 @@ import { useEffect, useState } from "react";
 // import AbbakusImg from "../../../assets/images/Abakkus.png";
 // import NarnoliaImg from "../../../assets/images/Narnolia.png";
 // import RenassImg from "../../../assets/images/renaissance.png";
-// import Tooltip from "@mui/material/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
+import ShowToast from "../../../utils/toastUtils.tsx";
+import { apiServices } from "../../../services/index.ts";
+import axios from "axios";
 
 const UserInfoModal = ({
   isOpen,
@@ -33,7 +36,8 @@ const UserInfoModal = ({
   branch,
   handleFileUpload,
   uploadedFileName,
-  // fetchMtfToken,
+  selectedWidget,
+  fetchMtfToken,
 }: any) => {
   const [clientDetails, setClientDetails] = useState({
     cn: "", // Client_Name
@@ -103,6 +107,109 @@ const UserInfoModal = ({
   function tog_fullscreen1() {
     handleModalClose(true);
   }
+
+  const handleSlbmActivation = async () => {
+    try {
+      const token: any = await fetchSlbmActivation();
+
+      if (!token) {
+        return;
+      }
+
+      const payload = {
+        clientcode: clientDetails?.cc,
+        apiType: "segments",
+      };
+
+      dispatch(showLoader(""));
+
+      const response = await axios.post(
+        "https://api.lkpconnect.net.in/api/ReKyc/GetReKycURL",
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      console.log("GetReKycURL response:", response?.data?.data);
+
+      if (
+        response?.status === 200 &&
+        response?.data?.isSuccess &&
+        response?.data?.data?.deeplink
+      ) {
+        const deeplink = response.data.data.deeplink;
+
+        window.open(deeplink, "_blank", "noopener,noreferrer");
+
+        return;
+      }
+
+      // 5. API returned failure
+      ShowToast(
+        "error",
+        response?.data?.errorMessages ||
+          response?.data?.message ||
+          "Compliance upload failed.",
+      );
+    } catch (error: any) {
+      console.log("GetReKycURL Error:", error);
+
+      ShowToast(
+        "error",
+        error?.response?.data?.errorMessages || "Compliance upload failed.",
+      );
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
+  const fetchSlbmActivation = async () => {
+    console.log("clientDetailsData", clientDetails);
+
+    const formattedDob = clientDetails?.dob?.split("T")[0];
+
+    const payload = {
+      user_id: clientDetails?.cc,
+      user_type: "Client",
+      dob: formattedDob,
+      pan: clientDetails?.pan,
+    };
+
+    try {
+      dispatch(showLoader(""));
+
+      const response = await apiServices.ValidateSencondAuth(payload);
+
+      if (response?.status === 200 && response?.data?.token) {
+        console.log("tokenResponse", response.data.token);
+
+        return response.data.token;
+      }
+
+      ShowToast(
+        "error",
+        response?.data?.errorMessages || "Authentication failed.",
+      );
+
+      return null;
+    } catch (error: any) {
+      console.log("ValidateSencondAuth Error:", error);
+
+      ShowToast(
+        "error",
+        error?.response?.data?.errorMessages || "Authentication failed.",
+      );
+
+      return null;
+    } finally {
+      dispatch(hideLoader());
+    }
+  };
+
   return (
     <Modal
       size="xl"
@@ -557,8 +664,51 @@ const UserInfoModal = ({
                               </span>
                             </Tooltip>
                           ) : ( */}
-                          <span style={{ color: "#777" }}>{status}</span>
+                          {/* <span style={{ color: "#777" }}>{status}</span> */}
                           {/* )} */}
+
+                          {item.key === "slbm" &&
+                          status === "Inactive" &&
+                          selectedWidget === "Inactive Clients" ? (
+                            <>
+                              {" "}
+                              <Tooltip title="Click to activate SLBM" arrow>
+                                <span
+                                  style={{
+                                    color: "#777",
+                                    cursor: "pointer",
+                                    textDecoration: "underline",
+                                  }}
+                                  onClick={() => {
+                                    console.log("Activate MTF clicked");
+                                    handleSlbmActivation();
+                                    // call activation API or open modal here
+                                  }}
+                                >
+                                  {status}
+                                </span>
+                              </Tooltip>
+                            </>
+                          ) : item.key === "mtf" && status === "Inactive" ? (
+                            <Tooltip title="Click to activate MTF" arrow>
+                              <span
+                                style={{
+                                  color: "#777",
+                                  cursor: "pointer",
+                                  textDecoration: "underline",
+                                }}
+                                onClick={() => {
+                                  console.log("Activate MTF clicked");
+                                  fetchMtfToken(clientDetails);
+                                  // call activation API or open modal here
+                                }}
+                              >
+                                {status}
+                              </span>
+                            </Tooltip>
+                          ) : (
+                            <span style={{ color: "#777" }}>{status}</span>
+                          )}
                         </p>
                         {/* {item.key === "mtf" && status === "Inactive" && (
                           <span
