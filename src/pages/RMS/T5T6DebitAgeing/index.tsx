@@ -1,15 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
-import { Container, Card, CardHeader, CardBody } from "reactstrap";
+import {
+  Container,
+  Card,
+  CardHeader,
+  CardBody,
+  Col,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button as ReactStrapButton,
+} from "reactstrap";
 import { Button, Tooltip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "../../../redux/store";
 import type { RootState } from "../../../redux/store";
-
+import { IoIosSend } from "react-icons/io";
 import { hideLoader, showLoader } from "../../../redux/slices/loaderSlice";
 import { apiServices } from "../../../services";
 import ShowToast from "../../../utils/toastUtils";
@@ -19,12 +29,22 @@ interface FormValues {
   excelFile: File | null;
 }
 
+const confirmBtnStyle = {
+  height: "25px",
+  minWidth: "70px",
+  padding: "0 12px",
+  fontSize: "13px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
 const T5T6DebitAgeing = ({ activeSubItem }: any) => {
   const [lastUploadedDetails, setLastUploadedDetails] = useState<{
     uploadedBy: string;
     uploadedOn: string;
   } | null>(null);
-
+  const [isEmailConfirmOpen, setIsEmailConfirmOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -206,8 +226,8 @@ const T5T6DebitAgeing = ({ activeSubItem }: any) => {
           borderRadius: "0.25rem",
           cursor: "pointer",
           backgroundColor: "#f8f9fa",
-          width: "40%",
-          minHeight: "50px",
+          width: "25%",
+          minHeight: "55px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -294,9 +314,98 @@ const T5T6DebitAgeing = ({ activeSubItem }: any) => {
     </div>
   );
 
+  const handleSendEmail = async () => {
+    const payload = {
+      user_id: user_id,
+    };
+    dispatch(showLoader("Sending email..."));
+    let hasError = false;
+    const callApi = async (
+      apiFn: (payload: any) => Promise<any>,
+      apiName: string,
+    ) => {
+      try {
+        const res = await apiFn(payload);
+        if (res?.status !== 200) {
+          throw new Error();
+        }
+      } catch {
+        hasError = true;
+        ShowToast("error", `${apiName} failed to send email`);
+      }
+    };
+
+    await callApi(apiServices.SendDealerT5AgeingMail, "Dealer Email");
+    await callApi(apiServices.SendRMT5AgeingMail, "RM Email");
+    await callApi(apiServices.SendTLT5AgeingMail, "TL Email");
+    await callApi(apiServices.SendBMT5AgeingMail, "BM Email");
+    await callApi(apiServices.SendAHT5AgeingMail, "AH Email");
+    await callApi(apiServices.SendRHT5AgeingMail, "RH Email");
+    await callApi(apiServices.SendAPT5AgeingMail, "AP Email");
+
+    dispatch(hideLoader());
+
+    if (!hasError) {
+      ShowToast("success", "All emails sent successfully");
+    }
+  };
+
   return (
     <div className="page-content page-view">
-      <Container fluid>
+      <Container fluid style={{ minHeight: "85vh" }}>
+        <Modal
+          isOpen={isEmailConfirmOpen}
+          toggle={() => setIsEmailConfirmOpen(false)}
+          centered
+          style={{ maxWidth: "400px" }}
+        >
+          <ModalHeader
+            toggle={() => setIsEmailConfirmOpen(false)}
+          ></ModalHeader>
+          <i
+            style={{ textAlign: "center" }}
+            className="ri-alert-line display-5 text-warning"
+          ></i>
+          <ModalBody
+            style={{ padding: "5px", fontSize: "14px", textAlign: "center" }}
+          >
+            Are you sure you want to send the Email?
+          </ModalBody>
+
+          <ModalFooter
+            className="justify-content-center"
+            style={{
+              padding: "8px 12px",
+              minHeight: "unset",
+            }}
+          >
+            <ReactStrapButton
+              color="#11395C"
+              style={{
+                ...confirmBtnStyle,
+                borderColor: "#11395C",
+                backgroundColor: "#fff",
+              }}
+              onClick={() => setIsEmailConfirmOpen(false)}
+            >
+              No
+            </ReactStrapButton>
+
+            <ReactStrapButton
+              style={{
+                ...confirmBtnStyle,
+                backgroundColor: "#11395C",
+                borderColor: "#11395C",
+              }}
+              onClick={() => {
+                setIsEmailConfirmOpen(false);
+                handleSendEmail();
+              }}
+            >
+              Yes
+            </ReactStrapButton>
+          </ModalFooter>
+        </Modal>
         <Card
           style={{
             borderRadius: "15px",
@@ -336,26 +445,59 @@ const T5T6DebitAgeing = ({ activeSubItem }: any) => {
               <Button
                 type="submit"
                 variant="contained"
+                // fullWidth
                 sx={{
-                  fontSize: "14px",
+                  fontSize: "10px",
                   color: "#fff",
+                  width: "25%",
+                  height: "30px",
                   bgcolor: "#11395C",
                   "&:hover": {
                     bgcolor: "#0d2d49",
                   },
                   textTransform: "none",
                   padding: "6px 20px",
-                  borderRadius: "6px",
                 }}
               >
                 Upload File
               </Button>
-
+              <Col>
+                <div className="mb-2" />
+                <Button
+                  style={{
+                    backgroundColor: "#11395C",
+                    fontSize: "10px",
+                    height: "30px",
+                    color: "#FFF",
+                    textTransform: "none",
+                    width: "25%",
+                  }}
+                  type="button"
+                  onClick={() => setIsEmailConfirmOpen(true)}
+                >
+                  Sent Email
+                  {/* <MailOutlineIcon
+                        fontSize="small"
+                        sx={{
+                          marginLeft: "5px",
+                          marginBottom: "2px",
+                          fontSize: "16px",
+                        }}
+                      /> */}
+                  <IoIosSend
+                    style={{
+                      marginLeft: "5px",
+                      marginBottom: "1px",
+                      fontSize: "20px",
+                    }}
+                  />
+                </Button>
+              </Col>
               {lastUploadedDetails && (
                 <div
                   style={{
-                    marginTop: "12px",
-                    fontSize: "13px",
+                    marginTop: "5px",
+                    fontSize: "10px",
                     color: "#344054",
                     lineHeight: "1.6",
                   }}
