@@ -15,7 +15,6 @@ import {
 } from "reactstrap";
 import { Button, Tooltip } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "../../../redux/store";
 import type { RootState } from "../../../redux/store";
@@ -45,6 +44,8 @@ const T5T6DebitAgeing = ({ activeSubItem }: any) => {
     uploadedOn: string;
   } | null>(null);
   const [isEmailConfirmOpen, setIsEmailConfirmOpen] = useState(false);
+  const [isUploadSuccessful, setIsUploadSuccessful] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -77,7 +78,7 @@ const T5T6DebitAgeing = ({ activeSubItem }: any) => {
 
     onSubmit: async (values) => {
       const file = values.excelFile;
-
+      setIsUploadSuccessful(false);
       if (!file) {
         ShowToast("error", "Please upload an Excel file");
         return;
@@ -116,7 +117,7 @@ const T5T6DebitAgeing = ({ activeSubItem }: any) => {
             response?.data?.isSuccess === true
           ) {
             console.log("T5T6 Ageing Debit upload response:", response?.data);
-
+            setIsUploadSuccessful(true);
             ShowToast(
               "success",
               response?.data?.message || "Excel file uploaded successfully",
@@ -464,26 +465,27 @@ const T5T6DebitAgeing = ({ activeSubItem }: any) => {
               <Col>
                 <div className="mb-2" />
                 <Button
-                  style={{
+                  type="button"
+                  disabled={!isUploadSuccessful}
+                  onClick={() => setIsEmailConfirmOpen(true)}
+                  sx={{
                     backgroundColor: "#11395C",
                     fontSize: "10px",
                     height: "30px",
                     color: "#FFF",
                     textTransform: "none",
                     width: "25%",
+                    "&:hover": {
+                      backgroundColor: "#0d2d49",
+                    },
+                    "&.Mui-disabled": {
+                      backgroundColor: "#bdbdbd",
+                      color: "#ffffff",
+                      cursor: "not-allowed",
+                    },
                   }}
-                  type="button"
-                  onClick={() => setIsEmailConfirmOpen(true)}
                 >
                   Sent Email
-                  {/* <MailOutlineIcon
-                        fontSize="small"
-                        sx={{
-                          marginLeft: "5px",
-                          marginBottom: "2px",
-                          fontSize: "16px",
-                        }}
-                      /> */}
                   <IoIosSend
                     style={{
                       marginLeft: "5px",
