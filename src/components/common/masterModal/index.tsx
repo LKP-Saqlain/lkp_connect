@@ -325,33 +325,18 @@ const ModalComponent = ({
 
   const getBankMasterValidationSchema = () =>
     Yup.object().shape({
-      memberName: Yup.string()
-        // .matches(/^[A-Za-z\s]+$/, "Only alphabets allowed")
-        .required("Member Name required"),
-      bankAccountName: Yup.string()
-        // .matches(/^[A-Za-z\s]+$/, "Only alphabets allowed")
-        .required("Account Name required"),
+      memberName: Yup.string().required("Member Name required"),
+      bankAccountName: Yup.string().required("Account Name required"),
       bankAccountNumber: Yup.string()
         .matches(/^[0-9\s]+$/, "Only numbers allowed")
         .required("Account Number required"),
-      accountDescription: Yup.string()
-        .matches(/^[A-Za-z\s]+$/, "No special characters allowed")
-        .required("Description required"),
-      bankMasterIfscCode: Yup.string()
-        .trim()
-        // .matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, "Invalid IFSC Code")
-        .required("IFSC Code required"),
-      purpose: Yup.string()
-        // .matches(/^[A-Za-z\s]+$/, "No special characters allowed")
-        .required("Purpose required"),
-
-      division: Yup.string()
-        .matches(/^[A-Za-z\s]+$/, "No special characters allowed")
-        .required("Division required"),
+      accountDescription: Yup.string().required("Description required"),
+      bankMasterIfscCode: Yup.string().trim().required("IFSC Code required"),
+      purpose: Yup.string().required("Purpose required"),
+      division: Yup.string(),
       accountType: Yup.string().required("Account Type is required"),
       status: Yup.string().required("Status is required"),
       openingDate: Yup.date().required("Opening Date required"),
-      // closingDate: Yup.date().required("Closing Date required"),
     });
 
   const getValidationSchema = (editData?: EditData) => {
