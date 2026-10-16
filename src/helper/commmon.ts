@@ -654,7 +654,7 @@ export const MEMBER_NAMES = [
     value: "LKP WEALTH ADVISORY LIMITED",
   },
   {
-    label: "Wise Tech Platforms Private Limited",
+    label: "Wise Tech Platforms Private Limited ",
     value: "WISE TECH PLATFORMS PRIVATE LIMITED",
   },
 ];
