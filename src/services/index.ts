@@ -1637,4 +1637,7 @@ export const apiServices = {
   SLBMPosition: async (payload: any) => {
     return await apiService("POST", endpoints.SLBMPosition, payload);
   },
+  GetMTFYieldReport: async (payload: any) => {
+    return await apiService("POST", endpoints.GetMTFYieldReport, payload);
+  },
 };

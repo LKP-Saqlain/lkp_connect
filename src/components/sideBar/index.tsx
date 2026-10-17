@@ -146,6 +146,7 @@ import { FaHandHoldingMedical } from "react-icons/fa";
 import T5T6DebitAgeing from "../../pages/RMS/T5T6DebitAgeing";
 
 import ClientPosition from "../../pages/Reports/ClientPosition";
+import MTFYield from "../../pages/MTF Funding Yield";
 const drawerWidth = 260;
 
 // Utility functions for Drawer
@@ -757,6 +758,7 @@ const SideBar = () => {
     "DP AMC Transaction": <DPTransactionIndex activeSubItem={activeSubItem} />,
     "Pledge Request Report": <PledgeReport activeSubItem={activeSubItem} />,
     "LKP Bank Report": <BankReport activeSubItem={activeSubItem} />,
+    "MTF Funding Yield": <MTFYield activeSubItem={activeSubItem} />,
     "Brokerage Report": <BrokerageData activeSubItem={activeSubItem} />,
     "SLBM Client Response": (
       <SLBMClientResponse activeSubItem={activeSubItem} />

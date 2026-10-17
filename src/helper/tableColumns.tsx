@@ -14557,6 +14557,221 @@ export const ApprovalBankAccountColumns: GridColDef[] = [
   },
 ];
 
+export const MTFFundYieldColumns: GridColDef[] = [
+  {
+    field: "clientcode",
+    headerName: "Client Code",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "clientname",
+    headerName: "Client Name",
+    minWidth: 210,
+    flex: 1,
+    headerAlign: "center",
+    align: "left",
+    disableColumnMenu: true,
+  },
+  {
+    field: "branchcode",
+    headerName: "Branch Code",
+    width: 90,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "zone",
+    headerName: "Zone",
+    width: 90,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "branchType",
+    headerName: "Branch Type",
+    width: 110,
+    headerAlign: "center",
+    align: "center",
+    disableColumnMenu: true,
+  },
+  {
+    field: "mtfFundedAmt",
+    headerName: "MTF Funded Amount",
+    width: 120,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "mtfInterest",
+    headerName: "MTF Interest",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "debitFundAmt",
+    headerName: "Debit Fund Amount",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "debitInterest",
+    headerName: "Debit Interest",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "shortmgnFundedAmt",
+    headerName: "Short Margin Funded Amount",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "shortMarginInterest",
+    headerName: "Short Margin Interest",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "totalFundAmt",
+    headerName: "Total Fund Amount",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "totalInterestAmt",
+    headerName: "Total Interest Amount",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    headerClassName: "header-wrap-custom",
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "brokerage",
+    headerName: "Brokerage",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "subBrokerage",
+    headerName: "Sub Brokerage",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "netBrokerage",
+    headerName: "Net Brokerage",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "totalIncome",
+    headerName: "Total Income",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (value: any) =>
+      Number(value ?? 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+  },
+  {
+    field: "yieldPerc",
+    headerName: "Yield (%)",
+    width: 110,
+    headerAlign: "center",
+    align: "right",
+    disableColumnMenu: true,
+    valueFormatter: (value: any) => `${Number(value ?? 0).toFixed(2)}%`,
+  },
+];
+
 export const BankAccReportColumns: GridColDef[] = [
   // {
   //   field: "ApprovalStatus",

@@ -394,6 +394,7 @@ export const endpoints = {
   MarketingData: "api/MIS/MarketingData",
   UploadT5T6AgeingDebit: "api/RMS/UploadT5T6AgeingDebit",
   SLBMPosition: "api/ShortAllocation/SLBMPosition",
+  GetMTFYieldReport: "api/Account/GetMTFYieldReport",
 };
 
 console.log("EndPOintLenghts", Object.keys(endpoints).length);

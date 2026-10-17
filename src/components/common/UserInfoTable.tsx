@@ -3059,6 +3059,10 @@ const DataTable = ({
       return TableColumns.BankAccReportColumns.map((column) => ({
         ...column,
       }));
+    } else if (activeSubItem === "MTF Funding Yield") {
+      return TableColumns.MTFFundYieldColumns.map((column) => ({
+        ...column,
+      }));
     } else if (activeSubItem === "T6 Selling Detail (Pre&Post)") {
       return TableColumns.T6SellingDetailReportColumns.map((column) => ({
         ...column,
